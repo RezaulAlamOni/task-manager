@@ -13,8 +13,8 @@ phases:
       - apt-get update
       - apt-get install -y software-properties-common
       - LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
-      - apt-get update
-      - apt-get install -y php7.3 php7.3-gd php7.3-mbstring php7.3-xml php7.3-dom php7.3-curl php7.3-mysql mcrypt
+      - yum update
+      - yum install -y php7.3 php7.3-gd php7.3-mbstring php7.3-xml php7.3-dom php7.3-curl php7.3-mysql mcrypt
   pre_build:
     commands:
       - composer install
