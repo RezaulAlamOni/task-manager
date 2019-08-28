@@ -1,12 +1,30 @@
 @extends('spark::layouts.app')
 
+@section("styles")
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+@endsection
+
 <!-- Main Content -->
 @section('content')
-<div class="container">
+<div class="container-fluid main-container">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div class="col-lg-5">
             <div class="card card-default">
-                <div class="card-header">{{__('Reset Password')}}</div>
+                <div class="card-header">
+                    <h2 class="text-center">
+                        <img src="/img/mono-logo.png" alt="Logo">
+                    </h2>
+                    <h3 class="text-center">Forgot Password
+                    </h3>
+                    <p class="text-center enter_email">
+                        Enter your Registered email
+                    </p>
+                    <p class="text-center check_email d-none">
+                        Check your email for Reset link
+                        <br><br>
+                        <u><a href="javascript:void(0)" class="reset-link">Resend the link</a></u>
+                    </p>
+                </div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -19,11 +37,11 @@
                         {!! csrf_field() !!}
 
                         <!-- E-Mail Address -->
-                        <div class="form-group row">
+                        <div class="form-group row{{ $errors->has('email') ? ' is-invalid' : '' }}">
                             <label class="col-md-4 col-form-label text-md-right">{{__('E-Mail Address')}}</label>
 
                             <div class="col-md-6">
-                                <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" autofocus>
+                                <input type="email" class="form-control" name="email" value="{{ old('email') }}" autofocus>
 
                                 @if ($errors->has('email'))
                                     <span class="invalid-feedback">

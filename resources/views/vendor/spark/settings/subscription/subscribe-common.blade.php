@@ -1,6 +1,6 @@
 <div class="card card-default">
-    <div class="card-header">
-        <div class="float-left">
+    <div class="card-header bg-primary text-white">
+        <div class="float-left" :class="{'btn-table-align': hasMonthlyAndYearlyPlans}">
             {{__('Subscribe')}}
         </div>
 
@@ -56,7 +56,7 @@
 
                     <!-- Plan Features Button -->
                     <td>
-                        <button class="btn btn-default" @click="showPlanDetails(plan)">
+                        <button class="btn btn-default text-dark border-light" @click="showPlanDetails(plan)">
                             <i class="fa fa-btn fa-star-o"></i> {{__('Features')}}
                         </button>
                     </td>
@@ -70,7 +70,7 @@
                             @{{ plan.type == 'team' && spark.chargesTeamsPerSeat ? '/ '+ spark.teamSeatName : '' }}
                             @{{ plan.type == 'team' && spark.chargesTeamsPerMember ? '/ '+ __('teams.member') : '' }}
                             / @{{ __(plan.interval) | capitalize }}
-                        </span>
+                        </div>
                     </td>
 
                     <!-- Trial Days -->

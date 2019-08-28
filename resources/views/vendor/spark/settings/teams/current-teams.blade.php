@@ -1,67 +1,65 @@
 <spark-current-teams :user="user" :teams="teams" inline-template>
     <div>
-        <div class="card card-default">
-            <div class="card-header">{{__('teams.current_teams')}}</div>
+        <div class="card card-default border-info">
+            <div class="card-header bg-info text-white">{{__('teams.current_teams')}}</div>
 
             <div class="table-responsive">
                 <table class="table table-valign-middle mb-0">
                     <thead>
-                        <tr>
-                            <th class="th-fit"></th>
-                            <th>{{__('Name')}}</th>
-                            <th>{{__('Owner')}}</th>
-                            <th>&nbsp;</th>
-                        </tr>
+                    <th class="th-fit"></th>
+                    <th>{{__('Name')}}</th>
+                    <th>{{__('Owner')}}</th>
+                    <th>&nbsp;</th>
                     </thead>
 
                     <tbody>
-                        <tr  v-for="team in teams">
-                            <!-- Photo -->
-                            <td>
-                                <img :src="team.photo_url" class="spark-profile-photo" alt="{{__('Team Photo')}}" />
-                            </td>
+                    <tr  v-for="team in teams">
+                        <!-- Photo -->
+                        <td>
+                            <img :src="team.photo_url" class="spark-profile-photo">
+                        </td>
 
-                            <!-- Team Name -->
-                            <td>
-                                <div>
-                                    @{{ team.name }}
-                                </div>
-                            </td>
+                        <!-- Team Name -->
+                        <td>
+                            <div class="btn-table-align">
+                                @{{ team.name }}
+                            </div>
+                        </td>
 
-                            <!-- Owner Name -->
-                            <td>
-                                <div>
+                        <!-- Owner Name -->
+                        <td>
+                            <div class="btn-table-align">
                                     <span v-if="user.id == team.owner.id">
                                         {{__('You')}}
                                     </span>
 
-                                    <span v-else>
+                                <span v-else>
                                         @{{ team.owner.name }}
                                     </span>
-                                </div>
-                            </td>
+                            </div>
+                        </td>
 
-                            <!-- Edit Button -->
-                            <td class="td-fit">
-                                <a :href="'/settings/{{Spark::teamsPrefix()}}/'+team.id">
-                                    <button class="btn btn-outline-primary">
-                                        <i class="fa fa-cog"></i>
-                                    </button>
-                                </a>
-
-                                <button class="btn btn-outline-warning" @click="approveLeavingTeam(team)"
-                                        data-toggle="tooltip" title="{{__('teams.leave_team')}}"
-                                        v-if="user.id !== team.owner_id">
-                                    <i class="fa fa-sign-out"></i>
+                        <!-- Edit Button -->
+                        <td class="td-fit">
+                            <a :href="'/settings/{{Spark::teamsPrefix()}}/'+team.id">
+                                <button class="btn  btn-primary">
+                                    <i class="fa fa-cog"></i>
                                 </button>
+                            </a>
 
-                                @if (Spark::createsAdditionalTeams())
-                                    <button class="btn btn-outline-danger" @click="approveTeamDelete(team)" v-if="user.id === team.owner_id">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                @endif
-                            </td>
-                        </tr>
+                            <button class="btn btn-outline-warning" @click="approveLeavingTeam(team)"
+                                    data-toggle="tooltip" title="{{__('teams.leave_team')}}"
+                                    v-if="user.id !== team.owner_id">
+                                <i class="fa fa-sign-out"></i>
+                            </button>
+
+                            @if (Spark::createsAdditionalTeams())
+                                <button class="btn btn-danger" @click="approveTeamDelete(team)" v-if="user.id === team.owner_id">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            @endif
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -96,8 +94,8 @@
         <!-- Delete Team Modal -->
         <div class="modal" id="modal-delete-team" tabindex="-1" role="dialog">
             <div class="modal-dialog" v-if="deletingTeam">
-                <div class="modal-content">
-                    <div class="modal-header">
+                <div class="modal-content border-primary">
+                    <div class="modal-header bg-primary text-white rounded-0">
                         <h5 class="modal-title">
                             {{__('teams.delete_team')}}
                         </h5>
@@ -110,7 +108,7 @@
 
                     <!-- Modal Actions -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{__('No, Go Back')}}</button>
+                        <button type="button" class="btn btn-warning text-white" data-dismiss="modal">{{__('No, Go Back')}}</button>
 
                         <button type="button" class="btn btn-danger" @click="deleteTeam" :disabled="deleteTeamForm.busy">
                             <span v-if="deleteTeamForm.busy">

@@ -2,7 +2,7 @@
     <div>
         <div class="card card-default">
             <div class="card-body">
-                <button class="btn btn-outline-danger"
+                <button class="btn btn-danger"
                 @click="confirmCancellation"
                 :disabled="form.busy">
 
@@ -14,8 +14,8 @@
         <!-- Confirm Cancellation Modal -->
         <div class="modal" id="modal-confirm-cancellation" tabindex="-1" role="dialog">
             <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
+                <div class="modal-content border-primary">
+                    <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title">
                             {{__('Cancel Subscription')}}
                         </h5>
@@ -27,7 +27,7 @@
 
                     <!-- Modal Actions -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{__('No, Go Back')}}</button>
+                        <button type="button" class="btn btn-default btn-secondary" data-dismiss="modal">{{__('No, Go Back')}}</button>
 
                         <button type="button" class="btn btn-danger" @click="cancel" :disabled="form.busy">
                         <span v-if="form.busy">

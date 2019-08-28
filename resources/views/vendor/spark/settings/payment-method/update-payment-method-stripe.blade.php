@@ -1,7 +1,7 @@
 <spark-update-payment-method-stripe :user="user" :team="team" :billable-type="billableType" inline-template>
     <div class="card card-default">
         <!-- Update Payment Method Heading -->
-        <div class="card-header">
+        <div class="card-header bg-primary text-white">
             <div class="float-left">
                 {{__('Update Payment Method')}}
             </div>

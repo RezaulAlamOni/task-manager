@@ -2,8 +2,8 @@
                 :plans="plans" :billable-type="billableType" inline-template>
 
     <div class="card card-default">
-        <div class="card-header">
-            <div class="float-left">
+        <div class="card-header bg-primary text-white">
+            <div class="float-left" :class="{'btn-table-align': hasMonthlyAndYearlyPlans}">
                 {{__('Resume Subscription')}}
             </div>
 
@@ -66,14 +66,14 @@
 
                         <!-- Plan Features Button -->
                         <td>
-                            <button class="btn btn-default" @click="showPlanDetails(plan)">
+                            <button class="btn btn-default btn-light text-dark" @click="showPlanDetails(plan)">
                                 <i class="fa fa-btn fa-star-o"></i> {{__('Features')}}
                             </button>
                         </td>
 
                         <!-- Plan Price -->
                         <td>
-                            <div>
+                            <div class="btn-table-align">
                                 <strong class="table-plan-price">@{{ priceWithTax(plan) | currency }}</strong>
                                 @{{ plan.type == 'user' && spark.chargesUsersPerSeat ? '/ '+ spark.seatName : '' }}
                                 @{{ plan.type == 'user' && spark.chargesUsersPerTeam ? '/ '+ __('teams.team') : '' }}
@@ -99,7 +99,7 @@
                                 </span>
 
                                 <span v-if="isActivePlan(plan) && selectingPlan !== plan">
-                                    {{__('Resume Subscription')}}
+                                    {{__('Resume')}}
                                 </span>
                             </button>
                         </td>
