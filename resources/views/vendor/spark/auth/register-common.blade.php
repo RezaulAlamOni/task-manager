@@ -27,7 +27,8 @@
     <div class="col-lg-8">
         <div class="card card-default">
             <div class="card-header">
-                <div class="float-left">
+      
+                <div class="float-left" :class="{'btn-table-align': hasMonthlyAndYearlyPlans}">
                     {{__('Subscription')}}
                 </div>
 
@@ -120,15 +121,16 @@
 
 <!-- Basic Profile -->
 <div class="row justify-content-center">
-    <div class="col-lg-8">
-        <div class="card card-default">
-            <div class="card-header">
+    <div class="col-lg-5 px-4">
+        <div class="card card-default px-3">
+            <div class="card-header text-center">
                 <span v-if="paidPlans.length > 0">
                     {{__('Profile')}}
                 </span>
 
                 <span v-else>
-                    {{__('Register')}}
+                    {{--{{__('Register')}}--}}
+                    <img src="/img/mono-logo.png" alt="">
                 </span>
             </div>
 

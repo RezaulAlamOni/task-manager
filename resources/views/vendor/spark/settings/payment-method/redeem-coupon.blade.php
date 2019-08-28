@@ -1,6 +1,6 @@
 <spark-redeem-coupon :user="user" :team="team" :billable-type="billableType" inline-template>
     <div class="card card-default">
-        <div class="card-header">{{__('Redeem Coupon')}}</div>
+        <div class="card-header bg-primary text-white">{{__('Redeem Coupon')}}</div>
 
         <div class="card-body">
             <div class="alert alert-success" v-if="form.successful">

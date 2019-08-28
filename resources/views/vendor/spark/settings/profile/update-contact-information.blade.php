@@ -1,6 +1,6 @@
 <spark-update-contact-information :user="user" inline-template>
-    <div class="card card-default">
-        <div class="card-header">{{__('Contact Information')}}</div>
+    <div class="card card-default border-primary">
+        <div class="card-header bg-primary text-white">{{__('Contact Information')}}</div>
 
         <div class="card-body">
             <!-- Success Message -->

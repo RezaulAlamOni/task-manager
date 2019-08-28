@@ -12,3 +12,7 @@
 require('./../spark-components/bootstrap');
 
 require('./home');
+
+require('../custom/leftmenu.js');
+require('../custom/metisMenu.js');
+require('../custom/rightside_bar.js');

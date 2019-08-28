@@ -6,8 +6,8 @@
     @include('spark::settings.subscription.subscribe-common')
 
     <!-- Billing Information -->
-        <div class="card card-default" v-show="selectedPlan">
-            <div class="card-header">{{__('Billing Information')}}</div>
+        <div class="card card-default border-warning" v-show="selectedPlan">
+            <div class="card-header bg-warning">{{__('Billing Information')}}</div>
 
             <div class="card-body">
                 <!-- Generic 500 Level Error Message / Stripe Threw Exception -->
@@ -31,7 +31,7 @@
                     <!-- Braintree Container -->
                     <div class="form-group row"  v-show="form.use_existing_payment_method != '1'">
                         <div class="col-md-6 offset-md-4">
-                            <div id="braintree-subscribe-container"></div>
+                            <div id="braintree-subscribe-container" class="m-b-md"></div>
                         </div>
                     </div>
 

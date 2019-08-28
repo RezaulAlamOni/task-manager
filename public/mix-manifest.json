@@ -1,6 +1,12 @@
 {
-    "/js/app.js": "/js/app.js?id=2687021d40e4f5d1fe96",
-    "/css/app.css": "/css/app.css?id=1f87437dd73d1bb9e756",
-    "/css/app-rtl.css": "/css/app-rtl.css?id=1f87437dd73d1bb9e756",
+    "/js/app.js": "/js/app.js?id=aceddb6d861a52fc9be4",
+    "/css/bootstrap.css": "/css/bootstrap.css?id=dc4056bfb60d2c674880",
+    "/css/custom.css": "/css/custom.css?id=1f84ace4cc3a94e18eeb",
+    "/css/light_custom.css": "/css/light_custom.css?id=6ed92def72cc13ae52e5",
+    "/css/app.css": "/css/app.css?id=e5f9f3032ab5d8e39569",
+    "/css/app-rtl.css": "/css/app-rtl.css?id=e5f9f3032ab5d8e39569",
+    "/vendors/select2/css/select2.min.css": "/vendors/select2/css/select2.min.css?id=af22a7e2bfec4d2a82c4",
+    "/vendors/select2/js/select2.js": "/vendors/select2/js/select2.js?id=2f9a54c2500929a2aade",
+    "/vendors/select2/css/select2-bootstrap.css": "/vendors/select2/css/select2-bootstrap.css?id=dcec0cc93fbad9b73863",
     "/js/sweetalert.min.js": "/js/sweetalert.min.js?id=0068f44b0aa1b83fa767"
 }

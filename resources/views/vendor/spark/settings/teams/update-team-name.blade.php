@@ -1,6 +1,6 @@
 <spark-update-team-name :user="user" :team="team" inline-template>
-    <div class="card card-default">
-        <div class="card-header">
+    <div class="card card-default border-primary">
+        <div class="card-header bg-primary text-white">
             {{__('teams.update_team_name')}}
         </div>
 
@@ -31,7 +31,7 @@
                                 @click.prevent="update"
                                 :disabled="form.busy">
 
-                            {{__('Update')}}
+                            {{__('UPDATE')}}
                         </button>
                     </div>
                 </div>
