@@ -9,3 +9,5 @@ after running composer install, you will need to:
 run ```php artisan migrate --force``` to run all database migrations.
 
 run ```npm install``` to install node packages.
+
+if this is your first installation and you would like access to the kiosk, please add the email address you registered with to the ```$developers``` array defined in: ```/app/Providers/SparkServiceProvider.php``
