@@ -1,8 +1,8 @@
 @extends('spark::layouts.app')
 
-@push('scripts')
+@section('scripts')
     <script src="https://js.braintreegateway.com/v2/braintree.js"></script>
-@endpush
+@endsection
 
 @section('content')
 <spark-register-braintree inline-template>

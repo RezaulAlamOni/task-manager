@@ -108,7 +108,7 @@
 
                     <!-- Modal Actions -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{__('Cancel')}}</button>
+                        <button type="button" class="btn btn-default btn-secondary" data-dismiss="modal">{{__('Cancel')}}</button>
 
                         <button type="button" class="btn btn-primary" @click="applyDiscount" :disabled="form.busy">
                             <span v-if="form.busy">

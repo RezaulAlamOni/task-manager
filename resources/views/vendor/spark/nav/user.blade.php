@@ -12,17 +12,18 @@
             <!-- Branding Image -->
             @include('spark::nav.brand')
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+            {{--<button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"--}}
+                    {{--aria-expanded="false" aria-label="Toggle navigation">--}}
+                <span class="fa fa-bars fa-2x"></span>
             </button>
 
-            <div id="navbarSupportedContent" class="collapse navbar-collapse">
+
+            <div id="navbarSupportedContent" class="collapse navbar-collapse show">
                 <ul class="navbar-nav mr-auto">
                     @includeIf('spark::nav.user-left')
                 </ul>
 
-                <a @click="showNotifications" class="notification-pill mx-auto mb-3 mb-md-0 mr-md-0 ml-md-auto">
+                <a @click="showNotifications" class="notification-pill ml-3 mb-3 mb-md-0 mr-md-0 ml-md-auto float-sm-left mt-2">
                 <svg class="mr-2" width="18px" height="20px" viewBox="0 0 18 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <defs>
                         <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-1">
@@ -42,11 +43,11 @@
                 @{{notificationsCount}}
                 </a>
 
-                <ul class="navbar-nav ml-4">
+                <ul class="navbar-nav ml-4 float-sm-left">
                     <li class="nav-item dropdown">
                         <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
-                            <img :src="user.photo_url" class="dropdown-toggle-image spark-nav-profile-photo" alt="{{__('User Photo')}}" />
+                            <img :src="user.photo_url" class="dropdown-toggle-image spark-nav-profile-photo">
                             <span class="d-none d-md-block">@{{ user.name }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
@@ -102,3 +103,5 @@
         </div>
     </nav>
 </spark-navbar>
+
+

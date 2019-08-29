@@ -7,33 +7,31 @@
                 <div class="table-responsive">
                     <table class="table table-valign-middle mb-0">
                         <thead>
-                            <tr>
-                                <th>{{__('Name')}}</th>
-                                <th>{{__('Created')}}</th>
-                                <th>{{__('Last Used')}}</th>
-                                <th>&nbsp;</th>
-                            </tr>
+                            <th>{{__('Name')}}</th>
+                            <th>{{__('Created')}}</th>
+                            <th>{{__('Last Used')}}</th>
+                            <th>&nbsp;</th>
                         </thead>
 
                         <tbody>
                         <tr v-for="token in tokens">
                             <!-- Name -->
                             <td>
-                                <div>
+                                <div class="btn-table-align">
                                     @{{ token.name }}
                                 </div>
                             </td>
 
                             <!-- Created At -->
                             <td>
-                                <div>
+                                <div class="btn-table-align">
                                     @{{ token.created_at | datetime }}
                                 </div>
                             </td>
 
                             <!-- Last Used At -->
                             <td>
-                                <div>
+                                <div class="btn-table-align">
                                         <span v-if="token.last_used_at">
                                             @{{ token.last_used_at | datetime }}
                                         </span>
@@ -47,11 +45,11 @@
                             <!-- Edit Button -->
                             <td class="td-fit">
                                 <div class="text-right ">
-                                    <button class="btn btn-outline-primary" @click="editToken(token)">
+                                    <button class="btn  btn-primary" @click="editToken(token)">
                                         <i class="fa fa-cog"></i>
                                     </button>
 
-                                    <button class="btn btn-outline-danger" @click="approveTokenDelete(token)">
+                                    <button class="btn  btn-danger" @click="approveTokenDelete(token)">
                                         <i class="fa fa-remove"></i>
                                     </button>
                                 </div>
@@ -66,8 +64,8 @@
         <!-- Update Token Modal -->
         <div class="modal" id="modal-update-token" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-md" v-if="updatingToken">
-                <div class="modal-content">
-                    <div class="modal-header">
+                <div class="modal-content border-primary">
+                    <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title">
                             {{__('Edit Token')}} (@{{ updatingToken.name }})
                         </h5>
@@ -116,7 +114,7 @@
 
                     <!-- Modal Actions -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{__('Close')}}</button>
+                        <button type="button" class="btn btn-default btn-secondary" data-dismiss="modal">{{__('Close')}}</button>
 
                         <button type="button" class="btn btn-primary" @click="updateToken" :disabled="updateTokenForm.busy">
                         {{__('Update')}}
@@ -129,8 +127,8 @@
         <!-- Delete Token Modal -->
         <div class="modal" id="modal-delete-token" tabindex="-1" role="dialog">
             <div class="modal-dialog" v-if="deletingToken">
-                <div class="modal-content">
-                    <div class="modal-header">
+                <div class="modal-content border-primary">
+                    <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title">
                             {{__('Delete Token')}} (@{{ deletingToken.name }})
                         </h5>
@@ -142,7 +140,7 @@
 
                     <!-- Modal Actions -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{__('No, Go Back')}}</button>
+                        <button type="button" class="btn btn-default btn-primary" data-dismiss="modal">{{__('No, Go Back')}}</button>
 
                         <button type="button" class="btn btn-danger" @click="deleteToken" :disabled="deleteTokenForm.busy">
                         {{__('Yes, Delete')}}

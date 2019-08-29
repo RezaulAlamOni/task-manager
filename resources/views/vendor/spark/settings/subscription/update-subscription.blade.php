@@ -2,8 +2,8 @@
                 :plans="plans" :billable-type="billableType" inline-template>
     <div>
         <div class="card card-default">
-            <div class="card-header">
-                <div class="float-left">
+            <div class="card-header bg-primary text-white">
+                <div class="float-left" :class="{'btn-table-align': hasMonthlyAndYearlyPlans}">
                     {{__('Update Subscription')}}
                 </div>
 
@@ -70,14 +70,14 @@
 
                             <!-- Plan Features Button -->
                             <td>
-                                <button class="btn btn-default" @click="showPlanDetails(plan)">
+                                <button class="btn btn-default btn-light text-dark" @click="showPlanDetails(plan)">
                                     <i class="fa fa-btn fa-star-o"></i> {{__('Features')}}
                                 </button>
                             </td>
 
                             <!-- Plan Price -->
                             <td>
-                                <div>
+                                <div class="btn-table-align">
                                     <span v-if="plan.price == 0">
                                         {{__('Free')}}
                                     </span>
@@ -108,9 +108,9 @@
         <!-- Confirm Plan Update Modal -->
         <div class="modal" id="modal-confirm-plan-update" tabindex="-2" role="dialog">
             <div class="modal-dialog">
-                <div class="modal-content" v-if="confirmingPlan">
+                <div class="modal-content border-primary" v-if="confirmingPlan">
                     <!-- Modal Header -->
-                    <div class="modal-header">
+                    <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title">
                             {{__('Update Subscription')}}
                         </h5>
@@ -125,7 +125,7 @@
 
                     <!-- Modal Actions -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{__('No, Go Back')}}</button>
+                        <button type="button" class="btn btn-default btn-secondary" data-dismiss="modal">{{__('No, Go Back')}}</button>
 
                         <button type="button" class="btn btn-primary" @click="approvePlanUpdate">{{__('Yes, I\'m Sure')}}</button>
                     </div>

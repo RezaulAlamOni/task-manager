@@ -6,8 +6,8 @@
     @include('spark::settings.subscription.subscribe-common')
 
     <!-- Billing Information -->
-        <div class="card card-default" v-show="selectedPlan">
-            <div class="card-header">{{__('Billing Information')}}</div>
+        <div class="card card-default border-warning" v-show="selectedPlan">
+            <div class="card-header bg-warning text-white">{{__('Billing Information')}}</div>
 
             <div class="card-body">
                 <!-- Generic 500 Level Error Message / Stripe Threw Exception -->
@@ -50,11 +50,11 @@
                     </div>
 
                     <!-- Billing Address Fields -->
-                    @if (Spark::collectsBillingAddress())
-                        @include('spark::settings.subscription.subscribe-address')
-                    @endif
+                @if (Spark::collectsBillingAddress())
+                    @include('spark::settings.subscription.subscribe-address')
+                @endif
 
-                    <!-- ZIP Code -->
+                <!-- ZIP Code -->
                     <div class="form-group row" v-if=" ! spark.collectsBillingAddress">
                         <label for="number" class="col-md-4 col-form-label text-md-right">{{__('ZIP / Postal Code')}}</label>
 
@@ -70,7 +70,7 @@
                         <div class="col-md-6">
                             <input type="text" class="form-control" v-model="form.coupon" :class="{'is-invalid': form.errors.has('coupon')}">
 
-                        <span class="invalid-feedback" v-show="form.errors.has('coupon')">
+                            <span class="invalid-feedback" v-show="form.errors.has('coupon')">
                             @{{ form.errors.get('coupon') }}
                         </span>
                         </div>
@@ -103,7 +103,7 @@
                                 <i class="fa fa-btn fa-spinner fa-spin"></i> {{__('Subscribing')}}
                             </span>
 
-                            <span v-else>
+                                <span v-else>
                                 {{__('Subscribe')}}
                             </span>
                             </button>
