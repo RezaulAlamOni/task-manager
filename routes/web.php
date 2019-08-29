@@ -20,3 +20,7 @@ Route::get('/clear', 'ClearController@show');
 Route::get('/select', 'ClearController@show_select');
 
 Route::get('/blank','ClearController@show_blank');
+
+Route::get('/projects','ProjectController@index');
+
+Route::get( '/{vue_route?}', 'VueController@index' )->where( 'vue_route', '(.*)' );

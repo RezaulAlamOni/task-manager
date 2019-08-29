@@ -12630,14 +12630,14 @@ a.text-dark:focus {
 
 .radio-select {
   display: inline-block;
-  background-image: url(/images/radio-select-default.svg?480bc0aebb3da809dc5b8d6f7ec60576);
+  background-image: url(/images/radio-select-default.svg?8e5d257dcf5fc69d07152803c74c5adf);
   height: 28px;
   width: 28px;
   cursor: pointer;
 }
 
 .radio-select-selected {
-  background-image: url(/images/radio-select-is-selected.svg?ac228fff7b6af5be6d1620e5352ee43c);
+  background-image: url(/images/radio-select-is-selected.svg?b8996852b3e07285ea63f99fa4eae0b9);
 }
 
 .table thead th {
