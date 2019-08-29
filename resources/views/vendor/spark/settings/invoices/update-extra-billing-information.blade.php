@@ -1,6 +1,6 @@
 <spark-update-extra-billing-information :user="user" :team="team" :billable-type="billableType" inline-template>
     <div class="card card-default">
-        <div class="card-header">{{__('Extra Billing Information')}}</div>
+        <div class="card-header bg-primary text-white">{{__('Extra Billing Information')}}</div>
 
         <div class="card-body">
             <!-- Information Message -->

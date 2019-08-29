@@ -1,13 +1,19 @@
-@extends('spark::layouts.app')
-
-@push('scripts')
+@extends('spark::layouts.layout_2')
+@section("title")
+    Register
+@endsection
+@section("styles")
+    <link href="/css/themify-icons.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+@endsection
+@section('scripts')
     <script src="https://js.stripe.com/v3/"></script>
-@endpush
+@endsection
 
 @section('content')
 <spark-register-stripe inline-template>
-    <div>
-        <div class="spark-screen container">
+    <div class="main-container">
+        <div class="spark-screen container ">
             <!-- Common Register Form Contents -->
             @include('spark::auth.register-common')
 

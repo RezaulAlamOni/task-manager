@@ -17,7 +17,7 @@
                 <div class="col-md-12">
                     <div class="card card-default">
                         <div class="card-header">
-                            <div>
+                            <div class="btn-table-align">
                                 <i class="fa fa-btn fa-times" style="cursor: pointer;" @click="showSearch"></i>
                                 @{{ profile.name }}
                             </div>
@@ -27,7 +27,7 @@
                             <div class="row">
                                 <!-- Profile Photo -->
                                 <div class="col-md-3 text-center">
-                                    <img :src="profile.photo_url" class="spark-profile-photo-xl" alt="{{__('Profile Photo')}}" />
+                                    <img :src="profile.photo_url" class="spark-profile-photo-xl">
                                 </div>
 
                                 <div class="col-md-9">
@@ -69,7 +69,7 @@
                                 {{__('Apply Discount')}}
                             </button>
 
-                            <button class="btn btn-default btn-sm" @click="impersonate(profile)" :disabled="user.id === profile.id">
+                            <button class="btn btn-default btn-secondary btn-sm" @click="impersonate(profile)" :disabled="user.id === profile.id">
                                 {{__('Impersonate')}}
                             </button>
                         </div>
@@ -85,33 +85,31 @@
                             {{__('teams.teams')}}
                         </div>
 
-                        <div class="table-responsive">
-                            <table class="table table-valign-middle mb-0">
+                        <div class="card-body">
+                            <table class="table table-borderless m-b-none table-responsive">
                                 <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>{{__('Name')}}</th>
-                                        <th>{{__('Subscription')}}</th>
-                                    </tr>
+                                    <th></th>
+                                    <th>{{__('Name')}}</th>
+                                    <th>{{__('Subscription')}}</th>
                                 </thead>
 
                                 <tbody>
                                     <tr v-for="team in profile.owned_teams">
                                         <!-- Photo -->
                                         <td>
-                                            <img :src="team.photo_url" class="spark-profile-photo" alt="{{__('Team Photo')}}" />
+                                            <img :src="team.photo_url" class="spark-profile-photo">
                                         </td>
 
                                         <!-- Team Name -->
                                         <td>
-                                            <div>
+                                            <div class="btn-table-align">
                                                 @{{ team.name }}
                                             </div>
                                         </td>
 
                                         <!-- Subscription -->
                                         <td>
-                                            <div>
+                                            <div class="btn-table-align">
                                                 <span v-if="activePlan(team)">
                                                     <a :href="customerUrlOnBillingProvider(team)" target="_blank">
                                                         @{{ activePlan(team).name }} (@{{ __(activePlan(team).interval) | capitalize }})

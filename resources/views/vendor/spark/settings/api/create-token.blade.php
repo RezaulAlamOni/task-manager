@@ -1,7 +1,7 @@
 <spark-create-token :available-abilities="availableAbilities" inline-template>
     <div>
-        <div class="card card-default">
-            <div class="card-header">
+        <div class="card card-default border-info">
+            <div class="card-header bg-info text-white">
                 {{__('Create API Token')}}
             </div>
 
@@ -39,11 +39,11 @@
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox"
-                                            @click="toggleAbility(ability.value)"
-                                            :class="{'is-invalid': form.errors.has('abilities')}"
-                                            :checked="abilityIsAssigned(ability.value)">
+                                               @click="toggleAbility(ability.value)"
+                                               :class="{'is-invalid': form.errors.has('abilities')}"
+                                               :checked="abilityIsAssigned(ability.value)">
 
-                                            @{{ ability.name }}
+                                        @{{ ability.name }}
                                     </label>
                                 </div>
                             </div>
@@ -72,8 +72,8 @@
         <!-- Show Token Modal -->
         <div class="modal" id="modal-show-token" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" v-if="showingToken">
-                <div class="modal-content">
-                    <div class="modal-header">
+                <div class="modal-content border-primary">
+                    <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title">
                             {{__('API Token')}}
                         </h5>
@@ -82,7 +82,7 @@
                     <div class="modal-body">
                         <div class="alert alert-warning">
                             {{__('Here is your new API token.')}}
-                             <strong>{{__('This is the only time the token will ever be displayed, so be sure not to lose it!')}}</strong>
+                            <strong>{{__('This is the only time the token will ever be displayed, so be sure not to lose it!')}}</strong>
                             {{__('You may revoke the token at any time from your API settings.')}}
                         </div>
 
@@ -94,10 +94,10 @@
                     <!-- Modal Actions -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" @click="selectToken">
-                        <span v-if="copyCommandSupported">{{__('Copy To Clipboard')}}</span>
-                        <span v-else>{{__('Select All')}}</span>
+                            <span v-if="copyCommandSupported">{{__('Copy To Clipboard')}}</span>
+                            <span v-else>{{__('Select All')}}</span>
                         </button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{__('Close')}}</button>
+                        <button type="button" class="btn btn-default btn-secondary" data-dismiss="modal">{{__('Close')}}</button>
                     </div>
                 </div>
             </div>

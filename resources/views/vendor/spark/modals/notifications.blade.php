@@ -10,12 +10,12 @@
                 <div class="modal-content">
                     <div class="modal-header text-center">
                         <div class="btn-group">
-                            <button class="btn btn-light" :class="{'active': showingNotifications}" @click="showNotifications" style="width: 50%;">
+                            <button class="btn btn-light text-dark" :class="{'active': showingNotifications}" @click="showNotifications" style="width: 50%;">
                                 {{__('Notifications')}}
                             </button>
 
-                            <button class="btn btn-light" :class="{'active': showingAnnouncements}" @click="showAnnouncements" style="width: 50%;">
-                                {{__('Announcements')}} <i class="fa fa-circle text-danger" v-if="hasUnreadAnnouncements"></i>
+                            <button class="btn btn-light text-dark" :class="{'active': showingAnnouncements}" @click="showAnnouncements" style="width: 50%;">
+                                {{__('Announcements')}} <i class="fa fa-circle text-danger p-l-xs" v-if="hasUnreadAnnouncements"></i>
                             </button>
                         </div>
                     </div>
@@ -23,11 +23,11 @@
                     <div class="modal-body">
                         <!-- Informational Messages -->
                         <div class="notification-container" v-if="loadingNotifications">
-                            <div><i class="fa fa-btn fa-spinner fa-spin"></i> {{__('Loading Notifications')}}</div>
+                            <i class="fa fa-btn fa-spinner fa-spin"></i> {{__('Loading Notifications')}}
                         </div>
 
                         <div class="notification-container" v-if=" ! loadingNotifications && activeNotifications.length == 0">
-                            <div class="alert alert-warning">
+                            <div class="alert alert-warning m-b-none">
                                 {{__('We don\'t have anything to show you right now! But when we do, we\'ll be sure to let you know. Talk to you soon!')}}
                             </div>
                         </div>
@@ -38,7 +38,7 @@
 
                                 <!-- Notification Icon -->
                                 <figure>
-                                    <img v-if="notification.creator" :src="notification.creator.photo_url" class="spark-profile-photo" alt="{{__('Creator Photo')}}" />
+                                    <img v-if="notification.creator" :src="notification.creator.photo_url" class="spark-profile-photo">
 
                                     <span v-else class="fa-stack fa-2x">
                                         <i class="fa fa-circle fa-stack-2x"></i>
@@ -81,7 +81,7 @@
 
                                 <!-- Notification Icon -->
                                 <figure>
-                                    <img :src="announcement.creator.photo_url" class="spark-profile-photo" alt="{{__('Creator Photo')}}" />
+                                    <img :src="announcement.creator.photo_url" class="spark-profile-photo">
                                 </figure>
 
                                 <!-- Announcement -->
@@ -108,7 +108,7 @@
 
                     <!-- Modal Actions -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{{__('Close')}}</button>
+                        <button type="button" class="btn btn-default btn-success" data-dismiss="modal">{{__('Close')}}</button>
                     </div>
                 </div>
             </div>

@@ -3194,12 +3194,6 @@ pre code {
   opacity: 1;
 }
 
-.form-control::-moz-placeholder,
-.StripeElement::-moz-placeholder {
-  color: #84919a;
-  opacity: 1;
-}
-
 .form-control::-ms-input-placeholder,
 .StripeElement::-ms-input-placeholder {
   color: #84919a;
@@ -6447,10 +6441,8 @@ input[type="button"].btn-block {
 @media (min-width: 576px) {
   .card-columns {
     -webkit-column-count: 3;
-       -moz-column-count: 3;
             column-count: 3;
     -webkit-column-gap: 1.25rem;
-       -moz-column-gap: 1.25rem;
             column-gap: 1.25rem;
     orphans: 1;
     widows: 1;
@@ -12587,11 +12579,6 @@ a.text-dark:focus {
 
 .form-control::-webkit-input-placeholder,
 .StripeElement::-webkit-input-placeholder {
-  color: #c7cdd1;
-}
-
-.form-control::-moz-placeholder,
-.StripeElement::-moz-placeholder {
   color: #c7cdd1;
 }
 

@@ -6,17 +6,15 @@
             <div class="table-responsive">
                 <table class="table table-valign-middle mb-0">
                     <thead>
-                        <tr>
-                            <th>{{ __('teams.team') }}</th>
-                            <th>&nbsp;</th>
-                        </tr>
+                        <th>{{ __('teams.team') }}</th>
+                        <th>&nbsp;</th>
                     </thead>
 
                     <tbody>
                         <tr v-for="invitation in invitations">
                             <!-- Team Name -->
                             <td>
-                                <div>
+                                <div class="btn-table-align">
                                     @{{ invitation.team.name }}
                                 </div>
                             </td>

@@ -1,26 +1,24 @@
 <spark-team-members :user="user" :team="team" inline-template>
     <div>
-        <div class="card card-default">
-            <div class="card-header">
+        <div class="card card-default border-primary">
+            <div class="card-header bg-primary text-white">
                 {{__('teams.team_members')}} (@{{ team.users.length }})
             </div>
 
             <div class="table-responsive">
                 <table class="table table-valign-middle mb-0">
                     <thead>
-                        <tr>
-                            <th class="th-fit"></th>
-                            <th>{{__('Name')}}</th>
-                            <th v-if="roles.length > 1">{{__('Role')}}</th>
-                            <th>&nbsp;</th>
-                        </tr>
+                        <th class="th-fit"></th>
+                        <th>{{__('Name')}}</th>
+                        <th v-if="roles.length > 1">{{__('Role')}}</th>
+                        <th>&nbsp;</th>
                     </thead>
 
                     <tbody>
                         <tr v-for="member in team.users">
                             <!-- Photo -->
                             <td>
-                                <img :src="member.photo_url" class="spark-profile-photo" alt="{{__('Member Photo')}}" />
+                                <img :src="member.photo_url" class="spark-profile-photo">
                             </td>
 
                             <!-- Name -->
