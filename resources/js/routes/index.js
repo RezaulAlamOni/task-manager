@@ -3,6 +3,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 import Index from '../views/project/index'
+import projectDashboard from '../views/projectDashboard/index'
+import projectBoard from '../views/projectDashboard/board'
+
 
 let routes = [
 
@@ -26,16 +29,17 @@ let routes = [
     //     path: '/report/project/summary',
     //     component: require('./views/project/project-summary')
     // },
-    // {
-    //     path: '/project-dashboard/:projectId',
-    //     component: require('./views/projectDashboard/index'),
-    //     name : 'project-dashboard'
-    // },
-    // {
-    //     path: '/project-board/:projectId',
-    //     component: require('./views/projectDashboard/board'),
-    //     name : 'project-board'
-    // }
+    {
+        path: '/project-dashboard/:projectId',
+        component: projectDashboard,
+        name : 'project-dashboard'
+
+    },
+    {
+        path: '/project-board/:projectId',
+        component: projectBoard,
+        name : 'project-board'
+    }
 ];
 
 const router = new VueRouter({

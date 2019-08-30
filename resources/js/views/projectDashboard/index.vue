@@ -14,11 +14,11 @@
 
                 <ul class="nav" style="border-bottom: 1px solid #cedcc4">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="'/project-dashboard/'+projects.id">{{trans('list.name')}} <i
+                        <router-link class="nav-link" :to="'/project-dashboard/'+projects.id">List<i
                                 class="i-btn x20 task-complete icon-circle-o"></i></router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="'/project-board/'+projects.id">{{trans('board.name')}} <i
+                        <router-link class="nav-link" :to="'/project-board/'+projects.id">Board <i
                                 class="tree-toggle i-btn x30"></i>
                         </router-link>
                     </li>

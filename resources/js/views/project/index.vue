@@ -75,11 +75,9 @@
                                                     ID <i data-v-095ab3dc="" class="fa float-right  fa fa-angle-up"></i>
                                                 </th>
                                                 <th data-v-095ab3dc="" class="sortable" style="width: auto;">
-                                                    Name <i data-v-095ab3dc="" class="fa float-right"></i></th>
+                                                    Title <i data-v-095ab3dc="" class="fa float-right"></i></th>
                                                 <th data-v-095ab3dc="" class="sortable" style="width: auto;">
-                                                    Email <i data-v-095ab3dc="" class="fa float-right"></i></th>
-                                                <th data-v-095ab3dc="" class="sortable" style="width: auto;">
-                                                    Age <i data-v-095ab3dc="" class="fa float-right"></i></th>
+                                                    Description <i data-v-095ab3dc="" class="fa float-right"></i></th>
                                                 <th data-v-095ab3dc="" class="sortable" style="width: auto;">
                                                     Status <i data-v-095ab3dc="" class="fa float-right"></i></th>
                                                 <th data-v-095ab3dc="" class="sortable" style="width: auto;">
@@ -91,14 +89,12 @@
                                                 <td data-v-095ab3dc="" class="numeric">
                                                     16023
                                                 </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Kassaundra Shiffman
+                                                <td data-v-095ab3dc="" class="" @click="projectView(21)">
+                                                   Project 1
                                                 </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    LStruble@tempor.com
-                                                </td> <!---->
+
                                                 <td data-v-095ab3dc="" class="numeric">
-                                                    22
+                                                    This is statis data.
                                                 </td> <!---->
                                                 <td data-v-095ab3dc="" class="">
                                                     Deactivated
@@ -106,177 +102,7 @@
                                                 <td data-v-095ab3dc="" class=""><a class="btn btn-info"
                                                                                    href="#/edit_user?0">Edit</a></td>
                                             </tr>
-                                            <tr data-v-095ab3dc="">
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    16024
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Helena Zensen
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    BTrautman@magna.com
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    33
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Deactivated
-                                                </td> <!----><!---->
-                                                <td data-v-095ab3dc="" class=""><a class="btn btn-info"
-                                                                                   href="#/edit_user?1">Edit</a></td>
-                                            </tr>
-                                            <tr data-v-095ab3dc="">
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    16025
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Gautam Nye
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    SThomad@turpis.ly
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    35
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Deactivated
-                                                </td> <!----><!---->
-                                                <td data-v-095ab3dc="" class=""><a class="btn btn-info"
-                                                                                   href="#/edit_user?2">Edit</a></td>
-                                            </tr>
-                                            <tr data-v-095ab3dc="">
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    16026
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Wichaya Wagner
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    NLindsay@odio.org
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    55
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Deactivated
-                                                </td> <!----><!---->
-                                                <td data-v-095ab3dc="" class=""><a class="btn btn-info"
-                                                                                   href="#/edit_user?3">Edit</a></td>
-                                            </tr>
-                                            <tr data-v-095ab3dc="">
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    16027
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Dawn Devereaux
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    NStair@ipsum.net
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    51
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Deactivated
-                                                </td> <!----><!---->
-                                                <td data-v-095ab3dc="" class=""><a class="btn btn-info"
-                                                                                   href="#/edit_user?4">Edit</a></td>
-                                            </tr>
-                                            <tr data-v-095ab3dc="">
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    16028
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Marcus Wray
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    SPointelin@amet.com
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    23
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Activated
-                                                </td> <!----><!---->
-                                                <td data-v-095ab3dc="" class=""><a class="btn btn-info"
-                                                                                   href="#/edit_user?5">Edit</a></td>
-                                            </tr>
-                                            <tr data-v-095ab3dc="">
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    16029
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Freddy Meng
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    SEtheridge@non.ly
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    32
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Deactivated
-                                                </td> <!----><!---->
-                                                <td data-v-095ab3dc="" class=""><a class="btn btn-info"
-                                                                                   href="#/edit_user?6">Edit</a></td>
-                                            </tr>
-                                            <tr data-v-095ab3dc="">
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    16030
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Culveretta Gilberto
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    SGlynn@tempor.com
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    58
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Activated
-                                                </td> <!----><!---->
-                                                <td data-v-095ab3dc="" class=""><a class="btn btn-info"
-                                                                                   href="#/edit_user?7">Edit</a></td>
-                                            </tr>
-                                            <tr data-v-095ab3dc="">
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    16031
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Rogelio Martin
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    BVollrath@at.io
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    50
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Activated
-                                                </td> <!----><!---->
-                                                <td data-v-095ab3dc="" class=""><a class="btn btn-info"
-                                                                                   href="#/edit_user?8">Edit</a></td>
-                                            </tr>
-                                            <tr data-v-095ab3dc="">
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    16032
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Suwanto Boyes
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    THeppelmann@molestie.net
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    36
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="">
-                                                    Activated
-                                                </td> <!----><!---->
-                                                <td data-v-095ab3dc="" class=""><a class="btn btn-info"
-                                                                                   href="#/edit_user?9">Edit</a></td>
-                                            </tr>
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -307,126 +133,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="right" class="" style="margin-top: 0px;">
-                <div id="right-slim">
-                    <div class="rightsidebar-right">
-                        <div id="__BVID__196" class="tabs"><!---->
-                            <div class="card-header">
-                                <ul role="tablist" tabindex="0" id="__BVID__196__BV_tab_controls_"
-                                    class="nav nav-tabs card-header-tabs">
-                                    <li role="presentation" class="nav-item"><a role="tab" tabindex="-1" href="#"
-                                                                                id="__BVID__197___BV_tab_button__"
-                                                                                aria-selected="true" aria-setsize="1"
-                                                                                aria-posinset="1"
-                                                                                aria-controls="__BVID__196__BV_tab_container_"
-                                                                                class="nav-link active">&lt;i
-                                        class='ti-comments'&gt;&lt;/i&gt;</a></li>
-                                </ul>
-                            </div>
-                            <div id="__BVID__196__BV_tab_container_" class="tab-content">
-                                <div role="tabpanel" id="__BVID__197" aria-hidden="false" aria-expanded="true"
-                                     aria-lablelledby="__BVID__197___BV_tab_button__"
-                                     class="tab-pane card-body show fade active">
-                                    <div id="slim_t1">
-                                        <div><h5 class="rightsidebar-right-heading text-uppercase text-xs"><i
-                                            class="menu-icon  fa fa-fw ti-user"></i>
-                                            Contacts
-                                        </h5>
-                                            <ul class="list-unstyled margin-none">
-                                                <li class="rightsidebar-contact-wrapper"><a href="javascript:void(0)"
-                                                                                            class="rightsidebar-contact"><img
-                                                    src="/images/avatar6.jpg?71bfec8fc58afc8a950d31fa2414525c"
-                                                    alt="avatar-image" class="rounded-circle float-right"> <i
-                                                    class="fa fa-circle text-xs text-primary"></i> Annette
-                                                </a></li>
-                                                <li class="rightsidebar-contact-wrapper"><a href="javascript:void(0)"
-                                                                                            class="rightsidebar-contact"><img
-                                                    src="/images/avatar.jpg?411dee33b51de39bfbcda58698b02382"
-                                                    alt="avatar-image" class="rounded-circle float-right"> <i
-                                                    class="fa fa-circle text-xs text-primary"></i> Jordan
-                                                </a></li>
-                                                <li class="rightsidebar-contact-wrapper"><a href="javascript:void(0)"
-                                                                                            class="rightsidebar-contact"><img
-                                                    src="/images/avatar2.jpg?c880ad025efbef8ee5ae438b9799636f"
-                                                    alt="avatar-image" class="rounded-circle float-right"> <i
-                                                    class="fa fa-circle text-xs text-primary"></i> Stewart
-                                                </a></li>
-                                                <li class="rightsidebar-contact-wrapper"><a href="javascript:void(0)"
-                                                                                            class="rightsidebar-contact"><img
-                                                    src="/images/avatar3.jpg?5cc977990977a9c107216d8366aba18f"
-                                                    alt="avatar-image" class="rounded-circle float-right"> <i
-                                                    class="fa fa-circle text-xs text-warning"></i> Alfred
-                                                </a></li>
-                                                <li class="rightsidebar-contact-wrapper"><a href="javascript:void(0)"
-                                                                                            class="rightsidebar-contact"><img
-                                                    src="/images/avatar4.jpg?b8f96d84f21362b28c3784deeccd6aab"
-                                                    alt="avatar-image" class="rounded-circle float-right"> <i
-                                                    class="fa fa-circle text-xs text-danger"></i> Eileen
-                                                </a></li>
-                                                <li class="rightsidebar-contact-wrapper"><a href="javascript:void(0)"
-                                                                                            class="rightsidebar-contact"><img
-                                                    src="/images/avatar5.jpg?dd46e2e2d1f85d751bf6a5990d05678b"
-                                                    alt="avatar-image" class="rounded-circle float-right"> <i
-                                                    class="fa fa-circle text-xs text-muted"></i> Robert
-                                                </a></li>
-                                                <li class="rightsidebar-contact-wrapper"><a href="javascript:void(0)"
-                                                                                            class="rightsidebar-contact"><img
-                                                    src="/images/avatar7.jpg?ccdd6115cac1528731d3400efd86d19d"
-                                                    alt="avatar-image" class="rounded-circle float-right"> <i
-                                                    class="fa fa-circle text-xs text-muted"></i> Cassandra
-                                                </a></li>
-                                            </ul>
-                                            <h5 class="rightsidebar-right-heading text-uppercase text-xs"><i
-                                                class="fa fa-fw ti-export"></i>
-                                                Recent Updates
-                                            </h5>
-                                            <div>
-                                                <ul class="list-unstyled">
-                                                    <li class="rightsidebar-notification"><a
-                                                        href="javascript:void(0)"><i
-                                                        class="fa ti-comments-smiley fa-fw text-primary"></i> New
-                                                        Comment
-                                                    </a></li>
-                                                    <li class="rightsidebar-notification"><a
-                                                        href="javascript:void(0)"><i
-                                                        class="fa ti-twitter-alt fa-fw text-success"></i> 3 New
-                                                        Followers
-                                                    </a></li>
-                                                    <li class="rightsidebar-notification"><a
-                                                        href="javascript:void(0)"><i
-                                                        class="fa ti-email fa-fw text-info"></i> Message Sent
-                                                    </a></li>
-                                                    <li class="rightsidebar-notification"><a
-                                                        href="javascript:void(0)"><i
-                                                        class="fa ti-write fa-fw text-warning"></i> New Task
-                                                    </a></li>
-                                                    <li class="rightsidebar-notification"><a
-                                                        href="javascript:void(0)"><i
-                                                        class="fa ti-export fa-fw text-danger"></i> Server Rebooted
-                                                    </a></li>
-                                                    <li class="rightsidebar-notification"><a
-                                                        href="javascript:void(0)"><i
-                                                        class="fa ti-info-alt fa-fw text-primary"></i> Server Not
-                                                        Responding
-                                                    </a></li>
-                                                    <li class="rightsidebar-notification"><a
-                                                        href="javascript:void(0)"><i
-                                                        class="fa ti-shopping-cart fa-fw text-success"></i> New Order
-                                                        Placed
-                                                    </a></li>
-                                                    <li class="rightsidebar-notification"><a
-                                                        href="javascript:void(0)"><i
-                                                        class="fa ti-money fa-fw text-info"></i> Payment Received
-                                                    </a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!----></div>
                         </div>
                     </div>
                 </div>
@@ -475,7 +181,8 @@
                 if (typeof page === 'undefined') {
                     page = 1;
                 }
-                let url = helper.getFilterURL(this.filterProjectForm);
+                // let url = helper.getFilterURL(this.filterProjectForm);
+                let url = '/';
                 console.log(url)
                 axios.get('/api/project')
                     .then(response => response.data)
