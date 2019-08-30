@@ -4,12 +4,12 @@
             <div class="col-md-12 col-12 align-self-center">
                 <ul class="nav" style="border-bottom: 1px solid #cedcc4">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="'/project-dashboard/'+projects.id">{{trans('list.name')}} <i
-                                class="i-btn x20 task-complete icon-circle-o"></i></router-link>
+                        <router-link class="nav-link" :to="'/project-dashboard/'+projects.id">List
+                            <i class="i-btn x20 task-complete icon-circle-o"></i></router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="'/project-board/'+projects.id">{{trans('board.name')}} <i
-                                class="tree-toggle i-btn x30"></i>
+                        <router-link class="nav-link" :to="'/project-board/'+projects.id">Board
+                            <i class="tree-toggle i-btn x30"></i>
                         </router-link>
                     </li>
                 </ul>
@@ -371,7 +371,8 @@
     import ClickOutside from 'vue-click-outside';
 
     import {Container, Draggable} from 'vue-smooth-dnd';
-    import {applyDrag, generateItems} from '../../../plugins/utils/helpers';
+    // import {applyDrag, generateItems} from '../../../plugins/utils/helpers';
+    import {applyDrag, generateItems} from '../../../assets/plugins/utils/helpers';
 
     export default {
         components: {Container, Draggable, flatPickr, switches},
