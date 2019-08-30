@@ -2229,6 +2229,403 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -6752,7 +7149,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.router_td{\n    color: #656565;\n}\n.router_td:hover{\n    cursor:pointer;\n    color: #656565;\n    background-color: #d0ddba;\n}\n", ""]);
+exports.push([module.i, "\n.router_td {\n    color: #656565;\n}\n.router_td:hover {\n    cursor: pointer;\n    color: #656565;\n    background-color: #d0ddba;\n}\n", ""]);
 
 // exports
 
@@ -58406,138 +58803,1810 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-12 col-sm-8 col-md-8" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-body" }, [
-            _c("h3", { staticClass: "card-title" }, [_vm._v("Project List")]),
-            _vm._v(" "),
-            _vm.projects
-              ? _c("h6", { staticClass: "card-subtitle" }, [
-                  _vm._v("Total Result Found " + _vm._s(_vm.projects.total))
-                ])
-              : _c("h6", { staticClass: "card-subtitle" }, [
-                  _vm._v("no_result_found")
-                ]),
-            _vm._v(" "),
-            _vm.projects.total
-              ? _c("div", { staticClass: "table-responsive" }, [
-                  _c("table", { staticClass: "table" }, [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _c(
-                      "tbody",
-                      _vm._l(_vm.projects.data, function(project) {
-                        return _c("tr", [
-                          _c(
-                            "td",
-                            {
-                              staticClass: "router_td",
-                              on: {
-                                click: function($event) {
-                                  _vm.projectView(project.id)
-                                }
-                              }
-                            },
-                            [_vm._v(_vm._s(project.name))]
-                          ),
-                          _vm._v(" "),
-                          _c("td", {
-                            domProps: {
-                              textContent: _vm._s(
-                                project.description ? project.description : ""
-                              )
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "table-option" }, [
-                            _c("div", { staticClass: "btn-group" }, [
-                              1
-                                ? _c(
-                                    "button",
-                                    {
-                                      directives: [
-                                        {
-                                          name: "tooltip",
-                                          rawName: "v-tooltip",
-                                          value: _vm.edit_project,
-                                          expression: "edit_project"
-                                        }
-                                      ],
-                                      staticClass: "btn btn-info btn-sm",
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          _vm.editProject(project)
-                                        }
-                                      }
-                                    },
-                                    [
-                                      _c("i", {
-                                        staticClass: "fas fa-pencil-alt"
-                                      })
-                                    ]
-                                  )
-                                : _vm._e(),
-                              _vm._v(" "),
-                              0
-                                ? _c(
-                                    "button",
-                                    {
-                                      directives: [
-                                        {
-                                          name: "confirm",
-                                          rawName: "v-confirm",
-                                          value: {
-                                            ok: _vm.confirmDelete(project)
-                                          },
-                                          expression:
-                                            "{ok: confirmDelete(project)}"
-                                        },
-                                        {
-                                          name: "tooltip",
-                                          rawName: "v-tooltip",
-                                          value: _vm.Delete,
-                                          expression: "Delete"
-                                        }
-                                      ],
-                                      key: project.id,
-                                      staticClass: "btn btn-danger btn-sm"
-                                    },
-                                    [_c("i", { staticClass: "fas fa-trash" })]
-                                  )
-                                : _vm._e()
-                            ])
-                          ])
-                        ])
-                      })
-                    )
-                  ])
-                ])
-              : _c("div", [
-                  _c("p", { staticClass: "warning" }, [
-                    _vm._v(" No data Found")
-                  ])
-                ])
-          ])
-        ])
-      ])
-    ])
-  ])
+  return _vm._m(0)
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Name")]),
+    return _c("aside", { staticClass: "right-aside" }, [
+      _c("section", { staticClass: "content" }, [
+        _c("div", { staticClass: "row user-list" }, [
+          _c("div", { staticClass: "col-lg-12" }, [
+            _c("div", { staticClass: "card bg-primary-card" }, [
+              _c("h4", { staticClass: "card-header" }, [
+                _c("div", [_vm._v("Registered Users")])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-body" }, [
+                _c("div", { staticClass: "table-responsive" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "card p-3",
+                      attrs: { "data-v-095ab3dc": "" }
+                    },
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "table-header",
+                          attrs: { "data-v-095ab3dc": "" }
+                        },
+                        [
+                          _c("h4", {
+                            staticClass: "table-title text-center mt-3",
+                            attrs: { "data-v-095ab3dc": "" }
+                          })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "text-left",
+                          attrs: { "data-v-095ab3dc": "" }
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              attrs: {
+                                "data-v-095ab3dc": "",
+                                id: "search-input-container"
+                              }
+                            },
+                            [
+                              _c(
+                                "label",
+                                { attrs: { "data-v-095ab3dc": "" } },
+                                [
+                                  _c("input", {
+                                    staticClass: "form-control mb-2",
+                                    attrs: {
+                                      "data-v-095ab3dc": "",
+                                      type: "search",
+                                      id: "search-input",
+                                      placeholder: "Search data"
+                                    }
+                                  })
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "actions float-right pr-4 mb-3",
+                                  attrs: { "data-v-095ab3dc": "" }
+                                },
+                                [
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "btn btn-info",
+                                      attrs: {
+                                        "data-v-095ab3dc": "",
+                                        href: "javascript:undefined",
+                                        title: "export excel"
+                                      }
+                                    },
+                                    [
+                                      _c("i", {
+                                        staticClass: "fa fa-download",
+                                        attrs: { "data-v-095ab3dc": "" }
+                                      })
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "table-responsive",
+                          attrs: { "data-v-095ab3dc": "" }
+                        },
+                        [
+                          _c(
+                            "table",
+                            {
+                              staticClass: "table",
+                              attrs: { "data-v-095ab3dc": "" }
+                            },
+                            [
+                              _c(
+                                "thead",
+                                { attrs: { "data-v-095ab3dc": "" } },
+                                [
+                                  _c(
+                                    "tr",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [
+                                      _c(
+                                        "th",
+                                        {
+                                          staticClass: "sortable sorting-asc",
+                                          staticStyle: { width: "auto" },
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    ID "
+                                          ),
+                                          _c("i", {
+                                            staticClass:
+                                              "fa float-right  fa fa-angle-up",
+                                            attrs: { "data-v-095ab3dc": "" }
+                                          })
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "th",
+                                        {
+                                          staticClass: "sortable",
+                                          staticStyle: { width: "auto" },
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Name "
+                                          ),
+                                          _c("i", {
+                                            staticClass: "fa float-right",
+                                            attrs: { "data-v-095ab3dc": "" }
+                                          })
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "th",
+                                        {
+                                          staticClass: "sortable",
+                                          staticStyle: { width: "auto" },
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Email "
+                                          ),
+                                          _c("i", {
+                                            staticClass: "fa float-right",
+                                            attrs: { "data-v-095ab3dc": "" }
+                                          })
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "th",
+                                        {
+                                          staticClass: "sortable",
+                                          staticStyle: { width: "auto" },
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Age "
+                                          ),
+                                          _c("i", {
+                                            staticClass: "fa float-right",
+                                            attrs: { "data-v-095ab3dc": "" }
+                                          })
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "th",
+                                        {
+                                          staticClass: "sortable",
+                                          staticStyle: { width: "auto" },
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Status "
+                                          ),
+                                          _c("i", {
+                                            staticClass: "fa float-right",
+                                            attrs: { "data-v-095ab3dc": "" }
+                                          })
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "th",
+                                        {
+                                          staticClass: "sortable",
+                                          staticStyle: { width: "auto" },
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Actions "
+                                          ),
+                                          _c("i", {
+                                            staticClass: "fa float-right",
+                                            attrs: { "data-v-095ab3dc": "" }
+                                          })
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "tbody",
+                                { attrs: { "data-v-095ab3dc": "" } },
+                                [
+                                  _c(
+                                    "tr",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    16023\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Kassaundra Shiffman\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    LStruble@tempor.com\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    22\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Deactivated\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass: "btn btn-info",
+                                              attrs: { href: "#/edit_user?0" }
+                                            },
+                                            [_vm._v("Edit")]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tr",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    16024\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Helena Zensen\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    BTrautman@magna.com\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    33\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Deactivated\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass: "btn btn-info",
+                                              attrs: { href: "#/edit_user?1" }
+                                            },
+                                            [_vm._v("Edit")]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tr",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    16025\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Gautam Nye\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    SThomad@turpis.ly\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    35\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Deactivated\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass: "btn btn-info",
+                                              attrs: { href: "#/edit_user?2" }
+                                            },
+                                            [_vm._v("Edit")]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tr",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    16026\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Wichaya Wagner\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    NLindsay@odio.org\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    55\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Deactivated\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass: "btn btn-info",
+                                              attrs: { href: "#/edit_user?3" }
+                                            },
+                                            [_vm._v("Edit")]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tr",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    16027\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Dawn Devereaux\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    NStair@ipsum.net\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    51\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Deactivated\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass: "btn btn-info",
+                                              attrs: { href: "#/edit_user?4" }
+                                            },
+                                            [_vm._v("Edit")]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tr",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    16028\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Marcus Wray\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    SPointelin@amet.com\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    23\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Activated\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass: "btn btn-info",
+                                              attrs: { href: "#/edit_user?5" }
+                                            },
+                                            [_vm._v("Edit")]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tr",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    16029\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Freddy Meng\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    SEtheridge@non.ly\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    32\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Deactivated\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass: "btn btn-info",
+                                              attrs: { href: "#/edit_user?6" }
+                                            },
+                                            [_vm._v("Edit")]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tr",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    16030\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Culveretta Gilberto\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    SGlynn@tempor.com\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    58\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Activated\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass: "btn btn-info",
+                                              attrs: { href: "#/edit_user?7" }
+                                            },
+                                            [_vm._v("Edit")]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tr",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    16031\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Rogelio Martin\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    BVollrath@at.io\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    50\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Activated\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass: "btn btn-info",
+                                              attrs: { href: "#/edit_user?8" }
+                                            },
+                                            [_vm._v("Edit")]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tr",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    16032\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Suwanto Boyes\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    THeppelmann@molestie.net\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        {
+                                          staticClass: "numeric",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    36\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _vm._v(
+                                            "\n                                                    Activated\n                                                "
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        { attrs: { "data-v-095ab3dc": "" } },
+                                        [
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass: "btn btn-info",
+                                              attrs: { href: "#/edit_user?9" }
+                                            },
+                                            [_vm._v("Edit")]
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "table-footer",
+                          attrs: { "data-v-095ab3dc": "" }
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "datatable-length float-left pl-3",
+                              attrs: { "data-v-095ab3dc": "" }
+                            },
+                            [
+                              _c("span", { attrs: { "data-v-095ab3dc": "" } }, [
+                                _vm._v("Rows per page:")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "select",
+                                {
+                                  staticClass: "custom-select",
+                                  attrs: { "data-v-095ab3dc": "" }
+                                },
+                                [
+                                  _c(
+                                    "option",
+                                    {
+                                      attrs: {
+                                        "data-v-095ab3dc": "",
+                                        value: "5"
+                                      }
+                                    },
+                                    [_vm._v("5")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "option",
+                                    {
+                                      attrs: {
+                                        "data-v-095ab3dc": "",
+                                        value: "10"
+                                      }
+                                    },
+                                    [_vm._v("10")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "option",
+                                    {
+                                      attrs: {
+                                        "data-v-095ab3dc": "",
+                                        value: "20"
+                                      }
+                                    },
+                                    [_vm._v("20")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "option",
+                                    {
+                                      attrs: {
+                                        "data-v-095ab3dc": "",
+                                        value: "50"
+                                      }
+                                    },
+                                    [_vm._v("50")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "option",
+                                    {
+                                      attrs: {
+                                        "data-v-095ab3dc": "",
+                                        value: "-1"
+                                      }
+                                    },
+                                    [_vm._v("All")]
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "datatable-info  pb-2 mt-3",
+                                  attrs: { "data-v-095ab3dc": "" }
+                                },
+                                [
+                                  _c(
+                                    "span",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [_vm._v("Showing ")]
+                                  ),
+                                  _vm._v(" 1 -10 of 20 "),
+                                  _c(
+                                    "span",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [_vm._v("records")]
+                                  )
+                                ]
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass: "float-right",
+                              attrs: { "data-v-095ab3dc": "" }
+                            },
+                            [
+                              _c(
+                                "ul",
+                                {
+                                  staticClass: "pagination",
+                                  attrs: { "data-v-095ab3dc": "" }
+                                },
+                                [
+                                  _c(
+                                    "li",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass: "btn link",
+                                          attrs: {
+                                            "data-v-095ab3dc": "",
+                                            href: "javascript:undefined",
+                                            tabindex: "0"
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "fa fa-angle-left",
+                                            attrs: { "data-v-095ab3dc": "" }
+                                          })
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "li",
+                                    { attrs: { "data-v-095ab3dc": "" } },
+                                    [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass: "btn link",
+                                          attrs: {
+                                            "data-v-095ab3dc": "",
+                                            href: "javascript:undefined",
+                                            tabindex: "0"
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "fa fa-angle-right",
+                                            attrs: { "data-v-095ab3dc": "" }
+                                          })
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ])
+          ])
+        ]),
         _vm._v(" "),
-        _c("th", [_vm._v("Description")]),
-        _vm._v(" "),
-        _c("th", { staticClass: "table-option" }, [_vm._v("Action")])
+        _c(
+          "div",
+          { staticStyle: { "margin-top": "0px" }, attrs: { id: "right" } },
+          [
+            _c("div", { attrs: { id: "right-slim" } }, [
+              _c("div", { staticClass: "rightsidebar-right" }, [
+                _c(
+                  "div",
+                  { staticClass: "tabs", attrs: { id: "__BVID__196" } },
+                  [
+                    _c("div", { staticClass: "card-header" }, [
+                      _c(
+                        "ul",
+                        {
+                          staticClass: "nav nav-tabs card-header-tabs",
+                          attrs: {
+                            role: "tablist",
+                            tabindex: "0",
+                            id: "__BVID__196__BV_tab_controls_"
+                          }
+                        },
+                        [
+                          _c(
+                            "li",
+                            {
+                              staticClass: "nav-item",
+                              attrs: { role: "presentation" }
+                            },
+                            [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "nav-link active",
+                                  attrs: {
+                                    role: "tab",
+                                    tabindex: "-1",
+                                    href: "#",
+                                    id: "__BVID__197___BV_tab_button__",
+                                    "aria-selected": "true",
+                                    "aria-setsize": "1",
+                                    "aria-posinset": "1",
+                                    "aria-controls":
+                                      "__BVID__196__BV_tab_container_"
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "<i\n                                        class='ti-comments'></i>"
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "tab-content",
+                        attrs: { id: "__BVID__196__BV_tab_container_" }
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "tab-pane card-body show fade active",
+                            attrs: {
+                              role: "tabpanel",
+                              id: "__BVID__197",
+                              "aria-hidden": "false",
+                              "aria-expanded": "true",
+                              "aria-lablelledby":
+                                "__BVID__197___BV_tab_button__"
+                            }
+                          },
+                          [
+                            _c("div", { attrs: { id: "slim_t1" } }, [
+                              _c("div", [
+                                _c(
+                                  "h5",
+                                  {
+                                    staticClass:
+                                      "rightsidebar-right-heading text-uppercase text-xs"
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "menu-icon  fa fa-fw ti-user"
+                                    }),
+                                    _vm._v(
+                                      "\n                                            Contacts\n                                        "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "ul",
+                                  { staticClass: "list-unstyled margin-none" },
+                                  [
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass:
+                                          "rightsidebar-contact-wrapper"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            staticClass: "rightsidebar-contact",
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass:
+                                                "rounded-circle float-right",
+                                              attrs: {
+                                                src:
+                                                  "/images/avatar6.jpg?71bfec8fc58afc8a950d31fa2414525c",
+                                                alt: "avatar-image"
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c("i", {
+                                              staticClass:
+                                                "fa fa-circle text-xs text-primary"
+                                            }),
+                                            _vm._v(
+                                              " Annette\n                                                "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass:
+                                          "rightsidebar-contact-wrapper"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            staticClass: "rightsidebar-contact",
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass:
+                                                "rounded-circle float-right",
+                                              attrs: {
+                                                src:
+                                                  "/images/avatar.jpg?411dee33b51de39bfbcda58698b02382",
+                                                alt: "avatar-image"
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c("i", {
+                                              staticClass:
+                                                "fa fa-circle text-xs text-primary"
+                                            }),
+                                            _vm._v(
+                                              " Jordan\n                                                "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass:
+                                          "rightsidebar-contact-wrapper"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            staticClass: "rightsidebar-contact",
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass:
+                                                "rounded-circle float-right",
+                                              attrs: {
+                                                src:
+                                                  "/images/avatar2.jpg?c880ad025efbef8ee5ae438b9799636f",
+                                                alt: "avatar-image"
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c("i", {
+                                              staticClass:
+                                                "fa fa-circle text-xs text-primary"
+                                            }),
+                                            _vm._v(
+                                              " Stewart\n                                                "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass:
+                                          "rightsidebar-contact-wrapper"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            staticClass: "rightsidebar-contact",
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass:
+                                                "rounded-circle float-right",
+                                              attrs: {
+                                                src:
+                                                  "/images/avatar3.jpg?5cc977990977a9c107216d8366aba18f",
+                                                alt: "avatar-image"
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c("i", {
+                                              staticClass:
+                                                "fa fa-circle text-xs text-warning"
+                                            }),
+                                            _vm._v(
+                                              " Alfred\n                                                "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass:
+                                          "rightsidebar-contact-wrapper"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            staticClass: "rightsidebar-contact",
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass:
+                                                "rounded-circle float-right",
+                                              attrs: {
+                                                src:
+                                                  "/images/avatar4.jpg?b8f96d84f21362b28c3784deeccd6aab",
+                                                alt: "avatar-image"
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c("i", {
+                                              staticClass:
+                                                "fa fa-circle text-xs text-danger"
+                                            }),
+                                            _vm._v(
+                                              " Eileen\n                                                "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass:
+                                          "rightsidebar-contact-wrapper"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            staticClass: "rightsidebar-contact",
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass:
+                                                "rounded-circle float-right",
+                                              attrs: {
+                                                src:
+                                                  "/images/avatar5.jpg?dd46e2e2d1f85d751bf6a5990d05678b",
+                                                alt: "avatar-image"
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c("i", {
+                                              staticClass:
+                                                "fa fa-circle text-xs text-muted"
+                                            }),
+                                            _vm._v(
+                                              " Robert\n                                                "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass:
+                                          "rightsidebar-contact-wrapper"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            staticClass: "rightsidebar-contact",
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticClass:
+                                                "rounded-circle float-right",
+                                              attrs: {
+                                                src:
+                                                  "/images/avatar7.jpg?ccdd6115cac1528731d3400efd86d19d",
+                                                alt: "avatar-image"
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c("i", {
+                                              staticClass:
+                                                "fa fa-circle text-xs text-muted"
+                                            }),
+                                            _vm._v(
+                                              " Cassandra\n                                                "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "h5",
+                                  {
+                                    staticClass:
+                                      "rightsidebar-right-heading text-uppercase text-xs"
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "fa fa-fw ti-export"
+                                    }),
+                                    _vm._v(
+                                      "\n                                                Recent Updates\n                                            "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("div", [
+                                  _c("ul", { staticClass: "list-unstyled" }, [
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass: "rightsidebar-notification"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("i", {
+                                              staticClass:
+                                                "fa ti-comments-smiley fa-fw text-primary"
+                                            }),
+                                            _vm._v(
+                                              " New\n                                                        Comment\n                                                    "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass: "rightsidebar-notification"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("i", {
+                                              staticClass:
+                                                "fa ti-twitter-alt fa-fw text-success"
+                                            }),
+                                            _vm._v(
+                                              " 3 New\n                                                        Followers\n                                                    "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass: "rightsidebar-notification"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("i", {
+                                              staticClass:
+                                                "fa ti-email fa-fw text-info"
+                                            }),
+                                            _vm._v(
+                                              " Message Sent\n                                                    "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass: "rightsidebar-notification"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("i", {
+                                              staticClass:
+                                                "fa ti-write fa-fw text-warning"
+                                            }),
+                                            _vm._v(
+                                              " New Task\n                                                    "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass: "rightsidebar-notification"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("i", {
+                                              staticClass:
+                                                "fa ti-export fa-fw text-danger"
+                                            }),
+                                            _vm._v(
+                                              " Server Rebooted\n                                                    "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass: "rightsidebar-notification"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("i", {
+                                              staticClass:
+                                                "fa ti-info-alt fa-fw text-primary"
+                                            }),
+                                            _vm._v(
+                                              " Server Not\n                                                        Responding\n                                                    "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass: "rightsidebar-notification"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("i", {
+                                              staticClass:
+                                                "fa ti-shopping-cart fa-fw text-success"
+                                            }),
+                                            _vm._v(
+                                              " New Order\n                                                        Placed\n                                                    "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "li",
+                                      {
+                                        staticClass: "rightsidebar-notification"
+                                      },
+                                      [
+                                        _c(
+                                          "a",
+                                          {
+                                            attrs: {
+                                              href: "javascript:void(0)"
+                                            }
+                                          },
+                                          [
+                                            _c("i", {
+                                              staticClass:
+                                                "fa ti-money fa-fw text-info"
+                                            }),
+                                            _vm._v(
+                                              " Payment Received\n                                                    "
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  ])
+                                ])
+                              ])
+                            ])
+                          ]
+                        )
+                      ]
+                    )
+                  ]
+                )
+              ])
+            ])
+          ]
+        )
       ])
     ])
   }
@@ -73297,7 +75366,7 @@ module.exports = "/images/color-logo.png?9b09dfcfe9e03feaf0f425b6dcfd3e62";
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes__ = __webpack_require__("./resources/js/routes.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes__ = __webpack_require__("./resources/js/routes/index.js");
 
 /*
  |--------------------------------------------------------------------------
@@ -73316,20 +75385,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 __webpack_require__("./spark/resources/assets/js/spark-bootstrap.js");
 __webpack_require__("./resources/js/components/bootstrap.js");
+window.Vue = __webpack_require__("./node_modules/vue/dist/vue.js");
+
 var invoice = __webpack_require__("./resources/js/components/invoice.vue");
+
 var projects = __webpack_require__("./resources/js/views/project/index.vue");
+
 __webpack_require__("./resources/js/bootstrap.js");
 
 
 
 var app = new Vue({
-    // el: '#app',
     router: __WEBPACK_IMPORTED_MODULE_0__routes__["a" /* default */],
     mixins: [__webpack_require__("./spark/resources/assets/js/spark.js")],
     components: {
         invoice: invoice, projects: projects
     }
 });
+// .$mount('#project');
 
 /***/ }),
 
@@ -74264,19 +76337,28 @@ $(window).on('load', function () {
 
 /***/ }),
 
-/***/ "./resources/js/routes.js":
+/***/ "./resources/js/routes/index.js":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_router__ = __webpack_require__("./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__("./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_project_index__ = __webpack_require__("./resources/js/views/project/index.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_project_index___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__views_project_index__);
+
+
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]);
 
 
 var routes = [{
-    path: '/project',
-    component: __webpack_require__("./resources/js/views/project/index.vue")
+    path: '/projects',
+    component: __WEBPACK_IMPORTED_MODULE_2__views_project_index___default.a
 }];
 
-var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
+var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
+    mode: 'history',
     routes: routes
 });
 

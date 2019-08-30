@@ -21,6 +21,6 @@ Route::get('/select', 'ClearController@show_select');
 
 Route::get('/blank','ClearController@show_blank');
 
-Route::get('/projects','ProjectController@index');
+//Route::get('/projects','ProjectController@index');
 
-Route::get( '/{vue_route?}', 'VueController@index' )->where( 'vue_route', '(.*)' );
+Route::get( '/{vue_route?}', 'ProjectController@index' )->where( 'vue_route', '(.*)' );

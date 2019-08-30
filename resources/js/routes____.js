@@ -1,10 +1,12 @@
+import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Index from './views/project/index'
 
-let routes = [
+let routes____ = [
 
             {
-                path: '/project',
-                component: require('./views/project/index')
+                path: '/projects',
+                component: Index
             },
             // {
             //     path: '/project/create',
@@ -35,7 +37,7 @@ let routes = [
 ];
 
 const router = new VueRouter({
-    routes
+    routes: routes____
 });
 
 
