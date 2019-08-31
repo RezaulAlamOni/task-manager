@@ -74,7 +74,7 @@
                                                     style="width: auto;">
                                                     ID <i data-v-095ab3dc="" class="fa float-right  fa fa-angle-up"></i>
                                                 </th>
-                                                <th data-v-095ab3dc="" class="sortable" style="width: auto;">
+                                                <th data-v-095ab3dc="" class="sortable " style="width: auto;">
                                                     Title <i data-v-095ab3dc="" class="fa float-right"></i></th>
                                                 <th data-v-095ab3dc="" class="sortable" style="width: auto;">
                                                     Description <i data-v-095ab3dc="" class="fa float-right"></i></th>
@@ -88,17 +88,17 @@
                                             <tr data-v-095ab3dc="">
                                                 <td data-v-095ab3dc="" class="numeric">
                                                     16023
-                                                </td> <!---->
-                                                <td data-v-095ab3dc="" class="" @click="projectView(21)">
+                                                </td>
+                                                <td data-v-095ab3dc="" class="" @click="projectView(21)" style="cursor: pointer;">
                                                    Project 1
-                                                </td> <!---->
+                                                </td>
 
                                                 <td data-v-095ab3dc="" class="numeric">
                                                     This is statis data.
-                                                </td> <!---->
+                                                </td>
                                                 <td data-v-095ab3dc="" class="">
                                                     Deactivated
-                                                </td> <!----><!---->
+                                                </td>
                                                 <td data-v-095ab3dc="" class=""><a class="btn btn-info"
                                                                                    href="#/edit_user?0">Edit</a></td>
                                             </tr>

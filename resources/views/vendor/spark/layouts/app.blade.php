@@ -64,7 +64,7 @@
                     </section>
                     <!-- Main content -->
                     <!-- Main Content -->
-                    <main class="py-4">
+                    <main class="">
                         @yield('content')
                     </main>
                     <!-- /.content -->

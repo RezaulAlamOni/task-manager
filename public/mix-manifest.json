@@ -1,9 +1,11 @@
 {
-    "/js/app.js": "/js/app.js?id=57526f03494556307df2",
+    "/js/app.js": "/js/app.js?id=ed4e76121c6f9a53d1a0",
     "/css/bootstrap.css": "/css/bootstrap.css?id=2482ac39695b72cb79b7",
     "/css/custom.css": "/css/custom.css?id=5d2b37a8840f54592ccd",
     "/css/light_custom.css": "/css/light_custom.css?id=c1d633676e754d8e271f",
     "/css/app.css": "/css/app.css?id=8bc14d70a7e2fdd177fe",
+    "/css/board_view.css": "/css/board_view.css?id=3861fbb50a6bafb8b07c",
+    "/css/tree_view.css": "/css/tree_view.css?id=2ce2bb4fefdd38b67a26",
     "/css/app-rtl.css": "/css/app-rtl.css?id=8bc14d70a7e2fdd177fe",
     "/vendors/select2/css/select2.min.css": "/vendors/select2/css/select2.min.css?id=af22a7e2bfec4d2a82c4",
     "/vendors/select2/js/select2.js": "/vendors/select2/js/select2.js?id=2f9a54c2500929a2aade",

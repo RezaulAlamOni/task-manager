@@ -1,5 +1,6 @@
 <template>
-    <div>
+
+    <div class="card pt-0 mt-0">
         <div class="row page-titles">
             <div class="col-md-12 col-12 align-self-center">
                 <!--                <div class="btn-group col-md-12">-->
@@ -14,7 +15,7 @@
 
                 <ul class="nav" style="border-bottom: 1px solid #cedcc4">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="'/project-dashboard/'+projects.id">List<i
+                        <router-link class="nav-link activeTask" :to="'/project-dashboard/'+projects.id">List<i
                                 class="i-btn x20 task-complete icon-circle-o"></i></router-link>
                     </li>
                     <li class="nav-item">
@@ -407,7 +408,15 @@
     </div>
 
 </template>
+<style>
+    .activeTask{
+        background: #aec8dd;
+        border-radius: 3px;
+        color: black;
+        font-weight: bold;
+    }
 
+</style>
 <script>
     import draggableHelper from 'draggable-helper';
     import {DraggableTree} from 'vue-draggable-nested-tree';
