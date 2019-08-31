@@ -75,7 +75,7 @@
                                                @blur="showItem($event)"
                                                @keypress="saveData($event,data)"
                                                @keydown="keyDownAction($event,data)"
-                                               class="inp input-hide" @click="makeInput($event,data)">
+                                               class="inp input-hide input-title" @click="makeInput($event,data)">
                                     </span>
 
                                     <a class="attach-icon hide-item-res">
@@ -94,12 +94,12 @@
                                     <a class="tag-icon hide-item-res">
                                         <div v-if="data.tags && data.tags.length !== 0">
                                             <div v-for="item in data.tags">
-                                                <span class="badge badge-danger"
+                                                <span class="badge badge-warning" style="background: #8b3920"
                                                       @click="changeTag(data)"
-                                                      v-if='item == "Dont Forget"'>{{item.substring(0,12)}}</span>
+                                                      v-if='item === "Dont Forget"'>{{item.substring(0,12)}}</span>
                                                 <span class="badge badge-success"
                                                       @click="changeTag(data)"
-                                                      v-else>{{item.substring(0,10)}}..</span>
+                                                      v-else>{{item.substring(0,12)}}..</span>
                                             </div>
                                         </div>
 
@@ -414,6 +414,9 @@
         border-radius: 3px;
         color: black;
         font-weight: bold;
+    }
+    .input-title{
+        display: inline-block !important;
     }
 
 </style>

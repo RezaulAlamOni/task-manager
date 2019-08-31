@@ -4,11 +4,11 @@
             <div class="col-md-12 col-12 align-self-center">
                 <ul class="nav" style="border-bottom: 1px solid #cedcc4">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="'/project-dashboard/'+projects.id">List
+                        <router-link class="nav-link" :to="'/project-dashboard/21'">List
                             <i class="i-btn x20 task-complete icon-circle-o"></i></router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link activeTask" :to="'/project-board/'+projects.id">Board
+                        <router-link class="nav-link activeTask" :to="'/project-board/21'">Board
                             <i class="tree-toggle i-btn x30"></i>
                         </router-link>
                     </li>
@@ -265,8 +265,8 @@
                         <p v-if="addField.error" class="text-danger">{{addField.error}}</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="setColumn">Add</button>
-                        <button type="button" class="btn btn-secondary" @click="clearInputFeild">Cancel</button>
+                        <button type="button" class="btn btn-primary" @click="setColumn()">Add</button>
+                        <button type="button" class="btn btn-secondary" @click="clearInputFeild()">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -673,8 +673,10 @@
                         column: this.addField.name,
                         task: [{name: '', date: '', tags: [], clicked: 0}]
                     });
+
                     this.getData();
                     this.addField = {};
+                    console.log(this.cards)
                 }
             },
             updateColumSow(index) {
