@@ -425,11 +425,7 @@
         data() {
             return {
                 id: 0,
-                projects: {
-                    id: null,
-                    name: null,
-                    description: null,
-                },
+                tree4data1: [],
                 tree4data: [
                     {
                         id: 1,
@@ -535,22 +531,13 @@
         mounted() {
             let _this = this;
             this.projectId = this.$route.params.projectId;
-            this.getProjects();
+            this.getTaskList();
             $(document).ready(function () {
                 $('.delete-icon').hide();
                 $('.searchList').hide();
                 $('.SubmitButton').hide();
                 $('.submitdetails').hide();
-                //
-                // $(document).bind("contextmenu",function(e){
-                //     return false;
-                // });
-                // $(document).on("keypress", "input", function(e){
-                //     if(e.which == 13){
-                //         var inputVal = $(this).val();
-                //         alert("You've entered: " + inputVal);
-                //     }
-                // });
+
             });
 
         },
@@ -730,17 +717,16 @@
             hasPermission(permission) {
                 return helper.hasPermission(permission);
             },
-            getProjects() {
-                axios.get('/api/project/' + this.projectId)
+            getTaskList() {
+                axios.get('/api/task-list/' + this.projectId)
                     .then(response => response.data)
                     .then(response => {
-
-                        this.projects = response.project;
-                        // this.projectForm.description = response.project.description;
+                        this.tree4data1 = response;
+                        console.log(this.tree4data)
+                        console.log(this.tree4data1)
                     })
                     .catch(error => {
-                        helper.showDataErrorMsg(error);
-                        this.$router.push('/project');
+
                     });
             },
             confirmDelete(project) {
@@ -1105,7 +1091,7 @@
         watch: {
             filterProjectForm: {
                 handler(val) {
-                    this.getProjects();
+                    this.getTaskList();
                 },
                 deep: true
             }

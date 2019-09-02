@@ -3721,11 +3721,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             id: 0,
-            projects: {
-                id: null,
-                name: null,
-                description: null
-            },
+            tree4data1: [],
             tree4data: [{
                 id: 1,
                 parent: 0,
@@ -3804,22 +3800,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     mounted: function mounted() {
         var _this = this;
         this.projectId = this.$route.params.projectId;
-        this.getProjects();
+        this.getTaskList();
         $(document).ready(function () {
             $('.delete-icon').hide();
             $('.searchList').hide();
             $('.SubmitButton').hide();
             $('.submitdetails').hide();
-            //
-            // $(document).bind("contextmenu",function(e){
-            //     return false;
-            // });
-            // $(document).on("keypress", "input", function(e){
-            //     if(e.which == 13){
-            //         var inputVal = $(this).val();
-            //         alert("You've entered: " + inputVal);
-            //     }
-            // });
         });
     },
     created: function created() {
@@ -3994,19 +3980,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         hasPermission: function hasPermission(permission) {
             return helper.hasPermission(permission);
         },
-        getProjects: function getProjects() {
+        getTaskList: function getTaskList() {
             var _this2 = this;
 
-            axios.get('/api/project/' + this.projectId).then(function (response) {
+            axios.get('/api/task-list/' + this.projectId).then(function (response) {
                 return response.data;
             }).then(function (response) {
-
-                _this2.projects = response.project;
-                // this.projectForm.description = response.project.description;
-            }).catch(function (error) {
-                helper.showDataErrorMsg(error);
-                _this2.$router.push('/project');
-            });
+                _this2.tree4data1 = response;
+                console.log(_this2.tree4data);
+                console.log(_this2.tree4data1);
+            }).catch(function (error) {});
         },
         confirmDelete: function confirmDelete(project) {
             var _this3 = this;
@@ -4365,7 +4348,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     watch: {
         filterProjectForm: {
             handler: function handler(val) {
-                this.getProjects();
+                this.getTaskList();
             },
 
             deep: true
