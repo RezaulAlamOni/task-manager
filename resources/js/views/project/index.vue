@@ -85,24 +85,22 @@
                                             </tr>
                                             </thead>
                                             <tbody data-v-095ab3dc="">
-                                            <tr data-v-095ab3dc="">
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    16023
+                                            <tr v-for="project in projects">
+                                                <td class="router_td">{{project.id}}</td>
+                                                <td class="router_td" @click="projectView(project.id)">{{project.name}}</td>
+                                                <td v-text="project.description ? project.description : ''"></td>
+                                                <td>Active</td>
+                                                <td class="table-option">
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-info btn-sm" title="edit_project"
+                                                                @click.prevent="editProject(project)"><i
+                                                            class="fa fa-edit"></i></button>
+                                                        <button class="btn btn-danger btn-sm" :key="project.id"
+                                                                title="Delete"  @click.prevent="confirmDelete(project)"><i
+                                                            class="fa fa-trash" ></i></button>
+                                                    </div>
                                                 </td>
-                                                <td data-v-095ab3dc="" class="" @click="projectView(21)" style="cursor: pointer;">
-                                                   Project 1
-                                                </td>
-
-                                                <td data-v-095ab3dc="" class="numeric">
-                                                    This is statis data.
-                                                </td>
-                                                <td data-v-095ab3dc="" class="">
-                                                    Deactivated
-                                                </td>
-                                                <td data-v-095ab3dc="" class=""><a class="btn btn-info"
-                                                                                   href="#/edit_user?0">Edit</a></td>
                                             </tr>
-
                                             </tbody>
                                         </table>
                                     </div>
@@ -181,13 +179,10 @@
                 if (typeof page === 'undefined') {
                     page = 1;
                 }
-                // let url = helper.getFilterURL(this.filterProjectForm);
-                let url = '/';
-                console.log(url)
                 axios.get('/api/project')
                     .then(response => response.data)
                     .then(response => {
-                        this.projects = response.projects;
+                        this.projects = response.Projects;
                         console.log(this.projects)
                     })
                     .catch(error => {

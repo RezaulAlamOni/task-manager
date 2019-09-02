@@ -12,6 +12,15 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+//        $this->middleware('auth');
+    }
+    public function getAll(){
+        $Projects = Project::all();
+        return $this->success(compact('projects', 'Projects'));
+    }
+
     public function index()
     {
         return view('projects');
@@ -81,5 +90,22 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         //
+    }
+
+    public function success($items = null, $status = 200)
+    {
+        $data = ['status' => 'success'];
+
+        if ($items instanceof Arrayable) {
+            $items = $items->toArray();
+        }
+
+        if ($items) {
+            foreach ($items as $key => $item) {
+                $data[$key] = $item;
+            }
+        }
+
+        return response()->json($data, $status)->setEncodingOptions(JSON_NUMERIC_CHECK);
     }
 }

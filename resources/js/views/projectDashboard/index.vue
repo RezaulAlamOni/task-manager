@@ -3,23 +3,14 @@
     <div class="card pt-0 mt-0">
         <div class="row page-titles">
             <div class="col-md-12 col-12 align-self-center">
-                <!--                <div class="btn-group col-md-12">-->
-                <!--                    <h3 class="text-themecolor ">{{projects.name}}</h3>-->
-                <!--                    <p class="dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"></p>-->
-                <!--                    <div class="dropdown-menu">-->
-                <!--                        <a class="dropdown-item" href="#">Link 1</a>-->
-                <!--                        <a class="dropdown-item" href="#">Link 2</a>-->
-                <!--                    </div>-->
-
-                <!--                </div>-->
 
                 <ul class="nav" style="border-bottom: 1px solid #cedcc4">
                     <li class="nav-item">
-                        <router-link class="nav-link activeTask" :to="'/project-dashboard/'+projects.id">List<i
+                        <router-link class="nav-link activeTask" :to="{ name: 'project-dashboard', params: { projectId: projectId }}">List<i
                                 class="i-btn x20 task-complete icon-circle-o"></i></router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="'/project-board/'+projects.id">Board <i
+                        <router-link class="nav-link" :to="{ name: 'project-board', params: { projectId: projectId }}">Board <i
                                 class="tree-toggle i-btn x30"></i>
                         </router-link>
                     </li>
@@ -538,6 +529,7 @@
                 tabKey: 0,
                 reselectParentId : null,
                 tag:null,
+                projectId:null,
             }
         },
         mounted() {

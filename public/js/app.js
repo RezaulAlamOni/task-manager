@@ -2412,8 +2412,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 
@@ -2444,13 +2442,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (typeof page === 'undefined') {
                 page = 1;
             }
-            // let url = helper.getFilterURL(this.filterProjectForm);
-            var url = '/';
-            console.log(url);
             axios.get('/api/project').then(function (response) {
                 return response.data;
             }).then(function (response) {
-                _this.projects = response.projects;
+                _this.projects = response.Projects;
                 console.log(_this.projects);
             }).catch(function (error) {});
         },
@@ -2996,10 +2991,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
             updateIndex: null,
             tag: null,
-            selectedExistedTask: []
+            selectedExistedTask: [],
+            projectId: null
         };
     },
     mounted: function mounted() {
+        this.projectId = this.$route.params.projectId;
         $(document).ready(function () {
             $(function () {
                 $('[data-toggle="popover"]').popover();
@@ -3710,15 +3707,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -3809,7 +3797,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             makeChildText: null,
             tabKey: 0,
             reselectParentId: null,
-            tag: null
+            tag: null,
+            projectId: null
         };
     },
     mounted: function mounted() {
@@ -72974,67 +72963,88 @@ var render = function() {
                           [
                             _vm._m(3),
                             _vm._v(" "),
-                            _c("tbody", { attrs: { "data-v-095ab3dc": "" } }, [
-                              _c("tr", { attrs: { "data-v-095ab3dc": "" } }, [
-                                _c(
-                                  "td",
-                                  {
-                                    staticClass: "numeric",
-                                    attrs: { "data-v-095ab3dc": "" }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                                    16023\n                                                "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "td",
-                                  {
-                                    staticStyle: { cursor: "pointer" },
-                                    attrs: { "data-v-095ab3dc": "" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.projectView(21)
+                            _c(
+                              "tbody",
+                              { attrs: { "data-v-095ab3dc": "" } },
+                              _vm._l(_vm.projects, function(project) {
+                                return _c("tr", [
+                                  _c("td", { staticClass: "router_td" }, [
+                                    _vm._v(_vm._s(project.id))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "td",
+                                    {
+                                      staticClass: "router_td",
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.projectView(project.id)
+                                        }
                                       }
+                                    },
+                                    [_vm._v(_vm._s(project.name))]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("td", {
+                                    domProps: {
+                                      textContent: _vm._s(
+                                        project.description
+                                          ? project.description
+                                          : ""
+                                      )
                                     }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                                   Project 1\n                                                "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "td",
-                                  {
-                                    staticClass: "numeric",
-                                    attrs: { "data-v-095ab3dc": "" }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                                    This is statis data.\n                                                "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c("td", { attrs: { "data-v-095ab3dc": "" } }, [
-                                  _vm._v(
-                                    "\n                                                    Deactivated\n                                                "
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _vm._m(4)
-                              ])
-                            ])
+                                  }),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v("Active")]),
+                                  _vm._v(" "),
+                                  _c("td", { staticClass: "table-option" }, [
+                                    _c("div", { staticClass: "btn-group" }, [
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass: "btn btn-info btn-sm",
+                                          attrs: { title: "edit_project" },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.editProject(project)
+                                            }
+                                          }
+                                        },
+                                        [_c("i", { staticClass: "fa fa-edit" })]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "button",
+                                        {
+                                          key: project.id,
+                                          staticClass: "btn btn-danger btn-sm",
+                                          attrs: { title: "Delete" },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              return _vm.confirmDelete(project)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "fa fa-trash"
+                                          })
+                                        ]
+                                      )
+                                    ])
+                                  ])
+                                ])
+                              }),
+                              0
+                            )
                           ]
                         )
                       ]
                     ),
                     _vm._v(" "),
-                    _vm._m(5)
+                    _vm._m(4)
                   ]
                 )
               ])
@@ -73218,18 +73228,6 @@ var staticRenderFns = [
           ]
         )
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", { attrs: { "data-v-095ab3dc": "" } }, [
-      _c(
-        "a",
-        { staticClass: "btn btn-info", attrs: { href: "#/edit_user?0" } },
-        [_vm._v("Edit")]
-      )
     ])
   },
   function() {
@@ -73956,7 +73954,12 @@ var render = function() {
                   "router-link",
                   {
                     staticClass: "nav-link",
-                    attrs: { to: "/project-dashboard/21" }
+                    attrs: {
+                      to: {
+                        name: "project-dashboard",
+                        params: { projectId: _vm.projectId }
+                      }
+                    }
                   },
                   [
                     _vm._v("List\n                        "),
@@ -73977,7 +73980,12 @@ var render = function() {
                   "router-link",
                   {
                     staticClass: "nav-link activeTask",
-                    attrs: { to: "/project-board/21" }
+                    attrs: {
+                      to: {
+                        name: "project-board",
+                        params: { projectId: _vm.projectId }
+                      }
+                    }
                   },
                   [
                     _vm._v("Board\n                        "),
@@ -75877,7 +75885,12 @@ var render = function() {
                   "router-link",
                   {
                     staticClass: "nav-link activeTask",
-                    attrs: { to: "/project-dashboard/" + _vm.projects.id }
+                    attrs: {
+                      to: {
+                        name: "project-dashboard",
+                        params: { projectId: _vm.projectId }
+                      }
+                    }
                   },
                   [
                     _vm._v("List"),
@@ -75898,7 +75911,12 @@ var render = function() {
                   "router-link",
                   {
                     staticClass: "nav-link",
-                    attrs: { to: "/project-board/" + _vm.projects.id }
+                    attrs: {
+                      to: {
+                        name: "project-board",
+                        params: { projectId: _vm.projectId }
+                      }
+                    }
                   },
                   [
                     _vm._v("Board "),

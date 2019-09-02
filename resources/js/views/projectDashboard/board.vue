@@ -4,11 +4,11 @@
             <div class="col-md-12 col-12 align-self-center">
                 <ul class="nav" style="border-bottom: 1px solid #cedcc4">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="'/project-dashboard/21'">List
+                        <router-link class="nav-link" :to="{ name: 'project-dashboard', params: { projectId: projectId }}">List
                             <i class="i-btn x20 task-complete icon-circle-o"></i></router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link activeTask" :to="'/project-board/21'">Board
+                        <router-link class="nav-link activeTask" :to="{ name: 'project-board', params: { projectId: projectId }}">Board
                             <i class="tree-toggle i-btn x30"></i>
                         </router-link>
                     </li>
@@ -534,9 +534,11 @@
                 updateIndex: null,
                 tag: null,
                 selectedExistedTask : [],
+                projectId : null,
             }
         },
         mounted() {
+            this.projectId = this.$route.params.projectId;
             $(document).ready(function () {
                 $(function () {
                     $('[data-toggle="popover"]').popover()
