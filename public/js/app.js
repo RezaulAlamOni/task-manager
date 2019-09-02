@@ -75959,8 +75959,6 @@ var render = function() {
                     key: "default",
                     fn: function(ref) {
                       var data = ref.data
-                      var _id = ref._id
-                      var store = ref.store
                       return _c(
                         "div",
                         {
@@ -76040,7 +76038,7 @@ var render = function() {
                                       {
                                         on: {
                                           click: function($event) {
-                                            return store.toggleOpen(data)
+                                            return _vm.store.toggleOpen(data)
                                           }
                                         }
                                       },
@@ -76060,7 +76058,7 @@ var render = function() {
                                       {
                                         on: {
                                           click: function($event) {
-                                            return store.toggleOpen(data)
+                                            return _vm.store.toggleOpen(data)
                                           }
                                         }
                                       },

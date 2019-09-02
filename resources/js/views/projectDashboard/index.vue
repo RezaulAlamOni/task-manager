@@ -35,7 +35,7 @@
                               @change="ChangeNode"
                               :indent="30"
                               :space="0">
-                            <div :class="{eachItemRow: true}" slot-scope="{data, _id,store }"
+                            <div :class="{eachItemRow: true}" slot-scope="{data}"
                                  style="font-size: 12px"
                                  @click="makeItClick($event, data)" :id="data._id">
                                 <template v-if="!data.isDragPlaceHolder" v-html="data.html">

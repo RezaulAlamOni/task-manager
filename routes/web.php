@@ -27,6 +27,9 @@ Route::prefix('api')->group(function () {
     Route::get('/project/{id}', 'ProjectController@show');
     Route::post('/project', 'ProjectController@store');
     Route::patch('/project/{id}', 'ProjectController@update');
+
+    Route::get('/task-list', 'TaskController@getAll');
+
 });
 
 
