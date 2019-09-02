@@ -55,9 +55,7 @@ mix.sass(resourcesAssets + 'sass/custom.scss', 'public/css');
 mix.sass(resourcesAssets + 'sass/light_custom.scss', 'public/css');
 
 
-
-mix
-    .sass('resources/sass/app.scss', 'public/css')
+mix.sass('resources/sass/app.scss', 'public/css')
     .sass('resources/sass/board_view.scss', 'public/css')
     .sass('resources/sass/tree_view.scss', 'public/css')
     .js('resources/js/app.js', 'public/js')
