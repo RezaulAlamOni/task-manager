@@ -1,53 +1,11 @@
 <template>
-<!--    <div>-->
-
-<!--        <div class="row">-->
-<!--            <div class="col-12 col-sm-8 col-md-8">-->
-<!--                <div class="card">-->
-<!--                    <div class="card-body">-->
-<!--                        <h3 class="card-title">Project List</h3>-->
-<!--                        <h6 class="card-subtitle" v-if="projects">Total Result Found {{projects.total}}</h6>-->
-<!--                        <h6 class="card-subtitle" v-else>no_result_found</h6>-->
-<!--                        <div class="table-responsive" v-if="projects.total">-->
-<!--                            <table class="table">-->
-<!--                                <thead>-->
-<!--                                <tr>-->
-<!--                                    <th>Name</th>-->
-<!--                                    <th>Description</th>-->
-<!--                                    <th class="table-option">Action</th>-->
-<!--                                </tr>-->
-<!--                                </thead>-->
-<!--                                <tbody>-->
-<!--                                <tr v-for="project in projects.data">-->
-<!--                                    <td class="router_td" @click="projectView(project.id)">{{project.name}}</td>-->
-<!--                                    <td v-text="project.description ? project.description : ''"></td>-->
-<!--                                    <td class="table-option">-->
-<!--                                        <div class="btn-group">-->
-<!--                                            <button class="btn btn-info btn-sm" v-if="1" v-tooltip="edit_project"-->
-<!--                                                    @click.prevent="editProject(project)"><i-->
-<!--                                                class="fas fa-pencil-alt"></i></button>-->
-<!--                                            <button class="btn btn-danger btn-sm" v-if="0" :key="project.id"-->
-<!--                                                    v-confirm="{ok: confirmDelete(project)}" v-tooltip="Delete"><i-->
-<!--                                                class="fas fa-trash"></i></button>-->
-<!--                                        </div>-->
-<!--                                    </td>-->
-<!--                                </tr>-->
-<!--                                </tbody>-->
-<!--                            </table>-->
-<!--                        </div>-->
-<!--                        <div v-else><p class="warning"> No data Found</p></div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
     <aside class="right-aside">
         <section class="content">
             <div class="row user-list">
                 <div class="col-lg-12">
                     <div class="card bg-primary-card">
                         <h4 class="card-header">
-                            <div>Registered Users</div>
+                            <div>Projects</div>
                         </h4>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -60,10 +18,14 @@
                                             data-v-095ab3dc=""><input data-v-095ab3dc="" type="search" id="search-input"
                                                                       placeholder="Search data"
                                                                       class="form-control mb-2"></label>
-                                            <div data-v-095ab3dc="" class="actions float-right pr-4 mb-3"><a
-                                                data-v-095ab3dc="" href="javascript:undefined" title="export excel"
-                                                class="btn btn-info"><i data-v-095ab3dc=""
-                                                                        class="fa fa-download"></i></a></div>
+                                            <div data-v-095ab3dc="" class="actions float-right pr-4 mb-3">
+
+
+                                                <router-link class="nav-link activeTask" :to="{ name: 'project-create'}">
+                                                    <a data-v-095ab3dc="" href="javascript:void(0)" title="Create Project" class="btn btn-info">
+                                                        <i data-v-095ab3dc=""class="fa fa-plus"></i></a>
+                                                </router-link>
+                                            </div>
                                         </div>
                                     </div>
                                     <div data-v-095ab3dc="" class="table-responsive">
@@ -87,7 +49,9 @@
                                             <tbody data-v-095ab3dc="">
                                             <tr v-for="project in projects">
                                                 <td class="router_td">{{project.id}}</td>
-                                                <td class="router_td" @click="projectView(project.id)">{{project.name}}</td>
+                                                <td class="router_td" @click="projectView(project.id,project.name)">
+                                                    {{project.name}}
+                                                </td>
                                                 <td v-text="project.description ? project.description : ''"></td>
                                                 <td>Active</td>
                                                 <td class="table-option">
@@ -96,8 +60,9 @@
                                                                 @click.prevent="editProject(project)"><i
                                                             class="fa fa-edit"></i></button>
                                                         <button class="btn btn-danger btn-sm" :key="project.id"
-                                                                title="Delete"  @click.prevent="confirmDelete(project)"><i
-                                                            class="fa fa-trash" ></i></button>
+                                                                title="Delete" @click.prevent="deleteProject(project)">
+                                                            <i
+                                                                class="fa fa-trash"></i></button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -120,10 +85,10 @@
                                         </div>
                                         <div data-v-095ab3dc="" class="float-right">
                                             <ul data-v-095ab3dc="" class="pagination">
-                                                <li data-v-095ab3dc=""><a data-v-095ab3dc="" href="javascript:undefined"
+                                                <li data-v-095ab3dc=""><a data-v-095ab3dc="" href="javascript:void(0)"
                                                                           tabindex="0" class="btn link"><i
                                                     data-v-095ab3dc="" class="fa fa-angle-left"></i></a></li>
-                                                <li data-v-095ab3dc=""><a data-v-095ab3dc="" href="javascript:undefined"
+                                                <li ><a data-v-095ab3dc="" href="javascript:void(0)"
                                                                           tabindex="0" class="btn link"><i
                                                     data-v-095ab3dc="" class="fa fa-angle-right"></i></a></li>
                                             </ul>
@@ -167,23 +132,19 @@
             };
         },
         mounted() {
+            $('#header-item').text('Projects')
             this.getProjects();
         },
         methods: {
 
-            projectView(id) {
-                this.$router.push({name: 'project-dashboard', params: {projectId: id}});
+            projectView(id, name) {
+                this.$router.push({name: 'project-dashboard', params: {projectId: id,name : name}});
             },
-            getProjects(page) {
-
-                if (typeof page === 'undefined') {
-                    page = 1;
-                }
+            getProjects() {
                 axios.get('/api/project')
                     .then(response => response.data)
                     .then(response => {
                         this.projects = response.Projects;
-                        console.log(this.projects)
                     })
                     .catch(error => {
 
@@ -196,11 +157,12 @@
                 return dialog => this.deleteProject(project);
             },
             deleteProject(project) {
-                axios.delete('/api/project/' + project.id)
+                axios.post('/api/project/' + project.id)
                     .then(response => response.data)
                     .then(response => {
-                        toastr.success(response.message);
-                        this.getProjects();
+                        if (response.success == 1){
+                            this.getProjects();
+                        }
                     }).catch(error => {
 
                 });

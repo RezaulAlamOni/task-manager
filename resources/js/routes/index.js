@@ -5,6 +5,7 @@ Vue.use(VueRouter)
 import Index from '../views/project/index'
 import projectDashboard from '../views/projectDashboard/index'
 import projectBoard from '../views/projectDashboard/board'
+import addProject from '../views/project/edit'
 
 
 let routes = [
@@ -13,10 +14,11 @@ let routes = [
         path: '/projects',
         component: Index
     },
-    // {
-    //     path: '/project/create',
-    //     component: require('./views/project/index')
-    // },
+    {
+        path: '/project/create',
+        component: addProject,
+        name : 'project-create'
+    },
     // {
     //     path: '/project/:uuid/edit',
     //     component: require('./views/project/edit')

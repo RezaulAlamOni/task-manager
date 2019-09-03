@@ -16,6 +16,7 @@ class TaskController extends Controller
         $data = $this->decorateData($tasks);
         return response()->json($data);
     }
+
     public function decorateData($obj){
         $data = [];
         foreach ($obj as $key => $task) {

@@ -2162,6 +2162,92 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/js/views/project/edit.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routes__ = __webpack_require__("./resources/js/routes/index.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            project: {
+                title: null,
+                description: null
+            },
+
+            id: this.$route.params.id
+        };
+    },
+    mounted: function mounted() {
+        $('#header-item').text('Project Create');
+    },
+
+    methods: {
+        addProject: function addProject() {
+            if (this.project.title.length > 3) {
+                axios.post('/api/project', this.project).then(function (response) {
+                    return response.data;
+                }).then(function (response) {
+                    if (response.success == 1) {
+                        window.location.href = "/projects";
+                    }
+                }).catch(function (error) {});
+            }
+        }
+    }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/js/views/project/form.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2377,41 +2463,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -2429,24 +2480,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     mounted: function mounted() {
+        $('#header-item').text('Projects');
         this.getProjects();
     },
 
     methods: {
-        projectView: function projectView(id) {
-            this.$router.push({ name: 'project-dashboard', params: { projectId: id } });
+        projectView: function projectView(id, name) {
+            this.$router.push({ name: 'project-dashboard', params: { projectId: id, name: name } });
         },
-        getProjects: function getProjects(page) {
+        getProjects: function getProjects() {
             var _this = this;
 
-            if (typeof page === 'undefined') {
-                page = 1;
-            }
             axios.get('/api/project').then(function (response) {
                 return response.data;
             }).then(function (response) {
                 _this.projects = response.Projects;
-                console.log(_this.projects);
             }).catch(function (error) {});
         },
         editProject: function editProject(project) {
@@ -2462,11 +2510,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         deleteProject: function deleteProject(project) {
             var _this3 = this;
 
-            axios.delete('/api/project/' + project.id).then(function (response) {
+            axios.post('/api/project/' + project.id).then(function (response) {
                 return response.data;
             }).then(function (response) {
-                toastr.success(response.message);
-                _this3.getProjects();
+                if (response.success == 1) {
+                    _this3.getProjects();
+                }
             }).catch(function (error) {});
         }
     },
@@ -2903,11 +2952,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 disableMobile: true,
                 dateFormat: 'd M'
             },
-            projects: {
-                id: null,
-                name: null,
-                description: null
-            },
+            projects: null,
             tree4data: [{
                 id: 1,
                 parent: 0,
@@ -2996,6 +3041,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     mounted: function mounted() {
+        $('#header-item').text('Project  / Task Board');
         this.projectId = this.$route.params.projectId;
         $(document).ready(function () {
             $(function () {
@@ -3056,13 +3102,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.get('/api/project/' + this.projectId).then(function (response) {
                 return response.data;
             }).then(function (response) {
-
                 _this2.projects = response.project;
-                // this.projectForm.description = response.project.description;
-            }).catch(function (error) {
-                helper.showDataErrorMsg(error);
-                _this2.$router.push('/project');
-            });
+                $('#header-item').text(_this2.projects.name + ' / Task List');
+            }).catch(function (error) {});
         },
         getData: function getData() {
             var _this3 = this;
@@ -3794,12 +3836,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             tabKey: 0,
             reselectParentId: null,
             tag: null,
-            projectId: null
+            projectId: null,
+            projects: null
         };
     },
     mounted: function mounted() {
         var _this = this;
         this.projectId = this.$route.params.projectId;
+        this.getProjects();
         this.getTaskList();
         $(document).ready(function () {
             $('.delete-icon').hide();
@@ -3913,6 +3957,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         dragNode: function dragNode(node, targetTree, oldTree) {
             // console.log(targetTree)
         },
+        getProjects: function getProjects() {
+            var _this2 = this;
+
+            axios.get('/api/project/' + this.projectId).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                _this2.projects = response.project;
+                console.log(_this2.projects.name);
+                $('#header-item').text(_this2.projects.name + ' / Task List');
+            }).catch(function (error) {});
+        },
         ChangeNode: function ChangeNode(index, new2, old) {
             // console.log(index)
             console.log(new2);
@@ -3981,21 +4036,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return helper.hasPermission(permission);
         },
         getTaskList: function getTaskList() {
-            var _this2 = this;
+            var _this3 = this;
 
             axios.get('/api/task-list/' + this.projectId).then(function (response) {
                 return response.data;
             }).then(function (response) {
-                _this2.tree4data1 = response;
-                console.log(_this2.tree4data);
-                console.log(_this2.tree4data1);
+                _this3.tree4data1 = response;
+                console.log(_this3.tree4data);
+                console.log(_this3.tree4data1);
             }).catch(function (error) {});
         },
         confirmDelete: function confirmDelete(project) {
-            var _this3 = this;
+            var _this4 = this;
 
             return function (dialog) {
-                return _this3.deleteProject(project);
+                return _this4.deleteProject(project);
             };
         },
         addChild: function addChild(data) {
@@ -72928,7 +72983,64 @@ var render = function() {
                   [
                     _vm._m(1),
                     _vm._v(" "),
-                    _vm._m(2),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "text-left",
+                        attrs: { "data-v-095ab3dc": "" }
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            attrs: {
+                              "data-v-095ab3dc": "",
+                              id: "search-input-container"
+                            }
+                          },
+                          [
+                            _vm._m(2),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass: "actions float-right pr-4 mb-3",
+                                attrs: { "data-v-095ab3dc": "" }
+                              },
+                              [
+                                _c(
+                                  "router-link",
+                                  {
+                                    staticClass: "nav-link activeTask",
+                                    attrs: { to: { name: "project-create" } }
+                                  },
+                                  [
+                                    _c(
+                                      "a",
+                                      {
+                                        staticClass: "btn btn-info",
+                                        attrs: {
+                                          "data-v-095ab3dc": "",
+                                          href: "javascript:void(0)",
+                                          title: "Create Project"
+                                        }
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass: "fa fa-plus",
+                                          attrs: { "data-v-095ab3dc": "" }
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            )
+                          ]
+                        )
+                      ]
+                    ),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -72961,11 +73073,20 @@ var render = function() {
                                       staticClass: "router_td",
                                       on: {
                                         click: function($event) {
-                                          return _vm.projectView(project.id)
+                                          return _vm.projectView(
+                                            project.id,
+                                            project.name
+                                          )
                                         }
                                       }
                                     },
-                                    [_vm._v(_vm._s(project.name))]
+                                    [
+                                      _vm._v(
+                                        "\n                                                " +
+                                          _vm._s(project.name) +
+                                          "\n                                            "
+                                      )
+                                    ]
                                   ),
                                   _vm._v(" "),
                                   _c("td", {
@@ -73006,7 +73127,7 @@ var render = function() {
                                           on: {
                                             click: function($event) {
                                               $event.preventDefault()
-                                              return _vm.confirmDelete(project)
+                                              return _vm.deleteProject(project)
                                             }
                                           }
                                         },
@@ -73044,7 +73165,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("h4", { staticClass: "card-header" }, [
-      _c("div", [_vm._v("Registered Users")])
+      _c("div", [_vm._v("Projects")])
     ])
   },
   function() {
@@ -73066,56 +73187,17 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "text-left", attrs: { "data-v-095ab3dc": "" } },
-      [
-        _c(
-          "div",
-          { attrs: { "data-v-095ab3dc": "", id: "search-input-container" } },
-          [
-            _c("label", { attrs: { "data-v-095ab3dc": "" } }, [
-              _c("input", {
-                staticClass: "form-control mb-2",
-                attrs: {
-                  "data-v-095ab3dc": "",
-                  type: "search",
-                  id: "search-input",
-                  placeholder: "Search data"
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "actions float-right pr-4 mb-3",
-                attrs: { "data-v-095ab3dc": "" }
-              },
-              [
-                _c(
-                  "a",
-                  {
-                    staticClass: "btn btn-info",
-                    attrs: {
-                      "data-v-095ab3dc": "",
-                      href: "javascript:undefined",
-                      title: "export excel"
-                    }
-                  },
-                  [
-                    _c("i", {
-                      staticClass: "fa fa-download",
-                      attrs: { "data-v-095ab3dc": "" }
-                    })
-                  ]
-                )
-              ]
-            )
-          ]
-        )
-      ]
-    )
+    return _c("label", { attrs: { "data-v-095ab3dc": "" } }, [
+      _c("input", {
+        staticClass: "form-control mb-2",
+        attrs: {
+          "data-v-095ab3dc": "",
+          type: "search",
+          id: "search-input",
+          placeholder: "Search data"
+        }
+      })
+    ])
   },
   function() {
     var _vm = this
@@ -73131,7 +73213,7 @@ var staticRenderFns = [
             attrs: { "data-v-095ab3dc": "" }
           },
           [
-            _vm._v("\n                                                    ID "),
+            _vm._v("\n                                                ID "),
             _c("i", {
               staticClass: "fa float-right  fa fa-angle-up",
               attrs: { "data-v-095ab3dc": "" }
@@ -73147,9 +73229,7 @@ var staticRenderFns = [
             attrs: { "data-v-095ab3dc": "" }
           },
           [
-            _vm._v(
-              "\n                                                    Title "
-            ),
+            _vm._v("\n                                                Title "),
             _c("i", {
               staticClass: "fa float-right",
               attrs: { "data-v-095ab3dc": "" }
@@ -73166,7 +73246,7 @@ var staticRenderFns = [
           },
           [
             _vm._v(
-              "\n                                                    Description "
+              "\n                                                Description "
             ),
             _c("i", {
               staticClass: "fa float-right",
@@ -73183,9 +73263,7 @@ var staticRenderFns = [
             attrs: { "data-v-095ab3dc": "" }
           },
           [
-            _vm._v(
-              "\n                                                    Status "
-            ),
+            _vm._v("\n                                                Status "),
             _c("i", {
               staticClass: "fa float-right",
               attrs: { "data-v-095ab3dc": "" }
@@ -73202,7 +73280,7 @@ var staticRenderFns = [
           },
           [
             _vm._v(
-              "\n                                                    Actions "
+              "\n                                                Actions "
             ),
             _c("i", {
               staticClass: "fa float-right",
@@ -73303,7 +73381,7 @@ var staticRenderFns = [
                       staticClass: "btn link",
                       attrs: {
                         "data-v-095ab3dc": "",
-                        href: "javascript:undefined",
+                        href: "javascript:void(0)",
                         tabindex: "0"
                       }
                     },
@@ -73316,14 +73394,14 @@ var staticRenderFns = [
                   )
                 ]),
                 _vm._v(" "),
-                _c("li", { attrs: { "data-v-095ab3dc": "" } }, [
+                _c("li", [
                   _c(
                     "a",
                     {
                       staticClass: "btn link",
                       attrs: {
                         "data-v-095ab3dc": "",
-                        href: "javascript:undefined",
+                        href: "javascript:void(0)",
                         tabindex: "0"
                       }
                     },
@@ -77281,6 +77359,124 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-c8d59c06", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-ed010082\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/js/views/project/edit.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "col-md-6 offset-md-3" }, [
+    _c("div", { staticClass: "card card-default" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n            Create Project\n        ")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c("form", { attrs: { role: "form" } }, [
+          _c("div", { staticClass: "form-group row" }, [
+            _c(
+              "label",
+              { staticClass: "col-md-4 col-form-label text-md-right" },
+              [_vm._v("Add Project Title")]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.project.title,
+                    expression: "project.title"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "name" },
+                domProps: { value: _vm.project.title },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.project, "title", $event.target.value)
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group row" }, [
+            _c(
+              "label",
+              { staticClass: "col-md-4 col-form-label text-md-right" },
+              [_vm._v("Add Description")]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.project.description,
+                    expression: "project.description"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "description" },
+                domProps: { value: _vm.project.description },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.project, "description", $event.target.value)
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group row mb-0" }, [
+            _c("div", { staticClass: "offset-md-4 col-md-6" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  attrs: { type: "submit" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.addProject($event)
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n\n                            Create\n                        "
+                  )
+                ]
+              )
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-ed010082", module.exports)
   }
 }
 
@@ -93927,6 +94123,8 @@ $(window).on('load', function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_projectDashboard_index___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__views_projectDashboard_index__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_projectDashboard_board__ = __webpack_require__("./resources/js/views/projectDashboard/board.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_projectDashboard_board___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__views_projectDashboard_board__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_project_edit__ = __webpack_require__("./resources/js/views/project/edit.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_project_edit___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__views_project_edit__);
 
 
 
@@ -93935,14 +94133,15 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vue_
 
 
 
+
 var routes = [{
     path: '/projects',
     component: __WEBPACK_IMPORTED_MODULE_2__views_project_index___default.a
+}, {
+    path: '/project/create',
+    component: __WEBPACK_IMPORTED_MODULE_5__views_project_edit___default.a,
+    name: 'project-create'
 },
-// {
-//     path: '/project/create',
-//     component: require('./views/project/index')
-// },
 // {
 //     path: '/project/:uuid/edit',
 //     component: require('./views/project/edit')
@@ -94598,6 +94797,54 @@ var base = __webpack_require__("./spark/resources/assets/js/settings/teams/updat
 Vue.component('spark-update-team-photo', {
     mixins: [base]
 });
+
+/***/ }),
+
+/***/ "./resources/js/views/project/edit.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/js/views/project/edit.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-ed010082\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/js/views/project/edit.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/views/project/edit.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-ed010082", Component.options)
+  } else {
+    hotAPI.reload("data-v-ed010082", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
 
 /***/ }),
 

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Project;
+use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -44,18 +46,30 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = [
+            'name' => $request->title,
+            'description' => $request->description,
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
+        ];
+        $project = Project::create($data);
+        if ($project){
+            return response()->json(['success'=>1]);
+        }
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Project  $project
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return void
      */
-    public function show(Project $project)
+    public function show(Request $request)
     {
-        //
+        $project = Project::findOrFail($request->id)->get();
+
+        return response()->json(['success'=>1,'project'=>$project[0]]);
     }
 
     /**
@@ -84,12 +98,13 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Project  $project
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return void
      */
-    public function destroy(Project $project)
+    public function destroy(Request $request)
     {
-        //
+        Project::findOrFail($request->id)->delete();
+        return response()->json(['success'=>1]);
     }
 
     public function success($items = null, $status = 200)

@@ -1,42 +1,81 @@
 <template>
-    <div>
-        <div class="row page-titles">
-            <div class="col-md-6 col-8 align-self-center">
-                <h3 class="text-themecolor m-b-0 m-t-0">{{trans('projects.edit_project')}}</h3>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><router-link to="/home">{{trans('general.home')}}</router-link></li>
-                    <li class="breadcrumb-item active">{{trans('project.edit_project')}}</li>
-                </ol>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">{{trans('project.edit_project')}}</h4>
-                        <project-form :id="id"></project-form>
+    <div class="col-md-6 offset-md-3">
+        <div class="card card-default">
+            <div class="card-header">
+                Create Project
+            </div>
+
+            <div class="card-body">
+                <form role="form">
+                    <!-- Token Name -->
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-right">Add Project Title</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" name="name" v-model="project.title">
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label text-md-right">Add Description</label>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" name="description" v-model="project.description">
+                        </div>
+                    </div>
+
+                    <!-- Create Button -->
+                    <div class="form-group row mb-0">
+                        <div class="offset-md-4 col-md-6">
+                            <button type="submit" class="btn btn-primary"
+                                    @click.prevent="addProject">
+
+                                Create
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </div>
-</template>
 
+        <!-- Show Token Modal -->
+    </div>
+
+</template>
 <script>
-    import projectForm from './form';
+
+    import router from "../../routes";
 
     export default {
-        components : { projectForm },
         data() {
             return {
+                project : {
+                    title : null,
+                    description : null
+                },
+
                 id:this.$route.params.id
             }
         },
         mounted(){
-            if(!helper.hasPermission('edit-project')){
-                helper.notAccessibleMsg();
-                this.$router.push('/home');
+            $('#header-item').text('Project Create')
+
+        },
+        methods:{
+            addProject() {
+                if (this.project.title.length > 3){
+                    axios.post('/api/project', this.project)
+                        .then(response => response.data)
+                        .then(response => {
+                            if (response.success == 1){
+                                window.location.href = "/projects";
+                            }
+                        })
+                        .catch(error => {
+
+                        });
+                }
+
             }
         }
     }

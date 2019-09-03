@@ -402,11 +402,7 @@
                     disableMobile: true,
                     dateFormat: 'd M',
                 },
-                projects: {
-                    id: null,
-                    name: null,
-                    description: null,
-                },
+                projects: null,
                 tree4data: [
                     {
                         id: 1,
@@ -538,6 +534,7 @@
             }
         },
         mounted() {
+            $('#header-item').text('Project  / Task Board')
             this.projectId = this.$route.params.projectId;
             $(document).ready(function () {
                 $(function () {
@@ -595,13 +592,10 @@
                 axios.get('/api/project/' + this.projectId)
                     .then(response => response.data)
                     .then(response => {
-
                         this.projects = response.project;
-                        // this.projectForm.description = response.project.description;
+                        $('#header-item').text(this.projects.name + ' / Task List')
                     })
                     .catch(error => {
-                        helper.showDataErrorMsg(error);
-                        this.$router.push('/project');
                     });
             },
             getData() {

@@ -526,11 +526,13 @@
                 reselectParentId : null,
                 tag:null,
                 projectId:null,
+                projects : null
             }
         },
         mounted() {
             let _this = this;
             this.projectId = this.$route.params.projectId;
+            this.getProjects();
             this.getTaskList();
             $(document).ready(function () {
                 $('.delete-icon').hide();
@@ -644,6 +646,17 @@
             },
             dragNode(node, targetTree, oldTree){
                 // console.log(targetTree)
+            },
+            getProjects() {
+                axios.get('/api/project/' + this.projectId)
+                    .then(response => response.data)
+                    .then(response => {
+                        this.projects = response.project;
+                        console.log(this.projects.name)
+                        $('#header-item').text(this.projects.name + ' / Task List')
+                    })
+                    .catch(error => {
+                    });
             },
             ChangeNode(index,new2,old){
                 // console.log(index)

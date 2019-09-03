@@ -1,6 +1,6 @@
 @extends('spark::layouts.app') @section("title") Home @endsection @section('breadcrumb')
 
-    <h1>Projects</h1>
+    <h1 id="header-item">Projects</h1>
     <ol class="breadcrumb">
         <li>
             <a href="/home">
@@ -12,6 +12,7 @@
 
 {{--    <projects></projects>--}}
 <div id="project">
+
     <router-view></router-view>
 </div>
 
