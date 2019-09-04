@@ -123,6 +123,12 @@
                     <span class="mm-text ">Select2</span>
                 </a>
             </li>
+             <li {!! (Request::is( 'project') ? 'class="active"' : '') !!}>
+                <a href="/projects">
+                    <i class="menu-icon ti-desktop"></i>
+                    <span class="mm-text ">Projects</span>
+                </a>
+            </li>
             @if (Spark::developer(Auth::user()->email))
             <li class="menu-dropdown">
                 <a data-toggle="collapse" href="#collapseKiosk">

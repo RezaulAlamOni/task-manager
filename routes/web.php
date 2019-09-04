@@ -20,3 +20,22 @@ Route::get('/clear', 'ClearController@show');
 Route::get('/select', 'ClearController@show_select');
 
 Route::get('/blank','ClearController@show_blank');
+
+//Route::get('/projects','ProjectController@index');
+Route::prefix('api')->group(function () {
+    Route::get('/project', 'ProjectController@getAll');
+    Route::get('/project/{id}', 'ProjectController@show');
+    Route::post('/project', 'ProjectController@store');
+    Route::patch('/project/{id}', 'ProjectController@update');
+    Route::post('/project/{id}', 'ProjectController@destroy');
+
+    //get task list data
+    Route::get('/task-list/{id}', 'TaskController@getAll');
+
+});
+
+
+Route::get( '/{vue_route?}', 'ProjectController@index' )->where( 'vue_route', '(.*)' );
+
+
+

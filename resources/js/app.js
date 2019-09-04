@@ -15,13 +15,22 @@
  */
 
 require('spark-bootstrap');
-
 require('./components/bootstrap');
+window.Vue = require('vue');
+
 let invoice = require('./components/invoice.vue');
 
+let projects = require('./views/project/index.vue');
+
+require('./bootstrap');
+
+import router from './routes'
+
 var app = new Vue({
+    router,
     mixins: [require('spark')],
     components: {
-        invoice
+        invoice,projects
     }
 });
+    // .$mount('#project');

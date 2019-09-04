@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', config('app.name'))</title>
 
@@ -18,6 +19,10 @@
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link href="/css/themify-icons.css" rel="stylesheet">
     <link href="/css/light_custom.css" rel="stylesheet">
+    <link href="{{ asset('css/tree_view.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/board_view.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/icon.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     {{--yield styles--}}
     @yield('styles','')
@@ -59,7 +64,7 @@
                     </section>
                     <!-- Main content -->
                     <!-- Main Content -->
-                    <main class="py-4">
+                    <main class="">
                         @yield('content')
                     </main>
                     <!-- /.content -->
@@ -102,10 +107,6 @@
                 $(this).parent().addClass("active");
                 $(this).parent().parent(".collapse.show").parent().addClass("active");
             })
-
-
-
-
         })
 
 

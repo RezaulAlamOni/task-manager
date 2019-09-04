@@ -55,12 +55,13 @@ mix.sass(resourcesAssets + 'sass/custom.scss', 'public/css');
 mix.sass(resourcesAssets + 'sass/light_custom.scss', 'public/css');
 
 
-
-mix
-    .sass('resources/sass/app.scss', 'public/css')
+mix.sass('resources/sass/app.scss', 'public/css')
+    .sass('resources/sass/board_view.scss', 'public/css')
+    .sass('resources/sass/tree_view.scss', 'public/css')
     .js('resources/js/app.js', 'public/js')
     .copy('node_modules/sweetalert/dist/sweetalert.min.js', 'public/js/sweetalert.min.js')
     .sass('resources/sass/app-rtl.scss', 'public/css')
+
     .then(() => {
         exec('node_modules/rtlcss/bin/rtlcss.js public/css/app-rtl.css ./public/css/app-rtl.css');
     })

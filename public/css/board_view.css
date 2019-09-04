@@ -1,0 +1,421 @@
+#board_view_list {
+  background: #ffffff;
+  padding: 0px;
+  overflow: auto;
+}
+
+#board_view_list .draggable-item {
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  display: block;
+  background-color: #fff;
+  outline: 0;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  margin-bottom: 2px;
+  margin-top: 2px;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+#board_view_list .draggable-item-horizontal {
+  height: 300px;
+  padding: 10px;
+  line-height: 100px;
+  text-align: center;
+  /* width : 200px; */
+  display: block;
+  background-color: #fff;
+  outline: 0;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  margin-right: 4px;
+  cursor: default;
+}
+
+#board_view_list .dragging {
+  background-color: yellow;
+}
+
+#board_view_list .card-scene {
+  padding: 20px;
+  height: 100%;
+}
+
+#board_view_list .card-container {
+  width: 320px;
+  height: 650px;
+  margin: 5px;
+  margin-right: 10px;
+  background-color: #F8F8F8;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.24);
+          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.24);
+}
+
+#board_view_list .card {
+  margin: 5px;
+  font-size: 13px;
+  /* border: 1px solid #ccc; */
+  background-color: white;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.24);
+          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.24);
+  padding: 10px;
+}
+
+#board_view_list .card-column-header {
+  padding: 10px;
+  font-size: 14px;
+  background-color: #fff;
+  border: 1px solid #ededed;
+  border-radius: 4px 4px 0 0;
+  -webkit-box-shadow: 0 1px 2px 1px rgba(118, 118, 118, 0.1);
+          box-shadow: 0 1px 2px 1px rgba(118, 118, 118, 0.1);
+}
+
+#board_view_list .smooth-dnd-container {
+  padding: 5px;
+  max-height: 600px;
+  min-height: 600px;
+  height: auto;
+  overflow: auto;
+}
+
+#board_view_list .column-drag-handle {
+  cursor: move;
+  padding: 5px;
+}
+
+#board_view_list .card-ghost {
+  -webkit-transition: -webkit-transform 0.18s ease;
+  transition: -webkit-transform 0.18s ease;
+  transition: transform 0.18s ease;
+  transition: transform 0.18s ease, -webkit-transform 0.18s ease;
+  -webkit-transform: rotateZ(5deg);
+          transform: rotateZ(5deg);
+}
+
+#board_view_list .card-ghost-drop {
+  -webkit-transition: -webkit-transform 0.18s ease-in-out;
+  transition: -webkit-transform 0.18s ease-in-out;
+  transition: transform 0.18s ease-in-out;
+  transition: transform 0.18s ease-in-out, -webkit-transform 0.18s ease-in-out;
+  -webkit-transform: rotateZ(0deg);
+          transform: rotateZ(0deg);
+}
+
+#board_view_list .opacity-ghost {
+  -webkit-transition: all .18s ease;
+  transition: all .18s ease;
+  opacity: 0.8;
+  /* transform: rotateZ(5deg); */
+  background-color: cornflowerblue;
+  -webkit-box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.3);
+          box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.3);
+}
+
+#board_view_list .opacity-ghost-drop {
+  opacity: 1;
+  /* transform: rotateZ(0deg); */
+  background-color: white;
+  -webkit-box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0);
+          box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0);
+}
+
+#board_view_list .form-demo {
+  width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#board_view_list .form {
+  -webkit-box-flex: 3;
+      -ms-flex: 3;
+          flex: 3;
+  /* width: 500px; */
+  /* background-color: #f3f3f3; */
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 6px;
+  -webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.08), 0px 3px 3px rgba(0, 0, 0, 0.08);
+          box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.08), 0px 3px 3px rgba(0, 0, 0, 0.08);
+}
+
+#board_view_list .form-fields-panel {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  margin-right: 50px;
+}
+
+#board_view_list .form-ghost {
+  -webkit-transition: 0.18s ease;
+  transition: 0.18s ease;
+  -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.08);
+          box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.08);
+}
+
+#board_view_list .form-ghost-drop {
+  -webkit-box-shadow: 0 0 2px 5px rgba(0, 0, 0, 0);
+          box-shadow: 0 0 2px 5px rgba(0, 0, 0, 0);
+}
+
+#board_view_list .drop-preview {
+  background-color: rgba(150, 150, 200, 0.1);
+  border: 1px dashed #abc;
+  margin: 5px;
+}
+
+#board_view_list .cards-drop-preview {
+  background-color: rgba(150, 150, 200, 0.1);
+  border: 1px dashed #abc;
+  margin: 5px 45px 5px 5px;
+}
+
+#board_view_list .dropdown-item {
+  padding: 4px 10px;
+  color: #54667a;
+  font-size: 13px;
+}
+
+#board_view_list .add-column {
+  cursor: pointer;
+  line-height: 3;
+  opacity: 0.65;
+  color: #383837 !important;
+  margin-left: 20px;
+  width: 120px;
+}
+
+#board_view_list .opacity {
+  opacity: 0.80;
+  cursor: pointer;
+}
+
+#board_view_list .hidden-column {
+  padding-top: 5px;
+  padding-right: 4px;
+}
+
+#board_view_list .column-drag-handle {
+  font-size: 15px !important;
+}
+
+#board_view_list .hideCol {
+  overflow: hidden;
+  width: 55px;
+  height: 52px;
+  display: block;
+  margin-right: 10px;
+  -webkit-transition: all 1s linear;
+  transition: all 1s linear;
+}
+
+#board_view_list .hideCol .card-column-header {
+  overflow: hidden;
+  display: block;
+  width: 47px;
+  -webkit-transition: all 1s linear;
+  transition: all 1s linear;
+}
+
+#board_view_list .hideCol .card-column-header .col_name,
+#board_view_list .hideCol .card-column-header .total-task {
+  display: none;
+}
+
+.list-group-item {
+  padding: 2px !important;
+}
+
+.list-group {
+  margin-left: 35px !important;
+}
+
+.list-model {
+  max-height: 410px;
+  overflow-y: auto;
+}
+
+.modal-content {
+  border-radius: 0.8rem !important;
+}
+
+.card-list:hover {
+  border: 0.50px solid #896799;
+  -webkit-box-shadow: 0px 2px 10px -3px #434745 !important;
+          box-shadow: 0px 2px 10px -3px #434745 !important;
+  cursor: pointer;
+}
+
+.card-list .input-hide {
+  border: none !important;
+  background: none !important;
+}
+
+.card-list .inp {
+  padding: 0px !important;
+}
+
+.card-list .form-control {
+  padding: 0px 0.75rem !important;
+  min-height: 0px !important;
+  width: 96%;
+  font-size: 13px;
+}
+
+.card-list .user {
+  margin-top: 10px;
+}
+
+.card-list .dropdown-menu {
+  width: 300px;
+  border-radius: 4px 4px;
+  margin-top: 10px;
+  -webkit-box-shadow: 0px 2px 10px -3px #434745;
+          box-shadow: 0px 2px 10px -3px #434745;
+}
+
+.card-list .dropdown-menu:before {
+  content: "";
+  border-bottom: 10px solid #fff;
+  border-right: 10px solid transparent;
+  border-left: 10px solid transparent;
+  position: absolute;
+  top: -5px;
+  left: 0px;
+  z-index: 10;
+}
+
+.card-list .dropdown-menu:after {
+  content: "";
+  border-bottom: 7px solid #ccc;
+  border-right: 7px solid transparent;
+  border-left: 7px solid transparent;
+  position: absolute;
+  top: -7px;
+  left: 3px;
+  z-index: 9;
+}
+
+.card-list .dropdown-menu1 {
+  width: 300px;
+  border-radius: 4px 4px;
+  margin-top: 10px;
+  -webkit-box-shadow: 0px 2px 10px -3px #434745;
+          box-shadow: 0px 2px 10px -3px #434745;
+}
+
+.card-list .dropdown-menu1:before {
+  content: "";
+  border-bottom: 10px solid #fff;
+  border-right: 10px solid transparent;
+  border-left: 10px solid transparent;
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  z-index: 10;
+}
+
+.card-list .dropdown-menu1:after {
+  content: "";
+  border-bottom: 7px solid #ccc;
+  border-right: 7px solid transparent;
+  border-left: 7px solid transparent;
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  z-index: 9;
+}
+
+.card-list .calender {
+  position: absolute;
+  bottom: 10px;
+  left: 59px;
+}
+
+.card-list .tag-icon {
+  position: absolute;
+  bottom: 10px;
+  left: 137px;
+}
+
+.card-list .li-opacity {
+  opacity: 0.25;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.card-list .flatpickr-input {
+  width: 63px;
+  height: 25px !important;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.62);
+  text-align: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  outline: 0;
+  position: absolute;
+  bottom: 13px;
+  left: 49px;
+  font-weight: bold;
+  border-radius: 12px;
+}
+
+.card-list .flatpickr-input1 {
+  width: 63px;
+  height: 25px !important;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.62);
+  text-align: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  outline: 0;
+  position: absolute;
+  bottom: 13px;
+  left: 49px;
+  font-weight: bold;
+  border-radius: 12px;
+  z-index: -1;
+}
+
+.card-list .text-area {
+  background: #E6F2D2;
+}
+
+.card-list .text-area:hover {
+  border: 1px solid #d4d4d4;
+}
+
+.card-list .dateCal {
+  opacity: 0;
+}
+
+.card-list .dateCal.dateCal1 {
+  background: #E6F2D2 !important;
+  opacity: 1;
+}
+
+.total-task {
+  font-size: 13px;
+  height: 24px;
+  width: 24px;
+  background: #e7e7e7;
+  border-radius: 50%;
+  margin-left: 14px;
+  display: inline-block;
+  text-align: center;
+  line-height: 25px;
+  color: #5f5f5f;
+}
+
+.smooth-dnd-container .vertical .smooth-dnd-draggable-wrapper {
+  overflow: initial !important;
+  display: block;
+}
+
