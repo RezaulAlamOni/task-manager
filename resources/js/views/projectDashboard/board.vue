@@ -402,7 +402,7 @@
                     disableMobile: true,
                     dateFormat: 'd M',
                 },
-                projects: null,
+                project: null,
                 tree4data: [
                     {
                         id: 1,
@@ -592,8 +592,8 @@
                 axios.get('/api/project/' + this.projectId)
                     .then(response => response.data)
                     .then(response => {
-                        this.projects = response.project;
-                        $('#header-item').text(this.projects.name + ' / Task List')
+                        this.project = response.project;
+                        $('#header-item').text(this.project.name + ' / Task Board')
                     })
                     .catch(error => {
                     });

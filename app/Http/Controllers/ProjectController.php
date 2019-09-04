@@ -16,7 +16,7 @@ class ProjectController extends Controller
      */
     public function __construct()
     {
-//        $this->middleware('auth');
+        $this->middleware('auth');
     }
     public function getAll(){
         $Projects = Project::all();
@@ -67,9 +67,9 @@ class ProjectController extends Controller
      */
     public function show(Request $request)
     {
-        $project = Project::findOrFail($request->id)->get();
+        $project = Project::findOrFail($request->id);
 
-        return response()->json(['success'=>1,'project'=>$project[0]]);
+        return response()->json(['success'=>1,'project'=>$project]);
     }
 
     /**

@@ -25,7 +25,7 @@ class TaskController extends Controller
             $data[$key]['text'] = $task->title;
             $data[$key]['clicked'] = 0;
             $data[$key]['date'] = $task->date;
-            $data[$key]['tags'] = ['Dont Forget'];
+            $data[$key]['tags'] = [$task->tag];
 
             $childrens = Task::where('parent_id',$task->id)->get();
             $data[$key]['children'] = $this->decorateData($childrens);

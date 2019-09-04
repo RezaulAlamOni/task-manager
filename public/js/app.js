@@ -2952,7 +2952,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 disableMobile: true,
                 dateFormat: 'd M'
             },
-            projects: null,
+            project: null,
             tree4data: [{
                 id: 1,
                 parent: 0,
@@ -3102,8 +3102,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.get('/api/project/' + this.projectId).then(function (response) {
                 return response.data;
             }).then(function (response) {
-                _this2.projects = response.project;
-                $('#header-item').text(_this2.projects.name + ' / Task List');
+                _this2.project = response.project;
+                $('#header-item').text(_this2.project.name + ' / Task Board');
             }).catch(function (error) {});
         },
         getData: function getData() {
@@ -3749,6 +3749,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3763,8 +3769,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             id: 0,
-            tree4data1: [],
-            tree4data: [{
+            tree4data: [],
+            tree4data1: [{
                 id: 1,
                 parent: 0,
                 text: "Don't Forget Section",
@@ -4031,7 +4037,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         switchEvent: function switchEvent(e) {
             $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
         },
-        showDate: function showDate(date) {},
+        showDate: function showDate(selectedDates, dateStr, instance) {
+            console.log(dateStr);
+        },
         hasPermission: function hasPermission(permission) {
             return helper.hasPermission(permission);
         },
@@ -4041,9 +4049,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.get('/api/task-list/' + this.projectId).then(function (response) {
                 return response.data;
             }).then(function (response) {
-                _this3.tree4data1 = response;
+                _this3.tree4data = response;
                 console.log(_this3.tree4data);
-                console.log(_this3.tree4data1);
             }).catch(function (error) {});
         },
         confirmDelete: function confirmDelete(project) {
@@ -76426,14 +76433,17 @@ var render = function() {
                                     _c("flatPickr", {
                                       staticClass: "dateCal",
                                       attrs: {
-                                        config: _vm.date_config,
+                                        config: {
+                                          enableTime: false,
+                                          wrap: true,
+                                          disableMobile: true,
+                                          altInput: true,
+                                          altFormat: "d M",
+                                          dateFormat: "Y m d"
+                                        },
                                         name: "date"
                                       },
-                                      on: {
-                                        "on-change": function($event) {
-                                          return _vm.showDate(_vm.date)
-                                        }
-                                      },
+                                      on: { "on-change": _vm.showDate },
                                       model: {
                                         value: data.date,
                                         callback: function($$v) {

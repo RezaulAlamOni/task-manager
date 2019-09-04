@@ -18,7 +18,6 @@ class CreateTasksTable extends Migration
             $table->bigInteger('sort_id')->default(0);
             $table->unsignedBigInteger('parent_id')->default(0);
             $table->unsignedInteger('project_id');
-            $table->unsignedBigInteger('board_id');
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->text('title');
@@ -28,7 +27,6 @@ class CreateTasksTable extends Migration
 
 
             $table->foreign('project_id')->references('id')->on('projects');
-            $table->foreign('board_id')->references('id')->on('task_boards');
 
 
             $table->foreign('created_by')->references('id')->on('users');

@@ -179,6 +179,17 @@
   top: 8px;
 }
 
+#tree_view_list .tree-node-children .hide-item-res {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  width: 65px;
+  background: transparent;
+  border: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
 #tree_view_list .tree-node-children .user {
   position: absolute;
   right: 9px;
@@ -230,6 +241,11 @@
   transition: all 0.2s linear;
 }
 
+#tree_view_list .tree-node .tree-node-inner:hover .delete-icon,
+#tree_view_list .tree-node .tree-node-inner:active .delete-icon {
+  opacity: 0 !important;
+}
+
 #tree_view_list .tree-node .tree-node-inner .eachItemRow {
   padding: 7px 15px;
 }
@@ -245,6 +261,10 @@
   color: rgba(0, 0, 0, 0.75);
   -webkit-transition: all 0.2s linear;
   transition: all 0.2s linear;
+}
+
+#tree_view_list .tree-node .tree-node-inner .eachItemRow.clicked .li-opacity.delete-icon {
+  opacity: 0 !important;
 }
 
 #tree_view_list .assignUser {

@@ -119,11 +119,17 @@
                                             <i class="outline-event icon-image-preview" title="toggle"
                                                data-toggle></i>
                                         </a>
-                                        <flatPickr
-                                                v-model="data.date"
-                                                :config="date_config"
+                                        <flatPickr v-model="data.date"
+                                                :config="{
+                                                        enableTime: false,
+                                                        wrap: true,
+                                                        disableMobile: true,
+                                                        altInput: true,
+                                                        altFormat: 'd M',
+                                                        dateFormat: 'Y m d'
+                                                    }"
                                                 class="dateCal"
-                                                @on-change="showDate(date)"
+                                                @on-change="showDate"
                                                 name="date">
                                         </flatPickr>
                                     </div>
@@ -425,8 +431,8 @@
         data() {
             return {
                 id: 0,
-                tree4data1: [],
-                tree4data: [
+                tree4data: [],
+                tree4data1: [
                     {
                         id: 1,
                         parent: 0,
@@ -572,7 +578,7 @@
                         _this.HideDetails(_this.selectedData);
                         break;
                     case "right" :
-                        console.log(_this.selectedData)
+                        // console.log(_this.selectedData)
                         _this.ShowDetails(_this.selectedData);
                         break;
                     case "ctrl+c":
@@ -642,7 +648,7 @@
                 }
             },
             dropNode(node, targetTree, oldTree){
-                console.log(oldTree)
+                // console.log(oldTree)
             },
             dragNode(node, targetTree, oldTree){
                 // console.log(targetTree)
@@ -652,7 +658,7 @@
                     .then(response => response.data)
                     .then(response => {
                         this.projects = response.project;
-                        console.log(this.projects.name)
+                        // console.log(this.projects.name)
                         $('#header-item').text(this.projects.name + ' / Task List')
                     })
                     .catch(error => {
@@ -660,8 +666,9 @@
             },
             ChangeNode(index,new2,old){
                 // console.log(index)
-                console.log(new2)
+                // console.log(new2)
                 // console.log(old)
+
             },
 
             makeItClick(e, data) {
@@ -724,8 +731,9 @@
             switchEvent(e) {
                 $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
             },
-            showDate(date) {
-
+            showDate(dateStr) {
+                // console.log(dateStr);
+                // alert(dateStr);
             },
             hasPermission(permission) {
                 return helper.hasPermission(permission);
@@ -734,9 +742,8 @@
                 axios.get('/api/task-list/' + this.projectId)
                     .then(response => response.data)
                     .then(response => {
-                        this.tree4data1 = response;
-                        console.log(this.tree4data)
-                        console.log(this.tree4data1)
+                        this.tree4data = response;
+                        // console.log(this.tree4data)
                     })
                     .catch(error => {
 
@@ -836,7 +843,7 @@
                     for (var i = 0; i < children.length; i++) {
                         if (children[i].text == text) {
                             children.splice(i + 1, 0, {id: 0, parent: data.id, text: ''});
-                            console.log(this.selectedData)
+                            // console.log(this.selectedData)
                             _this.reselectParentId = _this.selectedData.id;
                             setTimeout(function () {
                                 $("#0").click();
@@ -905,7 +912,7 @@
                 for (i = 0; i < targetData.length; i++) {
                     if (targetData[i].text == targetData.text) {
                         _this.selectedCopy = targetData[i];
-                        console.log(_this.selectedCopy);
+                        // console.log(_this.selectedCopy);
                         break;
                     }
                 }
