@@ -1,6 +1,6 @@
 <spark-update-password inline-template>
-    <div class="card card-default">
-        <div class="card-header">{{__('Update Password')}}</div>
+    <div class="card card-default border-danger">
+        <div class="card-header bg-danger text-white">{{__('Update Password')}}</div>
 
         <div class="card-body">
             <!-- Success Message -->

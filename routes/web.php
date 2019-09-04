@@ -14,3 +14,9 @@
 Route::get('/', 'WelcomeController@show');
 
 Route::get('/home', 'HomeController@show');
+
+Route::get('/clear', 'ClearController@show');
+
+Route::get('/select', 'ClearController@show_select');
+
+Route::get('/blank','ClearController@show_blank');

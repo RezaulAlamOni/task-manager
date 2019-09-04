@@ -40,38 +40,36 @@
                 <div class="table-responsive">
                     <table class="table table-valign-middle mb-0">
                         <thead>
-                            <tr>
-                                <th></th>
-                                <th>{{__('Name')}}</th>
-                                <th>{{__('E-Mail Address')}}</th>
-                                <th class="th-fit"></th>
-                            </tr>
+                            <th></th>
+                            <th>{{__('Name')}}</th>
+                            <th>{{__('E-Mail Address')}}</th>
+                            <th class="th-fit"></th>
                         </thead>
 
                         <tbody>
                             <tr v-for="searchUser in searchResults">
                                 <!-- Profile Photo -->
                                 <td>
-                                    <img :src="searchUser.photo_url" class="spark-profile-photo" alt="{{__('User Photo')}}" />
+                                    <img :src="searchUser.photo_url" class="spark-profile-photo">
                                 </td>
 
                                 <!-- Name -->
                                 <td>
-                                    <div>
+                                    <div class="btn-table-align">
                                         @{{ searchUser.name }}
                                     </div>
                                 </td>
 
                                 <!-- E-Mail Address -->
                                 <td>
-                                    <div>
+                                    <div class="btn-table-align">
                                         @{{ searchUser.email }}
                                     </div>
                                 </td>
 
                                 <td>
                                     <!-- View User Profile -->
-                                    <button class="btn btn-default" @click="showUserProfile(searchUser)">
+                                    <button class="btn btn-default btn-secondary" @click="showUserProfile(searchUser)">
                                         <i class="fa fa-search"></i>
                                     </button>
                                 </td>

@@ -17,7 +17,11 @@
 require('spark-bootstrap');
 
 require('./components/bootstrap');
+let invoice = require('./components/invoice.vue');
 
 var app = new Vue({
-    mixins: [require('spark')]
+    mixins: [require('spark')],
+    components: {
+        invoice
+    }
 });
