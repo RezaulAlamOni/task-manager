@@ -33,7 +33,12 @@ class TaskController extends Controller
             $data[$key]['tags'] = [$task->tag];
 
             $childrens = Task::where('parent_id', $task->id)->orderBy('sort_id', 'ASC')->get();
-            $data[$key]['children'] = $this->decorateData($childrens);
+            if (!empty($childrens)){
+                $data[$key]['children'] = $this->decorateData($childrens);
+            }else{
+                $data[$key]['children'] = [];
+            }
+
         }
         return $data;
     }
@@ -72,8 +77,9 @@ class TaskController extends Controller
             return response()->json(['success' => $task]);
 
         } else if ($request->text == '') {
+            Task::where(['id' => $request->id,'project_id' => $request->project_id])->delete();
             Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id])->delete();
-            return response()->json(['success' => 'deleted empty ']);
+            return response()->json(['success' =>['id'=>$request->id]]);
         }
     }
 
