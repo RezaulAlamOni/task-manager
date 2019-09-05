@@ -25,6 +25,20 @@
                 </div>
             </div>
         </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card card-default border-success">
+                    <div class="card-header bg-success text-white">Button</div>
+
+                    <div class="card-body">
+                        <button type="submit" class="btn btn-primary">
+
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </home>
 @endsection
