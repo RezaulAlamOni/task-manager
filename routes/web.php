@@ -31,6 +31,8 @@ Route::prefix('api')->group(function () {
 
     //get task list data
     Route::get('/task-list/{id}', 'TaskController@getAll');
+    Route::post('/task-list/add-task', 'TaskController@addTask');//add node
+
 
 });
 
