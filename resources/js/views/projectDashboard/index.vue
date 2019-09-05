@@ -864,8 +864,9 @@
                 axios.post('/api/task-list/add-task', postData)
                     .then(response => response.data)
                     .then(response => {
+                        console.log(response)
                         _this.newEmptyTaskID = response.success.id;
-                        console.log(response.success)
+
                         _this.getTaskList()
 
                         setTimeout(function () {

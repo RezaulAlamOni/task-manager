@@ -4172,8 +4172,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.post('/api/task-list/add-task', postData).then(function (response) {
                 return response.data;
             }).then(function (response) {
+                console.log(response);
                 _this.newEmptyTaskID = response.success.id;
-                console.log(response.success);
+
                 _this.getTaskList();
 
                 setTimeout(function () {

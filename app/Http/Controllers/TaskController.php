@@ -51,9 +51,10 @@ class TaskController extends Controller
     public function addTask(Request $request)
     {
 
-        $etask = Task::where(['id' => $request->id, 'parent_id' => $request->parent_id, 'project_id' => $request->project_id])
-            ->get();
 
+        $etask = Task::where(['id' => $request->id])
+            ->get();
+//        return response()->json($etask);
         if ($etask->count() > 0 && $request->text != '') {
 
             Task::where('id', $request->id)
