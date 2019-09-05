@@ -18,9 +18,10 @@ class ProjectController extends Controller
     {
         $this->middleware('auth');
     }
+
     public function getAll(){
         $Projects = Project::all();
-        return $this->success(compact('projects', 'Projects'));
+        return $this->success(compact($Projects, 'Projects'));
     }
 
     public function index()
