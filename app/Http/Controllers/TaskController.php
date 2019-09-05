@@ -13,13 +13,15 @@ class TaskController extends Controller
     {
     }
 
-    public function getAll(Request $request){
-        $tasks = Task::where('parent_id',0)->orderBy('sort_id','ASC')->get();
+    public function getAll(Request $request)
+    {
+        $tasks = Task::where('parent_id', 0)->orderBy('sort_id', 'ASC')->get();
         $data = $this->decorateData($tasks);
         return response()->json($data);
     }
 
-    public function decorateData($obj){
+    public function decorateData($obj)
+    {
         $data = [];
         foreach ($obj as $key => $task) {
             $data[$key]['id'] = $task->id;
@@ -30,7 +32,7 @@ class TaskController extends Controller
             $data[$key]['date'] = $task->date;
             $data[$key]['tags'] = [$task->tag];
 
-            $childrens = Task::where('parent_id',$task->id)->orderBy('sort_id','ASC')->get();
+            $childrens = Task::where('parent_id', $task->id)->orderBy('sort_id', 'ASC')->get();
             $data[$key]['children'] = $this->decorateData($childrens);
         }
         return $data;
@@ -43,34 +45,36 @@ class TaskController extends Controller
 
     public function addTask(Request $request)
     {
-        $empty_task = Task::where(['title'=>'','parent_id'=>$request->parent_id])->count();
 
-        if($empty_task < 0){
-            Task::where('id',$request->id)
-                ->update(['title'=>$request->text]);
+        $etask = Task::where(['id' => $request->id, 'parent_id' => $request->parent_id, 'project_id' => $request->project_id])
+            ->get();
 
-            Task::where('parent_id',$request->parent_id)
-                ->where('sort_id','>',$request->sort_id)
+        if ($etask->count() > 0 && $request->text != '') {
+
+            Task::where('id', $request->id)
+                ->update(['title' => $request->text]);
+
+            Task::where('parent_id', $request->parent_id)
+                ->where('sort_id', '>', $request->sort_id)
                 ->increment('sort_id');
             $data = [
-                'sort_id' => $request->sort_id+1,
-                'parent_id'=> $request->parent_id,
+                'sort_id' => $request->sort_id + 1,
+                'parent_id' => $request->parent_id,
                 'project_id' => $request->project_id,
-                'created_by'=>Auth::id(),
-                'updated_by'=>Auth::id(),
-                'title'=>'',
-                'tag'=>'',
-                'date'=>Carbon::today(),
-                'created_at'=>Carbon::now(),
+                'created_by' => Auth::id(),
+                'updated_by' => Auth::id(),
+                'title' => '',
+                'tag' => '',
+                'date' => Carbon::today(),
+                'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
-            return response()->json(['success'=>$task]);
-        } else {
-            return response()->json(['success'=> 'empty']);
+            return response()->json(['success' => $task]);
+
+        } else if ($request->text == '') {
+            Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id])->delete();
+            return response()->json(['success' => 'deleted empty ']);
         }
-
-
-
     }
 
     public function store(Request $request)

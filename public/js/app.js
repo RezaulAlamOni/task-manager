@@ -3754,6 +3754,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3816,14 +3826,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 clicked: 0,
                 tags: ['Important'],
                 assigned_user: { name: 0, picture: 0 }
-            }, { id: 8, parent: 3, text: 'node 4', draggable: true, html: 'Test', date: '6 Aug', clicked: 0, tags: [] }, { id: 9, parent: 3, text: 'node 5', date: '15 Aug', html: '251  41', clicked: 0, tags: [] }, { id: 10, parent: 3, text: 'node 6', droppable: false, date: '19 Aug', clicked: 0, tags: [] }, {
+            }, {
+                id: 8,
+                parent: 3,
+                text: 'node 4',
+                draggable: true,
+                html: 'Test',
+                date: '6 Aug',
+                clicked: 0,
+                tags: []
+            }, { id: 9, parent: 3, text: 'node 5', date: '15 Aug', html: '251  41', clicked: 0, tags: [] }, { id: 10, parent: 3, text: 'node 6', droppable: false, date: '19 Aug', clicked: 0, tags: [] }, {
                 id: 11, parent: 10, tags: ['Tags'],
                 text: 'node 7', clicked: 0, date: '', children: [{ id: 12, parent: 11, text: 'node 7-1', html: 'Atik', clicked: 0, tags: [] }, {
                     id: 13, parent: 11,
                     text: 'node 7-2', clicked: 0, children: [{ id: 14, parent: 13, text: 'node 7-2-1', date: '10 Aug', clicked: 0, tags: [] }, { id: 15, parent: 13, text: 'node 7-2-2', date: '25 Aug', clicked: 0, tags: [] }]
                 }, {
                     id: 16, parent: 10, tags: [],
-                    text: 'node 7-3', children: [{ id: 17, parent: 16, text: 'node 7-3-1', clicked: 0 }, { id: 18, parent: 16, text: 'node 7-3-2 undroppable', droppable: false, clicked: 0, tags: [] }], clicked: 0
+                    text: 'node 7-3', children: [{ id: 17, parent: 16, text: 'node 7-3-1', clicked: 0 }, {
+                        id: 18,
+                        parent: 16,
+                        text: 'node 7-3-2 undroppable',
+                        droppable: false,
+                        clicked: 0,
+                        tags: []
+                    }], clicked: 0
                 }, { id: 19, parent: 10, text: 'node 7-4', clicked: 0, tags: ['Tags'] }, { id: 20, parent: 10, text: 'node 7-5', clicked: 0, tags: ['Tags'] }, { id: 21, parent: 10, text: 'node 7-6', clicked: 0, tags: ['Tags'] }]
             }],
             date_config: {
@@ -4135,25 +4161,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         addNode: function addNode(data) {
             var _this = this;
-            var children = data.parent.children;
             var text = data.text;
-
-            var index = null;
-            // for (var i = 0; i < children.length; i++) {
-            //     if (children[i].text == '') {
-            //         index = i;
-            //         children.splice(i, 1);
-            //         setTimeout(function () {
-            //             $("#"+ _this.reselectParentId).click();
-            //             $("#"+ _this.reselectParentId).focus();
-            //             $("#"+ _this.reselectParentId).addClass('form-control');
-            //             $("#"+ _this.reselectParentId).removeClass('input-hide');
-            //         }, 100)
-            //     }
-            // }
-            // if (index == null) {
-            //     if (text !== ''){
-            var postData = { id: data.id, text: text, parent_id: data.parent_id, sort_id: data.sort_id, project_id: _this.projectId };
+            var postData = {
+                id: data.id,
+                text: text,
+                parent_id: data.parent_id,
+                sort_id: data.sort_id,
+                project_id: _this.projectId
+            };
             axios.post('/api/task-list/add-task', postData).then(function (response) {
                 return response.data;
             }).then(function (response) {
@@ -4161,26 +4176,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log(response.success);
                 _this.getTaskList();
 
-                // for (var i = 0; i < children.length; i++) {
-                //     if (children[i].text == text) {
-                // children.splice(i + 1, 0, {id: 0, parent_id: data.parent_id, text: '',sort_id : data.sort_id,project_id : _this.projectId});
-                // console.log(this.selectedData)
-                // _this.reselectParentId = _this.selectedData.id;
-
                 setTimeout(function () {
                     $("#" + _this.newEmptyTaskID).click();
                     $("#" + _this.newEmptyTaskID).focus();
                     $("#" + _this.newEmptyTaskID).addClass('form-control');
                     $("#" + _this.newEmptyTaskID).removeClass('input-hide');
-                }, 100);
-                //     }
-                // }
+                }, 500);
             }).catch(function (error) {
                 console.log('Api is not Working !!!');
             });
-            //     }
-            //
-            // }
         },
         RemoveNodeAndChildren: function RemoveNodeAndChildren(data) {
             if (confirm('Are You sure you want to delete this task !! ?')) {
@@ -11757,7 +11761,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.activeTask{\n    background: #aec8dd;\n    border-radius: 3px;\n    color: black;\n    font-weight: bold;\n}\n.input-title{\n    display: inline-block !important;\n}\n\n", ""]);
+exports.push([module.i, "\n.activeTask {\n    background: #aec8dd;\n    border-radius: 3px;\n    color: black;\n    font-weight: bold;\n}\n.input-title {\n    display: inline-block !important;\n}\n\n", ""]);
 
 // exports
 
@@ -76005,7 +76009,7 @@ var render = function() {
                     }
                   },
                   [
-                    _vm._v("Board "),
+                    _vm._v("\n                            Board "),
                     _c("i", { staticClass: "tree-toggle i-btn x30" })
                   ]
                 )
