@@ -38,10 +38,9 @@ class TaskController extends Controller
         //
     }
 
-
-    public function create()
+    public function addTask(Request $request)
     {
-        //
+        return response()->json($request->all());
     }
 
     public function store(Request $request)

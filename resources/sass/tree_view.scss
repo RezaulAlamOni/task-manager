@@ -257,7 +257,7 @@
                 background: #f0f0f0;
                 @include transition(all 0.2s linear);
                 .delete-icon {
-                    opacity: 0 !important;
+                    //opacity: 0 !important;
                 }
             }
 
@@ -273,7 +273,7 @@
                         color: rgba(0, 0, 0, 0.75);
                         @include transition(all 0.2s linear);
                         &.delete-icon {
-                            opacity: 0 !important;
+                            //opacity: 0 !important;
                         }
                     }
                 }

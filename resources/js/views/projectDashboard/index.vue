@@ -541,11 +541,12 @@
             this.getProjects();
             this.getTaskList();
             $(document).ready(function () {
-                $('.delete-icon').hide();
                 $('.searchList').hide();
                 $('.SubmitButton').hide();
                 $('.submitdetails').hide();
-
+                setTimeout(function () {
+                    $('.delete-icon').hide();
+                }, 500)
             });
 
         },
@@ -705,7 +706,7 @@
                 $(e.target).closest('.eachItemRow').find('.calender').show();
                 $(e.target).closest('.eachItemRow').find('.user').show();
                 $(e.target).closest('.eachItemRow').find('.dateCal').show();
-
+                $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
                 setTimeout(function () {
@@ -1008,16 +1009,12 @@
                 }
             },
             saveData(e, data) {
-                // console.log(e.which)
-                // if(e.shiftKey && e.keyCode === 9) {
-                //     alert("shift+tab")
-                // }
 
                 if (e.which === 13) {
                     $('.inp').addClass('input-hide');
                     $('.inp').removeClass('form-control');
                     this.addNode(data);
-                    // $(this).removeClass('from-control');
+
                 }
             },
             ShowDetails() {

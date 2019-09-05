@@ -2211,7 +2211,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -3852,10 +3851,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.getProjects();
         this.getTaskList();
         $(document).ready(function () {
-            $('.delete-icon').hide();
             $('.searchList').hide();
             $('.SubmitButton').hide();
             $('.submitdetails').hide();
+            setTimeout(function () {
+                $('.delete-icon').hide();
+            }, 500);
         });
     },
     created: function created() {
@@ -3887,7 +3888,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     _this.HideDetails(_this.selectedData);
                     break;
                 case "right":
-                    console.log(_this.selectedData);
+                    // console.log(_this.selectedData)
                     _this.ShowDetails(_this.selectedData);
                     break;
                 case "ctrl+c":
@@ -3958,7 +3959,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         dropNode: function dropNode(node, targetTree, oldTree) {
-            console.log(oldTree);
+            // console.log(oldTree)
         },
         dragNode: function dragNode(node, targetTree, oldTree) {
             // console.log(targetTree)
@@ -3970,14 +3971,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return response.data;
             }).then(function (response) {
                 _this2.projects = response.project;
-                console.log(_this2.projects.name);
+                // console.log(this.projects.name)
                 $('#header-item').text(_this2.projects.name + ' / Task List');
             }).catch(function (error) {});
         },
         ChangeNode: function ChangeNode(index, new2, old) {
             // console.log(index)
-            console.log(new2);
+            // console.log(new2)
             // console.log(old)
+
         },
         makeItClick: function makeItClick(e, data) {
             this.selectedData = data;
@@ -4012,7 +4014,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $(e.target).closest('.eachItemRow').find('.calender').show();
             $(e.target).closest('.eachItemRow').find('.user').show();
             $(e.target).closest('.eachItemRow').find('.dateCal').show();
-
+            $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
             $('.inp').addClass('input-hide');
             $('.inp').removeClass('form-control');
             setTimeout(function () {
@@ -4037,8 +4039,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         switchEvent: function switchEvent(e) {
             $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
         },
-        showDate: function showDate(selectedDates, dateStr, instance) {
-            console.log(dateStr);
+        showDate: function showDate(dateStr) {
+            // console.log(dateStr);
+            // alert(dateStr);
         },
         hasPermission: function hasPermission(permission) {
             return helper.hasPermission(permission);
@@ -4050,7 +4053,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return response.data;
             }).then(function (response) {
                 _this3.tree4data = response;
-                console.log(_this3.tree4data);
+                // console.log(this.tree4data)
             }).catch(function (error) {});
         },
         confirmDelete: function confirmDelete(project) {
@@ -4149,7 +4152,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 for (var i = 0; i < children.length; i++) {
                     if (children[i].text == text) {
                         children.splice(i + 1, 0, { id: 0, parent: data.id, text: '' });
-                        console.log(this.selectedData);
+                        // console.log(this.selectedData)
                         _this.reselectParentId = _this.selectedData.id;
                         setTimeout(function () {
                             $("#0").click();
@@ -4215,7 +4218,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             for (i = 0; i < targetData.length; i++) {
                 if (targetData[i].text == targetData.text) {
                     _this.selectedCopy = targetData[i];
-                    console.log(_this.selectedCopy);
+                    // console.log(_this.selectedCopy);
                     break;
                 }
             }
@@ -4310,16 +4313,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         saveData: function saveData(e, data) {
-            // console.log(e.which)
-            // if(e.shiftKey && e.keyCode === 9) {
-            //     alert("shift+tab")
-            // }
 
             if (e.which === 13) {
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
                 this.addNode(data);
-                // $(this).removeClass('from-control');
             }
         },
         ShowDetails: function ShowDetails() {
