@@ -63,7 +63,7 @@
                                         <input type="text" v-model="data.text"
                                                :id="data.id"
                                                @focus="hideItem($event)"
-                                               @blur="showItem($event)"
+                                               @blur="showItem($event,data)"
                                                @keypress="saveData($event,data)"
                                                @keydown="keyDownAction($event,data)"
                                                class="inp input-hide input-title" @click="makeInput($event,data)">
@@ -532,7 +532,8 @@
                 reselectParentId : null,
                 tag:null,
                 projectId:null,
-                projects : null
+                projects : null,
+                newEmptyTaskID  :null
             }
         },
         mounted() {
@@ -697,7 +698,7 @@
                 $(e.target).closest('.eachItemRow').find('.delete-icon').show();
 
             },
-            showItem(e) {
+            showItem(e,data) {
                 setTimeout(function () {
                     $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
                     $(e.target).closest('.eachItemRow').find('.task-complete').show();
@@ -710,11 +711,8 @@
                     $(e.target).closest('.eachItemRow').find('.dateCal').show();
 
                 }, 500)
-                // setTimeout(function () {
-                //     $('.delete-icon').hide();
-                // }, 500)
+                // this.add Node(data);
 
-                // $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
 
@@ -749,7 +747,7 @@
                     .then(response => response.data)
                     .then(response => {
                         this.tree4data = response;
-                        // console.log(this.tree4data)
+                        // console.log(response)
                     })
                     .catch(error => {
 
@@ -831,37 +829,52 @@
                 let _this = this;
                 var children = data.parent.children;
                 var text = data.text;
+
                 var index = null;
-                for (var i = 0; i < children.length; i++) {
-                    if (children[i].text == '') {
-                        index = i;
-                        children.splice(i, 1);
-                        setTimeout(function () {
-                            $("#"+ _this.reselectParentId).click();
-                            $("#"+ _this.reselectParentId).focus();
-                            $("#"+ _this.reselectParentId).addClass('form-control');
-                            $("#"+ _this.reselectParentId).removeClass('input-hide');
-                        }, 100)
+                // for (var i = 0; i < children.length; i++) {
+                //     if (children[i].text == '') {
+                //         index = i;
+                //         children.splice(i, 1);
+                //         setTimeout(function () {
+                //             $("#"+ _this.reselectParentId).click();
+                //             $("#"+ _this.reselectParentId).focus();
+                //             $("#"+ _this.reselectParentId).addClass('form-control');
+                //             $("#"+ _this.reselectParentId).removeClass('input-hide');
+                //         }, 100)
+                //     }
+                // }
+                // if (index == null) {
+                //     if (text !== ''){
+                        let postData = {id : data.id, text : text, parent_id : data.parent_id,sort_id : data.sort_id,project_id : _this.projectId};
+                        axios.post('/api/task-list/add-task' , postData)
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.newEmptyTaskID = response.success.id;
+                                console.log(response.success)
+                                _this.getTaskList()
 
-                    }
-                }
-                if (index == null) {
-                    for (var i = 0; i < children.length; i++) {
-                        if (children[i].text == text) {
-                            children.splice(i + 1, 0, {id: 0, parent: data.id, text: ''});
-                            // console.log(this.selectedData)
-                            _this.reselectParentId = _this.selectedData.id;
-                            setTimeout(function () {
-                                $("#0").click();
-                                $("#0").focus();
-                                $("#0").addClass('form-control');
-                                $("#0").removeClass('input-hide');
-                            }, 100)
+                                // for (var i = 0; i < children.length; i++) {
+                                //     if (children[i].text == text) {
+                                        // children.splice(i + 1, 0, {id: 0, parent_id: data.parent_id, text: '',sort_id : data.sort_id,project_id : _this.projectId});
+                                        // console.log(this.selectedData)
+                                        // _this.reselectParentId = _this.selectedData.id;
 
-                        }
-                    }
-                }
+                                        setTimeout(function () {
+                                            $("#"+_this.newEmptyTaskID).click();
+                                            $("#"+_this.newEmptyTaskID).focus();
+                                            $("#"+_this.newEmptyTaskID).addClass('form-control');
+                                            $("#"+_this.newEmptyTaskID).removeClass('input-hide');
+                                        }, 100)
+                                //     }
+                                // }
 
+                            })
+                            .catch(error => {
+                                console.log('Api is not Working !!!')
+                            });
+                //     }
+                //
+                // }
             },
             RemoveNodeAndChildren(data) {
                 if(confirm('Are You sure you want to delete this task !! ?')){
