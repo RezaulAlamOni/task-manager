@@ -3995,7 +3995,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $(e.target).addClass('form-control');
         },
         hideItem: function hideItem(e) {
-            $(e.target).closest('.eachItemRow').find('.left-content').hide();
+            $(e.target).closest('.eachItemRow').find('.task-complete').hide();
             $(e.target).closest('.eachItemRow').find('.tag-icon').hide();
             $(e.target).closest('.eachItemRow').find('.attach-icon').hide();
             $(e.target).closest('.eachItemRow').find('.subTask_plus').hide();
@@ -4006,20 +4006,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $(e.target).closest('.eachItemRow').find('.delete-icon').show();
         },
         showItem: function showItem(e) {
-            $(e.target).closest('.eachItemRow').find('.left-content').show();
-            $(e.target).closest('.eachItemRow').find('.tag-icon').show();
-            $(e.target).closest('.eachItemRow').find('.attach-icon').show();
-            $(e.target).closest('.eachItemRow').find('.subTask_plus').show();
-            $(e.target).closest('.eachItemRow').find('.task_plus').show();
-            $(e.target).closest('.eachItemRow').find('.calender').show();
-            $(e.target).closest('.eachItemRow').find('.user').show();
-            $(e.target).closest('.eachItemRow').find('.dateCal').show();
-            $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
-            $('.inp').addClass('input-hide');
-            $('.inp').removeClass('form-control');
             setTimeout(function () {
                 $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
+                $(e.target).closest('.eachItemRow').find('.task-complete').show();
+                $(e.target).closest('.eachItemRow').find('.tag-icon').show();
+                $(e.target).closest('.eachItemRow').find('.attach-icon').show();
+                $(e.target).closest('.eachItemRow').find('.subTask_plus').show();
+                $(e.target).closest('.eachItemRow').find('.task_plus').show();
+                $(e.target).closest('.eachItemRow').find('.calender').show();
+                $(e.target).closest('.eachItemRow').find('.user').show();
+                $(e.target).closest('.eachItemRow').find('.dateCal').show();
             }, 500);
+            // setTimeout(function () {
+            //     $('.delete-icon').hide();
+            // }, 500)
+
+            // $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
+            $('.inp').addClass('input-hide');
+            $('.inp').removeClass('form-control');
         },
         addTag: function addTag(e, data) {
             if (e.which === 13) {
@@ -4165,15 +4169,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         RemoveNodeAndChildren: function RemoveNodeAndChildren(data) {
-            var children = data.parent.children;
-            var id = data.id;
-            var index = 0;
-            for (var i = 0; i < children.length; i++) {
-                if (children[i].id == id) {
-                    index = i;
+            if (confirm('Are You sure you want to delete this task !! ?')) {
+                var children = data.parent.children;
+                var id = data.id;
+                var index = 0;
+                for (var i = 0; i < children.length; i++) {
+                    if (children[i].id == id) {
+                        index = i;
+                    }
                 }
+                children.splice(index, 1);
             }
-            children.splice(index, 1);
         },
         RemoveNewEmptyChildren: function RemoveNewEmptyChildren(data) {
             var children = data.children;
@@ -76043,7 +76049,8 @@ var render = function() {
                                 _c(
                                   "a",
                                   {
-                                    staticClass: "left-content li-opacity ",
+                                    staticClass:
+                                      "task-complete left-content li-opacity ",
                                     attrs: {
                                       title: data.children.length
                                         ? "Complete " +

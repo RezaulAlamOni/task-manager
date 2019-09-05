@@ -40,7 +40,7 @@
                                  @click="makeItClick($event, data)" :id="data._id">
                                 <template v-if="!data.isDragPlaceHolder" v-html="data.html">
 
-                                    <a class="left-content li-opacity "
+                                    <a class="task-complete left-content li-opacity "
                                        :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
                                        @click="addTaskToComplete(data)"
                                     >
@@ -686,7 +686,7 @@
                 $(e.target).addClass('form-control');
             },
             hideItem(e) {
-                $(e.target).closest('.eachItemRow').find('.left-content').hide();
+                $(e.target).closest('.eachItemRow').find('.task-complete').hide();
                 $(e.target).closest('.eachItemRow').find('.tag-icon').hide();
                 $(e.target).closest('.eachItemRow').find('.attach-icon').hide();
                 $(e.target).closest('.eachItemRow').find('.subTask_plus').hide();
@@ -698,20 +698,25 @@
 
             },
             showItem(e) {
-                $(e.target).closest('.eachItemRow').find('.left-content').show();
-                $(e.target).closest('.eachItemRow').find('.tag-icon').show();
-                $(e.target).closest('.eachItemRow').find('.attach-icon').show();
-                $(e.target).closest('.eachItemRow').find('.subTask_plus').show();
-                $(e.target).closest('.eachItemRow').find('.task_plus').show();
-                $(e.target).closest('.eachItemRow').find('.calender').show();
-                $(e.target).closest('.eachItemRow').find('.user').show();
-                $(e.target).closest('.eachItemRow').find('.dateCal').show();
-                $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
-                $('.inp').addClass('input-hide');
-                $('.inp').removeClass('form-control');
                 setTimeout(function () {
                     $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
+                    $(e.target).closest('.eachItemRow').find('.task-complete').show();
+                    $(e.target).closest('.eachItemRow').find('.tag-icon').show();
+                    $(e.target).closest('.eachItemRow').find('.attach-icon').show();
+                    $(e.target).closest('.eachItemRow').find('.subTask_plus').show();
+                    $(e.target).closest('.eachItemRow').find('.task_plus').show();
+                    $(e.target).closest('.eachItemRow').find('.calender').show();
+                    $(e.target).closest('.eachItemRow').find('.user').show();
+                    $(e.target).closest('.eachItemRow').find('.dateCal').show();
+
                 }, 500)
+                // setTimeout(function () {
+                //     $('.delete-icon').hide();
+                // }, 500)
+
+                // $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
+                $('.inp').addClass('input-hide');
+                $('.inp').removeClass('form-control');
 
             },
             addTag(e,data){
@@ -859,15 +864,18 @@
 
             },
             RemoveNodeAndChildren(data) {
-                var children = data.parent.children;
-                var id = data.id;
-                var index = 0;
-                for (var i = 0; i < children.length; i++) {
-                    if (children[i].id == id) {
-                        index = i;
+                if(confirm('Are You sure you want to delete this task !! ?')){
+                    var children = data.parent.children;
+                    var id = data.id;
+                    var index = 0;
+                    for (var i = 0; i < children.length; i++) {
+                        if (children[i].id == id) {
+                            index = i;
+                        }
                     }
+                    children.splice(index, 1);
                 }
-                children.splice(index, 1);
+
             },
             RemoveNewEmptyChildren(data) {
                 var children = data.children;
