@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Multiple_list;
+use App\Project;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -11,13 +13,26 @@ class TaskController extends Controller
 {
     public function __construct()
     {
+
     }
 
     public function getAll(Request $request)
     {
-        $tasks = Task::where('parent_id', 0)->orderBy('sort_id', 'ASC')->get();
+        $tasks = Task::where('parent_id', 0)->where('project_id', $request->id)->orderBy('sort_id', 'ASC')->get();
         $data = $this->decorateData($tasks);
-        return response()->json($data);
+
+        $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
+        $multiple_list = $multiple_list->multiple_list;
+        return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list]);
+    }
+    public function getAll2($id)
+    {
+        $tasks = Task::where('parent_id', 0)->where('project_id', $id)->orderBy('sort_id', 'ASC')->get();
+        $data = $this->decorateData($tasks);
+
+        $multiple_list = Project::with('multiple_list')->findOrFail($id);
+        $multiple_list = $multiple_list->multiple_list;
+        return ['task_list' => $data, 'multiple_list' => $multiple_list];
     }
 
     public function decorateData($obj)
@@ -27,15 +42,16 @@ class TaskController extends Controller
             $data[$key]['id'] = $task->id;
             $data[$key]['parent_id'] = $task->parent_id;
             $data[$key]['sort_id'] = $task->sort_id;
+            $data[$key]['list_id'] = $task->list_id;//list_id
             $data[$key]['text'] = $task->title;
             $data[$key]['clicked'] = 0;
             $data[$key]['date'] = $task->date;
             $data[$key]['tags'] = [$task->tag];
 
             $childrens = Task::where('parent_id', $task->id)->orderBy('sort_id', 'ASC')->get();
-            if (!empty($childrens)){
+            if (!empty($childrens)) {
                 $data[$key]['children'] = $this->decorateData($childrens);
-            }else{
+            } else {
                 $data[$key]['children'] = [];
             }
 
@@ -43,9 +59,35 @@ class TaskController extends Controller
         return $data;
     }
 
-    public function index()
+    public function addNewTask(Request $request)
     {
-        //
+        if ($request->list_id == null) {
+            $list = Multiple_list::where('project_id', $request->project_id)->orderBy('id', 'ASC')->first();
+            $list_id = $list->id;
+        } else {
+            $list_id = $request->list_id;
+        }
+
+        $sort = Task::where('project_id', $request->project_id)->where('list_id', $list_id)->where('parent_id', 0)->count();
+
+        $data = [
+            'sort_id' => $sort + 1,
+            'parent_id' => 0,
+            'project_id' => $request->project_id,
+            'list_id' => $list_id,
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
+            'title' => $request->title,
+            'tag' => '',
+            'date' => Carbon::today(),
+            'created_at' => Carbon::now(),
+        ];
+        $task = Task::create($data);
+
+        $task_list = $this->getAll2($request->project_id);
+        $task_list['success'] = $sort;
+        return response()->json($task_list);
+
     }
 
     public function addTask(Request $request)
@@ -67,6 +109,7 @@ class TaskController extends Controller
                 'sort_id' => $request->sort_id + 1,
                 'parent_id' => $request->parent_id,
                 'project_id' => $request->project_id,
+                'list_id' => $request->project_id,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
                 'title' => '',
@@ -78,9 +121,9 @@ class TaskController extends Controller
             return response()->json(['success' => $task]);
 
         } else if ($request->text == '') {
-            Task::where(['id' => $request->id,'project_id' => $request->project_id])->delete();
+            Task::where(['id' => $request->id, 'project_id' => $request->project_id])->delete();
             Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id])->delete();
-            return response()->json(['success' =>['id'=>$request->id]]);
+            return response()->json(['success' => ['id' => $request->id]]);
         }
     }
 

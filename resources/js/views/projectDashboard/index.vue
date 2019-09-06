@@ -6,15 +6,40 @@
 
                 <ul class="nav" style="border-bottom: 1px solid #cedcc4">
                     <li class="nav-item">
-                        <router-link class="nav-link activeTask"
-                                     :to="{ name: 'project-dashboard', params: { projectId: projectId }}">List<i
-                            class="i-btn x20 task-complete icon-circle-o"></i></router-link>
+                        <div class="btn-group">
+                            <button type="button" class="btn dropdown-toggle activeTask" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                List
+                            </button>
+                            <div class="dropdown-menu">
+
+                                <span v-for="list in multiple_list">
+                                    <span @click="setListId(list.id)">
+                                     <router-link class="nav-link drop-item"
+                                                  :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{list.list_title}}<i
+                                         class="i-btn x20 task-complete icon-circle-o"></i></router-link>
+                                    </span>
+                                </span>
+                                <a class="dropdown-item" href="#" @click="addListModel"><i class="fa fa-plus"></i> Add
+                                    List</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'project-board', params: { projectId: projectId }}">
-                            Board <i
-                            class="tree-toggle i-btn x30"></i>
-                        </router-link>
+                        <div class="btn-group">
+                            <button type="button" class="btn dropdown-toggle deactiveIteam" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                <span>Board</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <router-link class="nav-link"
+                                             :to="{ name: 'project-board', params: { projectId: projectId }}">
+                                    Board <i
+                                    class="tree-toggle i-btn x30"></i>
+                                </router-link>
+                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add List</a>
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -30,6 +55,7 @@
         </div>
         <div class="TaskListAndDetails">
             <div class="task_width" id="task_width">
+                <p class="add-list"><a href="#" @click="AddTaskPopup"><i class="fa fa-plus"></i> Add Task</a></p>
                 <div id="tree_view_list">
                     <div class="col-10 offset-2" id="col10" style="border: none">
                         <Tree class="tree4" :data="tree4data" draggable="draggable" cross-tree="cross-tree"
@@ -410,21 +436,70 @@
                 </div>
             </div>
         </div>
-
+        <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-4">Add Task</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add your new list here !</p>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Task Title</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="task.title">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="AddNewTask">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addListModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add List</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add your new list here !</p>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">List Title</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="list.name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">List Description</label>
+                            <div class="col-sm-8">
+                                <textarea name="" id="" cols="40" rows="3" v-model="list.description"></textarea>
+                            </div>
+                        </div>
+                        <!--                        <p v-if="addField.error" class="text-danger"></p>-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="AddNewList">Add</button>
+                        <button type="button" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>
 <style>
-    .activeTask {
-        background: #aec8dd;
-        border-radius: 3px;
-        color: black;
-        font-weight: bold;
-    }
-
-    .input-title {
-        display: inline-block !important;
-    }
 
 </style>
 <script>
@@ -442,106 +517,6 @@
             return {
                 id: 0,
                 tree4data: [],
-                tree4data1: [
-                    {
-                        id: 1,
-                        parent: 0,
-                        text: "Don't Forget Section",
-                        clicked: 0,
-                        date: '',
-                        tags: ["Dont Forget"],
-                        children: [
-                            {
-                                id: 2, parent: 1,
-                                text: 'node 1-1',
-                                html: 'Atik',
-                                tags: ["Dont Forget"],
-                                files: [{file: '/images/logo.png'}],
-                                clicked: 0
-                            },
-                            {
-                                id: 3, parent: 1,
-                                text: 'node 1-2', clicked: 0, tags: ["Dont Forget"], children: [
-                                    {
-                                        id: 4,
-                                        parent: 3,
-                                        text: 'node 1-2-1',
-                                        date: '10 Aug',
-                                        tags: ["Dont Forget"],
-                                        clicked: 0
-                                    },
-                                    {
-                                        id: 5,
-                                        parent: 3,
-                                        text: 'node 1-2-2',
-                                        date: '25 Aug',
-                                        tags: [],
-                                        clicked: 0
-                                    },
-                                ]
-                            },
-                        ]
-                    },
-                    {
-                        id: 6, parent: 0,
-                        text: 'node 2',
-                        html: 'Test 1',
-                        date: '05 Aug',
-                        clicked: 0,
-                        tags: ['Important'],
-                        assigned_user: {name: 0, picture: 0}
-                    },
-                    {
-                        id: 7, parent: 0,
-                        text: 'node 3',
-                        html: 'oni',
-                        clicked: 0,
-                        tags: ['Important'],
-                        assigned_user: {name: 0, picture: 0}
-                    },
-                    {
-                        id: 8,
-                        parent: 3,
-                        text: 'node 4',
-                        draggable: true,
-                        html: 'Test',
-                        date: '6 Aug',
-                        clicked: 0,
-                        tags: []
-                    },
-                    {id: 9, parent: 3, text: 'node 5', date: '15 Aug', html: '251  41', clicked: 0, tags: []},
-                    {id: 10, parent: 3, text: 'node 6', droppable: false, date: '19 Aug', clicked: 0, tags: []},
-                    {
-                        id: 11, parent: 10, tags: ['Tags'],
-                        text: 'node 7', clicked: 0, date: '', children: [
-                            {id: 12, parent: 11, text: 'node 7-1', html: 'Atik', clicked: 0, tags: []},
-                            {
-                                id: 13, parent: 11,
-                                text: 'node 7-2', clicked: 0, children: [
-                                    {id: 14, parent: 13, text: 'node 7-2-1', date: '10 Aug', clicked: 0, tags: []},
-                                    {id: 15, parent: 13, text: 'node 7-2-2', date: '25 Aug', clicked: 0, tags: []},
-                                ]
-                            },
-                            {
-                                id: 16, parent: 10, tags: [],
-                                text: 'node 7-3', children: [
-                                    {id: 17, parent: 16, text: 'node 7-3-1', clicked: 0},
-                                    {
-                                        id: 18,
-                                        parent: 16,
-                                        text: 'node 7-3-2 undroppable',
-                                        droppable: false,
-                                        clicked: 0,
-                                        tags: []
-                                    },
-                                ], clicked: 0
-                            },
-                            {id: 19, parent: 10, text: 'node 7-4', clicked: 0, tags: ['Tags']},
-                            {id: 20, parent: 10, text: 'node 7-5', clicked: 0, tags: ['Tags']},
-                            {id: 21, parent: 10, text: 'node 7-6', clicked: 0, tags: ['Tags']},
-                        ]
-                    },
-                ],
                 date_config: {
                     enableTime: false,
                     wrap: true,
@@ -558,8 +533,18 @@
                 reselectParentId: null,
                 tag: null,
                 projectId: null,
+                list_id: null,
                 projects: null,
-                newEmptyTaskID: null
+                newEmptyTaskID: null,
+                multiple_list: null,
+                list: {
+                    name: null,
+                    description: null
+                },
+                task: {
+                    title: null,
+                    list_id: null,
+                }
             }
         },
         mounted() {
@@ -772,11 +757,50 @@
                 axios.get('/api/task-list/' + this.projectId)
                     .then(response => response.data)
                     .then(response => {
-                        this.tree4data = response;
-                        // console.log(response)
+                        this.tree4data = response.task_list;
+                        this.multiple_list = response.multiple_list;
+                        console.log(response.multiple_list)
                     })
                     .catch(error => {
 
+                    });
+            },
+            AddTaskPopup() {
+                $("#addTaskModal").modal('show');
+            },
+            AddNewTask(){
+                this.task.project_id = this.projectId;
+                this.task.list_id = this.list_id;
+                axios.post('/api/add-task-task', this.task)
+                    .then(response => response.data)
+                    .then(response => {
+                        this.tree4data = response.task_list;
+                        this.multiple_list = response.multiple_list;
+                        console.log(response)
+                        $("#addTaskModal").modal('hide');
+                    })
+                    .catch(error => {
+                        console.log('Add list api not working!!')
+                    });
+            },
+            addListModel() {
+                $("#addListModel").modal('show');
+            },
+            setListId(id){
+                this.list_id = id;
+                // this.getTaskList()
+            },
+            AddNewList() {
+                this.list.project_id = this.projectId;
+                axios.post('/api/list-add', this.list)
+                    .then(response => response.data)
+                    .then(response => {
+                        this.multiple_list = response.multiple_list;
+                        console.log(response.multiple_list)
+                        $("#addListModel").modal('hide');
+                    })
+                    .catch(error => {
+                        console.log('Add list api not working!!')
                     });
             },
             confirmDelete(project) {
@@ -866,16 +890,13 @@
                     .then(response => {
                         console.log(response)
                         _this.newEmptyTaskID = response.success.id;
-
                         _this.getTaskList()
-
                         setTimeout(function () {
                             $("#" + _this.newEmptyTaskID).click();
                             $("#" + _this.newEmptyTaskID).focus();
                             $("#" + _this.newEmptyTaskID).addClass('form-control');
                             $("#" + _this.newEmptyTaskID).removeClass('input-hide');
                         }, 500)
-
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -893,7 +914,6 @@
                     }
                     children.splice(index, 1);
                 }
-
             },
             RemoveNewEmptyChildren(data) {
                 var children = data.children;
