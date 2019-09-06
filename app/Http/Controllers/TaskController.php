@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Project;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -11,13 +12,17 @@ class TaskController extends Controller
 {
     public function __construct()
     {
+
     }
 
     public function getAll(Request $request)
     {
         $tasks = Task::where('parent_id', 0)->where('project_id',$request->id )->orderBy('sort_id', 'ASC')->get();
         $data = $this->decorateData($tasks);
-        return response()->json(['task_list'=>$data]);
+
+        $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
+        $multiple_list = $multiple_list->multiple_list;
+        return response()->json(['task_list'=>$data,'multiple_list'=>$multiple_list[0]->listItem]);
     }
 
     public function decorateData($obj)

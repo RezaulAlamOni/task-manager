@@ -13,6 +13,6 @@ class Project extends Model
     ];
 
     public function multiple_list(){
-        $this->hasMany('App\Multiple_list','project_id','id');
+       return $this->hasMany(Multiple_list::Class,'project_id','id');
     }
 }

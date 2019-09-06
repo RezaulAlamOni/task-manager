@@ -4,13 +4,32 @@
             <div class="col-md-12 col-12 align-self-center">
                 <ul class="nav" style="border-bottom: 1px solid #cedcc4">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'project-dashboard', params: { projectId: projectId }}">List
-                            <i class="i-btn x20 task-complete icon-circle-o"></i></router-link>
+                        <div class="btn-group">
+                            <button type="button" class="btn dropdown-toggle deactiveIteam" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                List
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <router-link class="nav-link deactiveIteam"
+                                             :to="{ name: 'project-dashboard', params: { projectId: projectId }}">List<i
+                                    class="i-btn x20 task-complete icon-circle-o"></i></router-link>
+                            </div>
+                        </div>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link activeTask" :to="{ name: 'project-board', params: { projectId: projectId }}">Board
-                            <i class="tree-toggle i-btn x30"></i>
-                        </router-link>
+                        <div class="btn-group">
+                            <button type="button" class="btn dropdown-toggle activeTask" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span>Board</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <router-link class="nav-link" :to="{ name: 'project-board', params: { projectId: projectId }}">
+                                    Board <i
+                                    class="tree-toggle i-btn x30"></i>
+                                </router-link>
+
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -372,6 +391,21 @@
     .card{
         padding-top: 0 !important;
         margin-top: 0 !important;
+    }
+    .deactiveIteam{
+        background: #fefffd;
+        border-radius: 3px;
+        color: black;
+        font-weight: bold;
+    }
+    .deactiveIteam:hover{
+        color: black;
+        border : 1px solid #d3dacc;
+    }
+
+    .activeTask:hover {
+        color: black;
+        border: 1px solid #d3dacc;
     }
 
 </style>

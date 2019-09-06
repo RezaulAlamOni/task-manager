@@ -2924,6 +2924,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3764,6 +3798,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4080,8 +4146,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.get('/api/task-list/' + this.projectId).then(function (response) {
                 return response.data;
             }).then(function (response) {
-                _this3.tree4data = response;
-                // console.log(response)
+                _this3.tree4data = response.task_list;
+                console.log(response.multiple_list);
             }).catch(function (error) {});
         },
         confirmDelete: function confirmDelete(project) {
@@ -11747,7 +11813,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.activeTask{\n    background: #aec8dd;\n    border-radius: 3px;\n    color: black;\n    font-weight: bold;\n}\n.card{\n    padding-top: 0 !important;\n    margin-top: 0 !important;\n}\n\n", ""]);
+exports.push([module.i, "\n.activeTask{\n    background: #aec8dd;\n    border-radius: 3px;\n    color: black;\n    font-weight: bold;\n}\n.card{\n    padding-top: 0 !important;\n    margin-top: 0 !important;\n}\n.deactiveIteam{\n    background: #fefffd;\n    border-radius: 3px;\n    color: black;\n    font-weight: bold;\n}\n.deactiveIteam:hover{\n    color: black;\n    border : 1px solid #d3dacc;\n}\n.activeTask:hover {\n    color: black;\n    border: 1px solid #d3dacc;\n}\n\n", ""]);
 
 // exports
 
@@ -11762,7 +11828,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.activeTask {\n    background: #aec8dd;\n    border-radius: 3px;\n    color: black;\n    font-weight: bold;\n}\n.input-title {\n    display: inline-block !important;\n}\n\n", ""]);
+exports.push([module.i, "\n.activeTask {\n    background: #aec8dd;\n    border-radius: 3px;\n    color: black;\n    font-weight: bold;\n}\n.deactiveIteam{\n    background: #fefffd;\n    border-radius: 3px;\n    color: black;\n    font-weight: bold;\n}\n.deactiveIteam:hover{\n    color: black;\n    border : 1px solid #d3dacc;\n}\n.activeTask:hover {\n    color: black;\n    border: 1px solid #d3dacc;\n}\n.input-title {\n    display: inline-block !important;\n}\n\n", ""]);
 
 // exports
 
@@ -74037,60 +74103,100 @@ var render = function() {
             staticStyle: { "border-bottom": "1px solid #cedcc4" }
           },
           [
-            _c(
-              "li",
-              { staticClass: "nav-item" },
-              [
+            _c("li", { staticClass: "nav-item" }, [
+              _c("div", { staticClass: "btn-group" }, [
                 _c(
-                  "router-link",
+                  "button",
                   {
-                    staticClass: "nav-link",
+                    staticClass: "btn dropdown-toggle deactiveIteam",
                     attrs: {
-                      to: {
-                        name: "project-dashboard",
-                        params: { projectId: _vm.projectId }
-                      }
+                      type: "button",
+                      "data-toggle": "dropdown",
+                      "aria-haspopup": "true",
+                      "aria-expanded": "false"
                     }
                   },
                   [
-                    _vm._v("List\n                        "),
-                    _c("i", {
-                      staticClass: "i-btn x20 task-complete icon-circle-o"
-                    })
+                    _vm._v(
+                      "\n                            List\n                        "
+                    )
                   ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "dropdown-menu" },
+                  [
+                    _c(
+                      "a",
+                      { staticClass: "dropdown-item", attrs: { href: "#" } },
+                      [_vm._v("Action")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "nav-link deactiveIteam",
+                        attrs: {
+                          to: {
+                            name: "project-dashboard",
+                            params: { projectId: _vm.projectId }
+                          }
+                        }
+                      },
+                      [
+                        _vm._v("List"),
+                        _c("i", {
+                          staticClass: "i-btn x20 task-complete icon-circle-o"
+                        })
+                      ]
+                    )
+                  ],
+                  1
                 )
-              ],
-              1
-            ),
+              ])
+            ]),
             _vm._v(" "),
-            _c(
-              "li",
-              { staticClass: "nav-item" },
-              [
+            _c("li", { staticClass: "nav-item" }, [
+              _c("div", { staticClass: "btn-group" }, [
+                _vm._m(0),
+                _vm._v(" "),
                 _c(
-                  "router-link",
-                  {
-                    staticClass: "nav-link activeTask",
-                    attrs: {
-                      to: {
-                        name: "project-board",
-                        params: { projectId: _vm.projectId }
-                      }
-                    }
-                  },
+                  "div",
+                  { staticClass: "dropdown-menu" },
                   [
-                    _vm._v("Board\n                        "),
-                    _c("i", { staticClass: "tree-toggle i-btn x30" })
-                  ]
+                    _c(
+                      "a",
+                      { staticClass: "dropdown-item", attrs: { href: "#" } },
+                      [_vm._v("Action")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "nav-link",
+                        attrs: {
+                          to: {
+                            name: "project-board",
+                            params: { projectId: _vm.projectId }
+                          }
+                        }
+                      },
+                      [
+                        _vm._v("\n                                Board "),
+                        _c("i", { staticClass: "tree-toggle i-btn x30" })
+                      ]
+                    )
+                  ],
+                  1
                 )
-              ],
-              1
-            )
+              ])
+            ])
           ]
         )
       ]),
       _vm._v(" "),
-      _vm._m(0)
+      _vm._m(1)
     ]),
     _vm._v(" "),
     _c("div", { attrs: { id: "board_view_list" } }, [
@@ -75096,7 +75202,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(1),
+              _vm._m(2),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [
@@ -75225,7 +75331,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(2),
+              _vm._m(3),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [
@@ -75349,7 +75455,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(3),
+              _vm._m(4),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body list-model" }, [
                 _c(
@@ -75849,6 +75955,24 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn dropdown-toggle activeTask",
+        attrs: {
+          type: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [_c("span", [_vm._v("Board")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "input-group col-sm-3 searchList" }, [
       _c("input", {
         staticClass: "form-control searchTaskList",
@@ -75968,60 +76092,100 @@ var render = function() {
             staticStyle: { "border-bottom": "1px solid #cedcc4" }
           },
           [
-            _c(
-              "li",
-              { staticClass: "nav-item" },
-              [
+            _c("li", { staticClass: "nav-item" }, [
+              _c("div", { staticClass: "btn-group" }, [
                 _c(
-                  "router-link",
+                  "button",
                   {
-                    staticClass: "nav-link activeTask",
+                    staticClass: "btn dropdown-toggle activeTask",
                     attrs: {
-                      to: {
-                        name: "project-dashboard",
-                        params: { projectId: _vm.projectId }
-                      }
+                      type: "button",
+                      "data-toggle": "dropdown",
+                      "aria-haspopup": "true",
+                      "aria-expanded": "false"
                     }
                   },
                   [
-                    _vm._v("List"),
-                    _c("i", {
-                      staticClass: "i-btn x20 task-complete icon-circle-o"
-                    })
+                    _vm._v(
+                      "\n                                List\n                            "
+                    )
                   ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "dropdown-menu" },
+                  [
+                    _c(
+                      "a",
+                      { staticClass: "dropdown-item", attrs: { href: "#" } },
+                      [_vm._v("Action")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "nav-link deactiveIteam",
+                        attrs: {
+                          to: {
+                            name: "project-dashboard",
+                            params: { projectId: _vm.projectId }
+                          }
+                        }
+                      },
+                      [
+                        _vm._v("List"),
+                        _c("i", {
+                          staticClass: "i-btn x20 task-complete icon-circle-o"
+                        })
+                      ]
+                    )
+                  ],
+                  1
                 )
-              ],
-              1
-            ),
+              ])
+            ]),
             _vm._v(" "),
-            _c(
-              "li",
-              { staticClass: "nav-item" },
-              [
+            _c("li", { staticClass: "nav-item" }, [
+              _c("div", { staticClass: "btn-group" }, [
+                _vm._m(0),
+                _vm._v(" "),
                 _c(
-                  "router-link",
-                  {
-                    staticClass: "nav-link",
-                    attrs: {
-                      to: {
-                        name: "project-board",
-                        params: { projectId: _vm.projectId }
-                      }
-                    }
-                  },
+                  "div",
+                  { staticClass: "dropdown-menu" },
                   [
-                    _vm._v("\n                            Board "),
-                    _c("i", { staticClass: "tree-toggle i-btn x30" })
-                  ]
+                    _c(
+                      "a",
+                      { staticClass: "dropdown-item", attrs: { href: "#" } },
+                      [_vm._v("Action")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "nav-link",
+                        attrs: {
+                          to: {
+                            name: "project-board",
+                            params: { projectId: _vm.projectId }
+                          }
+                        }
+                      },
+                      [
+                        _vm._v("\n                                    Board "),
+                        _c("i", { staticClass: "tree-toggle i-btn x30" })
+                      ]
+                    )
+                  ],
+                  1
                 )
-              ],
-              1
-            )
+              ])
+            ])
           ]
         )
       ]),
       _vm._v(" "),
-      _vm._m(0)
+      _vm._m(1)
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "TaskListAndDetails" }, [
@@ -76778,7 +76942,7 @@ var render = function() {
               _c("div", { staticClass: "row pl-3" }, [
                 _c("div", [
                   _c("a", { staticClass: "user" }, [
-                    _vm._m(1),
+                    _vm._m(2),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -77126,7 +77290,7 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _vm._m(2),
+              _vm._m(3),
               _vm._v(" "),
               _vm.selectedData.files && _vm.selectedData.files.length !== 0
                 ? _c(
@@ -77277,7 +77441,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(3),
+              _vm._m(4),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("img", {
@@ -77293,6 +77457,24 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn dropdown-toggle deactiveIteam",
+        attrs: {
+          type: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [_c("span", [_vm._v("Board")])]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
