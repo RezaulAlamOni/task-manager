@@ -2937,27 +2937,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -3070,7 +3049,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             updateIndex: null,
             tag: null,
             selectedExistedTask: [],
-            projectId: null
+            projectId: null,
+            multiple_list: null
         };
     },
     mounted: function mounted() {
@@ -3136,7 +3116,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return response.data;
             }).then(function (response) {
                 _this2.project = response.project;
+                _this2.multiple_list = response.multiple_list;
                 $('#header-item').text(_this2.project.name + ' / Task Board');
+                console.log(_this2.multiple_list);
             }).catch(function (error) {});
         },
         getData: function getData() {
@@ -3830,6 +3812,49 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3845,79 +3870,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             id: 0,
             tree4data: [],
-            tree4data1: [{
-                id: 1,
-                parent: 0,
-                text: "Don't Forget Section",
-                clicked: 0,
-                date: '',
-                tags: ["Dont Forget"],
-                children: [{
-                    id: 2, parent: 1,
-                    text: 'node 1-1',
-                    html: 'Atik',
-                    tags: ["Dont Forget"],
-                    files: [{ file: '/images/logo.png' }],
-                    clicked: 0
-                }, {
-                    id: 3, parent: 1,
-                    text: 'node 1-2', clicked: 0, tags: ["Dont Forget"], children: [{
-                        id: 4,
-                        parent: 3,
-                        text: 'node 1-2-1',
-                        date: '10 Aug',
-                        tags: ["Dont Forget"],
-                        clicked: 0
-                    }, {
-                        id: 5,
-                        parent: 3,
-                        text: 'node 1-2-2',
-                        date: '25 Aug',
-                        tags: [],
-                        clicked: 0
-                    }]
-                }]
-            }, {
-                id: 6, parent: 0,
-                text: 'node 2',
-                html: 'Test 1',
-                date: '05 Aug',
-                clicked: 0,
-                tags: ['Important'],
-                assigned_user: { name: 0, picture: 0 }
-            }, {
-                id: 7, parent: 0,
-                text: 'node 3',
-                html: 'oni',
-                clicked: 0,
-                tags: ['Important'],
-                assigned_user: { name: 0, picture: 0 }
-            }, {
-                id: 8,
-                parent: 3,
-                text: 'node 4',
-                draggable: true,
-                html: 'Test',
-                date: '6 Aug',
-                clicked: 0,
-                tags: []
-            }, { id: 9, parent: 3, text: 'node 5', date: '15 Aug', html: '251  41', clicked: 0, tags: [] }, { id: 10, parent: 3, text: 'node 6', droppable: false, date: '19 Aug', clicked: 0, tags: [] }, {
-                id: 11, parent: 10, tags: ['Tags'],
-                text: 'node 7', clicked: 0, date: '', children: [{ id: 12, parent: 11, text: 'node 7-1', html: 'Atik', clicked: 0, tags: [] }, {
-                    id: 13, parent: 11,
-                    text: 'node 7-2', clicked: 0, children: [{ id: 14, parent: 13, text: 'node 7-2-1', date: '10 Aug', clicked: 0, tags: [] }, { id: 15, parent: 13, text: 'node 7-2-2', date: '25 Aug', clicked: 0, tags: [] }]
-                }, {
-                    id: 16, parent: 10, tags: [],
-                    text: 'node 7-3', children: [{ id: 17, parent: 16, text: 'node 7-3-1', clicked: 0 }, {
-                        id: 18,
-                        parent: 16,
-                        text: 'node 7-3-2 undroppable',
-                        droppable: false,
-                        clicked: 0,
-                        tags: []
-                    }], clicked: 0
-                }, { id: 19, parent: 10, text: 'node 7-4', clicked: 0, tags: ['Tags'] }, { id: 20, parent: 10, text: 'node 7-5', clicked: 0, tags: ['Tags'] }, { id: 21, parent: 10, text: 'node 7-6', clicked: 0, tags: ['Tags'] }]
-            }],
             date_config: {
                 enableTime: false,
                 wrap: true,
@@ -3934,8 +3886,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             reselectParentId: null,
             tag: null,
             projectId: null,
+            list_id: null,
             projects: null,
-            newEmptyTaskID: null
+            newEmptyTaskID: null,
+            multiple_list: null,
+            list: {
+                name: null,
+                description: null
+            },
+            task: {
+                title: null,
+                list_id: null
+            }
         };
     },
     mounted: function mounted() {
@@ -4147,14 +4109,55 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return response.data;
             }).then(function (response) {
                 _this3.tree4data = response.task_list;
+                _this3.multiple_list = response.multiple_list;
                 console.log(response.multiple_list);
             }).catch(function (error) {});
         },
-        confirmDelete: function confirmDelete(project) {
+        AddTaskPopup: function AddTaskPopup() {
+            $("#addTaskModal").modal('show');
+        },
+        AddNewTask: function AddNewTask() {
             var _this4 = this;
 
+            this.task.project_id = this.projectId;
+            this.task.list_id = this.list_id;
+            axios.post('/api/add-task-task', this.task).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                _this4.tree4data = response.task_list;
+                _this4.multiple_list = response.multiple_list;
+                console.log(response);
+                $("#addTaskModal").modal('hide');
+            }).catch(function (error) {
+                console.log('Add list api not working!!');
+            });
+        },
+        addListModel: function addListModel() {
+            $("#addListModel").modal('show');
+        },
+        setListId: function setListId(id) {
+            this.list_id = id;
+            // this.getTaskList()
+        },
+        AddNewList: function AddNewList() {
+            var _this5 = this;
+
+            this.list.project_id = this.projectId;
+            axios.post('/api/list-add', this.list).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                _this5.multiple_list = response.multiple_list;
+                console.log(response.multiple_list);
+                $("#addListModel").modal('hide');
+            }).catch(function (error) {
+                console.log('Add list api not working!!');
+            });
+        },
+        confirmDelete: function confirmDelete(project) {
+            var _this6 = this;
+
             return function (dialog) {
-                return _this4.deleteProject(project);
+                return _this6.deleteProject(project);
             };
         },
         addChild: function addChild(data) {
@@ -4240,9 +4243,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 console.log(response);
                 _this.newEmptyTaskID = response.success.id;
-
                 _this.getTaskList();
-
                 setTimeout(function () {
                     $("#" + _this.newEmptyTaskID).click();
                     $("#" + _this.newEmptyTaskID).focus();
@@ -11813,7 +11814,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.activeTask{\n    background: #aec8dd;\n    border-radius: 3px;\n    color: black;\n    font-weight: bold;\n}\n.card{\n    padding-top: 0 !important;\n    margin-top: 0 !important;\n}\n.deactiveIteam{\n    background: #fefffd;\n    border-radius: 3px;\n    color: black;\n    font-weight: bold;\n}\n.deactiveIteam:hover{\n    color: black;\n    border : 1px solid #d3dacc;\n}\n.activeTask:hover {\n    color: black;\n    border: 1px solid #d3dacc;\n}\n\n", ""]);
+exports.push([module.i, "\n.card{\n    padding-top: 0 !important;\n    margin-top: 0 !important;\n}\n", ""]);
 
 // exports
 
@@ -11828,7 +11829,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.activeTask {\n    background: #aec8dd;\n    border-radius: 3px;\n    color: black;\n    font-weight: bold;\n}\n.deactiveIteam{\n    background: #fefffd;\n    border-radius: 3px;\n    color: black;\n    font-weight: bold;\n}\n.deactiveIteam:hover{\n    color: black;\n    border : 1px solid #d3dacc;\n}\n.activeTask:hover {\n    color: black;\n    border: 1px solid #d3dacc;\n}\n.input-title {\n    display: inline-block !important;\n}\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -74127,39 +74128,44 @@ var render = function() {
                   "div",
                   { staticClass: "dropdown-menu" },
                   [
-                    _c(
-                      "a",
-                      { staticClass: "dropdown-item", attrs: { href: "#" } },
-                      [_vm._v("Action")]
-                    ),
+                    _vm._l(_vm.multiple_list, function(list) {
+                      return _c(
+                        "span",
+                        [
+                          _c(
+                            "router-link",
+                            {
+                              staticClass: "nav-link drop-item",
+                              attrs: {
+                                to: {
+                                  name: "project-dashboard",
+                                  params: { projectId: _vm.projectId }
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(_vm._s(list.list_title)),
+                              _c("i", {
+                                staticClass:
+                                  "i-btn x20 task-complete icon-circle-o"
+                              })
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    }),
                     _vm._v(" "),
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "nav-link deactiveIteam",
-                        attrs: {
-                          to: {
-                            name: "project-dashboard",
-                            params: { projectId: _vm.projectId }
-                          }
-                        }
-                      },
-                      [
-                        _vm._v("List"),
-                        _c("i", {
-                          staticClass: "i-btn x20 task-complete icon-circle-o"
-                        })
-                      ]
-                    )
+                    _vm._m(0)
                   ],
-                  1
+                  2
                 )
               ])
             ]),
             _vm._v(" "),
             _c("li", { staticClass: "nav-item" }, [
               _c("div", { staticClass: "btn-group" }, [
-                _vm._m(0),
+                _vm._m(1),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -74186,7 +74192,9 @@ var render = function() {
                         _vm._v("\n                                Board "),
                         _c("i", { staticClass: "tree-toggle i-btn x30" })
                       ]
-                    )
+                    ),
+                    _vm._v(" "),
+                    _vm._m(2)
                   ],
                   1
                 )
@@ -74196,7 +74204,7 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(1)
+      _vm._m(3)
     ]),
     _vm._v(" "),
     _c("div", { attrs: { id: "board_view_list" } }, [
@@ -74218,7 +74226,7 @@ var render = function() {
                   { attrs: { href: "#" }, on: { click: _vm.addColumn } },
                   [
                     _c("i", { staticClass: "fa fa-plus" }),
-                    _vm._v(" add column")
+                    _vm._v(" Add Column")
                   ]
                 )
               ]),
@@ -75202,7 +75210,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(2),
+              _vm._m(4),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [
@@ -75331,7 +75339,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(3),
+              _vm._m(5),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [
@@ -75455,7 +75463,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(4),
+              _vm._m(6),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body list-model" }, [
                 _c(
@@ -75955,6 +75963,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
+      _c("i", { staticClass: "fa fa-plus" }),
+      _vm._v(" Add List")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c(
       "button",
       {
@@ -75968,6 +75985,15 @@ var staticRenderFns = [
       },
       [_c("span", [_vm._v("Board")])]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
+      _c("i", { staticClass: "fa fa-plus" }),
+      _vm._v(" Add Board")
+    ])
   },
   function() {
     var _vm = this
@@ -76116,32 +76142,57 @@ var render = function() {
                   "div",
                   { staticClass: "dropdown-menu" },
                   [
-                    _c(
-                      "a",
-                      { staticClass: "dropdown-item", attrs: { href: "#" } },
-                      [_vm._v("Action")]
-                    ),
+                    _vm._l(_vm.multiple_list, function(list) {
+                      return _c("span", [
+                        _c(
+                          "span",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.setListId(list.id)
+                              }
+                            }
+                          },
+                          [
+                            _c(
+                              "router-link",
+                              {
+                                staticClass: "nav-link drop-item",
+                                attrs: {
+                                  to: {
+                                    name: "project-dashboard",
+                                    params: { projectId: _vm.projectId }
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(_vm._s(list.list_title)),
+                                _c("i", {
+                                  staticClass:
+                                    "i-btn x20 task-complete icon-circle-o"
+                                })
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ])
+                    }),
                     _vm._v(" "),
                     _c(
-                      "router-link",
+                      "a",
                       {
-                        staticClass: "nav-link deactiveIteam",
-                        attrs: {
-                          to: {
-                            name: "project-dashboard",
-                            params: { projectId: _vm.projectId }
-                          }
-                        }
+                        staticClass: "dropdown-item",
+                        attrs: { href: "#" },
+                        on: { click: _vm.addListModel }
                       },
                       [
-                        _vm._v("List"),
-                        _c("i", {
-                          staticClass: "i-btn x20 task-complete icon-circle-o"
-                        })
+                        _c("i", { staticClass: "fa fa-plus" }),
+                        _vm._v(" Add\n                                    List")
                       ]
                     )
                   ],
-                  1
+                  2
                 )
               ])
             ]),
@@ -76154,12 +76205,6 @@ var render = function() {
                   "div",
                   { staticClass: "dropdown-menu" },
                   [
-                    _c(
-                      "a",
-                      { staticClass: "dropdown-item", attrs: { href: "#" } },
-                      [_vm._v("Action")]
-                    ),
-                    _vm._v(" "),
                     _c(
                       "router-link",
                       {
@@ -76175,7 +76220,9 @@ var render = function() {
                         _vm._v("\n                                    Board "),
                         _c("i", { staticClass: "tree-toggle i-btn x30" })
                       ]
-                    )
+                    ),
+                    _vm._v(" "),
+                    _vm._m(1)
                   ],
                   1
                 )
@@ -76185,11 +76232,18 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(1)
+      _vm._m(2)
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "TaskListAndDetails" }, [
       _c("div", { staticClass: "task_width", attrs: { id: "task_width" } }, [
+        _c("p", { staticClass: "add-list" }, [
+          _c("a", { attrs: { href: "#" }, on: { click: _vm.AddTaskPopup } }, [
+            _c("i", { staticClass: "fa fa-plus" }),
+            _vm._v(" Add Task")
+          ])
+        ]),
+        _vm._v(" "),
         _c("div", { attrs: { id: "tree_view_list" } }, [
           _c(
             "div",
@@ -76942,7 +76996,7 @@ var render = function() {
               _c("div", { staticClass: "row pl-3" }, [
                 _c("div", [
                   _c("a", { staticClass: "user" }, [
-                    _vm._m(2),
+                    _vm._m(3),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -77290,7 +77344,7 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _vm._m(3),
+              _vm._m(4),
               _vm._v(" "),
               _vm.selectedData.files && _vm.selectedData.files.length !== 0
                 ? _c(
@@ -77441,13 +77495,206 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(4),
+              _vm._m(5),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("img", {
                   staticClass: "img-responsive",
                   attrs: { src: _vm.modalImg }
                 })
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "addTaskModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(6),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("p", [_vm._v("Add your new list here !")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("label", { staticClass: "col-sm-4 col-form-label" }, [
+                    _vm._v("Task Title")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.task.title,
+                          expression: "task.title"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.task.title },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.task, "title", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.AddNewTask }
+                  },
+                  [_vm._v("Add")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
+                  },
+                  [_vm._v("Cancel\n                        ")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "addListModel",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(7),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("p", [_vm._v("Add your new list here !")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("label", { staticClass: "col-sm-4 col-form-label" }, [
+                    _vm._v("List Title")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.list.name,
+                          expression: "list.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.list.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.list, "name", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("label", { staticClass: "col-sm-4 col-form-label" }, [
+                    _vm._v("List Description")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.list.description,
+                          expression: "list.description"
+                        }
+                      ],
+                      attrs: { name: "", id: "", cols: "40", rows: "3" },
+                      domProps: { value: _vm.list.description },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.list, "description", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.AddNewList }
+                  },
+                  [_vm._v("Add")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: { type: "button" }
+                  },
+                  [_vm._v("Cancel")]
+                )
               ])
             ])
           ]
@@ -77474,6 +77721,15 @@ var staticRenderFns = [
       },
       [_c("span", [_vm._v("Board")])]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
+      _c("i", { staticClass: "fa fa-plus" }),
+      _vm._v(" Add List")
+    ])
   },
   function() {
     var _vm = this
@@ -77553,6 +77809,48 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
       _c("h5", { staticClass: "modal-title" }, [_vm._v("Image Show")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title pl-4" }, [_vm._v("Add Task")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title pl-3" }, [_vm._v(" Add List")]),
       _vm._v(" "),
       _c(
         "button",

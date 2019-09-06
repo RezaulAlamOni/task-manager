@@ -29,8 +29,12 @@ Route::prefix('api')->group(function () {
     Route::patch('/project/{id}', 'ProjectController@update');
     Route::post('/project/{id}', 'ProjectController@destroy');
 
+
+    Route::post('/list-add', 'MultipleListController@store');//add list under project
+
     Route::get('/task-list/{id}', 'TaskController@getAll');//get task list data
-    Route::post('/task-list/add-task', 'TaskController@addTask');//add node
+    Route::post('/task-list/add-task', 'TaskController@addTask');//update add node
+    Route::post('/add-task-task', 'TaskController@addNewTask');//add new node
 
 
 });

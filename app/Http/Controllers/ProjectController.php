@@ -69,8 +69,10 @@ class ProjectController extends Controller
     public function show(Request $request)
     {
         $project = Project::findOrFail($request->id);
+        $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
+        $multiple_list = $multiple_list->multiple_list;
 
-        return response()->json(['success'=>1,'project'=>$project]);
+        return response()->json(['success'=>1,'project'=>$project,'multiple_list'=>$multiple_list]);
     }
 
     /**

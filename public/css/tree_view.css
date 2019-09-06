@@ -485,6 +485,12 @@
   height: calc(100vh - 200px);
 }
 
+.TaskListAndDetails .add-list {
+  padding-left: 123px;
+  display: inline-block;
+  padding-top: 15px;
+}
+
 .searchList {
   float: right;
   position: absolute;
@@ -531,6 +537,34 @@
 .task-img-right-pane {
   height: 50px;
   width: 50px;
+}
+
+.activeTask {
+  background: #aec8dd;
+  border-radius: 3px;
+  color: black;
+  font-weight: bold;
+}
+
+.deactiveIteam {
+  background: #fefffd;
+  border-radius: 3px;
+  color: black;
+  font-weight: bold;
+}
+
+.deactiveIteam:hover {
+  color: black;
+  border: 1px solid #d3dacc;
+}
+
+.activeTask:hover {
+  color: black;
+  border: 1px solid #d3dacc;
+}
+
+.input-title {
+  display: inline-block !important;
 }
 
 @media only screen and (max-width: 880px) {
