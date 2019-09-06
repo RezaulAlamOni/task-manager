@@ -15,9 +15,9 @@ class TaskController extends Controller
 
     public function getAll(Request $request)
     {
-        $tasks = Task::where('parent_id', 0)->orderBy('sort_id', 'ASC')->get();
+        $tasks = Task::where('parent_id', 0)->where('project_id',$request->id )->orderBy('sort_id', 'ASC')->get();
         $data = $this->decorateData($tasks);
-        return response()->json($data);
+        return response()->json(['task_list'=>$data]);
     }
 
     public function decorateData($obj)
@@ -27,6 +27,7 @@ class TaskController extends Controller
             $data[$key]['id'] = $task->id;
             $data[$key]['parent_id'] = $task->parent_id;
             $data[$key]['sort_id'] = $task->sort_id;
+            $data[$key]['list_id'] = $task->list_id;//list_id
             $data[$key]['text'] = $task->title;
             $data[$key]['clicked'] = 0;
             $data[$key]['date'] = $task->date;
@@ -67,6 +68,7 @@ class TaskController extends Controller
                 'sort_id' => $request->sort_id + 1,
                 'parent_id' => $request->parent_id,
                 'project_id' => $request->project_id,
+                'list_id' => $request->project_id,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
                 'title' => '',

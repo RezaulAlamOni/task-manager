@@ -772,8 +772,8 @@
                 axios.get('/api/task-list/' + this.projectId)
                     .then(response => response.data)
                     .then(response => {
-                        this.tree4data = response;
-                        // console.log(response)
+                        // this.tree4data = response.task_list;
+                        console.log(response)
                     })
                     .catch(error => {
 
