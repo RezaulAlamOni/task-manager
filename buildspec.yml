@@ -18,15 +18,15 @@ phases:
       - apt-get install -y php7.3 php7.3-gd php7.3-mbstring php7.3-xml php7.3-dom php7.3-curl php7.3-mysql mcrypt php7.3-zip php7.3-json
   pre_build:
     commands:
-      - composer install
+      - composer install --no-dev
       - npm install
       - npm run production
 #  build:
 #    commands:
 #      - php vendor/phpunit/phpunit/phpunit tests
-  post_build:
-    commands:
-      - composer install --no-dev
+ # post_build:
+ #   commands:
+ #     - composer install --no-dev
 
 artifacts:
   files:
