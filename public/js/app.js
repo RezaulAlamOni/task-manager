@@ -3855,6 +3855,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -3912,7 +3916,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $('.submitdetails').hide();
             setTimeout(function () {
                 $('.delete-icon').hide();
-                $('#' + _this.multiple_list[0].id).click();
+            }, 1000);
+            setTimeout(function () {
+                $('#list' + _this.multiple_list[0].id).click();
             }, 300);
         });
     },
@@ -4088,7 +4094,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         addExistingTag: function addExistingTag(e, data, tag) {
-            data.tags.splice(0, 1, tag);
+            data.tags = tag;
             $('#dropdown' + data._id).toggle();
         },
         changeTag: function changeTag(data) {
@@ -4123,7 +4129,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         $("#" + id).focus();
                         $("#" + id).addClass('form-control');
                         $("#" + id).removeClass('input-hide');
-                    }, 500);
+                    }, 300);
                 }
             }).catch(function (error) {});
         },
@@ -4162,7 +4168,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return response.data;
             }).then(function (response) {
                 _this5.multiple_list = response.multiple_list;
-                // console.log(response.multiple_list)
+                console.log(response);
+
+                setTimeout(function () {
+                    $('#list' + response.id.id).click();
+                }, 300);
                 $("#addListModel").modal('hide');
             }).catch(function (error) {
                 console.log('Add list api not working!!');
@@ -11845,7 +11855,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -76147,7 +76157,7 @@ var render = function() {
                         _c(
                           "span",
                           {
-                            attrs: { id: list.id },
+                            attrs: { id: "list" + list.id },
                             on: {
                               click: function($event) {
                                 return _vm.setListId(list.id, list.list_title)
@@ -76237,14 +76247,15 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "TaskListAndDetails" }, [
-      _c("div", { staticClass: "task_width", attrs: { id: "task_width" } }, [
-        _c("p", { staticClass: "add-list" }, [
-          _c("a", { attrs: { href: "#" }, on: { click: _vm.AddTaskPopup } }, [
-            _c("i", { staticClass: "fa fa-plus" }),
-            _vm._v(" Add Task")
+      _vm.tree4data.length <= 0
+        ? _c("div", { staticClass: "col-md-8 text-center pt-5" }, [
+            _c("h2", { staticStyle: { color: "#d1a894" } }, [
+              _vm._v("Add list and create task!")
+            ])
           ])
-        ]),
-        _vm._v(" "),
+        : _vm._e(),
+      _vm._v(" "),
+      _c("div", { staticClass: "task_width", attrs: { id: "task_width" } }, [
         _c("div", { attrs: { id: "tree_view_list" } }, [
           _c(
             "div",
@@ -76478,70 +76489,60 @@ var render = function() {
                                   "a",
                                   { staticClass: "tag-icon hide-item-res" },
                                   [
-                                    data.tags && data.tags.length !== 0
-                                      ? _c(
-                                          "div",
-                                          _vm._l(data.tags, function(item) {
-                                            return _c("div", [
-                                              item === "Dont Forget"
-                                                ? _c(
-                                                    "span",
-                                                    {
-                                                      staticClass:
-                                                        "badge badge-warning",
-                                                      staticStyle: {
-                                                        background: "#8b3920"
-                                                      },
-                                                      on: {
-                                                        click: function(
-                                                          $event
-                                                        ) {
-                                                          return _vm.changeTag(
-                                                            data
-                                                          )
-                                                        }
-                                                      }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        _vm._s(
-                                                          item.substring(0, 12)
-                                                        )
-                                                      )
-                                                    ]
+                                    data.tags
+                                      ? _c("div", [
+                                          data.tags === "Dont Forget"
+                                            ? _c(
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "badge badge-warning",
+                                                  staticStyle: {
+                                                    background: "#8b3920"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.changeTag(data)
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      data.tags.substring(0, 12)
+                                                    )
                                                   )
-                                                : _c(
-                                                    "span",
-                                                    {
-                                                      staticClass:
-                                                        "badge badge-success",
-                                                      on: {
-                                                        click: function(
-                                                          $event
-                                                        ) {
-                                                          return _vm.changeTag(
-                                                            data
-                                                          )
-                                                        }
-                                                      }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        _vm._s(
-                                                          item.substring(0, 12)
-                                                        ) + ".."
-                                                      )
-                                                    ]
+                                                ]
+                                              )
+                                            : _c(
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "badge badge-success",
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.changeTag(data)
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      data.tags.substring(0, 12)
+                                                    )
                                                   )
-                                            ])
-                                          }),
-                                          0
-                                        )
-                                      : _c("i", {
+                                                ]
+                                              )
+                                        ])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.tags.length == ""
+                                      ? _c("i", {
                                           staticClass:
                                             "outline-local_offer icon-image-preview dropdown-toggle-split li-opacity",
                                           attrs: { "data-toggle": "dropdown" }
-                                        }),
+                                        })
+                                      : _vm._e(),
                                     _vm._v(" "),
                                     _c(
                                       "div",
@@ -76622,7 +76623,7 @@ var render = function() {
                                                       "span",
                                                       {
                                                         staticClass:
-                                                          "badge badge-danger",
+                                                          "badge badge-danger pl-2",
                                                         on: {
                                                           click: function(
                                                             $event
@@ -77698,7 +77699,7 @@ var render = function() {
                       "aria-label": "Close"
                     }
                   },
-                  [_vm._v("Cancel")]
+                  [_vm._v("Cancel\n                        ")]
                 )
               ])
             ])

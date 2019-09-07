@@ -32,26 +32,26 @@ class MultipleListController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        Multiple_list::create([
-            'project_id'=>$request->project_id,
-            'list_title'=>$request->name,
-            'description'=>$request->description,
-            'created_at'=>Carbon::today(),
+        $id = Multiple_list::create([
+            'project_id' => $request->project_id,
+            'list_title' => $request->name,
+            'description' => $request->description,
+            'created_at' => Carbon::today(),
         ]);
         $multiple_list = Project::with('multiple_list')->findOrFail($request->project_id);
         $multiple_list = $multiple_list->multiple_list;
-        return response()->json(['multiple_list'=>$multiple_list]);
+        return response()->json(['multiple_list' => $multiple_list,'id'=>$id]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Multiple_list  $multiple_list
+     * @param \App\Multiple_list $multiple_list
      * @return \Illuminate\Http\Response
      */
     public function show(Multiple_list $multiple_list)
@@ -62,7 +62,7 @@ class MultipleListController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Multiple_list  $multiple_list
+     * @param \App\Multiple_list $multiple_list
      * @return \Illuminate\Http\Response
      */
     public function edit(Multiple_list $multiple_list)
@@ -73,8 +73,8 @@ class MultipleListController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Multiple_list  $multiple_list
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Multiple_list $multiple_list
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Multiple_list $multiple_list)
@@ -85,7 +85,7 @@ class MultipleListController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Multiple_list  $multiple_list
+     * @param \App\Multiple_list $multiple_list
      * @return \Illuminate\Http\Response
      */
     public function destroy(Multiple_list $multiple_list)

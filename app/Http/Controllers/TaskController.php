@@ -103,7 +103,7 @@ class TaskController extends Controller
             $data[$key]['text'] = $task->title;
             $data[$key]['clicked'] = 0;
             $data[$key]['date'] = $task->date;
-            $data[$key]['tags'] = [$task->tag];
+            $data[$key]['tags'] = $task->tag;
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)->orderBy('sort_id', 'ASC')->get();

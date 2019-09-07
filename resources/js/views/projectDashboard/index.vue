@@ -14,7 +14,7 @@
                             </button>
                             <div class="dropdown-menu">
                                 <span v-for="list in multiple_list">
-                                    <span @click="setListId(list.id ,list.list_title)" :id="list.id">
+                                    <span @click="setListId(list.id ,list.list_title)" :id="'list'+list.id">
                                      <router-link class="nav-link drop-item"
                                                   :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{list.list_title}}<i
                                          class="i-btn x20 task-complete icon-circle-o"></i></router-link>
@@ -54,8 +54,12 @@
 
         </div>
         <div class="TaskListAndDetails">
+            <div v-if="tree4data.length <= 0" class="col-md-8 text-center pt-5">
+                <h2 style="color: #d1a894">Add list and create task!</h2>
+            </div>
             <div class="task_width" id="task_width">
-                <p class="add-list"><a href="#" @click="AddTaskPopup"><i class="fa fa-plus"></i> Add Task</a></p>
+                <!--                <p class="add-list"><a href="#" @click="AddTaskPopup"><i class="fa fa-plus"></i> Add Task</a></p>-->
+
                 <div id="tree_view_list">
                     <div class="col-10 offset-2" id="col10" style="border: none">
                         <Tree class="tree4" :data="tree4data" draggable="draggable" cross-tree="cross-tree"
@@ -111,20 +115,20 @@
 
 
                                     <a class="tag-icon hide-item-res">
-                                        <div v-if="data.tags && data.tags.length !== 0">
-                                            <div v-for="item in data.tags">
-                                                <span class="badge badge-warning" style="background: #8b3920"
-                                                      @click="changeTag(data)"
-                                                      v-if='item === "Dont Forget"'>{{item.substring(0,12)}}</span>
-                                                <span class="badge badge-success"
-                                                      @click="changeTag(data)"
-                                                      v-else>{{item.substring(0,12)}}..</span>
-                                            </div>
+                                        <div v-if="data.tags">
+                                            <span class="badge badge-warning" style="background: #8b3920"
+                                                  @click="changeTag(data)"
+                                                  v-if='data.tags === "Dont Forget"'>{{data.tags.substring(0,12)}}</span>
+                                            <span class="badge badge-success"
+                                                  @click="changeTag(data)"
+                                                  v-else>{{data.tags.substring(0,12)}}</span>
                                         </div>
 
-                                        <i v-else
+                                        <i v-if="data.tags.length == ''"
                                            class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
-                                           data-toggle="dropdown"></i>
+                                           data-toggle="dropdown">
+
+                                        </i>
                                         <div class="dropdown-menu dropdown-menu-right" :id="'dropdown'+data._id">
 
                                             <diV class="collapse show switchToggle" style="">
@@ -134,9 +138,8 @@
                                                     <label class="pl-2 pt-3">
                                                         <span class="badge badge-success"
                                                               @click="addExistingTag($event,data,'Tags')">Tags</span>
-                                                        <span class="badge badge-danger"
+                                                        <span class="badge badge-danger pl-2"
                                                               @click="addExistingTag($event,data,'Dont Forget')">Dont Forget</span>
-
                                                     </label>
                                                 </li>
 
@@ -491,7 +494,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" @click="AddNewList">Add</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
                     </div>
                 </div>
             </div>
@@ -559,7 +563,9 @@
                 $('.submitdetails').hide();
                 setTimeout(function () {
                     $('.delete-icon').hide();
-                    $('#'+_this.multiple_list[0].id).click();
+                }, 1000)
+                setTimeout(function () {
+                    $('#list' + _this.multiple_list[0].id).click();
                 }, 300)
             });
         },
@@ -738,7 +744,7 @@
                 }
             },
             addExistingTag(e, data, tag) {
-                data.tags.splice(0, 1, tag);
+                data.tags = tag;
                 $('#dropdown' + data._id).toggle();
             },
             changeTag(data) {
@@ -759,19 +765,19 @@
                     id: this.projectId,
                     list_id: this.list_id
                 };
-                axios.post('/api/task-list',data)
+                axios.post('/api/task-list', data)
                     .then(response => response.data)
                     .then(response => {
                         this.tree4data = response.task_list;
                         this.multiple_list = response.multiple_list;
-                        if (this.tree4data.length === 1 && this.tree4data[0].text === ''){
+                        if (this.tree4data.length === 1 && this.tree4data[0].text === '') {
                             let id = this.tree4data[0].id
                             setTimeout(function () {
-                                $("#"+id).click();
-                                $("#"+id).focus();
-                                $("#"+id).addClass('form-control');
-                                $("#"+id).removeClass('input-hide');
-                            }, 500)
+                                $("#" + id).click();
+                                $("#" + id).focus();
+                                $("#" + id).addClass('form-control');
+                                $("#" + id).removeClass('input-hide');
+                            }, 300)
                         }
                     })
                     .catch(error => {
@@ -781,7 +787,7 @@
             AddTaskPopup() {
                 $("#addTaskModal").modal('show');
             },
-            AddNewTask(){
+            AddNewTask() {
                 this.task.project_id = this.projectId;
                 this.task.list_id = this.list_id;
                 axios.post('/api/add-task-task', this.task)
@@ -799,7 +805,7 @@
             addListModel() {
                 $("#addListModel").modal('show');
             },
-            setListId(id,title){
+            setListId(id, title) {
                 this.list_id = id;
                 $('#listName').text(title);
                 this.getTaskList()
@@ -810,7 +816,11 @@
                     .then(response => response.data)
                     .then(response => {
                         this.multiple_list = response.multiple_list;
-                        // console.log(response.multiple_list)
+                        console.log(response)
+
+                        setTimeout(function () {
+                            $('#list' +  response.id.id).click();
+                        }, 300)
                         $("#addListModel").modal('hide');
                     })
                     .catch(error => {
@@ -898,7 +908,7 @@
                     parent_id: data.parent_id,
                     sort_id: data.sort_id,
                     project_id: _this.projectId,
-                    list_id : _this.list_id
+                    list_id: _this.list_id
                 };
                 axios.post('/api/task-list/add-task', postData)
                     .then(response => response.data)
