@@ -4116,7 +4116,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 _this3.tree4data = response.task_list;
                 _this3.multiple_list = response.multiple_list;
-                // console.log(response.multiple_list)
+                if (_this3.tree4data.length === 1 && _this3.tree4data[0].text === '') {
+                    var id = _this3.tree4data[0].id;
+                    setTimeout(function () {
+                        $("#" + id).click();
+                        $("#" + id).focus();
+                        $("#" + id).addClass('form-control');
+                        $("#" + id).removeClass('input-hide');
+                    }, 500);
+                }
             }).catch(function (error) {});
         },
         AddTaskPopup: function AddTaskPopup() {
@@ -77684,7 +77692,11 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn btn-secondary",
-                    attrs: { type: "button" }
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
                   },
                   [_vm._v("Cancel")]
                 )

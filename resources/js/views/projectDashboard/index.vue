@@ -491,7 +491,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" @click="AddNewList">Add</button>
-                        <button type="button" class="btn btn-secondary">Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -764,7 +764,15 @@
                     .then(response => {
                         this.tree4data = response.task_list;
                         this.multiple_list = response.multiple_list;
-                        // console.log(response.multiple_list)
+                        if (this.tree4data.length === 1 && this.tree4data[0].text === ''){
+                            let id = this.tree4data[0].id
+                            setTimeout(function () {
+                                $("#"+id).click();
+                                $("#"+id).focus();
+                                $("#"+id).addClass('form-control');
+                                $("#"+id).removeClass('input-hide');
+                            }, 500)
+                        }
                     })
                     .catch(error => {
 

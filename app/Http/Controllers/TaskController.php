@@ -19,11 +19,10 @@ class TaskController extends Controller
 
     public function getAll(Request $request)
     {
-//        return response()->json($request->all());
         if ($request->list_id == null){
             $list = Multiple_list::where('project_id', $request->id)->orderBy('id', 'ASC')->first();
             $list_id = $list->id;
-        }else {
+        } else {
             $list_id = $request->list_id;
         }
         $tasks = Task::where('parent_id', 0)
@@ -31,24 +30,66 @@ class TaskController extends Controller
             ->where('list_id', $list_id)
             ->orderBy('sort_id', 'ASC')
             ->get();
+        $task= [];
+        if ($tasks->count() <= 0){
+            $data = [
+                'sort_id' =>0,
+                'parent_id' =>0,
+                'project_id' => $request->id,
+                'list_id' => $list_id,
+                'created_by' => Auth::id(),
+                'updated_by' => Auth::id(),
+                'title' => '',
+                'tag' => '',
+                'date' => Carbon::today(),
+                'created_at' => Carbon::now(),
+            ];
+            $task = Task::create($data);
+            $tasks = Task::where('parent_id', 0)
+                ->where('project_id', $request->id)
+                ->where('list_id', $list_id)
+                ->orderBy('sort_id', 'ASC')->get();
+        }
+
         $data = $this->decorateData($tasks);
 
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
-        return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list]);
+        return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list,'empty_task'=>$task]);
     }
+
     public function getAllTask($id,$list_id)
     {
-
+        $task= [];
         $tasks = Task::where('parent_id', 0)
             ->where('project_id', $id)
             ->where('list_id', $list_id)
             ->orderBy('sort_id', 'ASC')->get();
+        if ($tasks->count() <= 0){
+            $data = [
+                'sort_id' =>0,
+                'parent_id' =>0,
+                'project_id' => $id,
+                'list_id' => $list_id,
+                'created_by' => Auth::id(),
+                'updated_by' => Auth::id(),
+                'title' => '',
+                'tag' => '',
+                'date' => Carbon::today(),
+                'created_at' => Carbon::now(),
+            ];
+            $task = Task::create($data);
+            $tasks = Task::where('parent_id', 0)
+                ->where('project_id', $id)
+                ->where('list_id', $list_id)
+                ->orderBy('sort_id', 'ASC')->get();
+        }
+
         $data = $this->decorateData($tasks);
 
         $multiple_list = Project::with('multiple_list')->findOrFail($id);
         $multiple_list = $multiple_list->multiple_list;
-        return ['task_list' => $data, 'multiple_list' => $multiple_list];
+        return ['task_list' => $data, 'multiple_list' => $multiple_list,'empty_task'=>$task];
     }
 
     public function decorateData($obj)
@@ -143,30 +184,6 @@ class TaskController extends Controller
         }
     }
 
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show(Task $task)
-    {
-        //
-    }
-
-    public function edit(Task $task)
-    {
-        //
-    }
-
-    public function update(Request $request, Task $task)
-    {
-        //
-    }
-
-    public function destroy(Task $task)
-    {
-        //
-    }
 
     public function checkListId($list_id,$project_id){
         if ($list_id == null) {
