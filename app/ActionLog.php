@@ -15,7 +15,9 @@ class ActionLog extends Model
         'title',
         'log_type',
         'action_type',
+        'action_by',
         'action_at'
     ];
+
 
 }

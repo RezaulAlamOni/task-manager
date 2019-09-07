@@ -18,4 +18,8 @@ class Multiple_list extends Model
     {
         return $this->belongsTo('App\Project','project_id','id');
     }
+    public function action_log(){
+
+        return $this->hasMany('App\ActionLog','multiple_list_id','id');
+    }
 }

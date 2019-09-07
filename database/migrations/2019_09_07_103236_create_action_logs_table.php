@@ -23,6 +23,7 @@ class CreateActionLogsTable extends Migration
             $table->text('title')->nullable();
             $table->string('log_type')->nullable();
             $table->string('action_type')->nullable();
+            $table->integer('action_by');
             $table->dateTime('action_at');
         });
     }
