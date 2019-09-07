@@ -6,6 +6,7 @@ use App\Multiple_list;
 use App\Project;
 use App\Task;
 use Carbon\Carbon;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,16 +19,31 @@ class TaskController extends Controller
 
     public function getAll(Request $request)
     {
-        $tasks = Task::where('parent_id', 0)->where('project_id', $request->id)->orderBy('sort_id', 'ASC')->get();
+//        return response()->json($request->all());
+        if ($request->list_id == null){
+            $list = Multiple_list::where('project_id', $request->id)->orderBy('id', 'ASC')->first();
+            $list_id = $list->id;
+        }else {
+            $list_id = $request->list_id;
+        }
+        $tasks = Task::where('parent_id', 0)
+            ->where('project_id', $request->id)
+            ->where('list_id', $list_id)
+            ->orderBy('sort_id', 'ASC')
+            ->get();
         $data = $this->decorateData($tasks);
 
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
         return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list]);
     }
-    public function getAllTask($id)
+    public function getAllTask($id,$list_id)
     {
-        $tasks = Task::where('parent_id', 0)->where('project_id', $id)->orderBy('sort_id', 'ASC')->get();
+
+        $tasks = Task::where('parent_id', 0)
+            ->where('project_id', $id)
+            ->where('list_id', $list_id)
+            ->orderBy('sort_id', 'ASC')->get();
         $data = $this->decorateData($tasks);
 
         $multiple_list = Project::with('multiple_list')->findOrFail($id);
@@ -48,7 +64,8 @@ class TaskController extends Controller
             $data[$key]['date'] = $task->date;
             $data[$key]['tags'] = [$task->tag];
 
-            $childrens = Task::where('parent_id', $task->id)->orderBy('sort_id', 'ASC')->get();
+            $childrens = Task::where('parent_id', $task->id)
+                ->where('list_id', $task->list_id)->orderBy('sort_id', 'ASC')->get();
             if (!empty($childrens)) {
                 $data[$key]['children'] = $this->decorateData($childrens);
             } else {
@@ -84,7 +101,7 @@ class TaskController extends Controller
         ];
         $task = Task::create($data);
 
-        $task_list = $this->getAllTask($request->project_id);
+        $task_list = $this->getAllTask($request->project_id,$list_id);
         $task_list['success'] = $sort;
         return response()->json($task_list);
 
@@ -92,11 +109,9 @@ class TaskController extends Controller
 
     public function addTask(Request $request)
     {
+        $list_id = $this->checkListId($request->list_id,$request->project_id);
 
-
-        $etask = Task::where(['id' => $request->id])
-            ->get();
-//        return response()->json($etask);
+        $etask = Task::where(['id' => $request->id])->get();
         if ($etask->count() > 0 && $request->text != '') {
 
             Task::where('id', $request->id)
@@ -104,12 +119,13 @@ class TaskController extends Controller
 
             Task::where('parent_id', $request->parent_id)
                 ->where('sort_id', '>', $request->sort_id)
+                ->where('list_id', $list_id)
                 ->increment('sort_id');
             $data = [
                 'sort_id' => $request->sort_id + 1,
                 'parent_id' => $request->parent_id,
                 'project_id' => $request->project_id,
-                'list_id' => $request->project_id,
+                'list_id' => $list_id,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
                 'title' => '',
@@ -150,6 +166,15 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         //
+    }
+
+    public function checkListId($list_id,$project_id){
+        if ($list_id == null) {
+            $list = Multiple_list::where('project_id', $project_id)->orderBy('id', 'ASC')->first();
+            return $list->id;
+        } else {
+            return $list_id;
+        }
     }
 
 

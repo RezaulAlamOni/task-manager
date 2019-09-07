@@ -3905,13 +3905,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.projectId = this.$route.params.projectId;
         this.getProjects();
         this.getTaskList();
+
         $(document).ready(function () {
             $('.searchList').hide();
             $('.SubmitButton').hide();
             $('.submitdetails').hide();
             setTimeout(function () {
                 $('.delete-icon').hide();
-            }, 500);
+                $('#' + _this.multiple_list[0].id).click();
+            }, 300);
         });
     },
     created: function created() {
@@ -4105,12 +4107,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getTaskList: function getTaskList() {
             var _this3 = this;
 
-            axios.get('/api/task-list/' + this.projectId).then(function (response) {
+            var data = {
+                id: this.projectId,
+                list_id: this.list_id
+            };
+            axios.post('/api/task-list', data).then(function (response) {
                 return response.data;
             }).then(function (response) {
                 _this3.tree4data = response.task_list;
                 _this3.multiple_list = response.multiple_list;
-                console.log(response.multiple_list);
+                // console.log(response.multiple_list)
             }).catch(function (error) {});
         },
         AddTaskPopup: function AddTaskPopup() {
@@ -4126,7 +4132,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 _this4.tree4data = response.task_list;
                 _this4.multiple_list = response.multiple_list;
-                console.log(response);
+                // console.log(response)
                 $("#addTaskModal").modal('hide');
             }).catch(function (error) {
                 console.log('Add list api not working!!');
@@ -4135,9 +4141,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         addListModel: function addListModel() {
             $("#addListModel").modal('show');
         },
-        setListId: function setListId(id) {
+        setListId: function setListId(id, title) {
             this.list_id = id;
-            // this.getTaskList()
+            $('#listName').text(title);
+            this.getTaskList();
         },
         AddNewList: function AddNewList() {
             var _this5 = this;
@@ -4147,7 +4154,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return response.data;
             }).then(function (response) {
                 _this5.multiple_list = response.multiple_list;
-                console.log(response.multiple_list);
+                // console.log(response.multiple_list)
                 $("#addListModel").modal('hide');
             }).catch(function (error) {
                 console.log('Add list api not working!!');
@@ -4236,12 +4243,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 text: text,
                 parent_id: data.parent_id,
                 sort_id: data.sort_id,
-                project_id: _this.projectId
+                project_id: _this.projectId,
+                list_id: _this.list_id
             };
             axios.post('/api/task-list/add-task', postData).then(function (response) {
                 return response.data;
             }).then(function (response) {
-                console.log(response);
+                // console.log(response)
                 _this.newEmptyTaskID = response.success.id;
                 _this.getTaskList();
                 setTimeout(function () {
@@ -76120,23 +76128,7 @@ var render = function() {
           [
             _c("li", { staticClass: "nav-item" }, [
               _c("div", { staticClass: "btn-group" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn dropdown-toggle activeTask",
-                    attrs: {
-                      type: "button",
-                      "data-toggle": "dropdown",
-                      "aria-haspopup": "true",
-                      "aria-expanded": "false"
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\n                                List\n                            "
-                    )
-                  ]
-                ),
+                _vm._m(0),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -76147,9 +76139,10 @@ var render = function() {
                         _c(
                           "span",
                           {
+                            attrs: { id: list.id },
                             on: {
                               click: function($event) {
-                                return _vm.setListId(list.id)
+                                return _vm.setListId(list.id, list.list_title)
                               }
                             }
                           },
@@ -76199,7 +76192,7 @@ var render = function() {
             _vm._v(" "),
             _c("li", { staticClass: "nav-item" }, [
               _c("div", { staticClass: "btn-group" }, [
-                _vm._m(0),
+                _vm._m(1),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -76222,7 +76215,7 @@ var render = function() {
                       ]
                     ),
                     _vm._v(" "),
-                    _vm._m(1)
+                    _vm._m(2)
                   ],
                   1
                 )
@@ -76232,7 +76225,7 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(2)
+      _vm._m(3)
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "TaskListAndDetails" }, [
@@ -76996,7 +76989,7 @@ var render = function() {
               _c("div", { staticClass: "row pl-3" }, [
                 _c("div", [
                   _c("a", { staticClass: "user" }, [
-                    _vm._m(3),
+                    _vm._m(4),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -77344,7 +77337,7 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _vm._m(4),
+              _vm._m(5),
               _vm._v(" "),
               _vm.selectedData.files && _vm.selectedData.files.length !== 0
                 ? _c(
@@ -77495,7 +77488,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(5),
+              _vm._m(6),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("img", {
@@ -77527,7 +77520,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(6),
+              _vm._m(7),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [_vm._v("Add your new list here !")]),
@@ -77611,7 +77604,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(7),
+              _vm._m(8),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [_vm._v("Add your new list here !")]),
@@ -77704,6 +77697,24 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn dropdown-toggle activeTask",
+        attrs: {
+          type: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [_c("span", { attrs: { id: "listName" } }, [_vm._v("List")])]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

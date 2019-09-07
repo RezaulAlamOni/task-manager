@@ -9,12 +9,12 @@
                         <div class="btn-group">
                             <button type="button" class="btn dropdown-toggle activeTask" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
-                                List
+                                <span id="listName">List</span>
+
                             </button>
                             <div class="dropdown-menu">
-
                                 <span v-for="list in multiple_list">
-                                    <span @click="setListId(list.id)">
+                                    <span @click="setListId(list.id ,list.list_title)" :id="list.id">
                                      <router-link class="nav-link drop-item"
                                                   :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{list.list_title}}<i
                                          class="i-btn x20 task-complete icon-circle-o"></i></router-link>
@@ -552,15 +552,16 @@
             this.projectId = this.$route.params.projectId;
             this.getProjects();
             this.getTaskList();
+
             $(document).ready(function () {
                 $('.searchList').hide();
                 $('.SubmitButton').hide();
                 $('.submitdetails').hide();
                 setTimeout(function () {
                     $('.delete-icon').hide();
-                }, 500)
+                    $('#'+_this.multiple_list[0].id).click();
+                }, 300)
             });
-
         },
         created() {
             let _this = this;
@@ -754,12 +755,16 @@
                 return helper.hasPermission(permission);
             },
             getTaskList() {
-                axios.get('/api/task-list/' + this.projectId)
+                let data = {
+                    id: this.projectId,
+                    list_id: this.list_id
+                };
+                axios.post('/api/task-list',data)
                     .then(response => response.data)
                     .then(response => {
                         this.tree4data = response.task_list;
                         this.multiple_list = response.multiple_list;
-                        console.log(response.multiple_list)
+                        // console.log(response.multiple_list)
                     })
                     .catch(error => {
 
@@ -776,7 +781,7 @@
                     .then(response => {
                         this.tree4data = response.task_list;
                         this.multiple_list = response.multiple_list;
-                        console.log(response)
+                        // console.log(response)
                         $("#addTaskModal").modal('hide');
                     })
                     .catch(error => {
@@ -786,9 +791,10 @@
             addListModel() {
                 $("#addListModel").modal('show');
             },
-            setListId(id){
+            setListId(id,title){
                 this.list_id = id;
-                // this.getTaskList()
+                $('#listName').text(title);
+                this.getTaskList()
             },
             AddNewList() {
                 this.list.project_id = this.projectId;
@@ -796,7 +802,7 @@
                     .then(response => response.data)
                     .then(response => {
                         this.multiple_list = response.multiple_list;
-                        console.log(response.multiple_list)
+                        // console.log(response.multiple_list)
                         $("#addListModel").modal('hide');
                     })
                     .catch(error => {
@@ -883,12 +889,13 @@
                     text: text,
                     parent_id: data.parent_id,
                     sort_id: data.sort_id,
-                    project_id: _this.projectId
+                    project_id: _this.projectId,
+                    list_id : _this.list_id
                 };
                 axios.post('/api/task-list/add-task', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response)
+                        // console.log(response)
                         _this.newEmptyTaskID = response.success.id;
                         _this.getTaskList()
                         setTimeout(function () {
