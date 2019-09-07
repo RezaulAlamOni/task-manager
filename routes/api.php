@@ -11,8 +11,15 @@
 |
 */
 
-Route::group([
-    'middleware' => 'auth:api'
-], function () {
-    //
-});
+Route::get('/project', 'ProjectController@getAll');
+Route::get('/project/{id}', 'ProjectController@show');
+Route::post('/project', 'ProjectController@store');
+Route::patch('/project/{id}', 'ProjectController@update');
+Route::post('/project/{id}', 'ProjectController@destroy');
+
+
+Route::post('/list-add', 'MultipleListController@store');//add list under project
+
+Route::get('/task-list/{id}', 'TaskController@getAll');//get task list data
+Route::post('/task-list/add-task', 'TaskController@addTask');//update add node
+Route::post('/add-task-task', 'TaskController@addNewTask');//add new node

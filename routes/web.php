@@ -22,22 +22,7 @@ Route::get('/select', 'ClearController@show_select');
 Route::get('/blank','ClearController@show_blank');
 
 //Route::get('/projects','ProjectController@index');
-Route::prefix('api')->group(function () {
-    Route::get('/project', 'ProjectController@getAll');
-    Route::get('/project/{id}', 'ProjectController@show');
-    Route::post('/project', 'ProjectController@store');
-    Route::patch('/project/{id}', 'ProjectController@update');
-    Route::post('/project/{id}', 'ProjectController@destroy');
 
-
-    Route::post('/list-add', 'MultipleListController@store');//add list under project
-
-    Route::get('/task-list/{id}', 'TaskController@getAll');//get task list data
-    Route::post('/task-list/add-task', 'TaskController@addTask');//update add node
-    Route::post('/add-task-task', 'TaskController@addNewTask');//add new node
-
-
-});
 
 
 Route::get( '/{vue_route?}', 'ProjectController@index' )->where( 'vue_route', '(.*)' );

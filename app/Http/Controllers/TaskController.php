@@ -25,7 +25,7 @@ class TaskController extends Controller
         $multiple_list = $multiple_list->multiple_list;
         return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list]);
     }
-    public function getAll2($id)
+    public function getAllTask($id)
     {
         $tasks = Task::where('parent_id', 0)->where('project_id', $id)->orderBy('sort_id', 'ASC')->get();
         $data = $this->decorateData($tasks);
@@ -84,7 +84,7 @@ class TaskController extends Controller
         ];
         $task = Task::create($data);
 
-        $task_list = $this->getAll2($request->project_id);
+        $task_list = $this->getAllTask($request->project_id);
         $task_list['success'] = $sort;
         return response()->json($task_list);
 
