@@ -141,6 +141,7 @@ class TaskController extends Controller
                 }else{
                     $child = Task::where('id',$request->id)->update(['parent_id'=>$task->id,'sort_id'=>1]);
                 }
+                $this->createLog($request->id,'updated','Update parent',$request->text);
             }
 
             return response()->json(['success'=>$request->id]);

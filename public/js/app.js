@@ -4109,7 +4109,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 parent_id: data.parent_id,
                 project_id: _this.projectId,
                 list_id: _this.list_id,
-                sort_id: data.sort_id
+                sort_id: data.sort_id,
+                text: data.text
             };
             axios.post('/api/task-list/task-make-child', postData).then(function (response) {
                 return response.data;
