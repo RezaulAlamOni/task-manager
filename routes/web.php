@@ -21,6 +21,8 @@ Route::get('/select', 'ClearController@show_select');
 
 Route::get('/blank','ClearController@show_blank');
 
+Route::get('/blank','BlankController@show');
+
 //Route::get('/projects','ProjectController@index');
 Route::prefix('api')->group(function () {
     Route::get('/project', 'ProjectController@getAll');
