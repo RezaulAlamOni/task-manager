@@ -147,6 +147,26 @@ class TaskController extends Controller
             return response()->json(['success'=>$request->id]);
         }
     }
+    public function reverseChild(Request $request){
+        if (isset($request->parent_id) && $request->parent_id != 0){
+            $task = Task::where('id',$request->parent_id)->first();
+
+            if ($task){
+                $taskChild = Task::where('parent_id',$task->id)
+                    ->where('project_id',$task->project_id)
+                    ->where('list_id',$task->list_id)
+                    ->where('sort_id','>',$task->sort_id)
+                    ->increment('sort_id');
+                if ($taskChild){
+                    $sort_id = $task->sort_id+1;
+                    Task::where('id',$request->id)->update(['parent_id'=>$task->parent_id,'sort_id'=>$sort_id]);
+                }
+                $this->createLog($request->id,'updated','Update parent',$request->text);
+            }
+
+            return response()->json(['success'=>$request->id]);
+        }
+    }
 
 
 

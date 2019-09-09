@@ -26,3 +26,4 @@ Route::post('/add-task-task', 'TaskController@addNewTask');//add new node
 
 Route::post('/task-list/add-child-task', 'TaskController@addChildTask');//add child node
 Route::post('/task-list/task-make-child', 'TaskController@makeChild');//make child node
+Route::post('/task-list/reverse-child', 'TaskController@reverseChild');//reverse child node

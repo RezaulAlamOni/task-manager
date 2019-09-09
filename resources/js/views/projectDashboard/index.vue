@@ -554,11 +554,7 @@
                         _this.makeChild(_this.selectedData);
                         break;
                     case "shift+tab":
-                        if (_this.tabKey !== 1) {
-                            break;
-                        }
                         _this.unMakeChild(_this.selectedData);
-                        _this.tabKey = 0;
                         break;
                     case "up" :
                         _this.moveItemUp(_this.selectedData);
@@ -783,30 +779,31 @@
                         console.log('Api is task-make-child not Working !!!')
                     });
             },
-
             unMakeChild(data) {
-                if (this.tabKey !== 1) {
-                    return;
-                }
-                // if (typeof data.parent.parent !== 'undefined'  && this.makeChildText !== null) {
-                if (typeof data.parent.parent !== 'undefined') {
-                    var parent = data.parent.parent.children;
-                    var parentText = data.parent.text;
-                    var children = data.parent.children;
 
-                    for (var i = 0; i < children.length; i++) {
-                        if (children[i].text == data.text) {
-                            children.splice(i, 1);
-                        }
-                    }
-                    for (var i = 0; i < parent.length; i++) {
-                        if (parent[i].text == parentText) {
-                            parent.splice(i + 1, 0, data);
-                        }
-                    }
-                }
-                this.makeChildText = null;
+                let _this = this;
+                let postData = {
+                    id: data.id,
+                    parent_id: data.parent_id,
+                    project_id: _this.projectId,
+                    list_id: _this.list_id,
+                    sort_id: data.sort_id,
+                    text : data.text
+                };
+                axios.post('/api/task-list/reverse-child', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.newEmptyTaskID = response.success;
+                        _this.getTaskList()
+                        setTimeout(function () {
+                            $("#" + _this.newEmptyTaskID).click();
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Api is task-unmake-child not Working !!!')
+                    });
             },
+
             addTag(e, data) {
                 if (e.which === 13) {
                     // data.tags.push(this.tag);
