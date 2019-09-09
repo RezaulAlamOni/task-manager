@@ -15,4 +15,7 @@ class Project extends Model
     public function multiple_list(){
        return $this->hasMany(Multiple_list::Class,'project_id','id');
     }
+    public function action_log(){
+        return $this->hasMany('App\ActionLog','project_id','id');
+    }
 }

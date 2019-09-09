@@ -42,7 +42,8 @@ return [
         ],
 
         'api' => [
-            'driver' => 'spark',
+            'driver' => 'session',
+            'provider' => 'users',
         ],
     ],
 

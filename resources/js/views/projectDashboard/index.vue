@@ -9,12 +9,12 @@
                         <div class="btn-group">
                             <button type="button" class="btn dropdown-toggle activeTask" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">
-                                List
+                                <span id="listName">List</span>
+
                             </button>
                             <div class="dropdown-menu">
-
                                 <span v-for="list in multiple_list">
-                                    <span @click="setListId(list.id)">
+                                    <span @click="setListId(list.id ,list.list_title)" :id="'list'+list.id">
                                      <router-link class="nav-link drop-item"
                                                   :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{list.list_title}}<i
                                          class="i-btn x20 task-complete icon-circle-o"></i></router-link>
@@ -54,8 +54,12 @@
 
         </div>
         <div class="TaskListAndDetails">
+            <div v-if="tree4data.length <= 0" class="col-md-8 text-center pt-5">
+                <h2 style="color: #d1a894">Add list and create task!</h2>
+            </div>
             <div class="task_width" id="task_width">
-                <p class="add-list"><a href="#" @click="AddTaskPopup"><i class="fa fa-plus"></i> Add Task</a></p>
+                <!--                <p class="add-list"><a href="#" @click="AddTaskPopup"><i class="fa fa-plus"></i> Add Task</a></p>-->
+
                 <div id="tree_view_list">
                     <div class="col-10 offset-2" id="col10" style="border: none">
                         <Tree class="tree4" :data="tree4data" draggable="draggable" cross-tree="cross-tree"
@@ -63,7 +67,7 @@
                               @change="ChangeNode"
                               :indent="30"
                               :space="0">
-                            <div :class="{eachItemRow: true}" slot-scope="{data}"
+                            <div :class="{eachItemRow: true}" slot-scope="{data, _id,store}"
                                  style="font-size: 12px"
                                  @click="makeItClick($event, data)" :id="data._id">
                                 <template v-if="!data.isDragPlaceHolder" v-html="data.html">
@@ -111,20 +115,20 @@
 
 
                                     <a class="tag-icon hide-item-res">
-                                        <div v-if="data.tags && data.tags.length !== 0">
-                                            <div v-for="item in data.tags">
-                                                <span class="badge badge-warning" style="background: #8b3920"
-                                                      @click="changeTag(data)"
-                                                      v-if='item === "Dont Forget"'>{{item.substring(0,12)}}</span>
-                                                <span class="badge badge-success"
-                                                      @click="changeTag(data)"
-                                                      v-else>{{item.substring(0,12)}}..</span>
-                                            </div>
+                                        <div v-if="data.tags">
+                                            <span class="badge badge-warning" style="background: #8b3920"
+                                                  @click="changeTag(data)"
+                                                  v-if='data.tags === "Dont Forget"'>{{data.tags.substring(0,12)}}</span>
+                                            <span class="badge badge-success"
+                                                  @click="changeTag(data)"
+                                                  v-else>{{data.tags.substring(0,12)}}</span>
                                         </div>
 
-                                        <i v-else
+                                        <i v-if="data.tags.length == ''"
                                            class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
-                                           data-toggle="dropdown"></i>
+                                           data-toggle="dropdown">
+
+                                        </i>
                                         <div class="dropdown-menu dropdown-menu-right" :id="'dropdown'+data._id">
 
                                             <diV class="collapse show switchToggle" style="">
@@ -134,9 +138,8 @@
                                                     <label class="pl-2 pt-3">
                                                         <span class="badge badge-success"
                                                               @click="addExistingTag($event,data,'Tags')">Tags</span>
-                                                        <span class="badge badge-danger"
+                                                        <span class="badge badge-danger pl-2"
                                                               @click="addExistingTag($event,data,'Dont Forget')">Dont Forget</span>
-
                                                     </label>
                                                 </li>
 
@@ -436,33 +439,6 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title pl-4">Add Task</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Add your new list here !</p>
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Task Title</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="task.title">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="AddNewTask">Add</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="modal fade" id="addListModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -491,7 +467,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" @click="AddNewList">Add</button>
-                        <button type="button" class="btn btn-secondary">Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
                     </div>
                 </div>
             </div>
@@ -552,15 +529,18 @@
             this.projectId = this.$route.params.projectId;
             this.getProjects();
             this.getTaskList();
+
             $(document).ready(function () {
                 $('.searchList').hide();
                 $('.SubmitButton').hide();
                 $('.submitdetails').hide();
                 setTimeout(function () {
                     $('.delete-icon').hide();
-                }, 500)
+                }, 1000)
+                setTimeout(function () {
+                    $('#list' + _this.multiple_list[0].id).click();
+                }, 300)
             });
-
         },
         created() {
             let _this = this;
@@ -572,7 +552,6 @@
                         break;
                     case "tab" :
                         _this.makeChild(_this.selectedData);
-                        _this.tabKey = 1;
                         break;
                     case "shift+tab":
                         if (_this.tabKey !== 1) {
@@ -728,130 +707,83 @@
                 $('.inp').removeClass('form-control');
 
             },
-            addTag(e, data) {
-                if (e.which === 13) {
-                    // data.tags.push(this.tag);
-                    data.tags.splice(0, 1, this.tag);
-                    this.tag = null;
-                    $('#dropdown' + data._id).toggle();
-                }
-            },
-            addExistingTag(e, data, tag) {
-                data.tags.splice(0, 1, tag);
-                $('#dropdown' + data._id).toggle();
-            },
-            changeTag(data) {
-                $('#dropdown' + data._id).toggle();
-            },
-            switchEvent(e) {
-                $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
-            },
-            showDate(dateStr) {
-                // console.log(dateStr);
-                // alert(dateStr);
-            },
-            hasPermission(permission) {
-                return helper.hasPermission(permission);
-            },
-            getTaskList() {
-                axios.get('/api/task-list/' + this.projectId)
-                    .then(response => response.data)
-                    .then(response => {
-                        this.tree4data = response.task_list;
-                        this.multiple_list = response.multiple_list;
-                        console.log(response.multiple_list)
-                    })
-                    .catch(error => {
 
-                    });
-            },
-            AddTaskPopup() {
-                $("#addTaskModal").modal('show');
-            },
-            AddNewTask(){
-                this.task.project_id = this.projectId;
-                this.task.list_id = this.list_id;
-                axios.post('/api/add-task-task', this.task)
+            addNode(data) {
+                let _this = this;
+                var text = data.text;
+                let postData = {
+                    id: data.id,
+                    text: text,
+                    parent_id: data.parent_id,
+                    sort_id: data.sort_id,
+                    project_id: _this.projectId,
+                    list_id: _this.list_id
+                };
+                axios.post('/api/task-list/add-task', postData)
                     .then(response => response.data)
                     .then(response => {
-                        this.tree4data = response.task_list;
-                        this.multiple_list = response.multiple_list;
-                        console.log(response)
-                        $("#addTaskModal").modal('hide');
+                        _this.newEmptyTaskID = response.success.id;
+                        _this.getTaskList()
+                        setTimeout(function () {
+                            $("#" + _this.newEmptyTaskID).click();
+                            $("#" + _this.newEmptyTaskID).focus();
+                            $("#" + _this.newEmptyTaskID).addClass('form-control');
+                            $("#" + _this.newEmptyTaskID).removeClass('input-hide');
+                        }, 500)
                     })
                     .catch(error => {
-                        console.log('Add list api not working!!')
+                        console.log('Api is not Working !!!')
                     });
-            },
-            addListModel() {
-                $("#addListModel").modal('show');
-            },
-            setListId(id){
-                this.list_id = id;
-                // this.getTaskList()
-            },
-            AddNewList() {
-                this.list.project_id = this.projectId;
-                axios.post('/api/list-add', this.list)
-                    .then(response => response.data)
-                    .then(response => {
-                        this.multiple_list = response.multiple_list;
-                        console.log(response.multiple_list)
-                        $("#addListModel").modal('hide');
-                    })
-                    .catch(error => {
-                        console.log('Add list api not working!!')
-                    });
-            },
-            confirmDelete(project) {
-                return dialog => this.deleteProject(project);
             },
             addChild(data) {
                 let _this = this;
-                var children = data.children;
-                var text = '';
-                var index = null;
-                for (var i = 0; i < children.length; i++) {
-                    if (children[i].text == text) {
-                        index = i;
-                    }
-                }
-                if (index == null) {
-                    children.splice(i + 1, 0, {id: 0, parent: data.id, text: ''});
-                    _this.reselectParentId = _this.selectedData.id;
-                    setTimeout(function () {
-                        $("#0").click();
-                        $("#0").focus();
-                        $("#0").addClass('form-control');
-                        $("#0").removeClass('input-hide');
-
-                    }, 100)
-                } else {
-                    children.splice(index, 1);
-                    setTimeout(function () {
-                        $("#" + _this.reselectParentId).click();
-                        $("#" + _this.reselectParentId).focus();
-                        $("#" + _this.reselectParentId).addClass('form-control');
-                        $("#" + _this.reselectParentId).removeClass('input-hide');
-                    }, 100)
-                }
+                let postData = {
+                    id: data.id,
+                    project_id: _this.projectId,
+                    list_id: _this.list_id
+                };
+                axios.post('/api/task-list/add-child-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        _this.newEmptyTaskID = response.success.id;
+                        _this.getTaskList()
+                        setTimeout(function () {
+                            $("#" + _this.newEmptyTaskID).click();
+                            $("#" + _this.newEmptyTaskID).focus();
+                            $("#" + _this.newEmptyTaskID).addClass('form-control');
+                            $("#" + _this.newEmptyTaskID).removeClass('input-hide');
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Api is not Working !!!')
+                    });
             },
             makeChild(data) {
-                var parent = data.parent.children;
-                var parentText = data.text;
-                for (var i = 0; i < parent.length; i++) {
-                    if (parent[i].text == parentText) {
-                        if (i >= 1) {
-                            parent.splice(i, 1);
-                            this.$delete(data, 'parent');
-                            this.$set(data, 'parent', parent[i - 1]);
-                            parent[i - 1].children.push(data);
-                        }
-                    }
-                }
-                this.tabKey = 1;
-                this.makeChildText = parentText;
+
+                let _this = this;
+                let postData = {
+                    id: data.id,
+                    parent_id: data.parent_id,
+                    project_id: _this.projectId,
+                    list_id: _this.list_id,
+                    sort_id: data.sort_id,
+                    text : data.text
+                };
+                axios.post('/api/task-list/task-make-child', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.newEmptyTaskID = response.success;
+                        _this.getTaskList()
+                        setTimeout(function () {
+                            $("#" + _this.newEmptyTaskID).click();
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Api is task-make-child not Working !!!')
+                    });
             },
+
             unMakeChild(data) {
                 if (this.tabKey !== 1) {
                     return;
@@ -875,32 +807,85 @@
                 }
                 this.makeChildText = null;
             },
-            addNode(data) {
-                let _this = this;
-                var text = data.text;
-                let postData = {
-                    id: data.id,
-                    text: text,
-                    parent_id: data.parent_id,
-                    sort_id: data.sort_id,
-                    project_id: _this.projectId
+            addTag(e, data) {
+                if (e.which === 13) {
+                    // data.tags.push(this.tag);
+                    data.tags.splice(0, 1, this.tag);
+                    this.tag = null;
+                    $('#dropdown' + data._id).toggle();
+                }
+            },
+            addExistingTag(e, data, tag) {
+                data.tags = tag;
+                $('#dropdown' + data._id).toggle();
+            },
+            changeTag(data) {
+                $('#dropdown' + data._id).toggle();
+            },
+            switchEvent(e) {
+                $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
+            },
+            showDate(dateStr) {
+                // console.log(dateStr);
+                // alert(dateStr);
+            },
+            hasPermission(permission) {
+                return helper.hasPermission(permission);
+            },
+            getTaskList() {
+                let data = {
+                    id: this.projectId,
+                    list_id: this.list_id
                 };
-                axios.post('/api/task-list/add-task', postData)
+                axios.post('/api/task-list', data)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response)
-                        _this.newEmptyTaskID = response.success.id;
-                        _this.getTaskList()
+                        this.tree4data = response.task_list;
+                        this.multiple_list = response.multiple_list;
+                        if (this.tree4data.length === 1 && this.tree4data[0].text === '') {
+                            let id = this.tree4data[0].id
+                            setTimeout(function () {
+                                $("#" + id).click();
+                                $("#" + id).focus();
+                                $("#" + id).addClass('form-control');
+                                $("#" + id).removeClass('input-hide');
+                            }, 300)
+                        }
                         setTimeout(function () {
-                            $("#" + _this.newEmptyTaskID).click();
-                            $("#" + _this.newEmptyTaskID).focus();
-                            $("#" + _this.newEmptyTaskID).addClass('form-control');
-                            $("#" + _this.newEmptyTaskID).removeClass('input-hide');
+                            $('.delete-icon').hide();
                         }, 500)
                     })
                     .catch(error => {
-                        console.log('Api is not Working !!!')
+
                     });
+            },
+            addListModel() {
+                $("#addListModel").modal('show');
+            },
+            setListId(id, title) {
+                this.list_id = id;
+                $('#listName').text(title);
+                this.getTaskList()
+            },
+            AddNewList() {
+                this.list.project_id = this.projectId;
+                axios.post('/api/list-add', this.list)
+                    .then(response => response.data)
+                    .then(response => {
+                        this.multiple_list = response.multiple_list;
+                        console.log(response)
+
+                        setTimeout(function () {
+                            $('#list' + response.id.id).click();
+                        }, 300)
+                        $("#addListModel").modal('hide');
+                    })
+                    .catch(error => {
+                        console.log('Add list api not working!!')
+                    });
+            },
+            confirmDelete(project) {
+                return dialog => this.deleteProject(project);
             },
             RemoveNodeAndChildren(data) {
                 if (confirm('Are You sure you want to delete this task !! ?')) {

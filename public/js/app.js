@@ -2457,11 +2457,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 
@@ -3832,29 +3827,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -3905,13 +3877,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.projectId = this.$route.params.projectId;
         this.getProjects();
         this.getTaskList();
+
         $(document).ready(function () {
             $('.searchList').hide();
             $('.SubmitButton').hide();
             $('.submitdetails').hide();
             setTimeout(function () {
                 $('.delete-icon').hide();
-            }, 500);
+            }, 1000);
+            setTimeout(function () {
+                $('#list' + _this.multiple_list[0].id).click();
+            }, 300);
         });
     },
     created: function created() {
@@ -3924,7 +3900,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     break;
                 case "tab":
                     _this.makeChild(_this.selectedData);
-                    _this.tabKey = 1;
                     break;
                 case "shift+tab":
                     if (_this.tabKey !== 1) {
@@ -4077,133 +4052,77 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $('.inp').addClass('input-hide');
             $('.inp').removeClass('form-control');
         },
-        addTag: function addTag(e, data) {
-            if (e.which === 13) {
-                // data.tags.push(this.tag);
-                data.tags.splice(0, 1, this.tag);
-                this.tag = null;
-                $('#dropdown' + data._id).toggle();
-            }
-        },
-        addExistingTag: function addExistingTag(e, data, tag) {
-            data.tags.splice(0, 1, tag);
-            $('#dropdown' + data._id).toggle();
-        },
-        changeTag: function changeTag(data) {
-            $('#dropdown' + data._id).toggle();
-        },
-        switchEvent: function switchEvent(e) {
-            $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
-        },
-        showDate: function showDate(dateStr) {
-            // console.log(dateStr);
-            // alert(dateStr);
-        },
-        hasPermission: function hasPermission(permission) {
-            return helper.hasPermission(permission);
-        },
-        getTaskList: function getTaskList() {
-            var _this3 = this;
-
-            axios.get('/api/task-list/' + this.projectId).then(function (response) {
-                return response.data;
-            }).then(function (response) {
-                _this3.tree4data = response.task_list;
-                _this3.multiple_list = response.multiple_list;
-                console.log(response.multiple_list);
-            }).catch(function (error) {});
-        },
-        AddTaskPopup: function AddTaskPopup() {
-            $("#addTaskModal").modal('show');
-        },
-        AddNewTask: function AddNewTask() {
-            var _this4 = this;
-
-            this.task.project_id = this.projectId;
-            this.task.list_id = this.list_id;
-            axios.post('/api/add-task-task', this.task).then(function (response) {
-                return response.data;
-            }).then(function (response) {
-                _this4.tree4data = response.task_list;
-                _this4.multiple_list = response.multiple_list;
-                console.log(response);
-                $("#addTaskModal").modal('hide');
-            }).catch(function (error) {
-                console.log('Add list api not working!!');
-            });
-        },
-        addListModel: function addListModel() {
-            $("#addListModel").modal('show');
-        },
-        setListId: function setListId(id) {
-            this.list_id = id;
-            // this.getTaskList()
-        },
-        AddNewList: function AddNewList() {
-            var _this5 = this;
-
-            this.list.project_id = this.projectId;
-            axios.post('/api/list-add', this.list).then(function (response) {
-                return response.data;
-            }).then(function (response) {
-                _this5.multiple_list = response.multiple_list;
-                console.log(response.multiple_list);
-                $("#addListModel").modal('hide');
-            }).catch(function (error) {
-                console.log('Add list api not working!!');
-            });
-        },
-        confirmDelete: function confirmDelete(project) {
-            var _this6 = this;
-
-            return function (dialog) {
-                return _this6.deleteProject(project);
+        addNode: function addNode(data) {
+            var _this = this;
+            var text = data.text;
+            var postData = {
+                id: data.id,
+                text: text,
+                parent_id: data.parent_id,
+                sort_id: data.sort_id,
+                project_id: _this.projectId,
+                list_id: _this.list_id
             };
+            axios.post('/api/task-list/add-task', postData).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                _this.newEmptyTaskID = response.success.id;
+                _this.getTaskList();
+                setTimeout(function () {
+                    $("#" + _this.newEmptyTaskID).click();
+                    $("#" + _this.newEmptyTaskID).focus();
+                    $("#" + _this.newEmptyTaskID).addClass('form-control');
+                    $("#" + _this.newEmptyTaskID).removeClass('input-hide');
+                }, 500);
+            }).catch(function (error) {
+                console.log('Api is not Working !!!');
+            });
         },
         addChild: function addChild(data) {
             var _this = this;
-            var children = data.children;
-            var text = '';
-            var index = null;
-            for (var i = 0; i < children.length; i++) {
-                if (children[i].text == text) {
-                    index = i;
-                }
-            }
-            if (index == null) {
-                children.splice(i + 1, 0, { id: 0, parent: data.id, text: '' });
-                _this.reselectParentId = _this.selectedData.id;
+            var postData = {
+                id: data.id,
+                project_id: _this.projectId,
+                list_id: _this.list_id
+            };
+            axios.post('/api/task-list/add-child-task', postData).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response);
+                _this.newEmptyTaskID = response.success.id;
+                _this.getTaskList();
                 setTimeout(function () {
-                    $("#0").click();
-                    $("#0").focus();
-                    $("#0").addClass('form-control');
-                    $("#0").removeClass('input-hide');
-                }, 100);
-            } else {
-                children.splice(index, 1);
-                setTimeout(function () {
-                    $("#" + _this.reselectParentId).click();
-                    $("#" + _this.reselectParentId).focus();
-                    $("#" + _this.reselectParentId).addClass('form-control');
-                    $("#" + _this.reselectParentId).removeClass('input-hide');
-                }, 100);
-            }
+                    $("#" + _this.newEmptyTaskID).click();
+                    $("#" + _this.newEmptyTaskID).focus();
+                    $("#" + _this.newEmptyTaskID).addClass('form-control');
+                    $("#" + _this.newEmptyTaskID).removeClass('input-hide');
+                }, 500);
+            }).catch(function (error) {
+                console.log('Api is not Working !!!');
+            });
         },
         makeChild: function makeChild(data) {
-            var parent = data.parent.children;
-            var parentText = data.text;
-            for (var i = 0; i < parent.length; i++) {
-                if (parent[i].text == parentText) {
-                    if (i >= 1) {
-                        parent.splice(i, 1);
-                        this.$delete(data, 'parent');
-                        this.$set(data, 'parent', parent[i - 1]);
-                        parent[i - 1].children.push(data);
-                    }
-                }
-            }
-            this.tabKey = 1;
-            this.makeChildText = parentText;
+
+            var _this = this;
+            var postData = {
+                id: data.id,
+                parent_id: data.parent_id,
+                project_id: _this.projectId,
+                list_id: _this.list_id,
+                sort_id: data.sort_id,
+                text: data.text
+            };
+            axios.post('/api/task-list/task-make-child', postData).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                _this.newEmptyTaskID = response.success;
+                _this.getTaskList();
+                setTimeout(function () {
+                    $("#" + _this.newEmptyTaskID).click();
+                }, 500);
+            }).catch(function (error) {
+                console.log('Api is task-make-child not Working !!!');
+            });
         },
         unMakeChild: function unMakeChild(data) {
             if (this.tabKey !== 1) {
@@ -4228,31 +4147,89 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             this.makeChildText = null;
         },
-        addNode: function addNode(data) {
-            var _this = this;
-            var text = data.text;
-            var postData = {
-                id: data.id,
-                text: text,
-                parent_id: data.parent_id,
-                sort_id: data.sort_id,
-                project_id: _this.projectId
+        addTag: function addTag(e, data) {
+            if (e.which === 13) {
+                // data.tags.push(this.tag);
+                data.tags.splice(0, 1, this.tag);
+                this.tag = null;
+                $('#dropdown' + data._id).toggle();
+            }
+        },
+        addExistingTag: function addExistingTag(e, data, tag) {
+            data.tags = tag;
+            $('#dropdown' + data._id).toggle();
+        },
+        changeTag: function changeTag(data) {
+            $('#dropdown' + data._id).toggle();
+        },
+        switchEvent: function switchEvent(e) {
+            $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
+        },
+        showDate: function showDate(dateStr) {
+            // console.log(dateStr);
+            // alert(dateStr);
+        },
+        hasPermission: function hasPermission(permission) {
+            return helper.hasPermission(permission);
+        },
+        getTaskList: function getTaskList() {
+            var _this3 = this;
+
+            var data = {
+                id: this.projectId,
+                list_id: this.list_id
             };
-            axios.post('/api/task-list/add-task', postData).then(function (response) {
+            axios.post('/api/task-list', data).then(function (response) {
                 return response.data;
             }).then(function (response) {
-                console.log(response);
-                _this.newEmptyTaskID = response.success.id;
-                _this.getTaskList();
+                _this3.tree4data = response.task_list;
+                _this3.multiple_list = response.multiple_list;
+                if (_this3.tree4data.length === 1 && _this3.tree4data[0].text === '') {
+                    var id = _this3.tree4data[0].id;
+                    setTimeout(function () {
+                        $("#" + id).click();
+                        $("#" + id).focus();
+                        $("#" + id).addClass('form-control');
+                        $("#" + id).removeClass('input-hide');
+                    }, 300);
+                }
                 setTimeout(function () {
-                    $("#" + _this.newEmptyTaskID).click();
-                    $("#" + _this.newEmptyTaskID).focus();
-                    $("#" + _this.newEmptyTaskID).addClass('form-control');
-                    $("#" + _this.newEmptyTaskID).removeClass('input-hide');
+                    $('.delete-icon').hide();
                 }, 500);
+            }).catch(function (error) {});
+        },
+        addListModel: function addListModel() {
+            $("#addListModel").modal('show');
+        },
+        setListId: function setListId(id, title) {
+            this.list_id = id;
+            $('#listName').text(title);
+            this.getTaskList();
+        },
+        AddNewList: function AddNewList() {
+            var _this4 = this;
+
+            this.list.project_id = this.projectId;
+            axios.post('/api/list-add', this.list).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                _this4.multiple_list = response.multiple_list;
+                console.log(response);
+
+                setTimeout(function () {
+                    $('#list' + response.id.id).click();
+                }, 300);
+                $("#addListModel").modal('hide');
             }).catch(function (error) {
-                console.log('Api is not Working !!!');
+                console.log('Add list api not working!!');
             });
+        },
+        confirmDelete: function confirmDelete(project) {
+            var _this5 = this;
+
+            return function (dialog) {
+                return _this5.deleteProject(project);
+            };
         },
         RemoveNodeAndChildren: function RemoveNodeAndChildren(data) {
             if (confirm('Are You sure you want to delete this task !! ?')) {
@@ -11829,7 +11806,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -73160,10 +73137,6 @@ var render = function() {
                               { attrs: { "data-v-095ab3dc": "" } },
                               _vm._l(_vm.projects, function(project) {
                                 return _c("tr", [
-                                  _c("td", { staticClass: "router_td" }, [
-                                    _vm._v(_vm._s(project.id))
-                                  ]),
-                                  _vm._v(" "),
                                   _c(
                                     "td",
                                     {
@@ -73302,22 +73275,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", { attrs: { "data-v-095ab3dc": "" } }, [
       _c("tr", { attrs: { "data-v-095ab3dc": "" } }, [
-        _c(
-          "th",
-          {
-            staticClass: "sortable sorting-asc",
-            staticStyle: { width: "auto" },
-            attrs: { "data-v-095ab3dc": "" }
-          },
-          [
-            _vm._v("\n                                                ID "),
-            _c("i", {
-              staticClass: "fa float-right  fa fa-angle-up",
-              attrs: { "data-v-095ab3dc": "" }
-            })
-          ]
-        ),
-        _vm._v(" "),
         _c(
           "th",
           {
@@ -76120,23 +76077,7 @@ var render = function() {
           [
             _c("li", { staticClass: "nav-item" }, [
               _c("div", { staticClass: "btn-group" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn dropdown-toggle activeTask",
-                    attrs: {
-                      type: "button",
-                      "data-toggle": "dropdown",
-                      "aria-haspopup": "true",
-                      "aria-expanded": "false"
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\n                                List\n                            "
-                    )
-                  ]
-                ),
+                _vm._m(0),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -76147,9 +76088,10 @@ var render = function() {
                         _c(
                           "span",
                           {
+                            attrs: { id: "list" + list.id },
                             on: {
                               click: function($event) {
-                                return _vm.setListId(list.id)
+                                return _vm.setListId(list.id, list.list_title)
                               }
                             }
                           },
@@ -76199,7 +76141,7 @@ var render = function() {
             _vm._v(" "),
             _c("li", { staticClass: "nav-item" }, [
               _c("div", { staticClass: "btn-group" }, [
-                _vm._m(0),
+                _vm._m(1),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -76222,7 +76164,7 @@ var render = function() {
                       ]
                     ),
                     _vm._v(" "),
-                    _vm._m(1)
+                    _vm._m(2)
                   ],
                   1
                 )
@@ -76232,18 +76174,19 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(2)
+      _vm._m(3)
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "TaskListAndDetails" }, [
-      _c("div", { staticClass: "task_width", attrs: { id: "task_width" } }, [
-        _c("p", { staticClass: "add-list" }, [
-          _c("a", { attrs: { href: "#" }, on: { click: _vm.AddTaskPopup } }, [
-            _c("i", { staticClass: "fa fa-plus" }),
-            _vm._v(" Add Task")
+      _vm.tree4data.length <= 0
+        ? _c("div", { staticClass: "col-md-8 text-center pt-5" }, [
+            _c("h2", { staticStyle: { color: "#d1a894" } }, [
+              _vm._v("Add list and create task!")
+            ])
           ])
-        ]),
-        _vm._v(" "),
+        : _vm._e(),
+      _vm._v(" "),
+      _c("div", { staticClass: "task_width", attrs: { id: "task_width" } }, [
         _c("div", { attrs: { id: "tree_view_list" } }, [
           _c(
             "div",
@@ -76268,6 +76211,8 @@ var render = function() {
                     key: "default",
                     fn: function(ref) {
                       var data = ref.data
+                      var _id = ref._id
+                      var store = ref.store
                       return _c(
                         "div",
                         {
@@ -76348,7 +76293,7 @@ var render = function() {
                                       {
                                         on: {
                                           click: function($event) {
-                                            return _vm.store.toggleOpen(data)
+                                            return store.toggleOpen(data)
                                           }
                                         }
                                       },
@@ -76368,7 +76313,7 @@ var render = function() {
                                       {
                                         on: {
                                           click: function($event) {
-                                            return _vm.store.toggleOpen(data)
+                                            return store.toggleOpen(data)
                                           }
                                         }
                                       },
@@ -76477,70 +76422,60 @@ var render = function() {
                                   "a",
                                   { staticClass: "tag-icon hide-item-res" },
                                   [
-                                    data.tags && data.tags.length !== 0
-                                      ? _c(
-                                          "div",
-                                          _vm._l(data.tags, function(item) {
-                                            return _c("div", [
-                                              item === "Dont Forget"
-                                                ? _c(
-                                                    "span",
-                                                    {
-                                                      staticClass:
-                                                        "badge badge-warning",
-                                                      staticStyle: {
-                                                        background: "#8b3920"
-                                                      },
-                                                      on: {
-                                                        click: function(
-                                                          $event
-                                                        ) {
-                                                          return _vm.changeTag(
-                                                            data
-                                                          )
-                                                        }
-                                                      }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        _vm._s(
-                                                          item.substring(0, 12)
-                                                        )
-                                                      )
-                                                    ]
+                                    data.tags
+                                      ? _c("div", [
+                                          data.tags === "Dont Forget"
+                                            ? _c(
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "badge badge-warning",
+                                                  staticStyle: {
+                                                    background: "#8b3920"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.changeTag(data)
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      data.tags.substring(0, 12)
+                                                    )
                                                   )
-                                                : _c(
-                                                    "span",
-                                                    {
-                                                      staticClass:
-                                                        "badge badge-success",
-                                                      on: {
-                                                        click: function(
-                                                          $event
-                                                        ) {
-                                                          return _vm.changeTag(
-                                                            data
-                                                          )
-                                                        }
-                                                      }
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        _vm._s(
-                                                          item.substring(0, 12)
-                                                        ) + ".."
-                                                      )
-                                                    ]
+                                                ]
+                                              )
+                                            : _c(
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "badge badge-success",
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.changeTag(data)
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      data.tags.substring(0, 12)
+                                                    )
                                                   )
-                                            ])
-                                          }),
-                                          0
-                                        )
-                                      : _c("i", {
+                                                ]
+                                              )
+                                        ])
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    data.tags.length == ""
+                                      ? _c("i", {
                                           staticClass:
                                             "outline-local_offer icon-image-preview dropdown-toggle-split li-opacity",
                                           attrs: { "data-toggle": "dropdown" }
-                                        }),
+                                        })
+                                      : _vm._e(),
                                     _vm._v(" "),
                                     _c(
                                       "div",
@@ -76621,7 +76556,7 @@ var render = function() {
                                                       "span",
                                                       {
                                                         staticClass:
-                                                          "badge badge-danger",
+                                                          "badge badge-danger pl-2",
                                                         on: {
                                                           click: function(
                                                             $event
@@ -76996,7 +76931,7 @@ var render = function() {
               _c("div", { staticClass: "row pl-3" }, [
                 _c("div", [
                   _c("a", { staticClass: "user" }, [
-                    _vm._m(3),
+                    _vm._m(4),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -77344,7 +77279,7 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _vm._m(4),
+              _vm._m(5),
               _vm._v(" "),
               _vm.selectedData.files && _vm.selectedData.files.length !== 0
                 ? _c(
@@ -77495,97 +77430,13 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(5),
+              _vm._m(6),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("img", {
                   staticClass: "img-responsive",
                   attrs: { src: _vm.modalImg }
                 })
-              ])
-            ])
-          ]
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "modal fade",
-        attrs: {
-          id: "addTaskModal",
-          tabindex: "-1",
-          role: "dialog",
-          "aria-labelledby": "exampleModalLabel",
-          "aria-hidden": "true"
-        }
-      },
-      [
-        _c(
-          "div",
-          { staticClass: "modal-dialog", attrs: { role: "document" } },
-          [
-            _c("div", { staticClass: "modal-content" }, [
-              _vm._m(6),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }, [
-                _c("p", [_vm._v("Add your new list here !")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group row" }, [
-                  _c("label", { staticClass: "col-sm-4 col-form-label" }, [
-                    _vm._v("Task Title")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-sm-8" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.task.title,
-                          expression: "task.title"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.task.title },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.task, "title", $event.target.value)
-                        }
-                      }
-                    })
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    attrs: { type: "button" },
-                    on: { click: _vm.AddNewTask }
-                  },
-                  [_vm._v("Add")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-secondary",
-                    attrs: {
-                      type: "button",
-                      "data-dismiss": "modal",
-                      "aria-label": "Close"
-                    }
-                  },
-                  [_vm._v("Cancel\n                        ")]
-                )
               ])
             ])
           ]
@@ -77691,9 +77542,13 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn btn-secondary",
-                    attrs: { type: "button" }
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
                   },
-                  [_vm._v("Cancel")]
+                  [_vm._v("Cancel\n                        ")]
                 )
               ])
             ])
@@ -77704,6 +77559,24 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn dropdown-toggle activeTask",
+        attrs: {
+          type: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [_c("span", { attrs: { id: "listName" } }, [_vm._v("List")])]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -77809,27 +77682,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
       _c("h5", { staticClass: "modal-title" }, [_vm._v("Image Show")]),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c("h5", { staticClass: "modal-title pl-4" }, [_vm._v("Add Task")]),
       _vm._v(" "),
       _c(
         "button",

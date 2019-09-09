@@ -33,4 +33,8 @@ class Task extends Model
     {
         return $this->belongsTo('App\Multiple_list','id','list_id');
     }
+    public function action_log(){
+
+        return $this->hasMany('App\ActionLog','task_id','id');
+    }
 }

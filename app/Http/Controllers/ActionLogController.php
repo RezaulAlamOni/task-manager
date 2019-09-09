@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Multiple_board;
+use App\ActionLog;
 use Illuminate\Http\Request;
 
-class MultipleBoardController extends Controller
+class ActionLogController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -33,18 +33,20 @@ class MultipleBoardController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($req = [])
     {
-
+        if ($req){
+            ActionLog::create($req);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Multiple_board  $multiple_board
+     * @param  \App\ActionLog  $actionLog
      * @return \Illuminate\Http\Response
      */
-    public function show(Multiple_board $multiple_board)
+    public function show(ActionLog $actionLog)
     {
         //
     }
@@ -52,10 +54,10 @@ class MultipleBoardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Multiple_board  $multiple_board
+     * @param  \App\ActionLog  $actionLog
      * @return \Illuminate\Http\Response
      */
-    public function edit(Multiple_board $multiple_board)
+    public function edit(ActionLog $actionLog)
     {
         //
     }
@@ -64,10 +66,10 @@ class MultipleBoardController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Multiple_board  $multiple_board
+     * @param  \App\ActionLog  $actionLog
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Multiple_board $multiple_board)
+    public function update(Request $request, ActionLog $actionLog)
     {
         //
     }
@@ -75,10 +77,10 @@ class MultipleBoardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Multiple_board  $multiple_board
+     * @param  \App\ActionLog  $actionLog
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Multiple_board $multiple_board)
+    public function destroy(ActionLog $actionLog)
     {
         //
     }
