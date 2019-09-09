@@ -62,32 +62,6 @@ class TaskController extends Controller
         $multiple_list = $multiple_list->multiple_list;
         return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list,'empty_task'=>$task]);
     }
-
-    public function decorateData($obj)
-    {
-        $data = [];
-        foreach ($obj as $key => $task) {
-            $data[$key]['id'] = $task->id;
-            $data[$key]['parent_id'] = $task->parent_id;
-            $data[$key]['sort_id'] = $task->sort_id;
-            $data[$key]['list_id'] = $task->list_id;//list_id
-            $data[$key]['text'] = $task->title;
-            $data[$key]['clicked'] = 0;
-            $data[$key]['date'] = $task->date;
-            $data[$key]['tags'] = $task->tag;
-
-            $childrens = Task::where('parent_id', $task->id)
-                ->where('list_id', $task->list_id)->orderBy('sort_id', 'ASC')->get();
-            if (!empty($childrens)) {
-                $data[$key]['children'] = $this->decorateData($childrens);
-            } else {
-                $data[$key]['children'] = [];
-            }
-
-        }
-        return $data;
-    }
-
     public function addTask(Request $request)
     {
         $list_id = $this->checkListId($request->list_id,$request->project_id);
@@ -126,16 +100,6 @@ class TaskController extends Controller
             return response()->json(['success' => ['id' => $request->id]]);
         }
     }
-
-    public function checkListId($list_id,$project_id){
-        if ($list_id == null) {
-            $list = Multiple_list::where('project_id', $project_id)->orderBy('id', 'ASC')->first();
-            return $list->id;
-        } else {
-            return $list_id;
-        }
-    }
-
     public function addChildTask(Request $request){
         $tsk_id = Task::where('title','')->where('parent_id',$request->id)->first();
         if ($tsk_id){
@@ -159,7 +123,64 @@ class TaskController extends Controller
         $this->createLog($task->id,'created','create empty task','');
         return response()->json(['success'=>$task]);
     }
+    public function makeChild(Request $request){
+        if (isset($request->parent_id)){
+            $task = Task::where('parent_id',$request->parent_id)
+                ->where('project_id',$request->project_id)
+                ->where('list_id',$request->list_id)
+                ->where('sort_id','<',$request->sort_id)
+                ->orderBy('sort_id','desc')->first();
+            if ($task){
+                $taskChild = Task::where('parent_id',$task->id)
+                    ->where('project_id',$request->project_id)
+                    ->where('list_id',$request->list_id)
+                    ->orderBy('sort_id','desc')->first();
+                if ($taskChild){
+                    $sort_id = $taskChild->sort_id+1;
+                    $child = Task::where('id',$request->id)->update(['parent_id'=>$task->id,'sort_id'=>$sort_id]);
+                }else{
+                    $child = Task::where('id',$request->id)->update(['parent_id'=>$task->id,'sort_id'=>1]);
+                }
+            }
 
+            return response()->json(['success'=>$request->id]);
+        }
+    }
+
+
+
+    public function decorateData($obj)
+    {
+        $data = [];
+        foreach ($obj as $key => $task) {
+            $data[$key]['id'] = $task->id;
+            $data[$key]['parent_id'] = $task->parent_id;
+            $data[$key]['sort_id'] = $task->sort_id;
+            $data[$key]['list_id'] = $task->list_id;//list_id
+            $data[$key]['text'] = $task->title;
+            $data[$key]['clicked'] = 0;
+            $data[$key]['date'] = $task->date;
+            $data[$key]['tags'] = $task->tag;
+
+            $childrens = Task::where('parent_id', $task->id)
+                ->where('list_id', $task->list_id)->orderBy('sort_id', 'ASC')->get();
+            if (!empty($childrens)) {
+                $data[$key]['children'] = $this->decorateData($childrens);
+            } else {
+                $data[$key]['children'] = [];
+            }
+
+        }
+        return $data;
+    }
+    public function checkListId($list_id,$project_id){
+        if ($list_id == null) {
+            $list = Multiple_list::where('project_id', $project_id)->orderBy('id', 'ASC')->first();
+            return $list->id;
+        } else {
+            return $list_id;
+        }
+    }
     protected function createLog($task_id,$type,$message,$title){
         $log_data = [
             'task_id'=>$task_id,

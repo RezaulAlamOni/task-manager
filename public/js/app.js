@@ -3900,7 +3900,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     break;
                 case "tab":
                     _this.makeChild(_this.selectedData);
-                    _this.tabKey = 1;
                     break;
                 case "shift+tab":
                     if (_this.tabKey !== 1) {
@@ -4053,6 +4052,100 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $('.inp').addClass('input-hide');
             $('.inp').removeClass('form-control');
         },
+        addNode: function addNode(data) {
+            var _this = this;
+            var text = data.text;
+            var postData = {
+                id: data.id,
+                text: text,
+                parent_id: data.parent_id,
+                sort_id: data.sort_id,
+                project_id: _this.projectId,
+                list_id: _this.list_id
+            };
+            axios.post('/api/task-list/add-task', postData).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                _this.newEmptyTaskID = response.success.id;
+                _this.getTaskList();
+                setTimeout(function () {
+                    $("#" + _this.newEmptyTaskID).click();
+                    $("#" + _this.newEmptyTaskID).focus();
+                    $("#" + _this.newEmptyTaskID).addClass('form-control');
+                    $("#" + _this.newEmptyTaskID).removeClass('input-hide');
+                }, 500);
+            }).catch(function (error) {
+                console.log('Api is not Working !!!');
+            });
+        },
+        addChild: function addChild(data) {
+            var _this = this;
+            var postData = {
+                id: data.id,
+                project_id: _this.projectId,
+                list_id: _this.list_id
+            };
+            axios.post('/api/task-list/add-child-task', postData).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response);
+                _this.newEmptyTaskID = response.success.id;
+                _this.getTaskList();
+                setTimeout(function () {
+                    $("#" + _this.newEmptyTaskID).click();
+                    $("#" + _this.newEmptyTaskID).focus();
+                    $("#" + _this.newEmptyTaskID).addClass('form-control');
+                    $("#" + _this.newEmptyTaskID).removeClass('input-hide');
+                }, 500);
+            }).catch(function (error) {
+                console.log('Api is not Working !!!');
+            });
+        },
+        makeChild: function makeChild(data) {
+
+            var _this = this;
+            var postData = {
+                id: data.id,
+                parent_id: data.parent_id,
+                project_id: _this.projectId,
+                list_id: _this.list_id,
+                sort_id: data.sort_id
+            };
+            axios.post('/api/task-list/task-make-child', postData).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                _this.newEmptyTaskID = response.success;
+                _this.getTaskList();
+                setTimeout(function () {
+                    $("#" + _this.newEmptyTaskID).click();
+                }, 500);
+            }).catch(function (error) {
+                console.log('Api is task-make-child not Working !!!');
+            });
+        },
+        unMakeChild: function unMakeChild(data) {
+            if (this.tabKey !== 1) {
+                return;
+            }
+            // if (typeof data.parent.parent !== 'undefined'  && this.makeChildText !== null) {
+            if (typeof data.parent.parent !== 'undefined') {
+                var parent = data.parent.parent.children;
+                var parentText = data.parent.text;
+                var children = data.parent.children;
+
+                for (var i = 0; i < children.length; i++) {
+                    if (children[i].text == data.text) {
+                        children.splice(i, 1);
+                    }
+                }
+                for (var i = 0; i < parent.length; i++) {
+                    if (parent[i].text == parentText) {
+                        parent.splice(i + 1, 0, data);
+                    }
+                }
+            }
+            this.makeChildText = null;
+        },
         addTag: function addTag(e, data) {
             if (e.which === 13) {
                 // data.tags.push(this.tag);
@@ -4136,94 +4229,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return function (dialog) {
                 return _this5.deleteProject(project);
             };
-        },
-        addChild: function addChild(data) {
-            var _this = this;
-            var postData = {
-                id: data.id,
-                project_id: _this.projectId,
-                list_id: _this.list_id
-            };
-            axios.post('/api/task-list/add-child-task', postData).then(function (response) {
-                return response.data;
-            }).then(function (response) {
-                console.log(response);
-                _this.newEmptyTaskID = response.success.id;
-                _this.getTaskList();
-                setTimeout(function () {
-                    $("#" + _this.newEmptyTaskID).click();
-                    $("#" + _this.newEmptyTaskID).focus();
-                    $("#" + _this.newEmptyTaskID).addClass('form-control');
-                    $("#" + _this.newEmptyTaskID).removeClass('input-hide');
-                }, 500);
-            }).catch(function (error) {
-                console.log('Api is not Working !!!');
-            });
-        },
-        makeChild: function makeChild(data) {
-            var parent = data.parent.children;
-            var parentText = data.text;
-            for (var i = 0; i < parent.length; i++) {
-                if (parent[i].text == parentText) {
-                    if (i >= 1) {
-                        parent.splice(i, 1);
-                        this.$delete(data, 'parent');
-                        this.$set(data, 'parent', parent[i - 1]);
-                        parent[i - 1].children.push(data);
-                    }
-                }
-            }
-            this.tabKey = 1;
-            this.makeChildText = parentText;
-        },
-        unMakeChild: function unMakeChild(data) {
-            if (this.tabKey !== 1) {
-                return;
-            }
-            // if (typeof data.parent.parent !== 'undefined'  && this.makeChildText !== null) {
-            if (typeof data.parent.parent !== 'undefined') {
-                var parent = data.parent.parent.children;
-                var parentText = data.parent.text;
-                var children = data.parent.children;
-
-                for (var i = 0; i < children.length; i++) {
-                    if (children[i].text == data.text) {
-                        children.splice(i, 1);
-                    }
-                }
-                for (var i = 0; i < parent.length; i++) {
-                    if (parent[i].text == parentText) {
-                        parent.splice(i + 1, 0, data);
-                    }
-                }
-            }
-            this.makeChildText = null;
-        },
-        addNode: function addNode(data) {
-            var _this = this;
-            var text = data.text;
-            var postData = {
-                id: data.id,
-                text: text,
-                parent_id: data.parent_id,
-                sort_id: data.sort_id,
-                project_id: _this.projectId,
-                list_id: _this.list_id
-            };
-            axios.post('/api/task-list/add-task', postData).then(function (response) {
-                return response.data;
-            }).then(function (response) {
-                _this.newEmptyTaskID = response.success.id;
-                _this.getTaskList();
-                setTimeout(function () {
-                    $("#" + _this.newEmptyTaskID).click();
-                    $("#" + _this.newEmptyTaskID).focus();
-                    $("#" + _this.newEmptyTaskID).addClass('form-control');
-                    $("#" + _this.newEmptyTaskID).removeClass('input-hide');
-                }, 500);
-            }).catch(function (error) {
-                console.log('Api is not Working !!!');
-            });
         },
         RemoveNodeAndChildren: function RemoveNodeAndChildren(data) {
             if (confirm('Are You sure you want to delete this task !! ?')) {
@@ -76205,6 +76210,8 @@ var render = function() {
                     key: "default",
                     fn: function(ref) {
                       var data = ref.data
+                      var _id = ref._id
+                      var store = ref.store
                       return _c(
                         "div",
                         {
@@ -76285,7 +76292,7 @@ var render = function() {
                                       {
                                         on: {
                                           click: function($event) {
-                                            return _vm.store.toggleOpen(data)
+                                            return store.toggleOpen(data)
                                           }
                                         }
                                       },
@@ -76305,7 +76312,7 @@ var render = function() {
                                       {
                                         on: {
                                           click: function($event) {
-                                            return _vm.store.toggleOpen(data)
+                                            return store.toggleOpen(data)
                                           }
                                         }
                                       },
