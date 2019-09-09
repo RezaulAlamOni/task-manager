@@ -3827,33 +3827,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -4126,26 +4099,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         $("#" + id).removeClass('input-hide');
                     }, 300);
                 }
+                setTimeout(function () {
+                    $('.delete-icon').hide();
+                }, 500);
             }).catch(function (error) {});
-        },
-        AddTaskPopup: function AddTaskPopup() {
-            $("#addTaskModal").modal('show');
-        },
-        AddNewTask: function AddNewTask() {
-            var _this4 = this;
-
-            this.task.project_id = this.projectId;
-            this.task.list_id = this.list_id;
-            axios.post('/api/add-task-task', this.task).then(function (response) {
-                return response.data;
-            }).then(function (response) {
-                _this4.tree4data = response.task_list;
-                _this4.multiple_list = response.multiple_list;
-                // console.log(response)
-                $("#addTaskModal").modal('hide');
-            }).catch(function (error) {
-                console.log('Add list api not working!!');
-            });
         },
         addListModel: function addListModel() {
             $("#addListModel").modal('show');
@@ -4156,13 +4113,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.getTaskList();
         },
         AddNewList: function AddNewList() {
-            var _this5 = this;
+            var _this4 = this;
 
             this.list.project_id = this.projectId;
             axios.post('/api/list-add', this.list).then(function (response) {
                 return response.data;
             }).then(function (response) {
-                _this5.multiple_list = response.multiple_list;
+                _this4.multiple_list = response.multiple_list;
                 console.log(response);
 
                 setTimeout(function () {
@@ -4174,40 +4131,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         confirmDelete: function confirmDelete(project) {
-            var _this6 = this;
+            var _this5 = this;
 
             return function (dialog) {
-                return _this6.deleteProject(project);
+                return _this5.deleteProject(project);
             };
         },
         addChild: function addChild(data) {
             var _this = this;
-            var children = data.children;
-            var text = '';
-            var index = null;
-            for (var i = 0; i < children.length; i++) {
-                if (children[i].text == text) {
-                    index = i;
-                }
-            }
-            if (index == null) {
-                children.splice(i + 1, 0, { id: 0, parent: data.id, text: '' });
-                _this.reselectParentId = _this.selectedData.id;
+            var postData = {
+                id: data.id,
+                project_id: _this.projectId,
+                list_id: _this.list_id
+            };
+            axios.post('/api/task-list/add-child-task', postData).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response);
+                _this.newEmptyTaskID = response.success.id;
+                _this.getTaskList();
                 setTimeout(function () {
-                    $("#0").click();
-                    $("#0").focus();
-                    $("#0").addClass('form-control');
-                    $("#0").removeClass('input-hide');
-                }, 100);
-            } else {
-                children.splice(index, 1);
-                setTimeout(function () {
-                    $("#" + _this.reselectParentId).click();
-                    $("#" + _this.reselectParentId).focus();
-                    $("#" + _this.reselectParentId).addClass('form-control');
-                    $("#" + _this.reselectParentId).removeClass('input-hide');
-                }, 100);
-            }
+                    $("#" + _this.newEmptyTaskID).click();
+                    $("#" + _this.newEmptyTaskID).focus();
+                    $("#" + _this.newEmptyTaskID).addClass('form-control');
+                    $("#" + _this.newEmptyTaskID).removeClass('input-hide');
+                }, 500);
+            }).catch(function (error) {
+                console.log('Api is not Working !!!');
+            });
         },
         makeChild: function makeChild(data) {
             var parent = data.parent.children;
@@ -4262,7 +4213,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.post('/api/task-list/add-task', postData).then(function (response) {
                 return response.data;
             }).then(function (response) {
-                // console.log(response)
                 _this.newEmptyTaskID = response.success.id;
                 _this.getTaskList();
                 setTimeout(function () {
@@ -11850,7 +11800,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -77491,90 +77441,6 @@ var render = function() {
       {
         staticClass: "modal fade",
         attrs: {
-          id: "addTaskModal",
-          tabindex: "-1",
-          role: "dialog",
-          "aria-labelledby": "exampleModalLabel",
-          "aria-hidden": "true"
-        }
-      },
-      [
-        _c(
-          "div",
-          { staticClass: "modal-dialog", attrs: { role: "document" } },
-          [
-            _c("div", { staticClass: "modal-content" }, [
-              _vm._m(7),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }, [
-                _c("p", [_vm._v("Add your new list here !")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-group row" }, [
-                  _c("label", { staticClass: "col-sm-4 col-form-label" }, [
-                    _vm._v("Task Title")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-sm-8" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.task.title,
-                          expression: "task.title"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.task.title },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.task, "title", $event.target.value)
-                        }
-                      }
-                    })
-                  ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-primary",
-                    attrs: { type: "button" },
-                    on: { click: _vm.AddNewTask }
-                  },
-                  [_vm._v("Add")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-secondary",
-                    attrs: {
-                      type: "button",
-                      "data-dismiss": "modal",
-                      "aria-label": "Close"
-                    }
-                  },
-                  [_vm._v("Cancel\n                        ")]
-                )
-              ])
-            ])
-          ]
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "modal fade",
-        attrs: {
           id: "addListModel",
           tabindex: "-1",
           role: "dialog",
@@ -77588,7 +77454,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(8),
+              _vm._m(7),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [_vm._v("Add your new list here !")]),
@@ -77808,27 +77674,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
       _c("h5", { staticClass: "modal-title" }, [_vm._v("Image Show")]),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c("h5", { staticClass: "modal-title pl-4" }, [_vm._v("Add Task")]),
       _vm._v(" "),
       _c(
         "button",

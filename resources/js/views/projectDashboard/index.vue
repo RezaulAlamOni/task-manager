@@ -439,33 +439,6 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title pl-4">Add Task</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Add your new list here !</p>
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Task Title</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="task.title">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="AddNewTask">Add</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="modal fade" id="addListModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -779,27 +752,12 @@
                                 $("#" + id).removeClass('input-hide');
                             }, 300)
                         }
+                        setTimeout(function () {
+                            $('.delete-icon').hide();
+                        }, 500)
                     })
                     .catch(error => {
 
-                    });
-            },
-            AddTaskPopup() {
-                $("#addTaskModal").modal('show');
-            },
-            AddNewTask() {
-                this.task.project_id = this.projectId;
-                this.task.list_id = this.list_id;
-                axios.post('/api/add-task-task', this.task)
-                    .then(response => response.data)
-                    .then(response => {
-                        this.tree4data = response.task_list;
-                        this.multiple_list = response.multiple_list;
-                        // console.log(response)
-                        $("#addTaskModal").modal('hide');
-                    })
-                    .catch(error => {
-                        console.log('Add list api not working!!')
                     });
             },
             addListModel() {
@@ -832,33 +790,27 @@
             },
             addChild(data) {
                 let _this = this;
-                var children = data.children;
-                var text = '';
-                var index = null;
-                for (var i = 0; i < children.length; i++) {
-                    if (children[i].text == text) {
-                        index = i;
-                    }
-                }
-                if (index == null) {
-                    children.splice(i + 1, 0, {id: 0, parent: data.id, text: ''});
-                    _this.reselectParentId = _this.selectedData.id;
-                    setTimeout(function () {
-                        $("#0").click();
-                        $("#0").focus();
-                        $("#0").addClass('form-control');
-                        $("#0").removeClass('input-hide');
-
-                    }, 100)
-                } else {
-                    children.splice(index, 1);
-                    setTimeout(function () {
-                        $("#" + _this.reselectParentId).click();
-                        $("#" + _this.reselectParentId).focus();
-                        $("#" + _this.reselectParentId).addClass('form-control');
-                        $("#" + _this.reselectParentId).removeClass('input-hide');
-                    }, 100)
-                }
+                let postData = {
+                    id: data.id,
+                    project_id: _this.projectId,
+                    list_id: _this.list_id
+                };
+                axios.post('/api/task-list/add-child-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        _this.newEmptyTaskID = response.success.id;
+                        _this.getTaskList()
+                        setTimeout(function () {
+                            $("#" + _this.newEmptyTaskID).click();
+                            $("#" + _this.newEmptyTaskID).focus();
+                            $("#" + _this.newEmptyTaskID).addClass('form-control');
+                            $("#" + _this.newEmptyTaskID).removeClass('input-hide');
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Api is not Working !!!')
+                    });
             },
             makeChild(data) {
                 var parent = data.parent.children;
@@ -913,7 +865,6 @@
                 axios.post('/api/task-list/add-task', postData)
                     .then(response => response.data)
                     .then(response => {
-                        // console.log(response)
                         _this.newEmptyTaskID = response.success.id;
                         _this.getTaskList()
                         setTimeout(function () {
