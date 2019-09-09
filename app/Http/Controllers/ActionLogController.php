@@ -2,24 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\TaskBoard;
+use App\ActionLog;
 use Illuminate\Http\Request;
 
-class TaskBoardController extends Controller
+class ActionLogController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    protected $actionLog;
-    public function __construct()
-    {
-        date_default_timezone_set('UTC');
-        $this->actionLog =new ActionLogController;
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         //
@@ -41,18 +33,20 @@ class TaskBoardController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($req = [])
     {
-        //
+        if ($req){
+            ActionLog::create($req);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\TaskBoard  $taskBoard
+     * @param  \App\ActionLog  $actionLog
      * @return \Illuminate\Http\Response
      */
-    public function show(TaskBoard $taskBoard)
+    public function show(ActionLog $actionLog)
     {
         //
     }
@@ -60,10 +54,10 @@ class TaskBoardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\TaskBoard  $taskBoard
+     * @param  \App\ActionLog  $actionLog
      * @return \Illuminate\Http\Response
      */
-    public function edit(TaskBoard $taskBoard)
+    public function edit(ActionLog $actionLog)
     {
         //
     }
@@ -72,10 +66,10 @@ class TaskBoardController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\TaskBoard  $taskBoard
+     * @param  \App\ActionLog  $actionLog
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TaskBoard $taskBoard)
+    public function update(Request $request, ActionLog $actionLog)
     {
         //
     }
@@ -83,10 +77,10 @@ class TaskBoardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\TaskBoard  $taskBoard
+     * @param  \App\ActionLog  $actionLog
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TaskBoard $taskBoard)
+    public function destroy(ActionLog $actionLog)
     {
         //
     }

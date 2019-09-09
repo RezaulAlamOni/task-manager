@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Project;
+use Carbon\Carbon;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,8 +15,11 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $actionLog;
     public function __construct()
     {
+        date_default_timezone_set('UTC');
+        $this->actionLog =new ActionLogController;
         $this->middleware('auth');
     }
 
@@ -54,7 +58,21 @@ class ProjectController extends Controller
             'updated_by' => Auth::id(),
         ];
         $project = Project::create($data);
+
         if ($project){
+            $log_data = [
+                'project_id'=>$project->id,
+                'multiple_list_id'=>null,
+                'task_id'=>null,
+                'multiple_board_id'=>null,
+                'board_id'=>null,
+                'title'=>$request->title,
+                'log_type'=>'Create project',
+                'action_type'=>'created',
+                'action_by'=>Auth::id(),
+                'action_at'=>Carbon::now()
+            ];
+            $this->actionLog->store($log_data);
             return response()->json(['success'=>1]);
         }
 
@@ -69,8 +87,10 @@ class ProjectController extends Controller
     public function show(Request $request)
     {
         $project = Project::findOrFail($request->id);
+        $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
+        $multiple_list = $multiple_list->multiple_list;
 
-        return response()->json(['success'=>1,'project'=>$project]);
+        return response()->json(['success'=>1,'project'=>$project,'multiple_list'=>$multiple_list]);
     }
 
     /**

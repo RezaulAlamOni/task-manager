@@ -4,13 +4,34 @@
             <div class="col-md-12 col-12 align-self-center">
                 <ul class="nav" style="border-bottom: 1px solid #cedcc4">
                     <li class="nav-item">
-                        <router-link class="nav-link" :to="{ name: 'project-dashboard', params: { projectId: projectId }}">List
-                            <i class="i-btn x20 task-complete icon-circle-o"></i></router-link>
+                        <div class="btn-group">
+                            <button type="button" class="btn dropdown-toggle deactiveIteam" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                List
+                            </button>
+                            <div class="dropdown-menu">
+                                <span v-for="list in multiple_list">
+                                     <router-link class="nav-link drop-item"
+                                                  :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{list.list_title}}<i
+                                         class="i-btn x20 task-complete icon-circle-o"></i></router-link>
+                                </span>
+                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add List</a>
+                            </div>
+                        </div>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link activeTask" :to="{ name: 'project-board', params: { projectId: projectId }}">Board
-                            <i class="tree-toggle i-btn x30"></i>
-                        </router-link>
+                        <div class="btn-group">
+                            <button type="button" class="btn dropdown-toggle activeTask" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span>Board</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <router-link class="nav-link" :to="{ name: 'project-board', params: { projectId: projectId }}">
+                                    Board <i
+                                    class="tree-toggle i-btn x30"></i>
+                                </router-link>
+                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add Board</a>
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -27,9 +48,8 @@
 
         <div id="board_view_list">
             <div class="col-12" id="col10" style="border: none">
-
                 <div class="card-scene">
-                    <p><a href="#" @click="addColumn"><i class="fa fa-plus"></i> add column</a></p>
+                    <p><a href="#" @click="addColumn"><i class="fa fa-plus"></i> Add Column</a></p>
                     <Container
                             orientation="horizontal"
                             @drop="onColumnDrop($event)"
@@ -363,17 +383,10 @@
 
 </template>
 <style>
-    .activeTask{
-        background: #aec8dd;
-        border-radius: 3px;
-        color: black;
-        font-weight: bold;
-    }
     .card{
         padding-top: 0 !important;
         margin-top: 0 !important;
     }
-
 </style>
 <script>
     import flatPickr from 'vue-flatpickr-component';
@@ -531,6 +544,7 @@
                 tag: null,
                 selectedExistedTask : [],
                 projectId : null,
+                multiple_list : null
             }
         },
         mounted() {
@@ -593,7 +607,9 @@
                     .then(response => response.data)
                     .then(response => {
                         this.project = response.project;
+                        this.multiple_list = response.multiple_list;
                         $('#header-item').text(this.project.name + ' / Task Board')
+                        console.log(this.multiple_list)
                     })
                     .catch(error => {
                     });

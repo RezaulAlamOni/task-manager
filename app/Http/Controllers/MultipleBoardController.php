@@ -2,24 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\TaskBoard;
+use App\Multiple_board;
 use Illuminate\Http\Request;
 
-class TaskBoardController extends Controller
+class MultipleBoardController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    protected $actionLog;
-    public function __construct()
-    {
-        date_default_timezone_set('UTC');
-        $this->actionLog =new ActionLogController;
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         //
@@ -43,16 +35,16 @@ class TaskBoardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\TaskBoard  $taskBoard
+     * @param  \App\Multiple_board  $multiple_board
      * @return \Illuminate\Http\Response
      */
-    public function show(TaskBoard $taskBoard)
+    public function show(Multiple_board $multiple_board)
     {
         //
     }
@@ -60,10 +52,10 @@ class TaskBoardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\TaskBoard  $taskBoard
+     * @param  \App\Multiple_board  $multiple_board
      * @return \Illuminate\Http\Response
      */
-    public function edit(TaskBoard $taskBoard)
+    public function edit(Multiple_board $multiple_board)
     {
         //
     }
@@ -72,10 +64,10 @@ class TaskBoardController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\TaskBoard  $taskBoard
+     * @param  \App\Multiple_board  $multiple_board
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TaskBoard $taskBoard)
+    public function update(Request $request, Multiple_board $multiple_board)
     {
         //
     }
@@ -83,10 +75,10 @@ class TaskBoardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\TaskBoard  $taskBoard
+     * @param  \App\Multiple_board  $multiple_board
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TaskBoard $taskBoard)
+    public function destroy(Multiple_board $multiple_board)
     {
         //
     }
