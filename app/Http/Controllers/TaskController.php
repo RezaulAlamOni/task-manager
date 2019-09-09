@@ -12,9 +12,12 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
+    protected $actionLog;
     public function __construct()
     {
-
+        date_default_timezone_set('UTC');
+        $this->actionLog =new ActionLogController;
+        $this->middleware('auth');
     }
 
     public function getAll(Request $request)
@@ -45,10 +48,20 @@ class TaskController extends Controller
                 'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
+            $log_data = [
+                'task_id'=>$task->id,
+                'title'=>$request->title,
+                'log_type'=>'Create empty task',
+                'action_type'=>'created',
+                'action_by'=>Auth::id(),
+                'action_at'=>Carbon::now()
+            ];
+            $this->actionLog->store($log_data);
             $tasks = Task::where('parent_id', 0)
                 ->where('project_id', $request->id)
                 ->where('list_id', $list_id)
                 ->orderBy('sort_id', 'ASC')->get();
+
         }
 
         $data = $this->decorateData($tasks);
@@ -157,6 +170,15 @@ class TaskController extends Controller
 
             Task::where('id', $request->id)
                 ->update(['title' => $request->text]);
+            $log_data = [
+                'task_id'=>$request->id,
+                'title'=>$request->title,
+                'log_type'=>'Update task',
+                'action_type'=>'updated',
+                'action_by'=>Auth::id(),
+                'action_at'=>Carbon::now()
+            ];
+            $this->actionLog->store($log_data);
 
             Task::where('parent_id', $request->parent_id)
                 ->where('sort_id', '>', $request->sort_id)
@@ -175,10 +197,28 @@ class TaskController extends Controller
                 'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
+            $log_data = [
+                'task_id'=>$task->id,
+                'title'=>$request->title,
+                'log_type'=>'Create empty task',
+                'action_type'=>'created',
+                'action_by'=>Auth::id(),
+                'action_at'=>Carbon::now()
+            ];
+            $this->actionLog->store($log_data);
             return response()->json(['success' => $task]);
 
         } else if ($request->text == '') {
             Task::where(['id' => $request->id, 'project_id' => $request->project_id])->delete();
+            $log_data = [
+                'task_id'=>$request->id,
+                'title'=>'',
+                'log_type'=>'Delete task',
+                'action_type'=>'deleted',
+                'action_by'=>Auth::id(),
+                'action_at'=>Carbon::now()
+            ];
+            $this->actionLog->store($log_data);
             Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id])->delete();
             return response()->json(['success' => ['id' => $request->id]]);
         }

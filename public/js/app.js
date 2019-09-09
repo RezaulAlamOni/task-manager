@@ -2457,11 +2457,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 
@@ -73186,10 +73181,6 @@ var render = function() {
                               { attrs: { "data-v-095ab3dc": "" } },
                               _vm._l(_vm.projects, function(project) {
                                 return _c("tr", [
-                                  _c("td", { staticClass: "router_td" }, [
-                                    _vm._v(_vm._s(project.id))
-                                  ]),
-                                  _vm._v(" "),
                                   _c(
                                     "td",
                                     {
@@ -73328,22 +73319,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", { attrs: { "data-v-095ab3dc": "" } }, [
       _c("tr", { attrs: { "data-v-095ab3dc": "" } }, [
-        _c(
-          "th",
-          {
-            staticClass: "sortable sorting-asc",
-            staticStyle: { width: "auto" },
-            attrs: { "data-v-095ab3dc": "" }
-          },
-          [
-            _vm._v("\n                                                ID "),
-            _c("i", {
-              staticClass: "fa float-right  fa fa-angle-up",
-              attrs: { "data-v-095ab3dc": "" }
-            })
-          ]
-        ),
-        _vm._v(" "),
         _c(
           "th",
           {

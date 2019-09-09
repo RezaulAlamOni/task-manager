@@ -18,6 +18,7 @@ class ActionLog extends Model
         'action_by',
         'action_at'
     ];
+    public $timestamps = false;
 
 
 }

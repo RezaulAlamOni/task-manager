@@ -23,3 +23,6 @@ Route::post('/list-add', 'MultipleListController@store');//add list under projec
 Route::post('/task-list', 'TaskController@getAll');//get task list data
 Route::post('/task-list/add-task', 'TaskController@addTask');//update add node
 Route::post('/add-task-task', 'TaskController@addNewTask');//add new node
+
+//
+//Route::post('/add-action-log', 'ActionLogController@store');//create log for every action

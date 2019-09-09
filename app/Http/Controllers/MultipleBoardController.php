@@ -35,7 +35,7 @@ class MultipleBoardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**

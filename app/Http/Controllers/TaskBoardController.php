@@ -12,6 +12,14 @@ class TaskBoardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $actionLog;
+    public function __construct()
+    {
+        date_default_timezone_set('UTC');
+        $this->actionLog =new ActionLogController;
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         //

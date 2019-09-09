@@ -6,6 +6,7 @@ use App\Multiple_list;
 use App\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MultipleListController extends Controller
 {
@@ -14,9 +15,18 @@ class MultipleListController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    protected $actionLog;
+    public function __construct()
+    {
+        date_default_timezone_set('UTC');
+        $this->actionLog =new ActionLogController;
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        //
+
     }
 
     /**
@@ -45,6 +55,16 @@ class MultipleListController extends Controller
         ]);
         $multiple_list = Project::with('multiple_list')->findOrFail($request->project_id);
         $multiple_list = $multiple_list->multiple_list;
+        $log_data = [
+            'multiple_list_id'=>$id->id,
+            'title'=>$request->name,
+            'log_type'=>'Create list',
+            'action_type'=>'created',
+            'action_by'=>Auth::id(),
+            'action_at'=>Carbon::now()
+        ];
+        $this->actionLog->store($log_data);
+
         return response()->json(['multiple_list' => $multiple_list,'id'=>$id]);
     }
 
