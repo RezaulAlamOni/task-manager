@@ -4145,11 +4145,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         pastCopyAndCut: function pastCopyAndCut(data) {
             var _this = this;
-            var targetData = data.parent.children;
-            var copiedData = this.selectedCopy;
-            var cutData = this.selectedCut;
-            var type = null;
-
             var postData = {
                 target_id: data.id,
                 copy_id: this.selectedCopy === null ? this.selectedCut.id : this.selectedCopy.id,
@@ -4160,7 +4155,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.post('/api/task-list/copy-cut-past', postData).then(function (response) {
                 return response.data;
             }).then(function (response) {
-                console.log(response);
                 _this.getTaskList();
                 setTimeout(function () {
                     $("#" + response.success).click();
@@ -4168,6 +4162,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (error) {
                 console.log('Api is copy and cut not Working !!!');
             });
+        },
+        RemoveNodeAndChildren: function RemoveNodeAndChildren(data) {
+            var _this = this;
+            if (confirm('Are You sure you want to delete this task !! ?')) {
+                var postData = {
+                    id: data.id
+                };
+                axios.post('/api/task-list/delete-task', postData).then(function (response) {
+                    return response.data;
+                }).then(function (response) {
+                    console.log(response);
+                    _this.getTaskList();
+                }).catch(function (error) {
+                    console.log('Api for delete task not Working !!!');
+                });
+            }
         },
         addTag: function addTag(e, data) {
             if (e.which === 13) {
@@ -4252,19 +4262,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return function (dialog) {
                 return _this5.deleteProject(project);
             };
-        },
-        RemoveNodeAndChildren: function RemoveNodeAndChildren(data) {
-            if (confirm('Are You sure you want to delete this task !! ?')) {
-                var children = data.parent.children;
-                var id = data.id;
-                var index = 0;
-                for (var i = 0; i < children.length; i++) {
-                    if (children[i].id == id) {
-                        index = i;
-                    }
-                }
-                children.splice(index, 1);
-            }
         },
         RemoveNewEmptyChildren: function RemoveNewEmptyChildren(data) {
             var children = data.children;

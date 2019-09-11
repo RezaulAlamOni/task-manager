@@ -805,11 +805,6 @@
             },
             pastCopyAndCut(data) {
                 var _this = this;
-                var targetData = data.parent.children;
-                var copiedData = this.selectedCopy;
-                var cutData = this.selectedCut;
-                var type = null;
-
                 var postData = {
                     target_id : data.id,
                     copy_id : (this.selectedCopy === null) ? this.selectedCut.id :this.selectedCopy.id,
@@ -820,7 +815,6 @@
                 axios.post('/api/task-list/copy-cut-past', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response)
                         _this.getTaskList()
                         setTimeout(function () {
                             $("#" + response.success).click();
@@ -829,6 +823,23 @@
                     .catch(error => {
                         console.log('Api is copy and cut not Working !!!')
                     });
+            },
+            RemoveNodeAndChildren(data) {
+                var _this = this;
+                if (confirm('Are You sure you want to delete this task !! ?')) {
+                    var postData ={
+                        id : data.id
+                    }
+                    axios.post('/api/task-list/delete-task', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            console.log(response)
+                            _this.getTaskList()
+                        })
+                        .catch(error => {
+                            console.log('Api for delete task not Working !!!')
+                        });
+                }
             },
 
             addTag(e, data) {
@@ -911,19 +922,7 @@
             confirmDelete(project) {
                 return dialog => this.deleteProject(project);
             },
-            RemoveNodeAndChildren(data) {
-                if (confirm('Are You sure you want to delete this task !! ?')) {
-                    var children = data.parent.children;
-                    var id = data.id;
-                    var index = 0;
-                    for (var i = 0; i < children.length; i++) {
-                        if (children[i].id == id) {
-                            index = i;
-                        }
-                    }
-                    children.splice(index, 1);
-                }
-            },
+
             RemoveNewEmptyChildren(data) {
                 var children = data.children;
                 var index = 0;
