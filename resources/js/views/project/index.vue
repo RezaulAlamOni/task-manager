@@ -32,10 +32,6 @@
                                         <table data-v-095ab3dc="" class="table">
                                             <thead data-v-095ab3dc="">
                                             <tr data-v-095ab3dc="">
-                                                <th data-v-095ab3dc="" class="sortable sorting-asc"
-                                                    style="width: auto;">
-                                                    ID <i data-v-095ab3dc="" class="fa float-right  fa fa-angle-up"></i>
-                                                </th>
                                                 <th data-v-095ab3dc="" class="sortable " style="width: auto;">
                                                     Title <i data-v-095ab3dc="" class="fa float-right"></i></th>
                                                 <th data-v-095ab3dc="" class="sortable" style="width: auto;">
@@ -48,7 +44,6 @@
                                             </thead>
                                             <tbody data-v-095ab3dc="">
                                             <tr v-for="project in projects">
-                                                <td class="router_td">{{project.id}}</td>
                                                 <td class="router_td" @click="projectView(project.id,project.name)">
                                                     {{project.name}}
                                                 </td>
