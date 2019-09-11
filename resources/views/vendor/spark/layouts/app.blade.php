@@ -14,14 +14,13 @@
     <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
 
     <!-- CSS -->
-    <link href="{{ mix(Spark::usesRightToLeftTheme() ? 'css/app-rtl.css' : 'css/app.css') }}" rel="stylesheet">
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link href="/css/themify-icons.css" rel="stylesheet">
     <link href="/css/light_custom.css" rel="stylesheet">
-    <link href="{{ asset('css/tree_view.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/board_view.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/icon.css') }}" rel="stylesheet">
+    <link href="/css/tree_view.css" rel="stylesheet">
+    <link href="/css/board_view.css" rel="stylesheet">
+    <link href="/css/icon.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     {{--yield styles--}}
