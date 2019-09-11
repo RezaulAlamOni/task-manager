@@ -4173,12 +4173,55 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 axios.post('/api/task-list/delete-task', postData).then(function (response) {
                     return response.data;
                 }).then(function (response) {
-                    console.log(response);
                     _this.getTaskList();
                 }).catch(function (error) {
                     console.log('Api for delete task not Working !!!');
                 });
             }
+        },
+        moveItemUp: function moveItemUp(data) {
+            var _this = this;
+            var postData = {
+                id: data.id,
+                text: data.text,
+                parent_id: data.parent_id,
+                sort_id: data.sort_id,
+                type: 'up'
+            };
+            axios.post('/api/task-list/move-task', postData).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response);
+                _this.getTaskList();
+                _this.selectedData = data;
+                // setTimeout(function () {
+                //     $("#" + data.id).click();
+                // }, 500)
+            }).catch(function (error) {
+                console.log('Api for move up task not Working !!!');
+            });
+        },
+        moveItemDown: function moveItemDown(data) {
+            var _this = this;
+            var postData = {
+                id: data.id,
+                text: data.text,
+                parent_id: data.parent_id,
+                sort_id: data.sort_id,
+                type: 'down'
+            };
+            axios.post('/api/task-list/move-task', postData).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response);
+                _this.getTaskList();
+                _this.selectedData = data;
+                // setTimeout(function () {
+                //     $("#" + data.id).click();
+                // }, 500)
+            }).catch(function (error) {
+                console.log('Api for move down task not Working !!!');
+            });
         },
         addTag: function addTag(e, data) {
             if (e.which === 13) {
@@ -4257,13 +4300,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log('Add list api not working!!');
             });
         },
-        confirmDelete: function confirmDelete(project) {
-            var _this5 = this;
-
-            return function (dialog) {
-                return _this5.deleteProject(project);
-            };
-        },
         RemoveNewEmptyChildren: function RemoveNewEmptyChildren(data) {
             var children = data.children;
             var index = 0;
@@ -4273,33 +4309,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             }
             children.splice(index, 1);
-        },
-        moveItemUp: function moveItemUp(data) {
-            var children = data.parent.children;
-            var text = data.text;
-            for (var i = 0; i < children.length; i++) {
-                if (children[i].text == text) {
-                    if (i > 0) {
-                        var moveItem = data.parent.children[i];
-                        children.splice(i, 1);
-                        children.splice(i - 1, 0, moveItem);
-                        break;
-                    }
-                }
-            }
-        },
-        moveItemDown: function moveItemDown(data) {
-            var children = data.parent.children;
-            var text = data.text;
-            for (var i = 0; i < children.length; i++) {
-                if (children[i].text == text) {
-                    var index = i;
-                    var moveItem = data.parent.children[i];
-                    children.splice(index, 1);
-                    children.splice(index + 1, 0, moveItem);
-                    break;
-                }
-            }
         },
         dataCopy: function dataCopy(data) {
             var _this = this;

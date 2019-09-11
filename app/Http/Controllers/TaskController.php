@@ -221,6 +221,20 @@ class TaskController extends Controller
         return response()->json(['success'=>1]);
     }
 
+    public function moveTask(Request $request){
+        if($request->type == 'up'){
+            $pre_task = Task::where(['parent_id'=>$request->parent_id])->where('sort_id','<',$request->sort_id)->orderBy('sort_id','desc')->first();
+            $pre_sort_id = $pre_task->sort_id;
+            if ($pre_task){
+                Task::where('id',$pre_task->id)->update(['sort_id'=>$request->sort_id]);
+                Task::where('id',$request->id)->update(['sort_id'=>$pre_sort_id]);
+            }
+
+        }
+
+        return response()->json($pre_task);
+    }
+
     public function deleteTaskWithChild($id){
         Task::findOrFail($id)->delete();
         $childrens = Task::where('parent_id',$id)->get();

@@ -30,4 +30,5 @@ Route::post('/task-list/reverse-child', 'TaskController@reverseChild');//reverse
 
 Route::post('/task-list/copy-cut-past', 'TaskController@CopyCutPast');//copy and past task node
 Route::post('/task-list/delete-task', 'TaskController@deleteTask');//delete task
+Route::post('/task-list/move-task', 'TaskController@moveTask');//move-task
 

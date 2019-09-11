@@ -834,13 +834,60 @@
                     axios.post('/api/task-list/delete-task', postData)
                         .then(response => response.data)
                         .then(response => {
-                            console.log(response)
                             _this.getTaskList()
                         })
                         .catch(error => {
                             console.log('Api for delete task not Working !!!')
                         });
                 }
+            },
+            moveItemUp(data) {
+                var _this = this;
+                var postData ={
+                    id : data.id,
+                    text : data.text,
+                    parent_id : data.parent_id,
+                    sort_id : data.sort_id,
+                    type :'up'
+                }
+                axios.post('/api/task-list/move-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        _this.getTaskList()
+                        _this.selectedData = data;
+                        // setTimeout(function () {
+                        //     $("#" + data.id).click();
+                        // }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Api for move up task not Working !!!')
+                    });
+
+            },
+            moveItemDown(data) {
+                var _this = this;
+                var postData ={
+                    id : data.id,
+                    text : data.text,
+                    parent_id : data.parent_id,
+                    sort_id : data.sort_id,
+                    type :'down'
+                }
+                axios.post('/api/task-list/move-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        _this.getTaskList()
+                        _this.selectedData = data;
+                        // setTimeout(function () {
+                        //     $("#" + data.id).click();
+                        // }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
             },
 
             addTag(e, data) {
@@ -920,9 +967,6 @@
                         console.log('Add list api not working!!')
                     });
             },
-            confirmDelete(project) {
-                return dialog => this.deleteProject(project);
-            },
 
             RemoveNewEmptyChildren(data) {
                 var children = data.children;
@@ -934,34 +978,7 @@
                 }
                 children.splice(index, 1);
             },
-            moveItemUp(data) {
-                var children = data.parent.children;
-                var text = data.text;
-                for (var i = 0; i < children.length; i++) {
-                    if (children[i].text == text) {
-                        if (i > 0) {
-                            var moveItem = data.parent.children[i];
-                            children.splice(i, 1);
-                            children.splice(i - 1, 0, moveItem);
-                            break;
-                        }
-                    }
-                }
 
-            },
-            moveItemDown(data) {
-                var children = data.parent.children;
-                var text = data.text;
-                for (var i = 0; i < children.length; i++) {
-                    if (children[i].text == text) {
-                        var index = i;
-                        var moveItem = data.parent.children[i];
-                        children.splice(index, 1);
-                        children.splice(index + 1, 0, moveItem);
-                        break;
-                    }
-                }
-            },
             dataCopy(data) {
                 var _this = this;
                 var targetData = data.parent.children;
