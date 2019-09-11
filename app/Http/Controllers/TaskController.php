@@ -13,16 +13,17 @@ use Illuminate\Support\Facades\Auth;
 class TaskController extends Controller
 {
     protected $actionLog;
+
     public function __construct()
     {
         date_default_timezone_set('UTC');
-        $this->actionLog =new ActionLogController;
+        $this->actionLog = new ActionLogController;
         $this->middleware('auth');
     }
 
     public function getAll(Request $request)
     {
-        if ($request->list_id == null){
+        if ($request->list_id == null) {
             $list = Multiple_list::where('project_id', $request->id)->orderBy('id', 'ASC')->first();
             $list_id = $list->id;
         } else {
@@ -33,11 +34,11 @@ class TaskController extends Controller
             ->where('list_id', $list_id)
             ->orderBy('sort_id', 'ASC')
             ->get();
-        $task= [];
-        if ($tasks->count() <= 0){
+        $task = [];
+        if ($tasks->count() <= 0) {
             $data = [
-                'sort_id' =>0,
-                'parent_id' =>0,
+                'sort_id' => 0,
+                'parent_id' => 0,
                 'project_id' => $request->id,
                 'list_id' => $list_id,
                 'created_by' => Auth::id(),
@@ -48,7 +49,7 @@ class TaskController extends Controller
                 'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
-            $this->createLog($task->id,'created','Create empty task','');
+            $this->createLog($task->id, 'created', 'Create empty task', '');
             $tasks = Task::where('parent_id', 0)
                 ->where('project_id', $request->id)
                 ->where('list_id', $list_id)
@@ -60,18 +61,19 @@ class TaskController extends Controller
 
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
-        return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list,'empty_task'=>$task]);
+        return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list, 'empty_task' => $task]);
     }
+
     public function addTask(Request $request)
     {
-        $list_id = $this->checkListId($request->list_id,$request->project_id);
+        $list_id = $this->checkListId($request->list_id, $request->project_id);
 
         $etask = Task::where(['id' => $request->id])->get();
         if ($etask->count() > 0 && $request->text != '') {
 
             Task::where('id', $request->id)
                 ->update(['title' => $request->text]);
-            $this->createLog($request->id,'updated','Update task',$request->title);
+            $this->createLog($request->id, 'updated', 'Update task', $request->title);
 
             Task::where('parent_id', $request->parent_id)
                 ->where('sort_id', '>', $request->sort_id)
@@ -90,28 +92,30 @@ class TaskController extends Controller
                 'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
-            $this->createLog($task->id,'created','Create empty task',$request->title);
+            $this->createLog($task->id, 'created', 'Create empty task', $request->title);
             return response()->json(['success' => $task]);
 
         } else if ($request->text == '') {
             Task::where(['id' => $request->id, 'project_id' => $request->project_id])->delete();
-            $this->createLog($request->id,'deleted','Delete task','');
+            $this->createLog($request->id, 'deleted', 'Delete task', '');
             Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id])->delete();
             return response()->json(['success' => ['id' => $request->id]]);
         }
     }
-    public function addChildTask(Request $request){
-        $tsk_id = Task::where('title','')->where('parent_id',$request->id)->first();
-        if ($tsk_id){
-            Task::where('title','')->where('parent_id',$request->id)->delete();
-            $this->createLog($tsk_id->id,'deleted','Delete empty task','');
+
+    public function addChildTask(Request $request)
+    {
+        $tsk_id = Task::where('title', '')->where('parent_id', $request->id)->first();
+        if ($tsk_id) {
+            Task::where('title', '')->where('parent_id', $request->id)->delete();
+            $this->createLog($tsk_id->id, 'deleted', 'Delete empty task', '');
         }
-        $sort_id = Task::where('parent_id',$request->id)->orderBy('id','desc')->first();
+        $sort_id = Task::where('parent_id', $request->id)->orderBy('id', 'desc')->first();
         $data = [
-            'sort_id' => $sort_id ? $sort_id->sort_id+1 : 0,
+            'sort_id' => $sort_id ? $sort_id->sort_id + 1 : 0,
             'parent_id' => $request->id,
             'project_id' => $request->project_id,
-            'list_id' =>$request->list_id,
+            'list_id' => $request->list_id,
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
             'title' => '',
@@ -120,54 +124,57 @@ class TaskController extends Controller
             'created_at' => Carbon::now(),
         ];
         $task = Task::create($data);
-        $this->createLog($task->id,'created','create empty task','');
-        return response()->json(['success'=>$task]);
+        $this->createLog($task->id, 'created', 'create empty task', '');
+        return response()->json(['success' => $task]);
     }
-    public function makeChild(Request $request){
-        if (isset($request->parent_id)){
-            $task = Task::where('parent_id',$request->parent_id)
-                ->where('project_id',$request->project_id)
-                ->where('list_id',$request->list_id)
-                ->where('sort_id','<',$request->sort_id)
-                ->orderBy('sort_id','desc')->first();
-            if ($task){
-                $taskChild = Task::where('parent_id',$task->id)
-                    ->where('project_id',$request->project_id)
-                    ->where('list_id',$request->list_id)
-                    ->orderBy('sort_id','desc')->first();
-                if ($taskChild){
-                    $sort_id = $taskChild->sort_id+1;
-                    $child = Task::where('id',$request->id)->update(['parent_id'=>$task->id,'sort_id'=>$sort_id]);
-                }else{
-                    $child = Task::where('id',$request->id)->update(['parent_id'=>$task->id,'sort_id'=>1]);
+
+    public function makeChild(Request $request)
+    {
+        if (isset($request->parent_id)) {
+            $task = Task::where('parent_id', $request->parent_id)
+                ->where('project_id', $request->project_id)
+                ->where('list_id', $request->list_id)
+                ->where('sort_id', '<', $request->sort_id)
+                ->orderBy('sort_id', 'desc')->first();
+            if ($task) {
+                $taskChild = Task::where('parent_id', $task->id)
+                    ->where('project_id', $request->project_id)
+                    ->where('list_id', $request->list_id)
+                    ->orderBy('sort_id', 'desc')->first();
+                if ($taskChild) {
+                    $sort_id = $taskChild->sort_id + 1;
+                    $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => $sort_id]);
+                } else {
+                    $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => 1]);
                 }
-                $this->createLog($request->id,'updated','Update parent',$request->text);
+                $this->createLog($request->id, 'updated', 'Update parent', $request->text);
             }
 
-            return response()->json(['success'=>$request->id]);
+            return response()->json(['success' => $request->id]);
         }
     }
-    public function reverseChild(Request $request){
-        if (isset($request->parent_id) && $request->parent_id != 0){
-            $task = Task::where('id',$request->parent_id)->first();
 
-            if ($task){
-                $taskChild = Task::where('parent_id',$task->id)
-                    ->where('project_id',$task->project_id)
-                    ->where('list_id',$task->list_id)
-                    ->where('sort_id','>',$task->sort_id)
+    public function reverseChild(Request $request)
+    {
+        if (isset($request->parent_id) && $request->parent_id != 0) {
+            $task = Task::where('id', $request->parent_id)->first();
+
+            if ($task) {
+                $taskChild = Task::where('parent_id', $task->id)
+                    ->where('project_id', $task->project_id)
+                    ->where('list_id', $task->list_id)
+                    ->where('sort_id', '>', $task->sort_id)
                     ->increment('sort_id');
-                if ($taskChild){
-                    $sort_id = $task->sort_id+1;
-                    Task::where('id',$request->id)->update(['parent_id'=>$task->parent_id,'sort_id'=>$sort_id]);
-                }
-                $this->createLog($request->id,'updated','Update parent',$request->text);
+
+                $sort_id = $task->sort_id + 1;
+                Task::where('id', $request->id)->update(['parent_id' => $task->parent_id, 'sort_id' => $sort_id]);
+
+                $this->createLog($request->id, 'updated', 'Update parent', $request->text);
             }
 
-            return response()->json(['success'=>$request->id]);
+            return response()->json(['success' => $request->id]);
         }
     }
-
 
 
     public function decorateData($obj)
@@ -194,7 +201,9 @@ class TaskController extends Controller
         }
         return $data;
     }
-    public function checkListId($list_id,$project_id){
+
+    public function checkListId($list_id, $project_id)
+    {
         if ($list_id == null) {
             $list = Multiple_list::where('project_id', $project_id)->orderBy('id', 'ASC')->first();
             return $list->id;
@@ -202,14 +211,16 @@ class TaskController extends Controller
             return $list_id;
         }
     }
-    protected function createLog($task_id,$type,$message,$title){
+
+    protected function createLog($task_id, $type, $message, $title)
+    {
         $log_data = [
-            'task_id'=>$task_id,
-            'title'=>$title,
-            'log_type'=>$message,
-            'action_type'=>$type,
-            'action_by'=>Auth::id(),
-            'action_at'=>Carbon::now()
+            'task_id' => $task_id,
+            'title' => $title,
+            'log_type' => $message,
+            'action_type' => $type,
+            'action_by' => Auth::id(),
+            'action_at' => Carbon::now()
         ];
         $this->actionLog->store($log_data);
     }
