@@ -803,6 +803,33 @@
                         console.log('Api is task-unmake-child not Working !!!')
                     });
             },
+            pastCopyAndCut(data) {
+                var _this = this;
+                var targetData = data.parent.children;
+                var copiedData = this.selectedCopy;
+                var cutData = this.selectedCut;
+                var type = null;
+
+                var postData = {
+                    target_id : data.id,
+                    copy_id : (this.selectedCopy === null) ? this.selectedCut.id :this.selectedCopy.id,
+                    type :  (this.selectedCopy === null) ? 'cut' : 'copy',
+                    text : (this.selectedCopy === null) ? this.selectedCut.text :this.selectedCopy.text,
+                }
+
+                axios.post('/api/task-list/copy-cut-past', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        _this.getTaskList()
+                        setTimeout(function () {
+                            $("#" + response.success).click();
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Api is copy and cut not Working !!!')
+                    });
+            },
 
             addTag(e, data) {
                 if (e.which === 13) {
@@ -947,44 +974,44 @@
                 }
 
             },
-            pastCopyAndCut(data) {
-                var targetData = data.parent.children;
-                var i = 0, j = 0, k = 0;
-                var copiedData = this.selectedCopy;
-                var cutData = this.selectedCut;
-                var copiedItem = null;
-                var cutItem = null;
-                if (copiedData != null) {
-                    var copy = copiedData.parent.children;
-                    for (i = 0; i < copy.length; i++) {
-                        if (copy[i].text == copiedData.text) {
-                            copiedItem = copy[i];
-
-                        }
-                    }
-                }
-                if (cutData != null) {
-                    var cut = cutData.parent.children;
-                    for (j = 0; j < cut.length; j++) {
-                        if (cut[j].text == cutData.text) {
-                            cutItem = cut[j];
-                            cut.splice(j, 1);
-                        }
-                    }
-                }
-
-                for (k = 0; k < targetData.length; k++) {
-                    if (targetData[k].text == data.text) {
-                        if (copiedItem != null) {
-                            targetData.splice(k + 1, 0, copiedItem);
-                        }
-                        if (cutItem != null) {
-                            targetData.splice(k + 1, 0, cutItem);
-                        }
-                        break;
-                    }
-                }
-            },
+            // pastCopyAndCut(data) {
+            //     var targetData = data.parent.children;
+            //     var i = 0, j = 0, k = 0;
+            //     var copiedData = this.selectedCopy;
+            //     var cutData = this.selectedCut;
+            //     var copiedItem = null;
+            //     var cutItem = null;
+            //     if (copiedData != null) {
+            //         var copy = copiedData.parent.children;
+            //         for (i = 0; i < copy.length; i++) {
+            //             if (copy[i].text == copiedData.text) {
+            //                 copiedItem = copy[i];
+            //
+            //             }
+            //         }
+            //     }
+            //     if (cutData != null) {
+            //         var cut = cutData.parent.children;
+            //         for (j = 0; j < cut.length; j++) {
+            //             if (cut[j].text == cutData.text) {
+            //                 cutItem = cut[j];
+            //                 cut.splice(j, 1);
+            //             }
+            //         }
+            //     }
+            //
+            //     for (k = 0; k < targetData.length; k++) {
+            //         if (targetData[k].text == data.text) {
+            //             if (copiedItem != null) {
+            //                 targetData.splice(k + 1, 0, copiedItem);
+            //             }
+            //             if (cutItem != null) {
+            //                 targetData.splice(k + 1, 0, cutItem);
+            //             }
+            //             break;
+            //         }
+            //     }
+            // },
             shwAssignUserDropDown(data) {
                 let targets = $('#' + data._id).find('.outline-person');
                 if (targets.length > 0) {

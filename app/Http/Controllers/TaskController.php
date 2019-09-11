@@ -176,6 +176,45 @@ class TaskController extends Controller
         }
     }
 
+    public function CopyCutPast(Request $request){
+        if ($request->type == 'copy'){
+            $target = Task::where('id',$request->target_id)->first();
+            $past = Task::where('id',$request->copy_id)->first();
+
+            Task::where('parent_id', $target->parent_id)
+                ->where('project_id', $target->project_id)
+                ->where('list_id', $target->list_id)
+                ->where('sort_id', '>', $target->sort_id)
+                ->increment('sort_id');
+
+            $data = [
+                'sort_id' => $target->sort_id + 1,
+                'parent_id' => $target->parent_id,
+                'project_id' => $past->project_id,
+                'list_id' => $past->list_id,
+                'created_by' => Auth::id(),
+                'updated_by' => Auth::id(),
+                'title' => $past->title,
+                'tag' => $past->tag,
+                'date' => $past->date,
+                'created_at' => Carbon::now(),
+            ];
+            $task = Task::create($data);
+            $this->createLog($task->id, 'copy', 'Copy', $request->text);
+
+            return response()->json(['success'=>$task->id]);
+
+        }else if ($request->type == 'cut'){
+            $target = Task::where('id',$request->target_id)->first();
+            $past = Task::where('id',$request->copy_id)->update(['parent_id'=>$target->parent_id]);
+            $this->createLog($request->copy_id,'Cut','Cut and past tsk',$request->text);
+
+            return response()->json(['success'=>$request->copy_id]);
+        }
+
+
+
+    }
 
     public function decorateData($obj)
     {
