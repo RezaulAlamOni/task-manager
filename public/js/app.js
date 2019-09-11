@@ -4167,7 +4167,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
             if (confirm('Are You sure you want to delete this task !! ?')) {
                 var postData = {
-                    id: data.id
+                    id: data.id,
+                    text: data.text
                 };
                 axios.post('/api/task-list/delete-task', postData).then(function (response) {
                     return response.data;

@@ -217,9 +217,16 @@ class TaskController extends Controller
     }
 
     public function deleteTask(Request $request){
-        Task::findOrFail($request->id)->delete();
-
+        $this->deleteTaskWithChild($request->id);
         return response()->json(['success'=>1]);
+    }
+
+    public function deleteTaskWithChild($id){
+        Task::findOrFail($id)->delete();
+        $childrens = Task::where('parent_id',$id)->get();
+        foreach ($childrens as $children) {
+            $this->deleteTaskWithChild($children->id);
+        }
     }
 
     public function decorateData($obj)
