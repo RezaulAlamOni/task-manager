@@ -25,5 +25,5 @@
             {{--</g>--}}
         {{--</g>--}}
     {{--</svg>--}}
-    <img src="/img/color-logo.png" alt="">
+    <img src="/img/color-logo.png" class="img-responsive" style="max-width: 140px;" alt="">
 </a>

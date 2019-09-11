@@ -37,7 +37,7 @@ body {
   transition             : all .25s ease-out;
   font-size              : small;
   letter-spacing         : 0.5px;
-  color                  : #333;
+  color                  : #666666;
 }
 [v-cloak] {
     display: none;
@@ -1508,7 +1508,7 @@ li.dropdown-header {
 
 @media(min-width:992px){
   .navbar-brand{
-    width: 22%;
+    width: 160PX;
   }
 }
 @media(min-width:1200px){
@@ -1645,4 +1645,14 @@ aside.right-side {
 {
     left: -250px !important;
     transition: all 1s;
+}
+
+/******  Bryan Updates  ******/
+
+#modal-notifications .modal-content{
+  background: #ffffff;
+}
+
+.modal-header, .modal-footer{
+  border-radius: 0px;
 }
