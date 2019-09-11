@@ -54,6 +54,7 @@
 
         </div>
         <div class="TaskListAndDetails">
+
             <div v-if="tree4data.length <= 0" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Add list and create task!</h2>
             </div>
@@ -69,7 +70,7 @@
                               :space="0">
                             <div :class="{eachItemRow: true}" slot-scope="{data, _id,store}"
                                  style="font-size: 12px"
-                                 @click="makeItClick($event, data)" :id="data._id">
+                                 @click="makeItClick($event, data)" v-on:dblclick="showLog" :id="data._id">
                                 <template v-if="!data.isDragPlaceHolder" v-html="data.html">
 
                                     <a class="task-complete left-content li-opacity "
@@ -899,6 +900,9 @@
                         console.log('Api for move down task not Working !!!')
                     });
 
+            },
+            showLog(){
+                alert('adasd')
             },
 
             addTag(e, data) {
