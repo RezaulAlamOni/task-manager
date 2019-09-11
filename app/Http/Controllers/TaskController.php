@@ -223,13 +223,28 @@ class TaskController extends Controller
 
     public function moveTask(Request $request){
         if($request->type == 'up'){
-            $pre_task = Task::where(['parent_id'=>$request->parent_id])->where('sort_id','<',$request->sort_id)->orderBy('sort_id','desc')->first();
-            $pre_sort_id = $pre_task->sort_id;
-            if ($pre_task){
+            $pre_task = Task::where(['parent_id'=>$request->parent_id])
+                ->where('sort_id','<',$request->sort_id)
+                ->where('project_id', $request->project_id)
+                ->where('list_id', $request->list_id)
+                ->orderBy('sort_id','desc')->first();
+
+            if (!empty($pre_task)){
+                $pre_sort_id = $pre_task->sort_id;
                 Task::where('id',$pre_task->id)->update(['sort_id'=>$request->sort_id]);
                 Task::where('id',$request->id)->update(['sort_id'=>$pre_sort_id]);
             }
-
+        }else if ($request->type == 'down'){
+            $pre_task = Task::where(['parent_id'=>$request->parent_id])
+                ->where('sort_id','>',$request->sort_id)
+                ->where('project_id', $request->project_id)
+                ->where('list_id', $request->list_id)
+                ->orderBy('sort_id','asc')->first();
+            if (!empty($pre_task)){
+                $pre_sort_id = $pre_task->sort_id;
+                Task::where('id',$request->id)->update(['sort_id'=>$pre_sort_id]);
+                Task::where('id',$pre_task->id)->update(['sort_id'=>$request->sort_id]);
+            }
         }
 
         return response()->json($pre_task);

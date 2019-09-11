@@ -3905,10 +3905,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     _this.unMakeChild(_this.selectedData);
                     break;
                 case "up":
-                    _this.moveItemUp(_this.selectedData);
+                    if (Object.keys(_this.selectedData).length > 0) {
+                        _this.moveItemUp(_this.selectedData);
+                    }
+                    _this.selectedData = {};
                     break;
                 case "down":
-                    _this.moveItemDown(_this.selectedData);
+                    if (Object.keys(_this.selectedData).length > 0) {
+                        _this.moveItemDown(_this.selectedData);
+                    }
+                    _this.selectedData = {};
                     break;
                 case "left":
                     _this.HideDetails(_this.selectedData);
@@ -4186,6 +4192,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 text: data.text,
                 parent_id: data.parent_id,
                 sort_id: data.sort_id,
+                project_id: _this.projectId,
+                list_id: data.list_id,
                 type: 'up'
             };
             axios.post('/api/task-list/move-task', postData).then(function (response) {
@@ -4194,9 +4202,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log(response);
                 _this.getTaskList();
                 _this.selectedData = data;
-                // setTimeout(function () {
-                //     $("#" + data.id).click();
-                // }, 500)
+                setTimeout(function () {
+                    $("#" + data.id).click();
+                }, 300);
             }).catch(function (error) {
                 console.log('Api for move up task not Working !!!');
             });
@@ -4208,6 +4216,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 text: data.text,
                 parent_id: data.parent_id,
                 sort_id: data.sort_id,
+                project_id: _this.projectId,
+                list_id: data.list_id,
                 type: 'down'
             };
             axios.post('/api/task-list/move-task', postData).then(function (response) {
@@ -4215,10 +4225,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (response) {
                 console.log(response);
                 _this.getTaskList();
-                _this.selectedData = data;
-                // setTimeout(function () {
-                //     $("#" + data.id).click();
-                // }, 500)
+                setTimeout(function () {
+                    $("#" + data.id).click();
+                }, 300);
             }).catch(function (error) {
                 console.log('Api for move down task not Working !!!');
             });
