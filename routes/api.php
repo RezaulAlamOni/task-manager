@@ -32,3 +32,5 @@ Route::post('/task-list/copy-cut-past', 'TaskController@CopyCutPast');//copy and
 Route::post('/task-list/delete-task', 'TaskController@deleteTask');//delete task
 Route::post('/task-list/move-task', 'TaskController@moveTask');//move-task
 
+Route::post('/nev-item/add-new','ProjectNavItemsController@store'); //add new nev item
+

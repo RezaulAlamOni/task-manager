@@ -3974,6 +3974,65 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4013,9 +4072,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 name: null,
                 description: null
             },
-            task: {
+            nevItem: {
                 title: null,
-                list_id: null
+                type: null,
+                sort_id: null,
+                project_id: null
             }
         };
     },
@@ -4381,6 +4442,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         showLog: function showLog() {
             alert('adasd');
+        },
+        showModelForNevItem: function showModelForNevItem() {
+            $("#addNavItem").modal('show');
+            $('input[name="optionsRadios"]').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+        },
+        AddNevItem: function AddNevItem() {
+            var _this = this;
+            _this.nevItem.project_id = _this.projectId;
+            _this.nevItem.type = $('input[name="optionsRadios"]').val();
+
+            axios.post('/api/nev-item/add-new', _this.nevItem).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response.success);
+                // _this.getTaskList()
+                $("#addNavItem").modal('hide');
+            }).catch(function (error) {
+                console.log('Api for move down task not Working !!!');
+            });
+
+            // console.log(_this.nevItem)
         },
         addTag: function addTag(e, data) {
             if (e.which === 13) {
@@ -11994,7 +12080,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -76361,10 +76447,104 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _vm._m(3)
+        _c("nav", { staticClass: "navbar-expand-md navbar-spark" }, [
+          _c("div", { staticClass: "container-fluid" }, [
+            _c("div", { staticClass: "collapse navbar-collapse show" }, [
+              _vm._m(3),
+              _vm._v(" "),
+              _vm._m(4),
+              _vm._v(" "),
+              _vm._m(5),
+              _vm._v(" "),
+              _vm._m(6),
+              _vm._v(" "),
+              _vm._m(7),
+              _vm._v(" "),
+              _c(
+                "ul",
+                {
+                  staticClass: "navbar-nav ml-4",
+                  staticStyle: { position: "absolute", right: "20px" }
+                },
+                [
+                  _c("li", { staticClass: "nav-item dropdown" }, [
+                    _vm._m(8),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "dropdown-menu dropdown-menu-right",
+                        attrs: { "aria-labelledby": "dropdownMenuButton" }
+                      },
+                      [
+                        _c("h6", { staticClass: "dropdown-header" }, [
+                          _vm._v(" Manage Nav")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "dropdown-item",
+                            attrs: { href: "javascript:void(0)" },
+                            on: { click: _vm.showModelForNevItem }
+                          },
+                          [
+                            _c("i", {
+                              staticClass:
+                                "fa fa-fw text-left fa-btn fa-plus-circle"
+                            }),
+                            _vm._v(
+                              "\n                                            Create Task View\n                                        "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "dropdown-divider" }),
+                        _vm._v(" "),
+                        _c("h6", { staticClass: "dropdown-header" }, [
+                          _vm._v(" Edit Task View")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          { staticClass: "dropdown-item", attrs: { href: "" } },
+                          [_vm._v(" Ideas")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          { staticClass: "dropdown-item", attrs: { href: "" } },
+                          [_vm._v(" Scopes")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          { staticClass: "dropdown-item", attrs: { href: "" } },
+                          [_vm._v(" Dev Board")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          { staticClass: "dropdown-item", attrs: { href: "" } },
+                          [_vm._v(" Testing")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          { staticClass: "dropdown-item", attrs: { href: "" } },
+                          [_vm._v(" Complete")]
+                        )
+                      ]
+                    )
+                  ])
+                ]
+              )
+            ])
+          ])
+        ])
       ]),
       _vm._v(" "),
-      _vm._m(4)
+      _vm._m(9)
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "TaskListAndDetails" }, [
@@ -77122,7 +77302,7 @@ var render = function() {
               _c("div", { staticClass: "row pl-3" }, [
                 _c("div", [
                   _c("a", { staticClass: "user" }, [
-                    _vm._m(5),
+                    _vm._m(10),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -77470,7 +77650,7 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _vm._m(6),
+              _vm._m(11),
               _vm._v(" "),
               _vm.selectedData.files && _vm.selectedData.files.length !== 0
                 ? _c(
@@ -77621,7 +77801,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(7),
+              _vm._m(12),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("img", {
@@ -77653,7 +77833,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(8),
+              _vm._m(13),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [_vm._v("Add your new list here !")]),
@@ -77746,6 +77926,116 @@ var render = function() {
           ]
         )
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "addNavItem",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(14),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group row" }, [
+                  _vm._m(15),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.nevItem.title,
+                          expression: "nevItem.title"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.nevItem.title },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.nevItem, "title", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _vm._m(16),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.nevItem.sort_id,
+                          expression: "nevItem.sort_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "number", min: "0" },
+                      domProps: { value: _vm.nevItem.sort_id },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.nevItem, "sort_id", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(17)
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.AddNevItem }
+                  },
+                  [_vm._v("Add")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
+                  },
+                  [_vm._v("Cancel\n                        ")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
@@ -77799,437 +78089,325 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("nav", { staticClass: "navbar-expand-md navbar-spark" }, [
-      _c("div", { staticClass: "container-fluid" }, [
-        _c("div", { staticClass: "collapse navbar-collapse show" }, [
-          _c("ul", { staticClass: "navbar-nav ml-4 float-sm-left" }, [
-            _c("li", { staticClass: "nav-item dropdown" }, [
-              _c(
-                "a",
-                {
-                  staticClass:
-                    "d-block d-md-flex text-center nav-link dropdown-toggle",
-                  attrs: {
-                    href: "#",
-                    "data-toggle": "dropdown",
-                    "aria-haspopup": "true",
-                    "aria-expanded": "false"
-                  }
-                },
-                [
-                  _c("span", { staticClass: "d-none d-md-block" }, [
-                    _vm._v(
-                      "\n                               Ideas\n                            "
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "dropdown-menu dropdown-menu-left",
-                  attrs: { "aria-labelledby": "dropdownMenuButton" }
-                },
-                [
-                  _c("h6", { staticClass: "dropdown-header" }, [
-                    _vm._v(" Lists")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [_vm._v("S&O Ideas List")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [_vm._v("Marketing Ideas")]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "dropdown-divider" }),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [
-                      _c("i", {
-                        staticClass: "fa fa-fw text-left fa-btn fa-plus-circle"
-                      }),
-                      _vm._v(
-                        "\n                                            Create Idea List\n                                        "
-                      )
-                    ]
-                  )
-                ]
+    return _c("ul", { staticClass: "navbar-nav ml-4 float-sm-left" }, [
+      _c("li", { staticClass: "nav-item dropdown" }, [
+        _c(
+          "a",
+          {
+            staticClass:
+              "d-block d-md-flex text-center nav-link dropdown-toggle",
+            attrs: {
+              href: "#",
+              "data-toggle": "dropdown",
+              "aria-haspopup": "true",
+              "aria-expanded": "false"
+            }
+          },
+          [
+            _c("span", { staticClass: "d-none d-md-block" }, [
+              _vm._v(
+                "\n                               Ideas\n                            "
               )
             ])
-          ]),
-          _vm._v(" "),
-          _c("ul", { staticClass: "navbar-nav ml-4 float-sm-left" }, [
-            _c("li", { staticClass: "nav-item dropdown" }, [
-              _c(
-                "a",
-                {
-                  staticClass:
-                    "d-block d-md-flex text-center nav-link dropdown-toggle",
-                  attrs: {
-                    href: "#",
-                    "data-toggle": "dropdown",
-                    "aria-haspopup": "true",
-                    "aria-expanded": "false"
-                  }
-                },
-                [
-                  _c("span", { staticClass: "d-none d-md-block" }, [
-                    _vm._v(
-                      "\n                               Scopes\n                            "
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "dropdown-menu dropdown-menu-left",
-                  attrs: { "aria-labelledby": "dropdownMenuButton" }
-                },
-                [
-                  _c("h6", { staticClass: "dropdown-header" }, [
-                    _vm._v(" Lists")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [_vm._v("CompltIt Scope")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [_vm._v("Facebook Scope")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [_vm._v("Affiliate Scope")]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "dropdown-divider" }),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [
-                      _c("i", {
-                        staticClass: "fa fa-fw text-left fa-btn fa-plus-circle"
-                      }),
-                      _vm._v(
-                        "\n                                            Create Scope List\n                                        "
-                      )
-                    ]
-                  )
-                ]
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "dropdown-menu dropdown-menu-left",
+            attrs: { "aria-labelledby": "dropdownMenuButton" }
+          },
+          [
+            _c("h6", { staticClass: "dropdown-header" }, [_vm._v(" Lists")]),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _vm._v("S&O Ideas List")
+            ]),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _vm._v("Marketing Ideas")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-divider" }),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _c("i", {
+                staticClass: "fa fa-fw text-left fa-btn fa-plus-circle"
+              }),
+              _vm._v(
+                "\n                                            Create Idea List\n                                        "
               )
             ])
-          ]),
-          _vm._v(" "),
-          _c("ul", { staticClass: "navbar-nav ml-4 float-sm-left" }, [
-            _c("li", { staticClass: "nav-item dropdown" }, [
-              _c(
-                "a",
-                {
-                  staticClass:
-                    "d-block d-md-flex text-center nav-link dropdown-toggle",
-                  attrs: {
-                    href: "#",
-                    "data-toggle": "dropdown",
-                    "aria-haspopup": "true",
-                    "aria-expanded": "false"
-                  }
-                },
-                [
-                  _c("span", { staticClass: "d-none d-md-block" }, [
-                    _vm._v(
-                      "\n                               Dev Board\n                            "
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "dropdown-menu dropdown-menu-left",
-                  attrs: { "aria-labelledby": "dropdownMenuButton" }
-                },
-                [
-                  _c("h6", { staticClass: "dropdown-header" }, [
-                    _vm._v(" Boards")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [_vm._v("CompltIt Board")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [_vm._v("Marketing Board")]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "dropdown-divider" }),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [
-                      _c("i", {
-                        staticClass: "fa fa-fw text-left fa-btn fa-plus-circle"
-                      }),
-                      _vm._v(
-                        "\n                                            Create Dev Board\n                                        "
-                      )
-                    ]
-                  )
-                ]
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("ul", { staticClass: "navbar-nav ml-4 float-sm-left" }, [
-            _c("li", { staticClass: "nav-item dropdown" }, [
-              _c(
-                "a",
-                {
-                  staticClass:
-                    "d-block d-md-flex text-center nav-link dropdown-toggle",
-                  attrs: {
-                    href: "#",
-                    "data-toggle": "dropdown",
-                    "aria-haspopup": "true",
-                    "aria-expanded": "false"
-                  }
-                },
-                [
-                  _c("span", { staticClass: "d-none d-md-block" }, [
-                    _vm._v(
-                      "\n                               Testing\n                            "
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "dropdown-menu dropdown-menu-left",
-                  attrs: { "aria-labelledby": "dropdownMenuButton" }
-                },
-                [
-                  _c("h6", { staticClass: "dropdown-header" }, [
-                    _vm._v(" Board")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [_vm._v("CompltIt Test")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [_vm._v("Facebook Test")]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "dropdown-divider" }),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [
-                      _c("i", {
-                        staticClass: "fa fa-fw text-left fa-btn fa-plus-circle"
-                      }),
-                      _vm._v(
-                        "\n                                            Create Testing Board\n                                        "
-                      )
-                    ]
-                  )
-                ]
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("ul", { staticClass: "navbar-nav ml-4 float-sm-left" }, [
-            _c("li", { staticClass: "nav-item dropdown" }, [
-              _c(
-                "a",
-                {
-                  staticClass:
-                    "d-block d-md-flex text-center nav-link dropdown-toggle",
-                  attrs: {
-                    href: "#",
-                    "data-toggle": "dropdown",
-                    "aria-haspopup": "true",
-                    "aria-expanded": "false"
-                  }
-                },
-                [
-                  _c("span", { staticClass: "d-none d-md-block" }, [
-                    _vm._v(
-                      "\n                               Complete\n                            "
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "dropdown-menu dropdown-menu-left",
-                  attrs: { "aria-labelledby": "dropdownMenuButton" }
-                },
-                [
-                  _c("h6", { staticClass: "dropdown-header" }, [
-                    _vm._v(" Board")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [_vm._v("All Complete Dev Tasks")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [_vm._v("Marketing")]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "dropdown-divider" }),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "" } },
-                    [
-                      _c("i", {
-                        staticClass: "fa fa-fw text-left fa-btn fa-plus-circle"
-                      }),
-                      _vm._v(
-                        "\n                                            Create Complete Board\n                                        "
-                      )
-                    ]
-                  )
-                ]
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "ul",
-            {
-              staticClass: "navbar-nav ml-4",
-              staticStyle: { position: "absolute", right: "20px" }
-            },
-            [
-              _c("li", { staticClass: "nav-item dropdown" }, [
-                _c(
-                  "a",
-                  {
-                    staticClass: "d-block d-md-flex text-center nav-link",
-                    attrs: {
-                      href: "#",
-                      "data-toggle": "dropdown",
-                      "aria-haspopup": "true",
-                      "aria-expanded": "false"
-                    }
-                  },
-                  [
-                    _c("span", { staticClass: "d-none d-md-block" }, [
-                      _c("i", {
-                        staticClass: "fa fa-fw fa-plus-circle",
-                        staticStyle: { color: "#33CCFF", "font-size": "26px" }
-                      })
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "dropdown-menu dropdown-menu-right",
-                    attrs: { "aria-labelledby": "dropdownMenuButton" }
-                  },
-                  [
-                    _c("h6", { staticClass: "dropdown-header" }, [
-                      _vm._v(" Manage Nav")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      { staticClass: "dropdown-item", attrs: { href: "" } },
-                      [
-                        _c("i", {
-                          staticClass:
-                            "fa fa-fw text-left fa-btn fa-plus-circle"
-                        }),
-                        _vm._v(
-                          "\n                                            Create Task View\n                                        "
-                        )
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "dropdown-divider" }),
-                    _vm._v(" "),
-                    _c("h6", { staticClass: "dropdown-header" }, [
-                      _vm._v(" Edit Task View")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      { staticClass: "dropdown-item", attrs: { href: "" } },
-                      [_vm._v(" Ideas")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      { staticClass: "dropdown-item", attrs: { href: "" } },
-                      [_vm._v(" Scopes")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      { staticClass: "dropdown-item", attrs: { href: "" } },
-                      [_vm._v(" Dev Board")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      { staticClass: "dropdown-item", attrs: { href: "" } },
-                      [_vm._v(" Testing")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      { staticClass: "dropdown-item", attrs: { href: "" } },
-                      [_vm._v(" Complete")]
-                    )
-                  ]
-                )
-              ])
-            ]
-          )
-        ])
+          ]
+        )
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "navbar-nav ml-4 float-sm-left" }, [
+      _c("li", { staticClass: "nav-item dropdown" }, [
+        _c(
+          "a",
+          {
+            staticClass:
+              "d-block d-md-flex text-center nav-link dropdown-toggle",
+            attrs: {
+              href: "#",
+              "data-toggle": "dropdown",
+              "aria-haspopup": "true",
+              "aria-expanded": "false"
+            }
+          },
+          [
+            _c("span", { staticClass: "d-none d-md-block" }, [
+              _vm._v(
+                "\n                               Scopes\n                            "
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "dropdown-menu dropdown-menu-left",
+            attrs: { "aria-labelledby": "dropdownMenuButton" }
+          },
+          [
+            _c("h6", { staticClass: "dropdown-header" }, [_vm._v(" Lists")]),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _vm._v("CompltIt Scope")
+            ]),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _vm._v("Facebook Scope")
+            ]),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _vm._v("Affiliate Scope")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-divider" }),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _c("i", {
+                staticClass: "fa fa-fw text-left fa-btn fa-plus-circle"
+              }),
+              _vm._v(
+                "\n                                            Create Scope List\n                                        "
+              )
+            ])
+          ]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "navbar-nav ml-4 float-sm-left" }, [
+      _c("li", { staticClass: "nav-item dropdown" }, [
+        _c(
+          "a",
+          {
+            staticClass:
+              "d-block d-md-flex text-center nav-link dropdown-toggle",
+            attrs: {
+              href: "#",
+              "data-toggle": "dropdown",
+              "aria-haspopup": "true",
+              "aria-expanded": "false"
+            }
+          },
+          [
+            _c("span", { staticClass: "d-none d-md-block" }, [
+              _vm._v(
+                "\n                               Dev Board\n                            "
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "dropdown-menu dropdown-menu-left",
+            attrs: { "aria-labelledby": "dropdownMenuButton" }
+          },
+          [
+            _c("h6", { staticClass: "dropdown-header" }, [_vm._v(" Boards")]),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _vm._v("CompltIt Board")
+            ]),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _vm._v("Marketing Board")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-divider" }),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _c("i", {
+                staticClass: "fa fa-fw text-left fa-btn fa-plus-circle"
+              }),
+              _vm._v(
+                "\n                                            Create Dev Board\n                                        "
+              )
+            ])
+          ]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "navbar-nav ml-4 float-sm-left" }, [
+      _c("li", { staticClass: "nav-item dropdown" }, [
+        _c(
+          "a",
+          {
+            staticClass:
+              "d-block d-md-flex text-center nav-link dropdown-toggle",
+            attrs: {
+              href: "#",
+              "data-toggle": "dropdown",
+              "aria-haspopup": "true",
+              "aria-expanded": "false"
+            }
+          },
+          [
+            _c("span", { staticClass: "d-none d-md-block" }, [
+              _vm._v(
+                "\n                               Testing\n                            "
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "dropdown-menu dropdown-menu-left",
+            attrs: { "aria-labelledby": "dropdownMenuButton" }
+          },
+          [
+            _c("h6", { staticClass: "dropdown-header" }, [_vm._v(" Board")]),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _vm._v("CompltIt Test")
+            ]),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _vm._v("Facebook Test")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-divider" }),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _c("i", {
+                staticClass: "fa fa-fw text-left fa-btn fa-plus-circle"
+              }),
+              _vm._v(
+                "\n                                            Create Testing Board\n                                        "
+              )
+            ])
+          ]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "navbar-nav ml-4 float-sm-left" }, [
+      _c("li", { staticClass: "nav-item dropdown" }, [
+        _c(
+          "a",
+          {
+            staticClass:
+              "d-block d-md-flex text-center nav-link dropdown-toggle",
+            attrs: {
+              href: "#",
+              "data-toggle": "dropdown",
+              "aria-haspopup": "true",
+              "aria-expanded": "false"
+            }
+          },
+          [
+            _c("span", { staticClass: "d-none d-md-block" }, [
+              _vm._v(
+                "\n                               Complete\n                            "
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "dropdown-menu dropdown-menu-left",
+            attrs: { "aria-labelledby": "dropdownMenuButton" }
+          },
+          [
+            _c("h6", { staticClass: "dropdown-header" }, [_vm._v(" Board")]),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _vm._v("All Complete Dev Tasks")
+            ]),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _vm._v("Marketing")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-divider" }),
+            _vm._v(" "),
+            _c("a", { staticClass: "dropdown-item", attrs: { href: "" } }, [
+              _c("i", {
+                staticClass: "fa fa-fw text-left fa-btn fa-plus-circle"
+              }),
+              _vm._v(
+                "\n                                            Create Complete Board\n                                        "
+              )
+            ])
+          ]
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "d-block d-md-flex text-center nav-link",
+        attrs: {
+          href: "#",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [
+        _c("span", { staticClass: "d-none d-md-block" }, [
+          _c("i", {
+            staticClass: "fa fa-fw fa-plus-circle",
+            staticStyle: { color: "#33CCFF", "font-size": "26px" }
+          })
+        ])
+      ]
+    )
   },
   function() {
     var _vm = this
@@ -78343,6 +78521,95 @@ var staticRenderFns = [
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title pl-3" }, [_vm._v(" Add Nev Item")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-4" }, [
+      _c(
+        "label",
+        { staticClass: "control-label float-right m-t-ng-8 txt_media1" },
+        [_vm._v("Nav Title")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-4" }, [
+      _c(
+        "label",
+        { staticClass: "control-label float-right m-t-ng-8 txt_media1" },
+        [_vm._v("Sort Number")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row form-group" }, [
+      _c("div", { staticClass: "col-sm-4" }, [
+        _c(
+          "label",
+          { staticClass: "control-label float-right m-t-ng-8 txt_media1" },
+          [_vm._v("Select Type")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-sm-8" }, [
+        _c("div", { staticClass: "iradio" }, [
+          _c("label", [
+            _c("input", {
+              attrs: {
+                type: "radio",
+                name: "optionsRadios",
+                id: "optionsRadios1",
+                value: "list"
+              }
+            }),
+            _vm._v("   List view\n                                    ")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "iradio" }, [
+          _c("label", [
+            _c("input", {
+              attrs: {
+                type: "radio",
+                name: "optionsRadios",
+                id: "optionsRadios2",
+                value: "board"
+              }
+            }),
+            _vm._v("   Board View\n                                    ")
+          ])
+        ])
+      ])
     ])
   }
 ]

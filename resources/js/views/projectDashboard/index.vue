@@ -49,7 +49,8 @@
 
                             <ul class="navbar-nav ml-4 float-sm-left">
                                 <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
+                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
+                                       data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">
                                Ideas
@@ -71,7 +72,8 @@
 
                             <ul class="navbar-nav ml-4 float-sm-left">
                                 <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
+                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
+                                       data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">
                                Scopes
@@ -94,7 +96,8 @@
 
                             <ul class="navbar-nav ml-4 float-sm-left">
                                 <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
+                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
+                                       data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">
                                Dev Board
@@ -116,7 +119,8 @@
 
                             <ul class="navbar-nav ml-4 float-sm-left">
                                 <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
+                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
+                                       data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">
                                Testing
@@ -137,7 +141,8 @@
                             </ul>
                             <ul class="navbar-nav ml-4 float-sm-left">
                                 <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
+                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
+                                       data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">
                                Complete
@@ -162,14 +167,14 @@
                                 <li class="nav-item dropdown">
                                     <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
-                            <span class="d-none d-md-block">
+                            <span class="d-none d-md-block" >
                                <i class="fa fa-fw fa-plus-circle" style="color:#33CCFF;font-size: 26px;"></i>
                             </span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 
                                         <h6 class="dropdown-header"> Manage Nav</h6>
-                                        <a href="" class="dropdown-item">
+                                        <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNevItem">
                                             <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
                                             Create Task View
                                         </a>
@@ -620,6 +625,60 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="addNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add Nev Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="nevItem.title">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" min="0" v-model="nevItem.sort_id">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Select Type</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="iradio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="list"> &nbsp; List view
+                                    </label>
+                                </div>
+                                <div class="iradio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="board"> &nbsp; Board View
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="AddNevItem">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -665,9 +724,11 @@
                     name: null,
                     description: null
                 },
-                task: {
+                nevItem: {
                     title: null,
-                    list_id: null,
+                    type: null,
+                    sort_id: null,
+                    project_id: null,
                 }
             }
         },
@@ -704,15 +765,13 @@
                         _this.unMakeChild(_this.selectedData);
                         break;
                     case "up" :
-                        if (Object.keys(_this.selectedData).length > 0)
-                        {
+                        if (Object.keys(_this.selectedData).length > 0) {
                             _this.moveItemUp(_this.selectedData);
                         }
                         _this.selectedData = {};
                         break;
                     case "down" :
-                        if (Object.keys(_this.selectedData).length > 0)
-                        {
+                        if (Object.keys(_this.selectedData).length > 0) {
                             _this.moveItemDown(_this.selectedData);
                         }
                         _this.selectedData = {};
@@ -919,7 +978,7 @@
                     project_id: _this.projectId,
                     list_id: _this.list_id,
                     sort_id: data.sort_id,
-                    text : data.text
+                    text: data.text
                 };
                 axios.post('/api/task-list/task-make-child', postData)
                     .then(response => response.data)
@@ -943,7 +1002,7 @@
                     project_id: _this.projectId,
                     list_id: _this.list_id,
                     sort_id: data.sort_id,
-                    text : data.text
+                    text: data.text
                 };
                 axios.post('/api/task-list/reverse-child', postData)
                     .then(response => response.data)
@@ -961,10 +1020,10 @@
             pastCopyAndCut(data) {
                 var _this = this;
                 var postData = {
-                    target_id : data.id,
-                    copy_id : (this.selectedCopy === null) ? this.selectedCut.id :this.selectedCopy.id,
-                    type :  (this.selectedCopy === null) ? 'cut' : 'copy',
-                    text : (this.selectedCopy === null) ? this.selectedCut.text :this.selectedCopy.text,
+                    target_id: data.id,
+                    copy_id: (this.selectedCopy === null) ? this.selectedCut.id : this.selectedCopy.id,
+                    type: (this.selectedCopy === null) ? 'cut' : 'copy',
+                    text: (this.selectedCopy === null) ? this.selectedCut.text : this.selectedCopy.text,
                 }
 
                 axios.post('/api/task-list/copy-cut-past', postData)
@@ -982,9 +1041,9 @@
             RemoveNodeAndChildren(data) {
                 var _this = this;
                 if (confirm('Are You sure you want to delete this task !! ?')) {
-                    var postData ={
-                        id : data.id,
-                        text : data.text
+                    var postData = {
+                        id: data.id,
+                        text: data.text
                     }
                     axios.post('/api/task-list/delete-task', postData)
                         .then(response => response.data)
@@ -998,14 +1057,14 @@
             },
             moveItemUp(data) {
                 var _this = this;
-                var postData ={
-                    id : data.id,
-                    text : data.text,
-                    parent_id : data.parent_id,
-                    sort_id : data.sort_id,
-                    project_id : _this.projectId,
-                    list_id : data.list_id,
-                    type :'up'
+                var postData = {
+                    id: data.id,
+                    text: data.text,
+                    parent_id: data.parent_id,
+                    sort_id: data.sort_id,
+                    project_id: _this.projectId,
+                    list_id: data.list_id,
+                    type: 'up'
                 };
                 axios.post('/api/task-list/move-task', postData)
                     .then(response => response.data)
@@ -1024,14 +1083,14 @@
             },
             moveItemDown(data) {
                 var _this = this;
-                var postData ={
-                    id : data.id,
-                    text : data.text,
-                    parent_id : data.parent_id,
-                    sort_id : data.sort_id,
-                    project_id : _this.projectId,
-                    list_id : data.list_id,
-                    type :'down'
+                var postData = {
+                    id: data.id,
+                    text: data.text,
+                    parent_id: data.parent_id,
+                    sort_id: data.sort_id,
+                    project_id: _this.projectId,
+                    list_id: data.list_id,
+                    type: 'down'
                 }
                 axios.post('/api/task-list/move-task', postData)
                     .then(response => response.data)
@@ -1047,8 +1106,36 @@
                     });
 
             },
-            showLog(){
+            showLog() {
                 alert('adasd')
+            },
+            showModelForNevItem(){
+                $("#addNavItem").modal('show');
+                    $('input[name="optionsRadios"]').iCheck({
+                        checkboxClass: 'icheckbox_square-blue',
+                        radioClass: 'iradio_square-blue',
+                        increaseArea: '20%' // optional
+                    });
+            },
+            AddNevItem(){
+                var _this = this;
+                _this.nevItem.project_id = _this.projectId;
+                _this.nevItem.type = $('input[name="optionsRadios"]').val();
+
+                axios.post('/api/nev-item/add-new', _this.nevItem)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.success)
+                        // _this.getTaskList()
+                        $("#addNavItem").modal('hide');
+
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
+
+                // console.log(_this.nevItem)
             },
 
             addTag(e, data) {

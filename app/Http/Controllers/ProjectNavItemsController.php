@@ -3,18 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\ProjectNavItems;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProjectNavItemsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
+
     }
 
     /**
@@ -27,15 +24,23 @@ class ProjectNavItemsController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $data = [
+            'project_id'=>$request->project_id,
+            'title'=>$request->title,
+            'type'=>$request->type,
+            'sort_id'=>$request->sort_id,
+            'created_at'=>Carbon::now(),
+        ];
+        $check = ProjectNavItems::where('title',$request->title)->count();
+        if ($check <= 0){
+            $nev = ProjectNavItems::create($data);
+            return response()->json(['success'=>$nev]);
+        }else{
+            return response()->json(['success'=>'This title is already taken !']);
+        }
+
     }
 
     /**
