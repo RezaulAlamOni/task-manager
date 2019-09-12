@@ -3828,6 +3828,128 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3865,12 +3987,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             multiple_list: null,
             list: {
                 name: null,
-                description: null
+                description: null,
+                nev_id: null
             },
-            task: {
+            nevItem: {
                 title: null,
-                list_id: null
-            }
+                type: null,
+                sort_id: null,
+                project_id: null
+            },
+            nev_id: null,
+            AllNevItems: null
         };
     },
     mounted: function mounted() {
@@ -3878,6 +4005,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.projectId = this.$route.params.projectId;
         this.getProjects();
         this.getTaskList();
+        this.AllNevItem();
 
         $(document).ready(function () {
             $('.searchList').hide();
@@ -4236,6 +4364,45 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         showLog: function showLog() {
             alert('adasd');
         },
+        showModelForNevItem: function showModelForNevItem() {
+            $("#addNavItem").modal('show');
+            $('input[name="optionsRadios"]').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+        },
+        AddNevItem: function AddNevItem() {
+            var _this = this;
+            _this.nevItem.project_id = _this.projectId;
+            _this.nevItem.type = $('input[name="optionsRadios"]:checked').val();
+
+            axios.post('/api/nev-item/add-new', _this.nevItem).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response.success);
+                _this.AllNevItem();
+                $("#addNavItem").modal('hide');
+            }).catch(function (error) {
+                console.log('Api for move down task not Working !!!');
+            });
+
+            // console.log(_this.nevItem)
+        },
+        AllNevItem: function AllNevItem() {
+            var _this = this;
+            axios.get('/api/nev-item/' + _this.projectId).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response);
+                _this.AllNevItems = response.success;
+                // $("#addNavItem").modal('hide');
+            }).catch(function (error) {
+                console.log('Api for move down task not Working !!!');
+            });
+
+            // console.log(_this.nevItem)
+        },
         addTag: function addTag(e, data) {
             if (e.which === 13) {
                 // data.tags.push(this.tag);
@@ -4266,7 +4433,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             var data = {
                 id: this.projectId,
-                list_id: this.list_id
+                list_id: this.list_id,
+                nav_id: this.nev_id
             };
             axios.post('/api/task-list', data).then(function (response) {
                 return response.data;
@@ -4287,11 +4455,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }, 500);
             }).catch(function (error) {});
         },
-        addListModel: function addListModel() {
+        addListModel: function addListModel(id) {
+            this.nev_id = id;
             $("#addListModel").modal('show');
         },
-        setListId: function setListId(id, title) {
+        setListId: function setListId(id, title, nev_id) {
             this.list_id = id;
+            this.nev_id = nev_id;
             $('#listName').text(title);
             this.getTaskList();
         },
@@ -4299,12 +4469,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this4 = this;
 
             this.list.project_id = this.projectId;
+            this.list.nev_id = this.nev_id;
             axios.post('/api/list-add', this.list).then(function (response) {
                 return response.data;
             }).then(function (response) {
                 _this4.multiple_list = response.multiple_list;
                 console.log(response);
-
+                _this4.AllNevItem();
                 setTimeout(function () {
                     $('#list' + response.id.id).click();
                 }, 300);
@@ -11848,7 +12019,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -76110,113 +76281,208 @@ var render = function() {
   return _c("div", { staticClass: "card pt-0 mt-0" }, [
     _c("div", { staticClass: "row page-titles" }, [
       _c("div", { staticClass: "col-md-12 col-12 align-self-center" }, [
-        _c(
-          "ul",
-          {
-            staticClass: "nav",
-            staticStyle: { "border-bottom": "1px solid #cedcc4" }
-          },
-          [
-            _c("li", { staticClass: "nav-item" }, [
-              _c("div", { staticClass: "btn-group" }, [
-                _vm._m(0),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "dropdown-menu" },
-                  [
-                    _vm._l(_vm.multiple_list, function(list) {
-                      return _c("span", [
+        _c("nav", { staticClass: "navbar-expand-md navbar-spark" }, [
+          _c("div", { staticClass: "container-fluid" }, [
+            _c(
+              "div",
+              { staticClass: "collapse navbar-collapse show" },
+              [
+                _vm._l(_vm.AllNevItems, function(nev) {
+                  return _c("span", [
+                    _c("ul", { staticClass: "navbar-nav ml-4 float-sm-left" }, [
+                      _c("li", { staticClass: "nav-item dropdown" }, [
                         _c(
-                          "span",
+                          "a",
                           {
-                            attrs: { id: "list" + list.id },
-                            on: {
-                              click: function($event) {
-                                return _vm.setListId(list.id, list.list_title)
-                              }
+                            staticClass:
+                              "d-block d-md-flex text-center nav-link dropdown-toggle",
+                            attrs: {
+                              href: "#",
+                              "data-toggle": "dropdown",
+                              "aria-haspopup": "true",
+                              "aria-expanded": "false"
                             }
                           },
                           [
+                            _c("span", { staticClass: "d-none d-md-block" }, [
+                              _vm._v(_vm._s(nev.title))
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "dropdown-menu dropdown-menu-left",
+                            attrs: { "aria-labelledby": "dropdownMenuButton" }
+                          },
+                          [
+                            nev.type === "list"
+                              ? _c("h6", { staticClass: "dropdown-header" }, [
+                                  _vm._v(" Lists")
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            nev.type === "board"
+                              ? _c("h6", { staticClass: "dropdown-header" }, [
+                                  _vm._v(" Board")
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm._l(nev.lists, function(nev_list) {
+                              return _c("span", [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "dropdown-item",
+                                    attrs: { id: "list" + nev_list.id },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.setListId(
+                                          nev_list.id,
+                                          nev_list.list_title,
+                                          nev.id
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "router-link",
+                                      {
+                                        staticClass: "nav-link drop-item",
+                                        attrs: {
+                                          to: {
+                                            name: "project-dashboard",
+                                            params: { projectId: _vm.projectId }
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(_vm._s(nev_list.list_title)),
+                                        _c("i", {
+                                          staticClass:
+                                            "i-btn x20 task-complete icon-circle-o"
+                                        })
+                                      ]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ])
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "dropdown-divider" }),
+                            _vm._v(" "),
                             _c(
-                              "router-link",
+                              "a",
                               {
-                                staticClass: "nav-link drop-item",
-                                attrs: {
-                                  to: {
-                                    name: "project-dashboard",
-                                    params: { projectId: _vm.projectId }
+                                staticClass: "dropdown-item",
+                                attrs: { href: "Javascript:void(0)" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.addListModel(nev.id)
                                   }
                                 }
                               },
                               [
-                                _vm._v(_vm._s(list.list_title)),
                                 _c("i", {
                                   staticClass:
-                                    "i-btn x20 task-complete icon-circle-o"
-                                })
+                                    "fa fa-fw text-left fa-btn fa-plus-circle"
+                                }),
+                                _vm._v(
+                                  "\n                                                Create " +
+                                    _vm._s(nev.title) +
+                                    "  "
+                                ),
+                                nev.type === "list"
+                                  ? _c("span", [_vm._v("List")])
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                nev.type === "board"
+                                  ? _c("span", [_vm._v(" Board")])
+                                  : _vm._e()
                               ]
                             )
                           ],
-                          1
+                          2
                         )
                       ])
-                    }),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "dropdown-item",
-                        attrs: { href: "#" },
-                        on: { click: _vm.addListModel }
-                      },
-                      [
-                        _c("i", { staticClass: "fa fa-plus" }),
-                        _vm._v(" Add\n                                    List")
-                      ]
-                    )
-                  ],
-                  2
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "nav-item" }, [
-              _c("div", { staticClass: "btn-group" }, [
-                _vm._m(1),
+                    ])
+                  ])
+                }),
                 _vm._v(" "),
                 _c(
-                  "div",
-                  { staticClass: "dropdown-menu" },
+                  "ul",
+                  {
+                    staticClass: "navbar-nav ml-4",
+                    staticStyle: { position: "absolute", right: "20px" }
+                  },
                   [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "nav-link",
-                        attrs: {
-                          to: {
-                            name: "project-board",
-                            params: { projectId: _vm.projectId }
-                          }
-                        }
-                      },
-                      [
-                        _vm._v("\n                                    Board "),
-                        _c("i", { staticClass: "tree-toggle i-btn x30" })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _vm._m(2)
-                  ],
-                  1
+                    _c("li", { staticClass: "nav-item dropdown" }, [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "dropdown-menu dropdown-menu-right",
+                          attrs: { "aria-labelledby": "dropdownMenuButton" }
+                        },
+                        [
+                          _c("h6", { staticClass: "dropdown-header" }, [
+                            _vm._v(" Manage Nav")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "dropdown-item",
+                              attrs: { href: "javascript:void(0)" },
+                              on: { click: _vm.showModelForNevItem }
+                            },
+                            [
+                              _c("i", {
+                                staticClass:
+                                  "fa fa-fw text-left fa-btn fa-plus-circle"
+                              }),
+                              _vm._v(
+                                "\n                                            Create Task View\n                                        "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "dropdown-divider" }),
+                          _vm._v(" "),
+                          _c("h6", { staticClass: "dropdown-header" }, [
+                            _vm._v(" Edit Task View")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.AllNevItems, function(nev) {
+                            return _c("span", [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "dropdown-item",
+                                  attrs: { href: "#" }
+                                },
+                                [_vm._v(" " + _vm._s(nev.title))]
+                              )
+                            ])
+                          })
+                        ],
+                        2
+                      )
+                    ])
+                  ]
                 )
-              ])
-            ])
-          ]
-        )
+              ],
+              2
+            )
+          ])
+        ])
       ]),
       _vm._v(" "),
-      _vm._m(3)
+      _vm._m(1)
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "TaskListAndDetails" }, [
@@ -76974,7 +77240,7 @@ var render = function() {
               _c("div", { staticClass: "row pl-3" }, [
                 _c("div", [
                   _c("a", { staticClass: "user" }, [
-                    _vm._m(4),
+                    _vm._m(2),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -77322,7 +77588,7 @@ var render = function() {
                 }
               }),
               _vm._v(" "),
-              _vm._m(5),
+              _vm._m(3),
               _vm._v(" "),
               _vm.selectedData.files && _vm.selectedData.files.length !== 0
                 ? _c(
@@ -77473,7 +77739,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(6),
+              _vm._m(4),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("img", {
@@ -77505,7 +77771,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(7),
+              _vm._m(5),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [_vm._v("Add your new list here !")]),
@@ -77598,6 +77864,116 @@ var render = function() {
           ]
         )
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "addNavItem",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(6),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group row" }, [
+                  _vm._m(7),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.nevItem.title,
+                          expression: "nevItem.title"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.nevItem.title },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.nevItem, "title", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _vm._m(8),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.nevItem.sort_id,
+                          expression: "nevItem.sort_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "number", min: "0" },
+                      domProps: { value: _vm.nevItem.sort_id },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.nevItem, "sort_id", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(9)
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.AddNevItem }
+                  },
+                  [_vm._v("Add")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
+                  },
+                  [_vm._v("Cancel\n                        ")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
@@ -77607,45 +77983,25 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c(
-      "button",
+      "a",
       {
-        staticClass: "btn dropdown-toggle activeTask",
+        staticClass: "d-block d-md-flex text-center nav-link",
         attrs: {
-          type: "button",
+          href: "#",
           "data-toggle": "dropdown",
           "aria-haspopup": "true",
           "aria-expanded": "false"
         }
       },
-      [_c("span", { attrs: { id: "listName" } }, [_vm._v("List")])]
+      [
+        _c("span", { staticClass: "d-none d-md-block" }, [
+          _c("i", {
+            staticClass: "fa fa-fw fa-plus-circle",
+            staticStyle: { color: "#33CCFF", "font-size": "26px" }
+          })
+        ])
+      ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "btn dropdown-toggle deactiveIteam",
-        attrs: {
-          type: "button",
-          "data-toggle": "dropdown",
-          "aria-haspopup": "true",
-          "aria-expanded": "false"
-        }
-      },
-      [_c("span", [_vm._v("Board")])]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-      _c("i", { staticClass: "fa fa-plus" }),
-      _vm._v(" Add List")
-    ])
   },
   function() {
     var _vm = this
@@ -77759,6 +78115,95 @@ var staticRenderFns = [
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title pl-3" }, [_vm._v(" Add Nev Item")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-4" }, [
+      _c(
+        "label",
+        { staticClass: "control-label float-right m-t-ng-8 txt_media1" },
+        [_vm._v("Nav Title")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-4" }, [
+      _c(
+        "label",
+        { staticClass: "control-label float-right m-t-ng-8 txt_media1" },
+        [_vm._v("Sort Number")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row form-group" }, [
+      _c("div", { staticClass: "col-sm-4" }, [
+        _c(
+          "label",
+          { staticClass: "control-label float-right m-t-ng-8 txt_media1" },
+          [_vm._v("Select Type")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-sm-8" }, [
+        _c("div", { staticClass: "iradio" }, [
+          _c("label", [
+            _c("input", {
+              attrs: {
+                type: "radio",
+                name: "optionsRadios",
+                id: "optionsRadios1",
+                value: "list"
+              }
+            }),
+            _vm._v("   List view\n                                    ")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "iradio" }, [
+          _c("label", [
+            _c("input", {
+              attrs: {
+                type: "radio",
+                name: "optionsRadios",
+                id: "optionsRadios2",
+                value: "board"
+              }
+            }),
+            _vm._v("   Board View\n                                    ")
+          ])
+        ])
+      ])
     ])
   }
 ]
@@ -100965,9 +101410,9 @@ __webpack_require__("./resources/js/app.js");
 __webpack_require__("./resources/sass/bootstrap/bootstrap.scss");
 __webpack_require__("./resources/sass/custom.scss");
 __webpack_require__("./resources/sass/light_custom.scss");
-__webpack_require__("./resources/sass/app.scss");
 __webpack_require__("./resources/sass/board_view.scss");
 __webpack_require__("./resources/sass/tree_view.scss");
+__webpack_require__("./resources/sass/app.scss");
 module.exports = __webpack_require__("./resources/sass/app-rtl.scss");
 
 

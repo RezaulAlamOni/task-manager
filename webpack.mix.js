@@ -53,11 +53,10 @@ mix.copy(paths.select2BootstrapTheme + 'select2-bootstrap.css', destVendors + 's
 mix.sass('resources/sass/bootstrap/bootstrap.scss', 'public/css');
 mix.sass(resourcesAssets + 'sass/custom.scss', 'public/css');
 mix.sass(resourcesAssets + 'sass/light_custom.scss', 'public/css');
-
+mix.sass(resourcesAssets + 'sass/board_view.scss', 'public/css');
+mix.sass(resourcesAssets + 'sass/tree_view.scss', 'public/css');
 
 mix.sass('resources/sass/app.scss', 'public/css')
-    .sass('resources/sass/board_view.scss', 'public/css')
-    .sass('resources/sass/tree_view.scss', 'public/css')
     .js('resources/js/app.js', 'public/js')
     .copy('node_modules/sweetalert/dist/sweetalert.min.js', 'public/js/sweetalert.min.js')
     .sass('resources/sass/app-rtl.scss', 'public/css')

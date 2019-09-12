@@ -14,14 +14,15 @@
     <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
 
     <!-- CSS -->
-    <link href="{{ mix(Spark::usesRightToLeftTheme() ? 'css/app-rtl.css' : 'css/app.css') }}" rel="stylesheet">
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="/css/bootstrap.css">
-    <link href="/css/themify-icons.css" rel="stylesheet">
-    <link href="/css/light_custom.css" rel="stylesheet">
-    <link href="{{ asset('css/tree_view.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/board_view.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/icon.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{asset('css/bootstrap.css')}}">
+    <link href="{{asset('css/themify-icons.css')}}" rel="stylesheet">
+    <link href="{{asset('css/light_custom.css')}}" rel="stylesheet">
+    <link href="{{asset('css/tree_view.css')}}" rel="stylesheet">
+    <link href="{{asset('css/board_view.css')}}" rel="stylesheet">
+    <link href="{{asset('css/icon.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{asset('css/all.css')}}">
+    <link rel="stylesheet" href="{{asset('css/formelements.css')}}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     {{--yield styles--}}
@@ -59,7 +60,8 @@
                 </aside>
                 <aside class="right-side">
                     <!-- Content Header (Page header) -->
-                    <section class="content-header">
+{{--                    <section class="content-header">--}}
+                    <section>
                         @yield('breadcrumb')
                     </section>
                     <!-- Main content -->
@@ -87,7 +89,8 @@
 
     <!-- JavaScript -->
     <script src="{{ mix('js/app.js') }}"></script>
-    <script src="/js/sweetalert.min.js"></script>
+    <script src="{{asset('js/sweetalert.min.js')}}"></script>
+    <script src="{{asset('js/icheck.js')}}"></script>
 
     <!-- Scripts -->
     @yield('custom_scripts', '')
@@ -106,7 +109,7 @@
                 $("#menu .navigation li.active").removeClass("active");
                 $(this).parent().addClass("active");
                 $(this).parent().parent(".collapse.show").parent().addClass("active");
-            })
+            });
         })
 
 
