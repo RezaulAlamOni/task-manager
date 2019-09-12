@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMultipleListsTable extends Migration
+class CreateProjectNavItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateMultipleListsTable extends Migration
      */
     public function up()
     {
-        Schema::create('multiple_lists', function (Blueprint $table) {
+        Schema::create('project_nav_items', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('project_id');
-            $table->bigInteger('nav_id');
-            $table->string('list_title');
-            $table->text('description')->nullable();
+            $table->string('title');
+            $table->string('type');
+            $table->integer('sort_id');
             $table->timestamps();
 
-//            $table->foreign('project_id')->references('id')->on('projects');
         });
+
     }
 
     /**
@@ -32,6 +32,6 @@ class CreateMultipleListsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('multiple_lists');
+        Schema::dropIfExists('project_nav_items');
     }
 }

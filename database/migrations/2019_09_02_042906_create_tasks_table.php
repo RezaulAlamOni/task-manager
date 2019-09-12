@@ -19,6 +19,7 @@ class CreateTasksTable extends Migration
             $table->unsignedBigInteger('parent_id')->default(0);
             $table->unsignedInteger('project_id');
             $table->integer('list_id');
+            $table->bigInteger('nav_id');
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->text('title');

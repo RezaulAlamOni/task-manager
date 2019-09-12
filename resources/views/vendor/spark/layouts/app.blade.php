@@ -58,7 +58,8 @@
                 </aside>
                 <aside class="right-side">
                     <!-- Content Header (Page header) -->
-                    <section class="content-header">
+{{--                    <section class="content-header">--}}
+                    <section>
                         @yield('breadcrumb')
                     </section>
                     <!-- Main content -->

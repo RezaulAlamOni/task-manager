@@ -16,6 +16,7 @@ class CreateActionLogsTable extends Migration
         Schema::create('action_logs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('project_id')->nullable();
+            $table->bigInteger('nav_id')->nullable();
             $table->bigInteger('multiple_list_id')->nullable();
             $table->bigInteger('task_id')->nullable();
             $table->bigInteger('multiple_board_id')->nullable();
