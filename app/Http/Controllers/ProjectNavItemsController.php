@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Multiple_list;
 use App\ProjectNavItems;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -9,16 +10,27 @@ use Illuminate\Http\Request;
 class ProjectNavItemsController extends Controller
 {
 
-    public function index()
+    public function index($project_id)
     {
+        $nevItem = [];
+        $nev = ProjectNavItems::where('project_id',$project_id)->orderBy('sort_id','asc')->get();
+        foreach ($nev as $item) {
+            $item->lists = $this->getList($project_id,$item->id,$item->type);
+            $nevItem[] = $item;
+        }
+        return response()->json($nevItem);
+    }
+
+    public function getList($project_id, $nev_id, $type){
+        if ($type == 'list'){
+            $list = Multiple_list::where(['project_id'=>$project_id,'nav_id'=>$nev_id])->get();
+            return $list;
+        }else {
+            return [];
+        }
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //

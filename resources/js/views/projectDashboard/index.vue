@@ -4,163 +4,83 @@
         <div class="row page-titles">
             <div class="col-md-12 col-12 align-self-center">
 
-                <ul class="nav" style="border-bottom: 1px solid #cedcc4">
-                    <li class="nav-item">
-                        <div class="btn-group">
-                            <button type="button" class="btn dropdown-toggle activeTask" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                <span id="listName">List</span>
+<!--                <ul class="nav" style="border-bottom: 1px solid #cedcc4">-->
+<!--                    <li class="nav-item">-->
+<!--                        <div class="btn-group">-->
+<!--                            <button type="button" class="btn dropdown-toggle activeTask" data-toggle="dropdown"-->
+<!--                                    aria-haspopup="true" aria-expanded="false">-->
+<!--                                <span id="listName">List</span>-->
 
-                            </button>
-                            <div class="dropdown-menu">
-                                <span v-for="list in multiple_list">
-                                    <span @click="setListId(list.id ,list.list_title)" :id="'list'+list.id">
-                                     <router-link class="nav-link drop-item"
-                                                  :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{list.list_title}}<i
-                                         class="i-btn x20 task-complete icon-circle-o"></i></router-link>
-                                    </span>
-                                </span>
-                                <a class="dropdown-item" href="#" @click="addListModel"><i class="fa fa-plus"></i> Add
-                                    List</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="btn-group">
-                            <button type="button" class="btn dropdown-toggle deactiveIteam" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                <span>Board</span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <router-link class="nav-link"
-                                             :to="{ name: 'project-board', params: { projectId: projectId }}">
-                                    Board <i
-                                    class="tree-toggle i-btn x30"></i>
-                                </router-link>
-                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add List</a>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+<!--                            </button>-->
+<!--                            <div class="dropdown-menu">-->
+<!--                                <span v-for="list in multiple_list">-->
+<!--                                    <span @click="setListId(list.id ,list.list_title)" :id="'list'+list.id">-->
+<!--                                     <router-link class="nav-link drop-item"-->
+<!--                                                  :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{list.list_title}}<i-->
+<!--                                         class="i-btn x20 task-complete icon-circle-o"></i></router-link>-->
+<!--                                    </span>-->
+<!--                                </span>-->
+<!--                                <a class="dropdown-item" href="#" @click="addListModel"><i class="fa fa-plus"></i> Add-->
+<!--                                    List</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <div class="btn-group">-->
+<!--                            <button type="button" class="btn dropdown-toggle deactiveIteam" data-toggle="dropdown"-->
+<!--                                    aria-haspopup="true" aria-expanded="false">-->
+<!--                                <span>Board</span>-->
+<!--                            </button>-->
+<!--                            <div class="dropdown-menu">-->
+<!--                                <router-link class="nav-link"-->
+<!--                                             :to="{ name: 'project-board', params: { projectId: projectId }}">-->
+<!--                                    Board <i-->
+<!--                                    class="tree-toggle i-btn x30"></i>-->
+<!--                                </router-link>-->
+<!--                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add List</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                </ul>-->
                 <nav class="navbar-expand-md navbar-spark">
                     <div class="container-fluid">
 
                         <div class="collapse navbar-collapse show">
 
-                            <ul class="navbar-nav ml-4 float-sm-left">
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
-                                       data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
-                            <span class="d-none d-md-block">
-                               Ideas
-                            </span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
-
-                                        <h6 class="dropdown-header"> Lists</h6>
-                                        <a href="" class="dropdown-item">S&O Ideas List</a>
-                                        <a href="" class="dropdown-item">Marketing Ideas</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="" class="dropdown-item">
-                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                            Create Idea List
+                            <span v-for="nev in AllNevItems">
+                                <ul class="navbar-nav ml-4 float-sm-left">
+                                    <li class="nav-item dropdown">
+                                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
+                                           data-toggle="dropdown"
+                                           aria-haspopup="true" aria-expanded="false">
+                                <span class="d-none d-md-block">{{nev.title}}</span>
                                         </a>
-                                    </div>
-                                </li>
-                            </ul>
+                                        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
 
-                            <ul class="navbar-nav ml-4 float-sm-left">
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
-                                       data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
-                            <span class="d-none d-md-block">
-                               Scopes
+                                            <h6 class="dropdown-header" v-if="nev.type === 'list'"> Lists</h6>
+                                            <h6 class="dropdown-header" v-if="nev.type === 'board'"> Board</h6>
+
+                                            <span v-for="nev in AllNevItems.lists">
+<!--                                                <a href="#" class="dropdown-item"> {{nev.title}}</a>-->
+                                                <span @click="setListId(nev.id ,nev.list_title)" :id="'list'+nevnev.id">
+                                                    <router-link class="nav-link drop-item"
+                                                        :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nevnev.list_title}}<i
+                                                        class="i-btn x20 task-complete icon-circle-o"></i>
+                                                    </router-link>
+                                                 </span>
+                                            </span>
+
+
+                                            <div class="dropdown-divider"></div>
+                                            <a href="Javascript:void(0)" @click="addListModel" class="dropdown-item">
+                                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
+                                                Create Idea  <span v-if="nev.type === 'list'">List</span> <span v-if="nev.type === 'board'"> Board</span>
+                                            </a>
+                                        </div>
+                                    </li>
+                                </ul>
+
                             </span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
-
-                                        <h6 class="dropdown-header"> Lists</h6>
-                                        <a href="" class="dropdown-item">CompltIt Scope</a>
-                                        <a href="" class="dropdown-item">Facebook Scope</a>
-                                        <a href="" class="dropdown-item">Affiliate Scope</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="" class="dropdown-item">
-                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                            Create Scope List
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
-
-                            <ul class="navbar-nav ml-4 float-sm-left">
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
-                                       data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
-                            <span class="d-none d-md-block">
-                               Dev Board
-                            </span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
-
-                                        <h6 class="dropdown-header"> Boards</h6>
-                                        <a href="" class="dropdown-item">CompltIt Board</a>
-                                        <a href="" class="dropdown-item">Marketing Board</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="" class="dropdown-item">
-                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                            Create Dev Board
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
-
-                            <ul class="navbar-nav ml-4 float-sm-left">
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
-                                       data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
-                            <span class="d-none d-md-block">
-                               Testing
-                            </span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
-
-                                        <h6 class="dropdown-header"> Board</h6>
-                                        <a href="" class="dropdown-item">CompltIt Test</a>
-                                        <a href="" class="dropdown-item">Facebook Test</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="" class="dropdown-item">
-                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                            Create Testing Board
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
-                            <ul class="navbar-nav ml-4 float-sm-left">
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
-                                       data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
-                            <span class="d-none d-md-block">
-                               Complete
-                            </span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
-
-                                        <h6 class="dropdown-header"> Board</h6>
-                                        <a href="" class="dropdown-item">All Complete Dev Tasks</a>
-                                        <a href="" class="dropdown-item">Marketing</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="" class="dropdown-item">
-                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                            Create Complete Board
-                                        </a>
-                                    </div>
-                                </li>
-                            </ul>
 
 
                             <ul class="navbar-nav ml-4" style="position: absolute;right: 20px;">
@@ -180,12 +100,9 @@
                                         </a>
                                         <div class="dropdown-divider"></div>
                                         <h6 class="dropdown-header"> Edit Task View</h6>
-                                        <a href="" class="dropdown-item"> Ideas</a>
-                                        <a href="" class="dropdown-item"> Scopes</a>
-                                        <a href="" class="dropdown-item"> Dev Board</a>
-                                        <a href="" class="dropdown-item"> Testing</a>
-                                        <a href="" class="dropdown-item"> Complete</a>
-
+                                        <span v-for="nev in AllNevItems">
+                                             <a href="#" class="dropdown-item"> {{nev.title}}</a>
+                                        </span>
                                     </div>
                                 </li>
                             </ul>
@@ -660,12 +577,12 @@
                             <div class="col-sm-8">
                                 <div class="iradio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="list"> &nbsp; List view
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="list" > &nbsp; List view
                                     </label>
                                 </div>
                                 <div class="iradio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="board"> &nbsp; Board View
+                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="board" > &nbsp; Board View
                                     </label>
                                 </div>
                             </div>
@@ -729,7 +646,8 @@
                     type: null,
                     sort_id: null,
                     project_id: null,
-                }
+                },
+                AllNevItems: null
             }
         },
         mounted() {
@@ -737,6 +655,7 @@
             this.projectId = this.$route.params.projectId;
             this.getProjects();
             this.getTaskList();
+            this.AllNevItem();
 
             $(document).ready(function () {
                 $('.searchList').hide();
@@ -1120,14 +1039,31 @@
             AddNevItem(){
                 var _this = this;
                 _this.nevItem.project_id = _this.projectId;
-                _this.nevItem.type = $('input[name="optionsRadios"]').val();
+                _this.nevItem.type = $('input[name="optionsRadios"]:checked').val();
 
                 axios.post('/api/nev-item/add-new', _this.nevItem)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response.success)
-                        // _this.getTaskList()
+                        _this.AllNevItem()
                         $("#addNavItem").modal('hide');
+
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
+
+                // console.log(_this.nevItem)
+            },
+            AllNevItem(){
+                var _this = this;
+                axios.get('/api/nev-item/'+_this.projectId)
+                    .then(response => response.data)
+                    .then(response => {
+                        // console.log(response)
+                        _this.AllNevItems = response
+                        // $("#addNavItem").modal('hide');
 
                     })
                     .catch(error => {
@@ -1215,7 +1151,6 @@
                         console.log('Add list api not working!!')
                     });
             },
-
             RemoveNewEmptyChildren(data) {
                 var children = data.children;
                 var index = 0;

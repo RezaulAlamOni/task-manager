@@ -33,4 +33,5 @@ Route::post('/task-list/delete-task', 'TaskController@deleteTask');//delete task
 Route::post('/task-list/move-task', 'TaskController@moveTask');//move-task
 
 Route::post('/nev-item/add-new','ProjectNavItemsController@store'); //add new nev item
+Route::get('/nev-item/{project_id}','ProjectNavItemsController@index'); //all nev item
 
