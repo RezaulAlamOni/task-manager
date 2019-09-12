@@ -24,7 +24,7 @@ class TaskController extends Controller
     public function getAll(Request $request)
     {
         if ($request->list_id == null) {
-            $list = Multiple_list::where('project_id', $request->id)->orderBy('id', 'ASC')->first();
+            $list = Multiple_list::where('project_id', $request->id)->where('nav_id', $request->nav_id)->orderBy('id', 'ASC')->first();
             $list_id = $list->id;
         } else {
             $list_id = $request->list_id;
@@ -32,6 +32,7 @@ class TaskController extends Controller
         $tasks = Task::where('parent_id', 0)
             ->where('project_id', $request->id)
             ->where('list_id', $list_id)
+            ->where('nav_id', $request->nav_id)
             ->orderBy('sort_id', 'ASC')
             ->get();
         $task = [];
@@ -41,6 +42,7 @@ class TaskController extends Controller
                 'parent_id' => 0,
                 'project_id' => $request->id,
                 'list_id' => $list_id,
+                'nav_id' => $request->nav_id,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
                 'title' => '',
@@ -53,6 +55,7 @@ class TaskController extends Controller
             $tasks = Task::where('parent_id', 0)
                 ->where('project_id', $request->id)
                 ->where('list_id', $list_id)
+                ->where('nav_id', $request->nav_id)
                 ->orderBy('sort_id', 'ASC')->get();
 
         }
@@ -266,13 +269,15 @@ class TaskController extends Controller
             $data[$key]['parent_id'] = $task->parent_id;
             $data[$key]['sort_id'] = $task->sort_id;
             $data[$key]['list_id'] = $task->list_id;//list_id
+            $data[$key]['nav_id'] = $task->nav_id;//list_id
             $data[$key]['text'] = $task->title;
             $data[$key]['clicked'] = 0;
             $data[$key]['date'] = $task->date;
             $data[$key]['tags'] = $task->tag;
 
             $childrens = Task::where('parent_id', $task->id)
-                ->where('list_id', $task->list_id)->orderBy('sort_id', 'ASC')->get();
+                ->where('list_id', $task->list_id)
+                ->where('nav_id', $task->nav_id)->orderBy('sort_id', 'ASC')->get();
             if (!empty($childrens)) {
                 $data[$key]['children'] = $this->decorateData($childrens);
             } else {

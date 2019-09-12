@@ -6,9 +6,19 @@ use App\Multiple_list;
 use App\ProjectNavItems;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use PhpParser\Node\Expr\New_;
 
 class ProjectNavItemsController extends Controller
 {
+
+    protected $actionLog;
+
+    public function __construct()
+    {
+        $this->actionLog = new ActionLogController;
+        $this->middleware('auth');
+    }
 
     public function index($project_id)
     {
@@ -18,12 +28,12 @@ class ProjectNavItemsController extends Controller
             $item->lists = $this->getList($project_id,$item->id,$item->type);
             $nevItem[] = $item;
         }
-        return response()->json($nevItem);
+        return response()->json(['success'=>$nevItem]);
     }
 
     public function getList($project_id, $nev_id, $type){
         if ($type == 'list'){
-            $list = Multiple_list::where(['project_id'=>$project_id,'nav_id'=>$nev_id])->get();
+            $list = Multiple_list::where(['project_id'=>(int)$project_id,'nav_id'=>$nev_id])->get();
             return $list;
         }else {
             return [];
@@ -48,6 +58,7 @@ class ProjectNavItemsController extends Controller
         $check = ProjectNavItems::where('title',$request->title)->count();
         if ($check <= 0){
             $nev = ProjectNavItems::create($data);
+            $this->createLog($nev->id,'created','Navbar Create',$request->title);
             return response()->json(['success'=>$nev]);
         }else{
             return response()->json(['success'=>'This title is already taken !']);
@@ -55,48 +66,39 @@ class ProjectNavItemsController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\ProjectNavItems  $projectNavItems
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(ProjectNavItems $projectNavItems)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ProjectNavItems  $projectNavItems
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(ProjectNavItems $projectNavItems)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ProjectNavItems  $projectNavItems
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, ProjectNavItems $projectNavItems)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\ProjectNavItems  $projectNavItems
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(ProjectNavItems $projectNavItems)
     {
         //
+    }
+
+    protected function createLog($nav_id, $type, $message, $title)
+    {
+        $log_data = [
+            'nav_id' => $nav_id,
+            'title' => $title,
+            'log_type' => $message,
+            'action_type' => $type,
+            'action_by' => Auth::id(),
+            'action_at' => Carbon::now()
+        ];
+        $this->actionLog->store($log_data);
     }
 }

@@ -60,11 +60,11 @@
                                             <h6 class="dropdown-header" v-if="nev.type === 'list'"> Lists</h6>
                                             <h6 class="dropdown-header" v-if="nev.type === 'board'"> Board</h6>
 
-                                            <span v-for="nev in AllNevItems.lists">
+                                            <span v-for="nev_list in nev.lists">
 <!--                                                <a href="#" class="dropdown-item"> {{nev.title}}</a>-->
-                                                <span @click="setListId(nev.id ,nev.list_title)" :id="'list'+nevnev.id">
+                                                <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id)" class="dropdown-item" :id="'list'+nev_list.id">
                                                     <router-link class="nav-link drop-item"
-                                                        :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nevnev.list_title}}<i
+                                                        :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nev_list.list_title}}<i
                                                         class="i-btn x20 task-complete icon-circle-o"></i>
                                                     </router-link>
                                                  </span>
@@ -72,9 +72,9 @@
 
 
                                             <div class="dropdown-divider"></div>
-                                            <a href="Javascript:void(0)" @click="addListModel" class="dropdown-item">
+                                            <a href="Javascript:void(0)" @click="addListModel(nev.id)" class="dropdown-item">
                                                 <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                                Create Idea  <span v-if="nev.type === 'list'">List</span> <span v-if="nev.type === 'board'"> Board</span>
+                                                Create {{nev.title}}  <span v-if="nev.type === 'list'">List</span> <span v-if="nev.type === 'board'"> Board</span>
                                             </a>
                                         </div>
                                     </li>
@@ -639,7 +639,8 @@
                 multiple_list: null,
                 list: {
                     name: null,
-                    description: null
+                    description: null,
+                    nev_id : null
                 },
                 nevItem: {
                     title: null,
@@ -647,6 +648,7 @@
                     sort_id: null,
                     project_id: null,
                 },
+                nev_id : null,
                 AllNevItems: null
             }
         },
@@ -1061,8 +1063,8 @@
                 axios.get('/api/nev-item/'+_this.projectId)
                     .then(response => response.data)
                     .then(response => {
-                        // console.log(response)
-                        _this.AllNevItems = response
+                        console.log(response)
+                        _this.AllNevItems = response.success;
                         // $("#addNavItem").modal('hide');
 
                     })
@@ -1102,7 +1104,8 @@
             getTaskList() {
                 let data = {
                     id: this.projectId,
-                    list_id: this.list_id
+                    list_id: this.list_id,
+                    nav_id : this.nev_id
                 };
                 axios.post('/api/task-list', data)
                     .then(response => response.data)
@@ -1126,22 +1129,25 @@
 
                     });
             },
-            addListModel() {
+            addListModel(id) {
+                this.nev_id = id;
                 $("#addListModel").modal('show');
             },
-            setListId(id, title) {
+            setListId(id, title,nev_id) {
                 this.list_id = id;
+                this.nev_id = nev_id;
                 $('#listName').text(title);
                 this.getTaskList()
             },
             AddNewList() {
                 this.list.project_id = this.projectId;
+                this.list.nev_id = this.nev_id;
                 axios.post('/api/list-add', this.list)
                     .then(response => response.data)
                     .then(response => {
                         this.multiple_list = response.multiple_list;
                         console.log(response)
-
+                        this.AllNevItem()
                         setTimeout(function () {
                             $('#list' + response.id.id).click();
                         }, 300)

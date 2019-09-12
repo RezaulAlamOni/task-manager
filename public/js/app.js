@@ -3987,7 +3987,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             multiple_list: null,
             list: {
                 name: null,
-                description: null
+                description: null,
+                nev_id: null
             },
             nevItem: {
                 title: null,
@@ -3995,6 +3996,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 sort_id: null,
                 project_id: null
             },
+            nev_id: null,
             AllNevItems: null
         };
     },
@@ -4392,8 +4394,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.get('/api/nev-item/' + _this.projectId).then(function (response) {
                 return response.data;
             }).then(function (response) {
-                // console.log(response)
-                _this.AllNevItems = response;
+                console.log(response);
+                _this.AllNevItems = response.success;
                 // $("#addNavItem").modal('hide');
             }).catch(function (error) {
                 console.log('Api for move down task not Working !!!');
@@ -4431,7 +4433,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             var data = {
                 id: this.projectId,
-                list_id: this.list_id
+                list_id: this.list_id,
+                nav_id: this.nev_id
             };
             axios.post('/api/task-list', data).then(function (response) {
                 return response.data;
@@ -4452,11 +4455,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }, 500);
             }).catch(function (error) {});
         },
-        addListModel: function addListModel() {
+        addListModel: function addListModel(id) {
+            this.nev_id = id;
             $("#addListModel").modal('show');
         },
-        setListId: function setListId(id, title) {
+        setListId: function setListId(id, title, nev_id) {
             this.list_id = id;
+            this.nev_id = nev_id;
             $('#listName').text(title);
             this.getTaskList();
         },
@@ -4464,12 +4469,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this4 = this;
 
             this.list.project_id = this.projectId;
+            this.list.nev_id = this.nev_id;
             axios.post('/api/list-add', this.list).then(function (response) {
                 return response.data;
             }).then(function (response) {
                 _this4.multiple_list = response.multiple_list;
                 console.log(response);
-
+                _this4.AllNevItem();
                 setTimeout(function () {
                     $('#list' + response.id.id).click();
                 }, 300);
@@ -76323,17 +76329,19 @@ var render = function() {
                                 ])
                               : _vm._e(),
                             _vm._v(" "),
-                            _vm._l(_vm.AllNevItems.lists, function(nev) {
+                            _vm._l(nev.lists, function(nev_list) {
                               return _c("span", [
                                 _c(
                                   "span",
                                   {
-                                    attrs: { id: "list" + _vm.nevnev.id },
+                                    staticClass: "dropdown-item",
+                                    attrs: { id: "list" + nev_list.id },
                                     on: {
                                       click: function($event) {
                                         return _vm.setListId(
-                                          nev.id,
-                                          nev.list_title
+                                          nev_list.id,
+                                          nev_list.list_title,
+                                          nev.id
                                         )
                                       }
                                     }
@@ -76351,7 +76359,7 @@ var render = function() {
                                         }
                                       },
                                       [
-                                        _vm._v(_vm._s(_vm.nevnev.list_title)),
+                                        _vm._v(_vm._s(nev_list.list_title)),
                                         _c("i", {
                                           staticClass:
                                             "i-btn x20 task-complete icon-circle-o"
@@ -76371,7 +76379,11 @@ var render = function() {
                               {
                                 staticClass: "dropdown-item",
                                 attrs: { href: "Javascript:void(0)" },
-                                on: { click: _vm.addListModel }
+                                on: {
+                                  click: function($event) {
+                                    return _vm.addListModel(nev.id)
+                                  }
+                                }
                               },
                               [
                                 _c("i", {
@@ -76379,7 +76391,9 @@ var render = function() {
                                     "fa fa-fw text-left fa-btn fa-plus-circle"
                                 }),
                                 _vm._v(
-                                  "\n                                                Create Idea  "
+                                  "\n                                                Create " +
+                                    _vm._s(nev.title) +
+                                    "  "
                                 ),
                                 nev.type === "list"
                                   ? _c("span", [_vm._v("List")])

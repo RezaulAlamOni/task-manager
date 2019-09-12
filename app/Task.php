@@ -12,6 +12,7 @@ class Task extends Model
         'sort_id',
         'parent_id',
         'project_id',
+        'nav_id',
         'created_by', 'updated_by',
         'title',
         'tag', 'date',

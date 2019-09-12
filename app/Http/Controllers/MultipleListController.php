@@ -49,6 +49,7 @@ class MultipleListController extends Controller
     {
         $id = Multiple_list::create([
             'project_id' => $request->project_id,
+            'nav_id' => $request->nev_id,
             'list_title' => $request->name,
             'description' => $request->description,
             'created_at' => Carbon::today(),
