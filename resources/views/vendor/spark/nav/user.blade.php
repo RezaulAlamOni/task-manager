@@ -9,13 +9,11 @@
 
     <nav class="navbar navbar-light navbar-expand-md navbar-spark">
         <div class="container-fluid" v-if="user">
+            <span class="fa fa-bars fa-2x" style="cursor: pointer;margin-right:20px;"></span>
             <!-- Branding Image -->
             @include('spark::nav.brand')
 
-            {{--<button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"--}}
-                    {{--aria-expanded="false" aria-label="Toggle navigation">--}}
-                <span class="fa fa-bars fa-2x" style="cursor: pointer;"></span>
-            </button>
+
 
 
             <div id="navbarSupportedContent" class="collapse navbar-collapse show">
@@ -37,8 +35,6 @@
                                     @foreach (Auth::user()->teams as $team)
                                             @if (Auth::user()->current_team_id === $team->id)
                                                {{ $team->name }}
-                                            @else
-                                                <img src="{{ $team->photo_url }}" class="spark-profile-photo-xs" alt="{{__('Team Photo')}}" /> {{ $team->name }}
                                             @endif
                                     @endforeach
                                 @endif
@@ -49,6 +45,12 @@
                                 <!-- Team Settings -->
                                 @include('spark::nav.teams')
                             @endif
+
+                                <a href="/logout" class="dropdown-item">
+                                    <span>
+                                        Logout <i class="fa fa-fw ti-shift-right" title="Log out"></i>
+                                    </span>
+                                </a>
                         </div>
                     </li>
                 </ul>

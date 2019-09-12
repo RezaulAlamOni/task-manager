@@ -93539,7 +93539,7 @@ var generateItems = function generateItems(count, creator) {
 /***/ "./resources/img/color-logo.png":
 /***/ (function(module, exports) {
 
-module.exports = "/images/color-logo.png?9b09dfcfe9e03feaf0f425b6dcfd3e62";
+module.exports = "/images/color-logo.png?8ee75a415391006a863effb1fc023d07";
 
 /***/ }),
 
