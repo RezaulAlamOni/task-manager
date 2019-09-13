@@ -110,7 +110,7 @@ class TaskController extends Controller
 
     public function addChildTask(Request $request)
     {
-        $tsk_id = Task::where('title', '')->where('parent_id', $request->id)->first();
+        $tsk_id = Task::where('title', '')->where('parent_id', $request->id)->where('nav_id', $request->nav_id)->first();
         if ($tsk_id) {
             Task::where('title', '')->where('parent_id', $request->id)->where('nav_id', $request->nav_id)->delete();
             $this->createLog($tsk_id->id, 'deleted', 'Delete empty task', '');
@@ -140,12 +140,14 @@ class TaskController extends Controller
             $task = Task::where('parent_id', $request->parent_id)
                 ->where('project_id', $request->project_id)
                 ->where('list_id', $request->list_id)
+                ->where('nav_id', $request->nav_id)
                 ->where('sort_id', '<', $request->sort_id)
                 ->orderBy('sort_id', 'desc')->first();
             if ($task) {
                 $taskChild = Task::where('parent_id', $task->id)
                     ->where('project_id', $request->project_id)
                     ->where('list_id', $request->list_id)
+                    ->where('nav_id', $request->nav_id)
                     ->orderBy('sort_id', 'desc')->first();
                 if ($taskChild) {
                     $sort_id = $taskChild->sort_id + 1;

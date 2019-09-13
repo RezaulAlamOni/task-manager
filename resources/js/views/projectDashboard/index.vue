@@ -123,8 +123,11 @@
         </div>
         <div class="TaskListAndDetails">
 
-            <div v-if="tree4data.length <= 0" class="col-md-8 text-center pt-5">
-                <h2 style="color: #d1a894">Add list and create task!</h2>
+            <div v-if="nevItem != null && tree4data.length <= 0 " class="col-md-8 text-center pt-5">
+                <h2 style="color: #d1a894">Select Task View</h2>
+            </div>
+            <div v-if="nevItem == null" class="col-md-8 text-center pt-5">
+                <h2 style="color: #d1a894">Create Task View.</h2>
             </div>
             <div class="task_width" id="task_width">
                 <!--                <p class="add-list"><a href="#" @click="AddTaskPopup"><i class="fa fa-plus"></i> Add Task</a></p>-->
@@ -873,7 +876,8 @@
                 let postData = {
                     id: data.id,
                     project_id: _this.projectId,
-                    list_id: _this.list_id
+                    list_id: _this.list_id,
+                    nav_id : _this.nev_id
                 };
                 axios.post('/api/task-list/add-child-task', postData)
                     .then(response => response.data)
