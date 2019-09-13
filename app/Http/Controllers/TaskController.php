@@ -69,14 +69,20 @@ class TaskController extends Controller
 
     public function addTask(Request $request)
     {
-        $list_id = $this->checkListId($request->list_id, $request->project_id);
+        $list_id = $this->checkListId($request->list_id, $request->nav_id);
 
         $etask = Task::where(['id' => $request->id])->get();
-        if ($etask->count() > 0 && $request->text != '') {
+        if ($request->text == '') {
+            Task::where(['id' => $request->id, 'project_id' => $request->project_id,'nav_id' => $request->nav_id])->delete();
+            $this->createLog($request->id, 'deleted', 'Delete task', '');
+            Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id,'nav_id' => $request->nav_id])->delete();
+            return response()->json(['success' => ['id' => $request->id]]);
+        } else if ($etask->count() > 0 && $request->text != '') {
 
             Task::where('id', $request->id)
                 ->update(['title' => $request->text]);
             $this->createLog($request->id, 'updated', 'Update task', $request->title);
+            Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id,'nav_id' => $request->nav_id])->delete();
 
             Task::where('parent_id', $request->parent_id)
                 ->where('sort_id', '>', $request->sort_id)
@@ -86,6 +92,7 @@ class TaskController extends Controller
                 'sort_id' => $request->sort_id + 1,
                 'parent_id' => $request->parent_id,
                 'project_id' => $request->project_id,
+                'nav_id' => $request->nav_id,
                 'list_id' => $list_id,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
@@ -98,11 +105,6 @@ class TaskController extends Controller
             $this->createLog($task->id, 'created', 'Create empty task', $request->title);
             return response()->json(['success' => $task]);
 
-        } else if ($request->text == '') {
-            Task::where(['id' => $request->id, 'project_id' => $request->project_id])->delete();
-            $this->createLog($request->id, 'deleted', 'Delete task', '');
-            Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id])->delete();
-            return response()->json(['success' => ['id' => $request->id]]);
         }
     }
 
@@ -110,15 +112,16 @@ class TaskController extends Controller
     {
         $tsk_id = Task::where('title', '')->where('parent_id', $request->id)->first();
         if ($tsk_id) {
-            Task::where('title', '')->where('parent_id', $request->id)->delete();
+            Task::where('title', '')->where('parent_id', $request->id)->where('nav_id', $request->nav_id)->delete();
             $this->createLog($tsk_id->id, 'deleted', 'Delete empty task', '');
         }
-        $sort_id = Task::where('parent_id', $request->id)->orderBy('id', 'desc')->first();
+        $sort_id = Task::where('parent_id', $request->id)->where('nav_id', $request->nav_id)->orderBy('id', 'desc')->first();
         $data = [
             'sort_id' => $sort_id ? $sort_id->sort_id + 1 : 0,
             'parent_id' => $request->id,
             'project_id' => $request->project_id,
             'list_id' => $request->list_id,
+            'nav_id' => $request->nav_id,
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
             'title' => '',
@@ -179,10 +182,11 @@ class TaskController extends Controller
         }
     }
 
-    public function CopyCutPast(Request $request){
-        if ($request->type == 'copy'){
-            $target = Task::where('id',$request->target_id)->first();
-            $past = Task::where('id',$request->copy_id)->first();
+    public function CopyCutPast(Request $request)
+    {
+        if ($request->type == 'copy') {
+            $target = Task::where('id', $request->target_id)->first();
+            $past = Task::where('id', $request->copy_id)->first();
 
             Task::where('parent_id', $target->parent_id)
                 ->where('project_id', $target->project_id)
@@ -205,57 +209,59 @@ class TaskController extends Controller
             $task = Task::create($data);
             $this->createLog($task->id, 'copy', 'Copy', $request->text);
 
-            return response()->json(['success'=>$task->id]);
+            return response()->json(['success' => $task->id]);
 
-        }else if ($request->type == 'cut'){
-            $target = Task::where('id',$request->target_id)->first();
-            $past = Task::where('id',$request->copy_id)->update(['parent_id'=>$target->parent_id]);
-            $this->createLog($request->copy_id,'Cut','Cut and past tsk',$request->text);
+        } else if ($request->type == 'cut') {
+            $target = Task::where('id', $request->target_id)->first();
+            $past = Task::where('id', $request->copy_id)->update(['parent_id' => $target->parent_id]);
+            $this->createLog($request->copy_id, 'Cut', 'Cut and past tsk', $request->text);
 
-            return response()->json(['success'=>$request->copy_id]);
+            return response()->json(['success' => $request->copy_id]);
         }
 
 
-
     }
 
-    public function deleteTask(Request $request){
+    public function deleteTask(Request $request)
+    {
         $this->deleteTaskWithChild($request->id);
-        return response()->json(['success'=>1]);
+        return response()->json(['success' => 1]);
     }
 
-    public function moveTask(Request $request){
-        if($request->type == 'up'){
-            $pre_task = Task::where(['parent_id'=>$request->parent_id])
-                ->where('sort_id','<',$request->sort_id)
+    public function moveTask(Request $request)
+    {
+        if ($request->type == 'up') {
+            $pre_task = Task::where(['parent_id' => $request->parent_id])
+                ->where('sort_id', '<', $request->sort_id)
                 ->where('project_id', $request->project_id)
                 ->where('list_id', $request->list_id)
-                ->orderBy('sort_id','desc')->first();
+                ->orderBy('sort_id', 'desc')->first();
 
-            if (!empty($pre_task)){
+            if (!empty($pre_task)) {
                 $pre_sort_id = $pre_task->sort_id;
-                Task::where('id',$pre_task->id)->update(['sort_id'=>$request->sort_id]);
-                Task::where('id',$request->id)->update(['sort_id'=>$pre_sort_id]);
+                Task::where('id', $pre_task->id)->update(['sort_id' => $request->sort_id]);
+                Task::where('id', $request->id)->update(['sort_id' => $pre_sort_id]);
             }
-        }else if ($request->type == 'down'){
-            $pre_task = Task::where(['parent_id'=>$request->parent_id])
-                ->where('sort_id','>',$request->sort_id)
+        } else if ($request->type == 'down') {
+            $pre_task = Task::where(['parent_id' => $request->parent_id])
+                ->where('sort_id', '>', $request->sort_id)
                 ->where('project_id', $request->project_id)
                 ->where('list_id', $request->list_id)
-                ->orderBy('sort_id','asc')->first();
-            if (!empty($pre_task)){
+                ->orderBy('sort_id', 'asc')->first();
+            if (!empty($pre_task)) {
                 $pre_sort_id = $pre_task->sort_id;
-                Task::where('id',$request->id)->update(['sort_id'=>$pre_sort_id]);
-                Task::where('id',$pre_task->id)->update(['sort_id'=>$request->sort_id]);
+                Task::where('id', $request->id)->update(['sort_id' => $pre_sort_id]);
+                Task::where('id', $pre_task->id)->update(['sort_id' => $request->sort_id]);
             }
         }
 
         return response()->json($pre_task);
     }
 
-    public function deleteTaskWithChild($id){
+    public function deleteTaskWithChild($id)
+    {
         Task::findOrFail($id)->delete();
-        $childrens = Task::where('parent_id',$id)->get();
+        $childrens = Task::where('parent_id', $id)->get();
         foreach ($childrens as $children) {
             $this->deleteTaskWithChild($children->id);
         }
@@ -288,10 +294,10 @@ class TaskController extends Controller
         return $data;
     }
 
-    public function checkListId($list_id, $project_id)
+    public function checkListId($list_id, $nav_id)
     {
         if ($list_id == null) {
-            $list = Multiple_list::where('project_id', $project_id)->orderBy('id', 'ASC')->first();
+            $list = Multiple_list::where('nav_id', $nav_id)->orderBy('id', 'ASC')->first();
             return $list->id;
         } else {
             return $list_id;

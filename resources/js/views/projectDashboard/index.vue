@@ -848,8 +848,10 @@
                     parent_id: data.parent_id,
                     sort_id: data.sort_id,
                     project_id: _this.projectId,
-                    list_id: _this.list_id
+                    list_id: _this.list_id,
+                    nav_id : _this.nev_id
                 };
+                console.log(postData)
                 axios.post('/api/task-list/add-task', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -1136,8 +1138,9 @@
             setListId(id, title,nev_id) {
                 this.list_id = id;
                 this.nev_id = nev_id;
-                $('#listName').text(title);
+                // $('#listName').text(title);
                 this.getTaskList()
+                this.nev_id = nev_id;
             },
             AddNewList() {
                 this.list.project_id = this.projectId;
@@ -1180,44 +1183,7 @@
                 }
 
             },
-            // pastCopyAndCut(data) {
-            //     var targetData = data.parent.children;
-            //     var i = 0, j = 0, k = 0;
-            //     var copiedData = this.selectedCopy;
-            //     var cutData = this.selectedCut;
-            //     var copiedItem = null;
-            //     var cutItem = null;
-            //     if (copiedData != null) {
-            //         var copy = copiedData.parent.children;
-            //         for (i = 0; i < copy.length; i++) {
-            //             if (copy[i].text == copiedData.text) {
-            //                 copiedItem = copy[i];
-            //
-            //             }
-            //         }
-            //     }
-            //     if (cutData != null) {
-            //         var cut = cutData.parent.children;
-            //         for (j = 0; j < cut.length; j++) {
-            //             if (cut[j].text == cutData.text) {
-            //                 cutItem = cut[j];
-            //                 cut.splice(j, 1);
-            //             }
-            //         }
-            //     }
-            //
-            //     for (k = 0; k < targetData.length; k++) {
-            //         if (targetData[k].text == data.text) {
-            //             if (copiedItem != null) {
-            //                 targetData.splice(k + 1, 0, copiedItem);
-            //             }
-            //             if (cutItem != null) {
-            //                 targetData.splice(k + 1, 0, cutItem);
-            //             }
-            //             break;
-            //         }
-            //     }
-            // },
+
             shwAssignUserDropDown(data) {
                 let targets = $('#' + data._id).find('.outline-person');
                 if (targets.length > 0) {
