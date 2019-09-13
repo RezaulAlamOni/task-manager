@@ -101,7 +101,7 @@
                                         <div class="dropdown-divider"></div>
                                         <h6 class="dropdown-header"> Edit Task View</h6>
                                         <span v-for="nev in AllNevItems">
-                                             <a href="#" class="dropdown-item"> {{nev.title}}</a>
+                                             <a href="javascript:void(0)" @click="updateNavbarModel(nev)" class="dropdown-item"> {{nev.title}}</a>
                                         </span>
                                     </div>
                                 </li>
@@ -123,8 +123,11 @@
         </div>
         <div class="TaskListAndDetails">
 
-            <div v-if="tree4data.length <= 0" class="col-md-8 text-center pt-5">
-                <h2 style="color: #d1a894">Add list and create task!</h2>
+            <div v-if="nevItem != null && tree4data.length <= 0 " class="col-md-8 text-center pt-5">
+                <h2 style="color: #d1a894">Select Task View</h2>
+            </div>
+            <div v-if="nevItem == null" class="col-md-8 text-center pt-5">
+                <h2 style="color: #d1a894">Create Task View.</h2>
             </div>
             <div class="task_width" id="task_width">
                 <!--                <p class="add-list"><a href="#" @click="AddTaskPopup"><i class="fa fa-plus"></i> Add Task</a></p>-->
@@ -596,6 +599,43 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="updateNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add Nev Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="nevItem.title">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" min="0" v-model="nevItem.sort_id">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="updateNevItem">Update</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -848,8 +888,10 @@
                     parent_id: data.parent_id,
                     sort_id: data.sort_id,
                     project_id: _this.projectId,
-                    list_id: _this.list_id
+                    list_id: _this.list_id,
+                    nav_id : _this.nev_id
                 };
+                console.log(postData)
                 axios.post('/api/task-list/add-task', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -871,7 +913,8 @@
                 let postData = {
                     id: data.id,
                     project_id: _this.projectId,
-                    list_id: _this.list_id
+                    list_id: _this.list_id,
+                    nav_id : _this.nev_id
                 };
                 axios.post('/api/task-list/add-child-task', postData)
                     .then(response => response.data)
@@ -899,8 +942,10 @@
                     project_id: _this.projectId,
                     list_id: _this.list_id,
                     sort_id: data.sort_id,
-                    text: data.text
+                    text: data.text,
+                    nav_id : _this.nev_id
                 };
+                console.log(postData)
                 axios.post('/api/task-list/task-make-child', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -1075,6 +1120,36 @@
 
                 // console.log(_this.nevItem)
             },
+            updateNavbarModel(data){
+                this.nev_id = data.id;
+                this.nevItem.title = data.title;
+                this.nevItem.type = data.type;
+                this.nevItem.sort_id = data.sort_id;
+                this.nevItem.nev_id = data.id;
+                this.nevItem.project_id = data.project_id;
+
+                $("#updateNavItem").modal('show');
+                $('input[name="optionsRadios"]').iCheck({
+                    checkboxClass: 'icheckbox_square-blue',
+                    radioClass: 'iradio_square-blue',
+                    increaseArea: '20%' // optional
+                });
+
+            },
+            updateNevItem(){
+                var _this = this;
+                axios.post('/api/nev-item/update', _this.nevItem)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.success)
+                        _this.AllNevItem()
+                        $("#updateNavItem").modal('hide');
+
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+            },
 
             addTag(e, data) {
                 if (e.which === 13) {
@@ -1136,8 +1211,9 @@
             setListId(id, title,nev_id) {
                 this.list_id = id;
                 this.nev_id = nev_id;
-                $('#listName').text(title);
+                // $('#listName').text(title);
                 this.getTaskList()
+                this.nev_id = nev_id;
             },
             AddNewList() {
                 this.list.project_id = this.projectId;
@@ -1180,44 +1256,7 @@
                 }
 
             },
-            // pastCopyAndCut(data) {
-            //     var targetData = data.parent.children;
-            //     var i = 0, j = 0, k = 0;
-            //     var copiedData = this.selectedCopy;
-            //     var cutData = this.selectedCut;
-            //     var copiedItem = null;
-            //     var cutItem = null;
-            //     if (copiedData != null) {
-            //         var copy = copiedData.parent.children;
-            //         for (i = 0; i < copy.length; i++) {
-            //             if (copy[i].text == copiedData.text) {
-            //                 copiedItem = copy[i];
-            //
-            //             }
-            //         }
-            //     }
-            //     if (cutData != null) {
-            //         var cut = cutData.parent.children;
-            //         for (j = 0; j < cut.length; j++) {
-            //             if (cut[j].text == cutData.text) {
-            //                 cutItem = cut[j];
-            //                 cut.splice(j, 1);
-            //             }
-            //         }
-            //     }
-            //
-            //     for (k = 0; k < targetData.length; k++) {
-            //         if (targetData[k].text == data.text) {
-            //             if (copiedItem != null) {
-            //                 targetData.splice(k + 1, 0, copiedItem);
-            //             }
-            //             if (cutItem != null) {
-            //                 targetData.splice(k + 1, 0, cutItem);
-            //             }
-            //             break;
-            //         }
-            //     }
-            // },
+
             shwAssignUserDropDown(data) {
                 let targets = $('#' + data._id).find('.outline-person');
                 if (targets.length > 0) {

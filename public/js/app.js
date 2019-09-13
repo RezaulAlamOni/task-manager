@@ -3950,6 +3950,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4192,8 +4232,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 parent_id: data.parent_id,
                 sort_id: data.sort_id,
                 project_id: _this.projectId,
-                list_id: _this.list_id
+                list_id: _this.list_id,
+                nav_id: _this.nev_id
             };
+            console.log(postData);
             axios.post('/api/task-list/add-task', postData).then(function (response) {
                 return response.data;
             }).then(function (response) {
@@ -4214,7 +4256,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var postData = {
                 id: data.id,
                 project_id: _this.projectId,
-                list_id: _this.list_id
+                list_id: _this.list_id,
+                nav_id: _this.nev_id
             };
             axios.post('/api/task-list/add-child-task', postData).then(function (response) {
                 return response.data;
@@ -4241,8 +4284,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 project_id: _this.projectId,
                 list_id: _this.list_id,
                 sort_id: data.sort_id,
-                text: data.text
+                text: data.text,
+                nav_id: _this.nev_id
             };
+            console.log(postData);
             axios.post('/api/task-list/task-make-child', postData).then(function (response) {
                 return response.data;
             }).then(function (response) {
@@ -4403,6 +4448,33 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             // console.log(_this.nevItem)
         },
+        updateNavbarModel: function updateNavbarModel(data) {
+            this.nev_id = data.id;
+            this.nevItem.title = data.title;
+            this.nevItem.type = data.type;
+            this.nevItem.sort_id = data.sort_id;
+            this.nevItem.nev_id = data.id;
+            this.nevItem.project_id = data.project_id;
+
+            $("#updateNavItem").modal('show');
+            $('input[name="optionsRadios"]').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+        },
+        updateNevItem: function updateNevItem() {
+            var _this = this;
+            axios.post('/api/nev-item/update', _this.nevItem).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response.success);
+                _this.AllNevItem();
+                $("#updateNavItem").modal('hide');
+            }).catch(function (error) {
+                console.log('Api for move down task not Working !!!');
+            });
+        },
         addTag: function addTag(e, data) {
             if (e.which === 13) {
                 // data.tags.push(this.tag);
@@ -4462,8 +4534,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         setListId: function setListId(id, title, nev_id) {
             this.list_id = id;
             this.nev_id = nev_id;
-            $('#listName').text(title);
+            // $('#listName').text(title);
             this.getTaskList();
+            this.nev_id = nev_id;
         },
         AddNewList: function AddNewList() {
             var _this4 = this;
@@ -4505,45 +4578,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             }
         },
-
-        // pastCopyAndCut(data) {
-        //     var targetData = data.parent.children;
-        //     var i = 0, j = 0, k = 0;
-        //     var copiedData = this.selectedCopy;
-        //     var cutData = this.selectedCut;
-        //     var copiedItem = null;
-        //     var cutItem = null;
-        //     if (copiedData != null) {
-        //         var copy = copiedData.parent.children;
-        //         for (i = 0; i < copy.length; i++) {
-        //             if (copy[i].text == copiedData.text) {
-        //                 copiedItem = copy[i];
-        //
-        //             }
-        //         }
-        //     }
-        //     if (cutData != null) {
-        //         var cut = cutData.parent.children;
-        //         for (j = 0; j < cut.length; j++) {
-        //             if (cut[j].text == cutData.text) {
-        //                 cutItem = cut[j];
-        //                 cut.splice(j, 1);
-        //             }
-        //         }
-        //     }
-        //
-        //     for (k = 0; k < targetData.length; k++) {
-        //         if (targetData[k].text == data.text) {
-        //             if (copiedItem != null) {
-        //                 targetData.splice(k + 1, 0, copiedItem);
-        //             }
-        //             if (cutItem != null) {
-        //                 targetData.splice(k + 1, 0, cutItem);
-        //             }
-        //             break;
-        //         }
-        //     }
-        // },
         shwAssignUserDropDown: function shwAssignUserDropDown(data) {
             var targets = $('#' + data._id).find('.outline-person');
             if (targets.length > 0) {
@@ -12019,7 +12053,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -76463,7 +76497,12 @@ var render = function() {
                                 "a",
                                 {
                                   staticClass: "dropdown-item",
-                                  attrs: { href: "#" }
+                                  attrs: { href: "javascript:void(0)" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.updateNavbarModel(nev)
+                                    }
+                                  }
                                 },
                                 [_vm._v(" " + _vm._s(nev.title))]
                               )
@@ -76486,10 +76525,18 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "TaskListAndDetails" }, [
-      _vm.tree4data.length <= 0
+      _vm.nevItem != null && _vm.tree4data.length <= 0
         ? _c("div", { staticClass: "col-md-8 text-center pt-5" }, [
             _c("h2", { staticStyle: { color: "#d1a894" } }, [
-              _vm._v("Add list and create task!")
+              _vm._v("Select Task View")
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.nevItem == null
+        ? _c("div", { staticClass: "col-md-8 text-center pt-5" }, [
+            _c("h2", { staticStyle: { color: "#d1a894" } }, [
+              _vm._v("Create Task View.")
             ])
           ])
         : _vm._e(),
@@ -77974,6 +78021,114 @@ var render = function() {
           ]
         )
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "updateNavItem",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(10),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group row" }, [
+                  _vm._m(11),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.nevItem.title,
+                          expression: "nevItem.title"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.nevItem.title },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.nevItem, "title", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _vm._m(12),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.nevItem.sort_id,
+                          expression: "nevItem.sort_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "number", min: "0" },
+                      domProps: { value: _vm.nevItem.sort_id },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.nevItem, "sort_id", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.updateNevItem }
+                  },
+                  [_vm._v("Update")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
+                  },
+                  [_vm._v("Cancel\n                        ")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
@@ -78204,6 +78359,51 @@ var staticRenderFns = [
           ])
         ])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title pl-3" }, [_vm._v(" Add Nev Item")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-4" }, [
+      _c(
+        "label",
+        { staticClass: "control-label float-right m-t-ng-8 txt_media1" },
+        [_vm._v("Nav Title")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-4" }, [
+      _c(
+        "label",
+        { staticClass: "control-label float-right m-t-ng-8 txt_media1" },
+        [_vm._v("Sort Number")]
+      )
     ])
   }
 ]
