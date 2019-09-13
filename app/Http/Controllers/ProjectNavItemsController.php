@@ -55,7 +55,7 @@ class ProjectNavItemsController extends Controller
             'sort_id'=>$request->sort_id,
             'created_at'=>Carbon::now(),
         ];
-        $check = ProjectNavItems::where('title',$request->title)->count();
+        $check = ProjectNavItems::where('title',$request->title)->where('project_id',$request->project_id)->count();
         if ($check <= 0){
             $nev = ProjectNavItems::create($data);
             $this->createLog($nev->id,'created','Navbar Create',$request->title);
@@ -73,9 +73,34 @@ class ProjectNavItemsController extends Controller
     }
 
 
-    public function edit(ProjectNavItems $projectNavItems)
+    public function edit(Request $request)
     {
-        //
+        $check = ProjectNavItems::where('title',$request->title)->where('project_id',$request->project_id)->count();
+        if ($check <= 1){
+            $nab = ProjectNavItems::findOrFail($request->nev_id);
+
+            if ($nab->sort_id > $request->sort_id){
+                ProjectNavItems::where('project_id', $request->project_id)
+                    ->where('sort_id', '<', $nab->sort_id)
+                    ->where('sort_id', '>=', $request->sort_id)
+                    ->increment('sort_id');
+            }else if ($nab->sort_id < $request->sort_id){
+                ProjectNavItems::where('project_id', $request->project_id)
+                    ->where('sort_id', '>', $nab->sort_id)
+                    ->where('sort_id', '<=', $request->sort_id)
+                    ->decrement('sort_id');
+            }
+            $data = [
+                'title'=>$request->title,
+                'sort_id'=>$request->sort_id,
+                'updated_at'=>Carbon::now(),
+            ];
+            $nev = ProjectNavItems::where('id',$request->nev_id)->update($data);
+            $this->createLog($request->nev_id,'updated','Navbar updated',$request->title);
+            return response()->json(['status'=>200, 'success'=>$request->nev_id]);
+        }else{
+            return response()->json(['status'=>404,'error'=>'This title is already taken !']);
+        }
     }
 
     public function update(Request $request, ProjectNavItems $projectNavItems)

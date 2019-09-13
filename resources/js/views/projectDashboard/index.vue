@@ -101,7 +101,7 @@
                                         <div class="dropdown-divider"></div>
                                         <h6 class="dropdown-header"> Edit Task View</h6>
                                         <span v-for="nev in AllNevItems">
-                                             <a href="#" class="dropdown-item"> {{nev.title}}</a>
+                                             <a href="javascript:void(0)" @click="updateNavbarModel(nev)" class="dropdown-item"> {{nev.title}}</a>
                                         </span>
                                     </div>
                                 </li>
@@ -599,6 +599,43 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="updateNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add Nev Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="nevItem.title">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" min="0" v-model="nevItem.sort_id">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="updateNevItem">Update</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -1080,6 +1117,36 @@
 
 
                 // console.log(_this.nevItem)
+            },
+            updateNavbarModel(data){
+                this.nev_id = data.id;
+                this.nevItem.title = data.title;
+                this.nevItem.type = data.type;
+                this.nevItem.sort_id = data.sort_id;
+                this.nevItem.nev_id = data.id;
+                this.nevItem.project_id = data.project_id;
+
+                $("#updateNavItem").modal('show');
+                $('input[name="optionsRadios"]').iCheck({
+                    checkboxClass: 'icheckbox_square-blue',
+                    radioClass: 'iradio_square-blue',
+                    increaseArea: '20%' // optional
+                });
+
+            },
+            updateNevItem(){
+                var _this = this;
+                axios.post('/api/nev-item/update', _this.nevItem)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.success)
+                        _this.AllNevItem()
+                        $("#updateNavItem").modal('hide');
+
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
             },
 
             addTag(e, data) {
