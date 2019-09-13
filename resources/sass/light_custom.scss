@@ -115,7 +115,7 @@ body  .header .logo .icon {
 
 .right-side {
   margin-left : 250px;
-  padding     : 0 10px 10px 10px;
+  padding     : 0 0px 10px 0px;
 }
 .right-side > .content-header > h1 {
   margin       : 2px;
@@ -1208,7 +1208,7 @@ body.fixed-top  .header {
 }
 @media screen and (max-width : 560px) {
   .right-side {
-    padding : 0 10px 10px 10px;
+    padding : 0 0px 10px 0px;
   }
   .modal-dialog {
     margin : 115px 10px;
@@ -1654,4 +1654,9 @@ aside.right-side {
 
 .modal-header, .modal-footer{
   border-radius: 0px;
+}
+
+.img-responsive{
+  width: 100%;
+  height: auto;
 }

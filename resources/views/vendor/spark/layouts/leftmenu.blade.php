@@ -1,18 +1,6 @@
 <section class="sidebar">
     <div id="menu" role="navigation">
         <ul class="navigation" id="navigation">
-            <li {!! (Request::is( 'home') ? 'class="active"' : '') !!}>
-                <a href="/home">
-                    <i class="menu-icon ti-desktop"></i>
-                    <span class="mm-text ">Home</span>
-                </a>
-            </li>
-            <li>
-                <a href="/blank">
-                    <i class="menu-icon ti-desktop"></i>
-                    <span class="mm-text ">Rules - This will move to boards</span>
-                </a>
-            </li>
             @if (Spark::canBillCustomers())
             <li class="menu-dropdown">
                 <a data-toggle="collapse" href="#collapseBilling">
@@ -90,6 +78,13 @@
                         </a>
                     </li>
                 </ul>
+            </li>
+
+            <li>
+                <a href="/blank">
+                    <i class="fa fa-fw fa-magic"></i>
+                    <span class="mm-text ">Rules</span>
+                </a>
             </li>
 
             <li class="menu-dropdown">
