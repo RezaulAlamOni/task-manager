@@ -3990,6 +3990,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -4329,7 +4330,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 target_id: data.id,
                 copy_id: this.selectedCopy === null ? this.selectedCut.id : this.selectedCopy.id,
                 type: this.selectedCopy === null ? 'cut' : 'copy',
-                text: this.selectedCopy === null ? this.selectedCut.text : this.selectedCopy.text
+                text: this.selectedCopy === null ? this.selectedCut.text : this.selectedCopy.text,
+                nav_id: _this.nev_id
             };
 
             axios.post('/api/task-list/copy-cut-past', postData).then(function (response) {
@@ -4368,6 +4370,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 sort_id: data.sort_id,
                 project_id: _this.projectId,
                 list_id: data.list_id,
+                nav_id: _this.nev_id,
                 type: 'up'
             };
             axios.post('/api/task-list/move-task', postData).then(function (response) {
@@ -4392,6 +4395,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 sort_id: data.sort_id,
                 project_id: _this.projectId,
                 list_id: data.list_id,
+                nav_id: _this.nev_id,
                 type: 'down'
             };
             axios.post('/api/task-list/move-task', postData).then(function (response) {
@@ -4476,16 +4480,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         addTag: function addTag(e, data) {
+            var _this = this;
             if (e.which === 13) {
-                // data.tags.push(this.tag);
-                data.tags.splice(0, 1, this.tag);
-                this.tag = null;
-                $('#dropdown' + data._id).toggle();
+                var postData = {
+                    id: data.id,
+                    tags: _this.tag
+                };
+                axios.post('/api/task-list/add-tag', postData).then(function (response) {
+                    return response.data;
+                }).then(function (response) {
+                    console.log(response.success);
+                    _this.getTaskList();
+                    $('#dropdown' + data._id).toggle();
+                    _this.selectedData.tags = _this.tag, _this.tag = null;
+                }).catch(function (error) {
+                    console.log('Api for move down task not Working !!!');
+                });
             }
         },
         addExistingTag: function addExistingTag(e, data, tag) {
-            data.tags = tag;
-            $('#dropdown' + data._id).toggle();
+            var _this = this;
+            var postData = {
+                id: data.id,
+                tags: tag
+            };
+            axios.post('/api/task-list/add-tag', postData).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response.success);
+                _this.getTaskList();
+                $('#dropdown' + data._id).toggle();
+                _this.selectedData.tags = tag;
+            }).catch(function (error) {
+                console.log('Api for move down task not Working !!!');
+            });
         },
         changeTag: function changeTag(data) {
             $('#dropdown' + data._id).toggle();
@@ -4567,6 +4595,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             children.splice(index, 1);
         },
+        saveData: function saveData(e, data) {
+
+            if (e.which === 13) {
+                $('.inp').addClass('input-hide');
+                $('.inp').removeClass('form-control');
+                this.addNode(data);
+            }
+        },
         dataCopy: function dataCopy(data) {
             var _this = this;
             var targetData = data.parent.children;
@@ -4626,14 +4662,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 e.stopPropagation();
                 e.preventDefault();
                 this.addAttachment(this.selectedData);
-            }
-        },
-        saveData: function saveData(e, data) {
-
-            if (e.which === 13) {
-                $('.inp').addClass('input-hide');
-                $('.inp').removeClass('form-control');
-                this.addNode(data);
             }
         },
         ShowDetails: function ShowDetails() {
@@ -12053,7 +12081,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -76892,7 +76920,7 @@ var render = function() {
                                                       "span",
                                                       {
                                                         staticClass:
-                                                          "badge badge-success",
+                                                          "badge badge-success m-1",
                                                         on: {
                                                           click: function(
                                                             $event
@@ -76912,7 +76940,10 @@ var render = function() {
                                                       "span",
                                                       {
                                                         staticClass:
-                                                          "badge badge-danger pl-2",
+                                                          "badge badge-danger m-1 ",
+                                                        staticStyle: {
+                                                          background: "#8b3920"
+                                                        },
                                                         on: {
                                                           click: function(
                                                             $event
@@ -77472,106 +77503,147 @@ var render = function() {
                   [
                     _c("div", { staticClass: "row" }, [
                       _c("a", [
-                        _vm.selectedData.tags &&
-                        _vm.selectedData.tags.length !== 0
-                          ? _c(
-                              "div",
-                              _vm._l(_vm.selectedData.tags, function(item) {
-                                return _c("div", [
-                                  item == "Dont Forget"
-                                    ? _c(
-                                        "span",
-                                        { staticClass: "badge badge-danger" },
-                                        [_vm._v(_vm._s(item.substring(0, 12)))]
-                                      )
-                                    : _c(
-                                        "span",
-                                        { staticClass: "badge badge-success" },
-                                        [_vm._v(_vm._s(item.substring(0, 10)))]
-                                      ),
-                                  _vm._v(" "),
-                                  _c("i", {
-                                    staticClass:
-                                      "baseline-playlist_plus icon-image-preview  dropdown-toggle-split plus-icon",
-                                    attrs: { "data-toggle": "dropdown" }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    { staticClass: "dropdown-menu" },
+                        _vm.selectedData.tags
+                          ? _c("div", [
+                              _vm.selectedData.tags === "Dont Forget"
+                                ? _c(
+                                    "span",
+                                    {
+                                      staticClass: "badge badge-warning",
+                                      staticStyle: { background: "#8b3920" },
+                                      attrs: { "data-toggle": "dropdown" }
+                                    },
                                     [
-                                      _c(
-                                        "diV",
-                                        {
-                                          staticClass:
-                                            "collapse show switchToggle"
-                                        },
-                                        [
-                                          _c(
-                                            "li",
-                                            { staticClass: "assignUser" },
-                                            [
-                                              _c("input", {
-                                                staticClass:
-                                                  "input-group searchUser",
-                                                attrs: { type: "text" }
-                                              }),
-                                              _vm._v(" "),
-                                              _c(
-                                                "label",
-                                                { staticClass: "pl-2 pt-3" },
-                                                [
-                                                  _c(
-                                                    "span",
-                                                    {
-                                                      staticClass:
-                                                        "badge badge-success"
-                                                    },
-                                                    [_vm._v("Tags")]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "span",
-                                                    {
-                                                      staticClass:
-                                                        "badge badge-danger"
-                                                    },
-                                                    [_vm._v("Dont Forget")]
-                                                  )
-                                                ]
-                                              )
-                                            ]
-                                          )
-                                        ]
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.selectedData.tags.substring(0, 12)
+                                        )
                                       )
-                                    ],
-                                    1
+                                    ]
                                   )
-                                ])
-                              }),
-                              0
-                            )
-                          : _c(
-                              "span",
-                              {
-                                staticClass: "dropdown-toggle-split col-md-12",
-                                attrs: { "data-toggle": "dropdown" }
-                              },
-                              [
-                                _c("i", {
+                                : _c(
+                                    "span",
+                                    {
+                                      staticClass: "badge badge-success",
+                                      attrs: { "data-toggle": "dropdown" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.selectedData.tags.substring(0, 12)
+                                        )
+                                      )
+                                    ]
+                                  ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
                                   staticClass:
-                                    "outline-local_offer icon-image-preview tag-icon"
-                                }),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "i-text" }, [
-                                  _vm._v("Add tags")
-                                ])
-                              ]
-                            ),
+                                    "dropdown-menu dropdown-menu-right",
+                                  attrs: {
+                                    id: "dropdown" + _vm.selectedData._id
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "diV",
+                                    {
+                                      staticClass: "collapse show switchToggle"
+                                    },
+                                    [
+                                      _c("li", { staticClass: "assignUser" }, [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.tag,
+                                              expression: "tag"
+                                            }
+                                          ],
+                                          staticClass: "input-group searchUser",
+                                          attrs: { type: "text" },
+                                          domProps: { value: _vm.tag },
+                                          on: {
+                                            keypress: function($event) {
+                                              return _vm.addTag(
+                                                $event,
+                                                _vm.selectedData
+                                              )
+                                            },
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.tag = $event.target.value
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "label",
+                                          { staticClass: "pl-2 pt-3" },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "badge badge-success m-1",
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.addExistingTag(
+                                                      $event,
+                                                      _vm.selectedData,
+                                                      "Tags"
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [_vm._v("Tags")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "badge badge-danger m-1 ",
+                                                staticStyle: {
+                                                  background: "#8b3920"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.addExistingTag(
+                                                      $event,
+                                                      _vm.selectedData,
+                                                      "Dont Forget"
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [_vm._v("Dont Forget")]
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
+                            ])
+                          : _c("i", {
+                              staticClass:
+                                "outline-local_offer icon-image-preview dropdown-toggle-split li-opacity",
+                              attrs: { "data-toggle": "dropdown" }
+                            }),
                         _vm._v(" "),
                         _c(
                           "div",
-                          { staticClass: "dropdown-menu" },
+                          {
+                            staticClass: "dropdown-menu dropdown-menu-right",
+                            attrs: { id: "dropdown" + _vm.selectedData._id }
+                          },
                           [
                             _c(
                               "diV",
@@ -77579,20 +77651,66 @@ var render = function() {
                               [
                                 _c("li", { staticClass: "assignUser" }, [
                                   _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.tag,
+                                        expression: "tag"
+                                      }
+                                    ],
                                     staticClass: "input-group searchUser",
-                                    attrs: { type: "text" }
+                                    attrs: { type: "text" },
+                                    domProps: { value: _vm.tag },
+                                    on: {
+                                      keypress: function($event) {
+                                        return _vm.addTag(
+                                          $event,
+                                          _vm.selectedData
+                                        )
+                                      },
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.tag = $event.target.value
+                                      }
+                                    }
                                   }),
                                   _vm._v(" "),
                                   _c("label", { staticClass: "pl-2 pt-3" }, [
                                     _c(
                                       "span",
-                                      { staticClass: "badge badge-success" },
+                                      {
+                                        staticClass: "badge badge-success m-1",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.addExistingTag(
+                                              $event,
+                                              _vm.selectedData,
+                                              "Tags"
+                                            )
+                                          }
+                                        }
+                                      },
                                       [_vm._v("Tags")]
                                     ),
                                     _vm._v(" "),
                                     _c(
                                       "span",
-                                      { staticClass: "badge badge-danger" },
+                                      {
+                                        staticClass: "badge badge-danger m-1 ",
+                                        staticStyle: { background: "#8b3920" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.addExistingTag(
+                                              $event,
+                                              _vm.selectedData,
+                                              "Dont Forget"
+                                            )
+                                          }
+                                        }
+                                      },
                                       [_vm._v("Dont Forget")]
                                     )
                                   ])

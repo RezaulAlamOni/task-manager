@@ -193,6 +193,7 @@ class TaskController extends Controller
             Task::where('parent_id', $target->parent_id)
                 ->where('project_id', $target->project_id)
                 ->where('list_id', $target->list_id)
+                ->where('nav_id', $request->nav_id)
                 ->where('sort_id', '>', $target->sort_id)
                 ->increment('sort_id');
 
@@ -201,6 +202,7 @@ class TaskController extends Controller
                 'parent_id' => $target->parent_id,
                 'project_id' => $past->project_id,
                 'list_id' => $past->list_id,
+                'nav_id' => $request->nav_id,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
                 'title' => $past->title,
@@ -215,8 +217,17 @@ class TaskController extends Controller
 
         } else if ($request->type == 'cut') {
             $target = Task::where('id', $request->target_id)->first();
-            $past = Task::where('id', $request->copy_id)->update(['parent_id' => $target->parent_id]);
-            $this->createLog($request->copy_id, 'Cut', 'Cut and past tsk', $request->text);
+
+            Task::where('project_id', $target->project_id)
+                    ->where('sort_id','>', $target->sort_id)
+                    ->where('nav_id', $target->nav_id)
+                    ->where('parent_id', $target->parent_id)
+                    ->increment('sort_id');
+
+
+            $past = Task::where('id', $request->copy_id)->update(['parent_id' => $target->parent_id,'sort_id'=>$target->sort_id + 1]);
+
+            $this->createLog($request->copy_id, 'cut', 'Cut and past tsk', $request->text);
 
             return response()->json(['success' => $request->copy_id]);
         }
@@ -230,12 +241,19 @@ class TaskController extends Controller
         return response()->json(['success' => 1]);
     }
 
+    public function addTag(Request $request)
+    {
+        Task::where('id',$request->id)->update(['tag'=>$request->tags]);
+        return response()->json(['success' => 1]);
+    }
+
     public function moveTask(Request $request)
     {
         if ($request->type == 'up') {
             $pre_task = Task::where(['parent_id' => $request->parent_id])
                 ->where('sort_id', '<', $request->sort_id)
                 ->where('project_id', $request->project_id)
+                ->where('nav_id', $request->nav_id)
                 ->where('list_id', $request->list_id)
                 ->orderBy('sort_id', 'desc')->first();
 
@@ -248,6 +266,7 @@ class TaskController extends Controller
             $pre_task = Task::where(['parent_id' => $request->parent_id])
                 ->where('sort_id', '>', $request->sort_id)
                 ->where('project_id', $request->project_id)
+                ->where('nav_id', $request->nav_id)
                 ->where('list_id', $request->list_id)
                 ->orderBy('sort_id', 'asc')->first();
             if (!empty($pre_task)) {
