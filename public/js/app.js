@@ -4329,7 +4329,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 target_id: data.id,
                 copy_id: this.selectedCopy === null ? this.selectedCut.id : this.selectedCopy.id,
                 type: this.selectedCopy === null ? 'cut' : 'copy',
-                text: this.selectedCopy === null ? this.selectedCut.text : this.selectedCopy.text
+                text: this.selectedCopy === null ? this.selectedCut.text : this.selectedCopy.text,
+                nav_id: _this.nev_id
             };
 
             axios.post('/api/task-list/copy-cut-past', postData).then(function (response) {
@@ -4569,6 +4570,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             children.splice(index, 1);
         },
+        saveData: function saveData(e, data) {
+
+            if (e.which === 13) {
+                $('.inp').addClass('input-hide');
+                $('.inp').removeClass('form-control');
+                this.addNode(data);
+            }
+        },
         dataCopy: function dataCopy(data) {
             var _this = this;
             var targetData = data.parent.children;
@@ -4628,14 +4637,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 e.stopPropagation();
                 e.preventDefault();
                 this.addAttachment(this.selectedData);
-            }
-        },
-        saveData: function saveData(e, data) {
-
-            if (e.which === 13) {
-                $('.inp').addClass('input-hide');
-                $('.inp').removeClass('form-control');
-                this.addNode(data);
             }
         },
         ShowDetails: function ShowDetails() {

@@ -990,6 +990,7 @@
                     copy_id: (this.selectedCopy === null) ? this.selectedCut.id : this.selectedCopy.id,
                     type: (this.selectedCopy === null) ? 'cut' : 'copy',
                     text: (this.selectedCopy === null) ? this.selectedCut.text : this.selectedCopy.text,
+                    nav_id :_this.nev_id
                 }
 
                 axios.post('/api/task-list/copy-cut-past', postData)
@@ -1245,7 +1246,15 @@
                 }
                 children.splice(index, 1);
             },
+            saveData(e, data) {
 
+                if (e.which === 13) {
+                    $('.inp').addClass('input-hide');
+                    $('.inp').removeClass('form-control');
+                    this.addNode(data);
+
+                }
+            },
             dataCopy(data) {
                 var _this = this;
                 var targetData = data.parent.children;
@@ -1310,15 +1319,7 @@
                     this.addAttachment(this.selectedData);
                 }
             },
-            saveData(e, data) {
 
-                if (e.which === 13) {
-                    $('.inp').addClass('input-hide');
-                    $('.inp').removeClass('form-control');
-                    this.addNode(data);
-
-                }
-            },
             ShowDetails() {
 
                 var _this = this;
