@@ -1229,6 +1229,27 @@
                     });
 
             },
+            addTaskToComplete(data) {
+                var _this = this;
+                var postData = {
+                    id : data.id,
+                    complete : 1
+                }
+                axios.post('/api/task-list/update', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        _this.getTaskList()
+                        alert('Task is added to compete list !!');
+                        // $('#dropdown' + data._id).toggle();
+                        // _this.selectedData.tags = tag
+                    })
+                    .catch(error => {
+                        console.log('Api for complete task not Working !!!')
+                    });
+
+
+            },
 
             switchEvent(e) {
                 $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
@@ -1445,9 +1466,7 @@
                 // };
                 // _this.growInit(option);
             },
-            addTaskToComplete(data) {
-                alert('Task complete! !!');
-            },
+
 
             expandAll() {
                 th.breadthFirstSearch(this.tree1data, node => {

@@ -24,7 +24,9 @@ class TaskController extends Controller
     public function getAll(Request $request)
     {
         if ($request->list_id == null) {
-            $list = Multiple_list::where('project_id', $request->id)->where('nav_id', $request->nav_id)->orderBy('id', 'ASC')->first();
+            $list = Multiple_list::where('project_id', $request->id)
+                ->where('nav_id', $request->nav_id)
+                ->orderBy('id', 'ASC')->first();
             $list_id = $list->id;
         } else {
             $list_id = $request->list_id;
@@ -33,6 +35,7 @@ class TaskController extends Controller
             ->where('project_id', $request->id)
             ->where('list_id', $list_id)
             ->where('nav_id', $request->nav_id)
+            ->where('is_complete', 0)
             ->orderBy('sort_id', 'ASC')
             ->get();
         $task = [];
@@ -293,9 +296,11 @@ class TaskController extends Controller
             if(Task::where('id',$request->id)->update(['description'=>$request->details])){
                 return response()->json('success',200);
             }
-
+        }elseif (isset($request->complete)){
+            if(Task::where('id',$request->id)->update(['is_complete'=>1])){
+                return response()->json('success',200);
+            }
         }
-
     }
 
     public function decorateData($obj)
@@ -315,7 +320,7 @@ class TaskController extends Controller
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
-                ->where('nav_id', $task->nav_id)->orderBy('sort_id', 'ASC')->get();
+                ->where('nav_id', $task->nav_id)->where('is_complete', 0)->orderBy('sort_id', 'ASC')->get();
             if (!empty($childrens)) {
                 $data[$key]['children'] = $this->decorateData($childrens);
             } else {

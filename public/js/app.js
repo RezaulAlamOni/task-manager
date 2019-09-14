@@ -4545,6 +4545,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.log('Api for move down task not Working !!!');
             });
         },
+        addTaskToComplete: function addTaskToComplete(data) {
+            var _this = this;
+            var postData = {
+                id: data.id,
+                complete: 1
+            };
+            axios.post('/api/task-list/update', postData).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response);
+                _this.getTaskList();
+                alert('Task is added to compete list !!');
+                // $('#dropdown' + data._id).toggle();
+                // _this.selectedData.tags = tag
+            }).catch(function (error) {
+                console.log('Api for complete task not Working !!!');
+            });
+        },
         switchEvent: function switchEvent(e) {
             $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
         },
@@ -4754,9 +4772,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             //     maxHeight : 100
             // };
             // _this.growInit(option);
-        },
-        addTaskToComplete: function addTaskToComplete(data) {
-            alert('Task complete! !!');
         },
         expandAll: function expandAll() {
             th.breadthFirstSearch(this.tree1data, function (node) {
