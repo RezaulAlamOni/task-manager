@@ -28,6 +28,7 @@ Route::post('/task-list/add-child-task', 'TaskController@addChildTask');//add ch
 Route::post('/task-list/task-make-child', 'TaskController@makeChild');//make child node
 Route::post('/task-list/reverse-child', 'TaskController@reverseChild');//reverse child node
 Route::post('/task-list/add-tag', 'TaskController@addTag');//reverse child node
+Route::post('/task-list/update', 'TaskController@update');//reverse child node
 
 Route::post('/task-list/copy-cut-past', 'TaskController@CopyCutPast');//copy and past task node
 Route::post('/task-list/delete-task', 'TaskController@deleteTask');//delete task

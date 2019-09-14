@@ -425,12 +425,12 @@
                     <div class="listDetails">
                     <div class="textAreaExtend" v-click-outside="HideListDetails">
                         <textarea class="form-control detailsInput" data-grow="auto" placeholder="Add description"
-                                  @focus="ShowListDetails(selectedData)"
+                                  @focus="ShowListDetails(selectedData)" v-model="selectedData.description"
                         >
                         </textarea>
                         <div class="submitdetails" id="submitdetails">
-                            <a class="btn btn-default btn-sm" style="background: #7BB348;">Post</a>
-                            <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6">Cancle</a>
+                            <a href="javascript:void(0)" class="btn btn-default btn-sm" style="background: #7BB348;" @click="updateDescription" >Post</a>
+                            <a href="javascript:void(0)" class="btn btn-default btn-sm" style="border: 1px solid #f1efe6">Cancle</a>
                         </div>
 
                         <div v-if="selectedData.files && selectedData.files.length !== 0">
@@ -1209,6 +1209,25 @@
             },
             changeTag(data) {
                 $('#dropdown' + data._id).toggle();
+            },
+            updateDescription(){
+                var _this = this;
+                var postData = {
+                    id : _this.selectedData.id,
+                    details : _this.selectedData.description
+                }
+                axios.post('/api/task-list/update', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        // _this.getTaskList()
+                        // $('#dropdown' + data._id).toggle();
+                        // _this.selectedData.tags = tag
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
             },
 
             switchEvent(e) {

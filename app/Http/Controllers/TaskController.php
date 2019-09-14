@@ -288,6 +288,16 @@ class TaskController extends Controller
         }
     }
 
+    public function update(Request $request){
+        if(isset($request->details)){
+            if(Task::where('id',$request->id)->update(['description'=>$request->details])){
+                return response()->json('success',200);
+            }
+
+        }
+
+    }
+
     public function decorateData($obj)
     {
         $data = [];
@@ -301,6 +311,7 @@ class TaskController extends Controller
             $data[$key]['clicked'] = 0;
             $data[$key]['date'] = $task->date;
             $data[$key]['tags'] = $task->tag;
+            $data[$key]['description'] = $task->description;
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)

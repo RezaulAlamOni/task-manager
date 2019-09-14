@@ -4528,6 +4528,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         changeTag: function changeTag(data) {
             $('#dropdown' + data._id).toggle();
         },
+        updateDescription: function updateDescription() {
+            var _this = this;
+            var postData = {
+                id: _this.selectedData.id,
+                details: _this.selectedData.description
+            };
+            axios.post('/api/task-list/update', postData).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response);
+                // _this.getTaskList()
+                // $('#dropdown' + data._id).toggle();
+                // _this.selectedData.tags = tag
+            }).catch(function (error) {
+                console.log('Api for move down task not Working !!!');
+            });
+        },
         switchEvent: function switchEvent(e) {
             $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
         },
@@ -77828,19 +77845,66 @@ var render = function() {
                   },
                   [
                     _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.selectedData.description,
+                          expression: "selectedData.description"
+                        }
+                      ],
                       staticClass: "form-control detailsInput",
                       attrs: {
                         "data-grow": "auto",
                         placeholder: "Add description"
                       },
+                      domProps: { value: _vm.selectedData.description },
                       on: {
                         focus: function($event) {
                           return _vm.ShowListDetails(_vm.selectedData)
+                        },
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.selectedData,
+                            "description",
+                            $event.target.value
+                          )
                         }
                       }
                     }),
                     _vm._v(" "),
-                    _vm._m(3),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "submitdetails",
+                        attrs: { id: "submitdetails" }
+                      },
+                      [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-default btn-sm",
+                            staticStyle: { background: "#7BB348" },
+                            attrs: { href: "javascript:void(0)" },
+                            on: { click: _vm.updateDescription }
+                          },
+                          [_vm._v("Post")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-default btn-sm",
+                            staticStyle: { border: "1px solid #f1efe6" },
+                            attrs: { href: "javascript:void(0)" }
+                          },
+                          [_vm._v("Cancle")]
+                        )
+                      ]
+                    ),
                     _vm._v(" "),
                     _vm.selectedData.files &&
                     _vm.selectedData.files.length !== 0
@@ -77992,7 +78056,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("table", { staticClass: "table table-striped" }, [
-                  _vm._m(4),
+                  _vm._m(3),
                   _vm._v(" "),
                   _c(
                     "tbody",
@@ -78034,7 +78098,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(5),
+              _vm._m(4),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("img", {
@@ -78066,7 +78130,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(6),
+              _vm._m(5),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [_vm._v("Add your new list here !")]),
@@ -78179,11 +78243,11 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(7),
+              _vm._m(6),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("div", { staticClass: "form-group row" }, [
-                  _vm._m(8),
+                  _vm._m(7),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-sm-8" }, [
                     _c("input", {
@@ -78211,7 +78275,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group row" }, [
-                  _vm._m(9),
+                  _vm._m(8),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-sm-8" }, [
                     _c("input", {
@@ -78238,7 +78302,7 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(10)
+                _vm._m(9)
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [
@@ -78289,11 +78353,11 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(11),
+              _vm._m(10),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("div", { staticClass: "form-group row" }, [
-                  _vm._m(12),
+                  _vm._m(11),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-sm-8" }, [
                     _c("input", {
@@ -78321,7 +78385,7 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group row" }, [
-                  _vm._m(13),
+                  _vm._m(12),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-sm-8" }, [
                     _c("input", {
@@ -78449,34 +78513,6 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("span", { staticClass: "i-text" }, [_vm._v("Add assignee")])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "submitdetails", attrs: { id: "submitdetails" } },
-      [
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-default btn-sm",
-            staticStyle: { background: "#7BB348" }
-          },
-          [_vm._v("Post")]
-        ),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-default btn-sm",
-            staticStyle: { border: "1px solid #f1efe6" }
-          },
-          [_vm._v("Cancle")]
-        )
-      ]
-    )
   },
   function() {
     var _vm = this
