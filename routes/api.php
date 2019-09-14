@@ -37,3 +37,4 @@ Route::post('/nev-item/add-new','ProjectNavItemsController@store'); //add new ne
 Route::get('/nev-item/{project_id}','ProjectNavItemsController@index'); //all nev item
 Route::post('/nev-item/update','ProjectNavItemsController@edit'); //all nev item
 
+Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog');//reverse child node

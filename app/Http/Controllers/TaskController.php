@@ -81,7 +81,7 @@ class TaskController extends Controller
 
             Task::where('id', $request->id)
                 ->update(['title' => $request->text]);
-            $this->createLog($request->id, 'updated', 'Update task', $request->title);
+            $this->createLog($request->id, 'updated', 'Update task', $request->text);
             Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id,'nav_id' => $request->nav_id])->delete();
 
             Task::where('parent_id', $request->parent_id)
@@ -102,7 +102,7 @@ class TaskController extends Controller
                 'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
-            $this->createLog($task->id, 'created', 'Create empty task', $request->title);
+            $this->createLog($task->id, 'created', 'Create empty task', $request->text);
             return response()->json(['success' => $task]);
 
         }

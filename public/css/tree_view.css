@@ -567,6 +567,15 @@
   display: inline-block !important;
 }
 
+.log-data {
+  -webkit-transition: all 0.4s linear;
+  transition: all 0.4s linear;
+  height: calc(100vh - 275px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: inline-block;
+}
+
 @media only screen and (max-width: 880px) {
   .hide-item-res {
     display: none;

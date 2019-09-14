@@ -4,44 +4,6 @@
         <div class="row page-titles">
             <div class="col-md-12 col-12 align-self-center">
 
-<!--                <ul class="nav" style="border-bottom: 1px solid #cedcc4">-->
-<!--                    <li class="nav-item">-->
-<!--                        <div class="btn-group">-->
-<!--                            <button type="button" class="btn dropdown-toggle activeTask" data-toggle="dropdown"-->
-<!--                                    aria-haspopup="true" aria-expanded="false">-->
-<!--                                <span id="listName">List</span>-->
-
-<!--                            </button>-->
-<!--                            <div class="dropdown-menu">-->
-<!--                                <span v-for="list in multiple_list">-->
-<!--                                    <span @click="setListId(list.id ,list.list_title)" :id="'list'+list.id">-->
-<!--                                     <router-link class="nav-link drop-item"-->
-<!--                                                  :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{list.list_title}}<i-->
-<!--                                         class="i-btn x20 task-complete icon-circle-o"></i></router-link>-->
-<!--                                    </span>-->
-<!--                                </span>-->
-<!--                                <a class="dropdown-item" href="#" @click="addListModel"><i class="fa fa-plus"></i> Add-->
-<!--                                    List</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item">-->
-<!--                        <div class="btn-group">-->
-<!--                            <button type="button" class="btn dropdown-toggle deactiveIteam" data-toggle="dropdown"-->
-<!--                                    aria-haspopup="true" aria-expanded="false">-->
-<!--                                <span>Board</span>-->
-<!--                            </button>-->
-<!--                            <div class="dropdown-menu">-->
-<!--                                <router-link class="nav-link"-->
-<!--                                             :to="{ name: 'project-board', params: { projectId: projectId }}">-->
-<!--                                    Board <i-->
-<!--                                    class="tree-toggle i-btn x30"></i>-->
-<!--                                </router-link>-->
-<!--                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add List</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </li>-->
-<!--                </ul>-->
                 <nav class="navbar-expand-md navbar-spark">
                     <div class="container-fluid">
 
@@ -55,16 +17,18 @@
                                            aria-haspopup="true" aria-expanded="false">
                                 <span class="d-none d-md-block">{{nev.title}}</span>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
+                                        <div class="dropdown-menu dropdown-menu-left"
+                                             aria-labelledby="dropdownMenuButton">
 
                                             <h6 class="dropdown-header" v-if="nev.type === 'list'"> Lists</h6>
                                             <h6 class="dropdown-header" v-if="nev.type === 'board'"> Board</h6>
 
                                             <span v-for="nev_list in nev.lists">
 <!--                                                <a href="#" class="dropdown-item"> {{nev.title}}</a>-->
-                                                <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id)" class="dropdown-item" :id="'list'+nev_list.id">
+                                                <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id)"
+                                                      class="dropdown-item" :id="'list'+nev_list.id">
                                                     <router-link class="nav-link drop-item"
-                                                        :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nev_list.list_title}}<i
+                                                                 :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nev_list.list_title}}<i
                                                         class="i-btn x20 task-complete icon-circle-o"></i>
                                                     </router-link>
                                                  </span>
@@ -72,9 +36,11 @@
 
 
                                             <div class="dropdown-divider"></div>
-                                            <a href="Javascript:void(0)" @click="addListModel(nev.id)" class="dropdown-item">
+                                            <a href="Javascript:void(0)" @click="addListModel(nev.id)"
+                                               class="dropdown-item">
                                                 <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                                Create {{nev.title}}  <span v-if="nev.type === 'list'">List</span> <span v-if="nev.type === 'board'"> Board</span>
+                                                Create {{nev.title}}  <span v-if="nev.type === 'list'">List</span> <span
+                                                v-if="nev.type === 'board'"> Board</span>
                                             </a>
                                         </div>
                                     </li>
@@ -87,7 +53,7 @@
                                 <li class="nav-item dropdown">
                                     <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
-                            <span class="d-none d-md-block" >
+                            <span class="d-none d-md-block">
                                <i class="fa fa-fw fa-plus-circle" style="color:#33CCFF;font-size: 26px;"></i>
                             </span>
                                     </a>
@@ -101,7 +67,8 @@
                                         <div class="dropdown-divider"></div>
                                         <h6 class="dropdown-header"> Edit Task View</h6>
                                         <span v-for="nev in AllNevItems">
-                                             <a href="javascript:void(0)" @click="updateNavbarModel(nev)" class="dropdown-item"> {{nev.title}}</a>
+                                             <a href="javascript:void(0)" @click="updateNavbarModel(nev)"
+                                                class="dropdown-item"> {{nev.title}}</a>
                                         </span>
                                     </div>
                                 </li>
@@ -129,7 +96,7 @@
             <div v-if="nevItem == null" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Create Task View.</h2>
             </div>
-            <div class="task_width" id="task_width">
+            <div class="task_width" id="task_width" @click="HideDetails">
                 <!--                <p class="add-list"><a href="#" @click="AddTaskPopup"><i class="fa fa-plus"></i> Add Task</a></p>-->
 
                 <div id="tree_view_list">
@@ -210,7 +177,8 @@
                                                     <label class="pl-2 pt-3">
                                                         <span class="badge badge-success m-1"
                                                               @click="addExistingTag($event,data,'Tags')">Tags</span>
-                                                        <span class="badge badge-danger m-1 " style="background: #8b3920"
+                                                        <span class="badge badge-danger m-1 "
+                                                              style="background: #8b3920"
                                                               @click="addExistingTag($event,data,'Dont Forget')">Dont Forget</span>
                                                     </label>
                                                 </li>
@@ -317,9 +285,9 @@
             <div class="details" id="details">
                 <div class="detailsContainer tree_view_list" v-if="selectedData != null">
                     <h3 class="">
-                        <input type="text" class="inp input-hide" v-model="selectedData.text">
+                        <input type="text" class="inp input-hide" v-model="selectedData.text " @keypress="saveData($event,selectedData)">
                     </h3>
-                    <div class="row pl-3">
+                    <div class="row pl-3" v-if="task_logs === null">
                         <div>
                             <a class="user">
                                 <span data-toggle="dropdown">
@@ -403,11 +371,12 @@
                                     <div v-if="selectedData.tags">
                                         <span class="badge badge-warning" style="background: #8b3920"
 
-                                                  v-if='selectedData.tags === "Dont Forget"' data-toggle="dropdown">{{selectedData.tags.substring(0,12)}}</span>
+                                              v-if='selectedData.tags === "Dont Forget"' data-toggle="dropdown">{{selectedData.tags.substring(0,12)}}</span>
                                         <span class="badge badge-success"
                                               v-else data-toggle="dropdown">{{selectedData.tags.substring(0,12)}}</span>
 
-                                        <div class="dropdown-menu dropdown-menu-right" :id="'dropdown'+selectedData._id">
+                                        <div class="dropdown-menu dropdown-menu-right"
+                                             :id="'dropdown'+selectedData._id">
                                             <diV class="collapse show switchToggle" style="">
                                                 <li class="assignUser">
                                                     <input type="text" class="input-group searchUser" v-model="tag"
@@ -415,7 +384,8 @@
                                                     <label class="pl-2 pt-3">
                                                         <span class="badge badge-success m-1"
                                                               @click="addExistingTag($event,selectedData,'Tags')">Tags</span>
-                                                        <span class="badge badge-danger m-1 " style="background: #8b3920"
+                                                        <span class="badge badge-danger m-1 "
+                                                              style="background: #8b3920"
                                                               @click="addExistingTag($event,selectedData,'Dont Forget')">Dont Forget</span>
                                                     </label>
                                                 </li>
@@ -451,8 +421,8 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="listDetails">
+                <span v-if="task_logs === null">
+                    <div class="listDetails">
                     <div class="textAreaExtend" v-click-outside="HideListDetails">
                         <textarea class="form-control detailsInput" data-grow="auto" placeholder="Add description"
                                   @focus="ShowListDetails(selectedData)"
@@ -476,8 +446,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="detailsFooter">
                     <img src="/images/avatar.png" alt="user" class="commentPic">
                     <div class="textAreaExtend" v-click-outside="HideTextArea">
@@ -493,6 +461,32 @@
                         </div>
                     </div>
                 </div>
+                </span>
+                <span v-if="task_logs">
+                    <div class="log-data">
+                        <h3 class="p-2">Log data for <b>{{selectedData.text}}</b></h3>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                              <th scope="col">Title</th>
+                              <th scope="col">Log Type</th>
+                              <th scope="col">Action Type</th>
+                              <th scope="col">Action At</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                              <tr v-for="log in task_logs">
+                                  <td>{{log.title}}</td>
+                                  <td>{{log.log_type}}</td>
+                                  <td>{{log.action_type}}</td>
+                                  <td>{{log.action_at}}</td>
+                            </tr>
+
+                          </tbody>
+                        </table>
+                    </div>
+                </span>
+
             </div>
         </div>
 
@@ -581,12 +575,14 @@
                             <div class="col-sm-8">
                                 <div class="iradio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="list" > &nbsp; List view
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="list">
+                                        &nbsp; List view
                                     </label>
                                 </div>
                                 <div class="iradio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="board" > &nbsp; Board View
+                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="board">
+                                        &nbsp; Board View
                                     </label>
                                 </div>
                             </div>
@@ -681,7 +677,7 @@
                 list: {
                     name: null,
                     description: null,
-                    nev_id : null
+                    nev_id: null
                 },
                 nevItem: {
                     title: null,
@@ -689,8 +685,9 @@
                     sort_id: null,
                     project_id: null,
                 },
-                nev_id : null,
-                AllNevItems: null
+                nev_id: null,
+                AllNevItems: null,
+                task_logs: null
             }
         },
         mounted() {
@@ -742,6 +739,7 @@
                         _this.HideDetails(_this.selectedData);
                         break;
                     case "right" :
+                        _this.task_logs = null;
                         // console.log(_this.selectedData)
                         _this.ShowDetails(_this.selectedData);
                         break;
@@ -890,7 +888,7 @@
                     sort_id: data.sort_id,
                     project_id: _this.projectId,
                     list_id: _this.list_id,
-                    nav_id : _this.nev_id
+                    nav_id: _this.nev_id
                 };
                 console.log(postData)
                 axios.post('/api/task-list/add-task', postData)
@@ -915,7 +913,7 @@
                     id: data.id,
                     project_id: _this.projectId,
                     list_id: _this.list_id,
-                    nav_id : _this.nev_id
+                    nav_id: _this.nev_id
                 };
                 axios.post('/api/task-list/add-child-task', postData)
                     .then(response => response.data)
@@ -944,7 +942,7 @@
                     list_id: _this.list_id,
                     sort_id: data.sort_id,
                     text: data.text,
-                    nav_id : _this.nev_id
+                    nav_id: _this.nev_id
                 };
                 console.log(postData)
                 axios.post('/api/task-list/task-make-child', postData)
@@ -991,7 +989,7 @@
                     copy_id: (this.selectedCopy === null) ? this.selectedCut.id : this.selectedCopy.id,
                     type: (this.selectedCopy === null) ? 'cut' : 'copy',
                     text: (this.selectedCopy === null) ? this.selectedCut.text : this.selectedCopy.text,
-                    nav_id :_this.nev_id
+                    nav_id: _this.nev_id
                 }
 
                 axios.post('/api/task-list/copy-cut-past', postData)
@@ -1077,17 +1075,31 @@
 
             },
             showLog() {
-                alert('adasd')
-            },
-            showModelForNevItem(){
-                $("#addNavItem").modal('show');
-                    $('input[name="optionsRadios"]').iCheck({
-                        checkboxClass: 'icheckbox_square-blue',
-                        radioClass: 'iradio_square-blue',
-                        increaseArea: '20%' // optional
+                var _this = this;
+
+                axios.get('/api/task-list/get-log/' + _this.selectedData.id)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.task_logs = response;
+                        console.log(_this.task_logs)
+                        _this.ShowDetails(_this.selectedData);
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
                     });
+
+
+                // alert('adasd')
             },
-            AddNevItem(){
+            showModelForNevItem() {
+                $("#addNavItem").modal('show');
+                $('input[name="optionsRadios"]').iCheck({
+                    checkboxClass: 'icheckbox_square-blue',
+                    radioClass: 'iradio_square-blue',
+                    increaseArea: '20%' // optional
+                });
+            },
+            AddNevItem() {
                 var _this = this;
                 _this.nevItem.project_id = _this.projectId;
                 _this.nevItem.type = $('input[name="optionsRadios"]:checked').val();
@@ -1107,9 +1119,9 @@
 
                 // console.log(_this.nevItem)
             },
-            AllNevItem(){
+            AllNevItem() {
                 var _this = this;
-                axios.get('/api/nev-item/'+_this.projectId)
+                axios.get('/api/nev-item/' + _this.projectId)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response)
@@ -1124,7 +1136,7 @@
 
                 // console.log(_this.nevItem)
             },
-            updateNavbarModel(data){
+            updateNavbarModel(data) {
                 this.nev_id = data.id;
                 this.nevItem.title = data.title;
                 this.nevItem.type = data.type;
@@ -1140,7 +1152,7 @@
                 });
 
             },
-            updateNevItem(){
+            updateNevItem() {
                 var _this = this;
                 axios.post('/api/nev-item/update', _this.nevItem)
                     .then(response => response.data)
@@ -1158,8 +1170,8 @@
                 var _this = this;
                 if (e.which === 13) {
                     var postData = {
-                        id : data.id,
-                        tags : _this.tag
+                        id: data.id,
+                        tags: _this.tag
                     }
                     axios.post('/api/task-list/add-tag', postData)
                         .then(response => response.data)
@@ -1168,7 +1180,7 @@
                             _this.getTaskList()
                             $('#dropdown' + data._id).toggle();
                             _this.selectedData.tags = _this.tag,
-                            _this.tag = null
+                                _this.tag = null
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
@@ -1179,8 +1191,8 @@
             addExistingTag(e, data, tag) {
                 var _this = this;
                 var postData = {
-                    id : data.id,
-                    tags : tag
+                    id: data.id,
+                    tags: tag
                 }
                 axios.post('/api/task-list/add-tag', postData)
                     .then(response => response.data)
@@ -1213,7 +1225,7 @@
                 let data = {
                     id: this.projectId,
                     list_id: this.list_id,
-                    nav_id : this.nev_id
+                    nav_id: this.nev_id
                 };
                 axios.post('/api/task-list', data)
                     .then(response => response.data)
@@ -1241,7 +1253,7 @@
                 this.nev_id = id;
                 $("#addListModel").modal('show');
             },
-            setListId(id, title,nev_id) {
+            setListId(id, title, nev_id) {
                 this.list_id = id;
                 this.nev_id = nev_id;
                 // $('#listName').text(title);
@@ -1306,7 +1318,7 @@
             },
             AddTagTONode(data) {
                 // data.tags.push('Dont Forget');
-                data.tags = ['Dont Forget'];
+                data.tags = 'Dont Forget';
                 var moveItem;
                 var children = data.parent.children;
                 var text = data.text;
