@@ -3988,8 +3988,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 
@@ -4479,10 +4477,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         addTag: function addTag(e, data) {
+            var _this = this;
             if (e.which === 13) {
-                // data.tags.push(this.tag);
-                data.tags.splice(0, 1, this.tag);
-                this.tag = null;
+                var postData = {
+                    id: data.id,
+                    tags: _this.tag
+                };
+                axios.post('/api/task-list/add-tag', postData).then(function (response) {
+                    return response.data;
+                }).then(function (response) {
+                    console.log(response.success);
+                    _this.getTaskList();
+                    $("#updateNavItem").modal('hide');
+                }).catch(function (error) {
+                    console.log('Api for move down task not Working !!!');
+                });
                 $('#dropdown' + data._id).toggle();
             }
         },
@@ -12056,7 +12065,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -76895,7 +76904,7 @@ var render = function() {
                                                       "span",
                                                       {
                                                         staticClass:
-                                                          "badge badge-success",
+                                                          "badge badge-success m-1",
                                                         on: {
                                                           click: function(
                                                             $event
@@ -76915,7 +76924,10 @@ var render = function() {
                                                       "span",
                                                       {
                                                         staticClass:
-                                                          "badge badge-danger pl-2",
+                                                          "badge badge-danger m-1 ",
+                                                        staticStyle: {
+                                                          background: "#8b3920"
+                                                        },
                                                         on: {
                                                           click: function(
                                                             $event
@@ -77521,27 +77533,21 @@ var render = function() {
                                               }),
                                               _vm._v(" "),
                                               _c(
-                                                "label",
-                                                { staticClass: "pl-2 pt-3" },
-                                                [
-                                                  _c(
-                                                    "span",
-                                                    {
-                                                      staticClass:
-                                                        "badge badge-success"
-                                                    },
-                                                    [_vm._v("Tags")]
-                                                  ),
-                                                  _vm._v(" "),
-                                                  _c(
-                                                    "span",
-                                                    {
-                                                      staticClass:
-                                                        "badge badge-danger"
-                                                    },
-                                                    [_vm._v("Dont Forget")]
-                                                  )
-                                                ]
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "badge badge-danger"
+                                                },
+                                                [_vm._v("Dont Forget")]
+                                              ),
+                                              _vm._v(" "),
+                                              _c(
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "badge badge-success"
+                                                },
+                                                [_vm._v("Tags")]
                                               )
                                             ]
                                           )
@@ -77586,19 +77592,22 @@ var render = function() {
                                     attrs: { type: "text" }
                                   }),
                                   _vm._v(" "),
-                                  _c("label", { staticClass: "pl-2 pt-3" }, [
-                                    _c(
-                                      "span",
-                                      { staticClass: "badge badge-success" },
-                                      [_vm._v("Tags")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "span",
-                                      { staticClass: "badge badge-danger" },
-                                      [_vm._v("Dont Forget")]
-                                    )
-                                  ])
+                                  _c(
+                                    "span",
+                                    { staticClass: "badge badge-success" },
+                                    [_vm._v("Tags")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "span",
+                                    {
+                                      staticStyle: {
+                                        background: "#8d2300",
+                                        padding: "3px"
+                                      }
+                                    },
+                                    [_vm._v("Dont Forget")]
+                                  )
                                 ])
                               ]
                             )

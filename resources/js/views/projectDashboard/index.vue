@@ -208,9 +208,9 @@
                                                     <input type="text" class="input-group searchUser" v-model="tag"
                                                            @keypress="addTag($event,data)">
                                                     <label class="pl-2 pt-3">
-                                                        <span class="badge badge-success"
+                                                        <span class="badge badge-success m-1"
                                                               @click="addExistingTag($event,data,'Tags')">Tags</span>
-                                                        <span class="badge badge-danger pl-2"
+                                                        <span class="badge badge-danger m-1 " style="background: #8b3920"
                                                               @click="addExistingTag($event,data,'Dont Forget')">Dont Forget</span>
                                                     </label>
                                                 </li>
@@ -414,10 +414,8 @@
                                                 <diV class="collapse show switchToggle" style="">
                                                     <li class="assignUser">
                                                         <input type="text" class="input-group searchUser">
-                                                        <label class="pl-2 pt-3">
-                                                            <span class="badge badge-success">Tags</span>
-                                                            <span class="badge badge-danger">Dont Forget</span>
-                                                        </label>
+                                                        <span class="badge badge-danger">Dont Forget</span>
+                                                        <span class="badge badge-success">Tags</span>
                                                     </li>
 
                                                 </diV>
@@ -435,10 +433,10 @@
                                         <diV class="collapse show switchToggle" style="">
                                             <li class="assignUser">
                                                 <input type="text" class="input-group searchUser">
-                                                <label class="pl-2 pt-3">
+
                                                     <span class="badge badge-success">Tags</span>
-                                                    <span class="badge badge-danger">Dont Forget</span>
-                                                </label>
+                                                    <span style="background: #8d2300;padding: 3px">Dont Forget</span>
+
                                             </li>
 
                                         </diV>
@@ -1155,10 +1153,23 @@
             },
 
             addTag(e, data) {
+                var _this = this;
                 if (e.which === 13) {
-                    // data.tags.push(this.tag);
-                    data.tags.splice(0, 1, this.tag);
-                    this.tag = null;
+                    var postData = {
+                        id : data.id,
+                        tags : _this.tag
+                    }
+                    axios.post('/api/task-list/add-tag', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            console.log(response.success)
+                            _this.getTaskList()
+                            $("#updateNavItem").modal('hide');
+
+                        })
+                        .catch(error => {
+                            console.log('Api for move down task not Working !!!')
+                        });
                     $('#dropdown' + data._id).toggle();
                 }
             },

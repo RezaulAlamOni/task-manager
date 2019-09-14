@@ -241,6 +241,12 @@ class TaskController extends Controller
         return response()->json(['success' => 1]);
     }
 
+    public function addTag(Request $request)
+    {
+        Task::where('id',$request->id)->update(['tag'=>$request->tags]);
+        return response()->json(['success' => 1]);
+    }
+
     public function moveTask(Request $request)
     {
         if ($request->type == 'up') {
