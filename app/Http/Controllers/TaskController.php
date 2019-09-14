@@ -236,6 +236,7 @@ class TaskController extends Controller
             $pre_task = Task::where(['parent_id' => $request->parent_id])
                 ->where('sort_id', '<', $request->sort_id)
                 ->where('project_id', $request->project_id)
+                ->where('nav_id', $request->nav_id)
                 ->where('list_id', $request->list_id)
                 ->orderBy('sort_id', 'desc')->first();
 
@@ -248,6 +249,7 @@ class TaskController extends Controller
             $pre_task = Task::where(['parent_id' => $request->parent_id])
                 ->where('sort_id', '>', $request->sort_id)
                 ->where('project_id', $request->project_id)
+                ->where('nav_id', $request->nav_id)
                 ->where('list_id', $request->list_id)
                 ->orderBy('sort_id', 'asc')->first();
             if (!empty($pre_task)) {

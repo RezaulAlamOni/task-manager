@@ -1030,6 +1030,7 @@
                     sort_id: data.sort_id,
                     project_id: _this.projectId,
                     list_id: data.list_id,
+                    nav_id: _this.nev_id,
                     type: 'up'
                 };
                 axios.post('/api/task-list/move-task', postData)
@@ -1056,6 +1057,7 @@
                     sort_id: data.sort_id,
                     project_id: _this.projectId,
                     list_id: data.list_id,
+                    nav_id: _this.nev_id,
                     type: 'down'
                 }
                 axios.post('/api/task-list/move-task', postData)

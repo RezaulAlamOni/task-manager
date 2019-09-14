@@ -4368,6 +4368,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 sort_id: data.sort_id,
                 project_id: _this.projectId,
                 list_id: data.list_id,
+                nav_id: _this.nev_id,
                 type: 'up'
             };
             axios.post('/api/task-list/move-task', postData).then(function (response) {
@@ -4392,6 +4393,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 sort_id: data.sort_id,
                 project_id: _this.projectId,
                 list_id: data.list_id,
+                nav_id: _this.nev_id,
                 type: 'down'
             };
             axios.post('/api/task-list/move-task', postData).then(function (response) {
