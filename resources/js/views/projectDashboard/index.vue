@@ -400,43 +400,46 @@
                         <div class="col-md-12" style="cursor: pointer; background-color: #F8F8F8">
                             <div class="row">
                                 <a>
-                                    <div v-if="selectedData.tags && selectedData.tags.length !== 0">
-                                        <div v-for="item in selectedData.tags">
-                                        <span class="badge badge-danger"
-                                              v-if='item == "Dont Forget"'>{{item.substring(0,12)}}</span>
-                                            <span class="badge badge-success"
-                                                  v-else>{{item.substring(0,10)}}</span>
+                                    <div v-if="selectedData.tags">
+                                        <span class="badge badge-warning" style="background: #8b3920"
 
-                                            <i class="baseline-playlist_plus icon-image-preview  dropdown-toggle-split plus-icon"
-                                               data-toggle="dropdown"></i>
-                                            <div class="dropdown-menu">
+                                                  v-if='selectedData.tags === "Dont Forget"' data-toggle="dropdown">{{selectedData.tags.substring(0,12)}}</span>
+                                        <span class="badge badge-success"
+                                              v-else data-toggle="dropdown">{{selectedData.tags.substring(0,12)}}</span>
 
-                                                <diV class="collapse show switchToggle" style="">
-                                                    <li class="assignUser">
-                                                        <input type="text" class="input-group searchUser">
-                                                        <span class="badge badge-danger">Dont Forget</span>
-                                                        <span class="badge badge-success">Tags</span>
-                                                    </li>
+                                        <div class="dropdown-menu dropdown-menu-right" :id="'dropdown'+selectedData._id">
+                                            <diV class="collapse show switchToggle" style="">
+                                                <li class="assignUser">
+                                                    <input type="text" class="input-group searchUser" v-model="tag"
+                                                           @keypress="addTag($event,selectedData)">
+                                                    <label class="pl-2 pt-3">
+                                                        <span class="badge badge-success m-1"
+                                                              @click="addExistingTag($event,selectedData,'Tags')">Tags</span>
+                                                        <span class="badge badge-danger m-1 " style="background: #8b3920"
+                                                              @click="addExistingTag($event,selectedData,'Dont Forget')">Dont Forget</span>
+                                                    </label>
+                                                </li>
+                                            </diV>
 
-                                                </diV>
-
-                                            </div>
                                         </div>
                                     </div>
 
-                                    <span v-else class="dropdown-toggle-split col-md-12" data-toggle="dropdown">
-                                    <i class="outline-local_offer icon-image-preview tag-icon"></i>
-                                    <span class="i-text">Add tags</span>
-                                </span>
-                                    <div class="dropdown-menu">
+                                    <i v-else
+                                       class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
+                                       data-toggle="dropdown"></i>
+
+                                    <div class="dropdown-menu dropdown-menu-right" :id="'dropdown'+selectedData._id">
 
                                         <diV class="collapse show switchToggle" style="">
                                             <li class="assignUser">
-                                                <input type="text" class="input-group searchUser">
-
-                                                    <span class="badge badge-success">Tags</span>
-                                                    <span style="background: #8d2300;padding: 3px">Dont Forget</span>
-
+                                                <input type="text" class="input-group searchUser" v-model="tag"
+                                                       @keypress="addTag($event,selectedData)">
+                                                <label class="pl-2 pt-3">
+                                                        <span class="badge badge-success m-1"
+                                                              @click="addExistingTag($event,selectedData,'Tags')">Tags</span>
+                                                    <span class="badge badge-danger m-1 " style="background: #8b3920"
+                                                          @click="addExistingTag($event,selectedData,'Dont Forget')">Dont Forget</span>
+                                                </label>
                                             </li>
 
                                         </diV>
@@ -1151,7 +1154,6 @@
                         console.log('Api for move down task not Working !!!')
                     });
             },
-
             addTag(e, data) {
                 var _this = this;
                 if (e.which === 13) {
@@ -1164,22 +1166,39 @@
                         .then(response => {
                             console.log(response.success)
                             _this.getTaskList()
-                            $("#updateNavItem").modal('hide');
-
+                            $('#dropdown' + data._id).toggle();
+                            _this.selectedData.tags = _this.tag,
+                            _this.tag = null
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
                         });
-                    $('#dropdown' + data._id).toggle();
+
                 }
             },
             addExistingTag(e, data, tag) {
-                data.tags = tag;
-                $('#dropdown' + data._id).toggle();
+                var _this = this;
+                var postData = {
+                    id : data.id,
+                    tags : tag
+                }
+                axios.post('/api/task-list/add-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.success)
+                        _this.getTaskList()
+                        $('#dropdown' + data._id).toggle();
+                        _this.selectedData.tags = tag
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
             },
             changeTag(data) {
                 $('#dropdown' + data._id).toggle();
             },
+
             switchEvent(e) {
                 $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
             },

@@ -3988,6 +3988,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -4488,16 +4491,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }).then(function (response) {
                     console.log(response.success);
                     _this.getTaskList();
-                    $("#updateNavItem").modal('hide');
+                    $('#dropdown' + data._id).toggle();
+                    _this.selectedData.tags = _this.tag, _this.tag = null;
                 }).catch(function (error) {
                     console.log('Api for move down task not Working !!!');
                 });
-                $('#dropdown' + data._id).toggle();
             }
         },
         addExistingTag: function addExistingTag(e, data, tag) {
-            data.tags = tag;
-            $('#dropdown' + data._id).toggle();
+            var _this = this;
+            var postData = {
+                id: data.id,
+                tags: tag
+            };
+            axios.post('/api/task-list/add-tag', postData).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response.success);
+                _this.getTaskList();
+                $('#dropdown' + data._id).toggle();
+                _this.selectedData.tags = tag;
+            }).catch(function (error) {
+                console.log('Api for move down task not Working !!!');
+            });
         },
         changeTag: function changeTag(data) {
             $('#dropdown' + data._id).toggle();
@@ -12065,7 +12081,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -77487,100 +77503,147 @@ var render = function() {
                   [
                     _c("div", { staticClass: "row" }, [
                       _c("a", [
-                        _vm.selectedData.tags &&
-                        _vm.selectedData.tags.length !== 0
-                          ? _c(
-                              "div",
-                              _vm._l(_vm.selectedData.tags, function(item) {
-                                return _c("div", [
-                                  item == "Dont Forget"
-                                    ? _c(
-                                        "span",
-                                        { staticClass: "badge badge-danger" },
-                                        [_vm._v(_vm._s(item.substring(0, 12)))]
-                                      )
-                                    : _c(
-                                        "span",
-                                        { staticClass: "badge badge-success" },
-                                        [_vm._v(_vm._s(item.substring(0, 10)))]
-                                      ),
-                                  _vm._v(" "),
-                                  _c("i", {
-                                    staticClass:
-                                      "baseline-playlist_plus icon-image-preview  dropdown-toggle-split plus-icon",
-                                    attrs: { "data-toggle": "dropdown" }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    { staticClass: "dropdown-menu" },
+                        _vm.selectedData.tags
+                          ? _c("div", [
+                              _vm.selectedData.tags === "Dont Forget"
+                                ? _c(
+                                    "span",
+                                    {
+                                      staticClass: "badge badge-warning",
+                                      staticStyle: { background: "#8b3920" },
+                                      attrs: { "data-toggle": "dropdown" }
+                                    },
                                     [
-                                      _c(
-                                        "diV",
-                                        {
-                                          staticClass:
-                                            "collapse show switchToggle"
-                                        },
-                                        [
-                                          _c(
-                                            "li",
-                                            { staticClass: "assignUser" },
-                                            [
-                                              _c("input", {
-                                                staticClass:
-                                                  "input-group searchUser",
-                                                attrs: { type: "text" }
-                                              }),
-                                              _vm._v(" "),
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass:
-                                                    "badge badge-danger"
-                                                },
-                                                [_vm._v("Dont Forget")]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticClass:
-                                                    "badge badge-success"
-                                                },
-                                                [_vm._v("Tags")]
-                                              )
-                                            ]
-                                          )
-                                        ]
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.selectedData.tags.substring(0, 12)
+                                        )
                                       )
-                                    ],
-                                    1
+                                    ]
                                   )
-                                ])
-                              }),
-                              0
-                            )
-                          : _c(
-                              "span",
-                              {
-                                staticClass: "dropdown-toggle-split col-md-12",
-                                attrs: { "data-toggle": "dropdown" }
-                              },
-                              [
-                                _c("i", {
+                                : _c(
+                                    "span",
+                                    {
+                                      staticClass: "badge badge-success",
+                                      attrs: { "data-toggle": "dropdown" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.selectedData.tags.substring(0, 12)
+                                        )
+                                      )
+                                    ]
+                                  ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                {
                                   staticClass:
-                                    "outline-local_offer icon-image-preview tag-icon"
-                                }),
-                                _vm._v(" "),
-                                _c("span", { staticClass: "i-text" }, [
-                                  _vm._v("Add tags")
-                                ])
-                              ]
-                            ),
+                                    "dropdown-menu dropdown-menu-right",
+                                  attrs: {
+                                    id: "dropdown" + _vm.selectedData._id
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "diV",
+                                    {
+                                      staticClass: "collapse show switchToggle"
+                                    },
+                                    [
+                                      _c("li", { staticClass: "assignUser" }, [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.tag,
+                                              expression: "tag"
+                                            }
+                                          ],
+                                          staticClass: "input-group searchUser",
+                                          attrs: { type: "text" },
+                                          domProps: { value: _vm.tag },
+                                          on: {
+                                            keypress: function($event) {
+                                              return _vm.addTag(
+                                                $event,
+                                                _vm.selectedData
+                                              )
+                                            },
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.tag = $event.target.value
+                                            }
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "label",
+                                          { staticClass: "pl-2 pt-3" },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "badge badge-success m-1",
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.addExistingTag(
+                                                      $event,
+                                                      _vm.selectedData,
+                                                      "Tags"
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [_vm._v("Tags")]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "badge badge-danger m-1 ",
+                                                staticStyle: {
+                                                  background: "#8b3920"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.addExistingTag(
+                                                      $event,
+                                                      _vm.selectedData,
+                                                      "Dont Forget"
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [_vm._v("Dont Forget")]
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
+                            ])
+                          : _c("i", {
+                              staticClass:
+                                "outline-local_offer icon-image-preview dropdown-toggle-split li-opacity",
+                              attrs: { "data-toggle": "dropdown" }
+                            }),
                         _vm._v(" "),
                         _c(
                           "div",
-                          { staticClass: "dropdown-menu" },
+                          {
+                            staticClass: "dropdown-menu dropdown-menu-right",
+                            attrs: { id: "dropdown" + _vm.selectedData._id }
+                          },
                           [
                             _c(
                               "diV",
@@ -77588,26 +77651,69 @@ var render = function() {
                               [
                                 _c("li", { staticClass: "assignUser" }, [
                                   _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: _vm.tag,
+                                        expression: "tag"
+                                      }
+                                    ],
                                     staticClass: "input-group searchUser",
-                                    attrs: { type: "text" }
+                                    attrs: { type: "text" },
+                                    domProps: { value: _vm.tag },
+                                    on: {
+                                      keypress: function($event) {
+                                        return _vm.addTag(
+                                          $event,
+                                          _vm.selectedData
+                                        )
+                                      },
+                                      input: function($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.tag = $event.target.value
+                                      }
+                                    }
                                   }),
                                   _vm._v(" "),
-                                  _c(
-                                    "span",
-                                    { staticClass: "badge badge-success" },
-                                    [_vm._v("Tags")]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "span",
-                                    {
-                                      staticStyle: {
-                                        background: "#8d2300",
-                                        padding: "3px"
-                                      }
-                                    },
-                                    [_vm._v("Dont Forget")]
-                                  )
+                                  _c("label", { staticClass: "pl-2 pt-3" }, [
+                                    _c(
+                                      "span",
+                                      {
+                                        staticClass: "badge badge-success m-1",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.addExistingTag(
+                                              $event,
+                                              _vm.selectedData,
+                                              "Tags"
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Tags")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      {
+                                        staticClass: "badge badge-danger m-1 ",
+                                        staticStyle: { background: "#8b3920" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.addExistingTag(
+                                              $event,
+                                              _vm.selectedData,
+                                              "Dont Forget"
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Dont Forget")]
+                                    )
+                                  ])
                                 ])
                               ]
                             )
