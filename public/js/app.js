@@ -94184,7 +94184,7 @@ var generateItems = function generateItems(count, creator) {
 /***/ "./resources/img/color-logo.png":
 /***/ (function(module, exports) {
 
-module.exports = "/images/color-logo.png?8ee75a415391006a863effb1fc023d07";
+module.exports = "/images/color-logo.png?d09827a8ed19a9e7d56f11261fc1d85e";
 
 /***/ }),
 

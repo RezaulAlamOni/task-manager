@@ -1,6 +1,6 @@
 <spark-create-team inline-template>
     <div class="card card-default border-success">
-        <div class="card-header bg-success text-white">{{__('teams.create_team')}}</div>
+        <div class="card-header bg-primary text-white">{{__('teams.create_team')}}</div>
 
         <div class="card-body">
             <form role="form" v-if="canCreateMoreTeams">

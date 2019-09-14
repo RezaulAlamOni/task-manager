@@ -1,13 +1,6 @@
 <!-- Teams -->
 <h6 class="dropdown-header">{{ __('teams.teams')}}</h6>
 
-<!-- Create Team -->
-@if (Spark::createsAdditionalTeams())
-    <a class="dropdown-item" href="/settings#/{{Spark::teamsPrefix()}}">
-        <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i> {{__('teams.create_team')}}
-    </a>
-@endif
-
 <!-- Switch Current Team -->
 @if (Spark::showsTeamSwitcher())
     <a class="dropdown-item" v-for="team in teams" :href="'/settings/{{ Spark::teamsPrefix() }}/'+ team.id +'/switch'">
@@ -20,5 +13,10 @@
         </span>
     </a>
 @endif
-
+<!-- Create Team -->
+@if (Spark::createsAdditionalTeams())
+    <a class="dropdown-item" href="/settings#/{{Spark::teamsPrefix()}}">
+        <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i> {{__('teams.create_team')}}
+    </a>
+@endif
 <div class="dropdown-divider"></div>

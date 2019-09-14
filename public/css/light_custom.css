@@ -1070,17 +1070,16 @@ a {
 }
 
 #menu li.active > a {
-  background: #EEEEEE;
-  border-right: 3px solid #33ccff;
-  color: #33ccff;
+  border-right: 3px solid #174991;
+  color: #174991;
 }
 
 #menu .profile-left li > a:hover {
-  color: #33ccff;
+  color: #174991;
 }
 
 #menu li > a:hover {
-  color: #33ccff;
+  color: #174991;
 }
 
 #menu .menu-dropdown > ul > li > a {
@@ -1951,5 +1950,36 @@ aside.right-side {
 .img-responsive {
   width: 100%;
   height: auto;
+}
+
+.compltit-blue,
+.navbar-spark .nav-link:hover,
+.spark-settings-tabs .nav-link:hover,
+.navbar-spark .nav-link.active,
+.spark-settings-tabs .nav-link.active,
+.navbar-spark .nav-link.active svg,
+.spark-settings-tabs .nav-link.active svg,
+.navbar-spark .nav-link:hover svg,
+.spark-settings-tabs .nav-link:hover svg {
+  color: #174991;
+  fill: #174991;
+}
+
+a {
+  color: #174991;
+}
+
+.border-primary,
+.btn-primary {
+  border-color: #174991 !important;
+}
+
+.bg-primary,
+.btn-primary {
+  background-color: #174991 !important;
+}
+
+.navbar-spark i {
+  opacity: 1;
 }
 
