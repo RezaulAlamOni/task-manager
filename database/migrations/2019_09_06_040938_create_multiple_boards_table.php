@@ -14,9 +14,9 @@ class CreateMultipleBoardsTable extends Migration
     public function up()
     {
         Schema::create('multiple_boards', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
             $table->bigIncrements('id');
             $table->integer('project_id');
+            $table->bigInteger('nav_id');
             $table->string('board_title');
             $table->text('description')->nullable();
             $table->timestamps();

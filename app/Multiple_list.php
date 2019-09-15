@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\App;
 class Multiple_list extends Model
 {
     protected $fillable = [
-        'project_id','list_title','description','created_at','updated_at'
+        'project_id','list_title','nav_id','description','created_at','updated_at'
     ];
 
     public function listItem(){

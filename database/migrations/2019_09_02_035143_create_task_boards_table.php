@@ -17,6 +17,9 @@ class CreateTaskBoardsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('sort_id')->default(0);
             $table->string('title');
+            $table->unsignedInteger('project_id');
+            $table->bigInteger('nav_id');
+            $table->bigInteger('multiple_board_id');
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by');
             $table->timestamps();

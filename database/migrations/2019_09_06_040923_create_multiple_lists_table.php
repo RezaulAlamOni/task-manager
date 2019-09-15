@@ -16,6 +16,7 @@ class CreateMultipleListsTable extends Migration
         Schema::create('multiple_lists', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('project_id');
+            $table->bigInteger('nav_id');
             $table->string('list_title');
             $table->text('description')->nullable();
             $table->timestamps();
