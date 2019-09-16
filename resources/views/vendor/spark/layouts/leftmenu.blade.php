@@ -50,31 +50,31 @@
                     <li>
                         <a href="/">
                             <i class="fa fa-fw fa-tasks"></i>
-                            <span class="mm-text ">List of projects</span>
+                            <span class="mm-text ">List projects Here</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/project-dashboard/1">
+                            <i class="fa fa-fw fa-tasks"></i>
+                            <span class="mm-text ">CompltIt</span>
                         </a>
                     </li>
                     <li>
                         <a href="/">
                             <i class="fa fa-fw fa-tasks"></i>
-                            <span class="mm-text ">Project 3</span>
+                            <span class="mm-text ">List projects Here</span>
                         </a>
                     </li>
                     <li>
                         <a href="/">
                             <i class="fa fa-fw fa-tasks"></i>
-                            <span class="mm-text ">Project4</span>
+                            <span class="mm-text ">List projects Here</span>
                         </a>
                     </li>
                     <li>
                         <a href="/">
                             <i class="fa fa-fw fa-tasks"></i>
-                            <span class="mm-text ">Project 3</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/">
-                            <i class="fa fa-fw fa-tasks"></i>
-                            <span class="mm-text ">Project4</span>
+                            <span class="mm-text ">List projects Here</span>
                         </a>
                     </li>
                 </ul>

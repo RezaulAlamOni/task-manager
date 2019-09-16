@@ -1983,3 +1983,32 @@ a {
   opacity: 1;
 }
 
+.container-header {
+  color: #333;
+  margin: 15px 0;
+}
+
+.compltit-p {
+  color: #7d7d7d;
+  font-size: 18px;
+  margin: 40px 45px;
+}
+
+.card .card-header {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.badge-pill {
+  color: #fff;
+}
+
+.badge-pill {
+  padding: 3px 8px;
+  border-radius: 5px;
+}
+
+.btn-default {
+  color: #333333;
+}
+
