@@ -122,7 +122,7 @@
                         <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">
-                               <i class="fa fa-fw fa-plus-circle  compltit-blue" style="color:#33CCFF;font-size: 26px;"></i>
+                               <i class="fa fa-fw fa-plus-circle compltit-blue" style="font-size: 26px;"></i>
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
