@@ -53,12 +53,12 @@
         <!-- Main Content -->
         <div class="wrapper row-offcanvas row-offcanvas-left">
             @if (Auth::check())
-                <aside class="left-side sidebar-offcanvas">
+                <aside class="left-side sidebar-offcanvas left-hide">
                     <!-- sidebar: style can be found in sidebar-->
                 @include('spark::layouts.leftmenu')
                 <!-- /.sidebar -->
                 </aside>
-                <aside class="right-side">
+                <aside class="right-side right-align">
                     <!-- Content Header (Page header) -->
 {{--                    <section class="content-header">--}}
                     <section>

@@ -21,7 +21,7 @@
                             <a href="" class="dropdown-item">Marketing Ideas</a>
                             <div class="dropdown-divider"></div>
                             <a href="" class="dropdown-item">
-                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
+                                <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
                                 Create Idea List
                             </a>
                         </div>
@@ -44,7 +44,7 @@
                             <a href="" class="dropdown-item">Affiliate Scope</a>
                             <div class="dropdown-divider"></div>
                             <a href="" class="dropdown-item">
-                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
+                                <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
                                 Create Scope List
                             </a>
                         </div>
@@ -66,7 +66,7 @@
                             <a href="" class="dropdown-item">Marketing Board</a>
                             <div class="dropdown-divider"></div>
                             <a href="" class="dropdown-item">
-                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
+                                <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
                                 Create Dev Board
                             </a>
                         </div>
@@ -88,7 +88,7 @@
                             <a href="" class="dropdown-item">Facebook Test</a>
                             <div class="dropdown-divider"></div>
                             <a href="" class="dropdown-item">
-                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
+                                <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
                                 Create Testing Board
                             </a>
                         </div>
@@ -109,7 +109,7 @@
                             <a href="" class="dropdown-item">Marketing</a>
                             <div class="dropdown-divider"></div>
                             <a href="" class="dropdown-item">
-                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
+                                <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
                                 Create Complete Board
                             </a>
                         </div>
@@ -122,14 +122,14 @@
                         <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">
-                               <i class="fa fa-fw fa-plus-circle" style="color:#33CCFF;font-size: 26px;"></i>
+                               <i class="fa fa-fw fa-plus-circle compltit-blue" style="color:#174991;font-size: 26px;"></i>
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 
                             <h6 class="dropdown-header"> Manage Nav</h6>
                             <a href="" class="dropdown-item">
-                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
+                                <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
                                 Create Task View
                             </a>
                             <div class="dropdown-divider"></div>
@@ -154,8 +154,8 @@
         <!-- Application Dashboard -->
         <div class="row">
             <div class="col-md-12">
-                <div class="card card-default border-success">
-                    <div class="card-header bg-success text-white">{{__('Dashboard')}}</div>
+                <div class="card card-default border-primary">
+                    <div class="card-header bg-primary text-white">{{__('Dashboard')}}</div>
 
                     <div class="card-body">
                         {{__('Your application\'s dashboard.')}}
