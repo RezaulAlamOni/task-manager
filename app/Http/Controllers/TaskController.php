@@ -39,29 +39,29 @@ class TaskController extends Controller
             ->orderBy('sort_id', 'ASC')
             ->get();
         $task = [];
-        if ($tasks->count() <= 0) {
-            $data = [
-                'sort_id' => 0,
-                'parent_id' => 0,
-                'project_id' => $request->id,
-                'list_id' => $list_id,
-                'nav_id' => $request->nav_id,
-                'created_by' => Auth::id(),
-                'updated_by' => Auth::id(),
-                'title' => '',
-                'tag' => '',
-                'date' => Carbon::today(),
-                'created_at' => Carbon::now(),
-            ];
-            $task = Task::create($data);
-            $this->createLog($task->id, 'created', 'Create empty task', '');
-            $tasks = Task::where('parent_id', 0)
-                ->where('project_id', $request->id)
-                ->where('list_id', $list_id)
-                ->where('nav_id', $request->nav_id)
-                ->orderBy('sort_id', 'ASC')->get();
-
-        }
+//        if ($tasks->count() <= 0) {
+//            $data = [
+//                'sort_id' => 0,
+//                'parent_id' => 0,
+//                'project_id' => $request->id,
+//                'list_id' => $list_id,
+//                'nav_id' => $request->nav_id,
+//                'created_by' => Auth::id(),
+//                'updated_by' => Auth::id(),
+//                'title' => '',
+//                'tag' => '',
+//                'date' => Carbon::today(),
+//                'created_at' => Carbon::now(),
+//            ];
+//            $task = Task::create($data);
+//            $this->createLog($task->id, 'created', 'Create empty task', '');
+//            $tasks = Task::where('parent_id', 0)
+//                ->where('project_id', $request->id)
+//                ->where('list_id', $list_id)
+//                ->where('nav_id', $request->nav_id)
+//                ->orderBy('sort_id', 'ASC')->get();
+//
+//        }
 
         $data = $this->decorateData($tasks);
 
@@ -70,7 +70,7 @@ class TaskController extends Controller
         return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list, 'empty_task' => $task]);
     }
 
-    public function addTask(Request $request)
+    public function addTaskOld(Request $request)
     {
         $list_id = $this->checkListId($request->list_id, $request->nav_id);
 
@@ -100,6 +100,46 @@ class TaskController extends Controller
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
                 'title' => '',
+                'tag' => '',
+                'date' => Carbon::today(),
+                'created_at' => Carbon::now(),
+            ];
+            $task = Task::create($data);
+            $this->createLog($task->id, 'created', 'Create empty task', $request->text);
+            return response()->json(['success' => $task]);
+
+        }
+    }
+    public function addTask(Request $request)
+    {
+//        return response()->json([$request->all()]);
+        $list_id = $this->checkListId($request->list_id, $request->nav_id);
+
+        $etask = Task::where(['id' => $request->id])->get();
+
+        if ($etask->count() > 0) {
+            Task::where('id', $request->id)
+                ->update(['title' => $request->text]);
+            $this->createLog($request->id, 'updated', 'Update task', $request->text);
+            Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id,'nav_id' => $request->nav_id])->delete();
+            $task = Task::where('id', $request->id)->first();
+            return response()->json(['success'=>$task]);
+
+        } else if ($etask->count() <= 0) {
+
+            Task::where('parent_id', $request->parent_id)
+                ->where('sort_id', '>', $request->sort_id)
+                ->where('list_id', $list_id)
+                ->increment('sort_id');
+            $data = [
+                'sort_id' => $request->sort_id + 1,
+                'parent_id' => $request->parent_id,
+                'project_id' => $request->project_id,
+                'nav_id' => $request->nav_id,
+                'list_id' => $list_id,
+                'created_by' => Auth::id(),
+                'updated_by' => Auth::id(),
+                'title' => $request->text,
                 'tag' => '',
                 'date' => Carbon::today(),
                 'created_at' => Carbon::now(),

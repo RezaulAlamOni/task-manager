@@ -930,23 +930,62 @@
                     list_id: _this.list_id,
                     nav_id: _this.nev_id
                 };
-                console.log(postData)
-                axios.post('/api/task-list/add-task', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.newEmptyTaskID = response.success.id;
-                        _this.getTaskList()
-                        setTimeout(function () {
-                            $("#" + _this.newEmptyTaskID).click();
-                            $("#" + _this.newEmptyTaskID).focus();
-                            $("#" + _this.newEmptyTaskID).addClass('form-control');
-                            $("#" + _this.newEmptyTaskID).removeClass('input-hide');
-                        }, 500)
-                    })
-                    .catch(error => {
-                        console.log('Api is not Working !!!')
-                    });
+                if (text !== ''){
+                    axios.post('/api/task-list/add-task', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.newEmptyTaskID = response.success.id;
+                            // _this.getTaskList()
+                            console.log(response)
+
+                            setTimeout(function () {
+                                _this.addEmptyNode(data)
+                            }, 500)
+                        })
+                        .catch(error => {
+                            console.log('Api is not Working !!!')
+                        });
+                }else {
+                    console.log('Empty text')
+                }
+
             },
+
+            addEmptyNode(data) {
+                let _this = this;
+                var children = data.parent.children;
+                var date = Math.round(new Date().getTime()/1000);
+
+                var newEmty = {
+                    children: [],
+                    clicked: 0,
+                    date: "",
+                    description: null,
+                    id: date,
+                    list_id: _this.list_id,
+                    nav_id: data.nav_id,
+                    parent_id: data.parent_id,
+                    sort_id: data.sort_id,
+                    tags: "",
+                    text: ""
+                };
+                console.log(newEmty)
+                    for (var i = 0; i < children.length; i++) {
+                        if (children[i].text == data.text) {
+                            children.splice(i + 1, 0, newEmty);
+                            setTimeout(function () {
+                                $("#"+date).click();
+                                $("#"+date).focus();
+                                $("#"+date).addClass('form-control');
+                                $("#"+date).removeClass('input-hide');
+                            }, 100)
+
+                        }
+                    }
+
+
+            },
+
             addChild(data) {
                 let _this = this;
                 let postData = {
@@ -1304,6 +1343,7 @@
                 return helper.hasPermission(permission);
             },
             getTaskList() {
+                var _this = this;
                 let data = {
                     id: this.projectId,
                     list_id: this.list_id,
@@ -1312,16 +1352,34 @@
                 axios.post('/api/task-list', data)
                     .then(response => response.data)
                     .then(response => {
+                        console.log(response.task_list)
                         this.tree4data = response.task_list;
                         this.multiple_list = response.multiple_list;
-                        if (this.tree4data.length === 1 && this.tree4data[0].text === '') {
-                            let id = this.tree4data[0].id
+                        if (response.task_list.length === 0) {
+
+                            var date = Math.round(new Date().getTime()/1000);
+
+                            var newEmty = {
+                                children: [],
+                                clicked: 0,
+                                date: "",
+                                description: null,
+                                id: date,
+                                list_id: _this.list_id,
+                                nav_id: _this.nav_id,
+                                parent_id: 0,
+                                sort_id: 0,
+                                tags: "",
+                                text: ""
+                            };
+                            console.log(newEmty)
+                            _this.tree4data = [newEmty]
                             setTimeout(function () {
-                                $("#" + id).click();
-                                $("#" + id).focus();
-                                $("#" + id).addClass('form-control');
-                                $("#" + id).removeClass('input-hide');
-                            }, 300)
+                                $("#"+date).click();
+                                $("#"+date).focus();
+                                $("#"+date).addClass('form-control');
+                                $("#"+date).removeClass('input-hide');
+                            }, 100)
                         }
                         setTimeout(function () {
                             $('.delete-icon').hide();
@@ -1375,6 +1433,8 @@
                 if (e.which === 13) {
                     $('.inp').addClass('input-hide');
                     $('.inp').removeClass('form-control');
+
+
                     this.addNode(data);
 
                 }
