@@ -24,7 +24,9 @@ class TaskController extends Controller
     public function getAll(Request $request)
     {
         if ($request->list_id == null) {
-            $list = Multiple_list::where('project_id', $request->id)->where('nav_id', $request->nav_id)->orderBy('id', 'ASC')->first();
+            $list = Multiple_list::where('project_id', $request->id)
+                ->where('nav_id', $request->nav_id)
+                ->orderBy('id', 'ASC')->first();
             $list_id = $list->id;
         } else {
             $list_id = $request->list_id;
@@ -33,32 +35,33 @@ class TaskController extends Controller
             ->where('project_id', $request->id)
             ->where('list_id', $list_id)
             ->where('nav_id', $request->nav_id)
+            ->where('is_complete', 0)
             ->orderBy('sort_id', 'ASC')
             ->get();
         $task = [];
-        if ($tasks->count() <= 0) {
-            $data = [
-                'sort_id' => 0,
-                'parent_id' => 0,
-                'project_id' => $request->id,
-                'list_id' => $list_id,
-                'nav_id' => $request->nav_id,
-                'created_by' => Auth::id(),
-                'updated_by' => Auth::id(),
-                'title' => '',
-                'tag' => '',
-                'date' => Carbon::today(),
-                'created_at' => Carbon::now(),
-            ];
-            $task = Task::create($data);
-            $this->createLog($task->id, 'created', 'Create empty task', '');
-            $tasks = Task::where('parent_id', 0)
-                ->where('project_id', $request->id)
-                ->where('list_id', $list_id)
-                ->where('nav_id', $request->nav_id)
-                ->orderBy('sort_id', 'ASC')->get();
-
-        }
+//        if ($tasks->count() <= 0) {
+//            $data = [
+//                'sort_id' => 0,
+//                'parent_id' => 0,
+//                'project_id' => $request->id,
+//                'list_id' => $list_id,
+//                'nav_id' => $request->nav_id,
+//                'created_by' => Auth::id(),
+//                'updated_by' => Auth::id(),
+//                'title' => '',
+//                'tag' => '',
+//                'date' => Carbon::today(),
+//                'created_at' => Carbon::now(),
+//            ];
+//            $task = Task::create($data);
+//            $this->createLog($task->id, 'created', 'Create empty task', '');
+//            $tasks = Task::where('parent_id', 0)
+//                ->where('project_id', $request->id)
+//                ->where('list_id', $list_id)
+//                ->where('nav_id', $request->nav_id)
+//                ->orderBy('sort_id', 'ASC')->get();
+//
+//        }
 
         $data = $this->decorateData($tasks);
 
@@ -67,7 +70,7 @@ class TaskController extends Controller
         return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list, 'empty_task' => $task]);
     }
 
-    public function addTask(Request $request)
+    public function addTaskOld(Request $request)
     {
         $list_id = $this->checkListId($request->list_id, $request->nav_id);
 
@@ -81,7 +84,7 @@ class TaskController extends Controller
 
             Task::where('id', $request->id)
                 ->update(['title' => $request->text]);
-            $this->createLog($request->id, 'updated', 'Update task', $request->title);
+            $this->createLog($request->id, 'updated', 'Update task', $request->text);
             Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id,'nav_id' => $request->nav_id])->delete();
 
             Task::where('parent_id', $request->parent_id)
@@ -102,7 +105,47 @@ class TaskController extends Controller
                 'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
-            $this->createLog($task->id, 'created', 'Create empty task', $request->title);
+            $this->createLog($task->id, 'created', 'Create empty task', $request->text);
+            return response()->json(['success' => $task]);
+
+        }
+    }
+    public function addTask(Request $request)
+    {
+//        return response()->json([$request->all()]);
+        $list_id = $this->checkListId($request->list_id, $request->nav_id);
+
+        $etask = Task::where(['id' => $request->id])->get();
+
+        if ($etask->count() > 0) {
+            Task::where('id', $request->id)
+                ->update(['title' => $request->text]);
+            $this->createLog($request->id, 'updated', 'Update task', $request->text);
+            Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id,'nav_id' => $request->nav_id])->delete();
+            $task = Task::where('id', $request->id)->first();
+            return response()->json(['success'=>$task]);
+
+        } else if ($etask->count() <= 0) {
+
+            Task::where('parent_id', $request->parent_id)
+                ->where('sort_id', '>', $request->sort_id)
+                ->where('list_id', $list_id)
+                ->increment('sort_id');
+            $data = [
+                'sort_id' => $request->sort_id + 1,
+                'parent_id' => $request->parent_id,
+                'project_id' => $request->project_id,
+                'nav_id' => $request->nav_id,
+                'list_id' => $list_id,
+                'created_by' => Auth::id(),
+                'updated_by' => Auth::id(),
+                'title' => $request->text,
+                'tag' => '',
+                'date' => Carbon::today(),
+                'created_at' => Carbon::now(),
+            ];
+            $task = Task::create($data);
+            $this->createLog($task->id, 'created', 'Create empty task', $request->text);
             return response()->json(['success' => $task]);
 
         }
@@ -288,6 +331,18 @@ class TaskController extends Controller
         }
     }
 
+    public function update(Request $request){
+        if(isset($request->details)){
+            if(Task::where('id',$request->id)->update(['description'=>$request->details])){
+                return response()->json('success',200);
+            }
+        }elseif (isset($request->complete)){
+            if(Task::where('id',$request->id)->update(['is_complete'=>1])){
+                return response()->json('success',200);
+            }
+        }
+    }
+
     public function decorateData($obj)
     {
         $data = [];
@@ -301,10 +356,11 @@ class TaskController extends Controller
             $data[$key]['clicked'] = 0;
             $data[$key]['date'] = $task->date;
             $data[$key]['tags'] = $task->tag;
+            $data[$key]['description'] = $task->description;
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
-                ->where('nav_id', $task->nav_id)->orderBy('sort_id', 'ASC')->get();
+                ->where('nav_id', $task->nav_id)->where('is_complete', 0)->orderBy('sort_id', 'ASC')->get();
             if (!empty($childrens)) {
                 $data[$key]['children'] = $this->decorateData($childrens);
             } else {
