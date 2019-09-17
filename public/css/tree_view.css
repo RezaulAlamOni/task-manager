@@ -370,7 +370,7 @@
   width: 100%;
   -webkit-transition: all 0.4s linear;
   transition: all 0.4s linear;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 130px);
   overflow-x: hidden;
   overflow-y: auto;
   display: inline-block;
@@ -380,7 +380,7 @@
   width: calc(70% - 5px);
   -webkit-transition: all 0.4s linear;
   transition: all 0.4s linear;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 130px);
   overflow-x: hidden;
   overflow-y: auto;
   display: inline-block;
@@ -401,7 +401,7 @@
   width: 30%;
   float: right;
   background: white;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 130px);
   -webkit-box-shadow: -10px 0px 15px #dcdcdc;
           box-shadow: -10px 0px 15px #dcdcdc;
   position: relative;
@@ -482,7 +482,7 @@
   width: 100%;
   display: inline-block;
   overflow: hidden;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 130px);
 }
 
 .TaskListAndDetails .add-list {
@@ -570,7 +570,7 @@
 .log-data {
   -webkit-transition: all 0.4s linear;
   transition: all 0.4s linear;
-  height: calc(100vh - 275px);
+  height: calc(100vh - 220px);
   overflow-x: hidden;
   overflow-y: auto;
   display: inline-block;
