@@ -781,7 +781,7 @@
                         _this.ShowDetails(_this.selectedData);
                         setTimeout(function () {
                             $('#_details').click()
-                        }, 1000)
+                        }, 500)
                         break;
                     case "ctrl+c":
                         _this.selectedCopy = _this.selectedData;
@@ -1124,7 +1124,7 @@
                         _this.ShowDetails(_this.selectedData);
                         setTimeout(function () {
                             $('#_log').click()
-                        }, 1000)
+                        }, 300)
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
