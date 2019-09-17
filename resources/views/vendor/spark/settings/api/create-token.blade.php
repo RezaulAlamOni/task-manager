@@ -1,7 +1,7 @@
 <spark-create-token :available-abilities="availableAbilities" inline-template>
     <div>
         <div class="card card-default border-info">
-            <div class="card-header bg-info text-white">
+            <div class="card-header bg-primary text-white">
                 {{__('Create API Token')}}
             </div>
 

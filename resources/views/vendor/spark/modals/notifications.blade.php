@@ -142,84 +142,38 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="r_tab3">
-                                <div id="slim_t3">
-
-                                    <ul class="list-unstyled margin-none">
-                                        <li class="rightsidebar-contact-wrapper">
-                                            <a class="rightsidebar-contact" href="#">
-                                                <img src="img/authors/avatar6.jpg"
-                                                     class="rounded-circle float-right" alt="avatar-image">
-                                                <i class="fa fa-circle text-xs text-primary"></i>
-                                                Annette
-                                            </a>
-                                        </li>
-                                        <li class="rightsidebar-contact-wrapper">
-                                            <a class="rightsidebar-contact" href="#">
-                                                <img src="img/authors/avatar.jpg"
-                                                     class="rounded-circle float-right" alt="avatar-image">
-                                                <i class="fa fa-circle text-xs text-primary"></i>
-                                                Jordan
-                                            </a>
-                                        </li>
-                                    </ul>
-
-                                    <h5 class="rightsidebar-right-heading text-uppercase text-xs">
-                                        <i class="fa fa-fw ti-export"></i>
-                                        Recent Updates
-                                    </h5>
+                                <div id="slim_t3" style="padding-top: 70px;">
+                                    <h5 class="rightsidebar-right-heading text-uppercase text-xs">Settings</h5>
                                     <div>
                                         <ul class="list-unstyled">
                                             <li class="rightsidebar-notification">
-                                                <a href="#">
-                                                    <i class="fa ti-comments-smiley fa-fw text-primary"></i>
-                                                    New Comment
+                                                <a href="/settings#/profile" aria-controls="profile">
+                                                    <i class="fa fa-fw fa-btn fa-edit"></i> Profile
                                                 </a>
                                             </li>
+                                            @if (Spark::usesTeams())
                                             <li class="rightsidebar-notification">
-                                                <a href="#">
-                                                    <i class="fa ti-twitter-alt fa-fw text-success"></i>
-                                                    3 New Followers
+                                                <a href="/settings#/{{str_plural(Spark::teamsPrefix())}}" aria-controls="teams">
+                                                    <i class="fa fa-fw fa-btn fa-users"></i> {{ ucfirst(str_plural(Spark::teamsPrefix())) }}
                                                 </a>
                                             </li>
+                                            @endif
+                                        <!-- Security Link -->
                                             <li class="rightsidebar-notification">
-                                                <a href="#">
-                                                    <i class="fa ti-email fa-fw text-info"></i>
-                                                    Message Sent
+                                                <a href="/settings#/security" aria-controls="security">
+                                                    <i class="fa fa-fw fa-btn fa-lock"></i> Security
                                                 </a>
                                             </li>
-                                            <li class="rightsidebar-notification">
-                                                <a href="#">
-                                                    <i class="fa ti-write fa-fw text-warning"></i>
-                                                    New Task
-                                                </a>
-                                            </li>
-                                            <li class="rightsidebar-notification">
-                                                <a href="#">
-                                                    <i class="fa ti-export fa-fw text-danger"></i>
-                                                    Server Rebooted
-                                                </a>
-                                            </li>
-                                            <li class="rightsidebar-notification">
-                                                <a href="#">
-                                                    <i class="fa ti-info-alt fa-fw text-primary"></i>
-                                                    Server Not Responding
-                                                </a>
-                                            </li>
-                                            <li class="rightsidebar-notification">
-                                                <a href="#">
-                                                    <i class="fa ti-shopping-cart fa-fw text-success"></i>
-                                                    New Order Placed
-                                                </a>
-                                            </li>
-                                            <li class="rightsidebar-notification">
-                                                <a href="#">
-                                                    <i class="fa ti-money fa-fw text-info"></i>
-                                                    Payment Received
-                                                </a>
-                                            </li>
+                                            <!-- API Link -->
+                                            @if (Spark::usesApi())
+                                                <li class="rightsidebar-notification">
+                                                    <a href="/settings#/api" aria-controls="api">
+                                                        <i class="fa fa-fw fa-btn fa-cubes"></i> API
+                                                    </a>
+                                                </li>
+                                            @endif
                                         </ul>
                                     </div>
-
                                 </div>
                             </div>
                         </div>

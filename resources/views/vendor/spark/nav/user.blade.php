@@ -7,15 +7,15 @@
         :unread-notifications-count="unreadNotificationsCount"
         inline-template>
 
-    <nav class="navbar navbar-light navbar-expand-md navbar-spark">
-        <div class="container-fluid" v-if="user">
+    <nav class="navbar navbar-light navbar-expand-md navbar-spark" style="padding: 0;">
+        <div class="container-fluid" v-if="user" style="padding-left: 0;">
+            <div style="background: #ddd;height: 100%;padding: 12px 20px;margin-right: 20px;">
+                <span class="fa fa-bars fa-2x" style="cursor: pointer;"></span>
+            </div>
             <!-- Branding Image -->
             @include('spark::nav.brand')
 
-            {{--<button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"--}}
-                    {{--aria-expanded="false" aria-label="Toggle navigation">--}}
-                <span class="fa fa-bars fa-2x" style="cursor: pointer;"></span>
-            </button>
+
 
 
             <div id="navbarSupportedContent" class="collapse navbar-collapse show">
@@ -25,7 +25,7 @@
 
                 <a @click="showNotifications" class="ml-3 mb-3 mb-md-0 mr-md-0 ml-md-auto float-sm-left mt-2">
                     <i class="fa fa-fw ti-bell" style="font-size:17px;"></i>
-                    <span class="badge badge-pill" style="background-color:#33CCFF;">@{{notificationsCount}}</span>
+                    <span class="badge badge-pill" style="background-color:#174991;">@{{notificationsCount}}</span>
                 </a>
 
                 <ul class="navbar-nav ml-4 float-sm-left">
@@ -37,18 +37,30 @@
                                     @foreach (Auth::user()->teams as $team)
                                             @if (Auth::user()->current_team_id === $team->id)
                                                {{ $team->name }}
-                                            @else
-                                                <img src="{{ $team->photo_url }}" class="spark-profile-photo-xs" alt="{{__('Team Photo')}}" /> {{ $team->name }}
                                             @endif
                                     @endforeach
                                 @endif
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <a href="/projects" class="dropdown-item">
+                                <i class="fa fa-fw fa-plus-circle compltit-blue"></i> Create Project
+                            </a>
+
+                            <a href="/blank" class="dropdown-item">
+                                <i class="fa fa-fw fa-magic  compltit-blue"></i> Rules
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+
                             @if (Spark::usesTeams() && (Spark::createsAdditionalTeams() || Spark::showsTeamSwitcher()))
                                 <!-- Team Settings -->
                                 @include('spark::nav.teams')
                             @endif
+
+                            <a href="/logout" class="dropdown-item">
+                                Logout <i class="fa fa-fw ti-shift-right" title="Log out"></i>
+                            </a>
                         </div>
                     </li>
                 </ul>

@@ -1,83 +1,6 @@
 <section class="sidebar">
     <div id="menu" role="navigation">
-        <div class="nav_profile">
-            <div class="media profile-left">
-                <a class="pull-left profile-thumb" href="javascript:void(0)">
-                    <img :src="user.photo_url" class="rounded-circle img-fluid" alt="User Image">
-                </a>
-                <div class="content-profile ml-3">
-                    <h4 class="media-heading">@{{ user.name }}</h4>
-                    <ul class="icon-list pl-0">
-                        <li>
-                            <a href="/settings">
-                                <i class="fa fa-fw ti-settings" title="settings"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/settings#/security">
-                                <i class="fa fa-fw ti-lock" title="Update password"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/settings#/api">
-                                <i class="fa fa-fw ti-list" title="API settings"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/logout">
-                                <i class="fa fa-fw ti-shift-right" title="Log out"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
         <ul class="navigation" id="navigation">
-            <li {!! (Request::is( 'home') ? 'class="active"' : '') !!}>
-                <a href="/home">
-                    <i class="menu-icon ti-desktop"></i>
-                    <span class="mm-text ">Home</span>
-                </a>
-            </li>
-            <li class="menu-dropdown">
-                <a data-toggle="collapse" href="#collapseSetting">
-                    <i class="menu-icon ti-settings"></i>
-                    <span>
-                                    Settings
-                                </span>
-                    <span class="fa arrow"></span>
-                </a>
-                <ul id="collapseSetting" class="collapse" data-parent="#navigation">
-                    <!-- Profile Link -->
-                    <li>
-                        <a href="/settings#/profile" aria-controls="profile">
-                            <i class="fa fa-fw fa-btn fa-edit"></i> Profile
-                        </a>
-                    </li>
-                    <!-- Teams Link -->
-                    @if (Spark::usesTeams())
-                    <li>
-                        <a href="/settings#/{{str_plural(Spark::teamsPrefix())}}" aria-controls="teams">
-                            <i class="fa fa-fw fa-btn fa-users"></i> {{ ucfirst(str_plural(Spark::teamsPrefix())) }}
-                        </a>
-                    </li>
-                    @endif
-                    <!-- Security Link -->
-                    <li>
-                        <a href="/settings#/security" aria-controls="security">
-                            <i class="fa fa-fw fa-btn fa-lock"></i> Security
-                        </a>
-                    </li>
-                    <!-- API Link -->
-                    @if (Spark::usesApi())
-                    <li>
-                        <a href="/settings#/api" aria-controls="api">
-                            <i class="fa fa-fw fa-btn fa-cubes"></i> API
-                        </a>
-                    </li>
-                    @endif
-                </ul>
-            </li>
             @if (Spark::canBillCustomers())
             <li class="menu-dropdown">
                 <a data-toggle="collapse" href="#collapseBilling">
@@ -111,24 +34,52 @@
                 </ul>
             </li>
             @endif
-            <li {!! (Request::is( 'clear') ? 'class="active"' : '') !!}>
-                <a href="/clear">
-                    <i class="menu-icon ti-desktop"></i>
-                    <span class="mm-text ">Clear Invoice</span>
+            <li class="menu-dropdown">
+                <a data-toggle="collapse" href="#collapseProjects">
+                    <i class="fa fa-fw fa-tasks"></i>
+                    <span>Projects</span>
+                    <span class="fa arrow"></span>
                 </a>
+                <ul id="collapseProjects" class="collapse" data-parent="#navigation" style="overflow:auto;max-height: 200px;">
+                     <li {!! (Request::is( 'project') ? 'class="active"' : '') !!}>
+                        <a href="/projects">
+                            <i class="fa fa-fw fa-tasks"></i>
+                            <span class="mm-text ">Projects</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/">
+                            <i class="fa fa-fw fa-tasks"></i>
+                            <span class="mm-text ">List projects Here</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/project-dashboard/1">
+                            <i class="fa fa-fw fa-tasks"></i>
+                            <span class="mm-text ">CompltIt</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/">
+                            <i class="fa fa-fw fa-tasks"></i>
+                            <span class="mm-text ">List projects Here</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/">
+                            <i class="fa fa-fw fa-tasks"></i>
+                            <span class="mm-text ">List projects Here</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/">
+                            <i class="fa fa-fw fa-tasks"></i>
+                            <span class="mm-text ">List projects Here</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
-            <li {!! (Request::is( 'select') ? 'class="active"' : '') !!}>
-                <a href="/select">
-                    <i class="menu-icon ti-desktop"></i>
-                    <span class="mm-text ">Select2</span>
-                </a>
-            </li>
-             <li {!! (Request::is( 'project') ? 'class="active"' : '') !!}>
-                <a href="/projects">
-                    <i class="menu-icon ti-desktop"></i>
-                    <span class="mm-text ">Projects</span>
-                </a>
-            </li>
+
             @if (Spark::developer(Auth::user()->email))
             <li class="menu-dropdown">
                 <a data-toggle="collapse" href="#collapseKiosk">
@@ -157,22 +108,42 @@
                     </li>
                 </ul>
             </li>
-            @endif @if (Spark::usesTeams())
-            <li {!! (Request::is('settings/'.str_plural(Spark::teamsPrefix()).'/*') ? 'class="menu-dropdown active"' : 'class="menu-dropdown"') !!}>
-                <a data-toggle="collapse" href="#collapseTeam"><i class="ti-user"></i><span> {{ ucfirst(str_plural(Spark::teamsPrefix())) }} Settings</span><span class="fa arrow"></span></a>
-                <ul {!! (Request::is('settings/'.str_plural(Spark::teamsPrefix()).'/*') ? 'class="collapse show active"' : 'class="collapse"') !!} id="collapseTeam" data-parent="#navigation">
-                    <li v-for="team in teams" :class="{active:team.id=={{Request::is('settings/'.str_plural(Spark::teamsPrefix()).'/*')?substr(Request::path(),strlen('settings/'.str_plural(Spark::teamsPrefix()).'/')):0}}}">
-                        <a :href="'/settings/{{str_plural(Spark::teamsPrefix())}}/'+team.id">
-                            <span>
-                <img :src="team.photo_url" class="spark-team-photo-xs"><i class="fa fa-btn"></i><span> @{{ team.name }}</span>
-                            </span>
-                        </a>
-                    </li>
-                </ul>
+            @endif
+            @if (Spark::usesTeams())
+                <li {!! (Request::is('settings/'.str_plural(Spark::teamsPrefix()).'/*') ? 'class="menu-dropdown active"' : 'class="menu-dropdown"') !!}>
+                    <a data-toggle="collapse" href="#collapseTeam">
+                        <i class="ti-user"></i>
+                        <span> {{ ucfirst(str_plural(Spark::teamsPrefix())) }} Settings</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul {!! (Request::is('settings/'.str_plural(Spark::teamsPrefix()).'/*') ? 'class="collapse show active"' : 'class="collapse"') !!} id="collapseTeam"
+                        data-parent="#navigation">
+                        <li v-for="team in teams" :class="{active:team.id=={{Request::is('settings/'.str_plural(Spark::teamsPrefix()).'/*')?substr(Request::path(),strlen('settings/'.str_plural(Spark::teamsPrefix()).'/')):0}}}">
+                            <a :href="'/settings/{{str_plural(Spark::teamsPrefix())}}/'+team.id">
+                                <span>
+                                    <img :src="team.photo_url" class="spark-team-photo-xs">
+                                    <i class="fa fa-btn"></i>
+                                    <span> @{{ team.name }}</span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+<!--
+            <li>
+                <a href="/clear">
+                    <i class="fa fa-fw fa-tasks"></i>
+                    <span class="mm-text ">Clear Invoice</span>
+                </a>
             </li>
-            @endif @if (Spark::usesTeams() && (Spark::createsAdditionalTeams() || Spark::showsTeamSwitcher()))
-            <!-- Team Settings -->
-            @include('spark::nav.teams') @endif
+            <li>
+                <a href="/select">
+                    <i class="fa fa-fw fa-tasks"></i>
+                    <span class="mm-text ">Select2</span>
+                </a>
+            </li>
+            -->
         </ul>
         <!-- / .navigation -->
     </div>
