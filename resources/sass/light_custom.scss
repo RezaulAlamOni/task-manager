@@ -1661,10 +1661,76 @@ aside.right-side {
 
 /******  Bryan Updates  ******/
 
-#modal-notifications .modal-content{
+#modal-notifications .modal-content {
   background: #ffffff;
 }
 
-.modal-header, .modal-footer{
+.modal-header,
+.modal-footer {
   border-radius: 0px;
+}
+
+.img-responsive {
+  width: 100%;
+  height: auto;
+}
+
+.compltit-blue,
+.navbar-spark .nav-link:hover,
+.spark-settings-tabs .nav-link:hover,
+.navbar-spark .nav-link.active,
+.spark-settings-tabs .nav-link.active,
+.navbar-spark .nav-link.active svg,
+.spark-settings-tabs .nav-link.active svg,
+.navbar-spark .nav-link:hover svg,
+.spark-settings-tabs .nav-link:hover svg {
+  color: #174991;
+  fill: #174991;
+}
+
+a {
+  color: #174991;
+}
+
+.border-primary,
+.btn-primary {
+  border-color: #174991 !important;
+}
+
+.bg-primary,
+.btn-primary {
+  background-color: #174991 !important;
+}
+
+.navbar-spark i {
+  opacity: 1;
+}
+
+.container-header {
+  color: #333;
+  margin: 15px 0;
+}
+
+.compltit-p {
+  color: #7d7d7d;
+  font-size: 18px;
+  margin: 40px 45px;
+}
+
+.card .card-header {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.badge-pill {
+  color: #fff;
+}
+
+.badge-pill {
+  padding: 3px 8px;
+  border-radius: 5px;
+}
+
+.btn-default {
+  color: #333333;
 }
