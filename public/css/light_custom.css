@@ -131,8 +131,7 @@ body .header .logo .icon {
 /****** 3.1 HEADER RIGHT SIDE BAR *******/
 
 .right-side {
-  margin-left: 250px;
-  padding: 0 10px 10px 10px;
+  padding: 0;
 }
 
 .right-side > .content-header > h1 {
@@ -1930,6 +1929,7 @@ aside.right-side {
   left: 0;
   -webkit-transition: all 1s;
   transition: all 1s;
+  z-index: 900;
 }
 
 .right-align {
