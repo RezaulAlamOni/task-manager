@@ -965,8 +965,14 @@
                     tags: "",
                     text: ""
                 };
-                console.log(newEmty)
+
+                for (var i = 0; i < children.length; i++) {
+                    if (children[i].text == '') {
+                        children.splice(i, 1);
+                    }
+                }
                     for (var i = 0; i < children.length; i++) {
+
                         if (children[i].id == data.id) {
                             children.splice(i + 1, 0, newEmty);
                             setTimeout(function () {
@@ -1042,7 +1048,7 @@
                     });
             },
             makeChild(data) {
-
+                var children = data.parent.children;
                 let _this = this;
                 let postData = {
                     id: data.id,
@@ -1068,6 +1074,11 @@
                             console.log('Api is task-make-child not Working !!!')
                         });
                 }else{
+                    for (var i = 0; i < children.length; i++) {
+                        if (children[i].text == '') {
+                            children.splice(i, 1);
+                        }
+                    }
                     _this.addEmptyChild(_this.reselectParentId)
                 }
 

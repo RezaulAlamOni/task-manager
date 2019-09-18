@@ -87094,8 +87094,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 tags: "",
                 text: ""
             };
-            console.log(newEmty);
+
             for (var i = 0; i < children.length; i++) {
+                if (children[i].text == '') {
+                    children.splice(i, 1);
+                }
+            }
+            for (var i = 0; i < children.length; i++) {
+
                 if (children[i].id == data.id) {
                     children.splice(i + 1, 0, newEmty);
                     setTimeout(function () {
@@ -87163,7 +87169,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         makeChild: function makeChild(data) {
-
+            var children = data.parent.children;
             var _this = this;
             var postData = {
                 id: data.id,
@@ -87188,6 +87194,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     console.log('Api is task-make-child not Working !!!');
                 });
             } else {
+                for (var i = 0; i < children.length; i++) {
+                    if (children[i].text == '') {
+                        children.splice(i, 1);
+                    }
+                }
                 _this.addEmptyChild(_this.reselectParentId);
             }
         },
