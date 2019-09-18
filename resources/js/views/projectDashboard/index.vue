@@ -193,20 +193,6 @@
                                             <i class="outline-event icon-image-preview" title="toggle"
                                                data-toggle></i>
                                         </a>
-<!--                                        <flatPickr v-model="data.date"-->
-<!--                                                   :config="{-->
-<!--                                                        enableTime: false,-->
-<!--                                                        wrap: true,-->
-<!--                                                        disableMobile: true,-->
-<!--                                                        altInput: true,-->
-<!--                                                        altFormat: 'd M',-->
-<!--                                                        dateFormat: 'Y m d'-->
-<!--                                                    }"-->
-<!--                                                   class="dateCal"-->
-<!--                                                   @on-change="showDate"-->
-<!--                                                   name="date">-->
-<!--                                        </flatPickr>-->
-
                                         <datepicker
                                             :disabled-dates="disabledDates"
                                             input-class="dateCal"
@@ -215,7 +201,6 @@
                                             @selected="updateDate"
                                             calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
                                             >
-
                                         </datepicker>
 
 
@@ -320,6 +305,31 @@
                         <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <div class="row pl-3 pt-3">
                                 <div>
+                                    <a class="calender li-opacity clickHide" v-if="!selectedData.date">
+                                        <i class="outline-event icon-image-preview" title="toggle"
+                                           data-toggle></i>
+                                    </a>
+                                    <!--                                    <flatPickr-->
+                                    <!--                                        v-model="selectedData.date"-->
+                                    <!--                                        :config="date_config"-->
+                                    <!--                                        class="dateCal i-text"-->
+                                    <!--                                        placeholder="Add Date"-->
+                                    <!--                                        @on-change="showDate(selectedData.date)"-->
+                                    <!--                                        name="date">-->
+                                    <!--                                    </flatPickr>-->
+
+                                    <datepicker
+                                        :disabled-dates="disabledDates"
+                                        input-class="dateCal"
+                                        v-model="selectedData.date"
+                                        format = 'dd MMM'
+                                        @selected="updateDate"
+                                        calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
+                                    >
+                                    </datepicker>
+                                </div>
+                                <hr>
+                                <div>
                                     <a class="user">
                                         <span data-toggle="dropdown">
                                     <i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"></i>
@@ -381,21 +391,7 @@
                                         </div>
                                     </a>
                                 </div>
-                                <hr>
-                                <div>
-                                    <a class="calender li-opacity clickHide" v-if="!selectedData.date">
-                                        <i class="outline-event icon-image-preview" title="toggle"
-                                           data-toggle></i>
-                                    </a>
-<!--                                    <flatPickr-->
-<!--                                        v-model="selectedData.date"-->
-<!--                                        :config="date_config"-->
-<!--                                        class="dateCal i-text"-->
-<!--                                        placeholder="Add Date"-->
-<!--                                        @on-change="showDate(selectedData.date)"-->
-<!--                                        name="date">-->
-<!--                                    </flatPickr>-->
-                                </div>
+
                                 <div class="col-md-12" style="cursor: pointer; background-color: #F8F8F8">
                                     <div class="row">
                                         <a>
