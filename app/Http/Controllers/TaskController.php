@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Files;
 use App\Multiple_list;
 use App\Project;
 use App\Task;
@@ -340,6 +341,22 @@ class TaskController extends Controller
             if(Task::where('id',$request->id)->update(['is_complete'=>1])){
                 return response()->json('success',200);
             }
+        }elseif (isset($request->date)){
+            if(Task::where('id',$request->id)->update(['date'=>$request->date])){
+                return response()->json('success',200);
+            }
+        }elseif (isset($request->files)){
+            $sender = $request->id;
+            $photo = $_FILES['file']['name'];
+//            if (move_uploaded_file($_FILES["file"]["tmp_name"], "images/".$_FILES['file']['name'])) {
+//                $file = [
+//                    'file_name'=>
+//                ];
+//
+//                return response()->json('success',200);
+//            }else{
+//                return response()->json('failed',500);
+//            }
         }
     }
 
