@@ -193,19 +193,32 @@
                                             <i class="outline-event icon-image-preview" title="toggle"
                                                data-toggle></i>
                                         </a>
-                                        <flatPickr v-model="data.date"
-                                                   :config="{
-                                                        enableTime: false,
-                                                        wrap: true,
-                                                        disableMobile: true,
-                                                        altInput: true,
-                                                        altFormat: 'd M',
-                                                        dateFormat: 'Y m d'
-                                                    }"
-                                                   class="dateCal"
-                                                   @on-change="showDate"
-                                                   name="date">
-                                        </flatPickr>
+<!--                                        <flatPickr v-model="data.date"-->
+<!--                                                   :config="{-->
+<!--                                                        enableTime: false,-->
+<!--                                                        wrap: true,-->
+<!--                                                        disableMobile: true,-->
+<!--                                                        altInput: true,-->
+<!--                                                        altFormat: 'd M',-->
+<!--                                                        dateFormat: 'Y m d'-->
+<!--                                                    }"-->
+<!--                                                   class="dateCal"-->
+<!--                                                   @on-change="showDate"-->
+<!--                                                   name="date">-->
+<!--                                        </flatPickr>-->
+
+                                        <datepicker
+                                            :disabled-dates="disabledDates"
+                                            input-class="dateCal"
+                                            v-model="data.date"
+                                            format = 'dd MMM'
+                                            @selected="updateDate"
+                                            calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
+                                            >
+
+                                        </datepicker>
+
+
                                     </div>
                                     <div>
                                         <a class="user "><i
@@ -374,14 +387,14 @@
                                         <i class="outline-event icon-image-preview" title="toggle"
                                            data-toggle></i>
                                     </a>
-                                    <flatPickr
-                                        v-model="selectedData.date"
-                                        :config="date_config"
-                                        class="dateCal i-text"
-                                        placeholder="Add Date"
-                                        @on-change="showDate(selectedData.date)"
-                                        name="date">
-                                    </flatPickr>
+<!--                                    <flatPickr-->
+<!--                                        v-model="selectedData.date"-->
+<!--                                        :config="date_config"-->
+<!--                                        class="dateCal i-text"-->
+<!--                                        placeholder="Add Date"-->
+<!--                                        @on-change="showDate(selectedData.date)"-->
+<!--                                        name="date">-->
+<!--                                    </flatPickr>-->
                                 </div>
                                 <div class="col-md-12" style="cursor: pointer; background-color: #F8F8F8">
                                     <div class="row">
@@ -676,16 +689,18 @@
 <script>
     import draggableHelper from 'draggable-helper';
     import {DraggableTree} from 'vue-draggable-nested-tree';
-    import flatPickr from 'vue-flatpickr-component';
-    import 'flatpickr/dist/flatpickr.css';
+    // import flatPickr from 'vue-flatpickr-component';
+    // import 'flatpickr/dist/flatpickr.css';
     import switches from 'vue-switches';
     import hotkeys from 'hotkeys-js';
-    import ClickOutside from 'vue-click-outside'
+    import ClickOutside from 'vue-click-outside';
+    import Datepicker from 'vuejs-datepicker';
 
     export default {
-        components: {Tree: DraggableTree, th: draggableHelper, flatPickr, switches},
+        components: {Tree: DraggableTree, th: draggableHelper, switches,Datepicker},
         data() {
             return {
+                disabledDates: null,
                 id: 0,
                 tree4data: [],
                 date_config: {
@@ -721,7 +736,7 @@
                 },
                 nev_id: null,
                 AllNevItems: null,
-                task_logs: null
+                task_logs: null,
             }
         },
         mounted() {
@@ -730,6 +745,8 @@
             this.getProjects();
             this.getTaskList();
             this.AllNevItem();
+
+
 
             $(document).ready(function () {
                 $('.searchList').hide();
@@ -1083,8 +1100,6 @@
                 }
 
             },
-
-
             unMakeChild(data) {
 
                 let _this = this;
@@ -1131,22 +1146,89 @@
                         console.log('Api is copy and cut not Working !!!')
                     });
             },
-            RemoveNodeAndChildren(data) {
+            addTag(e, data) {
                 var _this = this;
-                if (confirm('Are You sure you want to delete this task !! ?')) {
+                if (e.which === 13) {
                     var postData = {
                         id: data.id,
-                        text: data.text
+                        tags: _this.tag
                     }
-                    axios.post('/api/task-list/delete-task', postData)
+                    axios.post('/api/task-list/add-tag', postData)
                         .then(response => response.data)
                         .then(response => {
+                            console.log(response.success)
                             _this.getTaskList()
+                            $('#dropdown' + data._id).toggle();
+                            _this.selectedData.tags = _this.tag,
+                                _this.tag = null
                         })
                         .catch(error => {
-                            console.log('Api for delete task not Working !!!')
+                            console.log('Api for move down task not Working !!!')
                         });
+
                 }
+            },
+            addExistingTag(e, data, tag) {
+                var _this = this;
+                var postData = {
+                    id: data.id,
+                    tags: tag
+                }
+                axios.post('/api/task-list/add-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.success)
+                        _this.getTaskList()
+                        $('#dropdown' + data._id).toggle();
+                        _this.selectedData.tags = tag
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
+            },
+            changeTag(data) {
+                $('#dropdown' + data._id).toggle();
+            },
+            updateDescription() {
+                var _this = this;
+                var postData = {
+                    id: _this.selectedData.id,
+                    details: _this.selectedData.description
+                }
+                axios.post('/api/task-list/update', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        // _this.getTaskList()
+                        // $('#dropdown' + data._id).toggle();
+                        // _this.selectedData.tags = tag
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
+            },
+            addTaskToComplete(data) {
+                var _this = this;
+                var postData = {
+                    id: data.id,
+                    complete: 1
+                }
+                axios.post('/api/task-list/update', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        _this.getTaskList()
+                        alert('Task is added to compete list !!');
+                        // $('#dropdown' + data._id).toggle();
+                        // _this.selectedData.tags = tag
+                    })
+                    .catch(error => {
+                        console.log('Api for complete task not Working !!!')
+                    });
+
+
             },
             moveItemUp(data) {
                 var _this = this;
@@ -1200,6 +1282,23 @@
                         console.log('Api for move down task not Working !!!')
                     });
 
+            },
+            RemoveNodeAndChildren(data) {
+                var _this = this;
+                if (confirm('Are You sure you want to delete this task !! ?')) {
+                    var postData = {
+                        id: data.id,
+                        text: data.text
+                    }
+                    axios.post('/api/task-list/delete-task', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.getTaskList()
+                        })
+                        .catch(error => {
+                            console.log('Api for delete task not Working !!!')
+                        });
+                }
             },
             showLog() {
                 var _this = this;
@@ -1295,103 +1394,13 @@
                         console.log('Api for move down task not Working !!!')
                     });
             },
-            addTag(e, data) {
-                var _this = this;
-                if (e.which === 13) {
-                    var postData = {
-                        id: data.id,
-                        tags: _this.tag
-                    }
-                    axios.post('/api/task-list/add-tag', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            console.log(response.success)
-                            _this.getTaskList()
-                            $('#dropdown' + data._id).toggle();
-                            _this.selectedData.tags = _this.tag,
-                                _this.tag = null
-                        })
-                        .catch(error => {
-                            console.log('Api for move down task not Working !!!')
-                        });
-
-                }
-            },
-            addExistingTag(e, data, tag) {
-                var _this = this;
-                var postData = {
-                    id: data.id,
-                    tags: tag
-                }
-                axios.post('/api/task-list/add-tag', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        console.log(response.success)
-                        _this.getTaskList()
-                        $('#dropdown' + data._id).toggle();
-                        _this.selectedData.tags = tag
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
-
-            },
-            changeTag(data) {
-                $('#dropdown' + data._id).toggle();
-            },
-            updateDescription() {
-                var _this = this;
-                var postData = {
-                    id: _this.selectedData.id,
-                    details: _this.selectedData.description
-                }
-                axios.post('/api/task-list/update', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        console.log(response)
-                        // _this.getTaskList()
-                        // $('#dropdown' + data._id).toggle();
-                        // _this.selectedData.tags = tag
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
-
-            },
-            addTaskToComplete(data) {
-                var _this = this;
-                var postData = {
-                    id: data.id,
-                    complete: 1
-                }
-                axios.post('/api/task-list/update', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        console.log(response)
-                        _this.getTaskList()
-                        alert('Task is added to compete list !!');
-                        // $('#dropdown' + data._id).toggle();
-                        // _this.selectedData.tags = tag
-                    })
-                    .catch(error => {
-                        console.log('Api for complete task not Working !!!')
-                    });
-
-
-            },
-
-            switchEvent(e) {
-                $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
-            },
-            showDate(dateStr) {
-                // console.log(dateStr);
-                // alert(dateStr);
-            },
-            hasPermission(permission) {
-                return helper.hasPermission(permission);
-            },
             getTaskList() {
                 var _this = this;
+                var datePicker = new Date();
+                datePicker.setDate(datePicker.getDate() - 1);
+                _this.disabledDates = {
+                    to: datePicker, // Disable all dates up to specific date
+                };
                 let data = {
                     id: this.projectId,
                     list_id: this.list_id,
@@ -1498,6 +1507,37 @@
                     }
                 }
 
+            },
+            updateDate(date) {
+                date = new Date(date);
+                var _this = this;
+                var month = (parseFloat(date.getMonth()+1) > 9) ? parseFloat(date.getMonth()+1) : '0'+parseFloat(date.getMonth()+1)
+                var formatedDate = date.getFullYear() +'-'+ month +'-'+date.getDate()
+
+                var postData = {
+                    id: _this.selectedData.id,
+                    date: formatedDate
+                }
+                axios.post('/api/task-list/update', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        _this.getTaskList()
+                    })
+                    .catch(error => {
+                        console.log('Api for task date update not Working !!!')
+                    });
+
+                alert(formatedDate);
+                alert(_this.selectedData.id);
+            },
+
+            switchEvent(e) {
+                $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
+            },
+
+            hasPermission(permission) {
+                return helper.hasPermission(permission);
             },
 
             shwAssignUserDropDown(data) {

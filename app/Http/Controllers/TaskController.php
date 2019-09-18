@@ -340,6 +340,10 @@ class TaskController extends Controller
             if(Task::where('id',$request->id)->update(['is_complete'=>1])){
                 return response()->json('success',200);
             }
+        }elseif (isset($request->date)){
+            if(Task::where('id',$request->id)->update(['date'=>$request->date])){
+                return response()->json('success',200);
+            }
         }
     }
 
