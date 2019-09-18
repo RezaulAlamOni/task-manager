@@ -149,7 +149,7 @@
                                         </span>
                                         <i class="fa fa-paperclip icon-image-preview dropdown-toggle-split li-opacity"
                                            @click="addAttachment(data)"></i>
-                                        <input type="file" :ref="data._id" :id="'file'+data._id" style="display: none;">
+                                        <input  type="file" id="file" ref="file" style="display: none;" @change="updatePicture($event,data)">
                                     </a>
 
 
@@ -696,7 +696,9 @@
         components: {Tree: DraggableTree, th: draggableHelper, switches,Datepicker},
         data() {
             return {
-                disabledDates: null,
+                disabledDates: {
+                    id : null
+                },
                 id: 0,
                 tree4data: [],
                 date_config: {
@@ -733,6 +735,7 @@
                 nev_id: null,
                 AllNevItems: null,
                 task_logs: null,
+                file : null
             }
         },
         mounted() {
@@ -1517,20 +1520,38 @@
                 axios.post('/api/task-list/update', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response)
                         _this.getTaskList()
                     })
                     .catch(error => {
                         console.log('Api for task date update not Working !!!')
                     });
-
-                alert(formatedDate);
-                alert(_this.selectedData.id);
             },
-
             switchEvent(e) {
                 $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
             },
+            addAttachment(data) {
+                let refData = data._id;
+                $('#file').click();
+            },
+            updatePicture(e,data) {
+                var _this = this
+                this.file = e.target.files[0];
+                let formData = new FormData();
+                formData.append('file', this.file);
+                formData.append('id', data.id);
+                formData.append('files', 'sdsds');
+
+                axios.post( '/api/task-list/update', formData, {headers: {'Content-Type': 'multipart/form-data'}})
+                    .then(response => response.data)
+                    .then(response => {
+                        // _this.getTaskList()
+                        console.log(response);
+                    })
+                    .catch(error => {
+                        console.log('Api for task date update not Working !!!')
+                    });
+            },
+
 
             hasPermission(permission) {
                 return helper.hasPermission(permission);
@@ -1564,10 +1585,6 @@
                         break;
                     }
                 }
-            },
-            addAttachment(data) {
-                let refData = data._id;
-                $('#file' + refData).click();
             },
             keyDownAction(e, data) {
                 if (e.which === 9) {
