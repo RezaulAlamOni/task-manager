@@ -269,7 +269,7 @@
                                         </a>
 
                                     </div>
-                                    <a class="subTask_plus li-opacity clickHide" @click="addChild(data)">
+                                    <a class="subTask_plus li-opacity clickHide" @click="addEmptyChild(data)">
                                         <i class="baseline-playlist_add icon-image-preview"></i>
                                     </a>
                                     <a class="task_plus li-opacity clickHide" @click="addNode(data)">
@@ -773,11 +773,8 @@
                         _this.HideDetails(_this.selectedData);
                         break;
                     case "right" :
-
                         _this.showLog();
-
                         _this.task_logs = null;
-                        // console.log(_this.selectedData)
                         _this.ShowDetails(_this.selectedData);
                         setTimeout(function () {
                             $('#_details').click()
@@ -934,7 +931,6 @@
                     axios.post('/api/task-list/add-task', postData)
                         .then(response => response.data)
                         .then(response => {
-                            _this.newEmptyTaskID = response.success.id;
                             // _this.getTaskList()
                             console.log(response)
 
@@ -950,11 +946,11 @@
                 }
 
             },
-
             addEmptyNode(data) {
                 let _this = this;
                 var children = data.parent.children;
                 var date = Math.round(new Date().getTime()/1000);
+                _this.reselectParentId = data;
 
                 var newEmty = {
                     children: [],
@@ -971,7 +967,7 @@
                 };
                 console.log(newEmty)
                     for (var i = 0; i < children.length; i++) {
-                        if (children[i].text == data.text) {
+                        if (children[i].id == data.id) {
                             children.splice(i + 1, 0, newEmty);
                             setTimeout(function () {
                                 $("#"+date).click();
@@ -985,7 +981,41 @@
 
 
             },
+            addEmptyChild(data) {
+                let _this = this;
+                var children = data.children;
+                var date = Math.round(new Date().getTime()/1000);
 
+                var newEmty = {
+                    children: [],
+                    clicked: 0,
+                    date: "",
+                    description: null,
+                    id: date,
+                    list_id: _this.list_id,
+                    nav_id: data.nav_id,
+                    parent_id: data.id,
+                    sort_id: 0,
+                    tags: "",
+                    text: ""
+                };
+                for (var i = 0; i < children.length; i++) {
+                    if (children[i].text == '') {
+                        children.splice(i, 1);
+                    }
+                }
+                children.splice(0, 0, newEmty);
+                setTimeout(function () {
+                    $("#"+date).click();
+                    $("#"+date).focus();
+                    $("#"+date).addClass('form-control');
+                    $("#"+date).removeClass('input-hide');
+                }, 100)
+
+
+
+
+            },
             addChild(data) {
                 let _this = this;
                 let postData = {
@@ -1023,20 +1053,27 @@
                     text: data.text,
                     nav_id: _this.nev_id
                 };
-                console.log(postData)
-                axios.post('/api/task-list/task-make-child', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.newEmptyTaskID = response.success;
-                        _this.getTaskList()
-                        setTimeout(function () {
-                            $("#" + _this.newEmptyTaskID).click();
-                        }, 500)
-                    })
-                    .catch(error => {
-                        console.log('Api is task-make-child not Working !!!')
-                    });
+                // console.log(postData)
+                if (data.text !== ''){
+                    axios.post('/api/task-list/task-make-child', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.newEmptyTaskID = response.success;
+                            _this.getTaskList()
+                            setTimeout(function () {
+                                $("#" + _this.newEmptyTaskID).click();
+                            }, 500)
+                        })
+                        .catch(error => {
+                            console.log('Api is task-make-child not Working !!!')
+                        });
+                }else{
+                    _this.addEmptyChild(_this.reselectParentId)
+                }
+
             },
+
+
             unMakeChild(data) {
 
                 let _this = this;
