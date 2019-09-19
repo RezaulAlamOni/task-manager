@@ -1110,18 +1110,29 @@
                     sort_id: data.sort_id,
                     text: data.text
                 };
-                axios.post('/api/task-list/reverse-child', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.newEmptyTaskID = response.success;
-                        _this.getTaskList()
-                        setTimeout(function () {
-                            $("#" + _this.newEmptyTaskID).click();
-                        }, 500)
-                    })
-                    .catch(error => {
-                        console.log('Api is task-unmake-child not Working !!!')
-                    });
+                if (data.text !== '') {
+                    axios.post('/api/task-list/reverse-child', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.newEmptyTaskID = response.success;
+                            _this.getTaskList()
+                            setTimeout(function () {
+                                $("#" + _this.newEmptyTaskID).click();
+                            }, 500)
+                        })
+                        .catch(error => {
+                            console.log('Api is task-unmake-child not Working !!!')
+                        });
+                }else{
+                    var children = data.parent.children;
+                    for (var i = 0; i < children.length; i++) {
+                        if (children[i].text == '') {
+                            children.splice(i, 1);
+                        }
+                    }
+                    _this.addEmptyNode(_this.reselectParentId)
+                }
+
             },
             pastCopyAndCut(data) {
                 var _this = this;
