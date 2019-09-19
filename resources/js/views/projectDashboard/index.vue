@@ -27,7 +27,7 @@
 <!--                                                <a href="#" class="dropdown-item"> {{nev.title}}</a>-->
                                                 <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id)"
                                                       class="dropdown-item" :id="'list'+nev_list.id">
-                                                    <router-link class="nav-link drop-item"
+                                                    <router-link class="nav-link drop-item" v-if="nev.type === 'list'"
                                                                  :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nev_list.list_title}}<i
                                                         class="i-btn x20 task-complete icon-circle-o"></i>
                                                     </router-link>
@@ -36,12 +36,20 @@
 
 
                                             <div class="dropdown-divider"></div>
-                                            <a href="Javascript:void(0)" @click="addListModel(nev.id)"
+
+                                            <a href="Javascript:void(0)" @click="addListModel(nev.id)" v-if="nev.type === 'list'"
                                                class="dropdown-item">
                                                 <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                                Create {{nev.title}}  <span v-if="nev.type === 'list'">List</span> <span
-                                                v-if="nev.type === 'board'"> Board</span>
+                                                Create {{nev.title}}  >List
                                             </a>
+
+                                            <a href="Javascript:void(0)" @click="addBoardModel(nev.id)" v-if="nev.type === 'board'"
+                                               class="dropdown-item">
+                                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
+                                                Create {{nev.title}}>Board
+                                            </a>
+
+
                                         </div>
                                     </li>
                                 </ul>
@@ -561,6 +569,40 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" @click="AddNewList">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addBoardModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add List</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add your new list here !</p>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Board Title</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="list.name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Board Description</label>
+                            <div class="col-sm-8">
+                                <textarea name="" cols="40" rows="3" v-model="list.description"></textarea>
+                            </div>
+                        </div>
+                        <!--                        <p v-if="addField.error" class="text-danger"></p>-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="AddNewBoard">Add</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
                         </button>
                     </div>
@@ -1444,6 +1486,11 @@
                 this.nev_id = id;
                 $("#addListModel").modal('show');
             },
+            addBoardModel(id) {
+                this.nev_id = id;
+                $("#addBoardModel").modal('show');
+            },
+
             setListId(id, title, nev_id) {
                 this.list_id = id;
                 this.nev_id = nev_id;
@@ -1464,6 +1511,24 @@
                             $('#list' + response.id.id).click();
                         }, 300)
                         $("#addListModel").modal('hide');
+                    })
+                    .catch(error => {
+                        console.log('Add list api not working!!')
+                    });
+            },
+            AddNewBoard() {
+                this.list.project_id = this.projectId;
+                this.list.nev_id = this.nev_id;
+                axios.post('/api/board-add', this.list)
+                    .then(response => response.data)
+                    .then(response => {
+                        this.multiple_list = response.multiple_board;
+                        console.log(response)
+                        this.AllNevItem()
+                        // setTimeout(function () {
+                        //     $('#list' + response.id.id).click();
+                        // }, 300)
+                        $("#addBoardModel").modal('hide');
                     })
                     .catch(error => {
                         console.log('Add list api not working!!')

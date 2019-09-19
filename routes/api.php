@@ -40,3 +40,9 @@ Route::get('/nev-item/{project_id}','ProjectNavItemsController@index'); //all ne
 Route::post('/nev-item/update','ProjectNavItemsController@edit'); //all nev item
 
 Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog');//reverse child node
+
+
+//board Section
+
+Route::post('/board-add', 'MultipleBoardController@store');//add list under project
+
