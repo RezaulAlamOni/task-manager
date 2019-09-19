@@ -143,8 +143,8 @@
                                     <a class="attach-icon hide-item-res">
                                         <span v-if="data.files && data.files.length !== 0">
                                             <template v-for="fl in data.files">
-                                                <img class="task-img" :src="fl.file"
-                                                     @click="showImage(data.files, fl.file)">
+                                                <img class="task-img" :src="'/images/'+fl.file_name"
+                                                     @click="showImage(data.files, fl.file_name)">
                                             </template>
                                         </span>
                                         <i class="fa fa-paperclip icon-image-preview dropdown-toggle-split li-opacity"
@@ -468,8 +468,8 @@
 
                                     <div v-if="selectedData.files && selectedData.files.length !== 0">
                                         <template v-for="fl in selectedData.files">
-                                            <img class="task-img-right-pane" :src="fl.file"
-                                                 @click="showImage(selectedData.files, fl.file)">
+                                            <img class="task-img-right-pane" :src="'/images/'+fl.file_name"
+                                                 @click="showImage(selectedData.files, fl.file_name)">
                                         </template>
                                     </div>
                                     <div style="cursor: pointer; background-color: #F8F8F8; margin:10px 0;">
@@ -539,12 +539,13 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Image Show</h5>
+                        <span class="badge badge-warning file-delete" @click="deletePhoto(modalImg)">Delete Photo</span>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <img :src="modalImg" class="img-responsive">
+                        <img :src="'/images/'+modalImg" class="image-auto" >
                     </div>
                 </div>
             </div>
@@ -1555,8 +1556,19 @@
                 axios.post( '/api/task-list/update', formData, {headers: {'Content-Type': 'multipart/form-data'}})
                     .then(response => response.data)
                     .then(response => {
-                        // _this.getTaskList()
-                        console.log(response);
+                        _this.getTaskList()
+                    })
+                    .catch(error => {
+                        console.log('Api for task date update not Working !!!')
+                    });
+            },
+            deletePhoto(img){
+                var _this = this;
+                axios.post( '/api/task-list/delete-img', {'img':img})
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getTaskList()
+                        $("#imageModal").modal('hide');
                     })
                     .catch(error => {
                         console.log('Api for task date update not Working !!!')

@@ -573,9 +573,19 @@
 }
 
 .task-img-right-pane {
-    height: 50px;
-    width: 50px;
+    cursor: pointer;
+    padding-top: 10px;
+    padding-right: 10px;
+    width: 50%;
 }
+.file-delete {
+    cursor: pointer;
+    margin-top: 4px;
+    position: absolute;
+    right: 45px;
+    background: #ff0622;
+}
+
 
 .activeTask {
     background: #aec8dd;
@@ -609,6 +619,9 @@
     overflow-x: hidden;
     overflow-y: auto;
     display: inline-block;
+}
+.image-auto{
+    width :100%;
 }
 
 @media only screen and (max-width: 880px) {

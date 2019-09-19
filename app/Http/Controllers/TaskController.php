@@ -111,6 +111,7 @@ class TaskController extends Controller
 
         }
     }
+
     public function addTask(Request $request)
     {
 //        return response()->json([$request->all()]);
@@ -285,6 +286,12 @@ class TaskController extends Controller
         return response()->json(['success' => 1]);
     }
 
+    public function deleteImg(Request $request)
+    {
+        Files::where('file_name',$request->img)->delete();
+        return response()->json(['success' => 1]);
+    }
+
     public function addTag(Request $request)
     {
         Task::where('id',$request->id)->update(['tag'=>$request->tags]);
@@ -379,6 +386,7 @@ class TaskController extends Controller
             $data[$key]['date'] = $task->date;
             $data[$key]['tags'] = $task->tag;
             $data[$key]['description'] = $task->description;
+            $data[$key]['files'] = $task->files;
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
