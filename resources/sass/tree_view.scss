@@ -573,9 +573,32 @@
 }
 
 .task-img-right-pane {
-    height: 50px;
-    width: 50px;
+    cursor: pointer;
+    padding-top: 10px;
+    padding-right: 10px;
+    width: 50%;
 }
+.file-delete {
+    cursor: pointer;
+    margin-top: 4px;
+    position: absolute;
+    right: 45px;
+    background: #ff0622;
+}
+.assignUser-photo{
+    width: 30px;
+    border-radius: 74%;
+    background: #2d1931;
+    height: 30px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 29px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
 
 .activeTask {
     background: #aec8dd;
@@ -609,6 +632,9 @@
     overflow-x: hidden;
     overflow-y: auto;
     display: inline-block;
+}
+.image-auto{
+    width :100%;
 }
 
 @media only screen and (max-width: 880px) {

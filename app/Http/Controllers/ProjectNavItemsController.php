@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Multiple_board;
 use App\Multiple_list;
 use App\ProjectNavItems;
 use Carbon\Carbon;
@@ -36,7 +37,8 @@ class ProjectNavItemsController extends Controller
             $list = Multiple_list::where(['project_id'=>(int)$project_id,'nav_id'=>$nev_id])->get();
             return $list;
         }else {
-            return [];
+            $board = Multiple_board::where(['project_id'=>(int)$project_id,'nav_id'=>$nev_id])->get();
+            return $board;
         }
 
     }
