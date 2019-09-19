@@ -7,6 +7,7 @@ use App\Multiple_list;
 use App\Project;
 use App\Task;
 use Carbon\Carbon;
+use App\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -387,6 +388,7 @@ class TaskController extends Controller
             $data[$key]['tags'] = $task->tag;
             $data[$key]['description'] = $task->description;
             $data[$key]['files'] = $task->files;
+            $data[$key]['users'] = User::all();
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
