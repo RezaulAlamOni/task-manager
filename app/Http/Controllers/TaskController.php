@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Files;
 use App\Multiple_list;
 use App\Project;
 use App\Task;
 use Carbon\Carbon;
+use App\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -110,6 +112,7 @@ class TaskController extends Controller
 
         }
     }
+
     public function addTask(Request $request)
     {
 //        return response()->json([$request->all()]);
@@ -284,6 +287,12 @@ class TaskController extends Controller
         return response()->json(['success' => 1]);
     }
 
+    public function deleteImg(Request $request)
+    {
+        Files::where('file_name',$request->img)->delete();
+        return response()->json(['success' => 1]);
+    }
+
     public function addTag(Request $request)
     {
         Task::where('id',$request->id)->update(['tag'=>$request->tags]);
@@ -340,6 +349,27 @@ class TaskController extends Controller
             if(Task::where('id',$request->id)->update(['is_complete'=>1])){
                 return response()->json('success',200);
             }
+        }elseif (isset($request->date)){
+            if(Task::where('id',$request->id)->update(['date'=>$request->date])){
+                return response()->json('success',200);
+            }
+        }elseif (isset($request->files)){
+            $task_id = $request->id;
+            $photo = $_FILES['file']['name'];
+
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], "images/".$_FILES['file']['name'])) {
+                $file = [
+                    'file_name'=>$photo,
+                    'tasks_id'=>$task_id ,
+                    'created_by'=> Auth::id(),
+                    'updated_by'=> Auth::id(),
+                    'created_at'=>Carbon::now()
+                ];
+                Files::create($file);
+                return response()->json('success',200);
+            }else{
+                return response()->json('failed',500);
+            }
         }
     }
 
@@ -355,8 +385,10 @@ class TaskController extends Controller
             $data[$key]['text'] = $task->title;
             $data[$key]['clicked'] = 0;
             $data[$key]['date'] = $task->date;
-            $data[$key]['tags'] = $task->tag;
+            $data[$key]['tags'] = $task->tags;
             $data[$key]['description'] = $task->description;
+            $data[$key]['files'] = $task->files;
+            $data[$key]['users'] = User::all();
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
