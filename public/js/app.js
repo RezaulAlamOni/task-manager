@@ -75926,51 +75926,51 @@ $.extend(Spark, __webpack_require__(270));
  * SparkForm helper class. Used to set common properties on all forms.
  */
 window.SparkForm = function (data) {
-  var form = this;
+    var form = this;
 
-  $.extend(this, data);
+    $.extend(this, data);
 
-  /**
-   * Create the form error helper instance.
-   */
-  this.errors = new SparkFormErrors();
+    /**
+     * Create the form error helper instance.
+     */
+    this.errors = new SparkFormErrors();
 
-  this.busy = false;
-  this.successful = false;
+    this.busy = false;
+    this.successful = false;
 
-  /**
-   * Start processing the form.
-   */
-  this.startProcessing = function () {
-    form.errors.forget();
-    form.busy = true;
-    form.successful = false;
-  };
+    /**
+     * Start processing the form.
+     */
+    this.startProcessing = function () {
+        form.errors.forget();
+        form.busy = true;
+        form.successful = false;
+    };
 
-  /**
-   * Finish processing the form.
-   */
-  this.finishProcessing = function () {
-    form.busy = false;
-    form.successful = true;
-  };
+    /**
+     * Finish processing the form.
+     */
+    this.finishProcessing = function () {
+        form.busy = false;
+        form.successful = true;
+    };
 
-  /**
-   * Reset the errors and other state for the form.
-   */
-  this.resetStatus = function () {
-    form.errors.forget();
-    form.busy = false;
-    form.successful = false;
-  };
+    /**
+     * Reset the errors and other state for the form.
+     */
+    this.resetStatus = function () {
+        form.errors.forget();
+        form.busy = false;
+        form.successful = false;
+    };
 
-  /**
-   * Set the errors on the form.
-   */
-  this.setErrors = function (errors) {
-    form.busy = false;
-    form.errors.set(errors);
-  };
+    /**
+     * Set the errors on the form.
+     */
+    this.setErrors = function (errors) {
+        form.busy = false;
+        form.errors.set(errors);
+    };
 };
 
 /***/ }),
@@ -81440,7 +81440,7 @@ exports = module.exports = __webpack_require__(12)(false);
 
 
 // module
-exports.push([module.i, "\n.invoice_bg {\n    margin: 15px 0 30px;\n    padding: 20px;\n}\n#customtable .table {\n    border: 1px solid #ccc;\n    table-layout: fixed;\n}\n#customtable .table tbody > tr {\n    height: 50px;\n}\n.table-responsive {\n    width: 100%;\n}\ntd,\nth {\n    width: 40px;\n    word-wrap: break-word;\n}\n.terms_conditions {\n    list-style: initial;\n}\n.table-condensed > thead > tr > th {\n    padding: 15px 8px;\n    width: 80px;\n}\n.table-condensed > thead > tr > th:first-child {\n    width: 180px;\n}\n.table-responsive > .table > tbody > tr > td,\n.table-responsive > .table > tfoot > tr > td {\n    padding: 15px 8px;\n    white-space: normal;\n}\n#add_row i,\n.row_delete i {\n    cursor: pointer;\n}\n@media print {\n.btn-section,\n    .left-side,\n    .no-print,\n    .content-header,\n    .header,\n    #customtable tr > td:last-child,\n    #customtable tr > th:last-child {\n        display: none;\n}\n.table-responsive {\n        display: inline-table;\n        width: 100%;\n}\n#invoice-stmt {\n        width: 100%;\n}\n.right-side {\n        margin-left: 0;\n}\n}\n.table thead th{\n    background-color: #6699cc;\n    color:#fff;\n}\n", ""]);
+exports.push([module.i, "\n.invoice_bg {\r\n    margin: 15px 0 30px;\r\n    padding: 20px;\n}\n#customtable .table {\r\n    border: 1px solid #ccc;\r\n    table-layout: fixed;\n}\n#customtable .table tbody > tr {\r\n    height: 50px;\n}\n.table-responsive {\r\n    width: 100%;\n}\ntd,\r\nth {\r\n    width: 40px;\r\n    word-wrap: break-word;\n}\n.terms_conditions {\r\n    list-style: initial;\n}\n.table-condensed > thead > tr > th {\r\n    padding: 15px 8px;\r\n    width: 80px;\n}\n.table-condensed > thead > tr > th:first-child {\r\n    width: 180px;\n}\n.table-responsive > .table > tbody > tr > td,\r\n.table-responsive > .table > tfoot > tr > td {\r\n    padding: 15px 8px;\r\n    white-space: normal;\n}\n#add_row i,\r\n.row_delete i {\r\n    cursor: pointer;\n}\n@media print {\n.btn-section,\r\n    .left-side,\r\n    .no-print,\r\n    .content-header,\r\n    .header,\r\n    #customtable tr > td:last-child,\r\n    #customtable tr > th:last-child {\r\n        display: none;\n}\n.table-responsive {\r\n        display: inline-table;\r\n        width: 100%;\n}\n#invoice-stmt {\r\n        width: 100%;\n}\n.right-side {\r\n        margin-left: 0;\n}\n}\n.table thead th{\r\n    background-color: #6699cc;\r\n    color:#fff;\n}\r\n", ""]);
 
 // exports
 
