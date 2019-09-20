@@ -39,10 +39,15 @@ class Task extends Model
 
         return $this->hasMany('App\ActionLog','task_id','id');
     }
+    public function tags(){
+
+        return $this->hasMany(Tags::class,'task_id','id');
+    }
     public function files(){
 
         return $this->hasMany('App\Files','tasks_id','id');
     }
+
 //    public function user(){
 //
 //        return $this->hasMany('App\Files','tasks_id','id');
