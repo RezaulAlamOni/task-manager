@@ -1542,6 +1542,7 @@
                         console.log('Add list api not working!!')
                     });
             },
+
             RemoveNewEmptyChildren(data) {
                 var children = data.children;
                 var index = 0;

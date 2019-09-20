@@ -2,38 +2,127 @@
     <div class="card pt-0 pr-0">
         <div class="row page-titles">
             <div class="col-md-12 col-12 align-self-center">
-                <ul class="nav" style="border-bottom: 1px solid #cedcc4">
-                    <li class="nav-item">
-                        <div class="btn-group">
-                            <button type="button" class="btn dropdown-toggle deactiveIteam" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                List
-                            </button>
-                            <div class="dropdown-menu">
-                                <span v-for="list in multiple_list">
-                                     <router-link class="nav-link drop-item"
-                                                  :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{list.list_title}}<i
-                                         class="i-btn x20 task-complete icon-circle-o"></i></router-link>
-                                </span>
-                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add List</a>
-                            </div>
+<!--                <ul class="nav" style="border-bottom: 1px solid #cedcc4">-->
+<!--                    <li class="nav-item">-->
+<!--                        <div class="btn-group">-->
+<!--                            <button type="button" class="btn dropdown-toggle deactiveIteam" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                                List-->
+<!--                            </button>-->
+<!--                            <div class="dropdown-menu">-->
+<!--                                <span v-for="list in multiple_list">-->
+<!--                                     <router-link class="nav-link drop-item"-->
+<!--                                                  :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{list.list_title}}<i-->
+<!--                                         class="i-btn x20 task-complete icon-circle-o"></i></router-link>-->
+<!--                                </span>-->
+<!--                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add List</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item">-->
+<!--                        <div class="btn-group">-->
+<!--                            <button type="button" class="btn dropdown-toggle activeTask" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                                <span>Board</span>-->
+<!--                            </button>-->
+<!--                            <div class="dropdown-menu">-->
+<!--                                <a class="dropdown-item" href="#">Action</a>-->
+<!--                                <router-link class="nav-link" :to="{ name: 'project-board', params: { projectId: projectId }}">-->
+<!--                                    Board <i-->
+<!--                                    class="tree-toggle i-btn x30"></i>-->
+<!--                                </router-link>-->
+<!--                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add Board</a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                </ul>-->
+                <nav class="navbar-expand-md navbar-spark">
+                    <div class="container-fluid">
+
+                        <div class="collapse navbar-collapse show">
+
+                            <span v-for="nev in AllNevItems">
+                                <ul class="navbar-nav ml-4 float-sm-left">
+                                    <li class="nav-item dropdown">
+                                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
+                                           data-toggle="dropdown"
+                                           aria-haspopup="true" aria-expanded="false">
+                                <span class="d-none d-md-block">{{nev.title}}</span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-left"
+                                             aria-labelledby="dropdownMenuButton">
+
+                                            <h6 class="dropdown-header" v-if="nev.type === 'list'"> Lists</h6>
+                                            <h6 class="dropdown-header" v-if="nev.type === 'board'"> Board </h6>
+
+                                            <span v-for="nev_list in nev.lists">
+<!--                                                <a href="#" class="dropdown-item"> {{nev.title}}</a>-->
+                                                <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id)"
+                                                      class="dropdown-item" :id="'list'+nev_list.id">
+
+                                                    <router-link class="nav-link drop-item" v-if="nev.type === 'list'"
+                                                                 :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nev_list.list_title}}<i
+                                                        class="i-btn x20 task-complete icon-circle-o"></i>
+                                                    </router-link>
+                                                    <router-link class="nav-link drop-item" v-else
+                                                                 :to="{ name: 'project-board', params: { projectId: projectId }}">{{nev_list.board_title}}<i
+                                                        class="i-btn x20 task-complete icon-circle-o"></i>
+                                                    </router-link>
+
+
+                                                 </span>
+
+                                            </span>
+
+
+                                            <div class="dropdown-divider"></div>
+
+                                            <a href="Javascript:void(0)" @click="addListModel(nev.id)" v-if="nev.type === 'list'"
+                                               class="dropdown-item">
+                                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
+                                                Create {{nev.title}}  >List
+                                            </a>
+
+                                            <a href="Javascript:void(0)" @click="addBoardModel(nev.id)" v-if="nev.type === 'board'"
+                                               class="dropdown-item">
+                                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
+                                                Create {{nev.title}}>Board
+                                            </a>
+
+
+                                        </div>
+                                    </li>
+                                </ul>
+
+                            </span>
+
+
+                            <ul class="navbar-nav ml-4" style="position: absolute;right: 20px;">
+                                <li class="nav-item dropdown">
+                                    <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
+                                       aria-haspopup="true" aria-expanded="false">
+                            <span class="d-none d-md-block">
+                               <i class="fa fa-fw fa-plus-circle" style="color:#33CCFF;font-size: 26px;"></i>
+                            </span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+
+                                        <h6 class="dropdown-header"> Manage Nav</h6>
+                                        <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNevItem">
+                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
+                                            Create Task View
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <h6 class="dropdown-header"> Edit Task View</h6>
+                                        <span v-for="nev in AllNevItems">
+                                             <a href="javascript:void(0)" @click="updateNavbarModel(nev)"
+                                                class="dropdown-item"> {{nev.title}}</a>
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="btn-group">
-                            <button type="button" class="btn dropdown-toggle activeTask" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span>Board</span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <router-link class="nav-link" :to="{ name: 'project-board', params: { projectId: projectId }}">
-                                    Board <i
-                                    class="tree-toggle i-btn x30"></i>
-                                </router-link>
-                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add Board</a>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+
+                    </div>
+                </nav>
             </div>
 
             <div class="input-group col-sm-3 searchList">
@@ -544,7 +633,8 @@
                 tag: null,
                 selectedExistedTask : [],
                 projectId : null,
-                multiple_list : null
+                multiple_list : null,
+                AllNevItems : null
             }
         },
         mounted() {
@@ -559,6 +649,7 @@
             this.getData();
             this.projectId = this.$route.params.projectId;
             this.getProjects();
+            this.AllNevItem();
             $(document).ready(function () {
                 $('.searchList').hide();
             });
@@ -644,6 +735,133 @@
                 }
 
                 console.log(this.scene);
+            },
+            showModelForNevItem() {
+                $("#addNavItem").modal('show');
+                $('input[name="optionsRadios"]').iCheck({
+                    checkboxClass: 'icheckbox_square-blue',
+                    radioClass: 'iradio_square-blue',
+                    increaseArea: '20%' // optional
+                });
+            },
+            AddNevItem() {
+                var _this = this;
+                _this.nevItem.project_id = _this.projectId;
+                _this.nevItem.type = $('input[name="optionsRadios"]:checked').val();
+
+                axios.post('/api/nev-item/add-new', _this.nevItem)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.success)
+                        _this.AllNevItem()
+                        $("#addNavItem").modal('hide');
+
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
+
+                // console.log(_this.nevItem)
+            },
+            AllNevItem() {
+                var _this = this;
+                axios.get('/api/nev-item/' + _this.projectId)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        _this.AllNevItems = response.success;
+                        // $("#addNavItem").modal('hide');
+
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
+
+                // console.log(_this.nevItem)
+            },
+            updateNavbarModel(data) {
+                this.nev_id = data.id;
+                this.nevItem.title = data.title;
+                this.nevItem.type = data.type;
+                this.nevItem.sort_id = data.sort_id;
+                this.nevItem.nev_id = data.id;
+                this.nevItem.project_id = data.project_id;
+
+                $("#updateNavItem").modal('show');
+                $('input[name="optionsRadios"]').iCheck({
+                    checkboxClass: 'icheckbox_square-blue',
+                    radioClass: 'iradio_square-blue',
+                    increaseArea: '20%' // optional
+                });
+
+            },
+            updateNevItem() {
+                var _this = this;
+                axios.post('/api/nev-item/update', _this.nevItem)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.success)
+                        _this.AllNevItem()
+                        $("#updateNavItem").modal('hide');
+
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+            },
+            addListModel(id) {
+                this.nev_id = id;
+                $("#addListModel").modal('show');
+            },
+            addBoardModel(id) {
+                this.nev_id = id;
+                $("#addBoardModel").modal('show');
+            },
+
+            setListId(id, title, nev_id) {
+                this.list_id = id;
+                this.nev_id = nev_id;
+                // $('#listName').text(title);
+                this.getTaskList()
+                this.nev_id = nev_id;
+            },
+            AddNewList() {
+                this.list.project_id = this.projectId;
+                this.list.nev_id = this.nev_id;
+                axios.post('/api/list-add', this.list)
+                    .then(response => response.data)
+                    .then(response => {
+                        this.multiple_list = response.multiple_list;
+                        console.log(response)
+                        this.AllNevItem()
+                        setTimeout(function () {
+                            $('#list' + response.id.id).click();
+                        }, 300)
+                        $("#addListModel").modal('hide');
+                    })
+                    .catch(error => {
+                        console.log('Add list api not working!!')
+                    });
+            },
+            AddNewBoard() {
+                this.list.project_id = this.projectId;
+                this.list.nev_id = this.nev_id;
+                axios.post('/api/board-add', this.list)
+                    .then(response => response.data)
+                    .then(response => {
+                        this.multiple_list = response.multiple_board;
+                        console.log(response)
+                        this.AllNevItem()
+                        // setTimeout(function () {
+                        //     $('#list' + response.id.id).click();
+                        // }, 300)
+                        $("#addBoardModel").modal('hide');
+                    })
+                    .catch(error => {
+                        console.log('Add list api not working!!')
+                    });
             },
 
             onColumnDrop(dropResult) {
