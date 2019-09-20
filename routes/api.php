@@ -27,9 +27,11 @@ Route::post('/add-task-task', 'TaskController@addNewTask');//add new node
 Route::post('/task-list/add-child-task', 'TaskController@addChildTask');//add child node
 Route::post('/task-list/task-make-child', 'TaskController@makeChild');//make child node
 Route::post('/task-list/reverse-child', 'TaskController@reverseChild');//reverse child node
-Route::post('/task-list/add-tag', 'TaskController@addTag');//reverse child node
+Route::post('/task-list/add-dont-forget-tag', 'TaskController@addDontForgetTag');//add dont forget tag
 Route::post('/task-list/update', 'TaskController@update');//reverse child node
 Route::post('/task-list/delete-img', 'TaskController@deleteImg');//reverse child node
+
+Route::post('/task-list/add-tag', 'TagsController@store');//add tag
 
 Route::post('/task-list/copy-cut-past', 'TaskController@CopyCutPast');//copy and past task node
 Route::post('/task-list/delete-task', 'TaskController@deleteTask');//delete task

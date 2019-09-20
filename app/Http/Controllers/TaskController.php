@@ -385,7 +385,7 @@ class TaskController extends Controller
             $data[$key]['text'] = $task->title;
             $data[$key]['clicked'] = 0;
             $data[$key]['date'] = $task->date;
-            $data[$key]['tags'] = $task->tag;
+            $data[$key]['tags'] = $task->tags;
             $data[$key]['description'] = $task->description;
             $data[$key]['files'] = $task->files;
             $data[$key]['users'] = User::all();
