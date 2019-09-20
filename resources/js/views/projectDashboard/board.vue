@@ -54,7 +54,6 @@
                                             <h6 class="dropdown-header" v-if="nev.type === 'board'"> Board </h6>
 
                                             <span v-for="nev_list in nev.lists">
-<!--                                                <a href="#" class="dropdown-item"> {{nev.title}}</a>-->
                                                 <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id)"
                                                       class="dropdown-item" :id="'list'+nev_list.id">
 
@@ -468,6 +467,168 @@
             </div>
         </div>
 
+        <div class="modal fade" id="addListModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add List</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add your new list here !</p>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">List Title</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="list.name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">List Description</label>
+                            <div class="col-sm-8">
+                                <textarea name="" id="" cols="40" rows="3" v-model="list.description"></textarea>
+                            </div>
+                        </div>
+                        <!--                        <p v-if="addField.error" class="text-danger"></p>-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="AddNewList">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addBoardModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add List</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add your new list here !</p>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Board Title</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="list.name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Board Description</label>
+                            <div class="col-sm-8">
+                                <textarea name="" cols="40" rows="3" v-model="list.description"></textarea>
+                            </div>
+                        </div>
+                        <!--                        <p v-if="addField.error" class="text-danger"></p>-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="AddNewBoard">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add Nev Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="nevItem.title">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" min="0" v-model="nevItem.sort_id">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Select Type</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="iradio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="list">
+                                        &nbsp; List view
+                                    </label>
+                                </div>
+                                <div class="iradio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="board">
+                                        &nbsp; Board View
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="AddNevItem">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="updateNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add Nev Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="nevItem.title">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" min="0" v-model="nevItem.sort_id">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="updateNevItem">Update</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </template>
@@ -634,7 +795,21 @@
                 selectedExistedTask : [],
                 projectId : null,
                 multiple_list : null,
-                AllNevItems : null
+                AllNevItems : null,
+                board_id: null,
+                multiple_list: null,
+                list: {
+                    name: null,
+                    description: null,
+                    nev_id: null
+                },
+                nevItem: {
+                    title: null,
+                    type: null,
+                    sort_id: null,
+                    project_id: null,
+                },
+                nev_id: null,
             }
         },
         mounted() {
@@ -781,6 +956,7 @@
 
                 // console.log(_this.nevItem)
             },
+
             updateNavbarModel(data) {
                 this.nev_id = data.id;
                 this.nevItem.title = data.title;
@@ -819,12 +995,11 @@
                 this.nev_id = id;
                 $("#addBoardModel").modal('show');
             },
-
             setListId(id, title, nev_id) {
-                this.list_id = id;
+                this.board_id = id;
                 this.nev_id = nev_id;
                 // $('#listName').text(title);
-                this.getTaskList()
+                this.getBoardTask()
                 this.nev_id = nev_id;
             },
             AddNewList() {
@@ -863,6 +1038,7 @@
                         console.log('Add list api not working!!')
                     });
             },
+
 
             onColumnDrop(dropResult) {
                 const scene = Object.assign({}, this.scene)
@@ -929,6 +1105,30 @@
                 $("#addExistingTask").modal('show');
             },
 
+            getBoardTask(){
+
+                var _this = this;
+                var datePicker = new Date();
+                datePicker.setDate(datePicker.getDate() - 1);
+                _this.disabledDates = {
+                    to: datePicker, // Disable all dates up to specific date
+                };
+                let data = {
+                    id: this.projectId,
+                    board_id: this.board_id,
+                    nav_id: this.nev_id
+                };
+                axios.post('/api/board-task', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.board_task)
+                        this.cards = response.board_task;
+                    })
+                    .catch(error => {
+
+                    });
+
+            },
             clearInputFeild() {
                 $("#EditModal").modal('hide');
                 $("#addModal").modal('hide');
