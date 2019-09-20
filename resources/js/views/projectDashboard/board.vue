@@ -768,7 +768,7 @@
                             {name: 'node 1-2-4', date: '25 Aug', tags: [], clicked: 0},
                         ],
                         hidden : 1
-                    },
+                    }, 
                     {
                         column: 'Complete',
                         task: [
