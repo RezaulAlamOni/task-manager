@@ -75926,51 +75926,51 @@ $.extend(Spark, __webpack_require__(270));
  * SparkForm helper class. Used to set common properties on all forms.
  */
 window.SparkForm = function (data) {
-    var form = this;
+  var form = this;
 
-    $.extend(this, data);
+  $.extend(this, data);
 
-    /**
-     * Create the form error helper instance.
-     */
-    this.errors = new SparkFormErrors();
+  /**
+   * Create the form error helper instance.
+   */
+  this.errors = new SparkFormErrors();
 
-    this.busy = false;
-    this.successful = false;
+  this.busy = false;
+  this.successful = false;
 
-    /**
-     * Start processing the form.
-     */
-    this.startProcessing = function () {
-        form.errors.forget();
-        form.busy = true;
-        form.successful = false;
-    };
+  /**
+   * Start processing the form.
+   */
+  this.startProcessing = function () {
+    form.errors.forget();
+    form.busy = true;
+    form.successful = false;
+  };
 
-    /**
-     * Finish processing the form.
-     */
-    this.finishProcessing = function () {
-        form.busy = false;
-        form.successful = true;
-    };
+  /**
+   * Finish processing the form.
+   */
+  this.finishProcessing = function () {
+    form.busy = false;
+    form.successful = true;
+  };
 
-    /**
-     * Reset the errors and other state for the form.
-     */
-    this.resetStatus = function () {
-        form.errors.forget();
-        form.busy = false;
-        form.successful = false;
-    };
+  /**
+   * Reset the errors and other state for the form.
+   */
+  this.resetStatus = function () {
+    form.errors.forget();
+    form.busy = false;
+    form.successful = false;
+  };
 
-    /**
-     * Set the errors on the form.
-     */
-    this.setErrors = function (errors) {
-        form.busy = false;
-        form.errors.set(errors);
-    };
+  /**
+   * Set the errors on the form.
+   */
+  this.setErrors = function (errors) {
+    form.busy = false;
+    form.errors.set(errors);
+  };
 };
 
 /***/ }),
@@ -81440,7 +81440,7 @@ exports = module.exports = __webpack_require__(12)(false);
 
 
 // module
-exports.push([module.i, "\n.invoice_bg {\r\n    margin: 15px 0 30px;\r\n    padding: 20px;\n}\n#customtable .table {\r\n    border: 1px solid #ccc;\r\n    table-layout: fixed;\n}\n#customtable .table tbody > tr {\r\n    height: 50px;\n}\n.table-responsive {\r\n    width: 100%;\n}\ntd,\r\nth {\r\n    width: 40px;\r\n    word-wrap: break-word;\n}\n.terms_conditions {\r\n    list-style: initial;\n}\n.table-condensed > thead > tr > th {\r\n    padding: 15px 8px;\r\n    width: 80px;\n}\n.table-condensed > thead > tr > th:first-child {\r\n    width: 180px;\n}\n.table-responsive > .table > tbody > tr > td,\r\n.table-responsive > .table > tfoot > tr > td {\r\n    padding: 15px 8px;\r\n    white-space: normal;\n}\n#add_row i,\r\n.row_delete i {\r\n    cursor: pointer;\n}\n@media print {\n.btn-section,\r\n    .left-side,\r\n    .no-print,\r\n    .content-header,\r\n    .header,\r\n    #customtable tr > td:last-child,\r\n    #customtable tr > th:last-child {\r\n        display: none;\n}\n.table-responsive {\r\n        display: inline-table;\r\n        width: 100%;\n}\n#invoice-stmt {\r\n        width: 100%;\n}\n.right-side {\r\n        margin-left: 0;\n}\n}\n.table thead th{\r\n    background-color: #6699cc;\r\n    color:#fff;\n}\r\n", ""]);
+exports.push([module.i, "\n.invoice_bg {\n    margin: 15px 0 30px;\n    padding: 20px;\n}\n#customtable .table {\n    border: 1px solid #ccc;\n    table-layout: fixed;\n}\n#customtable .table tbody > tr {\n    height: 50px;\n}\n.table-responsive {\n    width: 100%;\n}\ntd,\nth {\n    width: 40px;\n    word-wrap: break-word;\n}\n.terms_conditions {\n    list-style: initial;\n}\n.table-condensed > thead > tr > th {\n    padding: 15px 8px;\n    width: 80px;\n}\n.table-condensed > thead > tr > th:first-child {\n    width: 180px;\n}\n.table-responsive > .table > tbody > tr > td,\n.table-responsive > .table > tfoot > tr > td {\n    padding: 15px 8px;\n    white-space: normal;\n}\n#add_row i,\n.row_delete i {\n    cursor: pointer;\n}\n@media print {\n.btn-section,\n    .left-side,\n    .no-print,\n    .content-header,\n    .header,\n    #customtable tr > td:last-child,\n    #customtable tr > th:last-child {\n        display: none;\n}\n.table-responsive {\n        display: inline-table;\n        width: 100%;\n}\n#invoice-stmt {\n        width: 100%;\n}\n.right-side {\n        margin-left: 0;\n}\n}\n.table thead th{\n    background-color: #6699cc;\n    color:#fff;\n}\n", ""]);
 
 // exports
 
@@ -82135,6 +82135,10 @@ exports.push([module.i, "\n.router_td {\n    color: #656565;\n}\n.router_td:hove
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form__ = __webpack_require__(383);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form__);
+//
+//
+//
+//
 //
 //
 //
@@ -86074,7 +86078,7 @@ exports = module.exports = __webpack_require__(12)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -86093,6 +86097,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_click_outside__ = __webpack_require__(230);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_click_outside___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vue_click_outside__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vuejs_datepicker__ = __webpack_require__(471);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -95037,7 +95049,29 @@ var render = function() {
                                             })
                                           ]
                                         )
-                                      : _vm._e()
+                                      : _c(
+                                          "router-link",
+                                          {
+                                            staticClass: "nav-link drop-item",
+                                            attrs: {
+                                              to: {
+                                                name: "project-board",
+                                                params: {
+                                                  projectId: _vm.projectId
+                                                }
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              _vm._s(nev_list.board_title)
+                                            ),
+                                            _c("i", {
+                                              staticClass:
+                                                "i-btn x20 task-complete icon-circle-o"
+                                            })
+                                          ]
+                                        )
                                   ],
                                   1
                                 )
@@ -97660,6 +97694,258 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_click_outside___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vue_click_outside__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vue_smooth_dnd__ = __webpack_require__(483);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__assets_plugins_utils_helpers__ = __webpack_require__(484);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -98064,7 +98350,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: { Container: __WEBPACK_IMPORTED_MODULE_5_vue_smooth_dnd__["Container"], Draggable: __WEBPACK_IMPORTED_MODULE_5_vue_smooth_dnd__["Draggable"], flatPickr: __WEBPACK_IMPORTED_MODULE_0_vue_flatpickr_component___default.a, switches: __WEBPACK_IMPORTED_MODULE_2_vue_switches___default.a },
     data: function data() {
-        return {
+        var _ref;
+
+        return _ref = {
             id: 0,
             addField: {
                 name: null,
@@ -98079,22 +98367,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
             project: null,
             tree4data: [{
-                id: 1,
-                parent: 0,
+                id: 1, parent: 0,
                 text: "Don't Forget Section",
                 clicked: 0,
                 date: '',
                 tags: ["Dont Forget"],
                 children: [{
-                    id: 2, parent: 1,
+                    id: 2,
+                    parent: 1,
                     text: 'node 1-1',
                     html: 'Atik',
                     tags: ["Dont Forget"],
                     files: [{ file: '/images/logo.png' }],
                     clicked: 0
                 }, {
-                    id: 3, parent: 1,
-                    text: 'node 1-2', clicked: 0, tags: ["Dont Forget"], children: [{
+                    id: 3,
+                    parent: 1,
+                    text: 'node 1-2',
+                    clicked: 0,
+                    tags: ["Dont Forget"],
+                    children: [{
                         id: 4,
                         parent: 3,
                         text: 'node 1-2-1',
@@ -98111,7 +98403,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     }]
                 }]
             }, {
-                id: 6, parent: 0,
+                id: 6,
+                parent: 0,
                 text: 'node 2',
                 html: 'Test 1',
                 date: '05 Aug',
@@ -98163,8 +98456,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             tag: null,
             selectedExistedTask: [],
             projectId: null,
-            multiple_list: null
-        };
+            multiple_list: null,
+            AllNevItems: null,
+            board_id: null
+        }, _defineProperty(_ref, 'multiple_list', null), _defineProperty(_ref, 'list', {
+            name: null,
+            description: null,
+            nev_id: null
+        }), _defineProperty(_ref, 'nevItem', {
+            title: null,
+            type: null,
+            sort_id: null,
+            project_id: null
+        }), _defineProperty(_ref, 'nev_id', null), _ref;
     },
     mounted: function mounted() {
         $('#header-item').text('Project  / Task Board');
@@ -98178,6 +98482,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.getData();
         this.projectId = this.$route.params.projectId;
         this.getProjects();
+        this.AllNevItem();
         $(document).ready(function () {
             $('.searchList').hide();
         });
@@ -98271,6 +98576,125 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             console.log(this.scene);
         },
+        showModelForNevItem: function showModelForNevItem() {
+            $("#addNavItem").modal('show');
+            $('input[name="optionsRadios"]').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+        },
+        AddNevItem: function AddNevItem() {
+            var _this = this;
+            _this.nevItem.project_id = _this.projectId;
+            _this.nevItem.type = $('input[name="optionsRadios"]:checked').val();
+
+            axios.post('/api/nev-item/add-new', _this.nevItem).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response.success);
+                _this.AllNevItem();
+                $("#addNavItem").modal('hide');
+            }).catch(function (error) {
+                console.log('Api for move down task not Working !!!');
+            });
+
+            // console.log(_this.nevItem)
+        },
+        AllNevItem: function AllNevItem() {
+            var _this = this;
+            axios.get('/api/nev-item/' + _this.projectId).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response);
+                _this.AllNevItems = response.success;
+                // $("#addNavItem").modal('hide');
+            }).catch(function (error) {
+                console.log('Api for move down task not Working !!!');
+            });
+
+            // console.log(_this.nevItem)
+        },
+        updateNavbarModel: function updateNavbarModel(data) {
+            this.nev_id = data.id;
+            this.nevItem.title = data.title;
+            this.nevItem.type = data.type;
+            this.nevItem.sort_id = data.sort_id;
+            this.nevItem.nev_id = data.id;
+            this.nevItem.project_id = data.project_id;
+
+            $("#updateNavItem").modal('show');
+            $('input[name="optionsRadios"]').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+        },
+        updateNevItem: function updateNevItem() {
+            var _this = this;
+            axios.post('/api/nev-item/update', _this.nevItem).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response.success);
+                _this.AllNevItem();
+                $("#updateNavItem").modal('hide');
+            }).catch(function (error) {
+                console.log('Api for move down task not Working !!!');
+            });
+        },
+        addListModel: function addListModel(id) {
+            this.nev_id = id;
+            $("#addListModel").modal('show');
+        },
+        addBoardModel: function addBoardModel(id) {
+            this.nev_id = id;
+            $("#addBoardModel").modal('show');
+        },
+        setListId: function setListId(id, title, nev_id) {
+            this.board_id = id;
+            this.nev_id = nev_id;
+            // $('#listName').text(title);
+            this.getBoardTask();
+            this.nev_id = nev_id;
+        },
+        AddNewList: function AddNewList() {
+            var _this4 = this;
+
+            this.list.project_id = this.projectId;
+            this.list.nev_id = this.nev_id;
+            axios.post('/api/list-add', this.list).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                _this4.multiple_list = response.multiple_list;
+                console.log(response);
+                _this4.AllNevItem();
+                setTimeout(function () {
+                    $('#list' + response.id.id).click();
+                }, 300);
+                $("#addListModel").modal('hide');
+            }).catch(function (error) {
+                console.log('Add list api not working!!');
+            });
+        },
+        AddNewBoard: function AddNewBoard() {
+            var _this5 = this;
+
+            this.list.project_id = this.projectId;
+            this.list.nev_id = this.nev_id;
+            axios.post('/api/board-add', this.list).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                _this5.multiple_list = response.multiple_board;
+                console.log(response);
+                _this5.AllNevItem();
+                // setTimeout(function () {
+                //     $('#list' + response.id.id).click();
+                // }, 300)
+                $("#addBoardModel").modal('hide');
+            }).catch(function (error) {
+                console.log('Add list api not working!!');
+            });
+        },
         onColumnDrop: function onColumnDrop(dropResult) {
             var scene = Object.assign({}, this.scene);
             scene.children = Object(__WEBPACK_IMPORTED_MODULE_6__assets_plugins_utils_helpers__["a" /* applyDrag */])(scene.children, dropResult);
@@ -98290,10 +98714,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
         },
         getCardPayload: function getCardPayload(columnId) {
-            var _this4 = this;
+            var _this6 = this;
 
             return function (index) {
-                return _this4.scene.children.filter(function (p) {
+                return _this6.scene.children.filter(function (p) {
                     return p.id === columnId;
                 })[0].children[index];
             };
@@ -98342,6 +98766,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         addExistingTask: function addExistingTask(index) {
             this.updateIndex = index;
             $("#addExistingTask").modal('show');
+        },
+        getBoardTask: function getBoardTask() {
+            var _this7 = this;
+
+            var _this = this;
+            var datePicker = new Date();
+            datePicker.setDate(datePicker.getDate() - 1);
+            _this.disabledDates = {
+                to: datePicker // Disable all dates up to specific date
+            };
+            var data = {
+                id: this.projectId,
+                board_id: this.board_id,
+                nav_id: this.nev_id
+            };
+            axios.post('/api/board-task', data).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                console.log(response.board_task);
+                _this7.cards = response.board_task;
+            }).catch(function (error) {});
         },
         clearInputFeild: function clearInputFeild() {
             $("#EditModal").modal('hide');
@@ -101811,114 +102256,260 @@ var render = function() {
   return _c("div", { staticClass: "card pt-0 pr-0" }, [
     _c("div", { staticClass: "row page-titles" }, [
       _c("div", { staticClass: "col-md-12 col-12 align-self-center" }, [
-        _c(
-          "ul",
-          {
-            staticClass: "nav",
-            staticStyle: { "border-bottom": "1px solid #cedcc4" }
-          },
-          [
-            _c("li", { staticClass: "nav-item" }, [
-              _c("div", { staticClass: "btn-group" }, [
+        _c("nav", { staticClass: "navbar-expand-md navbar-spark" }, [
+          _c("div", { staticClass: "container-fluid" }, [
+            _c(
+              "div",
+              { staticClass: "collapse navbar-collapse show" },
+              [
+                _vm._l(_vm.AllNevItems, function(nev) {
+                  return _c("span", [
+                    _c("ul", { staticClass: "navbar-nav ml-4 float-sm-left" }, [
+                      _c("li", { staticClass: "nav-item dropdown" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass:
+                              "d-block d-md-flex text-center nav-link dropdown-toggle",
+                            attrs: {
+                              href: "#",
+                              "data-toggle": "dropdown",
+                              "aria-haspopup": "true",
+                              "aria-expanded": "false"
+                            }
+                          },
+                          [
+                            _c("span", { staticClass: "d-none d-md-block" }, [
+                              _vm._v(_vm._s(nev.title))
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "dropdown-menu dropdown-menu-left",
+                            attrs: { "aria-labelledby": "dropdownMenuButton" }
+                          },
+                          [
+                            nev.type === "list"
+                              ? _c("h6", { staticClass: "dropdown-header" }, [
+                                  _vm._v(" Lists")
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            nev.type === "board"
+                              ? _c("h6", { staticClass: "dropdown-header" }, [
+                                  _vm._v(" Board ")
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm._l(nev.lists, function(nev_list) {
+                              return _c("span", [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "dropdown-item",
+                                    attrs: { id: "list" + nev_list.id },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.setListId(
+                                          nev_list.id,
+                                          nev_list.list_title,
+                                          nev.id
+                                        )
+                                      }
+                                    }
+                                  },
+                                  [
+                                    nev.type === "list"
+                                      ? _c(
+                                          "router-link",
+                                          {
+                                            staticClass: "nav-link drop-item",
+                                            attrs: {
+                                              to: {
+                                                name: "project-dashboard",
+                                                params: {
+                                                  projectId: _vm.projectId
+                                                }
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _vm._v(_vm._s(nev_list.list_title)),
+                                            _c("i", {
+                                              staticClass:
+                                                "i-btn x20 task-complete icon-circle-o"
+                                            })
+                                          ]
+                                        )
+                                      : _c(
+                                          "router-link",
+                                          {
+                                            staticClass: "nav-link drop-item",
+                                            attrs: {
+                                              to: {
+                                                name: "project-board",
+                                                params: {
+                                                  projectId: _vm.projectId
+                                                }
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _vm._v(
+                                              _vm._s(nev_list.board_title)
+                                            ),
+                                            _c("i", {
+                                              staticClass:
+                                                "i-btn x20 task-complete icon-circle-o"
+                                            })
+                                          ]
+                                        )
+                                  ],
+                                  1
+                                )
+                              ])
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "dropdown-divider" }),
+                            _vm._v(" "),
+                            nev.type === "list"
+                              ? _c(
+                                  "a",
+                                  {
+                                    staticClass: "dropdown-item",
+                                    attrs: { href: "Javascript:void(0)" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.addListModel(nev.id)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass:
+                                        "fa fa-fw text-left fa-btn fa-plus-circle"
+                                    }),
+                                    _vm._v(
+                                      "\n                                                Create " +
+                                        _vm._s(nev.title) +
+                                        "  >List\n                                            "
+                                    )
+                                  ]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            nev.type === "board"
+                              ? _c(
+                                  "a",
+                                  {
+                                    staticClass: "dropdown-item",
+                                    attrs: { href: "Javascript:void(0)" },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.addBoardModel(nev.id)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass:
+                                        "fa fa-fw text-left fa-btn fa-plus-circle"
+                                    }),
+                                    _vm._v(
+                                      "\n                                                Create " +
+                                        _vm._s(nev.title) +
+                                        ">Board\n                                            "
+                                    )
+                                  ]
+                                )
+                              : _vm._e()
+                          ],
+                          2
+                        )
+                      ])
+                    ])
+                  ])
+                }),
+                _vm._v(" "),
                 _c(
-                  "button",
+                  "ul",
                   {
-                    staticClass: "btn dropdown-toggle deactiveIteam",
-                    attrs: {
-                      type: "button",
-                      "data-toggle": "dropdown",
-                      "aria-haspopup": "true",
-                      "aria-expanded": "false"
-                    }
+                    staticClass: "navbar-nav ml-4",
+                    staticStyle: { position: "absolute", right: "20px" }
                   },
                   [
-                    _vm._v(
-                      "\n                            List\n                        "
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "dropdown-menu" },
-                  [
-                    _vm._l(_vm.multiple_list, function(list) {
-                      return _c(
-                        "span",
+                    _c("li", { staticClass: "nav-item dropdown" }, [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "dropdown-menu dropdown-menu-right",
+                          attrs: { "aria-labelledby": "dropdownMenuButton" }
+                        },
                         [
+                          _c("h6", { staticClass: "dropdown-header" }, [
+                            _vm._v(" Manage Nav")
+                          ]),
+                          _vm._v(" "),
                           _c(
-                            "router-link",
+                            "a",
                             {
-                              staticClass: "nav-link drop-item",
-                              attrs: {
-                                to: {
-                                  name: "project-dashboard",
-                                  params: { projectId: _vm.projectId }
-                                }
-                              }
+                              staticClass: "dropdown-item",
+                              attrs: { href: "javascript:void(0)" },
+                              on: { click: _vm.showModelForNevItem }
                             },
                             [
-                              _vm._v(_vm._s(list.list_title)),
                               _c("i", {
                                 staticClass:
-                                  "i-btn x20 task-complete icon-circle-o"
-                              })
+                                  "fa fa-fw text-left fa-btn fa-plus-circle"
+                              }),
+                              _vm._v(
+                                "\n                                            Create Task View\n                                        "
+                              )
                             ]
-                          )
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "dropdown-divider" }),
+                          _vm._v(" "),
+                          _c("h6", { staticClass: "dropdown-header" }, [
+                            _vm._v(" Edit Task View")
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.AllNevItems, function(nev) {
+                            return _c("span", [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "dropdown-item",
+                                  attrs: { href: "javascript:void(0)" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.updateNavbarModel(nev)
+                                    }
+                                  }
+                                },
+                                [_vm._v(" " + _vm._s(nev.title))]
+                              )
+                            ])
+                          })
                         ],
-                        1
+                        2
                       )
-                    }),
-                    _vm._v(" "),
-                    _vm._m(0)
-                  ],
-                  2
+                    ])
+                  ]
                 )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "nav-item" }, [
-              _c("div", { staticClass: "btn-group" }, [
-                _vm._m(1),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "dropdown-menu" },
-                  [
-                    _c(
-                      "a",
-                      { staticClass: "dropdown-item", attrs: { href: "#" } },
-                      [_vm._v("Action")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "nav-link",
-                        attrs: {
-                          to: {
-                            name: "project-board",
-                            params: { projectId: _vm.projectId }
-                          }
-                        }
-                      },
-                      [
-                        _vm._v("\n                                Board "),
-                        _c("i", { staticClass: "tree-toggle i-btn x30" })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _vm._m(2)
-                  ],
-                  1
-                )
-              ])
-            ])
-          ]
-        )
+              ],
+              2
+            )
+          ])
+        ])
       ]),
       _vm._v(" "),
-      _vm._m(3)
+      _vm._m(1)
     ]),
     _vm._v(" "),
     _c("div", { attrs: { id: "board_view_list" } }, [
@@ -102381,7 +102972,7 @@ var render = function() {
                                                               },
                                                               [
                                                                 _vm._v(
-                                                                  "Or invite a new\n                                                                    member by\n                                                                    email address\n                                                                "
+                                                                  "Or invite a new\n                                                                        member by\n                                                                        email address\n                                                                    "
                                                                 )
                                                               ]
                                                             )
@@ -102924,7 +103515,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(4),
+              _vm._m(2),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [
@@ -103053,7 +103644,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(5),
+              _vm._m(3),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [
@@ -103177,7 +103768,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(6),
+              _vm._m(4),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body list-model" }, [
                 _c(
@@ -103230,7 +103821,7 @@ var render = function() {
                         _vm._v(
                           " " +
                             _vm._s(tree.text) +
-                            "\n                                "
+                            "\n                                    "
                         ),
                         tree.children
                           ? _c(
@@ -103289,7 +103880,7 @@ var render = function() {
                                     _vm._v(
                                       " " +
                                         _vm._s(child.text) +
-                                        "\n                                            "
+                                        "\n                                                "
                                     ),
                                     child.children
                                       ? _c(
@@ -103375,7 +103966,7 @@ var render = function() {
                                                   _vm._v(
                                                     " " +
                                                       _vm._s(child1.text) +
-                                                      "\n                                                        "
+                                                      "\n                                                            "
                                                   ),
                                                   child1.children
                                                     ? _c(
@@ -103486,7 +104077,7 @@ var render = function() {
                                                                       _vm._s(
                                                                         child2.text
                                                                       ) +
-                                                                      "\n                                                                    "
+                                                                      "\n                                                                        "
                                                                   ),
                                                                   child2.children
                                                                     ? _c(
@@ -103605,7 +104196,7 @@ var render = function() {
                                                                                         _vm._s(
                                                                                           child3.text
                                                                                         ) +
-                                                                                        "\n                                                                            "
+                                                                                        "\n                                                                                "
                                                                                     )
                                                                                   ]
                                                                                 )
@@ -103669,6 +104260,450 @@ var render = function() {
           ]
         )
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "addListModel",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(5),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("p", [_vm._v("Add your new list here !")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("label", { staticClass: "col-sm-4 col-form-label" }, [
+                    _vm._v("List Title")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.list.name,
+                          expression: "list.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.list.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.list, "name", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("label", { staticClass: "col-sm-4 col-form-label" }, [
+                    _vm._v("List Description")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.list.description,
+                          expression: "list.description"
+                        }
+                      ],
+                      attrs: { name: "", id: "", cols: "40", rows: "3" },
+                      domProps: { value: _vm.list.description },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.list, "description", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.AddNewList }
+                  },
+                  [_vm._v("Add")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
+                  },
+                  [_vm._v("Cancel\n                        ")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "addBoardModel",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(6),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("p", [_vm._v("Add your new list here !")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("label", { staticClass: "col-sm-4 col-form-label" }, [
+                    _vm._v("Board Title")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.list.name,
+                          expression: "list.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.list.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.list, "name", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("label", { staticClass: "col-sm-4 col-form-label" }, [
+                    _vm._v("Board Description")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.list.description,
+                          expression: "list.description"
+                        }
+                      ],
+                      attrs: { name: "", cols: "40", rows: "3" },
+                      domProps: { value: _vm.list.description },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.list, "description", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.AddNewBoard }
+                  },
+                  [_vm._v("Add")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
+                  },
+                  [_vm._v("Cancel\n                        ")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "addNavItem",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(7),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group row" }, [
+                  _vm._m(8),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.nevItem.title,
+                          expression: "nevItem.title"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.nevItem.title },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.nevItem, "title", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _vm._m(9),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.nevItem.sort_id,
+                          expression: "nevItem.sort_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "number", min: "0" },
+                      domProps: { value: _vm.nevItem.sort_id },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.nevItem, "sort_id", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(10)
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.AddNevItem }
+                  },
+                  [_vm._v("Add")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
+                  },
+                  [_vm._v("Cancel\n                        ")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "updateNavItem",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(11),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group row" }, [
+                  _vm._m(12),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.nevItem.title,
+                          expression: "nevItem.title"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.nevItem.title },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.nevItem, "title", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _vm._m(13),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.nevItem.sort_id,
+                          expression: "nevItem.sort_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "number", min: "0" },
+                      domProps: { value: _vm.nevItem.sort_id },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.nevItem, "sort_id", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.updateNevItem }
+                  },
+                  [_vm._v("Update")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
+                  },
+                  [_vm._v("Cancel\n                        ")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
@@ -103677,37 +104712,26 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-      _c("i", { staticClass: "fa fa-plus" }),
-      _vm._v(" Add List")
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c(
-      "button",
+      "a",
       {
-        staticClass: "btn dropdown-toggle activeTask",
+        staticClass: "d-block d-md-flex text-center nav-link",
         attrs: {
-          type: "button",
+          href: "#",
           "data-toggle": "dropdown",
           "aria-haspopup": "true",
           "aria-expanded": "false"
         }
       },
-      [_c("span", [_vm._v("Board")])]
+      [
+        _c("span", { staticClass: "d-none d-md-block" }, [
+          _c("i", {
+            staticClass: "fa fa-fw fa-plus-circle",
+            staticStyle: { color: "#33CCFF", "font-size": "26px" }
+          })
+        ])
+      ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-      _c("i", { staticClass: "fa fa-plus" }),
-      _vm._v(" Add Board")
-    ])
   },
   function() {
     var _vm = this
@@ -103787,7 +104811,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
-      _c("h5", { staticClass: "modal-title" }, [_vm._v("Add Exixting Task")]),
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Add Existing Task")]),
       _vm._v(" "),
       _c(
         "button",
@@ -103800,6 +104824,186 @@ var staticRenderFns = [
           }
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title pl-3" }, [_vm._v(" Add List")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title pl-3" }, [_vm._v(" Add List")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title pl-3" }, [_vm._v(" Add Nev Item")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-4" }, [
+      _c(
+        "label",
+        { staticClass: "control-label float-right m-t-ng-8 txt_media1" },
+        [_vm._v("Nav Title")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-4" }, [
+      _c(
+        "label",
+        { staticClass: "control-label float-right m-t-ng-8 txt_media1" },
+        [_vm._v("Sort Number")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row form-group" }, [
+      _c("div", { staticClass: "col-sm-4" }, [
+        _c(
+          "label",
+          { staticClass: "control-label float-right m-t-ng-8 txt_media1" },
+          [_vm._v("Select Type")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-sm-8" }, [
+        _c("div", { staticClass: "iradio" }, [
+          _c("label", [
+            _c("input", {
+              attrs: {
+                type: "radio",
+                name: "optionsRadios",
+                id: "optionsRadios1",
+                value: "list"
+              }
+            }),
+            _vm._v(
+              "\n                                          List view\n                                    "
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "iradio" }, [
+          _c("label", [
+            _c("input", {
+              attrs: {
+                type: "radio",
+                name: "optionsRadios",
+                id: "optionsRadios2",
+                value: "board"
+              }
+            }),
+            _vm._v(
+              "\n                                          Board View\n                                    "
+            )
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title pl-3" }, [_vm._v(" Add Nev Item")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-4" }, [
+      _c(
+        "label",
+        { staticClass: "control-label float-right m-t-ng-8 txt_media1" },
+        [_vm._v("Nav Title")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-4" }, [
+      _c(
+        "label",
+        { staticClass: "control-label float-right m-t-ng-8 txt_media1" },
+        [_vm._v("Sort Number")]
       )
     ])
   }

@@ -27,11 +27,19 @@
 <!--                                                <a href="#" class="dropdown-item"> {{nev.title}}</a>-->
                                                 <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id)"
                                                       class="dropdown-item" :id="'list'+nev_list.id">
+
                                                     <router-link class="nav-link drop-item" v-if="nev.type === 'list'"
                                                                  :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nev_list.list_title}}<i
                                                         class="i-btn x20 task-complete icon-circle-o"></i>
                                                     </router-link>
+                                                    <router-link class="nav-link drop-item" v-else
+                                                                 :to="{ name: 'project-board', params: { projectId: projectId }}">{{nev_list.board_title}}<i
+                                                        class="i-btn x20 task-complete icon-circle-o"></i>
+                                                    </router-link>
+
+
                                                  </span>
+
                                             </span>
 
 
@@ -1534,6 +1542,7 @@
                         console.log('Add list api not working!!')
                     });
             },
+
             RemoveNewEmptyChildren(data) {
                 var children = data.children;
                 var index = 0;
