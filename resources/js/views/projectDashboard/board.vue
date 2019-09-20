@@ -122,7 +122,7 @@
                                                       :id="'id'+index+key"
                                                       class="inp input-hide text-area" @click="makeInput($event)">
                                             </textarea>
-                                            <!--                                            <p>{{ card.data }}</p>-->
+                                            <!--<p>{{ card.data }}</p>-->
                                             <div>
                                                 <a class="calender li-opacity clickHide" v-if="!card.date">
                                                     <i class="outline-event icon-image-preview" title="toggle"
@@ -329,7 +329,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document" >
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add Exixting Task</h5>
+                        <h5 class="modal-title">Add Existing Task</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -418,15 +418,15 @@
                 project: null,
                 tree4data: [
                     {
-                        id: 1,
-                        parent: 0,
+                        id: 1, parent: 0,
                         text: "Don't Forget Section",
                         clicked: 0,
                         date: '',
                         tags: ["Dont Forget"],
                         children: [
                             {
-                                id: 2, parent: 1,
+                                id: 2, 
+                                parent: 1,
                                 text: 'node 1-1',
                                 html: 'Atik',
                                 tags: ["Dont Forget"],
@@ -434,8 +434,12 @@
                                 clicked: 0
                             },
                             {
-                                id: 3, parent: 1,
-                                text: 'node 1-2', clicked: 0, tags: ["Dont Forget"], children: [
+                                id: 3, 
+                                parent: 1,
+                                text: 'node 1-2', 
+                                clicked: 0, 
+                                tags: ["Dont Forget"], 
+                                children: [
                                     {
                                         id: 4,
                                         parent: 3,
@@ -457,7 +461,8 @@
                         ]
                     },
                     {
-                        id: 6, parent: 0,
+                        id: 6, 
+                        parent: 0,
                         text: 'node 2',
                         html: 'Test 1',
                         date: '05 Aug',

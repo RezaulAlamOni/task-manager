@@ -66,26 +66,30 @@
                                     </div>
                                     <div data-v-095ab3dc="" class="table-footer">
                                         <div data-v-095ab3dc="" class="datatable-length float-left pl-3"><span
-                                            data-v-095ab3dc="">Rows per page:</span> <select data-v-095ab3dc=""
-                                                                                             class="custom-select">
-                                            <option data-v-095ab3dc="" value="5">5</option>
-                                            <option data-v-095ab3dc="" value="10">10</option>
-                                            <option data-v-095ab3dc="" value="20">20</option>
-                                            <option data-v-095ab3dc="" value="50">50</option>
-                                            <option data-v-095ab3dc="" value="-1">All</option>
-                                        </select>
+                                            data-v-095ab3dc="">Rows per page:</span> 
+                                            <select data-v-095ab3dc="" class="custom-select">
+                                                <option data-v-095ab3dc="" value="5">5</option>
+                                                <option data-v-095ab3dc="" value="10">10</option>
+                                                <option data-v-095ab3dc="" value="20">20</option>
+                                                <option data-v-095ab3dc="" value="50">50</option>
+                                                <option data-v-095ab3dc="" value="-1">All</option>
+                                            </select>
                                             <div data-v-095ab3dc="" class="datatable-info  pb-2 mt-3"><span
                                                 data-v-095ab3dc="">Showing </span> 1 -10 of 20 <span data-v-095ab3dc="">records</span>
                                             </div>
                                         </div>
                                         <div data-v-095ab3dc="" class="float-right">
                                             <ul data-v-095ab3dc="" class="pagination">
-                                                <li data-v-095ab3dc=""><a data-v-095ab3dc="" href="javascript:void(0)"
-                                                                          tabindex="0" class="btn link"><i
-                                                    data-v-095ab3dc="" class="fa fa-angle-left"></i></a></li>
-                                                <li ><a data-v-095ab3dc="" href="javascript:void(0)"
-                                                                          tabindex="0" class="btn link"><i
-                                                    data-v-095ab3dc="" class="fa fa-angle-right"></i></a></li>
+                                                <li data-v-095ab3dc="">
+                                                    <a data-v-095ab3dc="" href="javascript:void(0)" tabindex="0" class="btn link">
+                                                        <i data-v-095ab3dc="" class="fa fa-angle-left"></i>
+                                                    </a>
+                                                </li>
+                                                <li >
+                                                    <a data-v-095ab3dc="" href="javascript:void(0)"  tabindex="0" class="btn link">
+                                                        <i data-v-095ab3dc="" class="fa fa-angle-right"></i>
+                                                    </a
+                                                ></li>
                                             </ul>
                                         </div>
                                     </div>
