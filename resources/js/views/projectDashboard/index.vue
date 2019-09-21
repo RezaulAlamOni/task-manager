@@ -173,19 +173,21 @@
 
 
                                     <a class="tag-icon hide-item-res">
-                                        <div v-if="data.tags.length > 0">
-                                            <span v-for="tag in data.tags">
-                                                <span class="badge badge-warning"
-                                                      v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
-                                                      @click="changeTag(data)">
+                                        <i v-if="data.tags.length > 0"
+                                           class="dropdown-toggle-split"
+                                           data-toggle="dropdown">
+                                            <template v-for="tag in data.tags">
+                                                <span class="badge badge-warning" v-if="tag.title !== null"
+                                                      v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
                                                     {{(data.tags.length > 2 ) ? tag.title.substring(0,2) : tag.title.substring(0,4) }}
                                                 </span>
-                                            </span>
+                                                <span class="badge badge-warning" v-else
+                                                      v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
+                                                    ;:
+                                                </span>
 
-                                            <!--                                            <span class="badge badge-success"-->
-                                            <!--                                                  @click="changeTag(data)"-->
-                                            <!--                                                  v-else>{{data.tags[0].title.substring(0,12)}}</span>-->
-                                        </div>
+                                            </template>
+                                        </i>
 
                                         <i v-if="data.tags.length === 0 " :id="'tag-'+data._id"
                                            class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
@@ -196,20 +198,18 @@
 
                                             <diV class="collapse show switchToggle" style="">
                                                 <li class="assignUser">
-                                                    <input type="text" class="input-group searchUser" v-model="tag"
-                                                           @keypress="addTag($event,data)">
+                                                    <vue-tags-input
+                                                        v-model="tag1"
+                                                        :tags="tags"
+                                                        :allow-edit-tags="true"
+                                                        @tags-changed="newTags => (changeTAg(newTags))"
+
+                                                    />
                                                     <label class="pl-2 pt-3">
-<!--                                                        <span class="badge badge-success m-1"-->
-<!--                                                              @click="addExistingTag($event,data,'Tags')">Tags-->
-<!--                                                        </span>-->
-<!--                                                        <span class="badge badge-danger m-1 "-->
-<!--                                                              style="background: #8b3920"-->
-<!--                                                              @click="addExistingTag($event,data,'Dont Forget')">Dont Forget-->
-<!--                                                        </span>-->
                                                         <span v-for="tag in data.tags">
                                                             <span class="badge m-1"
                                                                   v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                {{tag.title.substring(0,12)}}
+                                                                {{(tag.title !== null) ?tag.title.substring(0,12) : ''}}
                                                             </span>
                                                         </span>
 
@@ -260,7 +260,7 @@
                                                         <span v-for="user in data.users">
                                                             <div class="row" @click="assignUserToTask(user,data)">
                                                                 <div class="col-md-3 pt-2 pl-5">
-                                                                    <p class="assignUser-photo">{{user.name.substring(0,1)}}</p>
+                                                                    <p class="assignUser-photo">{{(user.name !== null) ? user.name.substring(0,12) : ''}}</p>
                                                                 </div>
                                                                 <div class="col-md-9">
                                                                     <h5>{{user.name}}<br>
@@ -326,14 +326,6 @@
                                         <i class="outline-event icon-image-preview" title="toggle"
                                            data-toggle></i>
                                     </a>
-                                    <!--                                    <flatPickr-->
-                                    <!--                                        v-model="selectedData.date"-->
-                                    <!--                                        :config="date_config"-->
-                                    <!--                                        class="dateCal i-text"-->
-                                    <!--                                        placeholder="Add Date"-->
-                                    <!--                                        @on-change="showDate(selectedData.date)"-->
-                                    <!--                                        name="date">-->
-                                    <!--                                    </flatPickr>-->
 
                                     <datepicker
                                         :disabled-dates="disabledDates"
@@ -415,9 +407,9 @@
                                             <div v-if="selectedData.tags > 0">
                                         <span class="badge badge-warning" style="background: #8b3920"
 
-                                              v-if='selectedData.tags[0] === "Dont Forget"' data-toggle="dropdown">{{selectedData.tags[0].substring(0,12)}}</span>
+                                              v-if='selectedData.tags[0] === "Dont Forget"' data-toggle="dropdown">;;</span>
                                                 <span class="badge badge-success"
-                                                      v-else data-toggle="dropdown">{{selectedData.tags[0].substring(0,12)}}</span>
+                                                      v-else data-toggle="dropdown">;;</span>
 
                                                 <div class="dropdown-menu dropdown-menu-right"
                                                      :id="'dropdown'+selectedData._id">
@@ -743,9 +735,10 @@
     import hotkeys from 'hotkeys-js';
     import ClickOutside from 'vue-click-outside';
     import Datepicker from 'vuejs-datepicker';
+    import VueTagsInput from '@johmun/vue-tags-input';
 
     export default {
-        components: {Tree: DraggableTree, th: draggableHelper, switches, Datepicker},
+        components: {Tree: DraggableTree, th: draggableHelper, switches, Datepicker,VueTagsInput},
         data() {
             return {
                 disabledDates: {
@@ -787,7 +780,25 @@
                 nev_id: null,
                 AllNevItems: null,
                 task_logs: null,
-                file: null
+                file: null,
+                tags: [{
+                    id : 1,
+                    text: 'custom class',
+                    classes: 'custom-class',
+                }, {
+                    id : 1,
+                    text: 'duplicate',
+                }, {
+                    id : 1,
+                    text: 'duplicate',
+                }, {
+                    id : 1,
+                    text: 'Inline styled tag',
+                    style: 'background-color: #ff0000;',
+                }],
+                tags1: [],
+
+                tag1 : ''
             }
         },
         mounted() {
@@ -1217,7 +1228,9 @@
                 myColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16)
                 return myColor;
             },
+
             addTag(e, data) {
+
                 var _this = this;
                 if (e.which === 13) {
                     var color = (_this.tag === 'Dont Forget') ? '#ff0000' : _this.generateColor();
@@ -1232,7 +1245,7 @@
                             console.log(response.success)
                             _this.getTaskList()
                             $('#dropdown' + data._id).toggle();
-                            _this.selectedData.tags[0] = _this.tag,
+                            _this.selectedData = data
                                 _this.tag = null
                         })
                         .catch(error => {
@@ -1263,9 +1276,39 @@
                     });
 
             },
-            changeTag(data) {
-                $('#dropdown' + data._id).toggle();
+            changeTAg(tags){
+                var _this = this;
+                var old = this.tags.length;
+                var newl = tags.length;
+
+                if(newl > old){
+                    this.tags = tags;
+                    console.log(this.tags[newl-1])
+
+                    var color = (this.tags[newl-1].text === 'Dont Forget') ? '#ff0000' : _this.generateColor();
+                    var postData = {
+                        id: _this.selectedData.id,
+                        tags: _this.tags[newl-1].text,
+                        color: color
+                    }
+                    axios.post('/api/task-list/add-tag', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            console.log(response.success)
+                            _this.getTaskList()
+                            $('#dropdown' + data._id).toggle();
+                            _this.selectedData = data
+                            _this.tag = null
+                        })
+                        .catch(error => {
+                            console.log('Api for move down task not Working !!!')
+                        });
+
+                }
+
+
             },
+
             updateDescription() {
                 var _this = this;
                 var postData = {
