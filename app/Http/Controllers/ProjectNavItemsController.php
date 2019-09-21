@@ -35,9 +35,11 @@ class ProjectNavItemsController extends Controller
     public function getList($project_id, $nev_id, $type){
         if ($type == 'list'){
             $list = Multiple_list::where(['project_id'=>(int)$project_id,'nav_id'=>$nev_id])->get();
+            $list->type = $type;
             return $list;
         }else {
             $board = Multiple_board::where(['project_id'=>(int)$project_id,'nav_id'=>$nev_id])->get();
+            $board->type = $type;
             return $board;
         }
 

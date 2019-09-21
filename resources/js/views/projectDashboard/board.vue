@@ -54,7 +54,7 @@
                                             <h6 class="dropdown-header" v-if="nev.type === 'board'"> Board </h6>
 
                                             <span v-for="nev_list in nev.lists">
-                                                <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id)"
+                                                <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id,nev.type)"
                                                       class="dropdown-item" :id="'list'+nev_list.id">
 
                                                     <router-link class="nav-link drop-item" v-if="nev.type === 'list'"
@@ -357,11 +357,29 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>You need to set a progress and color for the new column.</p>
+                        <p>You need to set a  andprogress color for the new column.</p>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Name</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" v-model="addField.name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Percent Complete</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" v-model="addField.progress">
+                                    <option>0%</option>
+                                    <option>10%</option>
+                                    <option>20%</option>
+                                    <option>30%</option>
+                                    <option>40%</option>
+                                    <option>50%</option>
+                                    <option>60%</option>
+                                    <option>70%</option>
+                                    <option>80%</option>
+                                    <option>90%</option>
+                                    <option>100%</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -657,7 +675,8 @@
                 addField: {
                     name: null,
                     color: null,
-                    error: null
+                    error: null,
+                    progress : null
                 },
                 date_config: {
                     enableTime: false,
@@ -1000,7 +1019,8 @@
                 this.nev_id = id;
                 $("#addBoardModel").modal('show');
             },
-            setListId(id, title, nev_id) {
+            setListId(id, title, nev_id, type) {
+                
                 this.board_id = id;
                 this.nev_id = nev_id;
                 // $('#listName').text(title);
@@ -1078,17 +1098,45 @@
             setColumn() {
                 if (!this.addField.name) {
                     this.addField.error = 'Name is required!';
+                } else if(!this.nev_id || !this.board_id){
+                     this.addField.error = 'select board';
                 } else {
                     $("#addModal").modal('hide');
-                    this.cards.push({
-                        column: this.addField.name,
+                    let data = {
+                        title: this.addField.name,
+                        color: this.addField.color,
+                        project_id: this.projectId,
+                        progress: this.progress,
+                        nav_id: this.nev_id,
+                        multiple_board_id: this.board_id,
                         task: [{name: '', date: '', tags: [], clicked: 0}]
+                    };
+                    this.saveBoard(data);
+                    this.cards.push({
+                        column: this.addField.name,  
+                        task: [] //{name: '', date: '', tags: [], clicked: 0}
                     });
 
                     this.getData();
                     this.addField = {};
-                    console.log(this.cards)
+                    // console.log(this.cards)
                 }
+            },
+            saveBoard(data){
+                let _this = this;
+                axios.post('/api/board-save',data)
+                .then(response => response.data)
+                .then(response => {     
+                    // if(response.success == true){
+                        // _this.cards.push({
+                        //     column: data.title,
+                        //     task: [{name: '', date: '', tags: [], clicked: 0}]
+                        // });
+                    // }
+                    // console.log(response);
+                })
+                .catch(error => {});
+                // this.getData();
             },
             updateColumSow(index) {
                 this.updateIndex = index;
@@ -1119,15 +1167,17 @@
                     to: datePicker, // Disable all dates up to specific date
                 };
                 let data = {
-                    id: this.projectId,
+                    projectId: this.projectId,
                     board_id: this.board_id,
                     nav_id: this.nev_id
                 };
                 axios.post('/api/board-task', data)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response.board_task)
-                        this.cards = response.board_task;
+                        // console.log(_this.cards)
+                        _this.cards = response.success;
+                        // console.log(_this.cards)
+                        _this.getData();
                     })
                     .catch(error => {
 

@@ -45,6 +45,8 @@ Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog
 
 
 //board Section
+Route::post('/board-task','MultipleBoardController@index'); //get board item
+Route::post('/board-save','MultipleBoardController@create'); //get board item
 
 Route::post('/board-add', 'MultipleBoardController@store');//add list under project
 
