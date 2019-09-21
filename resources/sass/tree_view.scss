@@ -636,6 +636,15 @@
 .image-auto{
     width :100%;
 }
+.tag-manager{
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 8px !important;
+    position: absolute;
+    right: 5px;
+    top: 50px;
+}
 
 @media only screen and (max-width: 880px) {
     .hide-item-res {

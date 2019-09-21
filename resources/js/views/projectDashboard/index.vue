@@ -45,13 +45,15 @@
 
                                             <div class="dropdown-divider"></div>
 
-                                            <a href="Javascript:void(0)" @click="addListModel(nev.id)" v-if="nev.type === 'list'"
+                                            <a href="Javascript:void(0)" @click="addListModel(nev.id)"
+                                               v-if="nev.type === 'list'"
                                                class="dropdown-item">
                                                 <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
                                                 Create {{nev.title}}  >List
                                             </a>
 
-                                            <a href="Javascript:void(0)" @click="addBoardModel(nev.id)" v-if="nev.type === 'board'"
+                                            <a href="Javascript:void(0)" @click="addBoardModel(nev.id)"
+                                               v-if="nev.type === 'board'"
                                                class="dropdown-item">
                                                 <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
                                                 Create {{nev.title}}>Board
@@ -165,22 +167,27 @@
                                         </span>
                                         <i class="fa fa-paperclip icon-image-preview dropdown-toggle-split li-opacity"
                                            @click="addAttachment(data)"></i>
-                                        <input type="file" :id="'file'+data._id" ref="file" style="display: none;"
+                                        <input type="file" :id="'file'+data._id" ref="file" style="display: none; "
                                                @change="updatePicture($event,data)">
                                     </a>
 
 
                                     <a class="tag-icon hide-item-res">
-                                        <div v-if="data.tags">
-                                            <span class="badge badge-warning" style="background: #8b3920"
-                                                  @click="changeTag(data)"
-                                                  v-if='data.tags === "Dont Forget"'>{{data.tags.substring(0,12)}}</span>
-                                            <span class="badge badge-success"
-                                                  @click="changeTag(data)"
-                                                  v-else>{{data.tags.substring(0,12)}}</span>
+                                        <div v-if="data.tags.length > 0">
+                                            <span v-for="tag in data.tags">
+                                                <span class="badge badge-warning"
+                                                      v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
+                                                      @click="changeTag(data)">
+                                                    {{(data.tags.length > 2 ) ? tag.title.substring(0,2) : tag.title.substring(0,4) }}
+                                                </span>
+                                            </span>
+
+                                            <!--                                            <span class="badge badge-success"-->
+                                            <!--                                                  @click="changeTag(data)"-->
+                                            <!--                                                  v-else>{{data.tags[0].title.substring(0,12)}}</span>-->
                                         </div>
 
-                                        <i v-if="data.tags.length == ''"
+                                        <i v-if="data.tags.length === 0 " :id="'tag-'+data._id"
                                            class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
                                            data-toggle="dropdown">
 
@@ -192,11 +199,22 @@
                                                     <input type="text" class="input-group searchUser" v-model="tag"
                                                            @keypress="addTag($event,data)">
                                                     <label class="pl-2 pt-3">
-                                                        <span class="badge badge-success m-1"
-                                                              @click="addExistingTag($event,data,'Tags')">Tags</span>
-                                                        <span class="badge badge-danger m-1 "
-                                                              style="background: #8b3920"
-                                                              @click="addExistingTag($event,data,'Dont Forget')">Dont Forget</span>
+<!--                                                        <span class="badge badge-success m-1"-->
+<!--                                                              @click="addExistingTag($event,data,'Tags')">Tags-->
+<!--                                                        </span>-->
+<!--                                                        <span class="badge badge-danger m-1 "-->
+<!--                                                              style="background: #8b3920"-->
+<!--                                                              @click="addExistingTag($event,data,'Dont Forget')">Dont Forget-->
+<!--                                                        </span>-->
+                                                        <span v-for="tag in data.tags">
+                                                            <span class="badge m-1"
+                                                                  v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
+                                                                {{tag.title.substring(0,12)}}
+                                                            </span>
+                                                        </span>
+
+                                                        <a href="javascript:void(0)" class="btn btn-primary tag-manager">Manage Tag </a>
+
                                                     </label>
                                                 </li>
 
@@ -394,12 +412,12 @@
                                 <div class="col-md-12" style="cursor: pointer; background-color: #F8F8F8">
                                     <div class="row">
                                         <a>
-                                            <div v-if="selectedData.tags">
+                                            <div v-if="selectedData.tags > 0">
                                         <span class="badge badge-warning" style="background: #8b3920"
 
-                                              v-if='selectedData.tags === "Dont Forget"' data-toggle="dropdown">{{selectedData.tags.substring(0,12)}}</span>
+                                              v-if='selectedData.tags[0] === "Dont Forget"' data-toggle="dropdown">{{selectedData.tags[0].substring(0,12)}}</span>
                                                 <span class="badge badge-success"
-                                                      v-else data-toggle="dropdown">{{selectedData.tags.substring(0,12)}}</span>
+                                                      v-else data-toggle="dropdown">{{selectedData.tags[0].substring(0,12)}}</span>
 
                                                 <div class="dropdown-menu dropdown-menu-right"
                                                      :id="'dropdown'+selectedData._id">
@@ -423,7 +441,7 @@
 
                                             <i v-else
                                                class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
-                                               data-toggle="dropdown"></i>
+                                               data-toggle="dropdown" :id="'tag-'+selectedData._id"></i>
 
                                             <div class="dropdown-menu dropdown-menu-right"
                                                  :id="'dropdown'+selectedData._id">
@@ -794,7 +812,7 @@
         },
         created() {
             let _this = this;
-            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,ctrl+d,ctrl+b,ctrl+s,ctrl+i', function (event, handler) {
+            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,ctrl+d,ctrl+b,ctrl+s,ctrl+i,ctrl+shift+3', function (event, handler) {
                 event.preventDefault()
                 switch (handler.key) {
                     case "enter" :
@@ -847,13 +865,17 @@
                         _this.shwAssignUserDropDown(_this.selectedData);
                         break;
                     case "ctrl+b":
-                        _this.AddTagTONode(_this.selectedData);
+                        _this.AddDontForgetTag(_this.selectedData);//add DON'T FORGET SECTION
                         break;
                     case "ctrl+s":
                         $('.searchList').show();
                         break;
                     case "ctrl+i":
                         _this.addAttachment(_this.selectedData);
+                        break;
+                    case "ctrl+shift+3":
+                        $('#tag-' + _this.selectedData._id).click();
+                        console.log(_this.selectedData);
                         break;
                 }
             });
@@ -918,7 +940,7 @@
                 // console.log(old)
 
             },
-            assignUserToTask(user,data){
+            assignUserToTask(user, data) {
                 alert('dfsa');
             },
 
@@ -1190,12 +1212,19 @@
                         console.log('Api is copy and cut not Working !!!')
                     });
             },
+            generateColor() {
+                var myColor = '#000000';
+                myColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16)
+                return myColor;
+            },
             addTag(e, data) {
                 var _this = this;
                 if (e.which === 13) {
+                    var color = (_this.tag === 'Dont Forget') ? '#ff0000' : _this.generateColor();
                     var postData = {
                         id: data.id,
-                        tags: _this.tag
+                        tags: _this.tag,
+                        color: color
                     }
                     axios.post('/api/task-list/add-tag', postData)
                         .then(response => response.data)
@@ -1203,7 +1232,7 @@
                             console.log(response.success)
                             _this.getTaskList()
                             $('#dropdown' + data._id).toggle();
-                            _this.selectedData.tags = _this.tag,
+                            _this.selectedData.tags[0] = _this.tag,
                                 _this.tag = null
                         })
                         .catch(error => {
@@ -1213,10 +1242,13 @@
                 }
             },
             addExistingTag(e, data, tag) {
+
                 var _this = this;
+                var color = (tag === 'Dont Forget') ? '#ff0000' : _this.generateColor();
                 var postData = {
                     id: data.id,
-                    tags: tag
+                    tags: tag,
+                    color: color
                 }
                 axios.post('/api/task-list/add-tag', postData)
                     .then(response => response.data)
@@ -1224,7 +1256,7 @@
                         console.log(response.success)
                         _this.getTaskList()
                         $('#dropdown' + data._id).toggle();
-                        _this.selectedData.tags = tag
+                        _this.selectedData.tags[0] = tag
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
@@ -1469,7 +1501,7 @@
                                 list_id: _this.list_id,
                                 nav_id: _this.nav_id,
                                 parent_id: 0,
-                                sort_id: 0,
+                                sort_id: 1,
                                 tags: "",
                                 text: ""
                             };
@@ -1620,16 +1652,7 @@
                     });
             },
             deletePhoto(img) {
-                var _this = this;
-                axios.post('/api/task-list/delete-img', {'img': img})
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.getTaskList()
-                        $("#imageModal").modal('hide');
-                    })
-                    .catch(error => {
-                        console.log('Api for task date update not Working !!!')
-                    });
+
             },
 
             hasPermission(permission) {
@@ -1642,9 +1665,19 @@
                     $(targets[0]).click();
                 }
             },
-            AddTagTONode(data) {
-                // data.tags.push('Dont Forget');
-                data.tags = 'Dont Forget';
+            AddDontForgetTag(data) {
+                // var _this = this;
+                // axios.post('/api/task-list/add-dont-forget-tag', {'img': img})
+                //     .then(response => response.data)
+                //     .then(response => {
+                //         _this.getTaskList()
+                //         $("#imageModal").modal('hide');
+                //     })
+                //     .catch(error => {
+                //         console.log('Api for task date update not Working !!!')
+                //     });
+
+                data.tags[0] = 'Dont Forget';
                 var moveItem;
                 var children = data.parent.children;
                 var text = data.text;
