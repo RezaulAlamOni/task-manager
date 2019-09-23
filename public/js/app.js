@@ -98484,14 +98484,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 }, { id: 19, parent: 10, text: 'node 7-4', clicked: 0 }, { id: 20, parent: 10, text: 'node 7-5', clicked: 0 }, { id: 21, parent: 10, text: 'node 7-6', clicked: 0 }]
             }],
             cards: [{
+                id: 0,
                 column: 'To Do',
                 task: [{ name: 'node 1-1-1 sdf a srsdfgs df gsdf', date: '10 Aug', tags: ["Nothing"], clicked: 0 }, { name: 'node 1-1-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0 }],
                 hidden: 0
             }, {
+                id: 1,
                 column: 'In Progress',
                 task: [{ name: 'node 1-2-1', date: '10 Aug', tags: ["Do First"], clicked: 0 }, { name: 'node 1-2-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0 }, { name: 'node 1-2-3', date: '', tags: ["important"], clicked: 0 }, { name: 'node 1-2-4', date: '25 Aug', tags: [], clicked: 0 }],
                 hidden: 1
             }, {
+                id: 2,
                 column: 'Complete',
                 task: [{ name: 'node 1-3-1', date: '10 Aug', tags: ["new"], clicked: 0 }, { name: 'node 1-3-2', date: '25 Aug', tags: ["Dst"], clicked: 0 }, { name: 'node 1-3-3', date: '25 Aug', tags: ["Dont Forget"], clicked: 0 }],
                 hidden: 0
@@ -98605,6 +98608,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 children: Object(__WEBPACK_IMPORTED_MODULE_6__assets_plugins_utils_helpers__["b" /* generateItems */])(this.cards.length, function (i) {
                     return {
                         id: 'column' + i,
+                        boardId: _this3.cards[i].id,
                         type: 'container',
                         name: _this3.cards[i].column,
                         props: {
@@ -98806,10 +98810,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     task: [{ name: '', date: '', tags: [], clicked: 0 }]
                 };
                 this.saveBoard(data);
-                this.cards.push({
-                    column: this.addField.name,
-                    task: [] //{name: '', date: '', tags: [], clicked: 0}
-                });
+                // this.cards.push({
+                //     column: this.addField.name,  
+                //     task: [] //{name: '', date: '', tags: [], clicked: 0}
+                // });
 
                 this.getData();
                 this.addField = {};
@@ -98821,12 +98825,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             axios.post('/api/board-save', data).then(function (response) {
                 return response.data;
             }).then(function (response) {
-                // if(response.success == true){
-                // _this.cards.push({
-                //     column: data.title,
-                //     task: [{name: '', date: '', tags: [], clicked: 0}]
-                // });
-                // }
+                if (response.success == true) {
+                    _this.cards.push({
+                        column: data.title,
+                        task: [] //[{name: '', date: '', tags: [], clicked: 0}]
+                    });
+                    _this.getData();
+                }
                 // console.log(response);
             }).catch(function (error) {});
             // this.getData();
@@ -98932,9 +98937,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.cards[index].task[key].tags.splice(0, 1, tag);
             // $('#dropdown'+index+key).toggle();
         },
-        deleteColumn: function deleteColumn(index) {
+        deleteColumn: function deleteColumn(index, id) {
             var _this = this;
-            if (confirm('Are you sure tou want to delete this board?')) {
+            if (confirm('Are you sure tou want to delete this board? ')) {
+
                 _this.cards.splice(index, 1);
                 _this.getData();
             }
@@ -102847,7 +102853,8 @@ var render = function() {
                                                 on: {
                                                   click: function($event) {
                                                     return _vm.deleteColumn(
-                                                      index
+                                                      index,
+                                                      column.boardId
                                                     )
                                                   }
                                                 }

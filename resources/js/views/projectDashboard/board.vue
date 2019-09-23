@@ -183,7 +183,7 @@
                                                     <a class="dropdown-item" href="#" @click="deleteColumnCards(index)">
                                                         <i class="fa fa-trash opacity"></i> Peekaboo all tasks in this column</a>
                                                     <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#" @click="deleteColumn(index)"><i
+                                                    <a class="dropdown-item" href="#" @click="deleteColumn(index,column.boardId)"><i
                                                             class="fa fa-trash opacity"></i> Delete column</a>
                                                 </diV>
                                             </div>
@@ -775,7 +775,8 @@
                     },
                 ],
                 cards: [
-                    {
+                    {   
+                        id: 0,
                         column: 'To Do',
                         task: [
                             {name: 'node 1-1-1 sdf a srsdfgs df gsdf', date: '10 Aug', tags: ["Nothing"], clicked: 0},
@@ -783,7 +784,8 @@
                         ],
                         hidden : 0
                     },
-                    {
+                    {   
+                        id: 1,
                         column: 'In Progress',
                         task: [
                             {name: 'node 1-2-1', date: '10 Aug', tags: ["Do First"], clicked: 0},
@@ -794,6 +796,7 @@
                         hidden : 1
                     }, 
                     {
+                        id: 2,
                         column: 'Complete',
                         task: [
                             {name: 'node 1-3-1', date: '10 Aug', tags: ["new"], clicked: 0},
@@ -912,6 +915,7 @@
                     },
                     children: generateItems(this.cards.length, i => ({
                         id: `column${i}`,
+                        boardId: this.cards[i].id,
                         type: 'container',
                         name: this.cards[i].column,
                         props: {
@@ -1112,10 +1116,10 @@
                         task: [{name: '', date: '', tags: [], clicked: 0}]
                     };
                     this.saveBoard(data);
-                    this.cards.push({
-                        column: this.addField.name,  
-                        task: [] //{name: '', date: '', tags: [], clicked: 0}
-                    });
+                    // this.cards.push({
+                    //     column: this.addField.name,  
+                    //     task: [] //{name: '', date: '', tags: [], clicked: 0}
+                    // });
 
                     this.getData();
                     this.addField = {};
@@ -1127,12 +1131,13 @@
                 axios.post('/api/board-save',data)
                 .then(response => response.data)
                 .then(response => {     
-                    // if(response.success == true){
-                        // _this.cards.push({
-                        //     column: data.title,
-                        //     task: [{name: '', date: '', tags: [], clicked: 0}]
-                        // });
-                    // }
+                    if(response.success == true){
+                        _this.cards.push({
+                            column: data.title,
+                            task: []//[{name: '', date: '', tags: [], clicked: 0}]
+                        });
+                        _this.getData();
+                    }
                     // console.log(response);
                 })
                 .catch(error => {});
@@ -1244,9 +1249,10 @@
                 this.cards[index].task[key].tags.splice(0,1,tag);
                 // $('#dropdown'+index+key).toggle();
             },
-            deleteColumn(index) {
+            deleteColumn(index,id) {
                 let _this = this;
-                if (confirm('Are you sure tou want to delete this board?')) {
+                if (confirm('Are you sure tou want to delete this board? ')) {
+                    
                     _this.cards.splice(index, 1)
                     _this.getData();
                 }
