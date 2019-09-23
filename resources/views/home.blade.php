@@ -116,6 +116,24 @@
                     </li>
                 </ul>
 
+                <ul class="navbar-nav ml-4" style="position: absolute;right: 60px;">
+                    <li class="nav-item dropdown">
+                        <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <span class="d-none d-md-block">
+                               Shortcuts
+                            </span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+
+                            <h6 class="dropdown-header"> Shortcut List</h6>
+                            <h6 class="dropdown-header"> Enter: Save & Add Task</h6>
+                            <h6 class="dropdown-header"> Shortcut List</h6>
+                            <h6 class="dropdown-header"> Shortcut List</h6>
+
+                        </div>
+                    </li>
+                </ul>
 
                 <ul class="navbar-nav ml-4" style="position: absolute;right: 20px;">
                     <li class="nav-item dropdown">

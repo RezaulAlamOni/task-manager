@@ -41,9 +41,10 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['tags'] = json_decode($values['tags']);
                 }
             } else {
-                $boards[$key]['task'] = '';
+                $boards[$key]['task'] = [];
             }
         }
+        // return $boards;
         return response()->json(['success'=>$boards]);
     }   
 
@@ -51,21 +52,24 @@ class MultipleBoardController extends Controller
     public function create(Request $request)
     {   
         // return $request->all();
-        TaskBoard::create([
-
+        $data = TaskBoard::create([
             'multiple_board_id' => $request->multiple_board_id,
             'nav_id' => $request->nav_id,
             'project_id' => $request->project_id,
             'title' => $request->title,
             'color' => $request->color,
             'parent_id' => 0,
+            'hidden' => 0,
             'sort_id' => 20,
             'created_by' => 1,
             'updated_by' => 1,
             'date' => Carbon::today(),
             'created_at' => Carbon::today(),
         ]);
-        return response()->json(['success'=> true]);
+        // return $data;
+        if($data){
+            return response()->json(['success'=> true, 'data' => $data]);
+        }
     }
 
     public function store(Request $request)
@@ -132,8 +136,15 @@ class MultipleBoardController extends Controller
      * @param  \App\Multiple_board  $multiple_board
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Multiple_board $multiple_board)
+    public function destroy($id)
     {
-        //
+        $delete = TaskBoard::where('id',$id)
+                ->orWhere('parent_id',$id)
+                ->delete();
+        if($delete){
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
     }
 }

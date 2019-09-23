@@ -98390,6 +98390,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -98483,22 +98505,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     text: 'node 7-3', children: [{ id: 17, parent: 16, text: 'node 7-3-1', clicked: 0 }, { id: 18, parent: 16, text: 'node 7-3-2 undroppable', droppable: false, clicked: 0 }], clicked: 0
                 }, { id: 19, parent: 10, text: 'node 7-4', clicked: 0 }, { id: 20, parent: 10, text: 'node 7-5', clicked: 0 }, { id: 21, parent: 10, text: 'node 7-6', clicked: 0 }]
             }],
-            cards: [{
-                id: 0,
-                column: 'To Do',
-                task: [{ name: 'node 1-1-1 sdf a srsdfgs df gsdf', date: '10 Aug', tags: ["Nothing"], clicked: 0 }, { name: 'node 1-1-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0 }],
-                hidden: 0
-            }, {
-                id: 1,
-                column: 'In Progress',
-                task: [{ name: 'node 1-2-1', date: '10 Aug', tags: ["Do First"], clicked: 0 }, { name: 'node 1-2-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0 }, { name: 'node 1-2-3', date: '', tags: ["important"], clicked: 0 }, { name: 'node 1-2-4', date: '25 Aug', tags: [], clicked: 0 }],
-                hidden: 1
-            }, {
-                id: 2,
-                column: 'Complete',
-                task: [{ name: 'node 1-3-1', date: '10 Aug', tags: ["new"], clicked: 0 }, { name: 'node 1-3-2', date: '25 Aug', tags: ["Dst"], clicked: 0 }, { name: 'node 1-3-3', date: '25 Aug', tags: ["Dont Forget"], clicked: 0 }],
-                hidden: 0
-            }],
+            cards: [
+                // {   
+                //     id: 0,
+                //     column: 'To Do',
+                //     task: [
+                //         {name: 'node 1-1-1 sdf a srsdfgs df gsdf', date: '10 Aug', tags: ["Nothing"], clicked: 0},
+                //         {name: 'node 1-1-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
+                //     ],
+                //     hidden : 0
+                // },
+                // {   
+                //     id: 1,
+                //     column: 'In Progress',
+                //     task: [
+                //         {name: 'node 1-2-1', date: '10 Aug', tags: ["Do First"], clicked: 0},
+                //         {name: 'node 1-2-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
+                //         {name: 'node 1-2-3', date: '', tags: ["important"], clicked: 0},
+                //         {name: 'node 1-2-4', date: '25 Aug', tags: [], clicked: 0},
+                //     ],
+                //     hidden : 1
+                // }, 
+                // {
+                //     id: 2,
+                //     column: 'Complete',
+                //     task: [
+                //         {name: 'node 1-3-1', date: '10 Aug', tags: ["new"], clicked: 0},
+                //         {name: 'node 1-3-2', date: '25 Aug', tags: ["Dst"], clicked: 0},
+                //         {name: 'node 1-3-3', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
+                //     ],
+                //     hidden : 0
+                // }
+            ],
             scene: {},
             upperDropPlaceholderOptions: {
                 className: 'cards-drop-preview',
@@ -98626,7 +98664,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                                 },
                                 data: _this3.cards[i].task[j].name,
                                 date: _this3.cards[i].task[j].date,
-                                tags: _this3.cards[i].task[j].tags
+                                tags: _this3.cards[i].task[j].tags,
+                                delete: _this3.cards[i].task[j].name
                             };
                         })
                     };
@@ -98827,7 +98866,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             }).then(function (response) {
                 if (response.success == true) {
                     _this.cards.push({
-                        column: data.title,
+                        id: response.data.id,
+                        column: response.data.title,
+                        hidden: response.data.hidden,
                         task: [] //[{name: '', date: '', tags: [], clicked: 0}]
                     });
                     _this.getData();
@@ -98837,6 +98878,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             // this.getData();
         },
         updateColumSow: function updateColumSow(index) {
+            // alert(index);
             this.updateIndex = index;
             this.addField.name = this.cards[this.updateIndex].column;
             $("#EditModal").modal('show');
@@ -98908,7 +98950,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             };
             _this.growInit(option);
         },
-        addCard: function addCard(index) {
+        addCard: function addCard(index, id) {
+            // alert(id);
             this.cards[index].task.push({ name: '', date: '', tags: [], clicked: 0 });
             var key = this.cards[index].task.length - 1;
             this.getData();
@@ -98938,11 +98981,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             // $('#dropdown'+index+key).toggle();
         },
         deleteColumn: function deleteColumn(index, id) {
+            // alert(id);
             var _this = this;
-            if (confirm('Are you sure tou want to delete this board? ')) {
-
-                _this.cards.splice(index, 1);
-                _this.getData();
+            if (confirm('Are you sure you want to delete this board?')) {
+                axios.delete('/api/delete-board/' + id).then(function (response) {
+                    return response.data;
+                }).then(function (response) {
+                    if (response.success) {
+                        _this.cards.splice(index, 1);
+                        _this.getData();
+                    }
+                }).catch(function (error) {});
             }
         },
         deleteColumnCards: function deleteColumnCards(index) {
@@ -102732,7 +102781,10 @@ var render = function() {
                                                 },
                                                 on: {
                                                   click: function($event) {
-                                                    return _vm.addCard(index)
+                                                    return _vm.addCard(
+                                                      index,
+                                                      column.boardId
+                                                    )
                                                   }
                                                 }
                                               },
@@ -103007,6 +103059,35 @@ var render = function() {
                                           1
                                         ),
                                         _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticStyle: {
+                                              position: "absolute",
+                                              right: "160px",
+                                              bottom: "8px"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "a",
+                                              {
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.deleteCard(index)
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass:
+                                                    "baseline-playlist_delete icon-image-preview"
+                                                })
+                                              ]
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
                                         _c("div", { staticClass: "user" }, [
                                           _c("a", [
                                             _c("i", {
@@ -103249,7 +103330,7 @@ var render = function() {
                                           ])
                                         ]),
                                         _vm._v(" "),
-                                        _c("a", { staticClass: "tag-icon " }, [
+                                        _c("a", { staticClass: "tag-icon" }, [
                                           card.tags && card.tags.length !== 0
                                             ? _c(
                                                 "div",
@@ -103837,6 +103918,71 @@ var render = function() {
                         }
                       }
                     })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("label", { staticClass: "col-sm-4 col-form-label" }, [
+                    _vm._v("Percent Complete")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.addField.progress,
+                            expression: "addField.progress"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.addField,
+                              "progress",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c("option", [_vm._v("0%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("10%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("20%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("30%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("40%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("50%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("60%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("70%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("80%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("90%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("100%")])
+                      ]
+                    )
                   ])
                 ]),
                 _vm._v(" "),
