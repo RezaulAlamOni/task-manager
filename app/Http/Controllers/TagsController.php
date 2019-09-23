@@ -12,7 +12,8 @@ class TagsController extends Controller
 
     public function index()
     {
-        //
+        $tags =  Tags::where('task_id','!=',null)->get();
+        return response()->json(['tags'=>$tags]);
     }
 
 

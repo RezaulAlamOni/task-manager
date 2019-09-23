@@ -214,7 +214,13 @@
                                                             </span>
                                                         </span>
 
-                                                        <a href="javascript:void(0)" class="btn btn-primary tag-manager">Manage Tag </a>
+                                                        <a href="javascript:void(0)" class="btn btn-primary tag-manager"
+
+                                                           @click="showTagManageModel"
+                                                        >
+                                                            Manage Tag
+
+                                                        </a>
 
                                                     </label>
                                                 </li>
@@ -408,7 +414,8 @@
                                             <div v-if="selectedData.tags > 0">
                                         <span class="badge badge-warning" style="background: #8b3920"
 
-                                              v-if='selectedData.tags[0] === "Dont Forget"' data-toggle="dropdown">;;</span>
+                                              v-if='selectedData.tags[0] === "Dont Forget"'
+                                              data-toggle="dropdown">;;</span>
                                                 <span class="badge badge-success"
                                                       v-else data-toggle="dropdown">;;</span>
 
@@ -721,6 +728,59 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="TagManage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="text-center text-uppercase">Manage All Tag</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="table" class="table-editable">
+                                    <table class="table table-bordered table-responsive-md table-striped text-center">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center">Task id</th>
+                                            <th class="text-center">Title</th>
+                                            <th class="text-center">Color</th>
+                                            <th class="text-center">Remove</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <template v-for="tag in manageTag">
+                                            <tr>
+                                                <td class="pt-3-half" >{{tag.task_id}}</td>
+                                                <td class="pt-3-half" contenteditable="true" @keypress="updateTagName($event,tag)">{{tag.title}}</td>
+                                                <td class="pt-3-half"><input type="color" :value="tag.color" @change="updateTagColor($event,tag)"></td>
+
+                                                <td>
+                                                <span class="table-remove">
+                                                    <button type="button" class="btn btn-danger btn-rounded btn-sm my-0" @click="DeleteTagFromModal($event,tag)">Remove</button>
+                                                </span>
+                                                </td>
+                                            </tr>
+                                        </template>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -739,7 +799,7 @@
     import VueTagsInput from '@johmun/vue-tags-input';
 
     export default {
-        components: {Tree: DraggableTree, th: draggableHelper, switches, Datepicker,VueTagsInput},
+        components: {Tree: DraggableTree, th: draggableHelper, switches, Datepicker, VueTagsInput},
         data() {
             return {
                 disabledDates: {
@@ -783,23 +843,23 @@
                 task_logs: null,
                 file: null,
                 tags1: [{
-                    id : 1,
+                    id: 1,
                     text: 'custom class',
                     classes: 'custom-class',
                 }, {
-                    id : 1,
+                    id: 1,
                     text: 'duplicate',
                 }, {
-                    id : 1,
+                    id: 1,
                     text: 'duplicate',
                 }, {
-                    id : 1,
+                    id: 1,
                     text: 'Inline styled tag',
                     style: 'background-color: #ff0000;',
                 }],
                 tags: [],
-
-                tag1 : ''
+                tag1: '',
+                manageTag: null
             }
         },
         mounted() {
@@ -1248,7 +1308,7 @@
                             _this.getTaskList()
                             $('#dropdown' + data._id).toggle();
                             _this.selectedData = data
-                                _this.tag = null
+                            _this.tag = null
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
@@ -1278,19 +1338,19 @@
                     });
 
             },
-            changeTAg(tags){
+            changeTAg(tags) {
                 var _this = this;
                 var old = this.tags.length;
                 var newl = tags.length;
 
-                if(newl > old){
+                if (newl > old) {
                     this.tags = tags;
-                    console.log(this.tags[newl-1])
+                    console.log(this.tags[newl - 1])
 
-                    var color = (this.tags[newl-1].text === 'Dont Forget') ? '#ff0000' : _this.generateColor();
+                    var color = (this.tags[newl - 1].text === 'Dont Forget') ? '#ff0000' : _this.generateColor();
                     var postData = {
                         id: _this.selectedData.id,
-                        tags: _this.tags[newl-1].text,
+                        tags: _this.tags[newl - 1].text,
                         color: color
                     }
                     axios.post('/api/task-list/add-tag', postData)
@@ -1308,7 +1368,7 @@
 
                 }
             },
-            DeleteTag(obj){
+            DeleteTag(obj) {
                 var _this = this;
                 var postData = {
                     id: obj.tag.id,
@@ -1327,8 +1387,7 @@
                     });
 
             },
-            UpdateTag(obj){
-                console.log(obj.tag.id)
+            UpdateTag(obj) {
                 var _this = this;
                 var postData = {
                     id: obj.tag.id,
@@ -1347,6 +1406,32 @@
                     });
 
             },
+            showTagManageModel() {
+                var _this = this;
+                axios.get('/api/task-list/all-tag')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.manageTag = response.tags;
+                        console.log(response)
+                        $('#TagManage').modal('show');
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
+            },
+            updateTagColor(e, tag){
+                var color = e.target.value;
+                alert (color);
+
+            },
+            updateTagName(e, tag){
+
+            },
+            DeleteTagFromModal(e, tag){
+
+            },
+
 
             updateDescription() {
                 var _this = this;
@@ -1735,7 +1820,7 @@
             },
             deletePhoto(img) {
                 var _this = this;
-                axios.post( '/api/task-list/delete-img', {'img':img})
+                axios.post('/api/task-list/delete-img', {'img': img})
                     .then(response => response.data)
                     .then(response => {
                         _this.getTaskList()
