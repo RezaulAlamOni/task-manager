@@ -12,6 +12,7 @@ use App\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\File;
 use function GuzzleHttp\Promise\all;
 
 class TaskController extends Controller
@@ -291,7 +292,15 @@ class TaskController extends Controller
 
     public function deleteImg(Request $request)
     {
-        Files::where('file_name',$request->img)->delete();
+        $delete =  Files::where('file_name',$request->img)->delete();
+        if ($delete){
+            $image_path = public_path()."/images/".$request->img;  // Value is not URL but directory file path
+            if(file_exists($image_path)) {
+                $del = unlink($image_path);
+                return response()->json(['success' => $del]);
+            }
+        }
+
         return response()->json(['success' => 1]);
     }
 
@@ -415,7 +424,6 @@ class TaskController extends Controller
                 $info['children'] = [];
             }
             $data[] = $info;
-
         }
         return $data;
     }

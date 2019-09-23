@@ -190,7 +190,7 @@
                                         </i>
 
                                         <i v-else :id="'tag-'+data._id"
-                                           class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
+                                           class="outline-local_offer icon-image-preview li-opacity"
                                            data-toggle="dropdown">
 
                                         </i>
@@ -200,9 +200,10 @@
                                                 <li class="assignUser">
                                                     <vue-tags-input
                                                         v-model="tag1"
-                                                           :tags="data.tags"
+                                                        :tags="data.tags"
                                                         :allow-edit-tags="true"
                                                         @tags-changed="newTags => (changeTAg(newTags))"
+                                                        @before-deleting-tag="DeleteTag"
 
                                                     />
                                                     <label class="pl-2 pt-3">
@@ -1306,7 +1307,44 @@
                         });
 
                 }
+            },
+            DeleteTag(obj){
+                var _this = this;
+                var postData = {
+                    id: obj.tag.id,
+                }
+                axios.post('/api/task-list/delete-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.success)
+                        _this.getTaskList()
+                        // $('#dropdown' + data._id).toggle();
+                        // _this.selectedData = data
+                        _this.tag = null
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
 
+            },
+            UpdateTag(obj){
+                console.log(obj.tag.id)
+                var _this = this;
+                var postData = {
+                    id: obj.tag.id,
+                }
+                axios.post('/api/task-list/update-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.success)
+                        _this.getTaskList()
+                        // $('#dropdown' + data._id).toggle();
+                        // _this.selectedData = data
+                        _this.tag = null
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
 
             },
 
@@ -1696,7 +1734,16 @@
                     });
             },
             deletePhoto(img) {
-
+                var _this = this;
+                axios.post( '/api/task-list/delete-img', {'img':img})
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getTaskList()
+                        $("#imageModal").modal('hide');
+                    })
+                    .catch(error => {
+                        console.log('Api for task date update not Working !!!')
+                    });
             },
 
             hasPermission(permission) {

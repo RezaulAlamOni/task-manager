@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Tags;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\DocBlock\Tag;
 
 class TagsController extends Controller
 {
@@ -48,8 +49,9 @@ class TagsController extends Controller
         //
     }
 
-    public function destroy(Tags $tags)
+    public function destroy(Request $request)
     {
-        //
+        Tags::where('id',$request->id)->delete();
+        return response()->json(['success'=>1]);
     }
 }
