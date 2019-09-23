@@ -31,7 +31,10 @@ Route::post('/task-list/add-dont-forget-tag', 'TaskController@addDontForgetTag')
 Route::post('/task-list/update', 'TaskController@update');//reverse child node
 Route::post('/task-list/delete-img', 'TaskController@deleteImg');//reverse child node
 
+Route::get('/task-list/all-tag', 'TagsController@index');//add tag
 Route::post('/task-list/add-tag', 'TagsController@store');//add tag
+Route::post('/task-list/delete-tag', 'TagsController@destroy');//add tag
+Route::post('/task-list/update-tag', 'TagsController@update');//add tag
 
 Route::post('/task-list/copy-cut-past', 'TaskController@CopyCutPast');//copy and past task node
 Route::post('/task-list/delete-task', 'TaskController@deleteTask');//delete task
