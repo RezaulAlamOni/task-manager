@@ -71,7 +71,6 @@ class TaskController extends Controller
         $data = $this->decorateData($tasks);
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
-//        dd($data);
         return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list, 'empty_task' => $task]);
     }
 
