@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Files;
 use App\Multiple_list;
 use App\Project;
+use App\Tags;
 use App\Task;
 use Carbon\Carbon;
 use App\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use function GuzzleHttp\Promise\all;
 
 class TaskController extends Controller
 {
@@ -66,9 +68,9 @@ class TaskController extends Controller
 //        }
 
         $data = $this->decorateData($tasks);
-
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
+//        dd($data);
         return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list, 'empty_task' => $task]);
     }
 
@@ -377,38 +379,42 @@ class TaskController extends Controller
     {
         $data = [];
         foreach ($obj as $key => $task) {
-            $data[$key]['id'] = $task->id;
-            $data[$key]['parent_id'] = $task->parent_id;
-            $data[$key]['sort_id'] = $task->sort_id;
-            $data[$key]['list_id'] = $task->list_id;//list_id
-            $data[$key]['nav_id'] = $task->nav_id;//list_id
-            $data[$key]['text'] = $task->title;
-            $data[$key]['clicked'] = 0;
-            $data[$key]['date'] = $task->date;
-            $allTags = $task->tags;
+            $info = array();
+            $info['id'] = $task->id;
+            $info['parent_id'] = $task->parent_id;
+            $info['sort_id'] = $task->sort_id;
+            $info['list_id'] = $task->list_id;//list_id
+            $info['nav_id'] = $task->nav_id;//list_id
+            $info['text'] = $task->title;
+            $info['clicked'] = 0;
+            $info['date'] = $task->date;
+            $allTags = Tags::where('task_id',$task->id)->get();
             $tags = [];
-            foreach ($allTags as $key => $tag) {
-                $tags[$key]['id'] = $tag->id;
-                $tags[$key]['task_id'] = $tag->task_id;
-                $tags[$key]['text'] = $tag->title;
-                $tags[$key]['classes'] = '';
-                $tags[$key]['style'] = 'background-color: '.$tag->color;
-                $tags[$key]['color'] = $tag->color;
+            if ($allTags->count() > 0){
+                foreach ($allTags as $key => $tag) {
+                    $tags[$key]['id'] = $tag->id;
+                    $tags[$key]['task_id'] = $tag->task_id;
+                    $tags[$key]['text'] = $tag->title;
+                    $tags[$key]['classes'] = '';
+                    $tags[$key]['style'] = 'background-color: '.$tag->color;
+                    $tags[$key]['color'] = $tag->color;
+                }
             }
 
-            $data[$key]['tags'] = $tags;
-            $data[$key]['description'] = $task->description;
-            $data[$key]['files'] = $task->files;
-            $data[$key]['users'] = User::all();
+            $info['tags'] = $tags;
+            $info['description'] = $task->description;
+            $info['files'] = $task->files;
+            $info['users'] = User::select('id','name')->get()->toArray();
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
                 ->where('nav_id', $task->nav_id)->where('is_complete', 0)->orderBy('sort_id', 'ASC')->get();
             if (!empty($childrens)) {
-                $data[$key]['children'] = $this->decorateData($childrens);
+                $info['children'] = $this->decorateData($childrens);
             } else {
-                $data[$key]['children'] = [];
+                $info['children'] = [];
             }
+            $data[] = $info;
 
         }
         return $data;

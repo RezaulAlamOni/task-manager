@@ -1297,8 +1297,8 @@
                         .then(response => {
                             console.log(response.success)
                             _this.getTaskList()
-                            $('#dropdown' + data._id).toggle();
-                            _this.selectedData = data
+                            // $('#dropdown' + data._id).toggle();
+                            // _this.selectedData = data
                             _this.tag = null
                         })
                         .catch(error => {
