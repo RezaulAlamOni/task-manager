@@ -54,7 +54,7 @@
                                             <h6 class="dropdown-header" v-if="nev.type === 'board'"> Board </h6>
 
                                             <span v-for="nev_list in nev.lists">
-                                                <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id)"
+                                                <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id,nev.type)"
                                                       class="dropdown-item" :id="'list'+nev_list.id">
 
                                                     <router-link class="nav-link drop-item" v-if="nev.type === 'list'"
@@ -164,7 +164,7 @@
                                                 <diV class="collapse show switchToggle">
                                                     <a class="dropdown-item" style="cursor:pointer;" href="#" @click="addExistingTask(index)">Add existing tasks</a>
                                                     <a class="dropdown-item" style="cursor:pointer;"
-                                                       @click="addCard(index)">Create new tasks</a>
+                                                       @click="addCard(index,column.boardId)">Create new tasks</a>
                                                 </diV>
                                             </div>
                                         </span>
@@ -183,7 +183,7 @@
                                                     <a class="dropdown-item" href="#" @click="deleteColumnCards(index)">
                                                         <i class="fa fa-trash opacity"></i> Peekaboo all tasks in this column</a>
                                                     <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#" @click="deleteColumn(index)"><i
+                                                    <a class="dropdown-item" href="#" @click="deleteColumn(index,column.boardId)"><i
                                                             class="fa fa-trash opacity"></i> Delete column</a>
                                                 </diV>
                                             </div>
@@ -228,6 +228,11 @@
                                                                  }"
                                                         name="date">
                                                 </flatPickr>
+                                            </div>
+                                            <div style="position: absolute; right: 160px; bottom: 8px; ">
+                                                <a @click="deleteCard(index)"> 
+                                                     <i class="baseline-playlist_delete icon-image-preview"></i>
+                                                </a>
                                             </div>
                                             <div class="user">
                                                 <a><i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
@@ -275,7 +280,7 @@
                                                         <li class="border-top pl-2" @click="switchEvent($event)">
                                                             <span style="font-size: 13px;">Assign an external team</span>
                                                             <switches v-model="id"
-                                                                      style="position:absolute;right: 10px;bottom: -4px"
+                                                                      style="position:absolute; right: 10px;bottom: -4px"
                                                                       theme="bootstrap"
                                                                       color="success">
                                                             </switches>
@@ -283,7 +288,7 @@
                                                     </div>
                                                 </a>
                                             </div>
-                                            <a class="tag-icon ">
+                                            <a class="tag-icon">
                                                 <div v-if="card.tags && card.tags.length !== 0">
                                                     <div v-for="item in card.tags">
                                                         <div class="dropdown-toggle-split " data-toggle="dropdown">
@@ -322,7 +327,6 @@
                                                                     class="input-group searchUser"
                                                                     v-model="tag"
                                                                     @keypress="addTag($event,index,key)"
-
                                                             >
                                                             <label class="pl-2 pt-3">
                                                                 <span class="badge badge-success">Tags</span>
@@ -357,11 +361,29 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>You need to set a progress and color for the new column.</p>
+                        <p>You need to set a  andprogress color for the new column.</p>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Name</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" v-model="addField.name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Percent Complete</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" v-model="addField.progress">
+                                    <option>0%</option>
+                                    <option>10%</option>
+                                    <option>20%</option>
+                                    <option>30%</option>
+                                    <option>40%</option>
+                                    <option>50%</option>
+                                    <option>60%</option>
+                                    <option>70%</option>
+                                    <option>80%</option>
+                                    <option>90%</option>
+                                    <option>100%</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -395,6 +417,24 @@
                             <label class="col-sm-2 col-form-label">Name</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" v-model="addField.name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Percent Complete</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" v-model="addField.progress">
+                                    <option>0%</option>
+                                    <option>10%</option>
+                                    <option>20%</option>
+                                    <option>30%</option>
+                                    <option>40%</option>
+                                    <option>50%</option>
+                                    <option>60%</option>
+                                    <option>70%</option>
+                                    <option>80%</option>
+                                    <option>90%</option>
+                                    <option>100%</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -657,7 +697,8 @@
                 addField: {
                     name: null,
                     color: null,
-                    error: null
+                    error: null,
+                    progress : null
                 },
                 date_config: {
                     enableTime: false,
@@ -756,33 +797,36 @@
                     },
                 ],
                 cards: [
-                    {
-                        column: 'To Do',
-                        task: [
-                            {name: 'node 1-1-1 sdf a srsdfgs df gsdf', date: '10 Aug', tags: ["Nothing"], clicked: 0},
-                            {name: 'node 1-1-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
-                        ],
-                        hidden : 0
-                    },
-                    {
-                        column: 'In Progress',
-                        task: [
-                            {name: 'node 1-2-1', date: '10 Aug', tags: ["Do First"], clicked: 0},
-                            {name: 'node 1-2-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
-                            {name: 'node 1-2-3', date: '', tags: ["important"], clicked: 0},
-                            {name: 'node 1-2-4', date: '25 Aug', tags: [], clicked: 0},
-                        ],
-                        hidden : 1
-                    }, 
-                    {
-                        column: 'Complete',
-                        task: [
-                            {name: 'node 1-3-1', date: '10 Aug', tags: ["new"], clicked: 0},
-                            {name: 'node 1-3-2', date: '25 Aug', tags: ["Dst"], clicked: 0},
-                            {name: 'node 1-3-3', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
-                        ],
-                        hidden : 0
-                    }
+                    // {   
+                    //     id: 0,
+                    //     column: 'To Do',
+                    //     task: [
+                    //         {name: 'node 1-1-1 sdf a srsdfgs df gsdf', date: '10 Aug', tags: ["Nothing"], clicked: 0},
+                    //         {name: 'node 1-1-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
+                    //     ],
+                    //     hidden : 0
+                    // },
+                    // {   
+                    //     id: 1,
+                    //     column: 'In Progress',
+                    //     task: [
+                    //         {name: 'node 1-2-1', date: '10 Aug', tags: ["Do First"], clicked: 0},
+                    //         {name: 'node 1-2-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
+                    //         {name: 'node 1-2-3', date: '', tags: ["important"], clicked: 0},
+                    //         {name: 'node 1-2-4', date: '25 Aug', tags: [], clicked: 0},
+                    //     ],
+                    //     hidden : 1
+                    // }, 
+                    // {
+                    //     id: 2,
+                    //     column: 'Complete',
+                    //     task: [
+                    //         {name: 'node 1-3-1', date: '10 Aug', tags: ["new"], clicked: 0},
+                    //         {name: 'node 1-3-2', date: '25 Aug', tags: ["Dst"], clicked: 0},
+                    //         {name: 'node 1-3-3', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
+                    //     ],
+                    //     hidden : 0
+                    // }
                 ],
                 scene: {},
                 upperDropPlaceholderOptions: {
@@ -893,6 +937,7 @@
                     },
                     children: generateItems(this.cards.length, i => ({
                         id: `column${i}`,
+                        boardId: this.cards[i].id,
                         type: 'container',
                         name: this.cards[i].column,
                         props: {
@@ -909,8 +954,9 @@
                             },
                             data: this.cards[i].task[j].name,
                             date: this.cards[i].task[j].date,
-                            tags: this.cards[i].task[j].tags
-                        }))
+                            tags: this.cards[i].task[j].tags,
+                            delete: this.cards[i].task[j].name
+                        })) 
                     })),
                 }
 
@@ -1000,7 +1046,8 @@
                 this.nev_id = id;
                 $("#addBoardModel").modal('show');
             },
-            setListId(id, title, nev_id) {
+            setListId(id, title, nev_id, type) {
+                
                 this.board_id = id;
                 this.nev_id = nev_id;
                 // $('#listName').text(title);
@@ -1078,19 +1125,51 @@
             setColumn() {
                 if (!this.addField.name) {
                     this.addField.error = 'Name is required!';
+                } else if(!this.nev_id || !this.board_id){
+                     this.addField.error = 'select board';
                 } else {
                     $("#addModal").modal('hide');
-                    this.cards.push({
-                        column: this.addField.name,
+                    let data = {
+                        title: this.addField.name,
+                        color: this.addField.color,
+                        project_id: this.projectId,
+                        progress: this.progress,
+                        nav_id: this.nev_id,
+                        multiple_board_id: this.board_id,
                         task: [{name: '', date: '', tags: [], clicked: 0}]
-                    });
+                    };
+                    this.saveBoard(data);
+                    // this.cards.push({
+                    //     column: this.addField.name,  
+                    //     task: [] //{name: '', date: '', tags: [], clicked: 0}
+                    // });
 
                     this.getData();
                     this.addField = {};
-                    console.log(this.cards)
+                    // console.log(this.cards)
                 }
             },
+            saveBoard(data){
+                let _this = this;
+                axios.post('/api/board-save',data)
+                .then(response => response.data)
+                .then(response => {     
+                    if(response.success == true){
+                        _this.cards.push({
+                            id: response.data.id,
+                            column: response.data.title,
+                            hidden: response.data.hidden,
+                            task: []//[{name: '', date: '', tags: [], clicked: 0}]
+                        });
+                        _this.getData();
+                    }
+                    // console.log(response);
+                })
+                .catch(error => {});
+                // this.getData();
+            },
             updateColumSow(index) {
+                // alert(index);
                 this.updateIndex = index;
                 this.addField.name = this.cards[this.updateIndex].column;
                 $("#EditModal").modal('show');
@@ -1119,15 +1198,17 @@
                     to: datePicker, // Disable all dates up to specific date
                 };
                 let data = {
-                    id: this.projectId,
+                    projectId: this.projectId,
                     board_id: this.board_id,
                     nav_id: this.nev_id
                 };
                 axios.post('/api/board-task', data)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response.board_task)
-                        this.cards = response.board_task;
+                        // console.log(_this.cards)
+                        _this.cards = response.success;
+                        // console.log(_this.cards)
+                        _this.getData();
                     })
                     .catch(error => {
 
@@ -1165,7 +1246,8 @@
                 };
                 _this.growInit(option);
             },
-            addCard(index) {
+            addCard(index,id) {
+                // alert(id);
                 this.cards[index].task.push({name: '', date: '', tags: [], clicked: 0});
                 let key = this.cards[index].task.length-1;
                 this.getData();
@@ -1194,11 +1276,21 @@
                 this.cards[index].task[key].tags.splice(0,1,tag);
                 // $('#dropdown'+index+key).toggle();
             },
-            deleteColumn(index) {
+            deleteColumn(index,id) {
+                // alert(id);
                 let _this = this;
-                if (confirm('Are you sure tou want to delete this board?')) {
-                    _this.cards.splice(index, 1)
-                    _this.getData();
+                if (confirm('Are you sure you want to delete this board?')) {
+                    axios.delete('/api/delete-board/'+id)
+                    .then(response => response.data)
+                    .then(response => {
+                        if(response.success){
+                            _this.cards.splice(index, 1)
+                            _this.getData();
+                        }
+                    })
+                    .catch(error => {
+                        
+                    });
                 }
             },
             deleteColumnCards(index) {
