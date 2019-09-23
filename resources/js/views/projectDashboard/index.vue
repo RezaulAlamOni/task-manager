@@ -177,19 +177,19 @@
                                            class="dropdown-toggle-split"
                                            data-toggle="dropdown">
                                             <template v-for="tag in data.tags">
-                                                <span class="badge badge-warning" v-if="tag.title !== null"
-                                                      v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                    {{(data.tags.length > 2 ) ? tag.title.substring(0,2) : tag.title.substring(0,4) }}
+                                                <span class="badge badge-warning" v-if="tag.text !== null"
+                                                      v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'},{'float' : 'left'}]">
+                                                    {{(data.tags.length > 2 ) ? tag.text.substring(0,2) : tag.text.substring(0,3) }}
                                                 </span>
                                                 <span class="badge badge-warning" v-else
-                                                      v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
+                                                      v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]">
                                                     ;:
                                                 </span>
 
                                             </template>
                                         </i>
 
-                                        <i v-if="data.tags.length === 0 " :id="'tag-'+data._id"
+                                        <i v-else :id="'tag-'+data._id"
                                            class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
                                            data-toggle="dropdown">
 
@@ -200,7 +200,7 @@
                                                 <li class="assignUser">
                                                     <vue-tags-input
                                                         v-model="tag1"
-                                                        :tags="tags"
+                                                           :tags="data.tags"
                                                         :allow-edit-tags="true"
                                                         @tags-changed="newTags => (changeTAg(newTags))"
 
@@ -209,7 +209,7 @@
                                                         <span v-for="tag in data.tags">
                                                             <span class="badge m-1"
                                                                   v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                {{(tag.title !== null) ?tag.title.substring(0,12) : ''}}
+                                                                {{(tag.text !== null) ?tag.text.substring(0,12) : ''}}
                                                             </span>
                                                         </span>
 
@@ -781,7 +781,7 @@
                 AllNevItems: null,
                 task_logs: null,
                 file: null,
-                tags: [{
+                tags1: [{
                     id : 1,
                     text: 'custom class',
                     classes: 'custom-class',
@@ -796,7 +796,7 @@
                     text: 'Inline styled tag',
                     style: 'background-color: #ff0000;',
                 }],
-                tags1: [],
+                tags: [],
 
                 tag1 : ''
             }
@@ -957,6 +957,7 @@
 
             makeItClick(e, data) {
                 this.selectedData = data;
+                this.tags = data.tags;
                 $('.eachItemRow').removeClass('clicked');
                 $(e.target).addClass('clicked');
                 $(e.target).closest('.eachItemRow').addClass('clicked');
@@ -1528,9 +1529,9 @@
                 axios.post('/api/task-list', data)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response.task_list)
                         this.tree4data = response.task_list;
                         this.multiple_list = response.multiple_list;
+                        console.log(this.tree4data)
                         if (response.task_list.length === 0) {
 
                             var date = Math.round(new Date().getTime() / 1000);

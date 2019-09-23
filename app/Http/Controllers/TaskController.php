@@ -385,7 +385,18 @@ class TaskController extends Controller
             $data[$key]['text'] = $task->title;
             $data[$key]['clicked'] = 0;
             $data[$key]['date'] = $task->date;
-            $data[$key]['tags'] = $task->tags;
+            $allTags = $task->tags;
+            $tags = [];
+            foreach ($allTags as $key => $tag) {
+                $tags[$key]['id'] = $tag->id;
+                $tags[$key]['task_id'] = $tag->task_id;
+                $tags[$key]['text'] = $tag->title;
+                $tags[$key]['classes'] = '';
+                $tags[$key]['style'] = 'background-color: '.$tag->color;
+                $tags[$key]['color'] = $tag->color;
+            }
+
+            $data[$key]['tags'] = $tags;
             $data[$key]['description'] = $task->description;
             $data[$key]['files'] = $task->files;
             $data[$key]['users'] = User::all();
