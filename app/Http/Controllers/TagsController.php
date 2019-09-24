@@ -12,7 +12,7 @@ class TagsController extends Controller
 
     public function index()
     {
-        $tags =  Tags::where('task_id','!=',null)->get();
+        $tags =  Tags::where('task_id','!=',null)->groupBy('title')->get();
         return response()->json(['tags'=>$tags]);
     }
 
@@ -32,7 +32,13 @@ class TagsController extends Controller
             'updated_at'=>Carbon::now(),
         ];
         Tags::create($data);
-        return response()->json(['success'=>1]);
+
+        if ($request->tags == 'Dont Forget' ){
+
+        }else{
+            return response()->json(['success'=>1]);
+        }
+
     }
 
     public function show(Tags $tags)
@@ -52,14 +58,14 @@ class TagsController extends Controller
         }elseif (isset($request->color)){
             Tags::where('id',$request->id)->update(['color'=>$request->color]);
         }
-        $tags =  Tags::where('task_id','!=',null)->get();
+        $tags =  Tags::where('task_id','!=',null)->groupBy('title')->get();
         return response()->json(['success'=>1,'tags'=>$tags]);
     }
 
     public function destroy(Request $request)
     {
-        Tags::where('id',$request->id)->delete();
-        $tags =  Tags::where('task_id','!=',null)->get();
+        Tags::where('title',$request->title)->delete();
+        $tags =  Tags::where('task_id','!=',null)->groupBy('title')->get();
         return response()->json(['success'=>1,'tags'=>$tags]);
     }
 }

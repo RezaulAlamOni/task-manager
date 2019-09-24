@@ -207,12 +207,13 @@
 
                                                     />
                                                     <label class="pl-2 pt-3">
-                                                        <span v-for="tag in data.tags">
-                                                            <span class="badge m-1"
+                                                        <template v-for="tag in data.tags">
+                                                            <span class="badge m-1" v-if="tag.text !== 'Dont Forget'"
                                                                   v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
                                                                 {{(tag.text !== null) ?tag.text.substring(0,12) : ''}}
                                                             </span>
-                                                        </span>
+                                                        </template>
+                                                        <span class="badge m-1" style="background: red" @click="addExistingTag($event,data ,'Dont Forget')"> Dont Forget </span>
 
                                                         <a href="javascript:void(0)" class="btn btn-primary tag-manager"
 
@@ -745,8 +746,8 @@
                                     <table class="table table-bordered table-responsive-md table-striped text-center">
                                         <thead>
                                         <tr>
-                                            <th class="text-center">Task id</th>
-                                            <th class="text-center">Title</th>
+<!--                                            <th class="text-center">Task id</th>-->
+                                            <th class="text-center">Tag Title</th>
                                             <th class="text-center">Color</th>
                                             <th class="text-center">Delete</th>
                                         </tr>
@@ -754,7 +755,7 @@
                                         <tbody>
                                         <template v-for="tag in manageTag">
                                             <tr>
-                                                <td class="pt-3-half" >{{tag.task_id}}</td>
+<!--                                                <td class="pt-3-half" >{{tag.task_id}}</td>-->
                                                 <td class="pt-3-half" contenteditable="true" @keyup="updateTagName($event,tag)" @keydown="newLineoff($event)">{{tag.title}}</td>
                                                 <td class="pt-3-half"><input type="color" :value="tag.color" @change="updateTagColor($event,tag)"></td>
 
@@ -1336,7 +1337,7 @@
                         _this.selectedData.tags[0] = tag
                     })
                     .catch(error => {
-                        console.log('Api for move down task not Working !!!')
+                        console.log('Api for add tag not Working !!!')
                     });
 
             },
@@ -1371,7 +1372,7 @@
             DeleteTag(obj) {
                 var _this = this;
                 var postData = {
-                    id: obj.tag.id,
+                    title: obj.tag.text,
                 }
                 axios.post('/api/task-list/delete-tag', postData)
                     .then(response => response.data)
@@ -1448,7 +1449,7 @@
             DeleteTagFromModal(tag){
                 var _this = this;
                 var postData = {
-                    id : tag.id,
+                    title : tag.title,
                 }
                 axios.post('/api/task-list/delete-tag', postData)
                     .then(response => response.data)
