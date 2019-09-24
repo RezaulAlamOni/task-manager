@@ -12,7 +12,7 @@ body {
 }
 .login-form
 {
-    background-color: #509de0;
+    background-color: #F0F1F3;
 }
 .navbar
 {
@@ -203,7 +203,6 @@ div.main-container {
     bottom: 0;
     left: 0;
     right: 0;
-    background: radial-gradient(ellipse at center, #5A93AF 0%, #004E74 100%);
     overflow-y: auto;
 }
 
