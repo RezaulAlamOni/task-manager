@@ -52,12 +52,14 @@ class TagsController extends Controller
         }elseif (isset($request->color)){
             Tags::where('id',$request->id)->update(['color'=>$request->color]);
         }
-        return response()->json(['success'=>1]);
+        $tags =  Tags::where('task_id','!=',null)->get();
+        return response()->json(['success'=>1,'tags'=>$tags]);
     }
 
     public function destroy(Request $request)
     {
         Tags::where('id',$request->id)->delete();
-        return response()->json(['success'=>1]);
+        $tags =  Tags::where('task_id','!=',null)->get();
+        return response()->json(['success'=>1,'tags'=>$tags]);
     }
 }

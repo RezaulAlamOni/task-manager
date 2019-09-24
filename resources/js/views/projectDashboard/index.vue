@@ -760,10 +760,9 @@
 
                                                 <td>
                                                 <span class="table-remove text-center">
-                                                    <a href="javascript:void(0)" @click="DeleteTagFromModal($event,tag)" class="text-danger">
+                                                    <a href="javascript:void(0)" @click="DeleteTagFromModal(tag)" class="text-danger">
                                                         <h3><i class="fa fa-trash"></i></h3>
                                                     </a>
-<!--                                                    <button type="button" class="btn btn-danger btn-rounded btn-sm my-0" @click="DeleteTagFromModal($event,tag)">Remove</button>-->
                                                 </span>
                                                 </td>
                                             </tr>
@@ -1361,8 +1360,6 @@
                         .then(response => {
                             console.log(response.success)
                             _this.getTaskList()
-                            // $('#dropdown' + data._id).toggle();
-                            // _this.selectedData = data
                             _this.tag = null
                         })
                         .catch(error => {
@@ -1381,8 +1378,6 @@
                     .then(response => {
                         console.log(response.success)
                         _this.getTaskList()
-                        // $('#dropdown' + data._id).toggle();
-                        // _this.selectedData = data
                         _this.tag = null
                     })
                     .catch(error => {
@@ -1414,7 +1409,7 @@
                 axios.post('/api/task-list/update-tag', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response)
+                        _this.manageTag = response.tags;
                         _this.getTaskList()
                         // $('#dropdown' + data._id).toggle();
                         // _this.selectedData = data
@@ -1436,10 +1431,8 @@
                     axios.post('/api/task-list/update-tag', postData)
                         .then(response => response.data)
                         .then(response => {
-                            console.log(response)
+                            _this.manageTag = response.tags;
                             _this.getTaskList()
-                            // $('#dropdown' + data._id).toggle();
-                            // _this.selectedData = data
                             _this.tag = null
                         })
                         .catch(error => {
@@ -1452,10 +1445,23 @@
                     e.preventDefault();
                 }
             },
-            DeleteTagFromModal(e, tag){
+            DeleteTagFromModal(tag){
+                var _this = this;
+                var postData = {
+                    id : tag.id,
+                }
+                axios.post('/api/task-list/delete-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.manageTag = response.tags;
+                        _this.getTaskList()
+                        _this.tag = null
+                    })
+                    .catch(error => {
+                        console.log('Api for delete tag not Working !!!')
+                    });
 
             },
-
 
             updateDescription() {
                 var _this = this;
