@@ -75926,51 +75926,51 @@ $.extend(Spark, __webpack_require__(270));
  * SparkForm helper class. Used to set common properties on all forms.
  */
 window.SparkForm = function (data) {
-    var form = this;
+  var form = this;
 
-    $.extend(this, data);
+  $.extend(this, data);
 
-    /**
-     * Create the form error helper instance.
-     */
-    this.errors = new SparkFormErrors();
+  /**
+   * Create the form error helper instance.
+   */
+  this.errors = new SparkFormErrors();
 
-    this.busy = false;
-    this.successful = false;
+  this.busy = false;
+  this.successful = false;
 
-    /**
-     * Start processing the form.
-     */
-    this.startProcessing = function () {
-        form.errors.forget();
-        form.busy = true;
-        form.successful = false;
-    };
+  /**
+   * Start processing the form.
+   */
+  this.startProcessing = function () {
+    form.errors.forget();
+    form.busy = true;
+    form.successful = false;
+  };
 
-    /**
-     * Finish processing the form.
-     */
-    this.finishProcessing = function () {
-        form.busy = false;
-        form.successful = true;
-    };
+  /**
+   * Finish processing the form.
+   */
+  this.finishProcessing = function () {
+    form.busy = false;
+    form.successful = true;
+  };
 
-    /**
-     * Reset the errors and other state for the form.
-     */
-    this.resetStatus = function () {
-        form.errors.forget();
-        form.busy = false;
-        form.successful = false;
-    };
+  /**
+   * Reset the errors and other state for the form.
+   */
+  this.resetStatus = function () {
+    form.errors.forget();
+    form.busy = false;
+    form.successful = false;
+  };
 
-    /**
-     * Set the errors on the form.
-     */
-    this.setErrors = function (errors) {
-        form.busy = false;
-        form.errors.set(errors);
-    };
+  /**
+   * Set the errors on the form.
+   */
+  this.setErrors = function (errors) {
+    form.busy = false;
+    form.errors.set(errors);
+  };
 };
 
 /***/ }),
@@ -81440,7 +81440,7 @@ exports = module.exports = __webpack_require__(12)(false);
 
 
 // module
-exports.push([module.i, "\n.invoice_bg {\r\n    margin: 15px 0 30px;\r\n    padding: 20px;\n}\n#customtable .table {\r\n    border: 1px solid #ccc;\r\n    table-layout: fixed;\n}\n#customtable .table tbody > tr {\r\n    height: 50px;\n}\n.table-responsive {\r\n    width: 100%;\n}\ntd,\r\nth {\r\n    width: 40px;\r\n    word-wrap: break-word;\n}\n.terms_conditions {\r\n    list-style: initial;\n}\n.table-condensed > thead > tr > th {\r\n    padding: 15px 8px;\r\n    width: 80px;\n}\n.table-condensed > thead > tr > th:first-child {\r\n    width: 180px;\n}\n.table-responsive > .table > tbody > tr > td,\r\n.table-responsive > .table > tfoot > tr > td {\r\n    padding: 15px 8px;\r\n    white-space: normal;\n}\n#add_row i,\r\n.row_delete i {\r\n    cursor: pointer;\n}\n@media print {\n.btn-section,\r\n    .left-side,\r\n    .no-print,\r\n    .content-header,\r\n    .header,\r\n    #customtable tr > td:last-child,\r\n    #customtable tr > th:last-child {\r\n        display: none;\n}\n.table-responsive {\r\n        display: inline-table;\r\n        width: 100%;\n}\n#invoice-stmt {\r\n        width: 100%;\n}\n.right-side {\r\n        margin-left: 0;\n}\n}\n.table thead th{\r\n    background-color: #6699cc;\r\n    color:#fff;\n}\r\n", ""]);
+exports.push([module.i, "\n.invoice_bg {\n    margin: 15px 0 30px;\n    padding: 20px;\n}\n#customtable .table {\n    border: 1px solid #ccc;\n    table-layout: fixed;\n}\n#customtable .table tbody > tr {\n    height: 50px;\n}\n.table-responsive {\n    width: 100%;\n}\ntd,\nth {\n    width: 40px;\n    word-wrap: break-word;\n}\n.terms_conditions {\n    list-style: initial;\n}\n.table-condensed > thead > tr > th {\n    padding: 15px 8px;\n    width: 80px;\n}\n.table-condensed > thead > tr > th:first-child {\n    width: 180px;\n}\n.table-responsive > .table > tbody > tr > td,\n.table-responsive > .table > tfoot > tr > td {\n    padding: 15px 8px;\n    white-space: normal;\n}\n#add_row i,\n.row_delete i {\n    cursor: pointer;\n}\n@media print {\n.btn-section,\n    .left-side,\n    .no-print,\n    .content-header,\n    .header,\n    #customtable tr > td:last-child,\n    #customtable tr > th:last-child {\n        display: none;\n}\n.table-responsive {\n        display: inline-table;\n        width: 100%;\n}\n#invoice-stmt {\n        width: 100%;\n}\n.right-side {\n        margin-left: 0;\n}\n}\n.table thead th{\n    background-color: #6699cc;\n    color:#fff;\n}\n", ""]);
 
 // exports
 
@@ -98372,6 +98372,46 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -98393,7 +98433,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             addField: {
                 name: null,
                 color: null,
-                error: null
+                error: null,
+                progress: null
             },
             date_config: {
                 enableTime: false,
@@ -98464,19 +98505,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                     text: 'node 7-3', children: [{ id: 17, parent: 16, text: 'node 7-3-1', clicked: 0 }, { id: 18, parent: 16, text: 'node 7-3-2 undroppable', droppable: false, clicked: 0 }], clicked: 0
                 }, { id: 19, parent: 10, text: 'node 7-4', clicked: 0 }, { id: 20, parent: 10, text: 'node 7-5', clicked: 0 }, { id: 21, parent: 10, text: 'node 7-6', clicked: 0 }]
             }],
-            cards: [{
-                column: 'To Do',
-                task: [{ name: 'node 1-1-1 sdf a srsdfgs df gsdf', date: '10 Aug', tags: ["Nothing"], clicked: 0 }, { name: 'node 1-1-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0 }],
-                hidden: 0
-            }, {
-                column: 'In Progress',
-                task: [{ name: 'node 1-2-1', date: '10 Aug', tags: ["Do First"], clicked: 0 }, { name: 'node 1-2-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0 }, { name: 'node 1-2-3', date: '', tags: ["important"], clicked: 0 }, { name: 'node 1-2-4', date: '25 Aug', tags: [], clicked: 0 }],
-                hidden: 1
-            }, {
-                column: 'Complete',
-                task: [{ name: 'node 1-3-1', date: '10 Aug', tags: ["new"], clicked: 0 }, { name: 'node 1-3-2', date: '25 Aug', tags: ["Dst"], clicked: 0 }, { name: 'node 1-3-3', date: '25 Aug', tags: ["Dont Forget"], clicked: 0 }],
-                hidden: 0
-            }],
+            cards: [
+                // {   
+                //     id: 0,
+                //     column: 'To Do',
+                //     task: [
+                //         {name: 'node 1-1-1 sdf a srsdfgs df gsdf', date: '10 Aug', tags: ["Nothing"], clicked: 0},
+                //         {name: 'node 1-1-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
+                //     ],
+                //     hidden : 0
+                // },
+                // {   
+                //     id: 1,
+                //     column: 'In Progress',
+                //     task: [
+                //         {name: 'node 1-2-1', date: '10 Aug', tags: ["Do First"], clicked: 0},
+                //         {name: 'node 1-2-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
+                //         {name: 'node 1-2-3', date: '', tags: ["important"], clicked: 0},
+                //         {name: 'node 1-2-4', date: '25 Aug', tags: [], clicked: 0},
+                //     ],
+                //     hidden : 1
+                // }, 
+                // {
+                //     id: 2,
+                //     column: 'Complete',
+                //     task: [
+                //         {name: 'node 1-3-1', date: '10 Aug', tags: ["new"], clicked: 0},
+                //         {name: 'node 1-3-2', date: '25 Aug', tags: ["Dst"], clicked: 0},
+                //         {name: 'node 1-3-3', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
+                //     ],
+                //     hidden : 0
+                // }
+            ],
             scene: {},
             upperDropPlaceholderOptions: {
                 className: 'cards-drop-preview',
@@ -98586,6 +98646,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 children: Object(__WEBPACK_IMPORTED_MODULE_6__assets_plugins_utils_helpers__["b" /* generateItems */])(this.cards.length, function (i) {
                     return {
                         id: 'column' + i,
+                        boardId: _this3.cards[i].id,
                         type: 'container',
                         name: _this3.cards[i].column,
                         props: {
@@ -98603,7 +98664,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                                 },
                                 data: _this3.cards[i].task[j].name,
                                 date: _this3.cards[i].task[j].date,
-                                tags: _this3.cards[i].task[j].tags
+                                tags: _this3.cards[i].task[j].tags,
+                                delete: _this3.cards[i].task[j].name
                             };
                         })
                     };
@@ -98686,7 +98748,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.nev_id = id;
             $("#addBoardModel").modal('show');
         },
-        setListId: function setListId(id, title, nev_id) {
+        setListId: function setListId(id, title, nev_id, type) {
+
             this.board_id = id;
             this.nev_id = nev_id;
             // $('#listName').text(title);
@@ -98772,19 +98835,50 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         setColumn: function setColumn() {
             if (!this.addField.name) {
                 this.addField.error = 'Name is required!';
+            } else if (!this.nev_id || !this.board_id) {
+                this.addField.error = 'select board';
             } else {
                 $("#addModal").modal('hide');
-                this.cards.push({
-                    column: this.addField.name,
+                var data = {
+                    title: this.addField.name,
+                    color: this.addField.color,
+                    project_id: this.projectId,
+                    progress: this.progress,
+                    nav_id: this.nev_id,
+                    multiple_board_id: this.board_id,
                     task: [{ name: '', date: '', tags: [], clicked: 0 }]
-                });
+                };
+                this.saveBoard(data);
+                // this.cards.push({
+                //     column: this.addField.name,  
+                //     task: [] //{name: '', date: '', tags: [], clicked: 0}
+                // });
 
                 this.getData();
                 this.addField = {};
-                console.log(this.cards);
+                // console.log(this.cards)
             }
         },
+        saveBoard: function saveBoard(data) {
+            var _this = this;
+            axios.post('/api/board-save', data).then(function (response) {
+                return response.data;
+            }).then(function (response) {
+                if (response.success == true) {
+                    _this.cards.push({
+                        id: response.data.id,
+                        column: response.data.title,
+                        hidden: response.data.hidden,
+                        task: [] //[{name: '', date: '', tags: [], clicked: 0}]
+                    });
+                    _this.getData();
+                }
+                // console.log(response);
+            }).catch(function (error) {});
+            // this.getData();
+        },
         updateColumSow: function updateColumSow(index) {
+            // alert(index);
             this.updateIndex = index;
             this.addField.name = this.cards[this.updateIndex].column;
             $("#EditModal").modal('show');
@@ -98804,7 +98898,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             $("#addExistingTask").modal('show');
         },
         getBoardTask: function getBoardTask() {
-            var _this7 = this;
 
             var _this = this;
             var datePicker = new Date();
@@ -98813,15 +98906,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 to: datePicker // Disable all dates up to specific date
             };
             var data = {
-                id: this.projectId,
+                projectId: this.projectId,
                 board_id: this.board_id,
                 nav_id: this.nev_id
             };
             axios.post('/api/board-task', data).then(function (response) {
                 return response.data;
             }).then(function (response) {
-                console.log(response.board_task);
-                _this7.cards = response.board_task;
+                // console.log(_this.cards)
+                _this.cards = response.success;
+                // console.log(_this.cards)
+                _this.getData();
             }).catch(function (error) {});
         },
         clearInputFeild: function clearInputFeild() {
@@ -98855,7 +98950,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             };
             _this.growInit(option);
         },
-        addCard: function addCard(index) {
+        addCard: function addCard(index, id) {
+            // alert(id);
             this.cards[index].task.push({ name: '', date: '', tags: [], clicked: 0 });
             var key = this.cards[index].task.length - 1;
             this.getData();
@@ -98884,11 +98980,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             this.cards[index].task[key].tags.splice(0, 1, tag);
             // $('#dropdown'+index+key).toggle();
         },
-        deleteColumn: function deleteColumn(index) {
+        deleteColumn: function deleteColumn(index, id) {
+            // alert(id);
             var _this = this;
-            if (confirm('Are you sure tou want to delete this board?')) {
-                _this.cards.splice(index, 1);
-                _this.getData();
+            if (confirm('Are you sure you want to delete this board?')) {
+                axios.delete('/api/delete-board/' + id).then(function (response) {
+                    return response.data;
+                }).then(function (response) {
+                    if (response.success) {
+                        _this.cards.splice(index, 1);
+                        _this.getData();
+                    }
+                }).catch(function (error) {});
             }
         },
         deleteColumnCards: function deleteColumnCards(index) {
@@ -102352,7 +102455,8 @@ var render = function() {
                                         return _vm.setListId(
                                           nev_list.id,
                                           nev_list.list_title,
-                                          nev.id
+                                          nev.id,
+                                          nev.type
                                         )
                                       }
                                     }
@@ -102677,7 +102781,10 @@ var render = function() {
                                                 },
                                                 on: {
                                                   click: function($event) {
-                                                    return _vm.addCard(index)
+                                                    return _vm.addCard(
+                                                      index,
+                                                      column.boardId
+                                                    )
                                                   }
                                                 }
                                               },
@@ -102798,7 +102905,8 @@ var render = function() {
                                                 on: {
                                                   click: function($event) {
                                                     return _vm.deleteColumn(
-                                                      index
+                                                      index,
+                                                      column.boardId
                                                     )
                                                   }
                                                 }
@@ -102949,6 +103057,35 @@ var render = function() {
                                             })
                                           ],
                                           1
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          {
+                                            staticStyle: {
+                                              position: "absolute",
+                                              right: "160px",
+                                              bottom: "8px"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "a",
+                                              {
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.deleteCard(index)
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass:
+                                                    "baseline-playlist_delete icon-image-preview"
+                                                })
+                                              ]
+                                            )
+                                          ]
                                         ),
                                         _vm._v(" "),
                                         _c("div", { staticClass: "user" }, [
@@ -103193,7 +103330,7 @@ var render = function() {
                                           ])
                                         ]),
                                         _vm._v(" "),
-                                        _c("a", { staticClass: "tag-icon " }, [
+                                        _c("a", { staticClass: "tag-icon" }, [
                                           card.tags && card.tags.length !== 0
                                             ? _c(
                                                 "div",
@@ -103556,7 +103693,7 @@ var render = function() {
               _c("div", { staticClass: "modal-body" }, [
                 _c("p", [
                   _vm._v(
-                    "You need to set a progress and color for the new column."
+                    "You need to set a  andprogress color for the new column."
                   )
                 ]),
                 _vm._v(" "),
@@ -103587,6 +103724,71 @@ var render = function() {
                         }
                       }
                     })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("label", { staticClass: "col-sm-4 col-form-label" }, [
+                    _vm._v("Percent Complete")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.addField.progress,
+                            expression: "addField.progress"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.addField,
+                              "progress",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c("option", [_vm._v("0%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("10%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("20%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("30%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("40%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("50%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("60%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("70%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("80%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("90%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("100%")])
+                      ]
+                    )
                   ])
                 ]),
                 _vm._v(" "),
@@ -103716,6 +103918,71 @@ var render = function() {
                         }
                       }
                     })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("label", { staticClass: "col-sm-4 col-form-label" }, [
+                    _vm._v("Percent Complete")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-8" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.addField.progress,
+                            expression: "addField.progress"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.addField,
+                              "progress",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      [
+                        _c("option", [_vm._v("0%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("10%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("20%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("30%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("40%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("50%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("60%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("70%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("80%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("90%")]),
+                        _vm._v(" "),
+                        _c("option", [_vm._v("100%")])
+                      ]
+                    )
                   ])
                 ]),
                 _vm._v(" "),
