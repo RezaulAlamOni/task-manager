@@ -1372,9 +1372,9 @@
             DeleteTag(obj) {
                 var _this = this;
                 var postData = {
-                    title: obj.tag.text,
+                    id: obj.tag.id,
                 }
-                axios.post('/api/task-list/delete-tag', postData)
+                axios.post('/api/task-list/delete-by-tag-id', postData)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response.success)
