@@ -535,6 +535,8 @@
 .task-img {
   height: 15px;
   width: 15px;
+  border: 1px solid gray;
+  border-radius: 4px;
 }
 
 .task-img-right-pane {
@@ -614,7 +616,7 @@
   line-height: 8px !important;
   position: absolute;
   right: 5px;
-  top: 50px;
+  bottom: 08px;
 }
 
 @media only screen and (max-width: 880px) {

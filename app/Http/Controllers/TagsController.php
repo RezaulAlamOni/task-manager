@@ -45,9 +45,14 @@ class TagsController extends Controller
         //
     }
 
-    public function update(Request $request, Tags $tags)
+    public function update(Request $request)
     {
-        //
+        if (isset($request->tag)){
+            Tags::where('id',$request->id)->update(['title'=>$request->tag]);
+        }elseif (isset($request->color)){
+            Tags::where('id',$request->id)->update(['color'=>$request->color]);
+        }
+        return response()->json(['success'=>1]);
     }
 
     public function destroy(Request $request)

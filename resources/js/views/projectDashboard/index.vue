@@ -748,19 +748,22 @@
                                             <th class="text-center">Task id</th>
                                             <th class="text-center">Title</th>
                                             <th class="text-center">Color</th>
-                                            <th class="text-center">Remove</th>
+                                            <th class="text-center">Delete</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <template v-for="tag in manageTag">
                                             <tr>
                                                 <td class="pt-3-half" >{{tag.task_id}}</td>
-                                                <td class="pt-3-half" contenteditable="true" @keypress="updateTagName($event,tag)">{{tag.title}}</td>
+                                                <td class="pt-3-half" contenteditable="true" @keyup="updateTagName($event,tag)" @keydown="newLineoff($event)">{{tag.title}}</td>
                                                 <td class="pt-3-half"><input type="color" :value="tag.color" @change="updateTagColor($event,tag)"></td>
 
                                                 <td>
-                                                <span class="table-remove">
-                                                    <button type="button" class="btn btn-danger btn-rounded btn-sm my-0" @click="DeleteTagFromModal($event,tag)">Remove</button>
+                                                <span class="table-remove text-center">
+                                                    <a href="javascript:void(0)" @click="DeleteTagFromModal($event,tag)" class="text-danger">
+                                                        <h3><i class="fa fa-trash"></i></h3>
+                                                    </a>
+<!--                                                    <button type="button" class="btn btn-danger btn-rounded btn-sm my-0" @click="DeleteTagFromModal($event,tag)">Remove</button>-->
                                                 </span>
                                                 </td>
                                             </tr>
@@ -1387,25 +1390,6 @@
                     });
 
             },
-            UpdateTag(obj) {
-                var _this = this;
-                var postData = {
-                    id: obj.tag.id,
-                }
-                axios.post('/api/task-list/update-tag', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        console.log(response.success)
-                        _this.getTaskList()
-                        // $('#dropdown' + data._id).toggle();
-                        // _this.selectedData = data
-                        _this.tag = null
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
-
-            },
             showTagManageModel() {
                 var _this = this;
                 axios.get('/api/task-list/all-tag')
@@ -1422,11 +1406,51 @@
             },
             updateTagColor(e, tag){
                 var color = e.target.value;
-                alert (color);
+                var _this = this;
+                var postData = {
+                    id: tag.id,
+                    color : color,
+                }
+                axios.post('/api/task-list/update-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        _this.getTaskList()
+                        // $('#dropdown' + data._id).toggle();
+                        // _this.selectedData = data
+                        _this.tag = null
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
 
             },
             updateTagName(e, tag){
-
+                var newTag = e.target.innerText;
+                if(e.which == 13){
+                    var _this = this;
+                    var postData = {
+                        id: tag.id,
+                        tag : newTag,
+                    }
+                    axios.post('/api/task-list/update-tag', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            console.log(response)
+                            _this.getTaskList()
+                            // $('#dropdown' + data._id).toggle();
+                            // _this.selectedData = data
+                            _this.tag = null
+                        })
+                        .catch(error => {
+                            console.log('Api for update tag not Working !!!')
+                        });
+                }
+            },
+            newLineoff(e){
+                if(e.which == 13){
+                    e.preventDefault();
+                }
             },
             DeleteTagFromModal(e, tag){
 
