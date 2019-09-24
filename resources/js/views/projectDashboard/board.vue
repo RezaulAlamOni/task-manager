@@ -229,7 +229,7 @@
                                                         name="date">
                                                 </flatPickr>
                                             </div>
-                                            <div style="position: absolute; right: 160px; bottom: 8px; ">
+                                            <div style="position: absolute; right: 160px; bottom: 8px; opacity: 0.25">
                                                 <a @click="deleteCard(index)"> 
                                                      <i class="baseline-playlist_delete icon-image-preview"></i>
                                                 </a>
@@ -416,13 +416,13 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Name</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" v-model="addField.name">
+                                <input type="text" class="form-control" v-model="editField.name">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">Percent Complete</label>
                             <div class="col-sm-8">
-                                <select class="form-control" v-model="addField.progress">
+                                <select class="form-control" v-model="editField.progress">
                                     <option>0%</option>
                                     <option>10%</option>
                                     <option>20%</option>
@@ -440,10 +440,10 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Color</label>
                             <div class="col-sm-10">
-                                <input type="color" class="form-control" v-model="addField.color">
+                                <input type="color" class="form-control" v-model="editField.color">
                             </div>
                         </div>
-                        <p v-if="addField.error" class="text-danger">{{addField.error}}</p>
+                        <p v-if="editField.error" class="text-danger">{{editField.error}}</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" @click="updateColumn">Update</button>
@@ -697,6 +697,13 @@
                 addField: {
                     name: null,
                     color: null,
+                    error: null,
+                    progress : null
+                },
+                editField: {
+                    name: null,
+                    color: null,
+                    boardId: null,
                     error: null,
                     progress : null
                 },
@@ -960,7 +967,7 @@
                     })),
                 }
 
-                console.log(this.scene);
+                // console.log(this.scene);
             },
             showModelForNevItem() {
                 $("#addNavItem").modal('show');
@@ -1169,19 +1176,35 @@
                 // this.getData();
             },
             updateColumSow(index) {
-                // alert(index);
                 this.updateIndex = index;
-                this.addField.name = this.cards[this.updateIndex].column;
-                $("#EditModal").modal('show');
+                this.editField.name = this.cards[index].column;
+                this.editField.boardId = this.cards[index].id;
+                this.editField.progress = this.cards[index].progress;
+                this.editField.color = this.cards[index].color;
+                this.editField.error = '';
+                setTimeout(function () {
+                    $("#EditModal").modal('show');
+                },100);
             },
             updateColumn() {
-                if (!this.addField.name) {
-                    this.addField.error = 'Name is required!';
+                console.log(this.cards[this.updateIndex])
+                if (!this.editField.name || this.editField.name == '') {
+                    this.editField.error = 'Name is required!';
                 } else {
+                    let data = this.cards[this.updateIndex];
                     $("#EditModal").modal('hide');
-                    this.cards[this.updateIndex].column = this.addField.name;
+                    axios.post('/api/board-modify',data)
+                    .then(response => response.data)
+                    .then(response => {
+                        if(response.success == true){
+                            this.cards[this.updateIndex].column = this.editField.name;
+                        }
+                    })
+                    .catch(error => {
+
+                    });
                     this.getData();
-                    this.addField = {};
+                    this.editField = {};
                 }
             },
             addExistingTask(index){
@@ -1247,13 +1270,28 @@
                 _this.growInit(option);
             },
             addCard(index,id) {
-                // alert(id);
+                let _this = this;
+                
+                axios.post('/api/card-add/',{'id': id})
+                .then(response => response.data)
+                .then(response => {
+                    if(response.success == true){
+                        let data = response.data;
+                        // console.log(response.data);
+                        // _this.cards[index].task.push({name: '', date: '', tags: [], clicked: 0});
+                        // keys = _this.cards[index].task.length-1;
+                        // alert(_this.cards[index].task.length);
+                    }
+                })
+                .catch(error => {
+
+                });
                 this.cards[index].task.push({name: '', date: '', tags: [], clicked: 0});
-                let key = this.cards[index].task.length-1;
+                let keys = this.cards[index].task.length-1;
                 this.getData();
                 setTimeout(function () {
-                    $('#id'+index+key).click();
-                    $('#id'+index+key).focus();
+                    $('#id'+index+keys).click();
+                    $('#id'+index+keys).focus();
                 },100)
             },
             saveData(data,index,child_key) {
