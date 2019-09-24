@@ -1,97 +1,75 @@
-@extends('spark::layouts.layout_2')
-@section("styles")
-    <link href="/css/themify-icons.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/login.css">
-@endsection
-@section('content')
-    <div class="container-fluid main-container">
-        <div class="row justify-content-center">
-            <div class="col-lg-4">
-                <div class="card card-default">
-                    <div class="card-header">
-                        <h2 class="text-center">
-                            <img src="/img/mono-logo.png" alt="Logo">
-                        </h2>
-                    </div>
-                    <div class="card-body">
-                        @include('spark::shared.errors')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
 
-                        <form class="form-horizontal" role="form" method="POST" action="/login">
-                        {{ csrf_field() }}
+    <title>TheSaaS — Login</title>
 
-                        <!-- E-Mail Address -->
-                            <div class="form-group ">
-                                {{--<label class="col-md-4 col-form-label text-md-right">{{__('E-Mail')}}</label>--}}
+    <!-- Styles -->
+    <link href="../css/page.min.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
 
-                                <div class="col-md-12">
-                                    <input type="email" placeholder="Email" class="form-control" name="email"
-                                           value="{{ old('email') }}" autofocus>
-                                </div>
-                            </div>
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+    <link rel="icon" href="../img/favicon.ico">
+</head>
 
-                            <!-- Password -->
-                            <div class="form-group ">
-                                {{--<label class="col-md-4 col-form-label text-md-right">{{__('Password')}}</label>--}}
+<body class="layout-centered bg-img" style="background-image: url(../img/bg/4.jpg);">
 
-                                <div class="col-md-12">
-                                    <input type="password" placeholder="Password" class="form-control" name="password">
-                                </div>
-                            </div>
 
-                            <!-- Remember Me -->
-                            <div class="form-group ">
-                                <div class="col-md-12">
-                                    <div class="form-check">
-                                        <label class="form-check-label login-check-label">
-                                            <input type="checkbox" name="remember" class="form-check-input"> &nbsp;&nbsp;{{__('Remember Me')}}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
+<!-- Main Content -->
+<main class="main-content">
 
-                            <!-- Login Button -->
-                            <div class="form-group  mb-0">
-                                <div class="col-md-12">
-                                    <button type="submit" class="btn btn-primary btn-block">
-                                        {{__('Sign In')}}
-                                    </button>
-                                    <div class="mt-3">
-                                        <a href="{{ url('/password/reset') }}">{{__('Forgot Your Password?')}}</a>
-                                        {{--<a class="mt-3 text-primary" href="{{ url('/password/reset') }}">{{__('Forgot Your Password?')}}</a>--}}
-                                        <span class="float-right sign-up">New ? <a
-                                                    href="{{ url('/register') }}">Signup</a></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="row social">
-
-                            <div class="col-12">
-                                <p class="alter text-center">Sign in with</p>
-
-                                <div class="row">
-                                    <div class="col-4 text-center">
-                                        <a href="#" class="btn btn-lg btn-facebook">
-                                            <i class="ti-facebook"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col-4 text-center">
-                                        <a href="#" class="btn btn-lg btn-twitter">
-                                            <i class="ti-twitter-alt"></i>
-                                        </a>
-                                    </div>
-                                    <div class="col-4 text-center">
-                                        <a href="#" class="btn btn-lg btn-google">
-                                            <i class="ti-google"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+    <div class="bg-white rounded shadow-7 w-400 mw-100 p-6">
+        <h5 class="mb-7">Sign into your account</h5>
+        @include('spark::shared.errors')
+        <form role="form" method="POST" action="/login">
+            {{ csrf_field() }}
+            <div class="form-group">
+                <input type="email" placeholder="Email" class="form-control" name="email" value="{{ old('email') }}" autofocus>
             </div>
+
+            <div class="form-group">
+                <input type="password" placeholder="Password" class="form-control" name="password">
+            </div>
+
+            <div class="form-group flexbox py-3">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="remember" checked>
+                    <label class="custom-control-label">Remember me</label>
+                </div>
+                <a class="text-muted small-2" href="{{ url('/password/reset') }}">{{__('Forgot Your Password?')}}</a>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-block btn-primary" type="submit">Login</button>
+            </div>
+        </form>
+
+        <div class="divider">Or Login With</div>
+        <div class="text-center">
+            <a class="btn btn-circle btn-sm btn-facebook mr-2" href="#"><i class="fa fa-facebook"></i></a>
+            <a class="btn btn-circle btn-sm btn-google mr-2" href="#"><i class="fa fa-google"></i></a>
+            <a class="btn btn-circle btn-sm btn-twitter" href="#"><i class="fa fa-twitter"></i></a>
         </div>
+
+        <hr class="w-30">
+
+        <p class="text-center text-muted small-2">
+            Don't have an account?
+            <a href="{{ url('/register') }}">Register here</a>
+        </p>
     </div>
-@endsection
+
+</main><!-- /.main-content -->
+
+
+<!-- Scripts -->
+<script src="../js/page.min.js"></script>
+<script src="../js/script.js"></script>
+
+</body>
+</html>

@@ -130,7 +130,7 @@
 
                 <span v-else>
                     {{--{{__('Register')}}--}}
-                    <img src="/img/mono-logo.png" alt="">
+                    <img src="/img/color-logo.png" alt="">
                 </span>
             </div>
 

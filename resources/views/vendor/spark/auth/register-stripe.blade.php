@@ -12,7 +12,7 @@
 
 @section('content')
 <spark-register-stripe inline-template>
-    <div class="main-container">
+    <div class="layout-centered bg-img" style="background-image: url(../img/bg/4.jpg);">
         <div class="spark-screen container ">
             <!-- Common Register Form Contents -->
             @include('spark::auth.register-common')
