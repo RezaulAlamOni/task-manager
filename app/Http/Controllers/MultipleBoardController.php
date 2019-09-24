@@ -33,6 +33,8 @@ class MultipleBoardController extends Controller
             $boards[$key]['id'] = $value['id'];
             $boards[$key]['column'] = $value['title'];
             $boards[$key]['hidden'] = 0;
+            $boards[$key]['progress'] = $value['progress'];
+            $boards[$key]['color'] = $value['color'];
             $tasks = TaskBoard::where('parent_id',$value->id)->get();
             if(count($tasks) > 0){
                 foreach ($tasks as $keys => $values) {
@@ -52,6 +54,7 @@ class MultipleBoardController extends Controller
     public function create(Request $request)
     {   
         // return $request->all();
+        $sortNo = TaskBoard::max('sort_id');
         $data = TaskBoard::create([
             'multiple_board_id' => $request->multiple_board_id,
             'nav_id' => $request->nav_id,
@@ -60,9 +63,8 @@ class MultipleBoardController extends Controller
             'color' => $request->color,
             'parent_id' => 0,
             'hidden' => 0,
-            'sort_id' => 20,
-            'created_by' => 1,
-            'updated_by' => 1,
+            'sort_id' => $sortNo+1,
+            'created_by' => Auth::id(),
             'date' => Carbon::today(),
             'created_at' => Carbon::today(),
         ]);
@@ -96,15 +98,29 @@ class MultipleBoardController extends Controller
         return response()->json(['multiple_board' => $multiple_board,'id'=>$id]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Multiple_board  $multiple_board
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Multiple_board $multiple_board)
+    
+    public function cardAdd(Request $request)
     {
-        //
+        $id = $request->id;
+        $parent = TaskBoard::find($id);
+        $sortNo = TaskBoard::max('sort_id');
+        $data = [
+            'title' => '',
+            'sort_id' => $sortNo+1,
+            'parent_id' => $parent->id,
+            'project_id' =>  $parent->project_id,
+            'nav_id' =>  $parent->nav_id,
+            'multiple_board_id' =>  $parent->multiple_board_id,
+            'hidden' =>  0,
+            'date' =>  Carbon::now(),
+            'created_by' => Auth::id(),
+            'created_at' => Carbon::now()
+        ];
+        $child = TaskBoard::create($data);
+        if($child){
+            return response()->json(['success' => true, 'data' => $child]);
+        }
+        return response()->json(['success' => false]);
     }
 
     /**
@@ -125,9 +141,21 @@ class MultipleBoardController extends Controller
      * @param  \App\Multiple_board  $multiple_board
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Multiple_board $multiple_board)
+    public function update(Request $request)
     {
-        //
+        // return $request->all();
+        $data = [
+            'title' => $request->column,
+            'color' => $request->color,
+            'progress' => $request->progress
+        ];
+        if($request->id || $request->id != ''){
+            $update = TaskBoard::where('id', $request->id)->update($data);
+            if($update){
+                return response()->json(['success' => true, 'data' => $update]);
+            }
+        }
+        return response()->json(['success' => false]);
     }
 
     /**
