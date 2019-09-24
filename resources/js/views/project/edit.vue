@@ -1,8 +1,8 @@
 <template>
 
     <div class="col-md-6 offset-md-3">
-        <div class="card card-default">
-            <div class="card-header">
+        <div class="card card-default border-primary">
+            <div class="card-header bg-primary text-white">
                 Create Project
             </div>
             <div class="card-body">
@@ -26,11 +26,8 @@
                     <!-- Create Button -->
                     <div class="form-group row mb-0">
                         <div class="offset-md-4 col-md-6">
-                            <button type="submit" class="btn btn-primary"
-                                    @click.prevent="addProject">
-
-                                Create
-                            </button>
+                            <button type="submit" class="btn btn-primary" @click.prevent="addProject">Create</button>
+                            <a class="btn btn-default" href="/projects">Cancel</a>
                         </div>
                     </div>
                 </form>
