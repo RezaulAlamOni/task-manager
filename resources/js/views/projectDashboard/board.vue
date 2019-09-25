@@ -95,12 +95,72 @@
 
 
                             <ul class="navbar-nav ml-4" style="position: absolute;right: 20px;">
+                                <li class="nav-item" style="margin-right:20px;">
+                                    <a href="Javascript:void(0)" class="d-block d-md-flex text-center nav-link" @click="shortcutModel">
+                                        <span class="d-none d-md-block">
+                                           Shortcuts
+                                        </span>
+                                    </a>
+                                </li>
+
                                 <li class="nav-item dropdown">
                                     <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
-                            <span class="d-none d-md-block">
-                               <i class="fa fa-fw fa-plus-circle" style="color:#33CCFF;font-size: 26px;"></i>
-                            </span>
+                                        <span class="d-none d-md-block">
+                                           <i class="fa fa-fw fa-filter" style="font-size: 26px;"></i>
+                                        </span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+
+                                        <h6 class="dropdown-header"> Filters</h6>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="javascript:void(0)" class="dropdown-item active">
+                                            <i class="fa fa-fw fa-tasks"></i>
+                                            Show All Tasks
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-user"></i>
+                                            Show My Tasks
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-users"></i>
+                                            Show Users Tasks
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-clipboard-check"></i>
+                                            Show Completed Tasks
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-eye-slash"></i>
+                                            Hide Completed Tasks
+                                        </a>
+                                        <h6 class="dropdown-header"> Sort</h6>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="javascript:void(0)" class="dropdown-item active">
+                                            <i class="fa fa-sort"></i>
+                                            Default
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-sort-up"></i>
+                                            Oldest
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-sort-down"></i>
+                                            Newest
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-calendar-alt"></i>
+                                            By Due Date
+                                        </a>
+                                    </div>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
+                                       aria-haspopup="true" aria-expanded="false">
+                                        <span class="d-none d-md-block">
+                                           <i class="fa fa-fw fa-plus-circle compltit-blue" style="font-size: 26px;"></i>
+                                        </span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 
@@ -585,6 +645,138 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="shortcutModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Shortcuts</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">ENTER</span>
+                            </li>
+                            <li class="list-group-item">Save and Create New Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">TAB</span>
+                            </li>
+                            <li class="list-group-item">Make Sub Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">SHIFT</span>
+                                +
+                                <span class="badge-pill badge-default">TAB</span>
+                            </li>
+                            <li class="list-group-item">Make  Parent Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">C</span>
+                            </li>
+                            <li class="list-group-item">Copy Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">V</span>
+                            </li>
+                            <li class="list-group-item">Paste Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">X</span>
+                            </li>
+                            <li class="list-group-item">Cut Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">S</span>
+                            </li>
+                            <li class="list-group-item">Search</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">i</span>
+                            </li>
+                            <li class="list-group-item">Upload Image/File</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">U</span>
+                            </li>
+                            <li class="list-group-item">Assign User</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">Shift</span>
+                                +
+                                <span class="badge-pill badge-default">#</span>
+                            </li>
+                            <li class="list-group-item">Add Tag</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">Shift</span>
+                                +
+                                <span class="badge-pill badge-default">B</span>
+                            </li>
+                            <li class="list-group-item">Add Don't Forget Tag</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">D</span>
+                            </li>
+                            <li class="list-group-item">Delete Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default"><i class="fa fa-caret-up"></i></span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default"><i class="fa fa-caret-down"></i></span>
+                            </li>
+                            <li class="list-group-item">Move Task Up &amp; Down</li>
+                        </ul>
+
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default"><i class="fa fa-caret-right"></i></span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default"><i class="fa fa-caret-left"></i></span>
+                            </li>
+                            <li class="list-group-item">Open &amp; Close Task Details</li>
+                        </ul>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="modal fade" id="addNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -987,6 +1179,9 @@
                     radioClass: 'iradio_square-blue',
                     increaseArea: '20%' // optional
                 });
+            },
+            shortcutModel() {
+                $("#shortcutModel").modal('show');
             },
             AddNevItem() {
                 var _this = this;

@@ -899,11 +899,7 @@ a {
   font-size   : 22px;
   line-height : 1.5;
 }
-.badge {
-  background-color : #66CC99;
-  font-weight      : 400;
-  float            : right;
-}
+
 .sub-menu {
   list-style : none;
   padding    : 0;
@@ -1687,6 +1683,24 @@ aside.right-side {
   fill: #174991;
 }
 
+.compltit-blue-a {
+  text-decoration: underline !important;
+  margin-right: 10px;
+  color: #174991;
+}
+
+.compltit-blue-link {
+  text-decoration: underline !important;
+  margin-right: 10px;
+  color: #174991;
+  cursor: pointer;
+}
+
+.compltit-blue-link:hover {
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
 a {
   color: #174991;
 }
@@ -1737,12 +1751,26 @@ a {
 .btn, a.btn {
   border-radius: 4px;
   font-size: 16px;
-  font-family: "Open Sans", sans-serif, verdana;
   text-decoration: none;
   text-align: center;
-  line-height: 40px;
-  height: 40px;
-  padding: 0 40px;
+  line-height: 35px;
+  padding: 0 20px;
+  margin: 0;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  box-sizing: border-box;
+  transition-property: all;
+  transition-duration: .3s;
+}
+
+.btn-small, a.btn-small {
+  border-radius: 4px;
+  font-size: 14px;
+  text-decoration: none;
+  text-align: center;
+  line-height: 30px;
+  padding: 0 10px;
   margin: 0;
   display: inline-block;
   cursor: pointer;
@@ -1775,4 +1803,11 @@ a {
   border-bottom: 1px solid #ddd;
   width: 100%;
   margin: 10px 0 10px 0;
+}
+
+.tags{
+  width: fit-content;
+  masrgin-left: 1px;
+  float: left;
+  margin: 5px;
 }
