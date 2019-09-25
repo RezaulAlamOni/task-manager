@@ -1,7 +1,5 @@
 <template>
-
     <div>
-
         <div class="row page-titles">
             <div class="col-md-12 col-12 align-self-center">
                 <nav class="navbar-expand-md navbar-spark">
@@ -9,56 +7,52 @@
 
                         <div class="collapse navbar-collapse show">
 
-                            <span v-for="nev in AllNevItems">
+                            <span v-for="nav in AllNavItems">
                                 <ul class="navbar-nav ml-4 float-sm-left">
                                     <li class="nav-item dropdown">
                                         <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
                                            data-toggle="dropdown"
                                            aria-haspopup="true" aria-expanded="false">
-                                <span class="d-none d-md-block">{{nev.title}}</span>
+                                <span class="d-none d-md-block">{{nav.title}}</span>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-left"
                                              aria-labelledby="dropdownMenuButton">
 
-                                            <h6 class="dropdown-header" v-if="nev.type === 'list'"> Lists</h6>
-                                            <h6 class="dropdown-header" v-if="nev.type === 'board'"> Board</h6>
+                                            <h6 class="dropdown-header" v-if="nav.type === 'list'"> Lists</h6>
+                                            <h6 class="dropdown-header" v-if="nav.type === 'board'"> Board</h6>
 
-                                            <span v-for="nev_list in nev.lists">
-<!--                                                <a href="#" class="dropdown-item"> {{nev.title}}</a>-->
-                                                <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id)"
-                                                      class="dropdown-item" :id="'list'+nev_list.id">
+                                            <span v-for="nav_list in nav.lists">
+                                                <span @click="setListId(nav_list.id ,nav_list.list_title,nav.id)"
+                                                      class="dropdown-item" :id="'list'+nav_list.id">
 
-                                                    <router-link class="nav-link drop-item" v-if="nev.type === 'list'"
-                                                                 :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nev_list.list_title}}<i
+                                                    <router-link class="nav-link drop-item" v-if="nav.type === 'list'"
+                                                                 :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nav_list.list_title}}<i
                                                         class="i-btn x20 task-complete icon-circle-o"></i>
                                                     </router-link>
                                                     <router-link class="nav-link drop-item" v-else
-                                                                 :to="{ name: 'project-board', params: { projectId: projectId }}">{{nev_list.board_title}}<i
+                                                                 :to="{ name: 'project-board', params: { projectId: projectId }}">{{nav_list.board_title}}<i
                                                         class="i-btn x20 task-complete icon-circle-o"></i>
                                                     </router-link>
-
 
                                                  </span>
 
                                             </span>
 
-
                                             <div class="dropdown-divider"></div>
 
-                                            <a href="Javascript:void(0)" @click="addListModel(nev.id)"
-                                               v-if="nev.type === 'list'"
+                                            <a href="Javascript:void(0)" @click="addListModel(nav.id)"
+                                               v-if="nav.type === 'list'"
                                                class="dropdown-item">
                                                 <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                                Create {{nev.title}}  >List
+                                                Create {{nav.title}}  >List
                                             </a>
 
-                                            <a href="Javascript:void(0)" @click="addBoardModel(nev.id)"
-                                               v-if="nev.type === 'board'"
+                                            <a href="Javascript:void(0)" @click="addBoardModel(nav.id)"
+                                               v-if="nav.type === 'board'"
                                                class="dropdown-item">
                                                 <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                                Create {{nev.title}}>Board
+                                                Create {{nav.title}}>Board
                                             </a>
-
 
                                         </div>
                                     </li>
@@ -136,15 +130,15 @@
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 
                                         <h6 class="dropdown-header"> Manage Nav</h6>
-                                        <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNevItem">
+                                        <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNavItem">
                                             <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
                                             Create Task View
                                         </a>
                                         <div class="dropdown-divider"></div>
                                         <h6 class="dropdown-header"> Edit Task View</h6>
-                                        <span v-for="nev in AllNevItems">
-                                             <a href="javascript:void(0)" @click="updateNavbarModel(nev)"
-                                                class="dropdown-item"> {{nev.title}}</a>
+                                        <span v-for="nav in AllNavItems">
+                                             <a href="javascript:void(0)" @click="updateNavbarModel(nav)"
+                                                class="dropdown-item"> {{nav.title}}</a>
                                         </span>
                                     </div>
                                 </li>
@@ -165,17 +159,13 @@
 
         </div>
         <div class="TaskListAndDetails">
-
-
             <div v-if="nevItem != null && tree4data.length <= 0 " class="col-md-8 text-center pt-5">
                 <p>We Should only see this section for accounts with no lists or boards. If a user has a list or a board start this page in the last list/board user was in.</p>
             </div>
-            <div v-if="nevItem == null" class="col-md-8 text-center pt-5">
+            <div v-if="navItem == null" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Create Task View.</h2>
             </div>
             <div class="task_width" id="task_width" @click="HideDetails">
-                <!--                <p class="add-list"><a href="#" @click="AddTaskPopup"><i class="fa fa-plus"></i> Add Task</a></p>-->
-
                 <div id="tree_view_list">
                     <div class="col-11" id="col10" style="border: none">
                         <div class="container offset-1">
@@ -217,7 +207,6 @@
                                     <b v-if="data.children && data.children.length && !data.open"
                                        @click="store.toggleOpen(data)"><i class="fa fa-fw fa-plus"></i></b>
                                     <span>
-<!--                                        <input type="text" :value="data.text"-->
                                         <input type="text" v-model="data.text"
                                                :id="data.id"
                                                @focus="hideItem($event)"
@@ -273,7 +262,6 @@
                                                         :allow-edit-tags="true"
                                                         @tags-changed="newTags => (changeTAg(newTags))"
                                                         @before-deleting-tag="DeleteTag"
-
                                                     />
                                                         <div class="row">
                                                             <div class="col-12">
@@ -290,14 +278,10 @@
                                                         <div class="col-xs-12" style="margin-top:10px;width: 100%;">
                                                             <button type="submit" class="btn btn-small btn-primary pull-right" @click="showTagManageModel">Manage Tag</button>
                                                         </div>
-
-
                                                 </div>
 
                                             </diV>
-
                                         </div>
-
                                     </a>
                                     <div class="hide-item-res">
                                         <a class="calender li-opacity clickHide" v-if="!data.date">
@@ -310,8 +294,7 @@
                                             v-model="data.date"
                                             format='dd MMM'
                                             @selected="updateDate"
-                                            calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
-                                        >
+                                            calendar-button-icon='<i class="outline-event icon-image-preview"></i>'>
                                         </datepicker>
 
 
@@ -377,9 +360,7 @@
                 <TaskDetails
                     :selectedData="selectedData"
                     :task_logs="task_logs"
-                    @textArea="ShowTextArea"
-                >
-
+                    @textArea="ShowTextArea">
                 </TaskDetails>
             </div>
         </div>
@@ -425,7 +406,6 @@
                                 <textarea name="" id="" cols="40" rows="3" v-model="list.description"></textarea>
                             </div>
                         </div>
-                        <!--                        <p v-if="addField.error" class="text-danger"></p>-->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" @click="AddNewList">Add</button>
@@ -606,7 +586,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title pl-3"> Add Nev Item</h5>
+                        <h5 class="modal-title pl-3"> Add Nav Item</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -617,7 +597,7 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="nevItem.title">
+                                <input type="text" class="form-control" v-model="navItem.title">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -625,7 +605,7 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" min="0" v-model="nevItem.sort_id">
+                                <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
                             </div>
                         </div>
 
@@ -650,7 +630,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="AddNevItem">Add</button>
+                        <button type="button" class="btn btn-primary" @click="AddNavItem">Add</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
                         </button>
                     </div>
@@ -662,7 +642,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title pl-3"> Add Nev Item</h5>
+                        <h5 class="modal-title pl-3"> Add Nav Item</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -673,7 +653,7 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="nevItem.title">
+                                <input type="text" class="form-control" v-model="navItem.title">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -681,13 +661,13 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" min="0" v-model="nevItem.sort_id">
+                                <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
                             </div>
                         </div>
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="updateNevItem">Update</button>
+                        <button type="button" class="btn btn-primary" @click="updateNavItem">Update</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
                         </button>
                     </div>
@@ -717,7 +697,6 @@
                                 <tbody>
                                 <template v-for="tag in manageTag">
                                     <tr>
-<!--                                                <td class="pt-3-half" >{{tag.task_id}}</td>-->
                                         <td class="pt-3-half" v-if="tag.title === 'Dont Forget'" >{{tag.title}}</td>
                                         <td class="pt-3-half" v-else contenteditable="true" @keyup="updateTagName($event,tag)" @keydown="newLineoff($event)">{{tag.title}}</td>
                                         <td class="pt-3-half">
@@ -751,8 +730,6 @@
 <script>
     import draggableHelper from 'draggable-helper';
     import {DraggableTree} from 'vue-draggable-nested-tree';
-    // import flatPickr from 'vue-flatpickr-component';
-    // import 'flatpickr/dist/flatpickr.css';
     import switches from 'vue-switches';
     import hotkeys from 'hotkeys-js';
     import ClickOutside from 'vue-click-outside';
@@ -792,16 +769,16 @@
                 list: {
                     name: null,
                     description: null,
-                    nev_id: null
+                    nav_id: null
                 },
-                nevItem: {
+                navItem: {
                     title: null,
                     type: null,
                     sort_id: null,
                     project_id: null,
                 },
-                nev_id: null,
-                AllNevItems: null,
+                nav_id: null,
+                AllNavItems: null,
                 task_logs: null,
                 file: null,
                 tags1: [{
@@ -829,8 +806,7 @@
             this.projectId = this.$route.params.projectId;
             this.getProjects();
             this.getTaskList();
-            this.AllNevItem();
-
+            this.AllNavItem();
 
             $(document).ready(function () {
                 $('.searchList').hide();
@@ -952,27 +928,20 @@
                 }
             },
             dropNode(node, targetTree, oldTree) {
-                // console.log(oldTree)
             },
             dragNode(node, targetTree, oldTree) {
-                // console.log(targetTree)
             },
             getProjects() {
                 axios.get('/api/project/' + this.projectId)
                     .then(response => response.data)
                     .then(response => {
                         this.projects = response.project;
-                        // console.log(this.projects.name)
                         $('#header-item').text(this.projects.name + ' / Task List')
                     })
                     .catch(error => {
                     });
             },
             ChangeNode(index, new2, old) {
-                // console.log(index)
-                // console.log(new2)
-                // console.log(old)
-
             },
             assignUserToTask(user, data) {
                 alert('dfsa');
@@ -1017,7 +986,6 @@
                     $(e.target).closest('.eachItemRow').find('.dateCal').show();
 
                 }, 500)
-                // this.add Node(data);
 
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
@@ -1034,7 +1002,7 @@
                     sort_id: data.sort_id,
                     project_id: _this.projectId,
                     list_id: _this.list_id,
-                    nav_id: _this.nev_id
+                    nav_id: _this.nav_id
                 };
                 if (text !== '') {
                     axios.post('/api/task-list/add-task', postData)
@@ -1094,7 +1062,6 @@
                     }
                 }
 
-
             },
             addEmptyChild(data) {
                 let _this = this;
@@ -1126,8 +1093,6 @@
                     $("#" + date).addClass('form-control');
                     $("#" + date).removeClass('input-hide');
                 }, 100)
-
-
             },
             addChild(data) {
                 let _this = this;
@@ -1135,7 +1100,7 @@
                     id: data.id,
                     project_id: _this.projectId,
                     list_id: _this.list_id,
-                    nav_id: _this.nev_id
+                    nav_id: _this.nav_id
                 };
                 axios.post('/api/task-list/add-child-task', postData)
                     .then(response => response.data)
@@ -1164,9 +1129,9 @@
                     list_id: _this.list_id,
                     sort_id: data.sort_id,
                     text: data.text,
-                    nav_id: _this.nev_id
+                    nav_id: _this.nav_id
                 };
-                // console.log(postData)
+
                 if (data.text !== '') {
                     axios.post('/api/task-list/task-make-child', postData)
                         .then(response => response.data)
@@ -1232,7 +1197,7 @@
                     copy_id: (this.selectedCopy === null) ? this.selectedCut.id : this.selectedCopy.id,
                     type: (this.selectedCopy === null) ? 'cut' : 'copy',
                     text: (this.selectedCopy === null) ? this.selectedCut.text : this.selectedCopy.text,
-                    nav_id: _this.nev_id
+                    nav_id: _this.nav_id
                 }
 
                 axios.post('/api/task-list/copy-cut-past', postData)
@@ -1275,7 +1240,6 @@
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
                         });
-
                 }
             },
             addExistingTag(e, data, tag) {
@@ -1307,7 +1271,6 @@
 
                 if (newl > old) {
                     this.tags = tags;
-                    console.log(this.tags[newl - 1])
 
                     var color = (this.tags[newl - 1].text === 'Dont Forget') ? '#ff0000' : _this.generateColor();
                     var postData = {
@@ -1463,8 +1426,6 @@
                     .catch(error => {
                         console.log('Api for complete task not Working !!!')
                     });
-
-
             },
             moveItemUp(data) {
                 var _this = this;
@@ -1475,7 +1436,7 @@
                     sort_id: data.sort_id,
                     project_id: _this.projectId,
                     list_id: data.list_id,
-                    nav_id: _this.nev_id,
+                    nav_id: _this.nav_id,
                     type: 'up'
                 };
                 axios.post('/api/task-list/move-task', postData)
@@ -1491,7 +1452,6 @@
                     .catch(error => {
                         console.log('Api for move up task not Working !!!')
                     });
-
             },
             moveItemDown(data) {
                 var _this = this;
@@ -1502,7 +1462,7 @@
                     sort_id: data.sort_id,
                     project_id: _this.projectId,
                     list_id: data.list_id,
-                    nav_id: _this.nev_id,
+                    nav_id: _this.nav_id,
                     type: 'down'
                 }
                 axios.post('/api/task-list/move-task', postData)
@@ -1550,11 +1510,8 @@
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
                     });
-
-
-                // alert('adasd')
             },
-            showModelForNevItem() {
+            showModelForNavItem() {
                 $("#addNavItem").modal('show');
                 $('input[name="optionsRadios"]').iCheck({
                     checkboxClass: 'icheckbox_square-blue',
@@ -1565,16 +1522,15 @@
             shortcutModel() {
                 $("#shortcutModel").modal('show');
             },
-            AddNevItem() {
+            AddNavItem() {
                 var _this = this;
-                _this.nevItem.project_id = _this.projectId;
-                _this.nevItem.type = $('input[name="optionsRadios"]:checked').val();
+                _this.navItem.project_id = _this.projectId;
+                _this.navItem.type = $('input[name="optionsRadios"]:checked').val();
 
-                axios.post('/api/nev-item/add-new', _this.nevItem)
+                axios.post('/api/nav-item/add-new', _this.navItem)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response.success)
-                        _this.AllNevItem()
+                        _this.AllNavItem()
                         $("#addNavItem").modal('hide');
 
                     })
@@ -1582,33 +1538,26 @@
                         console.log('Api for move down task not Working !!!')
                     });
 
-
-                // console.log(_this.nevItem)
             },
-            AllNevItem() {
+            AllNavItem() {
                 var _this = this;
-                axios.get('/api/nev-item/' + _this.projectId)
+                axios.get('/api/nav-item/' + _this.projectId)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response)
-                        _this.AllNevItems = response.success;
-                        // $("#addNavItem").modal('hide');
+                        _this.AllNavItems = response.success;
 
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
                     });
-
-
-                // console.log(_this.nevItem)
             },
             updateNavbarModel(data) {
-                this.nev_id = data.id;
-                this.nevItem.title = data.title;
-                this.nevItem.type = data.type;
-                this.nevItem.sort_id = data.sort_id;
-                this.nevItem.nev_id = data.id;
-                this.nevItem.project_id = data.project_id;
+                this.nav_id = data.id;
+                this.navItem.title = data.title;
+                this.navItem.type = data.type;
+                this.navItem.sort_id = data.sort_id;
+                this.navItem.nav_id = data.id;
+                this.navItem.project_id = data.project_id;
 
                 $("#updateNavItem").modal('show');
                 $('input[name="optionsRadios"]').iCheck({
@@ -1618,13 +1567,13 @@
                 });
 
             },
-            updateNevItem() {
+            updateNavItem() {
                 var _this = this;
-                axios.post('/api/nev-item/update', _this.nevItem)
+                axios.post('/api/nav-item/update', _this.navItem)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response.success)
-                        _this.AllNevItem()
+                        _this.AllNavItem()
                         $("#updateNavItem").modal('hide');
 
                     })
@@ -1642,7 +1591,7 @@
                 let data = {
                     id: this.projectId,
                     list_id: this.list_id,
-                    nav_id: this.nev_id
+                    nav_id: this.nav_id
                 };
                 axios.post('/api/task-list', data)
                     .then(response => response.data)
@@ -1653,8 +1602,7 @@
                         if (response.task_list.length === 0) {
 
                             var date = Math.round(new Date().getTime() / 1000);
-
-                            var newEmty = {
+                            var newEmpty = {
                                 children: [],
                                 clicked: 0,
                                 date: "",
@@ -1667,8 +1615,7 @@
                                 tags: "",
                                 text: ""
                             };
-                            console.log(newEmty)
-                            _this.tree4data = [newEmty]
+                            _this.tree4data = [newEmpty]
                             setTimeout(function () {
                                 $("#" + date).click();
                                 $("#" + date).focus();
@@ -1685,30 +1632,28 @@
                     });
             },
             addListModel(id) {
-                this.nev_id = id;
+                this.nav_id = id;
                 $("#addListModel").modal('show');
             },
             addBoardModel(id) {
-                this.nev_id = id;
+                this.nav_id = id;
                 $("#addBoardModel").modal('show');
             },
 
-            setListId(id, title, nev_id) {
+            setListId(id, title, nav_id) {
                 this.list_id = id;
-                this.nev_id = nev_id;
-                // $('#listName').text(title);
+                this.nav_id = nav_id;
                 this.getTaskList()
-                this.nev_id = nev_id;
+                this.nav_id = nav_id;
             },
             AddNewList() {
                 this.list.project_id = this.projectId;
-                this.list.nev_id = this.nev_id;
+                this.list.nav_id = this.nav_id;
                 axios.post('/api/list-add', this.list)
                     .then(response => response.data)
                     .then(response => {
                         this.multiple_list = response.multiple_list;
-                        console.log(response)
-                        this.AllNevItem()
+                        this.AllNavItem()
                         setTimeout(function () {
                             $('#list' + response.id.id).click();
                         }, 300)
@@ -1720,16 +1665,13 @@
             },
             AddNewBoard() {
                 this.list.project_id = this.projectId;
-                this.list.nev_id = this.nev_id;
+                this.list.nav_id = this.nav_id;
                 axios.post('/api/board-add', this.list)
                     .then(response => response.data)
                     .then(response => {
                         this.multiple_list = response.multiple_board;
                         console.log(response)
-                        this.AllNevItem()
-                        // setTimeout(function () {
-                        //     $('#list' + response.id.id).click();
-                        // }, 300)
+                        this.AllNavItem()
                         $("#addBoardModel").modal('hide');
                     })
                     .catch(error => {
@@ -1753,9 +1695,7 @@
                     $('.inp').addClass('input-hide');
                     $('.inp').removeClass('form-control');
 
-
                     this.addNode(data);
-
                 }
             },
             dataCopy(data) {
@@ -1764,11 +1704,9 @@
                 for (i = 0; i < targetData.length; i++) {
                     if (targetData[i].text == targetData.text) {
                         _this.selectedCopy = targetData[i];
-                        // console.log(_this.selectedCopy);
                         break;
                     }
                 }
-
             },
             updateDate(date) {
                 date = new Date(date);
@@ -1837,16 +1775,6 @@
                 }
             },
             AddDontForgetTag(data) {
-                // var _this = this;
-                // axios.post('/api/task-list/add-dont-forget-tag', {'img': img})
-                //     .then(response => response.data)
-                //     .then(response => {
-                //         _this.getTaskList()
-                //         $("#imageModal").modal('hide');
-                //     })
-                //     .catch(error => {
-                //         console.log('Api for task date update not Working !!!')
-                //     });
 
                 data.tags[0] = 'Dont Forget';
                 var moveItem;
@@ -1922,11 +1850,6 @@
             HideTextArea() {
                 var _this = this;
                 $('.SubmitButton').hide();
-                // var option = {
-                //     height : 32,
-                //     maxHeight : 100
-                // };
-                // _this.growInit(option);
             },
             ShowListDetails(data) {
                 var _this = this;
@@ -1940,13 +1863,7 @@
             HideListDetails() {
                 var _this = this;
                 $('.submitdetails').hide();
-                // var option = {
-                //     height : 32,
-                //     maxHeight : 100
-                // };
-                // _this.growInit(option);
             },
-
 
             expandAll() {
                 th.breadthFirstSearch(this.tree1data, node => {
