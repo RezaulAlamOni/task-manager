@@ -43,7 +43,7 @@
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                            <a href="/projects" class="dropdown-item">
+                            <a href="/project/create" class="dropdown-item">
                                 <i class="fa fa-fw fa-plus-circle compltit-blue"></i> Create Project
                             </a>
 

@@ -911,14 +911,14 @@ a {
 }
 #menu li.active > a {
   background : #EEEEEE;
-  border-right : 3px solid #68DEB7;
-  color      : #33CC99;
+  border-right : 3px solid #174991;
+  color      : #174991;
 }
 #menu .profile-left li > a:hover {
-  color : #0A1414;
+  color : #174991;
 }
 #menu li > a:hover {
-  color : #33CC99;
+  color : #174991;
 }
 #menu .menu-dropdown > ul > li > a {
   padding-left : 37px;
@@ -1627,9 +1627,9 @@ li.dropdown-header {
 //left menu
 
 .dropdown-item.active{
-  background: #EEEEEE;
-  color: #33CC99;
-  border-right: 3px solid #68DEB7;
+  background-color: #e6e6e6;
+  color: #174991;
+  border-right: 3px solid #174991;
 }
 @media(min-width: 320px) and (max-width: 575px) {
 
@@ -1730,6 +1730,49 @@ a {
   border-radius: 5px;
 }
 
-.btn-default {
+.table thead th{
+  border: none;
+}
+
+.btn, a.btn {
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: "Open Sans", sans-serif, verdana;
+  text-decoration: none;
+  text-align: center;
+  line-height: 40px;
+  height: 40px;
+  padding: 0 40px;
+  margin: 0;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  box-sizing: border-box;
+  transition-property: all;
+  transition-duration: .3s;
+}
+
+.btn-default, .badge-default{
   color: #333333;
+  background-color: #DCDCDC;
+  border-color: #DCDCDC;
+}
+
+.btn-default:hover {
+  color: #666;
+}
+
+.list-group-item{
+  border: none;
+}
+
+.multi-list-group .list-group-item {
+  margin-right: 20px;
+}
+
+.multi-list-group{
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+  margin: 10px 0 10px 0;
 }
