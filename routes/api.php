@@ -45,7 +45,7 @@ Route::post('/nev-item/add-new','ProjectNavItemsController@store'); //add new ne
 Route::get('/nev-item/{project_id}','ProjectNavItemsController@index'); //all nev item
 Route::post('/nev-item/update','ProjectNavItemsController@edit'); //all nev item
 
-Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog');//reverse child node
+Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog'); //reverse child node
 
 
 //board Section
@@ -54,6 +54,8 @@ Route::post('/board-save','MultipleBoardController@create'); //get board item
 Route::post('/board-modify','MultipleBoardController@update'); //column info update
 
 Route::post('/card-add', 'MultipleBoardController@cardAdd');
+Route::post('/card-update', 'MultipleBoardController@cardEdit');
+Route::delete('/card-delete/{id}','MultipleBoardController@cardDelete'); //delete card
 
 Route::delete('/delete-board/{id}','MultipleBoardController@destroy'); //delete board
 

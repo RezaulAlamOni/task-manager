@@ -137,7 +137,7 @@
         <div id="board_view_list">
             <div class="col-12" id="col10" style="border: none">
                 <div class="card-scene">
-                    <p><a href="#" @click="addColumn"><i class="fa fa-plus"></i> Add Column</a></p>
+                    <!-- <a><a href="#" @click="addColumn"><i class="fa fa-plus"></i> Add Column</a></p> -->
                     <Container
                             orientation="horizontal"
                             @drop="onColumnDrop($event)"
@@ -203,12 +203,12 @@
                                     <Draggable v-for="(card , key) in column.children" :key="card.id">
                                         <div class="card-list" :class="card.props.className" :style="card.props.style">
                                             <textarea
-                                                      type="text" v-model="card.data"
-                                                      @focus="hideItem($event)"
-                                                      @blur="showItem($event,card.data,index,key)"
-                                                      data-grow="auto"
-                                                      :id="'id'+index+key"
-                                                      class="inp input-hide text-area" @click="makeInput($event)">
+                                                    type="text" v-model="card.data"
+                                                    @focus="hideItem($event)"
+                                                    @blur="showItem($event,card,index,key)"
+                                                    data-grow="auto"
+                                                    :id="'id'+index+key"
+                                                    class="inp input-hide text-area" @click="makeInput($event)">
                                             </textarea>
                                             <!--<p>{{ card.data }}</p>-->
                                             <div>
@@ -216,6 +216,15 @@
                                                     <i class="outline-event icon-image-preview" title="toggle"
                                                        data-toggle></i>
                                                 </a>
+                                                <!-- <datepicker
+                                                    :disabled-dates="disabledDates"
+                                                    input-class="dateCal"
+                                                    v-model="card.date"
+                                                    format='dd MMM'
+                                                    @selected="updateDate"
+                                                    calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
+                                                >
+                                                </datepicker> -->
                                                 <flatPickr
                                                         v-model="card.date"
                                                         :config="date_config"
@@ -230,7 +239,7 @@
                                                 </flatPickr>
                                             </div>
                                             <div style="position: absolute; right: 160px; bottom: 8px; opacity: 0.25">
-                                                <a @click="deleteCard(index)"> 
+                                                <a @click="deleteCard(index, key ,card.cardId)"> 
                                                      <i class="baseline-playlist_delete icon-image-preview"></i>
                                                 </a>
                                             </div>
@@ -337,6 +346,7 @@
                                                 </div>
 
                                             </a>
+                                        
                                         </div>
                                     </Draggable>
                                 </Container>
@@ -684,13 +694,13 @@
     import switches from 'vue-switches';
     import hotkeys from 'hotkeys-js';
     import ClickOutside from 'vue-click-outside';
-
+     import Datepicker from 'vuejs-datepicker';
     import {Container, Draggable} from 'vue-smooth-dnd';
     // import {applyDrag, generateItems} from '../../../plugins/utils/helpers';
     import {applyDrag, generateItems} from '../../../assets/plugins/utils/helpers';
 
     export default {
-        components: {Container, Draggable, flatPickr, switches},
+        components: {Container, Draggable, flatPickr, switches, Datepicker},
         data() {
             return {
                 id: 0,
@@ -955,6 +965,7 @@
                         children: generateItems(this.cards[i].task.length, j => ({
                             type: 'draggable',
                             id: `${i}${j}`,
+                            cardId: this.cards[i].task[j].id,
                             props: {
                                 className: 'card',
                                 style: {backgroundColor: 'white'}
@@ -1271,35 +1282,57 @@
             },
             addCard(index,id) {
                 let _this = this;
-                
                 axios.post('/api/card-add/',{'id': id})
                 .then(response => response.data)
                 .then(response => {
                     if(response.success == true){
                         let data = response.data;
-                        // console.log(response.data);
-                        // _this.cards[index].task.push({name: '', date: '', tags: [], clicked: 0});
-                        // keys = _this.cards[index].task.length-1;
-                        // alert(_this.cards[index].task.length);
+                        console.log(response.data);
+                        _this.cards[index].task.push({id: data.id, name: data.title, date: data.date, tags: [], clicked: 0});
+                        let keys = _this.cards[index].task.length-1;
+                        _this.getData();
+                        setTimeout(function () {
+                            $('#id'+index+keys).click();
+                            $('#id'+index+keys).focus();
+                        },100)
                     }
                 })
                 .catch(error => {
-
+                    
                 });
-                this.cards[index].task.push({name: '', date: '', tags: [], clicked: 0});
-                let keys = this.cards[index].task.length-1;
-                this.getData();
-                setTimeout(function () {
-                    $('#id'+index+keys).click();
-                    $('#id'+index+keys).focus();
-                },100)
+            },
+            deleteCard(index,cardIndex,id){
+                let _this = this;
+                if(confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id){
+                    axios.delete('/api/card-delete/'+id)
+                    .then(response => response.data)
+                    .then(response => {
+                        if(response.success){
+                            delete _this.cards[index].task[cardIndex];
+                            _this.cards[index].task.length = _this.cards[index].task.length-1;
+                            _this.getData();
+                        }
+                    })
+                    .catch(error => {
+
+                    });
+                }
             },
             saveData(data,index,child_key) {
-                if (!data) {
-                    // alert('Title is required!');
+                let _this = this;
+                if (!data.data ) {
+                    alert('Title is required!');
                 } else {
-                    this.cards[index].task[child_key].name = data;
-                    this.getData();
+                    axios.post('/api/card-update',data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.cards[index].task[child_key].name = data.data;
+                        _this.getData();
+                    
+                    })
+                    .catch(error => {
+
+                    });
                 }
             },
             addTag(e,index,key){
@@ -1350,10 +1383,21 @@
                 this.getData();
             },
             showItem(e,data,index,child_key) {
+                // console.log(data);
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
                 this.saveData(data,index,child_key)
             },
+            saveCardData(e,data){
+                 if (e.which === 13) {
+                    $('.inp').addClass('input-hide');
+                    $('.inp').removeClass('form-control');
+                    // this.addNode(data);
+                }
+            },
+            updateDate(date){
+                alert("dsafasdf");
+            }
         },
         directives: {
             ClickOutside

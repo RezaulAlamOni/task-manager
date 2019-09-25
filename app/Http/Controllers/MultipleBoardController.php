@@ -38,6 +38,7 @@ class MultipleBoardController extends Controller
             $tasks = TaskBoard::where('parent_id',$value->id)->get();
             if(count($tasks) > 0){
                 foreach ($tasks as $keys => $values) {
+                    $boards[$key]['task'][$keys]['id'] = $values['id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
                     $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($values['date']));
                     $boards[$key]['task'][$keys]['tags'] = json_decode($values['tags']);
@@ -123,24 +124,25 @@ class MultipleBoardController extends Controller
         return response()->json(['success' => false]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Multiple_board  $multiple_board
-     * @return \Illuminate\Http\Response
-     */
+    public function cardEdit(Request $request)
+    {   
+        $id = $request->cardId;
+        $data = [
+            'title' => $request->data,
+        ];
+        $child = TaskBoard::where('id', $id)->update($data);
+        if($child){
+            $datas = TaskBoard::find($id);
+            return response()->json(['success' => true, 'data' => $datas]);
+        }
+        return response()->json(['success' => false]);
+    }
+
     public function edit(Multiple_board $multiple_board)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Multiple_board  $multiple_board
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request)
     {
         // return $request->all();
@@ -168,6 +170,17 @@ class MultipleBoardController extends Controller
     {
         $delete = TaskBoard::where('id',$id)
                 ->orWhere('parent_id',$id)
+                ->delete();
+        if($delete){
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function cardDelete($id)
+    {
+        $delete = TaskBoard::where('id',$id)
                 ->delete();
         if($delete){
             return response()->json(['success' => true]);
