@@ -268,7 +268,7 @@
                 padding: 7px 15px;
 
                 &.clicked {
-                    background: #e6f2d1;
+                    background: #6a92cc;
                     @include transition(all 0.2s linear);
 
                     .li-opacity {
@@ -377,6 +377,7 @@
 
     .inp {
         padding: 0px !important;
+        width: 70%;
     }
 
     .form-control {
@@ -419,15 +420,24 @@
     padding: 20px;
 }
 
-.detailsShow {
-    display: block;
-    width: 30%;
-    float: right;
-    background: white;
-    height: calc(100vh - 130px);
-    box-shadow: -10px 0px 15px #dcdcdc;
-    position: relative;
-    z-index: 2;
+
+
+    .detailsShow {
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        outline: 0;
+        box-sizing: border-box;
+        overflow-y: auto;
+        background: white;
+        box-shadow: 0 0 15px #EEE;
+        border-left: 1px solid rgba(0,0,0,.12);
+        border-right: none;
+        width: 40vw;
+        max-width: 600px;
+        z-index: 2;
+        right: 0;
 
     .input-hide {
         border: none !important;
@@ -640,9 +650,8 @@
 }
 .tag-manager{
     color: #fff;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: bold;
-    line-height: 8px !important;
     position: absolute;
     right: 5px;
     bottom: 08px;

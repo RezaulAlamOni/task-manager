@@ -48,7 +48,7 @@ class TagsController extends Controller
                 ->get();
             if ($taskDontForget->count() <= 0){
                 $data = [
-                    'sort_id' => 0,
+                    'sort_id' => -2,
                     'parent_id' => 0,
                     'project_id' => $task->project_id,
                     'list_id' => $task->list_id,
