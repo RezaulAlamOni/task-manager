@@ -23,6 +23,7 @@ var nodes = 'node_modules/'
 var dest = 'public/';
 var destFonts = dest + 'fonts/';
 var destCss = dest + 'css/';
+var destJs = dest + 'js/';
 var destVendors = dest + 'vendors/';
 
 
@@ -38,10 +39,17 @@ mix.copy(resourcesAssets + 'img', 'public/img');
 
 
 // ========copy fonts=====
-mix.copy(resourcesAssets + 'fonts', 'public/fonts');
+mix.copy(resourcesAssets + 'fonts', destFonts);
 
 // ========copy css=====
-mix.copy(resourcesAssets + 'css', "public/css");
+mix.copy(resourcesAssets + 'css', destCss);
+
+// ========copy js=====
+mix.copy(resourcesAssets + 'js/page.min.js', destJs);
+mix.copy(resourcesAssets + 'js/icheck.js', destJs);
+mix.copy(resourcesAssets + 'js/form_elements.js', destJs);
+mix.copy(resourcesAssets + 'js/script.js', destJs);
+mix.copy(resourcesAssets + 'js/jquery.tagsinput.js', destJs);
 
 
 //select2
