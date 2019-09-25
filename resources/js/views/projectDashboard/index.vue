@@ -159,7 +159,7 @@
 
         </div>
         <div class="TaskListAndDetails">
-            <div v-if="nevItem != null && tree4data.length <= 0 " class="col-md-8 text-center pt-5">
+            <div v-if="navItem != null && tree4data.length <= 0 " class="col-md-8 text-center pt-5">
                 <p>We Should only see this section for accounts with no lists or boards. If a user has a list or a board start this page in the last list/board user was in.</p>
             </div>
             <div v-if="navItem == null" class="col-md-8 text-center pt-5">
@@ -1894,6 +1894,5 @@
             }
         }
     }
-
 
 </script>

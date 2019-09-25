@@ -21,7 +21,7 @@ class MultipleBoardController extends Controller
     }
 
     public function index(Request $request)
-    {   
+    {
         $boards = [];
         $board = TaskBoard::where('parent_id',0)
                         ->where('project_id',$request->projectId)
@@ -49,11 +49,11 @@ class MultipleBoardController extends Controller
         }
         // return $boards;
         return response()->json(['success'=>$boards]);
-    }   
+    }
 
 
     public function create(Request $request)
-    {   
+    {
         // return $request->all();
         $sortNo = TaskBoard::max('sort_id');
         $data = TaskBoard::create([
@@ -79,7 +79,7 @@ class MultipleBoardController extends Controller
     {
         $id = Multiple_board::create([
             'project_id' => $request->project_id,
-            'nav_id' => $request->nev_id,
+            'nav_id' => $request->nav_id,
             'board_title' => $request->name,
             'description' => $request->description,
             'created_at' => Carbon::today(),
@@ -99,7 +99,7 @@ class MultipleBoardController extends Controller
         return response()->json(['multiple_board' => $multiple_board,'id'=>$id]);
     }
 
-    
+
     public function cardAdd(Request $request)
     {
         $id = $request->id;
@@ -125,7 +125,7 @@ class MultipleBoardController extends Controller
     }
 
     public function cardEdit(Request $request)
-    {   
+    {
         $id = $request->cardId;
         $data = [
             'title' => $request->data,
