@@ -1,7 +1,6 @@
 <template>
 
     <div class="card pt-0 mt-0">
-        <span>{{selectedData.text}}</span>
         <div class="row page-titles">
             <div class="col-md-12 col-12 align-self-center">
                 <nav class="navbar-expand-md navbar-spark">
@@ -364,7 +363,13 @@
                 </div>
             </div>
             <div class="details" id="details" >
-                <TaskDetails :selectedData="selectedData" :task_logs="task_logs"></TaskDetails>
+                <TaskDetails
+                    :selectedData="selectedData"
+                    :task_logs="task_logs"
+                    @textArea="ShowTextArea"
+                >
+
+                </TaskDetails>
 
 <!--                <div class="detailsContainer tree_view_list" v-if="selectedData != null">-->
 <!--                    <h3 class="">-->

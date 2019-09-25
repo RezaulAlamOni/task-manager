@@ -172,10 +172,10 @@
                                     >
                                     </textarea>
                                     <div class="submitdetails" id="submitdetails">
-                                        <a href="javascript:void(0)" class="badge badge-default"
+                                        <a href="javascript:void(0)" class="btn btn-default"
                                            style="background: #7BB348;"
                                            @click="updateDescription">Post</a>
-                                        <a href="javascript:void(0)" class="badge badge-default"
+                                        <a href="javascript:void(0)" class="btn btn-default"
                                            style="border: 1px solid #f1efe6">Cancel</a>
                                     </div>
 
@@ -202,7 +202,7 @@
                                     </textarea>
                                     <div class="SubmitButton" id="SubmitButton">
                                         <a class="btn btn-default btn-sm" style="background: #7BB348;">Post</a>
-                                        <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6">Cancle</a>
+                                        <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6">Cancel</a>
                                         <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6"
                                            @click="addAttachment(selectedData)"><i class="fa fa-paperclip"></i></a>
                                     </div>
@@ -354,13 +354,14 @@
                 $('.SubmitButton').hide();
             },
             ShowTextArea(data) {
-                var _this = this;
-                $('.SubmitButton').show();
-                var option = {
-                    height: 50,
-                    maxHeight: 200
-                };
-                _this.growInit(option);
+                this.$emit('textArea', data)
+                // var _this = this;
+                // $('.SubmitButton').show();
+                // var option = {
+                //     height: 50,
+                //     maxHeight: 200
+                // };
+                // _this.growInit(option);
             },
             ShowListDetails(data) {
                 var _this = this;
