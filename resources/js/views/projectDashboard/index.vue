@@ -944,7 +944,8 @@
                                         <template v-for="tag in manageTag">
                                             <tr>
 <!--                                                <td class="pt-3-half" >{{tag.task_id}}</td>-->
-                                                <td class="pt-3-half" contenteditable="true" @keyup="updateTagName($event,tag)" @keydown="newLineoff($event)">{{tag.title}}</td>
+                                                <td class="pt-3-half" v-if="tag.title === 'Dont Forget'" >{{tag.title}}</td>
+                                                <td class="pt-3-half" v-else contenteditable="true" @keyup="updateTagName($event,tag)" @keydown="newLineoff($event)">{{tag.title}}</td>
                                                 <td class="pt-3-half"><input type="color" :value="tag.color" @change="updateTagColor($event,tag)"></td>
 
                                                 <td>
@@ -1563,16 +1564,19 @@
                 var postData = {
                     id: obj.tag.id,
                 }
-                axios.post('/api/task-list/delete-by-tag-id', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        console.log(response.success)
-                        _this.getTaskList()
-                        _this.tag = null
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
+                if(obj.tag.text !== 'Dont Forget'){
+                    axios.post('/api/task-list/delete-by-tag-id', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            console.log(response.success)
+                            _this.getTaskList()
+                            _this.tag = null
+                        })
+                        .catch(error => {
+                            console.log('Api for move down task not Working !!!')
+                        });
+                }
+
 
             },
             showTagManageModel() {

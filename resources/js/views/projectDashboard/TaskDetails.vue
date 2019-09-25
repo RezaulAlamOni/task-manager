@@ -181,8 +181,8 @@
 
                                     <div v-if="selectedData.files && selectedData.files.length !== 0">
                                         <template v-for="fl in selectedData.files">
-                                            <img class="task-img-right-pane" :src="'/images/'+fl.file_name"
-                                                 @click="showImage(selectedData.files, fl.file_name)">
+                                            <img class="task-img-right-pane" :src="'/images/'+fl.file_name">
+<!--                                                 @click="showImage(selectedData.files, fl.file_name)"-->
                                         </template>
                                     </div>
                                     <div style="cursor: pointer; background-color: #F8F8F8; margin:10px 0;">
