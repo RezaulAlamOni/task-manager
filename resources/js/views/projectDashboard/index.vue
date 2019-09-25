@@ -1,6 +1,5 @@
 <template>
-
-    <div class="card pt-0 mt-0">
+    <div>
         <div class="row page-titles">
             <div class="col-md-12 col-12 align-self-center">
                 <nav class="navbar-expand-md navbar-spark">
@@ -160,20 +159,29 @@
 
         </div>
         <div class="TaskListAndDetails">
-
-            <div v-if="navItem != null && tree4data.length <= 0 " class="col-md-8 text-center pt-5">
-                <h2 style="color: #d1a894">Select Task View</h2>
+            <div v-if="nevItem != null && tree4data.length <= 0 " class="col-md-8 text-center pt-5">
+                <p>We Should only see this section for accounts with no lists or boards. If a user has a list or a board start this page in the last list/board user was in.</p>
             </div>
             <div v-if="navItem == null" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Create Task View.</h2>
             </div>
             <div class="task_width" id="task_width" @click="HideDetails">
                 <div id="tree_view_list">
-                    <div class="col-10 offset-2" id="col10" style="border: none">
+                    <div class="col-11" id="col10" style="border: none">
+                        <div class="container offset-1">
+                            <div class="container-header">
+                                <h2>
+                                    [[NAME OF LIST OR BOARD HERE]]
+                                    <button type="submit" class="btn btn-primary pull-right"> EDIT [LIST/BOARD]</button>
+                                </h2>
+                                <p class="compltit-p">LIST/BOARD DESCRIPTION HERE</p>
+                            </div>
+                        </div>
+
                         <Tree class="tree4" :data="tree4data" draggable="draggable" cross-tree="cross-tree"
                               @drop="dropNode"
                               @change="ChangeNode"
-                              :indent="30"
+                              :indent="2"
                               :space="0">
                             <div :class="{eachItemRow: true}" slot-scope="{data, _id,store}"
                                  style="font-size: 12px"
@@ -247,7 +255,7 @@
                                         <div class="dropdown-menu dropdown-menu-right" :id="'dropdown'+data._id">
 
                                             <diV class="collapse show switchToggle" style="">
-                                                <li class="assignUser">
+                                                <div class="container-fluid">
                                                     <vue-tags-input
                                                         v-model="tag1"
                                                         :tags="data.tags"
@@ -255,18 +263,23 @@
                                                         @tags-changed="newTags => (changeTAg(newTags))"
                                                         @before-deleting-tag="DeleteTag"
                                                     />
-                                                    <label class="pl-2 pt-3">
-                                                        <template v-for="tag in data.tags">
-                                                            <span class="badge m-1" v-if="tag.text !== 'Dont Forget'"
-                                                                  v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                {{(tag.text !== null) ?tag.text.substring(0,12) : ''}}
-                                                            </span>
-                                                        </template>
-                                                        <span class="badge m-1" style="background: red" @click="addExistingTag($event,data ,'Dont Forget')"> Dont Forget </span>
-                                                        <a href="javascript:void(0)" class="badge badge-primary tag-manager"
-                                                           @click="showTagManageModel">Manage Tag</a>
-                                                    </label>
-                                                </li>
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <template v-for="tag in data.tags">
+                                                                    <li class="badge-pill tags" v-if="tag.text !== 'Dont Forget'"
+                                                                          v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
+                                                                        {{(tag.text !== null) ?tag.text.substring(0,12) : ''}}
+                                                                    </li>
+                                                                </template>
+                                                                <li class="badge-pill tags" style="background: #FB8678" @click="addExistingTag($event,data ,'Dont Forget')"> Dont Forget </li>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="col-xs-12" style="margin-top:10px;width: 100%;">
+                                                            <button type="submit" class="btn btn-small btn-primary pull-right" @click="showTagManageModel">Manage Tag</button>
+                                                        </div>
+                                                </div>
+
                                             </diV>
                                         </div>
                                     </a>
@@ -672,41 +685,34 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="table" class="table-editable">
-                                    <table class="table table-bordered table-responsive-md table-striped text-center">
-                                        <thead>
-                                        <tr>
-                                            <th class="text-center">Tag Title</th>
-                                            <th class="text-center">Color</th>
-                                            <th class="text-center">Delete</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <template v-for="tag in manageTag">
-                                            <tr>
-                                                <td class="pt-3-half" v-if="tag.title === 'Dont Forget'" >{{tag.title}}</td>
-                                                <td class="pt-3-half" v-else contenteditable="true" @keyup="updateTagName($event,tag)" @keydown="newLineoff($event)">{{tag.title}}</td>
-                                                <td class="pt-3-half"><input type="color" :value="tag.color" @change="updateTagColor($event,tag)"></td>
+                        <div id="table" class="table-responsive">
+                            <table data-v-095ab3dc="" class="table">
+                                <thead data-v-095ab3dc="">
+                                    <tr data-v-095ab3dc="">
+                                    <th>Tag Title</th>
+                                    <th>Color</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <template v-for="tag in manageTag">
+                                    <tr>
+                                        <td class="pt-3-half" v-if="tag.title === 'Dont Forget'" >{{tag.title}}</td>
+                                        <td class="pt-3-half" v-else contenteditable="true" @keyup="updateTagName($event,tag)" @keydown="newLineoff($event)">{{tag.title}}</td>
+                                        <td class="pt-3-half">
+                                            <input type="color" :value="tag.color" @change="updateTagColor($event,tag)" style="cursor: pointer;background-color: #fff;border: none;">
+                                        </td>
+                                        <td>
+                                            <a href="javascript:void(0)" @click="DeleteTagFromModal(tag)" class="compltit-blue-a">
+                                                Delete
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </template>
 
-                                                <td>
-                                                <span class="table-remove text-center">
-                                                    <a href="javascript:void(0)" @click="DeleteTagFromModal(tag)" class="text-danger">
-                                                        <h3><i class="fa fa-trash"></i></h3>
-                                                    </a>
-                                                </span>
-                                                </td>
-                                            </tr>
-                                        </template>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                                </tbody>
+                            </table>
                         </div>
-
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
