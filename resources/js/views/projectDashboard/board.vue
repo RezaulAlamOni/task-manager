@@ -255,7 +255,7 @@
                                                 </flatPickr>
                                             </div>
                                             <div style="position: absolute; right: 160px; bottom: 8px; opacity: 0.25">
-                                                <a @click="deleteCard(index, key ,card.cardId)"> 
+                                                <a @click="deleteCard(index, key, card.cardId)">
                                                      <i class="baseline-playlist_delete icon-image-preview"></i>
                                                 </a>
                                             </div>
@@ -351,8 +351,7 @@
                                                                     type="text"
                                                                     class="input-group searchUser"
                                                                     v-model="tag"
-                                                                    @keypress="addTag($event,index,key)"
-                                                            >
+                                                                    @keypress="addTag($event,index,key)">
                                                             <label class="pl-2 pt-3">
                                                                 <span class="badge badge-success">Tags</span>
                                                                 <span class="badge badge-danger">Dont Forget</span>
@@ -362,7 +361,6 @@
                                                 </div>
 
                                             </a>
-                                        
                                         </div>
                                     </Draggable>
                                 </Container>
@@ -880,7 +878,7 @@
                         tags: ["Dont Forget"],
                         children: [
                             {
-                                id: 2, 
+                                id: 2,
                                 parent: 1,
                                 text: 'node 1-1',
                                 html: 'Atik',
@@ -889,11 +887,11 @@
                                 clicked: 0
                             },
                             {
-                                id: 3, 
+                                id: 3,
                                 parent: 1,
-                                text: 'node 1-2', 
-                                clicked: 0, 
-                                tags: ["Dont Forget"], 
+                                text: 'node 1-2',
+                                clicked: 0,
+                                tags: ["Dont Forget"],
                                 children: [
                                     {
                                         id: 4,
@@ -916,7 +914,7 @@
                         ]
                     },
                     {
-                        id: 6, 
+                        id: 6,
                         parent: 0,
                         text: 'node 2',
                         html: 'Test 1',
@@ -980,7 +978,6 @@
                 multiple_list : null,
                 AllNavItems : null,
                 board_id: null,
-                multiple_list: null,
                 list: {
                     name: null,
                     description: null,
@@ -1001,7 +998,7 @@
             $(document).ready(function () {
                 $(function () {
                     $('[data-toggle="popover"]').popover()
-                })
+                });
                 $("#popoverData").popover({trigger: "hover"});
             });
             this.getData();
@@ -1091,7 +1088,7 @@
                             date: this.cards[i].task[j].date,
                             tags: this.cards[i].task[j].tags,
                             delete: this.cards[i].task[j].name
-                        })) 
+                        }))
                     })),
                 }
 
@@ -1107,7 +1104,7 @@
             shortcutModel() {
                 $("#shortcutModel").modal('show');
             },
-            AddNevItem() {
+            AddNavItem() {
                 var _this = this;
                 _this.navItem.project_id = _this.projectId;
                 _this.navItem.type = $('input[name="optionsRadios"]:checked').val();
@@ -1177,7 +1174,6 @@
                 $("#addBoardModel").modal('show');
             },
             setListId(id, title, nav_id, type) {
-                
                 this.board_id = id;
                 this.nav_id = nav_id;
                 this.getBoardTask()
@@ -1274,7 +1270,7 @@
                 let _this = this;
                 axios.post('/api/board-save',data)
                 .then(response => response.data)
-                .then(response => {     
+                .then(response => {
                     if(response.success == true){
                         _this.cards.push({
                             id: response.data.id,
@@ -1300,7 +1296,7 @@
             },
             updateColumn() {
                 console.log(this.cards[this.updateIndex])
-                if (!this.editField.name || this.editField.name == '') {
+                if (!this.editField.name || this.editField.name === '') {
                     this.editField.error = 'Name is required!';
                 } else {
                     let data = this.cards[this.updateIndex];
@@ -1308,7 +1304,7 @@
                     axios.post('/api/board-modify',data)
                     .then(response => response.data)
                     .then(response => {
-                        if(response.success == true){
+                        if(response.success === true){
                             this.cards[this.updateIndex].column = this.editField.name;
                         }
                     })
@@ -1397,7 +1393,7 @@
                     }
                 })
                 .catch(error => {
-                    
+
                 });
             },
             deleteCard(index,cardIndex,id){
@@ -1427,7 +1423,7 @@
                     .then(response => {
                         _this.cards[index].task[child_key].name = data.data;
                         _this.getData();
-                    
+
                     })
                     .catch(error => {
 
@@ -1455,7 +1451,7 @@
                         }
                     })
                     .catch(error => {
-                        
+
                     });
                 }
             },
@@ -1504,6 +1500,4 @@
             }
         }
     }
-
-
 </script>

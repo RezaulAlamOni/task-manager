@@ -33,9 +33,9 @@ Route::post('/task-list/move-task', 'TaskController@moveTask');//move-task
 Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog'); //reverse child node
 
 //navigation management
-Route::post('/nav-item/add-new','ProjectNavItemsController@store'); //add new nev item
-Route::get('/nav-item/{project_id}','ProjectNavItemsController@index'); //all nev item
-Route::post('/nav-item/update','ProjectNavItemsController@edit'); //all nev item
+Route::post('/nav-item/add-new','ProjectNavItemsController@store'); //add new nav item
+Route::get('/nav-item/{project_id}','ProjectNavItemsController@index'); //all nav item
+Route::post('/nav-item/update','ProjectNavItemsController@edit'); //all nav item
 
 //board Section
 Route::post('/board-task','MultipleBoardController@index'); //get board item
