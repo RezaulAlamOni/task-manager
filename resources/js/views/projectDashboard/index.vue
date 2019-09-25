@@ -2,157 +2,162 @@
 
     <div class="card pt-0 mt-0">
         <div class="row page-titles">
-            <div class="col-md-12 col-12 align-self-center">
-                <nav class="navbar-expand-md navbar-spark">
-                    <div class="container-fluid">
 
-                        <div class="collapse navbar-collapse show">
+            <!--            <div class="col-md-12 col-12 align-self-center">-->
+            <!--                <nav class="navbar-expand-md navbar-spark">-->
+            <!--                    <div class="container-fluid">-->
 
-                            <span v-for="nev in AllNevItems">
-                                <ul class="navbar-nav ml-4 float-sm-left">
-                                    <li class="nav-item dropdown">
-                                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
-                                           data-toggle="dropdown"
-                                           aria-haspopup="true" aria-expanded="false">
-                                <span class="d-none d-md-block">{{nev.title}}</span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-left"
-                                             aria-labelledby="dropdownMenuButton">
+            <!--                        <div class="collapse navbar-collapse show">-->
 
-                                            <h6 class="dropdown-header" v-if="nev.type === 'list'"> Lists</h6>
-                                            <h6 class="dropdown-header" v-if="nev.type === 'board'"> Board</h6>
+            <!--                            <span v-for="nev in AllNevItems">-->
+            <!--                                <ul class="navbar-nav ml-4 float-sm-left">-->
+            <!--                                    <li class="nav-item dropdown">-->
+            <!--                                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"-->
+            <!--                                           data-toggle="dropdown"-->
+            <!--                                           aria-haspopup="true" aria-expanded="false">-->
+            <!--                                <span class="d-none d-md-block">{{nev.title}}</span>-->
+            <!--                                        </a>-->
+            <!--                                        <div class="dropdown-menu dropdown-menu-left"-->
+            <!--                                             aria-labelledby="dropdownMenuButton">-->
 
-                                            <span v-for="nev_list in nev.lists">
-<!--                                                <a href="#" class="dropdown-item"> {{nev.title}}</a>-->
-                                                <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id)"
-                                                      class="dropdown-item" :id="'list'+nev_list.id">
+            <!--                                            <h6 class="dropdown-header" v-if="nev.type === 'list'"> Lists</h6>-->
+            <!--                                            <h6 class="dropdown-header" v-if="nev.type === 'board'"> Board</h6>-->
 
-                                                    <router-link class="nav-link drop-item" v-if="nev.type === 'list'"
-                                                                 :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nev_list.list_title}}<i
-                                                        class="i-btn x20 task-complete icon-circle-o"></i>
-                                                    </router-link>
-                                                    <router-link class="nav-link drop-item" v-else
-                                                                 :to="{ name: 'project-board', params: { projectId: projectId }}">{{nev_list.board_title}}<i
-                                                        class="i-btn x20 task-complete icon-circle-o"></i>
-                                                    </router-link>
+            <!--                                            <span v-for="nev_list in nev.lists">-->
+            <!--&lt;!&ndash;                                                <a href="#" class="dropdown-item"> {{nev.title}}</a>&ndash;&gt;-->
+            <!--                                                <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id)"-->
+            <!--                                                      class="dropdown-item" :id="'list'+nev_list.id">-->
 
-
-                                                 </span>
-
-                                            </span>
+            <!--                                                    <router-link class="nav-link drop-item" v-if="nev.type === 'list'"-->
+            <!--                                                                 :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nev_list.list_title}}<i-->
+            <!--                                                        class="i-btn x20 task-complete icon-circle-o"></i>-->
+            <!--                                                    </router-link>-->
+            <!--                                                    <router-link class="nav-link drop-item" v-else-->
+            <!--                                                                 :to="{ name: 'project-board', params: { projectId: projectId }}">{{nev_list.board_title}}<i-->
+            <!--                                                        class="i-btn x20 task-complete icon-circle-o"></i>-->
+            <!--                                                    </router-link>-->
 
 
-                                            <div class="dropdown-divider"></div>
+            <!--                                                 </span>-->
 
-                                            <a href="Javascript:void(0)" @click="addListModel(nev.id)"
-                                               v-if="nev.type === 'list'"
-                                               class="dropdown-item">
-                                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                                Create {{nev.title}}  >List
-                                            </a>
-
-                                            <a href="Javascript:void(0)" @click="addBoardModel(nev.id)"
-                                               v-if="nev.type === 'board'"
-                                               class="dropdown-item">
-                                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                                Create {{nev.title}}>Board
-                                            </a>
+            <!--                                            </span>-->
 
 
-                                        </div>
-                                    </li>
-                                </ul>
+            <!--                                            <div class="dropdown-divider"></div>-->
 
-                            </span>
-                            <ul class="navbar-nav ml-4" style="position: absolute;right: 60px;">
-                                <li class="nav-item" style="margin-right:20px;">
-                                    <a href="Javascript:void(0)" class="d-block d-md-flex text-center nav-link" @click="shortcutModel">
-                                        <span class="d-none d-md-block">
-                                           Shortcuts
-                                        </span>
-                                    </a>
-                                </li>
+            <!--                                            <a href="Javascript:void(0)" @click="addListModel(nev.id)"-->
+            <!--                                               v-if="nev.type === 'list'"-->
+            <!--                                               class="dropdown-item">-->
+            <!--                                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>-->
+            <!--                                                Create {{nev.title}}  >List-->
+            <!--                                            </a>-->
 
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
-                                        <span class="d-none d-md-block">
-                                           <i class="fa fa-fw fa-filter" style="font-size: 26px;"></i>
-                                        </span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+            <!--                                            <a href="Javascript:void(0)" @click="addBoardModel(nev.id)"-->
+            <!--                                               v-if="nev.type === 'board'"-->
+            <!--                                               class="dropdown-item">-->
+            <!--                                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>-->
+            <!--                                                Create {{nev.title}}>Board-->
+            <!--                                            </a>-->
 
-                                        <h6 class="dropdown-header"> Filters</h6>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="javascript:void(0)" class="dropdown-item active">
-                                            <i class="fa fa-fw fa-tasks"></i>
-                                            Show All Tasks
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-user"></i>
-                                            Show My Tasks
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-users"></i>
-                                            Show Users Tasks
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-clipboard-check"></i>
-                                            Show Completed Tasks
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-eye-slash"></i>
-                                            Hide Completed Tasks
-                                        </a>
-                                        <h6 class="dropdown-header"> Sort</h6>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="javascript:void(0)" class="dropdown-item active">
-                                            <i class="fa fa-sort"></i>
-                                            Default
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-sort-up"></i>
-                                            Oldest
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-sort-down"></i>
-                                            Newest
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-calendar-alt"></i>
-                                            By Due Date
-                                        </a>
-                                    </div>
-                                </li>
 
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
-                                        <span class="d-none d-md-block">
-                                           <i class="fa fa-fw fa-plus-circle compltit-blue" style="font-size: 26px;"></i>
-                                        </span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+            <!--                                        </div>-->
+            <!--                                    </li>-->
+            <!--                                </ul>-->
 
-                                        <h6 class="dropdown-header"> Manage Nav</h6>
-                                        <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNevItem">
-                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
-                                            Create Task View
-                                        </a>
-                                        <div class="dropdown-divider"></div>
-                                        <h6 class="dropdown-header"> Edit Task View</h6>
-                                        <span v-for="nev in AllNevItems">
-                                             <a href="javascript:void(0)" @click="updateNavbarModel(nev)"
-                                                class="dropdown-item"> {{nev.title}}</a>
-                                        </span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+            <!--                            </span>-->
+            <!--                            <ul class="navbar-nav ml-4" style="position: absolute;right: 60px;">-->
+            <!--                                <li class="nav-item" style="margin-right:20px;">-->
+            <!--                                    <a href="Javascript:void(0)" class="d-block d-md-flex text-center nav-link" @click="shortcutModel">-->
+            <!--                                        <span class="d-none d-md-block">-->
+            <!--                                           Shortcuts-->
+            <!--                                        </span>-->
+            <!--                                    </a>-->
+            <!--                                </li>-->
 
-                    </div>
-                </nav>
-            </div>
+            <!--                                <li class="nav-item dropdown">-->
+            <!--                                    <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"-->
+            <!--                                       aria-haspopup="true" aria-expanded="false">-->
+            <!--                                        <span class="d-none d-md-block">-->
+            <!--                                           <i class="fa fa-fw fa-filter" style="font-size: 26px;"></i>-->
+            <!--                                        </span>-->
+            <!--                                    </a>-->
+            <!--                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">-->
+
+            <!--                                        <h6 class="dropdown-header"> Filters</h6>-->
+            <!--                                        <div class="dropdown-divider"></div>-->
+            <!--                                        <a href="javascript:void(0)" class="dropdown-item active">-->
+            <!--                                            <i class="fa fa-fw fa-tasks"></i>-->
+            <!--                                            Show All Tasks-->
+            <!--                                        </a>-->
+            <!--                                        <a href="javascript:void(0)" class="dropdown-item">-->
+            <!--                                            <i class="fa fa-user"></i>-->
+            <!--                                            Show My Tasks-->
+            <!--                                        </a>-->
+            <!--                                        <a href="javascript:void(0)" class="dropdown-item">-->
+            <!--                                            <i class="fa fa-users"></i>-->
+            <!--                                            Show Users Tasks-->
+            <!--                                        </a>-->
+            <!--                                        <a href="javascript:void(0)" class="dropdown-item">-->
+            <!--                                            <i class="fa fa-clipboard-check"></i>-->
+            <!--                                            Show Completed Tasks-->
+            <!--                                        </a>-->
+            <!--                                        <a href="javascript:void(0)" class="dropdown-item">-->
+            <!--                                            <i class="fa fa-eye-slash"></i>-->
+            <!--                                            Hide Completed Tasks-->
+            <!--                                        </a>-->
+            <!--                                        <h6 class="dropdown-header"> Sort</h6>-->
+            <!--                                        <div class="dropdown-divider"></div>-->
+            <!--                                        <a href="javascript:void(0)" class="dropdown-item active">-->
+            <!--                                            <i class="fa fa-sort"></i>-->
+            <!--                                            Default-->
+            <!--                                        </a>-->
+            <!--                                        <a href="javascript:void(0)" class="dropdown-item">-->
+            <!--                                            <i class="fa fa-sort-up"></i>-->
+            <!--                                            Oldest-->
+            <!--                                        </a>-->
+            <!--                                        <a href="javascript:void(0)" class="dropdown-item">-->
+            <!--                                            <i class="fa fa-sort-down"></i>-->
+            <!--                                            Newest-->
+            <!--                                        </a>-->
+            <!--                                        <a href="javascript:void(0)" class="dropdown-item">-->
+            <!--                                            <i class="fa fa-calendar-alt"></i>-->
+            <!--                                            By Due Date-->
+            <!--                                        </a>-->
+            <!--                                    </div>-->
+            <!--                                </li>-->
+
+            <!--                                <li class="nav-item dropdown">-->
+            <!--                                    <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"-->
+            <!--                                       aria-haspopup="true" aria-expanded="false">-->
+            <!--                                        <span class="d-none d-md-block">-->
+            <!--                                           <i class="fa fa-fw fa-plus-circle compltit-blue" style="font-size: 26px;"></i>-->
+            <!--                                        </span>-->
+            <!--                                    </a>-->
+            <!--                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">-->
+
+            <!--                                        <h6 class="dropdown-header"> Manage Nav</h6>-->
+            <!--                                        <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNevItem">-->
+            <!--                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>-->
+            <!--                                            Create Task View-->
+            <!--                                        </a>-->
+            <!--                                        <div class="dropdown-divider"></div>-->
+            <!--                                        <h6 class="dropdown-header"> Edit Task View</h6>-->
+            <!--                                        <span v-for="nev in AllNevItems">-->
+            <!--                                             <a href="javascript:void(0)" @click="updateNavbarModel(nev)"-->
+            <!--                                                class="dropdown-item"> {{nev.title}}</a>-->
+            <!--                                        </span>-->
+            <!--                                    </div>-->
+            <!--                                </li>-->
+            <!--                            </ul>-->
+            <!--                        </div>-->
+
+            <!--                    </div>-->
+            <!--                </nav>-->
+            <!--            </div>-->
+            <Navbar :projectId="$route.params.projectId"
+                    @getList="showTask"
+
+            ></Navbar>
 
             <div class="input-group col-sm-3 searchList">
                 <input type="text" class="form-control searchTaskList" id="searchTaskList" placeholder="Search task"
@@ -168,7 +173,7 @@
             <div v-if="nevItem != null && tree4data.length <= 0 " class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Select Task View</h2>
             </div>
-            <div v-if="nevItem == null" class="col-md-8 text-center pt-5">
+            <div v-else-if="nevItem == null" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Create Task View.</h2>
             </div>
             <div class="task_width" id="task_width" @click="HideDetails">
@@ -202,7 +207,7 @@
                                     </a>
                                     <b v-if="data.children && data.children.length && data.open"
                                        @click="store.toggleOpen(data)"><i class="fa fa-fw fa-minus"></i></b>
-                                    <b v-if="data.children && data.children.length && !data.open"
+                                    <b v-else-if="data.children && data.children.length && !data.open"
                                        @click="store.toggleOpen(data)"><i class="fa fa-fw fa-plus"></i></b>
                                     <span>
 <!--                                        <input type="text" :value="data.text"-->
@@ -995,9 +1000,10 @@
     import Datepicker from 'vuejs-datepicker';
     import VueTagsInput from '@johmun/vue-tags-input';
     import TaskDetails from "./TaskDetails";
+    import Navbar from "./ProjectNavbar/Navbar";
 
     export default {
-        components: {Tree: DraggableTree, thy: draggableHelper, switches, Datepicker, VueTagsInput,TaskDetails},
+        components: {Tree: DraggableTree, thy: draggableHelper, switches, Datepicker, VueTagsInput,TaskDetails,Navbar},
         data() {
             return {
                 disabledDates: {
@@ -1040,22 +1046,6 @@
                 AllNevItems: null,
                 task_logs: null,
                 file: null,
-                tags1: [{
-                    id: 1,
-                    text: 'custom class',
-                    classes: 'custom-class',
-                }, {
-                    id: 1,
-                    text: 'duplicate',
-                }, {
-                    id: 1,
-                    text: 'duplicate',
-                }, {
-                    id: 1,
-                    text: 'Inline styled tag',
-                    style: 'background-color: #ff0000;',
-                }],
-                tags: [],
                 tag1: '',
                 manageTag: null,
             }
@@ -1065,7 +1055,7 @@
             this.projectId = this.$route.params.projectId;
             this.getProjects();
             this.getTaskList();
-            this.AllNevItem();
+            // this.AllNevItem();
 
 
             $(document).ready(function () {
@@ -1920,6 +1910,13 @@
 
                     });
             },
+            //collect data by child navbar component
+            showTask(data){
+                this.list_id = data.list_id;
+                this.nev_id = data.nev_id;
+                this.getTaskList()
+            },
+
             addListModel(id) {
                 this.nev_id = id;
                 $("#addListModel").modal('show');
