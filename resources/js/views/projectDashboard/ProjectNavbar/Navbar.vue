@@ -467,10 +467,9 @@
 <script>
     export default {
         name: "Navbar",
-        props: ['projectId'],
+        props: ['projectId','AllNavItems'],
         data() {
             return {
-                AllNavItems: null,
                 list: {
                     name: null,
                     description: null,

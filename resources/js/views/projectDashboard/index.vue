@@ -17,29 +17,29 @@
 
         </div>
         <div class="TaskListAndDetails">
-<!--            <div v-if="navItem != null " class="col-md-8 text-center pt-5">-->
-<!--                <p>We Should only see this section for accounts with no lists or boards. If a user has a list or a board start this page in the last list/board user was in.</p>-->
-<!--            </div>-->
             <div v-if="AllNavItems === null" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Create Task View.</h2>
             </div>
-            <div v-if="AllNavItems !== null && list.type === null" class="col-md-8 text-center pt-5">
+            <div v-else-if="AllNavItems !== null && list.type === null" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Select Task View.</h2>
             </div>
             <div class="task_width" id="task_width" @click="HideDetails">
-                <div id="tree_view_list" >
+                <div id="tree_view_list">
                     <div class="col-11" id="col10" style="border: none">
-                        <div class="container offset-1" v-if="tree4data.length !== 0 || list.type === 'board'">
-                            <div class="container-header">
+                        <div class="offset-1" v-if="tree4data.length !== 0 || list.type === 'board'">
+                            <div class="container-header pl-5 mr-5">
                                 <h2>
                                     {{list.name}}
-                                    <button type="submit" class="btn btn-primary pull-right" @click="UpdateListModel"> EDIT {{list.name}}</button>
+                                    <button type="submit" class="btn btn-primary pull-right" @click="UpdateListModel">
+                                        EDIT {{list.name}}
+                                    </button>
                                 </h2>
                                 <p v-if="list.description != null" class="compltit-p">{{list.description}}</p>
                             </div>
                         </div>
 
-                        <Tree class="tree4" :data="tree4data" draggable="draggable" cross-tree="cross-tree" v-if="list.type === 'list'"
+                        <Tree class="tree4" :data="tree4data" draggable="draggable" cross-tree="cross-tree"
+                              v-if="list.type === 'list'"
                               @drop="dropNode"
                               @change="ChangeNode"
                               :indent="2"
@@ -91,22 +91,29 @@
                                     </a>
 
 
-                                    <a class="tag-icon hide-item-res">
+                                    <a class="tag-icon hide-item-res" >
                                         <i v-if="data.tags.length > 0"
                                            class="dropdown-toggle-split"
                                            data-toggle="dropdown">
-                                            <template v-for="tag in data.tags">
-                                                <span class="badge badge-warning" v-if="tag.text !== null"
-                                                      v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'},{'float' : 'left'}]">
-                                                    {{(data.tags.length > 2 ) ? tag.text.substring(0,2) : tag.text.substring(0,3) }}
-                                                </span>
-                                                <span class="badge badge-warning" v-else
-                                                      v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]">
-                                                    ;:
-                                                </span>
-
+                                            <template v-for="(tag ,index) in data.tags">
+                                                <template v-if="index < 2">
+                                                    <span class="badge badge-warning" v-if="tag.text !== null"
+                                                          data-toggle="tooltip" data-placement="bottom"
+                                                          :title="data.tagTooltip"
+                                                          v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'},{'float' : 'left'}]">
+                                                        {{(data.tags.length > 2 ) ? tag.text.substring(0,3) : tag.text.substring(0,3) }}
+                                                    </span>
+                                                        <span class="badge badge-warning" v-else
+                                                              v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]">
+                                                        ::
+                                                    </span>
+                                                </template>
                                             </template>
+
+
                                         </i>
+
+
 
                                         <i v-else :id="'tag-'+data._id"
                                            class="outline-local_offer icon-image-preview li-opacity"
@@ -124,26 +131,34 @@
                                                         @tags-changed="newTags => (changeTAg(newTags))"
                                                         @before-deleting-tag="DeleteTag"
                                                     />
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <template v-for="tag in data.tags">
-                                                                    <li class="badge-pill tags" v-if="tag.text !== 'Dont Forget'"
-                                                                          v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                        {{(tag.text !== null) ?tag.text.substring(0,12) : ''}}
-                                                                    </li>
-                                                                </template>
-                                                                <li class="badge-pill tags" style="background: #FB8678" @click="addExistingTag($event,data ,'Dont Forget')"> Dont Forget </li>
-                                                            </div>
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <template v-for="tag in data.tags">
+                                                                <li class="badge-pill tags"
+                                                                    v-if="tag.text !== 'Dont Forget'"
+                                                                    v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
+                                                                    {{(tag.text !== undefined) ?tag.text.substring(0,12) : ''}}
+                                                                </li>
+                                                            </template>
+                                                            <li class="badge-pill tags" style="background: #FB8678"
+                                                                @click="addExistingTag($event,data ,'Dont Forget')">
+                                                                Dont Forget
+                                                            </li>
                                                         </div>
-                                                        <hr>
-                                                        <div class="col-xs-12" style="margin-top:10px;width: 100%;">
-                                                            <button type="submit" class="btn btn-small btn-primary pull-right" @click="showTagManageModel">Manage Tag</button>
-                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="col-xs-12" style="margin-top:10px;width: 100%;">
+                                                        <button type="submit"
+                                                                class="btn btn-small btn-primary pull-right"
+                                                                @click="showTagManageModel">Manage Tag
+                                                        </button>
+                                                    </div>
                                                 </div>
 
                                             </diV>
                                         </div>
                                     </a>
+
                                     <div class="hide-item-res">
                                         <a class="calender li-opacity clickHide" v-if="!data.date">
                                             <i class="outline-event icon-image-preview" title="toggle"
@@ -218,7 +233,7 @@
                     </div>
                 </div>
             </div>
-            <div class="details" id="details" >
+            <div class="details" id="details">
 
                 <TaskDetails
                     :selectedData="selectedData"
@@ -259,7 +274,7 @@
                         <div id="table" class="table-responsive">
                             <table data-v-095ab3dc="" class="table">
                                 <thead data-v-095ab3dc="">
-                                    <tr data-v-095ab3dc="">
+                                <tr data-v-095ab3dc="">
                                     <th>Tag Title</th>
                                     <th>Color</th>
                                     <th>Action</th>
@@ -268,13 +283,18 @@
                                 <tbody>
                                 <template v-for="tag in manageTag">
                                     <tr>
-                                        <td class="pt-3-half" v-if="tag.title === 'Dont Forget'" >{{tag.title}}</td>
-                                        <td class="pt-3-half" v-else contenteditable="true" @keyup="updateTagName($event,tag)" @keydown="newLineoff($event)">{{tag.title}}</td>
+                                        <td class="pt-3-half" v-if="tag.title === 'Dont Forget'">{{tag.title}}</td>
+                                        <td class="pt-3-half" v-else contenteditable="true"
+                                            @keyup="updateTagName($event,tag)" @keydown="newLineoff($event)">
+                                            {{tag.title}}
+                                        </td>
                                         <td class="pt-3-half">
-                                            <input type="color" :value="tag.color" @change="updateTagColor($event,tag)" style="cursor: pointer;background-color: #fff;border: none;">
+                                            <input type="color" :value="tag.color" @change="updateTagColor($event,tag)"
+                                                   style="cursor: pointer;background-color: #fff;border: none;">
                                         </td>
                                         <td>
-                                            <a href="javascript:void(0)" @click="DeleteTagFromModal(tag)" class="compltit-blue-a">
+                                            <a href="javascript:void(0)" @click="DeleteTagFromModal(tag)"
+                                               class="compltit-blue-a">
                                                 Delete
                                             </a>
                                         </td>
@@ -292,12 +312,14 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="updateListBoardModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div class="modal fade" id="updateListBoardModel" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title pl-3"> Update {{list.name}} <span class="text-uppercase">[{{list.type}}]</span></h5>
+                        <h5 class="modal-title pl-3"> Update {{list.name}} <span
+                            class="text-uppercase">[{{list.type}}]</span></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -343,7 +365,15 @@
     import Navbar from "./ProjectNavbar/Navbar";
 
     export default {
-        components: {Tree: DraggableTree, thy: draggableHelper, switches, Datepicker, VueTagsInput,TaskDetails,Navbar},
+        components: {
+            Tree: DraggableTree,
+            thy: draggableHelper,
+            switches,
+            Datepicker,
+            VueTagsInput,
+            TaskDetails,
+            Navbar
+        },
         data() {
             return {
                 disabledDates: {
@@ -375,7 +405,7 @@
                     name: null,
                     description: null,
                     nav_id: null,
-                    type : null
+                    type: null
                 },
                 nav_id: null,
                 AllNavItems: null,
@@ -390,8 +420,6 @@
             this.projectId = this.$route.params.projectId;
             this.getProjects();
             this.getTaskList();
-            // this.AllNevItem();
-
 
             $(document).ready(function () {
                 $('.searchList').hide();
@@ -624,7 +652,7 @@
                     nav_id: data.nav_id,
                     parent_id: data.parent_id,
                     sort_id: data.sort_id,
-                    tags: "",
+                    tags: [],
                     text: ""
                 };
 
@@ -881,7 +909,7 @@
                 var postData = {
                     id: obj.tag.id,
                 }
-                if(obj.tag.text !== 'Dont Forget'){
+                if (obj.tag.text !== 'Dont Forget') {
                     axios.post('/api/task-list/delete-by-tag-id', postData)
                         .then(response => response.data)
                         .then(response => {
@@ -910,12 +938,12 @@
                     });
 
             },
-            updateTagColor(e, tag){
+            updateTagColor(e, tag) {
                 var color = e.target.value;
                 var _this = this;
                 var postData = {
                     id: tag.id,
-                    color : color,
+                    color: color,
                 }
                 axios.post('/api/task-list/update-tag', postData)
                     .then(response => response.data)
@@ -931,13 +959,13 @@
                     });
 
             },
-            updateTagName(e, tag){
+            updateTagName(e, tag) {
                 var newTag = e.target.innerText;
-                if(e.which == 13){
+                if (e.which == 13) {
                     var _this = this;
                     var postData = {
                         id: tag.id,
-                        tag : newTag,
+                        tag: newTag,
                     }
                     axios.post('/api/task-list/update-tag', postData)
                         .then(response => response.data)
@@ -951,15 +979,15 @@
                         });
                 }
             },
-            newLineoff(e){
-                if(e.which == 13){
+            newLineoff(e) {
+                if (e.which == 13) {
                     e.preventDefault();
                 }
             },
-            DeleteTagFromModal(tag){
+            DeleteTagFromModal(tag) {
                 var _this = this;
                 var postData = {
-                    title : tag.title,
+                    title: tag.title,
                 }
                 axios.post('/api/task-list/delete-tag', postData)
                     .then(response => response.data)
@@ -1116,6 +1144,9 @@
                     .then(response => {
                         this.tree4data = response.task_list;
                         this.multiple_list = response.multiple_list;
+                        setTimeout(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        }, 1000)
                         if (response.task_list.length === 0) {
 
                             var date = Math.round(new Date().getTime() / 1000);
@@ -1150,20 +1181,20 @@
             },
 
             //collect data by child navbar component
-            showTask(data){
+            showTask(data) {
                 this.list_id = data.list_id;
                 this.nav_id = data.nav_id;
                 this.list.name = data.title;
                 this.list.description = data.description;
                 this.list.type = data.type;
-                if (data.type === 'list'){
+                if (data.type === 'list') {
                     this.getTaskList()
                 }
 
             },
-            getNavbar(data){
-              this.AllNavItems = data.AllNavItems;
-              console.log(this.AllNavItems)
+            getNavbar(data) {
+                this.AllNavItems = data.AllNavItems;
+                console.log(this.AllNavItems)
             },
 
             UpdateListModel() {
@@ -1177,15 +1208,13 @@
                 axios.post('/api/board-list-update', this.list)
                     .then(response => response.data)
                     .then(response => {
-                        _this.AllNavItems = response.navItems;
-                        console.log(_this.navItems)
+                        _this.AllNavItems = response.navItems.original.success;
                         $("#updateListBoardModel").modal('hide');
                     })
                     .catch(error => {
                         console.log('Add list api not working!!')
                     });
             },
-
 
 
             RemoveNewEmptyChildren(data) {
@@ -1386,9 +1415,9 @@
             },
 
             showImage(data, image) {
-                    this.modalImg = image;
-                    $("#imageModal").modal();
-                },
+                this.modalImg = image;
+                $("#imageModal").modal();
+            },
 
         },
         directives: {
