@@ -182,10 +182,10 @@
                         <div class="container offset-1" v-if="tree4data.length !== 0">
                             <div class="container-header">
                                 <h2>
-                                    [[NAME OF LIST OR BOARD HERE]]
-                                    <button type="submit" class="btn btn-primary pull-right"> EDIT [LIST/BOARD]</button>
+                                    {{list.name}}
+                                    <button type="submit" class="btn btn-primary pull-right"> EDIT {{list.name}}</button>
                                 </h2>
-                                <p class="compltit-p">LIST/BOARD DESCRIPTION HERE</p>
+                                <p v-if="list.description != null" class="compltit-p">{{list.description}}</p>
                             </div>
                         </div>
 
@@ -1633,6 +1633,8 @@
             showTask(data){
                 this.list_id = data.list_id;
                 this.nav_id = data.nav_id;
+                this.list.name = data.title;
+                this.list.description = data.description;
                 this.getTaskList()
             },
 

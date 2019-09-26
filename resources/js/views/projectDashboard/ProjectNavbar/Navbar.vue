@@ -20,7 +20,7 @@
 
                                         <span v-for="nav_list in nav.lists">
 <!--                                                <a href="#" class="dropdown-item"> {{nav.title}}</a>-->
-                                        <span @click="setListId(nav_list.id ,nav_list.list_title,nav.id)"
+                                        <span @click="setListId(nav_list.id ,nav_list.list_title,nav.id,nav.description)"
                                               class="dropdown-item" :id="'list'+nav_list.id">
 
                                             <router-link class="nav-link drop-item" v-if="nav.type === 'list'"
@@ -558,13 +558,10 @@
                 this.nav_id = id;
                 $("#addBoardModel").modal('show');
             },
-            setListId(id, title, nav_id) {
+            setListId(id, title, nav_id,description) {
                 this.list_id = id;
                 this.nav_id = nav_id;
-                // $('#listName').text(title);
-                // this.getTaskList()
-                this.nav_id = nav_id;
-                this.$emit('getList', {list_id:id,nav_id : nav_id})
+                this.$emit('getList', {list_id:id,nav_id : nav_id,title : title,description : description})
 
             },
 
@@ -575,7 +572,6 @@
                     .then(response => response.data)
                     .then(response => {
                         this.multiple_list = response.multiple_list;
-                        console.log(response)
                         this.AllNavItem()
                         setTimeout(function () {
                             $('#list' + response.id.id).click();
@@ -593,11 +589,7 @@
                     .then(response => response.data)
                     .then(response => {
                         this.multiple_list = response.multiple_board;
-                        console.log(response)
                         this.AllNavItem()
-                        // setTimeout(function () {
-                        //     $('#list' + response.id.id).click();
-                        // }, 300)
                         $("#addBoardModel").modal('hide');
                     })
                     .catch(error => {
