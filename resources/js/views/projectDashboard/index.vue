@@ -2,6 +2,8 @@
     <div>
         <div class="row page-titles">
             <Navbar :projectId="$route.params.projectId"
+                    :AllNavItems="AllNavItems"
+                    @getNavBars="getNavbar"
                     @getList="showTask">
             </Navbar>
 
@@ -18,10 +20,10 @@
 <!--            <div v-if="navItem != null " class="col-md-8 text-center pt-5">-->
 <!--                <p>We Should only see this section for accounts with no lists or boards. If a user has a list or a board start this page in the last list/board user was in.</p>-->
 <!--            </div>-->
-            <div v-if="navItem === null" class="col-md-8 text-center pt-5">
+            <div v-if="AllNavItems === null" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Create Task View.</h2>
             </div>
-            <div v-if="navItem !== null && list.type === null" class="col-md-8 text-center pt-5">
+            <div v-if="AllNavItems !== null && list.type === null" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Select Task View.</h2>
             </div>
             <div class="task_width" id="task_width" @click="HideDetails">
@@ -374,12 +376,6 @@
                     description: null,
                     nav_id: null,
                     type : null
-                },
-                navItem: {
-                    title: null,
-                    type: null,
-                    sort_id: null,
-                    project_id: null,
                 },
                 nav_id: null,
                 AllNavItems: null,
@@ -1165,22 +1161,25 @@
                 }
 
             },
+            getNavbar(data){
+              this.AllNavItems = data.AllNavItems;
+              console.log(this.AllNavItems)
+            },
 
             UpdateListModel() {
                 $("#updateListBoardModel").modal('show');
             },
             UpdateListOrBoard() {
+                var _this = this;
                 this.list.project_id = this.projectId;
                 this.list.nav_id = this.nav_id;
                 this.list.id = this.list_id;
                 axios.post('/api/board-list-update', this.list)
                     .then(response => response.data)
                     .then(response => {
-
-                        console.log(response)
-                        // this.multiple_list = response.multiple_board;
-                        // this.AllNavItem()
-                        // $("#addBoardModel").modal('hide');
+                        _this.AllNavItems = response.navItems;
+                        console.log(_this.navItems)
+                        $("#updateListBoardModel").modal('hide');
                     })
                     .catch(error => {
                         console.log('Add list api not working!!')

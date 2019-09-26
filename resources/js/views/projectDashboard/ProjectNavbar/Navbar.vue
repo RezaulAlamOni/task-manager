@@ -1,9 +1,9 @@
 <template>
 
-        <div class="col-md-12 col-12 align-self-center">
-            <nav class="navbar-expand-md navbar-spark">
-                <div class="container-fluid">
-                    <div class="collapse navbar-collapse show">
+    <div class="col-md-12 col-12 align-self-center">
+        <nav class="navbar-expand-md navbar-spark">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse show">
                         <span v-for="nav in AllNavItems">
                             <ul class="navbar-nav ml-4 float-sm-left">
                                 <li class="nav-item dropdown">
@@ -22,17 +22,17 @@
                                         <span @click="setListId(nav_list,nav.id,nav_list.description,nav.type)"
                                               class="dropdown-item" :id="'list'+nav_list.id">
                                             <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>
-                                            <a href="javascript:void(0)"v-else>{{nav_list.board_title}}</a>
+                                            <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>
 
-<!--                                            <router-link class="nav-link drop-item" v-if="nav.type === 'list'"-->
-<!--                                                         :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nav_list.list_title}}<i-->
-<!--                                                class="i-btn x20 task-complete icon-circle-o"></i>-->
-<!--                                            </router-link>-->
+                                            <!--                                            <router-link class="nav-link drop-item" v-if="nav.type === 'list'"-->
+                                            <!--                                                         :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nav_list.list_title}}<i-->
+                                            <!--                                                class="i-btn x20 task-complete icon-circle-o"></i>-->
+                                            <!--                                            </router-link>-->
 
-<!--                                            <router-link class="nav-link drop-item" v-else-->
-<!--                                                         :to="{ name: 'project-board', params: { projectId: projectId }}">{{nav_list.board_title}}<i-->
-<!--                                                class="i-btn x20 task-complete icon-circle-o"></i>-->
-<!--                                            </router-link>-->
+                                            <!--                                            <router-link class="nav-link drop-item" v-else-->
+                                            <!--                                                         :to="{ name: 'project-board', params: { projectId: projectId }}">{{nav_list.board_title}}<i-->
+                                            <!--                                                class="i-btn x20 task-complete icon-circle-o"></i>-->
+                                            <!--                                            </router-link>-->
 
 
                                          </span>
@@ -61,389 +61,405 @@
                                 </li>
                             </ul>
                         </span>
-                        <ul class="navbar-nav ml-4" style="position: absolute;right: 60px;">
-                            <li class="nav-item" style="margin-right:20px;">
-                                <a href="Javascript:void(0)" class="d-block d-md-flex text-center nav-link" @click="shortcutModel">
+                    <ul class="navbar-nav ml-4" style="position: absolute;right: 60px;">
+                        <li class="nav-item" style="margin-right:20px;">
+                            <a href="Javascript:void(0)" class="d-block d-md-flex text-center nav-link"
+                               @click="shortcutModel">
                                         <span class="d-none d-md-block">
                                            Shortcuts
                                         </span>
-                                </a>
-                            </li>
+                            </a>
+                        </li>
 
-                            <li class="nav-item dropdown">
-                                <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
-                                   aria-haspopup="true" aria-expanded="false">
+                        <li class="nav-item dropdown">
+                            <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
                                         <span class="d-none d-md-block">
                                            <i class="fa fa-fw fa-filter" style="font-size: 26px;"></i>
                                         </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+
+                                <h6 class="dropdown-header"> Filters</h6>
+                                <div class="dropdown-divider"></div>
+                                <a href="javascript:void(0)" class="dropdown-item active">
+                                    <i class="fa fa-fw fa-tasks"></i>
+                                    Show All Tasks
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                <a href="javascript:void(0)" class="dropdown-item">
+                                    <i class="fa fa-user"></i>
+                                    Show My Tasks
+                                </a>
+                                <a href="javascript:void(0)" class="dropdown-item">
+                                    <i class="fa fa-users"></i>
+                                    Show Users Tasks
+                                </a>
+                                <a href="javascript:void(0)" class="dropdown-item">
+                                    <i class="fa fa-clipboard-check"></i>
+                                    Show Completed Tasks
+                                </a>
+                                <a href="javascript:void(0)" class="dropdown-item">
+                                    <i class="fa fa-eye-slash"></i>
+                                    Hide Completed Tasks
+                                </a>
+                                <h6 class="dropdown-header"> Sort</h6>
+                                <div class="dropdown-divider"></div>
+                                <a href="javascript:void(0)" class="dropdown-item active">
+                                    <i class="fa fa-sort"></i>
+                                    Default
+                                </a>
+                                <a href="javascript:void(0)" class="dropdown-item">
+                                    <i class="fa fa-sort-up"></i>
+                                    Oldest
+                                </a>
+                                <a href="javascript:void(0)" class="dropdown-item">
+                                    <i class="fa fa-sort-down"></i>
+                                    Newest
+                                </a>
+                                <a href="javascript:void(0)" class="dropdown-item">
+                                    <i class="fa fa-calendar-alt"></i>
+                                    By Due Date
+                                </a>
+                            </div>
+                        </li>
 
-                                    <h6 class="dropdown-header"> Filters</h6>
-                                    <div class="dropdown-divider"></div>
-                                    <a href="javascript:void(0)" class="dropdown-item active">
-                                        <i class="fa fa-fw fa-tasks"></i>
-                                        Show All Tasks
-                                    </a>
-                                    <a href="javascript:void(0)" class="dropdown-item">
-                                        <i class="fa fa-user"></i>
-                                        Show My Tasks
-                                    </a>
-                                    <a href="javascript:void(0)" class="dropdown-item">
-                                        <i class="fa fa-users"></i>
-                                        Show Users Tasks
-                                    </a>
-                                    <a href="javascript:void(0)" class="dropdown-item">
-                                        <i class="fa fa-clipboard-check"></i>
-                                        Show Completed Tasks
-                                    </a>
-                                    <a href="javascript:void(0)" class="dropdown-item">
-                                        <i class="fa fa-eye-slash"></i>
-                                        Hide Completed Tasks
-                                    </a>
-                                    <h6 class="dropdown-header"> Sort</h6>
-                                    <div class="dropdown-divider"></div>
-                                    <a href="javascript:void(0)" class="dropdown-item active">
-                                        <i class="fa fa-sort"></i>
-                                        Default
-                                    </a>
-                                    <a href="javascript:void(0)" class="dropdown-item">
-                                        <i class="fa fa-sort-up"></i>
-                                        Oldest
-                                    </a>
-                                    <a href="javascript:void(0)" class="dropdown-item">
-                                        <i class="fa fa-sort-down"></i>
-                                        Newest
-                                    </a>
-                                    <a href="javascript:void(0)" class="dropdown-item">
-                                        <i class="fa fa-calendar-alt"></i>
-                                        By Due Date
-                                    </a>
-                                </div>
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
-                                   aria-haspopup="true" aria-expanded="false">
+                        <li class="nav-item dropdown">
+                            <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
                                         <span class="d-none d-md-block">
-                                           <i class="fa fa-fw fa-plus-circle compltit-blue" style="font-size: 26px;"></i>
+                                           <i class="fa fa-fw fa-plus-circle compltit-blue"
+                                              style="font-size: 26px;"></i>
                                         </span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 
-                                    <h6 class="dropdown-header"> Manage Nav</h6>
-                                    <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNavItem">
-                                        <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
-                                        Create Task View
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <h6 class="dropdown-header"> Edit Task View</h6>
-                                    <span v-for="nav in AllNavItems">
+                                <h6 class="dropdown-header"> Manage Nav</h6>
+                                <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNavItem">
+                                    <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
+                                    Create Task View
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <h6 class="dropdown-header"> Edit Task View</h6>
+                                <span v-for="nav in AllNavItems">
                                              <a href="javascript:void(0)" @click="updateNavbarModel(nav)"
                                                 class="dropdown-item"> {{nav.title}}</a>
                                         </span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-
-
-            <div class="modal fade" id="addListModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title pl-3"> Add List</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Add your new list here !</p>
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">List Title</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="list.name">
-                                </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">List Description</label>
-                                <div class="col-sm-8">
-                                    <textarea name="" id="" cols="40" rows="3" v-model="list.description"></textarea>
-                                </div>
-                            </div>
-                            <!--                        <p v-if="addField.error" class="text-danger"></p>-->
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" @click="AddNewList">Add</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
-                            </button>
-                        </div>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div class="modal fade" id="addBoardModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title pl-3"> Add List</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Add your new list here !</p>
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Board Title</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="list.name">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Board Description</label>
-                                <div class="col-sm-8">
-                                    <textarea name="" cols="40" rows="3" v-model="list.description"></textarea>
-                                </div>
-                            </div>
-                            <!--                        <p v-if="addField.error" class="text-danger"></p>-->
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" @click="AddNewBoard">Add</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
-                            </button>
-                        </div>
+        </nav>
+
+
+        <div class="modal fade" id="addListModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add List</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                </div>
-            </div>
-            <div class="modal fade" id="shortcutModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title pl-3"> Shortcuts</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                    <div class="modal-body">
+                        <p>Add your new list here !</p>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">List Title</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="list.name">
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default">ENTER</span>
-                                </li>
-                                <li class="list-group-item">Save and Create New Task</li>
-                            </ul>
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default">TAB</span>
-                                </li>
-                                <li class="list-group-item">Make Sub Task</li>
-                            </ul>
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default">SHIFT</span>
-                                    +
-                                    <span class="badge-pill badge-default">TAB</span>
-                                </li>
-                                <li class="list-group-item">Make  Parent Task</li>
-                            </ul>
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default">CTRL</span>
-                                    +
-                                    <span class="badge-pill badge-default">C</span>
-                                </li>
-                                <li class="list-group-item">Copy Task</li>
-                            </ul>
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default">CTRL</span>
-                                    +
-                                    <span class="badge-pill badge-default">V</span>
-                                </li>
-                                <li class="list-group-item">Paste Task</li>
-                            </ul>
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default">CTRL</span>
-                                    +
-                                    <span class="badge-pill badge-default">X</span>
-                                </li>
-                                <li class="list-group-item">Cut Task</li>
-                            </ul>
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default">CTRL</span>
-                                    +
-                                    <span class="badge-pill badge-default">S</span>
-                                </li>
-                                <li class="list-group-item">Search</li>
-                            </ul>
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default">CTRL</span>
-                                    +
-                                    <span class="badge-pill badge-default">i</span>
-                                </li>
-                                <li class="list-group-item">Upload Image/File</li>
-                            </ul>
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default">CTRL</span>
-                                    +
-                                    <span class="badge-pill badge-default">U</span>
-                                </li>
-                                <li class="list-group-item">Assign User</li>
-                            </ul>
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default">Shift</span>
-                                    +
-                                    <span class="badge-pill badge-default">#</span>
-                                </li>
-                                <li class="list-group-item">Add Tag</li>
-                            </ul>
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default">Shift</span>
-                                    +
-                                    <span class="badge-pill badge-default">B</span>
-                                </li>
-                                <li class="list-group-item">Add Don't Forget Tag</li>
-                            </ul>
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default">CTRL</span>
-                                    +
-                                    <span class="badge-pill badge-default">D</span>
-                                </li>
-                                <li class="list-group-item">Delete Task</li>
-                            </ul>
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default"><i class="fa fa-caret-up"></i></span>
-                                </li>
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default"><i class="fa fa-caret-down"></i></span>
-                                </li>
-                                <li class="list-group-item">Move Task Up &amp; Down</li>
-                            </ul>
-
-                            <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default"><i class="fa fa-caret-right"></i></span>
-                                </li>
-                                <li class="list-group-item">
-                                    <span class="badge-pill badge-default"><i class="fa fa-caret-left"></i></span>
-                                </li>
-                                <li class="list-group-item">Open &amp; Close Task Details</li>
-                            </ul>
-
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">List Description</label>
+                            <div class="col-sm-8">
+                                <textarea name="" id="" cols="40" rows="3" v-model="list.description"></textarea>
+                            </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
-                                Close
-                            </button>
-                        </div>
+                        <!--                        <p v-if="addField.error" class="text-danger"></p>-->
                     </div>
-                </div>
-            </div>
-            <div class="modal fade" id="addNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title pl-3"> Add Nav Item</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group row">
-                                <div class="col-sm-4">
-                                    <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="navItem.title">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-4">
-                                    <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
-                                </div>
-                            </div>
-
-                            <div class="row form-group">
-                                <div class="col-sm-4">
-                                    <label class="control-label float-right m-t-ng-8 txt_media1">Select Type</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <div class="iradio">
-                                        <label>
-                                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="list">
-                                            &nbsp; List view
-                                        </label>
-                                    </div>
-                                    <div class="iradio">
-                                        <label>
-                                            <input type="radio" name="optionsRadios" id="optionsRadios2" value="board">
-                                            &nbsp; Board View
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" @click="AddNavItem">Add</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal fade" id="updateNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title pl-3"> Add Nav Item</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group row">
-                                <div class="col-sm-4">
-                                    <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="navItem.title">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-sm-4">
-                                    <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" @click="updateNavItem">Update</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
-                            </button>
-                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="AddNewList">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="addBoardModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add List</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add your new list here !</p>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Board Title</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="list.name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Board Description</label>
+                            <div class="col-sm-8">
+                                <textarea name="" cols="40" rows="3" v-model="list.description"></textarea>
+                            </div>
+                        </div>
+                        <!--                        <p v-if="addField.error" class="text-danger"></p>-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="AddNewBoard">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="shortcutModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Shortcuts</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">ENTER</span>
+                            </li>
+                            <li class="list-group-item">Save and Create New Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">TAB</span>
+                            </li>
+                            <li class="list-group-item">Make Sub Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">SHIFT</span>
+                                +
+                                <span class="badge-pill badge-default">TAB</span>
+                            </li>
+                            <li class="list-group-item">Make Parent Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">C</span>
+                            </li>
+                            <li class="list-group-item">Copy Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">V</span>
+                            </li>
+                            <li class="list-group-item">Paste Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">X</span>
+                            </li>
+                            <li class="list-group-item">Cut Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">S</span>
+                            </li>
+                            <li class="list-group-item">Search</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">i</span>
+                            </li>
+                            <li class="list-group-item">Upload Image/File</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">U</span>
+                            </li>
+                            <li class="list-group-item">Assign User</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">Shift</span>
+                                +
+                                <span class="badge-pill badge-default">#</span>
+                            </li>
+                            <li class="list-group-item">Add Tag</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">Shift</span>
+                                +
+                                <span class="badge-pill badge-default">B</span>
+                            </li>
+                            <li class="list-group-item">Add Don't Forget Tag</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">D</span>
+                            </li>
+                            <li class="list-group-item">Delete Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default"><i class="fa fa-caret-up"></i></span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default"><i class="fa fa-caret-down"></i></span>
+                            </li>
+                            <li class="list-group-item">Move Task Up &amp; Down</li>
+                        </ul>
+
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default"><i class="fa fa-caret-right"></i></span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default"><i class="fa fa-caret-left"></i></span>
+                            </li>
+                            <li class="list-group-item">Open &amp; Close Task Details</li>
+                        </ul>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add Nav Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="navItem.title">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Select Type</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="iradio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="list">
+                                        &nbsp; List view
+                                    </label>
+                                </div>
+                                <div class="iradio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="board">
+                                        &nbsp; Board View
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="AddNavItem">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="updateNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add Nav Item</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="navItem.title">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="updateNavItem">Update</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </template>
@@ -451,10 +467,10 @@
 <script>
     export default {
         name: "Navbar",
-        props : ['projectId'],
-        data(){
+        props: ['projectId'],
+        data() {
             return {
-                AllNavItems :null,
+                AllNavItems: null,
                 list: {
                     name: null,
                     description: null,
@@ -471,7 +487,7 @@
         mounted() {
             this.AllNavItem();
         },
-        methods:{
+        methods: {
 
             showModelForNavItem() {
                 $("#addNavItem").modal('show');
@@ -511,7 +527,7 @@
                     .then(response => {
                         console.log(response)
                         _this.AllNavItems = response.success;
-                        // $("#addNavItem").modal('hide');
+                        _this.$emit('getNavBars', {AllNavItems: _this.AllNavItems})
 
                     })
                     .catch(error => {
@@ -560,11 +576,17 @@
                 this.nav_id = id;
                 $("#addBoardModel").modal('show');
             },
-            setListId(navList, nav_id,description,type) {
+            setListId(navList, nav_id, description, type) {
                 this.list_id = navList.id;
                 this.nav_id = nav_id;
                 var title = (type === 'list') ? navList.list_title : navList.board_title;
-                this.$emit('getList', {list_id:navList.id,nav_id : nav_id,title : title,description : description,type:type})
+                this.$emit('getList', {
+                    list_id: navList.id,
+                    nav_id: nav_id,
+                    title: title,
+                    description: description,
+                    type: type
+                })
 
             },
 
