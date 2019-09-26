@@ -45,5 +45,5 @@ Route::post('/board-add', 'MultipleBoardController@store'); //add list under pro
 Route::delete('/board-delete/{id}','MultipleBoardController@destroy'); //delete board
 
 Route::post('/card-add', 'MultipleBoardController@cardAdd');
-Route::post('/card-update', 'MultipleBoardController@cardEdit');
+Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');
 Route::delete('/card-delete/{id}','MultipleBoardController@cardDelete'); //delete card
