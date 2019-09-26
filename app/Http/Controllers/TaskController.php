@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Files;
@@ -44,29 +43,6 @@ class TaskController extends Controller
             ->orderBy('sort_id', 'ASC')
             ->get();
         $task = [];
-//        if ($tasks->count() <= 0) {
-//            $data = [
-//                'sort_id' => 0,
-//                'parent_id' => 0,
-//                'project_id' => $request->id,
-//                'list_id' => $list_id,
-//                'nav_id' => $request->nav_id,
-//                'created_by' => Auth::id(),
-//                'updated_by' => Auth::id(),
-//                'title' => '',
-//                'tag' => '',
-//                'date' => Carbon::today(),
-//                'created_at' => Carbon::now(),
-//            ];
-//            $task = Task::create($data);
-//            $this->createLog($task->id, 'created', 'Create empty task', '');
-//            $tasks = Task::where('parent_id', 0)
-//                ->where('project_id', $request->id)
-//                ->where('list_id', $list_id)
-//                ->where('nav_id', $request->nav_id)
-//                ->orderBy('sort_id', 'ASC')->get();
-//
-//        }
 
         $data = $this->decorateData($tasks);
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
@@ -109,7 +85,7 @@ class TaskController extends Controller
                 'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
-            $this->createLog($task->id, 'created', 'Create empty task', $request->text);
+            $this->createLog($task->id, 'created', 'Create task', $request->text);
             return response()->json(['success' => $task]);
 
         }
@@ -117,9 +93,7 @@ class TaskController extends Controller
 
     public function addTask(Request $request)
     {
-//        return response()->json([$request->all()]);
         $list_id = $this->checkListId($request->list_id, $request->nav_id);
-
         $etask = Task::where(['id' => $request->id])->get();
 
         if ($etask->count() > 0) {
@@ -150,7 +124,7 @@ class TaskController extends Controller
                 'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
-            $this->createLog($task->id, 'created', 'Create empty task', $request->text);
+            $this->createLog($task->id, 'created', 'Create task', $request->text);
             return response()->json(['success' => $task]);
 
         }
@@ -279,8 +253,6 @@ class TaskController extends Controller
 
             return response()->json(['success' => $request->copy_id]);
         }
-
-
     }
 
     public function deleteTask(Request $request)
@@ -449,6 +421,4 @@ class TaskController extends Controller
         ];
         $this->actionLog->store($log_data);
     }
-
-
 }
