@@ -4,31 +4,31 @@
             <nav class="navbar-expand-md navbar-spark">
                 <div class="container-fluid">
                     <div class="collapse navbar-collapse show">
-                        <span v-for="nev in AllNevItems">
+                        <span v-for="nav in AllNavItems">
                             <ul class="navbar-nav ml-4 float-sm-left">
                                 <li class="nav-item dropdown">
                                     <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
                                        data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
-                                        <span class="d-none d-md-block">{{nev.title}}</span>
+                                        <span class="d-none d-md-block">{{nav.title}}</span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-left"
                                          aria-labelledby="dropdownMenuButton">
 
-                                        <h6 class="dropdown-header" v-if="nev.type === 'list'"> Lists</h6>
-                                        <h6 class="dropdown-header" v-else-if="nev.type === 'board'"> Board</h6>
+                                        <h6 class="dropdown-header" v-if="nav.type === 'list'"> Lists</h6>
+                                        <h6 class="dropdown-header" v-else-if="nav.type === 'board'"> Board</h6>
 
-                                        <span v-for="nev_list in nev.lists">
-<!--                                                <a href="#" class="dropdown-item"> {{nev.title}}</a>-->
-                                        <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id)"
-                                              class="dropdown-item" :id="'list'+nev_list.id">
+                                        <span v-for="nav_list in nav.lists">
+<!--                                                <a href="#" class="dropdown-item"> {{nav.title}}</a>-->
+                                        <span @click="setListId(nav_list.id ,nav_list.list_title,nav.id)"
+                                              class="dropdown-item" :id="'list'+nav_list.id">
 
-                                            <router-link class="nav-link drop-item" v-if="nev.type === 'list'"
-                                                         :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nev_list.list_title}}<i
+                                            <router-link class="nav-link drop-item" v-if="nav.type === 'list'"
+                                                         :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nav_list.list_title}}<i
                                                 class="i-btn x20 task-complete icon-circle-o"></i>
                                             </router-link>
                                             <router-link class="nav-link drop-item" v-else
-                                                         :to="{ name: 'project-board', params: { projectId: projectId }}">{{nev_list.board_title}}<i
+                                                         :to="{ name: 'project-board', params: { projectId: projectId }}">{{nav_list.board_title}}<i
                                                 class="i-btn x20 task-complete icon-circle-o"></i>
                                             </router-link>
 
@@ -40,18 +40,18 @@
 
                                         <div class="dropdown-divider"></div>
 
-                                        <a href="Javascript:void(0)" @click="addListModel(nev.id)"
-                                           v-if="nev.type === 'list'"
+                                        <a href="Javascript:void(0)" @click="addListModel(nav.id)"
+                                           v-if="nav.type === 'list'"
                                            class="dropdown-item">
                                             <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                            Create {{nev.title}}  >List
+                                            Create {{nav.title}}  >List
                                         </a>
 
-                                        <a href="Javascript:void(0)" @click="addBoardModel(nev.id)"
-                                           v-else-if="nev.type === 'board'"
+                                        <a href="Javascript:void(0)" @click="addBoardModel(nav.id)"
+                                           v-else-if="nav.type === 'board'"
                                            class="dropdown-item">
                                             <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                            Create {{nev.title}}>Board
+                                            Create {{nav.title}}>Board
                                         </a>
 
 
@@ -130,15 +130,15 @@
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 
                                     <h6 class="dropdown-header"> Manage Nav</h6>
-                                    <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNevItem">
+                                    <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNavItem">
                                         <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
                                         Create Task View
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <h6 class="dropdown-header"> Edit Task View</h6>
-                                    <span v-for="nev in AllNevItems">
-                                             <a href="javascript:void(0)" @click="updateNavbarModel(nev)"
-                                                class="dropdown-item"> {{nev.title}}</a>
+                                    <span v-for="nav in AllNavItems">
+                                             <a href="javascript:void(0)" @click="updateNavbarModel(nav)"
+                                                class="dropdown-item"> {{nav.title}}</a>
                                         </span>
                                 </div>
                             </li>
@@ -353,7 +353,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title pl-3"> Add Nev Item</h5>
+                            <h5 class="modal-title pl-3"> Add Nav Item</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -364,7 +364,7 @@
                                     <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="nevItem.title">
+                                    <input type="text" class="form-control" v-model="navItem.title">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -372,7 +372,7 @@
                                     <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="number" class="form-control" min="0" v-model="nevItem.sort_id">
+                                    <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
                                 </div>
                             </div>
 
@@ -397,7 +397,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" @click="AddNevItem">Add</button>
+                            <button type="button" class="btn btn-primary" @click="AddNavItem">Add</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
                             </button>
                         </div>
@@ -409,7 +409,7 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title pl-3"> Add Nev Item</h5>
+                            <h5 class="modal-title pl-3"> Add Nav Item</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -420,7 +420,7 @@
                                     <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="nevItem.title">
+                                    <input type="text" class="form-control" v-model="navItem.title">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -428,13 +428,13 @@
                                     <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input type="number" class="form-control" min="0" v-model="nevItem.sort_id">
+                                    <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
                                 </div>
                             </div>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" @click="updateNevItem">Update</button>
+                            <button type="button" class="btn btn-primary" @click="updateNavItem">Update</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
                             </button>
                         </div>
@@ -452,13 +452,13 @@
         props : ['projectId'],
         data(){
             return {
-                AllNevItems :null,
+                AllNavItems :null,
                 list: {
                     name: null,
                     description: null,
-                    nev_id: null
+                    nav_id: null
                 },
-                nevItem: {
+                navItem: {
                     title: null,
                     type: null,
                     sort_id: null,
@@ -467,11 +467,11 @@
             }
         },
         mounted() {
-            this.AllNevItem();
+            this.AllNavItem();
         },
         methods:{
 
-            showModelForNevItem() {
+            showModelForNavItem() {
                 $("#addNavItem").modal('show');
                 $('input[name="optionsRadios"]').iCheck({
                     checkboxClass: 'icheckbox_square-blue',
@@ -482,16 +482,16 @@
             shortcutModel() {
                 $("#shortcutModel").modal('show');
             },
-            AddNevItem() {
+            AddNavItem() {
                 var _this = this;
-                _this.nevItem.project_id = _this.projectId;
-                _this.nevItem.type = $('input[name="optionsRadios"]:checked').val();
+                _this.navItem.project_id = _this.projectId;
+                _this.navItem.type = $('input[name="optionsRadios"]:checked').val();
 
-                axios.post('/api/nev-item/add-new', _this.nevItem)
+                axios.post('/api/nav-item/add-new', _this.navItem)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response.success)
-                        _this.AllNevItem()
+                        _this.AllNavItem()
                         $("#addNavItem").modal('hide');
 
                     })
@@ -500,15 +500,15 @@
                     });
 
 
-                // console.log(_this.nevItem)
+                // console.log(_this.navItem)
             },
-            AllNevItem() {
+            AllNavItem() {
                 var _this = this;
-                axios.get('/api/nev-item/' + _this.projectId)
+                axios.get('/api/nav-item/' + _this.projectId)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response)
-                        _this.AllNevItems = response.success;
+                        _this.AllNavItems = response.success;
                         // $("#addNavItem").modal('hide');
 
                     })
@@ -517,15 +517,15 @@
                     });
 
 
-                // console.log(_this.nevItem)
+                // console.log(_this.navItem)
             },
             updateNavbarModel(data) {
-                this.nev_id = data.id;
-                this.nevItem.title = data.title;
-                this.nevItem.type = data.type;
-                this.nevItem.sort_id = data.sort_id;
-                this.nevItem.nev_id = data.id;
-                this.nevItem.project_id = data.project_id;
+                this.nav_id = data.id;
+                this.navItem.title = data.title;
+                this.navItem.type = data.type;
+                this.navItem.sort_id = data.sort_id;
+                this.navItem.nav_id = data.id;
+                this.navItem.project_id = data.project_id;
 
                 $("#updateNavItem").modal('show');
                 $('input[name="optionsRadios"]').iCheck({
@@ -535,13 +535,13 @@
                 });
 
             },
-            updateNevItem() {
+            updateNavItem() {
                 var _this = this;
-                axios.post('/api/nev-item/update', _this.nevItem)
+                axios.post('/api/nav-item/update', _this.navItem)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response.success)
-                        _this.AllNevItem()
+                        _this.AllNavItem()
                         $("#updateNavItem").modal('hide');
 
                     })
@@ -551,32 +551,32 @@
             },
 
             addListModel(id) {
-                this.nev_id = id;
+                this.nav_id = id;
                 $("#addListModel").modal('show');
             },
             addBoardModel(id) {
-                this.nev_id = id;
+                this.nav_id = id;
                 $("#addBoardModel").modal('show');
             },
-            setListId(id, title, nev_id) {
+            setListId(id, title, nav_id) {
                 this.list_id = id;
-                this.nev_id = nev_id;
+                this.nav_id = nav_id;
                 // $('#listName').text(title);
                 // this.getTaskList()
-                this.nev_id = nev_id;
-                this.$emit('getList', {list_id:id,nev_id : nev_id})
+                this.nav_id = nav_id;
+                this.$emit('getList', {list_id:id,nav_id : nav_id})
 
             },
 
             AddNewList() {
                 this.list.project_id = this.projectId;
-                this.list.nev_id = this.nev_id;
+                this.list.nav_id = this.nav_id;
                 axios.post('/api/list-add', this.list)
                     .then(response => response.data)
                     .then(response => {
                         this.multiple_list = response.multiple_list;
                         console.log(response)
-                        this.AllNevItem()
+                        this.AllNavItem()
                         setTimeout(function () {
                             $('#list' + response.id.id).click();
                         }, 300)
@@ -588,13 +588,13 @@
             },
             AddNewBoard() {
                 this.list.project_id = this.projectId;
-                this.list.nev_id = this.nev_id;
+                this.list.nav_id = this.nav_id;
                 axios.post('/api/board-add', this.list)
                     .then(response => response.data)
                     .then(response => {
                         this.multiple_list = response.multiple_board;
                         console.log(response)
-                        this.AllNevItem()
+                        this.AllNavItem()
                         // setTimeout(function () {
                         //     $('#list' + response.id.id).click();
                         // }, 300)

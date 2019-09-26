@@ -35,21 +35,14 @@
                                             </thead>
                                             <tbody data-v-095ab3dc="">
                                             <tr v-for="project in projects">
-                                                <td class="router_td" @click="projectView(project.id,project.name)">
-                                                    {{project.name}}
+                                                <td @click="projectView(project.id,project.name)">
+                                                    <span class="compltit-blue-link">{{project.name}}</span>
                                                 </td>
                                                 <td v-text="project.description ? project.description : ''"></td>
                                                 <td>Active</td>
                                                 <td class="table-option">
-                                                    <div class="btn-group">
-                                                        <button class="btn btn-info btn-sm" title="edit_project"
-                                                                @click.prevent="editProject(project)"><i
-                                                                class="fa fa-edit"></i></button>
-                                                        <button class="btn btn-danger btn-sm" :key="project.id"
-                                                                title="Delete" @click.prevent="deleteProject(project)">
-                                                            <i
-                                                                    class="fa fa-trash"></i></button>
-                                                    </div>
+                                                    <a href="javascript:void(0)" class="compltit-blue-a" title="edit_project" @click.prevent="editProject(project)">Edit</a>
+                                                    <a href="javascript:void(0)" class="compltit-blue-a" :key="project.id" title="Delete" @click.prevent="deleteProject(project)">Delete</a>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -91,18 +84,6 @@
         </div>
     </aside>
 </template>
-<style>
-    .router_td {
-        color: #656565;
-    }
-
-    .router_td:hover {
-        cursor: pointer;
-        color: #656565;
-        background-color: #d0ddba;
-    }
-</style>
-
 <script>
     import projectForm from './form'
 

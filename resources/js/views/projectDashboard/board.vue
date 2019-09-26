@@ -2,67 +2,35 @@
     <div class="card pt-0 pr-0">
         <div class="row page-titles">
             <div class="col-md-12 col-12 align-self-center">
-<!--                <ul class="nav" style="border-bottom: 1px solid #cedcc4">-->
-<!--                    <li class="nav-item">-->
-<!--                        <div class="btn-group">-->
-<!--                            <button type="button" class="btn dropdown-toggle deactiveIteam" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-<!--                                List-->
-<!--                            </button>-->
-<!--                            <div class="dropdown-menu">-->
-<!--                                <span v-for="list in multiple_list">-->
-<!--                                     <router-link class="nav-link drop-item"-->
-<!--                                                  :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{list.list_title}}<i-->
-<!--                                         class="i-btn x20 task-complete icon-circle-o"></i></router-link>-->
-<!--                                </span>-->
-<!--                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add List</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </li>-->
-<!--                    <li class="nav-item">-->
-<!--                        <div class="btn-group">-->
-<!--                            <button type="button" class="btn dropdown-toggle activeTask" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-<!--                                <span>Board</span>-->
-<!--                            </button>-->
-<!--                            <div class="dropdown-menu">-->
-<!--                                <a class="dropdown-item" href="#">Action</a>-->
-<!--                                <router-link class="nav-link" :to="{ name: 'project-board', params: { projectId: projectId }}">-->
-<!--                                    Board <i-->
-<!--                                    class="tree-toggle i-btn x30"></i>-->
-<!--                                </router-link>-->
-<!--                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add Board</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </li>-->
-<!--                </ul>-->
                 <nav class="navbar-expand-md navbar-spark">
                     <div class="container-fluid">
 
                         <div class="collapse navbar-collapse show">
 
-                            <span v-for="nev in AllNevItems">
+                            <span v-for="nav in AllNavItems">
                                 <ul class="navbar-nav ml-4 float-sm-left">
                                     <li class="nav-item dropdown">
                                         <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
                                            data-toggle="dropdown"
                                            aria-haspopup="true" aria-expanded="false">
-                                <span class="d-none d-md-block">{{nev.title}}</span>
+                                <span class="d-none d-md-block">{{nav.title}}</span>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-left"
                                              aria-labelledby="dropdownMenuButton">
 
-                                            <h6 class="dropdown-header" v-if="nev.type === 'list'"> Lists</h6>
-                                            <h6 class="dropdown-header" v-if="nev.type === 'board'"> Board </h6>
+                                            <h6 class="dropdown-header" v-if="nav.type === 'list'"> Lists</h6>
+                                            <h6 class="dropdown-header" v-if="nav.type === 'board'"> Board </h6>
 
-                                            <span v-for="nev_list in nev.lists">
-                                                <span @click="setListId(nev_list.id ,nev_list.list_title,nev.id,nev.type)"
-                                                      class="dropdown-item" :id="'list'+nev_list.id">
+                                            <span v-for="nav_list in nav.lists">
+                                                <span @click="setListId(nav_list.id ,nav_list.list_title,nav.id,nav.type)"
+                                                      class="dropdown-item" :id="'list'+nav_list.id">
 
-                                                    <router-link class="nav-link drop-item" v-if="nev.type === 'list'"
-                                                                 :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nev_list.list_title}}<i
+                                                    <router-link class="nav-link drop-item" v-if="nav.type === 'list'"
+                                                                 :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nav_list.list_title}}<i
                                                         class="i-btn x20 task-complete icon-circle-o"></i>
                                                     </router-link>
                                                     <router-link class="nav-link drop-item" v-else
-                                                                 :to="{ name: 'project-board', params: { projectId: projectId }}">{{nev_list.board_title}}<i
+                                                                 :to="{ name: 'project-board', params: { projectId: projectId }}">{{nav_list.board_title}}<i
                                                         class="i-btn x20 task-complete icon-circle-o"></i>
                                                     </router-link>
 
@@ -74,16 +42,16 @@
 
                                             <div class="dropdown-divider"></div>
 
-                                            <a href="Javascript:void(0)" @click="addListModel(nev.id)" v-if="nev.type === 'list'"
+                                            <a href="Javascript:void(0)" @click="addListModel(nav.id)" v-if="nav.type === 'list'"
                                                class="dropdown-item">
                                                 <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                                Create {{nev.title}}  >List
+                                                Create {{nav.title}}  >List
                                             </a>
 
-                                            <a href="Javascript:void(0)" @click="addBoardModel(nev.id)" v-if="nev.type === 'board'"
+                                            <a href="Javascript:void(0)" @click="addBoardModel(nav.id)" v-if="nav.type === 'board'"
                                                class="dropdown-item">
                                                 <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                                Create {{nev.title}}>Board
+                                                Create {{nav.title}}>Board
                                             </a>
 
 
@@ -95,25 +63,85 @@
 
 
                             <ul class="navbar-nav ml-4" style="position: absolute;right: 20px;">
+                                <li class="nav-item" style="margin-right:20px;">
+                                    <a href="Javascript:void(0)" class="d-block d-md-flex text-center nav-link" @click="shortcutModel">
+                                        <span class="d-none d-md-block">
+                                           Shortcuts
+                                        </span>
+                                    </a>
+                                </li>
+
                                 <li class="nav-item dropdown">
                                     <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
-                            <span class="d-none d-md-block">
-                               <i class="fa fa-fw fa-plus-circle" style="color:#33CCFF;font-size: 26px;"></i>
-                            </span>
+                                        <span class="d-none d-md-block">
+                                           <i class="fa fa-fw fa-filter" style="font-size: 26px;"></i>
+                                        </span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+
+                                        <h6 class="dropdown-header"> Filters</h6>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="javascript:void(0)" class="dropdown-item active">
+                                            <i class="fa fa-fw fa-tasks"></i>
+                                            Show All Tasks
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-user"></i>
+                                            Show My Tasks
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-users"></i>
+                                            Show Users Tasks
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-clipboard-check"></i>
+                                            Show Completed Tasks
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-eye-slash"></i>
+                                            Hide Completed Tasks
+                                        </a>
+                                        <h6 class="dropdown-header"> Sort</h6>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="javascript:void(0)" class="dropdown-item active">
+                                            <i class="fa fa-sort"></i>
+                                            Default
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-sort-up"></i>
+                                            Oldest
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-sort-down"></i>
+                                            Newest
+                                        </a>
+                                        <a href="javascript:void(0)" class="dropdown-item">
+                                            <i class="fa fa-calendar-alt"></i>
+                                            By Due Date
+                                        </a>
+                                    </div>
+                                </li>
+
+                                <li class="nav-item dropdown">
+                                    <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
+                                       aria-haspopup="true" aria-expanded="false">
+                                        <span class="d-none d-md-block">
+                                           <i class="fa fa-fw fa-plus-circle compltit-blue" style="font-size: 26px;"></i>
+                                        </span>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
 
                                         <h6 class="dropdown-header"> Manage Nav</h6>
-                                        <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNevItem">
+                                        <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNavItem">
                                             <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
                                             Create Task View
                                         </a>
                                         <div class="dropdown-divider"></div>
                                         <h6 class="dropdown-header"> Edit Task View</h6>
-                                        <span v-for="nev in AllNevItems">
-                                             <a href="javascript:void(0)" @click="updateNavbarModel(nev)"
-                                                class="dropdown-item"> {{nev.title}}</a>
+                                        <span v-for="nav in AllNavItems">
+                                             <a href="javascript:void(0)" @click="updateNavbarModel(nav)"
+                                                class="dropdown-item"> {{nav.title}}</a>
                                         </span>
                                     </div>
                                 </li>
@@ -137,14 +165,12 @@
         <div id="board_view_list">
             <div class="col-12" id="col10" style="border: none">
                 <div class="card-scene">
-                    <p><a href="#" @click="addColumn"><i class="fa fa-plus"></i> Add Column</a></p>
                     <Container
                             orientation="horizontal"
                             @drop="onColumnDrop($event)"
                             drag-handle-selector=".column-drag-handle"
                             @drag-start="dragStart"
-                            :drop-placeholder="upperDropPlaceholderOptions"
-                    >
+                            :drop-placeholder="upperDropPlaceholderOptions">
                         <Draggable v-for="(column , index ) in scene.children" :key="column.id">
                             <div class="hidden-column" v-if="column.hidden">
                                 <div class="card-column-header">
@@ -203,14 +229,13 @@
                                     <Draggable v-for="(card , key) in column.children" :key="card.id">
                                         <div class="card-list" :class="card.props.className" :style="card.props.style">
                                             <textarea
-                                                      type="text" v-model="card.data"
-                                                      @focus="hideItem($event)"
-                                                      @blur="showItem($event,card.data,index,key)"
-                                                      data-grow="auto"
-                                                      :id="'id'+index+key"
-                                                      class="inp input-hide text-area" @click="makeInput($event)">
+                                                    type="text" v-model="card.data"
+                                                    @focus="hideItem($event)"
+                                                    @blur="showItem($event,card,index,key)"
+                                                    data-grow="auto"
+                                                    :id="'id'+index+key"
+                                                    class="inp input-hide text-area" @click="makeInput($event)">
                                             </textarea>
-                                            <!--<p>{{ card.data }}</p>-->
                                             <div>
                                                 <a class="calender li-opacity clickHide" v-if="!card.date">
                                                     <i class="outline-event icon-image-preview" title="toggle"
@@ -230,7 +255,7 @@
                                                 </flatPickr>
                                             </div>
                                             <div style="position: absolute; right: 160px; bottom: 8px; opacity: 0.25">
-                                                <a @click="deleteCard(index)"> 
+                                                <a @click="deleteCard(index, key, card.cardId)">
                                                      <i class="baseline-playlist_delete icon-image-preview"></i>
                                                 </a>
                                             </div>
@@ -326,8 +351,7 @@
                                                                     type="text"
                                                                     class="input-group searchUser"
                                                                     v-model="tag"
-                                                                    @keypress="addTag($event,index,key)"
-                                                            >
+                                                                    @keypress="addTag($event,index,key)">
                                                             <label class="pl-2 pt-3">
                                                                 <span class="badge badge-success">Tags</span>
                                                                 <span class="badge badge-danger">Dont Forget</span>
@@ -575,12 +599,144 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="shortcutModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Shortcuts</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">ENTER</span>
+                            </li>
+                            <li class="list-group-item">Save and Create New Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">TAB</span>
+                            </li>
+                            <li class="list-group-item">Make Sub Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">SHIFT</span>
+                                +
+                                <span class="badge-pill badge-default">TAB</span>
+                            </li>
+                            <li class="list-group-item">Make  Parent Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">C</span>
+                            </li>
+                            <li class="list-group-item">Copy Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">V</span>
+                            </li>
+                            <li class="list-group-item">Paste Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">X</span>
+                            </li>
+                            <li class="list-group-item">Cut Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">S</span>
+                            </li>
+                            <li class="list-group-item">Search</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">i</span>
+                            </li>
+                            <li class="list-group-item">Upload Image/File</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">U</span>
+                            </li>
+                            <li class="list-group-item">Assign User</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">Shift</span>
+                                +
+                                <span class="badge-pill badge-default">#</span>
+                            </li>
+                            <li class="list-group-item">Add Tag</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">Shift</span>
+                                +
+                                <span class="badge-pill badge-default">B</span>
+                            </li>
+                            <li class="list-group-item">Add Don't Forget Tag</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">D</span>
+                            </li>
+                            <li class="list-group-item">Delete Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default"><i class="fa fa-caret-up"></i></span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default"><i class="fa fa-caret-down"></i></span>
+                            </li>
+                            <li class="list-group-item">Move Task Up &amp; Down</li>
+                        </ul>
+
+                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default"><i class="fa fa-caret-right"></i></span>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default"><i class="fa fa-caret-left"></i></span>
+                            </li>
+                            <li class="list-group-item">Open &amp; Close Task Details</li>
+                        </ul>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="modal fade" id="addNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title pl-3"> Add Nev Item</h5>
+                        <h5 class="modal-title pl-3"> Add Nav Item</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -591,7 +747,7 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="nevItem.title">
+                                <input type="text" class="form-control" v-model="navItem.title">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -599,7 +755,7 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" min="0" v-model="nevItem.sort_id">
+                                <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
                             </div>
                         </div>
 
@@ -624,7 +780,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="AddNevItem">Add</button>
+                        <button type="button" class="btn btn-primary" @click="AddNavItem">Add</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
                         </button>
                     </div>
@@ -636,7 +792,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title pl-3"> Add Nev Item</h5>
+                        <h5 class="modal-title pl-3"> Add Nav Item</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -647,7 +803,7 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="nevItem.title">
+                                <input type="text" class="form-control" v-model="navItem.title">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -655,13 +811,13 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" min="0" v-model="nevItem.sort_id">
+                                <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
                             </div>
                         </div>
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="updateNevItem">Update</button>
+                        <button type="button" class="btn btn-primary" @click="updateNavItem">Update</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
                         </button>
                     </div>
@@ -684,13 +840,12 @@
     import switches from 'vue-switches';
     import hotkeys from 'hotkeys-js';
     import ClickOutside from 'vue-click-outside';
-
+    import Datepicker from 'vuejs-datepicker';
     import {Container, Draggable} from 'vue-smooth-dnd';
-    // import {applyDrag, generateItems} from '../../../plugins/utils/helpers';
     import {applyDrag, generateItems} from '../../../assets/plugins/utils/helpers';
 
     export default {
-        components: {Container, Draggable, flatPickr, switches},
+        components: {Container, Draggable, flatPickr, switches, Datepicker},
         data() {
             return {
                 id: 0,
@@ -723,7 +878,7 @@
                         tags: ["Dont Forget"],
                         children: [
                             {
-                                id: 2, 
+                                id: 2,
                                 parent: 1,
                                 text: 'node 1-1',
                                 html: 'Atik',
@@ -732,11 +887,11 @@
                                 clicked: 0
                             },
                             {
-                                id: 3, 
+                                id: 3,
                                 parent: 1,
-                                text: 'node 1-2', 
-                                clicked: 0, 
-                                tags: ["Dont Forget"], 
+                                text: 'node 1-2',
+                                clicked: 0,
+                                tags: ["Dont Forget"],
                                 children: [
                                     {
                                         id: 4,
@@ -759,7 +914,7 @@
                         ]
                     },
                     {
-                        id: 6, 
+                        id: 6,
                         parent: 0,
                         text: 'node 2',
                         html: 'Test 1',
@@ -804,36 +959,6 @@
                     },
                 ],
                 cards: [
-                    // {   
-                    //     id: 0,
-                    //     column: 'To Do',
-                    //     task: [
-                    //         {name: 'node 1-1-1 sdf a srsdfgs df gsdf', date: '10 Aug', tags: ["Nothing"], clicked: 0},
-                    //         {name: 'node 1-1-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
-                    //     ],
-                    //     hidden : 0
-                    // },
-                    // {   
-                    //     id: 1,
-                    //     column: 'In Progress',
-                    //     task: [
-                    //         {name: 'node 1-2-1', date: '10 Aug', tags: ["Do First"], clicked: 0},
-                    //         {name: 'node 1-2-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
-                    //         {name: 'node 1-2-3', date: '', tags: ["important"], clicked: 0},
-                    //         {name: 'node 1-2-4', date: '25 Aug', tags: [], clicked: 0},
-                    //     ],
-                    //     hidden : 1
-                    // }, 
-                    // {
-                    //     id: 2,
-                    //     column: 'Complete',
-                    //     task: [
-                    //         {name: 'node 1-3-1', date: '10 Aug', tags: ["new"], clicked: 0},
-                    //         {name: 'node 1-3-2', date: '25 Aug', tags: ["Dst"], clicked: 0},
-                    //         {name: 'node 1-3-3', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
-                    //     ],
-                    //     hidden : 0
-                    // }
                 ],
                 scene: {},
                 upperDropPlaceholderOptions: {
@@ -851,21 +976,20 @@
                 selectedExistedTask : [],
                 projectId : null,
                 multiple_list : null,
-                AllNevItems : null,
+                AllNavItems : null,
                 board_id: null,
-                multiple_list: null,
                 list: {
                     name: null,
                     description: null,
-                    nev_id: null
+                    nav_id: null
                 },
-                nevItem: {
+                navItem: {
                     title: null,
                     type: null,
                     sort_id: null,
                     project_id: null,
                 },
-                nev_id: null,
+                nav_id: null,
             }
         },
         mounted() {
@@ -874,13 +998,13 @@
             $(document).ready(function () {
                 $(function () {
                     $('[data-toggle="popover"]').popover()
-                })
+                });
                 $("#popoverData").popover({trigger: "hover"});
             });
             this.getData();
             this.projectId = this.$route.params.projectId;
             this.getProjects();
-            this.AllNevItem();
+            this.AllNavItem();
             $(document).ready(function () {
                 $('.searchList').hide();
             });
@@ -955,6 +1079,7 @@
                         children: generateItems(this.cards[i].task.length, j => ({
                             type: 'draggable',
                             id: `${i}${j}`,
+                            cardId: this.cards[i].task[j].id,
                             props: {
                                 className: 'card',
                                 style: {backgroundColor: 'white'}
@@ -963,13 +1088,12 @@
                             date: this.cards[i].task[j].date,
                             tags: this.cards[i].task[j].tags,
                             delete: this.cards[i].task[j].name
-                        })) 
+                        }))
                     })),
                 }
 
-                // console.log(this.scene);
             },
-            showModelForNevItem() {
+            showModelForNavItem() {
                 $("#addNavItem").modal('show');
                 $('input[name="optionsRadios"]').iCheck({
                     checkboxClass: 'icheckbox_square-blue',
@@ -977,51 +1101,47 @@
                     increaseArea: '20%' // optional
                 });
             },
-            AddNevItem() {
+            shortcutModel() {
+                $("#shortcutModel").modal('show');
+            },
+            AddNavItem() {
                 var _this = this;
-                _this.nevItem.project_id = _this.projectId;
-                _this.nevItem.type = $('input[name="optionsRadios"]:checked').val();
+                _this.navItem.project_id = _this.projectId;
+                _this.navItem.type = $('input[name="optionsRadios"]:checked').val();
 
-                axios.post('/api/nev-item/add-new', _this.nevItem)
+                axios.post('/api/nav-item/add-new', _this.navItem)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response.success)
-                        _this.AllNevItem()
+                        _this.AllNavItem()
                         $("#addNavItem").modal('hide');
 
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
                     });
-
-
-                // console.log(_this.nevItem)
             },
-            AllNevItem() {
+            AllNavItem() {
                 var _this = this;
-                axios.get('/api/nev-item/' + _this.projectId)
+                axios.get('/api/nav-item/' + _this.projectId)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response)
-                        _this.AllNevItems = response.success;
-                        // $("#addNavItem").modal('hide');
+                        _this.AllNavItems = response.success;
 
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
                     });
-
-
-                // console.log(_this.nevItem)
             },
 
             updateNavbarModel(data) {
-                this.nev_id = data.id;
-                this.nevItem.title = data.title;
-                this.nevItem.type = data.type;
-                this.nevItem.sort_id = data.sort_id;
-                this.nevItem.nev_id = data.id;
-                this.nevItem.project_id = data.project_id;
+                this.nav_id = data.id;
+                this.navItem.title = data.title;
+                this.navItem.type = data.type;
+                this.navItem.sort_id = data.sort_id;
+                this.navItem.nav_id = data.id;
+                this.navItem.project_id = data.project_id;
 
                 $("#updateNavItem").modal('show');
                 $('input[name="optionsRadios"]').iCheck({
@@ -1031,13 +1151,13 @@
                 });
 
             },
-            updateNevItem() {
+            updateNavItem() {
                 var _this = this;
-                axios.post('/api/nev-item/update', _this.nevItem)
+                axios.post('/api/nav-item/update', _this.navItem)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response.success)
-                        _this.AllNevItem()
+                        _this.AllNavItem()
                         $("#updateNavItem").modal('hide');
 
                     })
@@ -1046,30 +1166,28 @@
                     });
             },
             addListModel(id) {
-                this.nev_id = id;
+                this.nav_id = id;
                 $("#addListModel").modal('show');
             },
             addBoardModel(id) {
-                this.nev_id = id;
+                this.nav_id = id;
                 $("#addBoardModel").modal('show');
             },
-            setListId(id, title, nev_id, type) {
-                
+            setListId(id, title, nav_id, type) {
                 this.board_id = id;
-                this.nev_id = nev_id;
-                // $('#listName').text(title);
+                this.nav_id = nav_id;
                 this.getBoardTask()
-                this.nev_id = nev_id;
+                this.nav_id = nav_id;
             },
             AddNewList() {
                 this.list.project_id = this.projectId;
-                this.list.nev_id = this.nev_id;
+                this.list.nav_id = this.nav_id;
                 axios.post('/api/list-add', this.list)
                     .then(response => response.data)
                     .then(response => {
                         this.multiple_list = response.multiple_list;
                         console.log(response)
-                        this.AllNevItem()
+                        this.AllNavItem()
                         setTimeout(function () {
                             $('#list' + response.id.id).click();
                         }, 300)
@@ -1081,16 +1199,13 @@
             },
             AddNewBoard() {
                 this.list.project_id = this.projectId;
-                this.list.nev_id = this.nev_id;
+                this.list.nav_id = this.nav_id;
                 axios.post('/api/board-add', this.list)
                     .then(response => response.data)
                     .then(response => {
                         this.multiple_list = response.multiple_board;
                         console.log(response)
-                        this.AllNevItem()
-                        // setTimeout(function () {
-                        //     $('#list' + response.id.id).click();
-                        // }, 300)
+                        this.AllNavItem()
                         $("#addBoardModel").modal('hide');
                     })
                     .catch(error => {
@@ -1132,7 +1247,7 @@
             setColumn() {
                 if (!this.addField.name) {
                     this.addField.error = 'Name is required!';
-                } else if(!this.nev_id || !this.board_id){
+                } else if(!this.nav_id || !this.board_id){
                      this.addField.error = 'select board';
                 } else {
                     $("#addModal").modal('hide');
@@ -1141,39 +1256,32 @@
                         color: this.addField.color,
                         project_id: this.projectId,
                         progress: this.progress,
-                        nav_id: this.nev_id,
+                        nav_id: this.nav_id,
                         multiple_board_id: this.board_id,
                         task: [{name: '', date: '', tags: [], clicked: 0}]
                     };
                     this.saveBoard(data);
-                    // this.cards.push({
-                    //     column: this.addField.name,  
-                    //     task: [] //{name: '', date: '', tags: [], clicked: 0}
-                    // });
 
                     this.getData();
                     this.addField = {};
-                    // console.log(this.cards)
                 }
             },
             saveBoard(data){
                 let _this = this;
                 axios.post('/api/board-save',data)
                 .then(response => response.data)
-                .then(response => {     
+                .then(response => {
                     if(response.success == true){
                         _this.cards.push({
                             id: response.data.id,
                             column: response.data.title,
                             hidden: response.data.hidden,
-                            task: []//[{name: '', date: '', tags: [], clicked: 0}]
+                            task: []
                         });
                         _this.getData();
                     }
-                    // console.log(response);
                 })
                 .catch(error => {});
-                // this.getData();
             },
             updateColumSow(index) {
                 this.updateIndex = index;
@@ -1188,7 +1296,7 @@
             },
             updateColumn() {
                 console.log(this.cards[this.updateIndex])
-                if (!this.editField.name || this.editField.name == '') {
+                if (!this.editField.name || this.editField.name === '') {
                     this.editField.error = 'Name is required!';
                 } else {
                     let data = this.cards[this.updateIndex];
@@ -1196,7 +1304,7 @@
                     axios.post('/api/board-modify',data)
                     .then(response => response.data)
                     .then(response => {
-                        if(response.success == true){
+                        if(response.success === true){
                             this.cards[this.updateIndex].column = this.editField.name;
                         }
                     })
@@ -1223,14 +1331,12 @@
                 let data = {
                     projectId: this.projectId,
                     board_id: this.board_id,
-                    nav_id: this.nev_id
+                    nav_id: this.nav_id
                 };
                 axios.post('/api/board-task', data)
                     .then(response => response.data)
                     .then(response => {
-                        // console.log(_this.cards)
                         _this.cards = response.success;
-                        // console.log(_this.cards)
                         _this.getData();
                     })
                     .catch(error => {
@@ -1271,51 +1377,69 @@
             },
             addCard(index,id) {
                 let _this = this;
-                
                 axios.post('/api/card-add/',{'id': id})
                 .then(response => response.data)
                 .then(response => {
                     if(response.success == true){
                         let data = response.data;
-                        // console.log(response.data);
-                        // _this.cards[index].task.push({name: '', date: '', tags: [], clicked: 0});
-                        // keys = _this.cards[index].task.length-1;
-                        // alert(_this.cards[index].task.length);
+                        console.log(response.data);
+                        _this.cards[index].task.push({id: data.id, name: data.title, date: data.date, tags: [], clicked: 0});
+                        let keys = _this.cards[index].task.length-1;
+                        _this.getData();
+                        setTimeout(function () {
+                            $('#id'+index+keys).click();
+                            $('#id'+index+keys).focus();
+                        },100)
                     }
                 })
                 .catch(error => {
 
                 });
-                this.cards[index].task.push({name: '', date: '', tags: [], clicked: 0});
-                let keys = this.cards[index].task.length-1;
-                this.getData();
-                setTimeout(function () {
-                    $('#id'+index+keys).click();
-                    $('#id'+index+keys).focus();
-                },100)
+            },
+            deleteCard(index,cardIndex,id){
+                let _this = this;
+                if(confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id){
+                    axios.delete('/api/card-delete/'+id)
+                    .then(response => response.data)
+                    .then(response => {
+                        if(response.success){
+                            delete _this.cards[index].task[cardIndex];
+                            _this.cards[index].task.length = _this.cards[index].task.length-1;
+                            _this.getData();
+                        }
+                    })
+                    .catch(error => {
+
+                    });
+                }
             },
             saveData(data,index,child_key) {
-                if (!data) {
-                    // alert('Title is required!');
+                let _this = this;
+                if (!data.data ) {
+                    alert('Title is required!');
                 } else {
-                    this.cards[index].task[child_key].name = data;
-                    this.getData();
+                    axios.post('/api/card-update',data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.cards[index].task[child_key].name = data.data;
+                        _this.getData();
+
+                    })
+                    .catch(error => {
+
+                    });
                 }
             },
             addTag(e,index,key){
                 if (e.which === 13) {
-                    // this.cards[index].task[key].tags.push(this.tag);
                     this.cards[index].task[key].tags.splice(0,1,this.tag);
                     this.tag = null;
-                    // $('#dropdown'+index+key).toggle();
                 }
             },
             addExistingTag(index,key,tag){
                 this.cards[index].task[key].tags.splice(0,1,tag);
-                // $('#dropdown'+index+key).toggle();
             },
             deleteColumn(index,id) {
-                // alert(id);
                 let _this = this;
                 if (confirm('Are you sure you want to delete this board?')) {
                     axios.delete('/api/delete-board/'+id)
@@ -1327,7 +1451,7 @@
                         }
                     })
                     .catch(error => {
-                        
+
                     });
                 }
             },
@@ -1354,6 +1478,15 @@
                 $('.inp').removeClass('form-control');
                 this.saveData(data,index,child_key)
             },
+            saveCardData(e,data){
+                 if (e.which === 13) {
+                    $('.inp').addClass('input-hide');
+                    $('.inp').removeClass('form-control');
+                }
+            },
+            updateDate(date){
+                alert("dsafasdf");
+            }
         },
         directives: {
             ClickOutside
@@ -1367,6 +1500,4 @@
             }
         }
     }
-
-
 </script>

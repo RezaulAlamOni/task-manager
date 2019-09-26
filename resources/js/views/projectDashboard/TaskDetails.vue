@@ -1,8 +1,8 @@
 <template>
     <div class="detailsContainer tree_view_list" v-if="selectedData != null">
-        <h3 class="">
-            <input type="text" class="inp input-hide" v-model="selectedData.text ">
-        </h3>
+        <h5 class="">
+            {{selectedData.text}}
+        </h5>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="_details" data-toggle="tab" href="#home" role="tab"
