@@ -1141,6 +1141,7 @@
                 $("#addModal").modal('show');
             },
             setColumn() {
+                console.log(this.nev_id, this.board_id);
                 if (!this.addField.name) {
                     this.addField.error = 'Name is required!';
                 } else if(!this.nev_id || !this.board_id){
