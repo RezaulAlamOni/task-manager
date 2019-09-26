@@ -80,27 +80,15 @@ class MultipleListController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Multiple_list $multiple_list
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Multiple_list $multiple_list)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Multiple_list $multiple_list
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Multiple_list $multiple_list)
+    public function update(Request $request)
     {
-        //
+        return response()->json($request->all());
     }
 
     /**

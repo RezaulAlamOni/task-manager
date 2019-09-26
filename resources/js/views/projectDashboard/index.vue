@@ -21,13 +21,13 @@
             <div v-if="navItem === null" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Create Task View.</h2>
             </div>
-            <div v-if="navItem !== null && tree4data.length === 0" class="col-md-8 text-center pt-5">
+            <div v-if="navItem !== null && list.type === null" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Select Task View.</h2>
             </div>
             <div class="task_width" id="task_width" @click="HideDetails">
-                <div id="tree_view_list">
+                <div id="tree_view_list" >
                     <div class="col-11" id="col10" style="border: none">
-                        <div class="container offset-1" v-if="tree4data.length !== 0">
+                        <div class="container offset-1" v-if="tree4data.length !== 0 || list.type === 'board'">
                             <div class="container-header">
                                 <h2>
                                     {{list.name}}
@@ -37,7 +37,7 @@
                             </div>
                         </div>
 
-                        <Tree class="tree4" :data="tree4data" draggable="draggable" cross-tree="cross-tree"
+                        <Tree class="tree4" :data="tree4data" draggable="draggable" cross-tree="cross-tree" v-if="list.type === 'list'"
                               @drop="dropNode"
                               @change="ChangeNode"
                               :indent="2"
@@ -212,6 +212,7 @@
                                 </template>
                             </div>
                         </Tree>
+
                     </div>
                 </div>
             </div>
@@ -1119,7 +1120,6 @@
                     .then(response => {
                         this.tree4data = response.task_list;
                         this.multiple_list = response.multiple_list;
-                        console.log(this.tree4data)
                         if (response.task_list.length === 0) {
 
                             var date = Math.round(new Date().getTime() / 1000);
@@ -1166,26 +1166,28 @@
 
             },
 
-            UpdateListModel(id) {
-                this.nav_id = id;
+            UpdateListModel() {
                 $("#updateListBoardModel").modal('show');
             },
-
             UpdateListOrBoard() {
                 this.list.project_id = this.projectId;
                 this.list.nav_id = this.nav_id;
+                this.list.id = this.list_id;
                 axios.post('/api/board-list-update', this.list)
                     .then(response => response.data)
                     .then(response => {
-                        this.multiple_list = response.multiple_board;
+
                         console.log(response)
-                        this.AllNavItem()
-                        $("#addBoardModel").modal('hide');
+                        // this.multiple_list = response.multiple_board;
+                        // this.AllNavItem()
+                        // $("#addBoardModel").modal('hide');
                     })
                     .catch(error => {
                         console.log('Add list api not working!!')
                     });
             },
+
+
 
             RemoveNewEmptyChildren(data) {
                 var children = data.children;

@@ -19,20 +19,20 @@
                                         <h6 class="dropdown-header" v-else-if="nav.type === 'board'"> Board</h6>
 
                                         <span v-for="nav_list in nav.lists">
-                                        <span @click="setListId(nav_list.id ,nav_list.list_title,nav.id,nav_list.description,nav.type)"
+                                        <span @click="setListId(nav_list,nav.id,nav_list.description,nav.type)"
                                               class="dropdown-item" :id="'list'+nav_list.id">
-                                            <span v-if="nav.type === 'list'">{{nav_list.list_title}} </span>
-<!--                                            <span v-else>{{nav_list.board_title}}</span>-->
+                                            <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>
+                                            <a href="javascript:void(0)"v-else>{{nav_list.board_title}}</a>
 
 <!--                                            <router-link class="nav-link drop-item" v-if="nav.type === 'list'"-->
 <!--                                                         :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nav_list.list_title}}<i-->
 <!--                                                class="i-btn x20 task-complete icon-circle-o"></i>-->
 <!--                                            </router-link>-->
 
-                                            <router-link class="nav-link drop-item" v-else
-                                                         :to="{ name: 'project-board', params: { projectId: projectId }}">{{nav_list.board_title}}<i
-                                                class="i-btn x20 task-complete icon-circle-o"></i>
-                                            </router-link>
+<!--                                            <router-link class="nav-link drop-item" v-else-->
+<!--                                                         :to="{ name: 'project-board', params: { projectId: projectId }}">{{nav_list.board_title}}<i-->
+<!--                                                class="i-btn x20 task-complete icon-circle-o"></i>-->
+<!--                                            </router-link>-->
 
 
                                          </span>
@@ -560,10 +560,11 @@
                 this.nav_id = id;
                 $("#addBoardModel").modal('show');
             },
-            setListId(id, title, nav_id,description,type) {
-                this.list_id = id;
+            setListId(navList, nav_id,description,type) {
+                this.list_id = navList.id;
                 this.nav_id = nav_id;
-                this.$emit('getList', {list_id:id,nav_id : nav_id,title : title,description : description,type:type})
+                var title = (type === 'list') ? navList.list_title : navList.board_title;
+                this.$emit('getList', {list_id:navList.id,nav_id : nav_id,title : title,description : description,type:type})
 
             },
 
