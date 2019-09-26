@@ -207,7 +207,7 @@
             position: absolute;
             right: 25px;
             top: 0;
-            width: 65px;
+            width: 75px;
             background: transparent;
             border: none;
             box-shadow: none;
@@ -414,6 +414,7 @@
     position: relative;
     display: none;
     width: 30%;
+    @include transition(all 0.4s linear);
 }
 
 .detailsContainer {
@@ -438,6 +439,7 @@
         max-width: 600px;
         z-index: 2;
         right: 0;
+        @include transition(all 0.4s linear);
 
     .input-hide {
         border: none !important;
@@ -655,6 +657,10 @@
     position: absolute;
     right: 5px;
     bottom: 08px;
+}
+.tooltipMakeForTag{
+    display: inline-block;
+
 }
 
 @media only screen and (max-width: 880px) {

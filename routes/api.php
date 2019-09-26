@@ -6,7 +6,9 @@ Route::post('/project', 'ProjectController@store');
 Route::patch('/project/{id}', 'ProjectController@update');
 Route::post('/project/{id}', 'ProjectController@destroy');
 
+//List section
 Route::post('/list-add', 'MultipleListController@store');//add list under project
+Route::post('/board-list-update', 'MultipleListController@update');//Update list
 
 //task listmanagement
 Route::post('/add-task-task', 'TaskController@addNewTask');//add new node

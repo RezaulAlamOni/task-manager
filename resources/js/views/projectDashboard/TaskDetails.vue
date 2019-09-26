@@ -1,5 +1,5 @@
 <template>
-    <div class="detailsContainer tree_view_list" v-if="selectedData != null">
+    <div class="detailsContainer tree_view_list" v-if="Object.keys(selectedData).length > 0">
         <h5 class="">
             {{selectedData.text}}
         </h5>
