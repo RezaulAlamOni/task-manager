@@ -16,17 +16,20 @@
             </div>
 
         </div>
-        <div class="TaskListAndDetails">
+        <div>
             <div v-if="AllNavItems === null" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Create Task View.</h2>
             </div>
             <div v-else-if="AllNavItems !== null && list.type === null" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Select Task View.</h2>
             </div>
+        </div>
+<!--        //tree view component section-->
+        <div class="TaskListAndDetails" v-if="list.type === 'list'">
             <div class="task_width" id="task_width" @click="HideDetails">
                 <div id="tree_view_list">
                     <div class="col-11" id="col10" style="border: none">
-                        <div class="offset-1" v-if="tree4data.length !== 0 || list.type === 'board'">
+                        <div class="offset-1" >
                             <div class="container-header pl-5 mr-5">
                                 <h2>
                                     {{list.name}}
@@ -38,7 +41,7 @@
                             </div>
                         </div>
 
-                        <Tree class="tree4" :data="tree4data" draggable="draggable" cross-tree="cross-tree"
+                        <Tree class="tree4" :data="treeList" draggable="draggable" cross-tree="cross-tree"
                               v-if="list.type === 'list'"
                               @drop="dropNode"
                               @change="ChangeNode"
@@ -234,7 +237,6 @@
                 </div>
             </div>
             <div class="details" id="details">
-
                 <TaskDetails
                     :selectedData="selectedData"
                     :task_logs="task_logs"
@@ -242,6 +244,28 @@
                 </TaskDetails>
             </div>
         </div>
+
+<!--        //board component section-->
+        <div class="boardView" v-if="list.type === 'board'">
+            <div class="offset-1 col-9" >
+                <div class="container-header pl-5 mr-5">
+                    <h2>
+                        {{list.name}}
+                        <button type="submit" class="btn btn-primary pull-right" @click="UpdateListModel">
+                            EDIT {{list.name}}
+                        </button>
+                    </h2>
+                    <p v-if="list.description != null" class="compltit-p">{{list.description}}</p>
+                </div>
+            </div>
+            <BoardView
+                :board_id="list_id"
+                :projectId="projectId"
+                :nav_id="nav_id">
+            </BoardView>
+
+        </div>
+
 
         <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
@@ -363,6 +387,7 @@
     import VueTagsInput from '@johmun/vue-tags-input';
     import TaskDetails from "./TaskDetails";
     import Navbar from "./ProjectNavbar/Navbar";
+    import BoardView from "./board";
 
     export default {
         components: {
@@ -372,7 +397,7 @@
             Datepicker,
             VueTagsInput,
             TaskDetails,
-            Navbar
+            Navbar,BoardView
         },
         data() {
             return {
@@ -380,7 +405,7 @@
                     id: null
                 },
                 id: 0,
-                tree4data: [],
+                treeList: [],
                 date_config: {
                     enableTime: false,
                     wrap: true,
@@ -1142,7 +1167,7 @@
                 axios.post('/api/task-list', data)
                     .then(response => response.data)
                     .then(response => {
-                        this.tree4data = response.task_list;
+                        this.treeList = response.task_list;
                         this.multiple_list = response.multiple_list;
                         setTimeout(function () {
                             $('[data-toggle="tooltip"]').tooltip();
@@ -1163,7 +1188,7 @@
                                 tags: "",
                                 text: ""
                             };
-                            _this.tree4data = [newEmpty]
+                            _this.treeList = [newEmpty]
                             setTimeout(function () {
                                 $("#" + date).click();
                                 $("#" + date).focus();
@@ -1328,9 +1353,9 @@
                     }
                 }
                 var text1 = "Don't Forget Section";
-                for (var i = 0; i < this.tree4data.length; i++) {
-                    if (this.tree4data[i].text == text1) {
-                        this.tree4data[i].children.push(moveItem);
+                for (var i = 0; i < this.treeList.length; i++) {
+                    if (this.treeList[i].text == text1) {
+                        this.treeList[i].children.push(moveItem);
                         break;
                     }
                 }

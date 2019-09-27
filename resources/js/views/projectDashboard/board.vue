@@ -1,166 +1,5 @@
 <template>
     <div class="card pt-0 pr-0">
-        <div class="row page-titles">
-            <div class="col-md-12 col-12 align-self-center">
-                <nav class="navbar-expand-md navbar-spark">
-                    <div class="container-fluid">
-
-                        <div class="collapse navbar-collapse show">
-
-                            <span v-for="nav in AllNavItems">
-                                <ul class="navbar-nav ml-4 float-sm-left">
-                                    <li class="nav-item dropdown">
-                                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
-                                           data-toggle="dropdown"
-                                           aria-haspopup="true" aria-expanded="false">
-                                <span class="d-none d-md-block">{{nav.title}}</span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-left"
-                                             aria-labelledby="dropdownMenuButton">
-
-                                            <h6 class="dropdown-header" v-if="nav.type === 'list'"> Lists</h6>
-                                            <h6 class="dropdown-header" v-if="nav.type === 'board'"> Board </h6>
-
-                                            <span v-for="nav_list in nav.lists">
-                                                <span @click="setListId(nav_list.id ,nav_list.list_title,nav.id,nav.type)"
-                                                      class="dropdown-item" :id="'list'+nav_list.id">
-
-                                                    <router-link class="nav-link drop-item" v-if="nav.type === 'list'"
-                                                                 :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nav_list.list_title}}<i
-                                                        class="i-btn x20 task-complete icon-circle-o"></i>
-                                                    </router-link>
-                                                    <router-link class="nav-link drop-item" v-else
-                                                                 :to="{ name: 'project-board', params: { projectId: projectId }}">{{nav_list.board_title}}<i
-                                                        class="i-btn x20 task-complete icon-circle-o"></i>
-                                                    </router-link>
-
-
-                                                 </span>
-
-                                            </span>
-
-
-                                            <div class="dropdown-divider"></div>
-
-                                            <a href="Javascript:void(0)" @click="addListModel(nav.id)" v-if="nav.type === 'list'"
-                                               class="dropdown-item">
-                                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                                Create {{nav.title}}  >List
-                                            </a>
-
-                                            <a href="Javascript:void(0)" @click="addBoardModel(nav.id)" v-if="nav.type === 'board'"
-                                               class="dropdown-item">
-                                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                                Create {{nav.title}}>Board
-                                            </a>
-
-
-                                        </div>
-                                    </li>
-                                </ul>
-
-                            </span>
-
-
-                            <ul class="navbar-nav ml-4" style="position: absolute;right: 20px;">
-                                <li class="nav-item" style="margin-right:20px;">
-                                    <a href="Javascript:void(0)" class="d-block d-md-flex text-center nav-link" @click="shortcutModel">
-                                        <span class="d-none d-md-block">
-                                           Shortcuts
-                                        </span>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
-                                        <span class="d-none d-md-block">
-                                           <i class="fa fa-fw fa-filter" style="font-size: 26px;"></i>
-                                        </span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-
-                                        <h6 class="dropdown-header"> Filters</h6>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="javascript:void(0)" class="dropdown-item active">
-                                            <i class="fa fa-fw fa-tasks"></i>
-                                            Show All Tasks
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-user"></i>
-                                            Show My Tasks
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-users"></i>
-                                            Show Users Tasks
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-clipboard-check"></i>
-                                            Show Completed Tasks
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-eye-slash"></i>
-                                            Hide Completed Tasks
-                                        </a>
-                                        <h6 class="dropdown-header"> Sort</h6>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="javascript:void(0)" class="dropdown-item active">
-                                            <i class="fa fa-sort"></i>
-                                            Default
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-sort-up"></i>
-                                            Oldest
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-sort-down"></i>
-                                            Newest
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-calendar-alt"></i>
-                                            By Due Date
-                                        </a>
-                                    </div>
-                                </li>
-
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
-                                        <span class="d-none d-md-block">
-                                           <i class="fa fa-fw fa-plus-circle compltit-blue" style="font-size: 26px;"></i>
-                                        </span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-
-                                        <h6 class="dropdown-header"> Manage Nav</h6>
-                                        <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNavItem">
-                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                            Create Task View
-                                        </a>
-                                        <div class="dropdown-divider"></div>
-                                        <h6 class="dropdown-header"> Edit Task View</h6>
-                                        <span v-for="nav in AllNavItems">
-                                             <a href="javascript:void(0)" @click="updateNavbarModel(nav)"
-                                                class="dropdown-item"> {{nav.title}}</a>
-                                        </span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
-                    </div>
-                </nav>
-            </div>
-
-            <div class="input-group col-sm-3 searchList">
-                <input type="text" class="form-control searchTaskList" id="searchTaskList" placeholder="Search task"
-                       name="search">
-                <div class="input-group-btn searchClick" id="searchClick">
-                    <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
-                </div>
-            </div>
-
-        </div>
 
         <div id="board_view_list">
             <div class="col-12" id="col10" style="border: none">
@@ -322,7 +161,7 @@
                                                             <span class="badge badge-success " v-else>{{item.substring(0,10)}}..</span>
                                                         </div>
 
-                                                      
+
                                                         <div class="dropdown-menu dropdown-menu1 dropdown-menu-left" :id="'dropdown'+data._id">
 
                                                             <diV class="collapse show switchToggle" style="">
@@ -866,6 +705,7 @@
     import VueTagsInput from '@johmun/vue-tags-input';
 
     export default {
+        props : ['nav_id','board_id','projectId'],
         components: {Container, Draggable, flatPickr, switches, VueTagsInput, Datepicker},
         data() {
             return {
@@ -996,10 +836,7 @@
                 updateIndex: null,
                 tag: null,
                 selectedExistedTask : [],
-                projectId : null,
                 multiple_list : null,
-                AllNavItems : null,
-                board_id: null,
                 list: {
                     name: null,
                     description: null,
@@ -1011,7 +848,6 @@
                     sort_id: null,
                     project_id: null,
                 },
-                nav_id: null,
             }
         },
         mounted() {
@@ -1023,10 +859,10 @@
                 });
                 $("#popoverData").popover({trigger: "hover"});
             });
-            this.getData();
-            this.projectId = this.$route.params.projectId;
-            this.getProjects();
-            this.AllNavItem();
+            this.getBoardTask();
+            // this.getData();
+            // this.projectId = this.$route.params.projectId;
+            // this.AllNavItem();
             $(document).ready(function () {
                 $('.searchList').hide();
             });
@@ -1070,18 +906,6 @@
                 }
             },
 
-            getProjects() {
-                axios.get('/api/project/' + this.projectId)
-                    .then(response => response.data)
-                    .then(response => {
-                        this.project = response.project;
-                        this.multiple_list = response.multiple_list;
-                        $('#header-item').text(this.project.name + ' / Task Board')
-                        console.log(this.multiple_list)
-                    })
-                    .catch(error => {
-                    });
-            },
             getData() {
                 this.scene = {
                     type: 'container',
@@ -1367,6 +1191,7 @@
                     });
 
             },
+
             clearInputFeild() {
                 $("#EditModal").modal('hide');
                 $("#addModal").modal('hide');
@@ -1518,10 +1343,10 @@
                     axios.post('/api/card-update/'+card.cardId, data)
                     .then(response => response.data)
                     .then(response => {
-                        
+
                     })
                     .catch(error => {
-    
+
                     });
                 }, 300)
             }
@@ -1530,12 +1355,19 @@
             ClickOutside
         },
         watch: {
-            filterProjectForm: {
-                handler(val) {
-                    this.getProjects();
-                },
-                deep: true
-            }
+            projectId : function (val) {
+                this.projectId = val;
+                this.getBoardTask()
+            },
+            board_id : function (val) {
+                this.board_id = val;
+                this.getBoardTask()
+                console.log(this.board_id)
+            },
+            nav_id : function (val) {
+                this.nav_id = val;
+                this.getBoardTask()
+            },
         }
     }
 </script>
