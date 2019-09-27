@@ -1,153 +1,11 @@
 <template>
     <div>
         <div class="row page-titles">
-            <div class="col-md-12 col-12 align-self-center">
-                <nav class="navbar-expand-md navbar-spark">
-                    <div class="container-fluid">
-
-                        <div class="collapse navbar-collapse show">
-
-                            <span v-for="nav in AllNavItems">
-                                <ul class="navbar-nav ml-4 float-sm-left">
-                                    <li class="nav-item dropdown">
-                                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
-                                           data-toggle="dropdown"
-                                           aria-haspopup="true" aria-expanded="false">
-                                <span class="d-none d-md-block">{{nav.title}}</span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-left"
-                                             aria-labelledby="dropdownMenuButton">
-
-                                            <h6 class="dropdown-header" v-if="nav.type === 'list'"> Lists</h6>
-                                            <h6 class="dropdown-header" v-if="nav.type === 'board'"> Board</h6>
-
-                                            <span v-for="nav_list in nav.lists">
-                                                <span @click="setListId(nav_list.id ,nav_list.list_title,nav.id)"
-                                                      class="dropdown-item" :id="'list'+nav_list.id">
-
-                                                    <router-link class="nav-link drop-item" v-if="nav.type === 'list'"
-                                                                 :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nav_list.list_title}}<i
-                                                        class="i-btn x20 task-complete icon-circle-o"></i>
-                                                    </router-link>
-                                                    <router-link class="nav-link drop-item" v-else
-                                                                 :to="{ name: 'project-board', params: { projectId: projectId }}">{{nav_list.board_title}}<i
-                                                        class="i-btn x20 task-complete icon-circle-o"></i>
-                                                    </router-link>
-
-                                                 </span>
-
-                                            </span>
-
-                                            <div class="dropdown-divider"></div>
-
-                                            <a href="Javascript:void(0)" @click="addListModel(nav.id)"
-                                               v-if="nav.type === 'list'"
-                                               class="dropdown-item">
-                                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                                Create {{nav.title}}  >List
-                                            </a>
-
-                                            <a href="Javascript:void(0)" @click="addBoardModel(nav.id)"
-                                               v-if="nav.type === 'board'"
-                                               class="dropdown-item">
-                                                <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                                Create {{nav.title}}>Board
-                                            </a>
-
-                                        </div>
-                                    </li>
-                                </ul>
-
-                            </span>
-                            <ul class="navbar-nav ml-4" style="position: absolute;right: 60px;">
-                                <li class="nav-item" style="margin-right:20px;">
-                                    <a href="Javascript:void(0)" class="d-block d-md-flex text-center nav-link" @click="shortcutModel">
-                                        <span class="d-none d-md-block">
-                                           Shortcuts
-                                        </span>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
-                                        <span class="d-none d-md-block">
-                                           <i class="fa fa-fw fa-filter" style="font-size: 26px;"></i>
-                                        </span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-
-                                        <h6 class="dropdown-header"> Filters</h6>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="javascript:void(0)" class="dropdown-item active">
-                                            <i class="fa fa-fw fa-tasks"></i>
-                                            Show All Tasks
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-user"></i>
-                                            Show My Tasks
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-users"></i>
-                                            Show Users Tasks
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-clipboard-check"></i>
-                                            Show Completed Tasks
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-eye-slash"></i>
-                                            Hide Completed Tasks
-                                        </a>
-                                        <h6 class="dropdown-header"> Sort</h6>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="javascript:void(0)" class="dropdown-item active">
-                                            <i class="fa fa-sort"></i>
-                                            Default
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-sort-up"></i>
-                                            Oldest
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-sort-down"></i>
-                                            Newest
-                                        </a>
-                                        <a href="javascript:void(0)" class="dropdown-item">
-                                            <i class="fa fa-calendar-alt"></i>
-                                            By Due Date
-                                        </a>
-                                    </div>
-                                </li>
-
-                                <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
-                                        <span class="d-none d-md-block">
-                                           <i class="fa fa-fw fa-plus-circle compltit-blue" style="font-size: 26px;"></i>
-                                        </span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-
-                                        <h6 class="dropdown-header"> Manage Nav</h6>
-                                        <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNavItem">
-                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
-                                            Create Task View
-                                        </a>
-                                        <div class="dropdown-divider"></div>
-                                        <h6 class="dropdown-header"> Edit Task View</h6>
-                                        <span v-for="nav in AllNavItems">
-                                             <a href="javascript:void(0)" @click="updateNavbarModel(nav)"
-                                                class="dropdown-item"> {{nav.title}}</a>
-                                        </span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
-                    </div>
-                </nav>
-            </div>
+            <Navbar :projectId="$route.params.projectId"
+                    :AllNavItems="AllNavItems"
+                    @getNavBars="getNavbar"
+                    @getList="showTask">
+            </Navbar>
 
             <div class="input-group col-sm-3 searchList">
                 <input type="text" class="form-control searchTaskList" id="searchTaskList" placeholder="Search task"
@@ -159,26 +17,29 @@
 
         </div>
         <div class="TaskListAndDetails">
-            <div v-if="navItem != null && tree4data.length <= 0 " class="col-md-8 text-center pt-5">
-                <p>We Should only see this section for accounts with no lists or boards. If a user has a list or a board start this page in the last list/board user was in.</p>
-            </div>
-            <div v-if="navItem == null" class="col-md-8 text-center pt-5">
+            <div v-if="AllNavItems === null" class="col-md-8 text-center pt-5">
                 <h2 style="color: #d1a894">Create Task View.</h2>
+            </div>
+            <div v-else-if="AllNavItems !== null && list.type === null" class="col-md-8 text-center pt-5">
+                <h2 style="color: #d1a894">Select Task View.</h2>
             </div>
             <div class="task_width" id="task_width" @click="HideDetails">
                 <div id="tree_view_list">
                     <div class="col-11" id="col10" style="border: none">
-                        <div class="container offset-1">
-                            <div class="container-header">
+                        <div class="offset-1" v-if="tree4data.length !== 0 || list.type === 'board'">
+                            <div class="container-header pl-5 mr-5">
                                 <h2>
-                                    [[NAME OF LIST OR BOARD HERE]]
-                                    <button type="submit" class="btn btn-primary pull-right"> EDIT [LIST/BOARD]</button>
+                                    {{list.name}}
+                                    <button type="submit" class="btn btn-primary pull-right" @click="UpdateListModel">
+                                        EDIT {{list.name}}
+                                    </button>
                                 </h2>
-                                <p class="compltit-p">LIST/BOARD DESCRIPTION HERE</p>
+                                <p v-if="list.description != null" class="compltit-p">{{list.description}}</p>
                             </div>
                         </div>
 
                         <Tree class="tree4" :data="tree4data" draggable="draggable" cross-tree="cross-tree"
+                              v-if="list.type === 'list'"
                               @drop="dropNode"
                               @change="ChangeNode"
                               :indent="2"
@@ -204,7 +65,7 @@
                                     </a>
                                     <b v-if="data.children && data.children.length && data.open"
                                        @click="store.toggleOpen(data)"><i class="fa fa-fw fa-minus"></i></b>
-                                    <b v-if="data.children && data.children.length && !data.open"
+                                    <b v-else-if="data.children && data.children.length && !data.open"
                                        @click="store.toggleOpen(data)"><i class="fa fa-fw fa-plus"></i></b>
                                     <span>
                                         <input type="text" v-model="data.text"
@@ -230,22 +91,29 @@
                                     </a>
 
 
-                                    <a class="tag-icon hide-item-res">
+                                    <a class="tag-icon hide-item-res" >
                                         <i v-if="data.tags.length > 0"
                                            class="dropdown-toggle-split"
                                            data-toggle="dropdown">
-                                            <template v-for="tag in data.tags">
-                                                <span class="badge badge-warning" v-if="tag.text !== null"
-                                                      v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'},{'float' : 'left'}]">
-                                                    {{(data.tags.length > 2 ) ? tag.text.substring(0,2) : tag.text.substring(0,3) }}
-                                                </span>
-                                                <span class="badge badge-warning" v-else
-                                                      v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]">
-                                                    ;:
-                                                </span>
-
+                                            <template v-for="(tag ,index) in data.tags">
+                                                <template v-if="index < 2">
+                                                    <span class="badge badge-warning" v-if="tag.text !== null"
+                                                          data-toggle="tooltip" data-placement="bottom"
+                                                          :title="data.tagTooltip"
+                                                          v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'},{'float' : 'left'}]">
+                                                        {{(data.tags.length > 2 ) ? tag.text.substring(0,3) : tag.text.substring(0,3) }}
+                                                    </span>
+                                                        <span class="badge badge-warning" v-else
+                                                              v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]">
+                                                        ::
+                                                    </span>
+                                                </template>
                                             </template>
+
+
                                         </i>
+
+
 
                                         <i v-else :id="'tag-'+data._id"
                                            class="outline-local_offer icon-image-preview li-opacity"
@@ -263,26 +131,34 @@
                                                         @tags-changed="newTags => (changeTAg(newTags))"
                                                         @before-deleting-tag="DeleteTag"
                                                     />
-                                                        <div class="row">
-                                                            <div class="col-12">
-                                                                <template v-for="tag in data.tags">
-                                                                    <li class="badge-pill tags" v-if="tag.text !== 'Dont Forget'"
-                                                                          v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                        {{(tag.text !== null) ?tag.text.substring(0,12) : ''}}
-                                                                    </li>
-                                                                </template>
-                                                                <li class="badge-pill tags" style="background: #FB8678" @click="addExistingTag($event,data ,'Dont Forget')"> Dont Forget </li>
-                                                            </div>
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <template v-for="tag in data.tags">
+                                                                <li class="badge-pill tags"
+                                                                    v-if="tag.text !== 'Dont Forget'"
+                                                                    v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
+                                                                    {{(tag.text !== undefined) ?tag.text.substring(0,12) : ''}}
+                                                                </li>
+                                                            </template>
+                                                            <li class="badge-pill tags" style="background: #FB8678"
+                                                                @click="addExistingTag($event,data ,'Dont Forget')">
+                                                                Dont Forget
+                                                            </li>
                                                         </div>
-                                                        <hr>
-                                                        <div class="col-xs-12" style="margin-top:10px;width: 100%;">
-                                                            <button type="submit" class="btn btn-small btn-primary pull-right" @click="showTagManageModel">Manage Tag</button>
-                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="col-xs-12" style="margin-top:10px;width: 100%;">
+                                                        <button type="submit"
+                                                                class="btn btn-small btn-primary pull-right"
+                                                                @click="showTagManageModel">Manage Tag
+                                                        </button>
+                                                    </div>
                                                 </div>
 
                                             </diV>
                                         </div>
                                     </a>
+
                                     <div class="hide-item-res">
                                         <a class="calender li-opacity clickHide" v-if="!data.date">
                                             <i class="outline-event icon-image-preview" title="toggle"
@@ -353,10 +229,12 @@
                                 </template>
                             </div>
                         </Tree>
+
                     </div>
                 </div>
             </div>
-            <div class="details" id="details" >
+            <div class="details" id="details">
+
                 <TaskDetails
                     :selectedData="selectedData"
                     :task_logs="task_logs"
@@ -382,298 +260,6 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="addListModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title pl-3"> Add List</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Add your new list here !</p>
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">List Title</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="list.name">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">List Description</label>
-                            <div class="col-sm-8">
-                                <textarea name="" id="" cols="40" rows="3" v-model="list.description"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="AddNewList">Add</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="addBoardModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title pl-3"> Add List</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Add your new list here !</p>
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Board Title</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="list.name">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Board Description</label>
-                            <div class="col-sm-8">
-                                <textarea name="" cols="40" rows="3" v-model="list.description"></textarea>
-                            </div>
-                        </div>
-                        <!--                        <p v-if="addField.error" class="text-danger"></p>-->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="AddNewBoard">Add</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="shortcutModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title pl-3"> Shortcuts</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default">ENTER</span>
-                            </li>
-                            <li class="list-group-item">Save and Create New Task</li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default">TAB</span>
-                            </li>
-                            <li class="list-group-item">Make Sub Task</li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default">SHIFT</span>
-                                +
-                                <span class="badge-pill badge-default">TAB</span>
-                            </li>
-                            <li class="list-group-item">Make  Parent Task</li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default">CTRL</span>
-                                +
-                                <span class="badge-pill badge-default">C</span>
-                            </li>
-                            <li class="list-group-item">Copy Task</li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default">CTRL</span>
-                                +
-                                <span class="badge-pill badge-default">V</span>
-                            </li>
-                            <li class="list-group-item">Paste Task</li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default">CTRL</span>
-                                +
-                                <span class="badge-pill badge-default">X</span>
-                            </li>
-                            <li class="list-group-item">Cut Task</li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default">CTRL</span>
-                                +
-                                <span class="badge-pill badge-default">S</span>
-                            </li>
-                            <li class="list-group-item">Search</li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default">CTRL</span>
-                                +
-                                <span class="badge-pill badge-default">i</span>
-                            </li>
-                            <li class="list-group-item">Upload Image/File</li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default">CTRL</span>
-                                +
-                                <span class="badge-pill badge-default">U</span>
-                            </li>
-                            <li class="list-group-item">Assign User</li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default">Shift</span>
-                                +
-                                <span class="badge-pill badge-default">#</span>
-                            </li>
-                            <li class="list-group-item">Add Tag</li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default">Shift</span>
-                                +
-                                <span class="badge-pill badge-default">B</span>
-                            </li>
-                            <li class="list-group-item">Add Don't Forget Tag</li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default">CTRL</span>
-                                +
-                                <span class="badge-pill badge-default">D</span>
-                            </li>
-                            <li class="list-group-item">Delete Task</li>
-                        </ul>
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default"><i class="fa fa-caret-up"></i></span>
-                            </li>
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default"><i class="fa fa-caret-down"></i></span>
-                            </li>
-                            <li class="list-group-item">Move Task Up &amp; Down</li>
-                        </ul>
-
-                        <ul class="list-group list-group-horizontal multi-list-group" style="margin-left: 0px !important;">
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default"><i class="fa fa-caret-right"></i></span>
-                            </li>
-                            <li class="list-group-item">
-                                <span class="badge-pill badge-default"><i class="fa fa-caret-left"></i></span>
-                            </li>
-                            <li class="list-group-item">Open &amp; Close Task Details</li>
-                        </ul>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
-                            Close
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="addNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title pl-3"> Add Nav Item</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="navItem.title">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="col-sm-4">
-                                <label class="control-label float-right m-t-ng-8 txt_media1">Select Type</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <div class="iradio">
-                                    <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="list">
-                                        &nbsp; List view
-                                    </label>
-                                </div>
-                                <div class="iradio">
-                                    <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="board">
-                                        &nbsp; Board View
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="AddNavItem">Add</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="updateNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title pl-3"> Add Nav Item</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="navItem.title">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="updateNavItem">Update</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="modal fade" id="TagManage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -688,7 +274,7 @@
                         <div id="table" class="table-responsive">
                             <table data-v-095ab3dc="" class="table">
                                 <thead data-v-095ab3dc="">
-                                    <tr data-v-095ab3dc="">
+                                <tr data-v-095ab3dc="">
                                     <th>Tag Title</th>
                                     <th>Color</th>
                                     <th>Action</th>
@@ -697,13 +283,18 @@
                                 <tbody>
                                 <template v-for="tag in manageTag">
                                     <tr>
-                                        <td class="pt-3-half" v-if="tag.title === 'Dont Forget'" >{{tag.title}}</td>
-                                        <td class="pt-3-half" v-else contenteditable="true" @keyup="updateTagName($event,tag)" @keydown="newLineoff($event)">{{tag.title}}</td>
+                                        <td class="pt-3-half" v-if="tag.title === 'Dont Forget'">{{tag.title}}</td>
+                                        <td class="pt-3-half" v-else contenteditable="true"
+                                            @keyup="updateTagName($event,tag)" @keydown="newLineoff($event)">
+                                            {{tag.title}}
+                                        </td>
                                         <td class="pt-3-half">
-                                            <input type="color" :value="tag.color" @change="updateTagColor($event,tag)" style="cursor: pointer;background-color: #fff;border: none;">
+                                            <input type="color" :value="tag.color" @change="updateTagColor($event,tag)"
+                                                   style="cursor: pointer;background-color: #fff;border: none;">
                                         </td>
                                         <td>
-                                            <a href="javascript:void(0)" @click="DeleteTagFromModal(tag)" class="compltit-blue-a">
+                                            <a href="javascript:void(0)" @click="DeleteTagFromModal(tag)"
+                                               class="compltit-blue-a">
                                                 Delete
                                             </a>
                                         </td>
@@ -715,6 +306,41 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="updateListBoardModel" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Update {{list.name}} <span
+                            class="text-uppercase">[{{list.type}}]</span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add your new list here !</p>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Title</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="list.name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Description</label>
+                            <div class="col-sm-8">
+                                <textarea name="" id="" cols="40" rows="3" v-model="list.description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" @click="UpdateListOrBoard">Update</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
                         </button>
                     </div>
@@ -736,9 +362,18 @@
     import Datepicker from 'vuejs-datepicker';
     import VueTagsInput from '@johmun/vue-tags-input';
     import TaskDetails from "./TaskDetails";
+    import Navbar from "./ProjectNavbar/Navbar";
 
     export default {
-        components: {Tree: DraggableTree, thy: draggableHelper, switches, Datepicker, VueTagsInput,TaskDetails},
+        components: {
+            Tree: DraggableTree,
+            thy: draggableHelper,
+            switches,
+            Datepicker,
+            VueTagsInput,
+            TaskDetails,
+            Navbar
+        },
         data() {
             return {
                 disabledDates: {
@@ -769,34 +404,13 @@
                 list: {
                     name: null,
                     description: null,
-                    nav_id: null
-                },
-                navItem: {
-                    title: null,
-                    type: null,
-                    sort_id: null,
-                    project_id: null,
+                    nav_id: null,
+                    type: null
                 },
                 nav_id: null,
                 AllNavItems: null,
                 task_logs: null,
                 file: null,
-                tags1: [{
-                    id: 1,
-                    text: 'custom class',
-                    classes: 'custom-class',
-                }, {
-                    id: 1,
-                    text: 'duplicate',
-                }, {
-                    id: 1,
-                    text: 'duplicate',
-                }, {
-                    id: 1,
-                    text: 'Inline styled tag',
-                    style: 'background-color: #ff0000;',
-                }],
-                tags: [],
                 tag1: '',
                 manageTag: null,
             }
@@ -806,7 +420,6 @@
             this.projectId = this.$route.params.projectId;
             this.getProjects();
             this.getTaskList();
-            this.AllNavItem();
 
             $(document).ready(function () {
                 $('.searchList').hide();
@@ -1039,7 +652,7 @@
                     nav_id: data.nav_id,
                     parent_id: data.parent_id,
                     sort_id: data.sort_id,
-                    tags: "",
+                    tags: [],
                     text: ""
                 };
 
@@ -1296,7 +909,7 @@
                 var postData = {
                     id: obj.tag.id,
                 }
-                if(obj.tag.text !== 'Dont Forget'){
+                if (obj.tag.text !== 'Dont Forget') {
                     axios.post('/api/task-list/delete-by-tag-id', postData)
                         .then(response => response.data)
                         .then(response => {
@@ -1325,12 +938,12 @@
                     });
 
             },
-            updateTagColor(e, tag){
+            updateTagColor(e, tag) {
                 var color = e.target.value;
                 var _this = this;
                 var postData = {
                     id: tag.id,
-                    color : color,
+                    color: color,
                 }
                 axios.post('/api/task-list/update-tag', postData)
                     .then(response => response.data)
@@ -1346,13 +959,13 @@
                     });
 
             },
-            updateTagName(e, tag){
+            updateTagName(e, tag) {
                 var newTag = e.target.innerText;
-                if(e.which == 13){
+                if (e.which == 13) {
                     var _this = this;
                     var postData = {
                         id: tag.id,
-                        tag : newTag,
+                        tag: newTag,
                     }
                     axios.post('/api/task-list/update-tag', postData)
                         .then(response => response.data)
@@ -1366,15 +979,15 @@
                         });
                 }
             },
-            newLineoff(e){
-                if(e.which == 13){
+            newLineoff(e) {
+                if (e.which == 13) {
                     e.preventDefault();
                 }
             },
-            DeleteTagFromModal(tag){
+            DeleteTagFromModal(tag) {
                 var _this = this;
                 var postData = {
-                    title : tag.title,
+                    title: tag.title,
                 }
                 axios.post('/api/task-list/delete-tag', postData)
                     .then(response => response.data)
@@ -1389,6 +1002,7 @@
 
             },
 
+            //task operation/Action
             updateDescription() {
                 var _this = this;
                 var postData = {
@@ -1511,76 +1125,8 @@
                         console.log('Api for move down task not Working !!!')
                     });
             },
-            showModelForNavItem() {
-                $("#addNavItem").modal('show');
-                $('input[name="optionsRadios"]').iCheck({
-                    checkboxClass: 'icheckbox_square-blue',
-                    radioClass: 'iradio_square-blue',
-                    increaseArea: '20%' // optional
-                });
-            },
-            shortcutModel() {
-                $("#shortcutModel").modal('show');
-            },
-            AddNavItem() {
-                var _this = this;
-                _this.navItem.project_id = _this.projectId;
-                _this.navItem.type = $('input[name="optionsRadios"]:checked').val();
 
-                axios.post('/api/nav-item/add-new', _this.navItem)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.AllNavItem()
-                        $("#addNavItem").modal('hide');
-
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
-
-            },
-            AllNavItem() {
-                var _this = this;
-                axios.get('/api/nav-item/' + _this.projectId)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.AllNavItems = response.success;
-
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
-            },
-            updateNavbarModel(data) {
-                this.nav_id = data.id;
-                this.navItem.title = data.title;
-                this.navItem.type = data.type;
-                this.navItem.sort_id = data.sort_id;
-                this.navItem.nav_id = data.id;
-                this.navItem.project_id = data.project_id;
-
-                $("#updateNavItem").modal('show');
-                $('input[name="optionsRadios"]').iCheck({
-                    checkboxClass: 'icheckbox_square-blue',
-                    radioClass: 'iradio_square-blue',
-                    increaseArea: '20%' // optional
-                });
-
-            },
-            updateNavItem() {
-                var _this = this;
-                axios.post('/api/nav-item/update', _this.navItem)
-                    .then(response => response.data)
-                    .then(response => {
-                        console.log(response.success)
-                        _this.AllNavItem()
-                        $("#updateNavItem").modal('hide');
-
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
-            },
+            // get task list
             getTaskList() {
                 var _this = this;
                 var datePicker = new Date();
@@ -1598,7 +1144,9 @@
                     .then(response => {
                         this.tree4data = response.task_list;
                         this.multiple_list = response.multiple_list;
-                        console.log(this.tree4data)
+                        setTimeout(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        }, 1000)
                         if (response.task_list.length === 0) {
 
                             var date = Math.round(new Date().getTime() / 1000);
@@ -1631,53 +1179,43 @@
 
                     });
             },
-            addListModel(id) {
-                this.nav_id = id;
-                $("#addListModel").modal('show');
+
+            //collect data by child navbar component
+            showTask(data) {
+                this.list_id = data.list_id;
+                this.nav_id = data.nav_id;
+                this.list.name = data.title;
+                this.list.description = data.description;
+                this.list.type = data.type;
+                if (data.type === 'list') {
+                    this.getTaskList()
+                }
+
             },
-            addBoardModel(id) {
-                this.nav_id = id;
-                $("#addBoardModel").modal('show');
+            getNavbar(data) {
+                this.AllNavItems = data.AllNavItems;
+                console.log(this.AllNavItems)
             },
 
-            setListId(id, title, nav_id) {
-                this.list_id = id;
-                this.nav_id = nav_id;
-                this.getTaskList()
-                this.nav_id = nav_id;
+            UpdateListModel() {
+                $("#updateListBoardModel").modal('show');
             },
-            AddNewList() {
+            UpdateListOrBoard() {
+                var _this = this;
                 this.list.project_id = this.projectId;
                 this.list.nav_id = this.nav_id;
-                axios.post('/api/list-add', this.list)
+                this.list.id = this.list_id;
+                axios.post('/api/board-list-update', this.list)
                     .then(response => response.data)
                     .then(response => {
-                        this.multiple_list = response.multiple_list;
-                        this.AllNavItem()
-                        setTimeout(function () {
-                            $('#list' + response.id.id).click();
-                        }, 300)
-                        $("#addListModel").modal('hide');
+                        _this.AllNavItems = response.navItems.original.success;
+                        $("#updateListBoardModel").modal('hide');
                     })
                     .catch(error => {
                         console.log('Add list api not working!!')
                     });
             },
-            AddNewBoard() {
-                this.list.project_id = this.projectId;
-                this.list.nav_id = this.nav_id;
-                axios.post('/api/board-add', this.list)
-                    .then(response => response.data)
-                    .then(response => {
-                        this.multiple_list = response.multiple_board;
-                        console.log(response)
-                        this.AllNavItem()
-                        $("#addBoardModel").modal('hide');
-                    })
-                    .catch(error => {
-                        console.log('Add list api not working!!')
-                    });
-            },
+
 
             RemoveNewEmptyChildren(data) {
                 var children = data.children;
@@ -1876,10 +1414,10 @@
                 })
             },
 
-                showImage(data, image) {
-                    this.modalImg = image;
-                    $("#imageModal").modal();
-                },
+            showImage(data, image) {
+                this.modalImg = image;
+                $("#imageModal").modal();
+            },
 
         },
         directives: {

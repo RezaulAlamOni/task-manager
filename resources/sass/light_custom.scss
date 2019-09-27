@@ -1811,3 +1811,28 @@ a {
   float: left;
   margin: 5px;
 }
+
+.vdp-datepicker{
+  width: 70px;
+  float: left;
+}
+
+.due-details {
+  width: 70px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: inherit;
+  cursor: pointer;
+}
+.due-details :focus{
+  outline: none;
+}
+
+
+.details-title{
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: inherit;
+}

@@ -105,6 +105,9 @@ class MultipleBoardController extends Controller
         $id = $request->id;
         $parent = TaskBoard::find($id);
         $sortNo = TaskBoard::max('sort_id');
+        if(!$sortNo){
+            $sortNo = 0;
+        }
         $data = [
             'title' => '',
             'sort_id' => $sortNo+1,
@@ -124,12 +127,15 @@ class MultipleBoardController extends Controller
         return response()->json(['success' => false]);
     }
 
-    public function cardEdit(Request $request)
+    public function cardEdit($id,Request $request)
     {
-        $id = $request->cardId;
-        $data = [
-            'title' => $request->data,
-        ];
+        $data = [];
+        foreach ($request->all() as $key => $value) {
+            if($key == 'date'){
+                $value = date('Y-m-d',strtotime($value));
+            }
+            $data[$key] = $value;
+        }
         $child = TaskBoard::where('id', $id)->update($data);
         if($child){
             $datas = TaskBoard::find($id);

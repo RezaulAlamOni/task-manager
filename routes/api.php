@@ -6,7 +6,9 @@ Route::post('/project', 'ProjectController@store');
 Route::patch('/project/{id}', 'ProjectController@update');
 Route::post('/project/{id}', 'ProjectController@destroy');
 
+//List section
 Route::post('/list-add', 'MultipleListController@store');//add list under project
+Route::post('/board-list-update', 'MultipleListController@update');//Update list
 
 //task listmanagement
 Route::post('/add-task-task', 'TaskController@addNewTask');//add new node
@@ -45,5 +47,5 @@ Route::post('/board-add', 'MultipleBoardController@store'); //add list under pro
 Route::delete('/board-delete/{id}','MultipleBoardController@destroy'); //delete board
 
 Route::post('/card-add', 'MultipleBoardController@cardAdd');
-Route::post('/card-update', 'MultipleBoardController@cardEdit');
+Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');
 Route::delete('/card-delete/{id}','MultipleBoardController@cardDelete'); //delete card

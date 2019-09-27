@@ -370,6 +370,7 @@ class TaskController extends Controller
             $info['date'] = $task->date;
             $allTags = Tags::where('task_id',$task->id)->get();
             $tags = [];
+            $tagTooltip = '';
             if ($allTags->count() > 0){
                 foreach ($allTags as $key => $tag) {
                     $tags[$key]['id'] = $tag->id;
@@ -378,10 +379,12 @@ class TaskController extends Controller
                     $tags[$key]['classes'] = '';
                     $tags[$key]['style'] = 'background-color: '.$tag->color;
                     $tags[$key]['color'] = $tag->color;
+                    $tagTooltip .= '#'.$tag->title.' ';
                 }
             }
 
             $info['tags'] = $tags;
+            $info['tagTooltip'] = $tagTooltip;
             $info['description'] = $task->description;
             $info['files'] = $task->files;
             $info['users'] = User::select('id','name')->get()->toArray();

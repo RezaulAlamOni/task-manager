@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Multiple_board;
 use App\Multiple_list;
 use App\Project;
+use App\ProjectNavItems;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\DocBlock\Description;
 
 class MultipleListController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
 
     protected $actionLog;
+    protected $NavBar;
     public function __construct()
     {
         date_default_timezone_set('UTC');
         $this->actionLog =new ActionLogController;
+        $this->NavBar =new ProjectNavItemsController();
         $this->middleware('auth');
     }
 
@@ -29,22 +29,12 @@ class MultipleListController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $id = Multiple_list::create([
@@ -69,38 +59,32 @@ class MultipleListController extends Controller
         return response()->json(['multiple_list' => $multiple_list,'id'=>$id]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Multiple_list $multiple_list
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Multiple_list $multiple_list)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Multiple_list $multiple_list
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Multiple_list $multiple_list)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Multiple_list $multiple_list
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Multiple_list $multiple_list)
+    public function update(Request $request)
     {
-        //
+            $id = $request->id;
+            $title = $request->name;
+            $description = $request->description;
+        if ($request->type == 'list'){
+            Multiple_list::where('id',$id)->update(['list_title'=>$title,'description'=>$description,'updated_at'=>Carbon::now()]);
+        }else{
+            Multiple_board::where('id',$id)->update(['board_title'=>$title,'description'=>$description,'updated_at'=>Carbon::now()]);
+        }
+
+        $navBar = $this->NavBar->index($request->project_id);
+
+        return response()->json(['success'=>1,'navItems'=>$navBar]);
     }
 
     /**
