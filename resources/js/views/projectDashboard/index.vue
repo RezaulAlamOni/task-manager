@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="row page-titles">
+<!--            Navbar Component-->
             <Navbar :projectId="$route.params.projectId"
                     :AllNavItems="AllNavItems"
                     @getNavBars="getNavbar"
@@ -258,6 +259,7 @@
                     <p v-if="list.description != null" class="compltit-p">{{list.description}}</p>
                 </div>
             </div>
+            <!-- Board View Component -->
             <BoardView
                 :board_id="list_id"
                 :projectId="projectId"
@@ -423,7 +425,6 @@
                 tag: null,
                 projectId: null,
                 list_id: null,
-                projects: null,
                 newEmptyTaskID: null,
                 multiple_list: null,
                 list: {
@@ -443,7 +444,6 @@
         mounted() {
             let _this = this;
             this.projectId = this.$route.params.projectId;
-            this.getProjects();
             this.getTaskList();
 
             $(document).ready(function () {
@@ -568,16 +568,6 @@
             dropNode(node, targetTree, oldTree) {
             },
             dragNode(node, targetTree, oldTree) {
-            },
-            getProjects() {
-                axios.get('/api/project/' + this.projectId)
-                    .then(response => response.data)
-                    .then(response => {
-                        this.projects = response.project;
-                        $('#header-item').text(this.projects.name + ' / Task List')
-                    })
-                    .catch(error => {
-                    });
             },
             ChangeNode(index, new2, old) {
             },
@@ -1219,7 +1209,6 @@
             },
             getNavbar(data) {
                 this.AllNavItems = data.AllNavItems;
-                console.log(this.AllNavItems)
             },
 
             UpdateListModel() {
