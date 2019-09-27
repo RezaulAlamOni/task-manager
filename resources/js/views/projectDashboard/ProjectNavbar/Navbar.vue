@@ -22,7 +22,7 @@
                                         <span @click="setListId(nav_list,nav.id,nav_list.description,nav.type)"
                                               class="dropdown-item" :id="'list'+nav_list.id">
                                             <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>
-                                             <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>!
+                                             <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>
                                          </span>
 
                                     </span>
@@ -34,14 +34,14 @@
                                            v-if="nav.type === 'list'"
                                            class="dropdown-item">
                                             <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                            Create {{nav.title}}  >List
+                                            Create {{nav.title}} List
                                         </a>
 
                                         <a href="Javascript:void(0)" @click="addBoardModel(nav.id)"
                                            v-else-if="nav.type === 'board'"
                                            class="dropdown-item">
                                             <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                            Create {{nav.title}}>Board
+                                            Create {{nav.title}} Board
                                         </a>
 
 

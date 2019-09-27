@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div style="height: calc(100vh - 130px);">
         <div class="row page-titles">
-<!--            Navbar Component-->
+            <!-- Navbar Component-->
             <Navbar :projectId="$route.params.projectId"
                     :AllNavItems="AllNavItems"
                     @getNavBars="getNavbar"

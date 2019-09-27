@@ -401,8 +401,7 @@
 }
 
 .task_widthNormal {
-    width: calc(68% - 0px);
-    //width: calc(40% - 0px);
+    width: calc(40% - 0px);
     @include transition(all 0.4s linear);
     height: calc(100vh - 130px);
     overflow-x: hidden;
@@ -422,9 +421,7 @@
     padding: 20px;
 }
 
-
-
-    .detailsShow {
+.detailsShow {
         display: block;
         position: absolute;
         top: 0;
@@ -435,8 +432,7 @@
         box-shadow: 0 0 15px #EEE;
         border-left: 1px solid rgba(0,0,0,.12);
         border-right: none;
-        width: 32%;
-        //width: 60%;
+        width: 60%;
         max-width: 800px;
         z-index: 2;
         right: 0;
@@ -537,8 +533,7 @@
 .boardView{
     width: 100%;
     display: inline-block;
-    overflow: hidden;
-    height: calc(100vh - 130px);
+    height: 100%;
 }
 
 .searchList {
