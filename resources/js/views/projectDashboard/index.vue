@@ -223,7 +223,7 @@
                                         </a>
 
                                     </div>
-                                    <a class="subTask_plus li-opacity clickHide" @click="addEmptyChild(data)">
+                                    <a class="subTask_plus li-opacity clickHide" @click="addChild(data)">
                                         <i class="baseline-playlist_add icon-image-preview"></i>
                                     </a>
                                     <a class="task_plus li-opacity clickHide" @click="addNode(data)">
@@ -444,7 +444,7 @@
         mounted() {
             let _this = this;
             this.projectId = this.$route.params.projectId;
-            this.getTaskList();
+            // this.getTaskList();
 
             $(document).ready(function () {
                 $('.searchList').hide();
@@ -620,7 +620,8 @@
 
             },
 
-            addNode(data) {
+
+            addNodeStatic(data) {
                 let _this = this;
                 var text = data.text;
                 let postData = {
@@ -650,7 +651,7 @@
                     console.log('Empty text')
                 }
 
-            },
+            },//add static empty node
             addEmptyNode(data) {
                 let _this = this;
                 var children = data.parent.children;
@@ -722,6 +723,107 @@
                     $("#" + date).removeClass('input-hide');
                 }, 100)
             },
+            makeChildOld(data) {
+                var children = data.parent.children;
+                let _this = this;
+                let postData = {
+                    id: data.id,
+                    parent_id: data.parent_id,
+                    project_id: _this.projectId,
+                    list_id: _this.list_id,
+                    sort_id: data.sort_id,
+                    text: data.text,
+                    nav_id: _this.nav_id
+                };
+
+                if (data.text !== '') {
+                    axios.post('/api/task-list/task-make-child', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.newEmptyTaskID = response.success;
+                            _this.getTaskList()
+                            setTimeout(function () {
+                                $("#" + _this.newEmptyTaskID).click();
+                            }, 500)
+                        })
+                        .catch(error => {
+                            console.log('Api is task-make-child not Working !!!')
+                        });
+                } else {
+                    for (var i = 0; i < children.length; i++) {
+                        if (children[i].text == '') {
+                            children.splice(i, 1);
+                        }
+                    }
+                    _this.addEmptyChild(_this.reselectParentId)
+                }
+
+            },
+            unMakeChildOld(data) {
+
+                let _this = this;
+                let postData = {
+                    id: data.id,
+                    parent_id: data.parent_id,
+                    project_id: _this.projectId,
+                    list_id: _this.list_id,
+                    sort_id: data.sort_id,
+                    text: data.text
+                };
+                if (data.text !== '') {
+                    axios.post('/api/task-list/reverse-child', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.newEmptyTaskID = response.success;
+                            _this.getTaskList()
+                            setTimeout(function () {
+                                $("#" + _this.newEmptyTaskID).click();
+                            }, 500)
+                        })
+                        .catch(error => {
+                            console.log('Api is task-unmake-child not Working !!!')
+                        });
+                } else {
+                    var children = data.parent.children;
+                    for (var i = 0; i < children.length; i++) {
+                        if (children[i].text == '') {
+                            children.splice(i, 1);
+                        }
+                    }
+                    _this.addEmptyNode(_this.reselectParentId)
+                }
+
+            },
+
+            addNode(data) {
+                let _this = this;
+                var text = data.text;
+                let postData = {
+                    id: data.id,
+                    text: text,
+                    parent_id: data.parent_id,
+                    sort_id: data.sort_id,
+                    project_id: _this.projectId,
+                    list_id: _this.list_id,
+                    nav_id: _this.nav_id
+                };
+                console.log(postData)
+                axios.post('/api/task-list/add-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.newEmptyTaskID = response.success.id;
+                        _this.getTaskList()
+                        setTimeout(function () {
+                            $("#" + _this.newEmptyTaskID).click();
+                            $("#" + _this.newEmptyTaskID).focus();
+                            $("#" + _this.newEmptyTaskID).addClass('form-control');
+                            $("#" + _this.newEmptyTaskID).removeClass('input-hide');
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Api is not Working !!!')
+                    });
+            },
             addChild(data) {
                 let _this = this;
                 let postData = {
@@ -759,29 +861,18 @@
                     text: data.text,
                     nav_id: _this.nav_id
                 };
-
-                if (data.text !== '') {
-                    axios.post('/api/task-list/task-make-child', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.newEmptyTaskID = response.success;
-                            _this.getTaskList()
-                            setTimeout(function () {
-                                $("#" + _this.newEmptyTaskID).click();
-                            }, 500)
-                        })
-                        .catch(error => {
-                            console.log('Api is task-make-child not Working !!!')
-                        });
-                } else {
-                    for (var i = 0; i < children.length; i++) {
-                        if (children[i].text == '') {
-                            children.splice(i, 1);
-                        }
-                    }
-                    _this.addEmptyChild(_this.reselectParentId)
-                }
-
+                axios.post('/api/task-list/task-make-child', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.newEmptyTaskID = response.success;
+                        _this.getTaskList()
+                        setTimeout(function () {
+                            $("#" + _this.newEmptyTaskID).click();
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Api is task-make-child not Working !!!')
+                    });
             },
             unMakeChild(data) {
 
@@ -794,29 +885,18 @@
                     sort_id: data.sort_id,
                     text: data.text
                 };
-                if (data.text !== '') {
-                    axios.post('/api/task-list/reverse-child', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.newEmptyTaskID = response.success;
-                            _this.getTaskList()
-                            setTimeout(function () {
-                                $("#" + _this.newEmptyTaskID).click();
-                            }, 500)
-                        })
-                        .catch(error => {
-                            console.log('Api is task-unmake-child not Working !!!')
-                        });
-                } else {
-                    var children = data.parent.children;
-                    for (var i = 0; i < children.length; i++) {
-                        if (children[i].text == '') {
-                            children.splice(i, 1);
-                        }
-                    }
-                    _this.addEmptyNode(_this.reselectParentId)
-                }
-
+                axios.post('/api/task-list/reverse-child', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.newEmptyTaskID = response.success;
+                        _this.getTaskList()
+                        setTimeout(function () {
+                            $("#" + _this.newEmptyTaskID).click();
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Api is task-unmake-child not Working !!!')
+                    });
             },
             pastCopyAndCut(data) {
                 var _this = this;
@@ -1142,7 +1222,7 @@
             },
 
             // get task list
-            getTaskList() {
+            getTaskListWithDynamicEmptyNode() {
                 var _this = this;
                 var datePicker = new Date();
                 datePicker.setDate(datePicker.getDate() - 1);
@@ -1185,6 +1265,35 @@
                                 $("#" + date).addClass('form-control');
                                 $("#" + date).removeClass('input-hide');
                             }, 100)
+                        }
+                        setTimeout(function () {
+                            $('.delete-icon').hide();
+                        }, 500)
+                    })
+                    .catch(error => {
+
+                    });
+            },
+
+            getTaskList() {
+                let data = {
+                    id: this.projectId,
+                    list_id: this.list_id,
+                    nav_id: this.nav_id
+                };
+                axios.post('/api/task-list', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        this.treeList = response.task_list;
+                        this.multiple_list = response.multiple_list;
+                        if (this.treeList.length === 1 && this.treeList[0].text === '') {
+                            let id = this.treeList[0].id
+                            setTimeout(function () {
+                                $("#" + id).click();
+                                $("#" + id).focus();
+                                $("#" + id).addClass('form-control');
+                                $("#" + id).removeClass('input-hide');
+                            }, 300)
                         }
                         setTimeout(function () {
                             $('.delete-icon').hide();
