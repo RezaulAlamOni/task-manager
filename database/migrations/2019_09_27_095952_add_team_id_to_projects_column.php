@@ -14,7 +14,7 @@ class AddTeamIdToProjectsColumn extends Migration
     public function up()
     {
         Schema::table('projects', function (Blueprint $table) {
-            //
+            $table->integer('team_id')->after('id');
         });
     }
 
@@ -26,7 +26,7 @@ class AddTeamIdToProjectsColumn extends Migration
     public function down()
     {
         Schema::table('projects', function (Blueprint $table) {
-            //
+            $table->dropColumn('team_id');
         });
     }
 }
