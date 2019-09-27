@@ -360,6 +360,9 @@
                                                         <div class="container-fluid">
                                                             <vue-tags-input
                                                                 :allow-edit-tags="true"
+                                                                 @tags-changed="newTags => (changeTAg(newTags,card))"
+                                                                 :tags="tag1"
+                                                                 v-model="tag"
                                                             />
                                                                 <div class="row">
                                                                     <div class="col-12">
@@ -870,6 +873,7 @@
         data() {
             return {
                 id: 0,
+                tags: [],
                 addField: {
                     name: null,
                     color: null,
@@ -994,7 +998,8 @@
                     showOnTop: true
                 },
                 updateIndex: null,
-                tag: null,
+                tag: '',
+                tag1: [],
                 selectedExistedTask : [],
                 projectId : null,
                 multiple_list : null,
@@ -1318,11 +1323,11 @@
                 },100);
             },
             updateColumn() {
-                console.log(this.cards[this.updateIndex])
+                // console.log(this.editField)
                 if (!this.editField.name || this.editField.name === '') {
                     this.editField.error = 'Name is required!';
                 } else {
-                    let data = this.cards[this.updateIndex];
+                    let data = this.editField;//this.cards[this.updateIndex];
                     $("#EditModal").modal('hide');
                     axios.post('/api/board-modify',data)
                     .then(response => response.data)
@@ -1400,7 +1405,7 @@
             },
             addCard(index,id) {
                 let _this = this;
-                axios.post('/api/card-add/',{'id': id})
+                axios.post('/api/card-add',{'id': id})
                 .then(response => response.data)
                 .then(response => {
                     if(response.success == true){
@@ -1524,6 +1529,40 @@
     
                     });
                 }, 300)
+            },
+            generateColor() {
+                var myColor = '#000000';
+                myColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16)
+                return myColor;
+            },
+            changeTAg(tags, card) {
+                // console.log(card)
+                var _this = this;
+                var old = this.tags.length;
+                var newl = tags.length;
+
+                if (newl > old) {
+                    this.tags = tags;
+
+                    var color = (this.tags[newl - 1].text === 'Dont Forget') ? '#ff0000' : _this.generateColor();
+                    var postData = {
+                        id: card.cardId,
+                        tags: _this.tags[newl - 1].text,
+                        color: color,
+                        type: 'board',
+                    }
+                    axios.post('/api/task-list/add-tag', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            console.log(response.success)
+                            _this.getTaskList()
+                            _this.tag = null
+                        })
+                        .catch(error => {
+                            console.log('Api for move down task not Working !!!')
+                        });
+
+                }
             }
         },
         directives: {
