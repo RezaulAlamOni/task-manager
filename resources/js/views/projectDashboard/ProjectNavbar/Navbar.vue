@@ -1,6 +1,6 @@
 <template>
 
-    <div class="col-md-12 col-12 align-self-center">
+    <div class="align-self-center">
         <nav class="navbar-expand-md navbar-spark">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse show">

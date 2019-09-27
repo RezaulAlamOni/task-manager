@@ -10,7 +10,7 @@
                           :indent="2"
                           :space="0">
                         <div :class="{eachItemRow: true}" slot-scope="{data, _id,store}"
-                             style="font-size: 12px"
+                             style="font-size: 16px"
                              @click="makeItClick($event, data)" v-on:dblclick="showLog" :id="data._id">
                             <template v-if="!data.isDragPlaceHolder" v-html="data.html">
 
@@ -349,7 +349,7 @@
         },
         created() {
             let _this = this;
-            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,ctrl+d,ctrl+b,ctrl+s,ctrl+i,ctrl+shift+3', function (event, handler) {
+            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3', function (event, handler) {
                 event.preventDefault()
                 switch (handler.key) {
                     case "enter" :
@@ -395,7 +395,7 @@
                     case "ctrl+v":
                         _this.pastCopyAndCut(_this.selectedData);
                         break;
-                    case "ctrl+d":
+                    case "delete":
                         _this.RemoveNodeAndChildren(_this.selectedData);
                         break;
                     case "ctrl+u":
@@ -410,7 +410,7 @@
                     case "ctrl+i":
                         _this.addAttachment(_this.selectedData);
                         break;
-                    case "ctrl+shift+3":
+                    case "shift+3":
                         $('#tag-' + _this.selectedData._id).click();
                         console.log(_this.selectedData);
                         break;

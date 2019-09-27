@@ -22,14 +22,11 @@
 }
 
 .he-tree {
-    border: 1px solid #ccc;
     padding: 20px;
 }
 
 .tree-node-inner {
-    /*padding: 5px;*/
-    border: 1px solid #cccccc;
-    cursor: pointer;
+
 }
 
 .draggable-placeholder-inner {
@@ -54,7 +51,6 @@
 
 .tree4 .tree-node-inner {
     border: none;
-    border-bottom: 1px solid #ccc;
     padding: 5px 10px;
     backgroud: #ccc;
 }
@@ -70,7 +66,6 @@
 
 
 #tree_view_list {
-    background: #ffffff;
     padding: 0px;
     min-height: 900px;
 
@@ -249,9 +244,7 @@
     .tree-node {
         position: relative;
         padding-left: 50px;
-        //border: 1px solid #dfdfdf;
         .tree-node-inner {
-            border: 1px solid #f9f9f9;
             margin-bottom: -1px;
             padding: 0;
             @include transition(all 0.2s linear);
@@ -266,6 +259,10 @@
 
             .eachItemRow {
                 padding: 7px 15px;
+                margin: 5px 0;
+                border: 1px solid #f2f2f2;
+                border-radius: 4px;
+                background-color: #fff;
 
                 &.clicked {
                     background: #99c3ff;
@@ -378,13 +375,14 @@
     .inp {
         padding: 0px !important;
         width: 70%;
+        font-size: 16px;
     }
 
     .form-control {
         padding: 0px 0.75rem !important;
         min-height: 0px !important;
         width: 96%;
-        font-size: 13px;
+        font-size: 16px;
     }
 
 
@@ -394,8 +392,6 @@
     width: 100%;
     @include transition(all 0.4s linear);
     height: calc(100vh - 130px);
-    overflow-x: hidden;
-    overflow-y: auto;
     display: inline-block;
 
 }
@@ -404,8 +400,6 @@
     width: calc(40% - 0px);
     @include transition(all 0.4s linear);
     height: calc(100vh - 130px);
-    overflow-x: hidden;
-    overflow-y: auto;
     display: inline-block;
 
 }
@@ -520,10 +514,9 @@
 }
 
 .TaskListAndDetails {
+    background-color: #f9f9f9;
     width: 100%;
     display: inline-block;
-    overflow: hidden;
-    height: calc(100vh - 130px);
     .add-list{
         padding-left: 123px;
         display: inline-block;
@@ -534,6 +527,12 @@
     width: 100%;
     display: inline-block;
     height: 100%;
+}
+#col10{
+    height: calc(100vh - 218px)
+}
+.wrapper{
+    min-height: calc(100vh - 55px) !important;
 }
 
 .searchList {
@@ -644,9 +643,6 @@
 
 .log-data{
     transition: all 0.4s linear;
-    height: calc(100vh - 220px);
-    overflow-x: hidden;
-    overflow-y: auto;
     display: inline-block;
 }
 .image-auto{

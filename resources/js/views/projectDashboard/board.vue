@@ -1,5 +1,5 @@
 <template>
-    <div class="card pt-0 pr-0">
+    <div>
 
         <div id="board_view_list">
             <div class="col-12" id="col10" style="border: none">
@@ -393,16 +393,9 @@
             </div>
         </div>
 
-
     </div>
 
 </template>
-<style>
-    .card{
-        padding-top: 0 !important;
-        margin-top: 0 !important;
-    }
-</style>
 <script>
     import flatPickr from 'vue-flatpickr-component';
     import 'flatpickr/dist/flatpickr.css';

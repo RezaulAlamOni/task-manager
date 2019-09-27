@@ -1,6 +1,6 @@
 <template>
-    <div style="height: calc(100vh - 130px);">
-        <div class="row page-titles">
+    <div>
+        <div class="page-titles">
             <!-- Navbar Component-->
             <Navbar :projectId="$route.params.projectId"
                     :AllNavItems="AllNavItems"
@@ -15,32 +15,30 @@
                     <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
                 </div>
             </div>
+        </div>
 
+        <div v-if="AllNavItems === null" class="col-md-8 text-center pt-5">
+            <h2 style="color: #d1a894">Create Task View.</h2>
         </div>
-        <div>
-            <div v-if="AllNavItems === null" class="col-md-8 text-center pt-5">
-                <h2 style="color: #d1a894">Create Task View.</h2>
-            </div>
-            <div v-else-if="AllNavItems !== null && list.type === null" class="col-md-8 text-center pt-5">
-                <h2 style="color: #d1a894">Select Task View.</h2>
+        <div v-else-if="AllNavItems !== null && list.type === null" class="col-md-8 text-center pt-5">
+            <h2 style="color: #d1a894">Select Task View.</h2>
+        </div>
+
+        <div class="container">
+            <div class="col-12">
+                <h2 class="p-t-20">
+                    {{list.name}}
+                    <button type="submit" class="btn btn-primary pull-right" @click="UpdateListModel">
+                        EDIT {{list.name}}
+                    </button>
+                </h2>
+                <p v-if="list.description != null" class="compltit-p">{{list.description}}</p>
             </div>
         </div>
-<!--        //tree view component section-->
-        <div class="TaskListAndDetails" v-if="list.type === 'list'">
+        <!--        //tree view component section-->
+        <div class="TaskListAndDetails container-fluid" v-if="list.type === 'list'">
             <div class="task_width" id="task_width" @click="HideDetails">
-                <div id="tree_view_list">
-                    <div class="col-11" id="col10" style="border: none">
-                        <div class="offset-1" >
-                            <div class="container-header pl-5 mr-5">
-                                <h2>
-                                    {{list.name}}
-                                    <button type="submit" class="btn btn-primary pull-right" @click="UpdateListModel">
-                                        EDIT {{list.name}}
-                                    </button>
-                                </h2>
-                                <p v-if="list.description != null" class="compltit-p">{{list.description}}</p>
-                            </div>
-                        </div>
+                <div id="tree_view_list" class="col-11">
 
                         <Tree class="tree4" :data="treeList" draggable="draggable" cross-tree="cross-tree"
                               v-if="list.type === 'list'"
@@ -95,7 +93,7 @@
                                     </a>
 
 
-                                    <a class="tag-icon hide-item-res" >
+                                    <a class="tag-icon hide-item-res">
                                         <i v-if="data.tags.length > 0"
                                            class="dropdown-toggle-split"
                                            data-toggle="dropdown">
@@ -107,8 +105,8 @@
                                                           v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'},{'float' : 'left'}]">
                                                         {{(data.tags.length > 2 ) ? tag.text.substring(0,3) : tag.text.substring(0,3) }}
                                                     </span>
-                                                        <span class="badge badge-warning" v-else
-                                                              v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]">
+                                                    <span class="badge badge-warning" v-else
+                                                          v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]">
                                                         ::
                                                     </span>
                                                 </template>
@@ -116,7 +114,6 @@
 
 
                                         </i>
-
 
 
                                         <i v-else :id="'tag-'+data._id"
@@ -129,11 +126,11 @@
                                             <diV class="collapse show switchToggle" style="">
                                                 <div class="container-fluid">
                                                     <vue-tags-input
-                                                        v-model="tag1"
-                                                        :tags="data.tags"
-                                                        :allow-edit-tags="true"
-                                                        @tags-changed="newTags => (changeTAg(newTags))"
-                                                        @before-deleting-tag="DeleteTag"
+                                                            v-model="tag1"
+                                                            :tags="data.tags"
+                                                            :allow-edit-tags="true"
+                                                            @tags-changed="newTags => (changeTAg(newTags))"
+                                                            @before-deleting-tag="DeleteTag"
                                                     />
                                                     <div class="row">
                                                         <div class="col-12">
@@ -141,7 +138,8 @@
                                                                 <li class="badge-pill tags"
                                                                     v-if="tag.text !== 'Dont Forget'"
                                                                     v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                    {{(tag.text !== undefined) ?tag.text.substring(0,12) : ''}}
+                                                                    {{(tag.text !== undefined) ?tag.text.substring(0,12)
+                                                                    : ''}}
                                                                 </li>
                                                             </template>
                                                             <li class="badge-pill tags" style="background: #FB8678"
@@ -169,20 +167,20 @@
                                                data-toggle></i>
                                         </a>
                                         <datepicker
-                                            :disabled-dates="disabledDates"
-                                            input-class="dateCal"
-                                            v-model="data.date"
-                                            format='dd MMM'
-                                            @selected="updateDate"
-                                            calendar-button-icon='<i class="outline-event icon-image-preview"></i>'>
+                                                :disabled-dates="disabledDates"
+                                                input-class="dateCal"
+                                                v-model="data.date"
+                                                format='dd MMM'
+                                                @selected="updateDate"
+                                                calendar-button-icon='<i class="outline-event icon-image-preview"></i>'>
                                         </datepicker>
 
 
                                     </div>
                                     <div>
                                         <a class="user "><i
-                                            class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
-                                            data-toggle="dropdown"></i>
+                                                class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
+                                                data-toggle="dropdown"></i>
                                             <div class="dropdown-menu dropdown-menu-right">
 
                                                 <diV class="collapse show switchToggle">
@@ -234,36 +232,24 @@
                             </div>
                         </Tree>
 
-                    </div>
                 </div>
             </div>
             <div class="details" id="details">
                 <TaskDetails
-                    :selectedData="selectedData"
-                    :task_logs="task_logs"
-                    @textArea="ShowTextArea">
+                        :selectedData="selectedData"
+                        :task_logs="task_logs"
+                        @textArea="ShowTextArea">
                 </TaskDetails>
             </div>
         </div>
 
-<!--        //board component section-->
+        <!--        //board component section-->
         <div class="boardView" v-if="list.type === 'board'">
-            <div class="offset-1 col-9" >
-                <div class="container-header pl-5 mr-5">
-                    <h2>
-                        {{list.name}}
-                        <button type="submit" class="btn btn-primary pull-right" @click="UpdateListModel">
-                            EDIT {{list.name}}
-                        </button>
-                    </h2>
-                    <p v-if="list.description != null" class="compltit-p">{{list.description}}</p>
-                </div>
-            </div>
             <!-- Board View Component -->
             <BoardView
-                :board_id="list_id"
-                :projectId="projectId"
-                :nav_id="nav_id">
+                    :board_id="list_id"
+                    :projectId="projectId"
+                    :nav_id="nav_id">
             </BoardView>
 
         </div>
@@ -345,7 +331,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title pl-3"> Update {{list.name}} <span
-                            class="text-uppercase">[{{list.type}}]</span></h5>
+                                class="text-uppercase">[{{list.type}}]</span></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -399,7 +385,7 @@
             Datepicker,
             VueTagsInput,
             TaskDetails,
-            Navbar,BoardView
+            Navbar, BoardView
         },
         data() {
             return {
@@ -460,7 +446,7 @@
         },
         created() {
             let _this = this;
-            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,ctrl+d,ctrl+b,ctrl+s,ctrl+i,ctrl+shift+3', function (event, handler) {
+            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3', function (event, handler) {
                 event.preventDefault()
                 switch (handler.key) {
                     case "enter" :
@@ -506,7 +492,7 @@
                     case "ctrl+v":
                         _this.pastCopyAndCut(_this.selectedData);
                         break;
-                    case "ctrl+d":
+                    case "delete":
                         _this.RemoveNodeAndChildren(_this.selectedData);
                         break;
                     case "ctrl+u":
@@ -521,7 +507,7 @@
                     case "ctrl+i":
                         _this.addAttachment(_this.selectedData);
                         break;
-                    case "ctrl+shift+3":
+                    case "shift+3":
                         $('#tag-' + _this.selectedData._id).click();
                         console.log(_this.selectedData);
                         break;
@@ -536,9 +522,7 @@
                 var curHeight = text.scrollHeight;
                 if (curHeight > maxHeight) {
                     curHeight = maxHeight;
-                    text.style.overflow = 'auto';
                 } else {
-                    text.style.overflow = 'hidden';
                 }
                 if (curHeight < height) {
                     curHeight = height;
@@ -552,7 +536,6 @@
                     var target = locInputs[i];
                     var height = options.height || '100px';
                     var maxHeight = options.maxHeight || '500px';
-                    target.style.overflow = 'hidden';
                     target.style.resize = 'none';
                     target.style.height = height + 'px';
                     target.style.maxHeight = maxHeight + 'px';
@@ -1190,20 +1173,20 @@
             },
             RemoveNodeAndChildren(data) {
                 var _this = this;
-                if (confirm('Are You sure you want to delete this task !! ?')) {
-                    var postData = {
-                        id: data.id,
-                        text: data.text
-                    }
-                    axios.post('/api/task-list/delete-task', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.getTaskList()
-                        })
-                        .catch(error => {
-                            console.log('Api for delete task not Working !!!')
-                        });
+
+                var postData = {
+                    id: data.id,
+                    text: data.text
                 }
+                axios.post('/api/task-list/delete-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getTaskList()
+                    })
+                    .catch(error => {
+                        console.log('Api for delete task not Working !!!')
+                    });
+
             },
             showLog() {
                 var _this = this;
@@ -1485,9 +1468,6 @@
                     $('#task_width').addClass('task_widthNormal');
                     $('#details').removeClass('details');
                     $('#details').addClass('detailsShow');
-                    $('#col10').removeClass('col-10');
-                    $('#col10').addClass('col-12');
-                    $('#col10').removeClass('offset-2');
                 }
             },
             HideDetails() {
@@ -1495,9 +1475,6 @@
                 $('#task_width').removeClass('task_widthNormal');
                 $('#details').addClass('details');
                 $('#details').removeClass('detailsShow');
-                $('#col10').removeClass('col-12');
-                $('#col10').addClass('col-10');
-                $('#col10').addClass('offset-2');
             },
             ShowTextArea(data) {
                 var _this = this;
