@@ -563,7 +563,6 @@
         },
         mounted() {
             $('#header-item').text('Project  / Task Board')
-            this.projectId = this.$route.params.projectId;
             $(document).ready(function () {
                 $(function () {
                     $('[data-toggle="popover"]').popover()

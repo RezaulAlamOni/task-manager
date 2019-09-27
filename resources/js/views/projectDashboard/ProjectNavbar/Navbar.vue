@@ -22,19 +22,7 @@
                                         <span @click="setListId(nav_list,nav.id,nav_list.description,nav.type)"
                                               class="dropdown-item" :id="'list'+nav_list.id">
                                             <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>
-                                            <!-- <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</!-->
-
-                                            <!--                                            <router-link class="nav-link drop-item" v-if="nav.type === 'list'"-->
-                                            <!--                                                         :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{nav_list.list_title}}<i-->
-                                            <!--                                                class="i-btn x20 task-complete icon-circle-o"></i>-->
-                                            <!--                                            </router-link>-->
-
-                                                                                       <router-link class="nav-link drop-item" v-else
-                                                                                                    :to="{ name: 'project-board', params: { projectId: projectId }}">{{nav_list.board_title}}<i
-                                                                                           class="i-btn x20 task-complete icon-circle-o"></i>
-                                                                                       </router-link>
-
-
+                                             <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>!
                                          </span>
 
                                     </span>
