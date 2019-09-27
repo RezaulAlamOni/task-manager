@@ -9,7 +9,7 @@ class Project extends Model
     protected $table = 'projects';
 
     protected $fillable = [
-        'name', 'description' , 'created_by', 'updated_by'
+        'team_id','name', 'description' , 'created_by', 'updated_by'
     ];
 
     public function multiple_list(){

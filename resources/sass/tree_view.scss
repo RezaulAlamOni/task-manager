@@ -538,7 +538,14 @@
     width: 100%;
     display: inline-block;
     overflow: hidden;
-    height: calc(100vh - 130px);
+    height: calc(100vh - 104px);
+}
+
+#col10{
+    height: calc(100vh - 218px)
+}
+.wrapper{
+    min-height: calc(100vh - 55px) !important;
 }
 
 .searchList {
