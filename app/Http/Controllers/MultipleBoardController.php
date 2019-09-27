@@ -56,6 +56,7 @@ class MultipleBoardController extends Controller
     {
         // return $request->all();
         $sortNo = TaskBoard::max('sort_id');
+
         $data = TaskBoard::create([
             'multiple_board_id' => $request->multiple_board_id,
             'nav_id' => $request->nav_id,
@@ -66,6 +67,7 @@ class MultipleBoardController extends Controller
             'hidden' => 0,
             'sort_id' => $sortNo+1,
             'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
             'date' => Carbon::today(),
             'created_at' => Carbon::today(),
         ]);
@@ -118,6 +120,7 @@ class MultipleBoardController extends Controller
             'hidden' =>  0,
             'date' =>  Carbon::now(),
             'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
             'created_at' => Carbon::now()
         ];
         $child = TaskBoard::create($data);

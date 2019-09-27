@@ -27,8 +27,8 @@
                                             </span>
                                             <div class="dropdown-menu">
                                                 <diV class="collapse show switchToggle">
-                                                    <a class="dropdown-item" style="cursor:pointer;" href="#" @click="addExistingTask(index)">Add existing tasks</a>
-                                                    <a class="dropdown-item" style="cursor:pointer;"
+                                                    <a class="dropdown-item" href="javascript:void(0)" @click="addExistingTask(index)">Add existing tasks</a>
+                                                    <a class="dropdown-item" href="javascript:void(0)"
                                                        @click="addCard(index,column.boardId)">Create new tasks</a>
                                                 </diV>
                                             </div>
@@ -1224,8 +1224,10 @@
                 _this.growInit(option);
             },
             addCard(index,id) {
+
+                console.log(index,id)
                 let _this = this;
-                axios.post('/api/card-add/',{'id': id})
+                axios.post('/api/card-add',{'id': id})
                 .then(response => response.data)
                 .then(response => {
                     if(response.success == true){
