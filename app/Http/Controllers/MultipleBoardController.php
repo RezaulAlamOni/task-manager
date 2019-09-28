@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Multiple_board;
 use App\Multiple_list;
 use App\TaskBoard;
+use App\Tags;
 use App\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,9 +36,28 @@ class MultipleBoardController extends Controller
             $boards[$key]['hidden'] = 0;
             $boards[$key]['progress'] = $value['progress'];
             $boards[$key]['color'] = $value['color'];
-            $tasks = TaskBoard::where('parent_id',$value->id)->get();
+            $tasks = TaskBoard::with('tags')->where('parent_id',$value->id)->get();
+            $tags = [];
+            $tagTooltip = '';
             if(count($tasks) > 0){
                 foreach ($tasks as $keys => $values) {
+                    $allTags = Tags::where('board_id',$values['id'])->get();
+
+                    if ($allTags->count() > 0){
+                        foreach ($allTags as $tagkey => $tag) {
+                            $tags[$tagkey]['id'] = $tag->id;
+                            $tags[$tagkey]['board_id'] = $tag->board_id;
+                            $tags[$tagkey]['text'] = $tag->title;
+                            $tags[$tagkey]['classes'] = '';
+                            $tags[$tagkey]['style'] = 'background-color: '.$tag->color;
+                            $tags[$tagkey]['color'] = $tag->color;
+                            $tagTooltip .= '#'.$tag->title.' ';
+                        }
+                        // return $tagTooltip;
+                    }
+                    $boards[$key]['task'][$keys]['tags'] = $tags;
+                    $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
+
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
                     $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($values['date']));
@@ -56,6 +76,7 @@ class MultipleBoardController extends Controller
     {
         // return $request->all();
         $sortNo = TaskBoard::max('sort_id');
+
         $data = TaskBoard::create([
             'multiple_board_id' => $request->multiple_board_id,
             'nav_id' => $request->nav_id,
@@ -66,6 +87,7 @@ class MultipleBoardController extends Controller
             'hidden' => 0,
             'sort_id' => $sortNo+1,
             'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
             'date' => Carbon::today(),
             'created_at' => Carbon::today(),
         ]);
@@ -118,6 +140,7 @@ class MultipleBoardController extends Controller
             'hidden' =>  0,
             'date' =>  Carbon::now(),
             'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
             'created_at' => Carbon::now()
         ];
         $child = TaskBoard::create($data);
@@ -153,12 +176,12 @@ class MultipleBoardController extends Controller
     {
         // return $request->all();
         $data = [
-            'title' => $request->column,
+            'title' => $request->name,
             'color' => $request->color,
             'progress' => $request->progress
         ];
-        if($request->id || $request->id != ''){
-            $update = TaskBoard::where('id', $request->id)->update($data);
+        if($request->boardId || $request->boardId != ''){
+            $update = TaskBoard::where('id', $request->boardId)->update($data);
             if($update){
                 return response()->json(['success' => true, 'data' => $update]);
             }

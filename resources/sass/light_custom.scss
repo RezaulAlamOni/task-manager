@@ -21,13 +21,13 @@ Created by: Jyostna Designs
 /*****  2.RESET STYLES  *****/
 
 html {
-  background             : none repeat scroll 0 0 #FCFCFC;
-  overflow-x             : hidden;
+  background             : none repeat scroll 0 0 #f9f9f9;
   -webkit-font-smoothing : antialiased;
   -webkit-transition     : all .25s ease-out;
   -moz-transition        : all .25s ease-out;
   transition             : all .25s ease-out;
   font-size              : small;
+  height: 100%;
 }
 body {
   //background             : none repeat scroll 0 0 #FCFCFC;
@@ -164,7 +164,6 @@ body  .header .logo .icon {
   position           : fixed;
   top                : 0;
   bottom             : 0;
-  overflow-y         : auto;
   right              : -270px;
   box-shadow         : 0 0 15px #CCC;
   background         : #FAFAFA;
@@ -1123,9 +1122,7 @@ div.uploader {
 .dataTables_length {
   margin-top : 10px;
 }
-.table-responsive {
-  overflow-y : hidden;
-}
+
 //dimple chart
 .chartWindow {
   border-radius : 5px;
@@ -1451,9 +1448,7 @@ body.fixed-top  .header {
   height:40px;
   width:40px;
 }
-#spark-app{
-  overflow-x:hidden;
-}
+
 
 @media (max-width: 767px){
 .navbar-nav .open .dropdown-menu {
@@ -1727,7 +1722,7 @@ a {
 .compltit-p {
   color: #7d7d7d;
   font-size: 18px;
-  margin: 40px 45px;
+  margin: 22px 13px;
 }
 
 .card .card-header {
@@ -1810,6 +1805,7 @@ a {
   masrgin-left: 1px;
   float: left;
   margin: 5px;
+  cursor: pointer;
 }
 
 .vdp-datepicker{
@@ -1835,4 +1831,24 @@ a {
   font-weight: 500;
   line-height: 1.2;
   color: inherit;
+}
+
+//Margins//
+
+.m-t-10{
+  margin-top:10px;
+}
+
+.m-t-20{
+  margin-top:20px;
+}
+
+//padding//
+
+.p-t-10{
+  margin-top:10px;
+}
+
+.p-t-20{
+  margin-top:20px;
 }

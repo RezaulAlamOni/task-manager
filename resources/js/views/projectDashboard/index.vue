@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div class="row page-titles">
+        <div class="page-titles">
+            <!-- Navbar Component-->
             <Navbar :projectId="$route.params.projectId"
                     :AllNavItems="AllNavItems"
                     @getNavBars="getNavbar"
@@ -14,31 +15,32 @@
                     <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
                 </div>
             </div>
-
         </div>
-        <div class="TaskListAndDetails">
-            <div v-if="AllNavItems === null" class="col-md-8 text-center pt-5">
-                <h2 style="color: #d1a894">Create Task View.</h2>
-            </div>
-            <div v-else-if="AllNavItems !== null && list.type === null" class="col-md-8 text-center pt-5">
-                <h2 style="color: #d1a894">Select Task View.</h2>
-            </div>
-            <div class="task_width" id="task_width" @click="HideDetails">
-                <div id="tree_view_list">
-                    <div class="col-11" id="col10" style="border: none">
-                        <div class="offset-1" v-if="tree4data.length !== 0 || list.type === 'board'">
-                            <div class="container-header pl-5 mr-5">
-                                <h2>
-                                    {{list.name}}
-                                    <button type="submit" class="btn btn-primary pull-right" @click="UpdateListModel">
-                                        EDIT {{list.name}}
-                                    </button>
-                                </h2>
-                                <p v-if="list.description != null" class="compltit-p">{{list.description}}</p>
-                            </div>
-                        </div>
 
-                        <Tree class="tree4" :data="tree4data" draggable="draggable" cross-tree="cross-tree"
+        <div v-if="AllNavItems === null" class="col-md-8 text-center pt-5">
+            <h2 style="color: #d1a894">Create Task View.</h2>
+        </div>
+        <div v-else-if="AllNavItems !== null && list.type === null" class="col-md-8 text-center pt-5">
+            <h2 style="color: #d1a894">Select Task View.</h2>
+        </div>
+
+        <div class="container">
+            <div class="col-12">
+                <h2 class="p-t-20">
+                    {{list.name}}
+                    <button type="submit" class="btn btn-primary pull-right" @click="UpdateListModel">
+                        EDIT {{list.name}}
+                    </button>
+                </h2>
+                <p v-if="list.description != null" class="compltit-p">{{list.description}}</p>
+            </div>
+        </div>
+        <!--        //tree view component section-->
+        <div class="TaskListAndDetails container-fluid" v-if="list.type === 'list'">
+            <div class="task_width" id="task_width" @click="HideDetails">
+                <div id="tree_view_list" class="col-11">
+
+                        <Tree class="tree4" :data="treeList" draggable="draggable" cross-tree="cross-tree"
                               v-if="list.type === 'list'"
                               @drop="dropNode"
                               @change="ChangeNode"
@@ -91,7 +93,7 @@
                                     </a>
 
 
-                                    <a class="tag-icon hide-item-res" >
+                                    <a class="tag-icon hide-item-res">
                                         <i v-if="data.tags.length > 0"
                                            class="dropdown-toggle-split"
                                            data-toggle="dropdown">
@@ -103,8 +105,8 @@
                                                           v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'},{'float' : 'left'}]">
                                                         {{(data.tags.length > 2 ) ? tag.text.substring(0,3) : tag.text.substring(0,3) }}
                                                     </span>
-                                                        <span class="badge badge-warning" v-else
-                                                              v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]">
+                                                    <span class="badge badge-warning" v-else
+                                                          v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]">
                                                         ::
                                                     </span>
                                                 </template>
@@ -112,7 +114,6 @@
 
 
                                         </i>
-
 
 
                                         <i v-else :id="'tag-'+data._id"
@@ -125,11 +126,11 @@
                                             <diV class="collapse show switchToggle" style="">
                                                 <div class="container-fluid">
                                                     <vue-tags-input
-                                                        v-model="tag1"
-                                                        :tags="data.tags"
-                                                        :allow-edit-tags="true"
-                                                        @tags-changed="newTags => (changeTAg(newTags))"
-                                                        @before-deleting-tag="DeleteTag"
+                                                            v-model="tag1"
+                                                            :tags="data.tags"
+                                                            :allow-edit-tags="true"
+                                                            @tags-changed="newTags => (changeTAg(newTags))"
+                                                            @before-deleting-tag="DeleteTag"
                                                     />
                                                     <div class="row">
                                                         <div class="col-12">
@@ -137,7 +138,8 @@
                                                                 <li class="badge-pill tags"
                                                                     v-if="tag.text !== 'Dont Forget'"
                                                                     v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                    {{(tag.text !== undefined) ?tag.text.substring(0,12) : ''}}
+                                                                    {{(tag.text !== undefined) ?tag.text.substring(0,12)
+                                                                    : ''}}
                                                                 </li>
                                                             </template>
                                                             <li class="badge-pill tags" style="background: #FB8678"
@@ -165,20 +167,20 @@
                                                data-toggle></i>
                                         </a>
                                         <datepicker
-                                            :disabled-dates="disabledDates"
-                                            input-class="dateCal"
-                                            v-model="data.date"
-                                            format='dd MMM'
-                                            @selected="updateDate"
-                                            calendar-button-icon='<i class="outline-event icon-image-preview"></i>'>
+                                                :disabled-dates="disabledDates"
+                                                input-class="dateCal"
+                                                v-model="data.date"
+                                                format='dd MMM'
+                                                @selected="updateDate"
+                                                calendar-button-icon='<i class="outline-event icon-image-preview"></i>'>
                                         </datepicker>
 
 
                                     </div>
                                     <div>
                                         <a class="user "><i
-                                            class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
-                                            data-toggle="dropdown"></i>
+                                                class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
+                                                data-toggle="dropdown"></i>
                                             <div class="dropdown-menu dropdown-menu-right">
 
                                                 <diV class="collapse show switchToggle">
@@ -219,7 +221,7 @@
                                         </a>
 
                                     </div>
-                                    <a class="subTask_plus li-opacity clickHide" @click="addEmptyChild(data)">
+                                    <a class="subTask_plus li-opacity clickHide" @click="addChild(data)">
                                         <i class="baseline-playlist_add icon-image-preview"></i>
                                     </a>
                                     <a class="task_plus li-opacity clickHide" @click="addNode(data)">
@@ -230,18 +232,28 @@
                             </div>
                         </Tree>
 
-                    </div>
                 </div>
             </div>
             <div class="details" id="details">
-
                 <TaskDetails
-                    :selectedData="selectedData"
-                    :task_logs="task_logs"
-                    @textArea="ShowTextArea">
+                        :selectedData="selectedData"
+                        :task_logs="task_logs"
+                        @textArea="ShowTextArea">
                 </TaskDetails>
             </div>
         </div>
+
+        <!--        //board component section-->
+        <div class="boardView" v-if="list.type === 'board'">
+            <!-- Board View Component -->
+            <BoardView
+                    :board_id="list_id"
+                    :projectId="projectId"
+                    :nav_id="nav_id">
+            </BoardView>
+
+        </div>
+
 
         <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
@@ -319,7 +331,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title pl-3"> Update {{list.name}} <span
-                            class="text-uppercase">[{{list.type}}]</span></h5>
+                                class="text-uppercase">[{{list.type}}]</span></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -363,6 +375,7 @@
     import VueTagsInput from '@johmun/vue-tags-input';
     import TaskDetails from "./TaskDetails";
     import Navbar from "./ProjectNavbar/Navbar";
+    import BoardView from "./board";
 
     export default {
         components: {
@@ -372,7 +385,7 @@
             Datepicker,
             VueTagsInput,
             TaskDetails,
-            Navbar
+            Navbar, BoardView
         },
         data() {
             return {
@@ -380,7 +393,7 @@
                     id: null
                 },
                 id: 0,
-                tree4data: [],
+                treeList: [],
                 date_config: {
                     enableTime: false,
                     wrap: true,
@@ -398,7 +411,6 @@
                 tag: null,
                 projectId: null,
                 list_id: null,
-                projects: null,
                 newEmptyTaskID: null,
                 multiple_list: null,
                 list: {
@@ -418,8 +430,7 @@
         mounted() {
             let _this = this;
             this.projectId = this.$route.params.projectId;
-            this.getProjects();
-            this.getTaskList();
+            // this.getTaskList();
 
             $(document).ready(function () {
                 $('.searchList').hide();
@@ -435,7 +446,7 @@
         },
         created() {
             let _this = this;
-            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,ctrl+d,ctrl+b,ctrl+s,ctrl+i,ctrl+shift+3', function (event, handler) {
+            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3', function (event, handler) {
                 event.preventDefault()
                 switch (handler.key) {
                     case "enter" :
@@ -481,7 +492,7 @@
                     case "ctrl+v":
                         _this.pastCopyAndCut(_this.selectedData);
                         break;
-                    case "ctrl+d":
+                    case "delete":
                         _this.RemoveNodeAndChildren(_this.selectedData);
                         break;
                     case "ctrl+u":
@@ -496,7 +507,7 @@
                     case "ctrl+i":
                         _this.addAttachment(_this.selectedData);
                         break;
-                    case "ctrl+shift+3":
+                    case "shift+3":
                         $('#tag-' + _this.selectedData._id).click();
                         console.log(_this.selectedData);
                         break;
@@ -511,9 +522,7 @@
                 var curHeight = text.scrollHeight;
                 if (curHeight > maxHeight) {
                     curHeight = maxHeight;
-                    text.style.overflow = 'auto';
                 } else {
-                    text.style.overflow = 'hidden';
                 }
                 if (curHeight < height) {
                     curHeight = height;
@@ -527,7 +536,6 @@
                     var target = locInputs[i];
                     var height = options.height || '100px';
                     var maxHeight = options.maxHeight || '500px';
-                    target.style.overflow = 'hidden';
                     target.style.resize = 'none';
                     target.style.height = height + 'px';
                     target.style.maxHeight = maxHeight + 'px';
@@ -543,16 +551,6 @@
             dropNode(node, targetTree, oldTree) {
             },
             dragNode(node, targetTree, oldTree) {
-            },
-            getProjects() {
-                axios.get('/api/project/' + this.projectId)
-                    .then(response => response.data)
-                    .then(response => {
-                        this.projects = response.project;
-                        $('#header-item').text(this.projects.name + ' / Task List')
-                    })
-                    .catch(error => {
-                    });
             },
             ChangeNode(index, new2, old) {
             },
@@ -605,7 +603,8 @@
 
             },
 
-            addNode(data) {
+
+            addNodeStatic(data) {
                 let _this = this;
                 var text = data.text;
                 let postData = {
@@ -635,7 +634,7 @@
                     console.log('Empty text')
                 }
 
-            },
+            },//add static empty node
             addEmptyNode(data) {
                 let _this = this;
                 var children = data.parent.children;
@@ -707,6 +706,107 @@
                     $("#" + date).removeClass('input-hide');
                 }, 100)
             },
+            makeChildOld(data) {
+                var children = data.parent.children;
+                let _this = this;
+                let postData = {
+                    id: data.id,
+                    parent_id: data.parent_id,
+                    project_id: _this.projectId,
+                    list_id: _this.list_id,
+                    sort_id: data.sort_id,
+                    text: data.text,
+                    nav_id: _this.nav_id
+                };
+
+                if (data.text !== '') {
+                    axios.post('/api/task-list/task-make-child', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.newEmptyTaskID = response.success;
+                            _this.getTaskList()
+                            setTimeout(function () {
+                                $("#" + _this.newEmptyTaskID).click();
+                            }, 500)
+                        })
+                        .catch(error => {
+                            console.log('Api is task-make-child not Working !!!')
+                        });
+                } else {
+                    for (var i = 0; i < children.length; i++) {
+                        if (children[i].text == '') {
+                            children.splice(i, 1);
+                        }
+                    }
+                    _this.addEmptyChild(_this.reselectParentId)
+                }
+
+            },
+            unMakeChildOld(data) {
+
+                let _this = this;
+                let postData = {
+                    id: data.id,
+                    parent_id: data.parent_id,
+                    project_id: _this.projectId,
+                    list_id: _this.list_id,
+                    sort_id: data.sort_id,
+                    text: data.text
+                };
+                if (data.text !== '') {
+                    axios.post('/api/task-list/reverse-child', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.newEmptyTaskID = response.success;
+                            _this.getTaskList()
+                            setTimeout(function () {
+                                $("#" + _this.newEmptyTaskID).click();
+                            }, 500)
+                        })
+                        .catch(error => {
+                            console.log('Api is task-unmake-child not Working !!!')
+                        });
+                } else {
+                    var children = data.parent.children;
+                    for (var i = 0; i < children.length; i++) {
+                        if (children[i].text == '') {
+                            children.splice(i, 1);
+                        }
+                    }
+                    _this.addEmptyNode(_this.reselectParentId)
+                }
+
+            },
+
+            addNode(data) {
+                let _this = this;
+                var text = data.text;
+                let postData = {
+                    id: data.id,
+                    text: text,
+                    parent_id: data.parent_id,
+                    sort_id: data.sort_id,
+                    project_id: _this.projectId,
+                    list_id: _this.list_id,
+                    nav_id: _this.nav_id
+                };
+                console.log(postData)
+                axios.post('/api/task-list/add-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.newEmptyTaskID = response.success.id;
+                        _this.getTaskList()
+                        setTimeout(function () {
+                            $("#" + _this.newEmptyTaskID).click();
+                            $("#" + _this.newEmptyTaskID).focus();
+                            $("#" + _this.newEmptyTaskID).addClass('form-control');
+                            $("#" + _this.newEmptyTaskID).removeClass('input-hide');
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Api is not Working !!!')
+                    });
+            },
             addChild(data) {
                 let _this = this;
                 let postData = {
@@ -744,29 +844,18 @@
                     text: data.text,
                     nav_id: _this.nav_id
                 };
-
-                if (data.text !== '') {
-                    axios.post('/api/task-list/task-make-child', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.newEmptyTaskID = response.success;
-                            _this.getTaskList()
-                            setTimeout(function () {
-                                $("#" + _this.newEmptyTaskID).click();
-                            }, 500)
-                        })
-                        .catch(error => {
-                            console.log('Api is task-make-child not Working !!!')
-                        });
-                } else {
-                    for (var i = 0; i < children.length; i++) {
-                        if (children[i].text == '') {
-                            children.splice(i, 1);
-                        }
-                    }
-                    _this.addEmptyChild(_this.reselectParentId)
-                }
-
+                axios.post('/api/task-list/task-make-child', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.newEmptyTaskID = response.success;
+                        _this.getTaskList()
+                        setTimeout(function () {
+                            $("#" + _this.newEmptyTaskID).click();
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Api is task-make-child not Working !!!')
+                    });
             },
             unMakeChild(data) {
 
@@ -779,29 +868,18 @@
                     sort_id: data.sort_id,
                     text: data.text
                 };
-                if (data.text !== '') {
-                    axios.post('/api/task-list/reverse-child', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.newEmptyTaskID = response.success;
-                            _this.getTaskList()
-                            setTimeout(function () {
-                                $("#" + _this.newEmptyTaskID).click();
-                            }, 500)
-                        })
-                        .catch(error => {
-                            console.log('Api is task-unmake-child not Working !!!')
-                        });
-                } else {
-                    var children = data.parent.children;
-                    for (var i = 0; i < children.length; i++) {
-                        if (children[i].text == '') {
-                            children.splice(i, 1);
-                        }
-                    }
-                    _this.addEmptyNode(_this.reselectParentId)
-                }
-
+                axios.post('/api/task-list/reverse-child', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.newEmptyTaskID = response.success;
+                        _this.getTaskList()
+                        setTimeout(function () {
+                            $("#" + _this.newEmptyTaskID).click();
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Api is task-unmake-child not Working !!!')
+                    });
             },
             pastCopyAndCut(data) {
                 var _this = this;
@@ -1095,20 +1173,20 @@
             },
             RemoveNodeAndChildren(data) {
                 var _this = this;
-                if (confirm('Are You sure you want to delete this task !! ?')) {
-                    var postData = {
-                        id: data.id,
-                        text: data.text
-                    }
-                    axios.post('/api/task-list/delete-task', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.getTaskList()
-                        })
-                        .catch(error => {
-                            console.log('Api for delete task not Working !!!')
-                        });
+
+                var postData = {
+                    id: data.id,
+                    text: data.text
                 }
+                axios.post('/api/task-list/delete-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getTaskList()
+                    })
+                    .catch(error => {
+                        console.log('Api for delete task not Working !!!')
+                    });
+
             },
             showLog() {
                 var _this = this;
@@ -1127,7 +1205,7 @@
             },
 
             // get task list
-            getTaskList() {
+            getTaskListWithDynamicEmptyNode() {
                 var _this = this;
                 var datePicker = new Date();
                 datePicker.setDate(datePicker.getDate() - 1);
@@ -1142,7 +1220,7 @@
                 axios.post('/api/task-list', data)
                     .then(response => response.data)
                     .then(response => {
-                        this.tree4data = response.task_list;
+                        this.treeList = response.task_list;
                         this.multiple_list = response.multiple_list;
                         setTimeout(function () {
                             $('[data-toggle="tooltip"]').tooltip();
@@ -1163,13 +1241,42 @@
                                 tags: "",
                                 text: ""
                             };
-                            _this.tree4data = [newEmpty]
+                            _this.treeList = [newEmpty]
                             setTimeout(function () {
                                 $("#" + date).click();
                                 $("#" + date).focus();
                                 $("#" + date).addClass('form-control');
                                 $("#" + date).removeClass('input-hide');
                             }, 100)
+                        }
+                        setTimeout(function () {
+                            $('.delete-icon').hide();
+                        }, 500)
+                    })
+                    .catch(error => {
+
+                    });
+            },
+
+            getTaskList() {
+                let data = {
+                    id: this.projectId,
+                    list_id: this.list_id,
+                    nav_id: this.nav_id
+                };
+                axios.post('/api/task-list', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        this.treeList = response.task_list;
+                        this.multiple_list = response.multiple_list;
+                        if (this.treeList.length === 1 && this.treeList[0].text === '') {
+                            let id = this.treeList[0].id
+                            setTimeout(function () {
+                                $("#" + id).click();
+                                $("#" + id).focus();
+                                $("#" + id).addClass('form-control');
+                                $("#" + id).removeClass('input-hide');
+                            }, 300)
                         }
                         setTimeout(function () {
                             $('.delete-icon').hide();
@@ -1194,7 +1301,6 @@
             },
             getNavbar(data) {
                 this.AllNavItems = data.AllNavItems;
-                console.log(this.AllNavItems)
             },
 
             UpdateListModel() {
@@ -1328,9 +1434,9 @@
                     }
                 }
                 var text1 = "Don't Forget Section";
-                for (var i = 0; i < this.tree4data.length; i++) {
-                    if (this.tree4data[i].text == text1) {
-                        this.tree4data[i].children.push(moveItem);
+                for (var i = 0; i < this.treeList.length; i++) {
+                    if (this.treeList[i].text == text1) {
+                        this.treeList[i].children.push(moveItem);
                         break;
                     }
                 }
@@ -1362,9 +1468,6 @@
                     $('#task_width').addClass('task_widthNormal');
                     $('#details').removeClass('details');
                     $('#details').addClass('detailsShow');
-                    $('#col10').removeClass('col-10');
-                    $('#col10').addClass('col-12');
-                    $('#col10').removeClass('offset-2');
                 }
             },
             HideDetails() {
@@ -1372,9 +1475,6 @@
                 $('#task_width').removeClass('task_widthNormal');
                 $('#details').addClass('details');
                 $('#details').removeClass('detailsShow');
-                $('#col10').removeClass('col-12');
-                $('#col10').addClass('col-10');
-                $('#col10').addClass('offset-2');
             },
             ShowTextArea(data) {
                 var _this = this;
