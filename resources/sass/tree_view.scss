@@ -198,6 +198,7 @@
             background: transparent;
             width: 50px;
         }
+
         .hide-item-res {
             position: absolute;
             right: 25px;
@@ -244,6 +245,7 @@
     .tree-node {
         position: relative;
         padding-left: 50px;
+
         .tree-node-inner {
             margin-bottom: -1px;
             padding: 0;
@@ -252,6 +254,7 @@
             &:hover, &:active {
                 background: #f0f0f0;
                 @include transition(all 0.2s linear);
+
                 .delete-icon {
                     //opacity: 0 !important;
                 }
@@ -272,6 +275,7 @@
                         opacity: 1 !important;
                         color: rgba(0, 0, 0, 0.75);
                         @include transition(all 0.2s linear);
+
                         &.delete-icon {
                             //opacity: 0 !important;
                         }
@@ -385,6 +389,91 @@
         font-size: 16px;
     }
 
+    .content {
+        width: 260px;
+        margin: 100px auto;
+    }
+
+    .colors {
+        width: 260px;
+        float: left;
+        margin: 20px auto;
+
+        a {
+            width: 43.3px;
+            height: 30px;
+            float: left;
+        }
+
+        .default {
+            background: #414956;
+        }
+    }
+
+    .jquery-accordion-menu > ul > li:hover > a {
+        background: #8ec0da
+    }
+
+    .jquery-accordion-menu, .jquery-accordion-menu * {
+        font-family: 'Open Sans', sans-serif;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        outline: 0
+    }
+
+    .jquery-accordion-menu {
+        max-width: 290px;
+        float: left;
+        position: absolute;
+        box-shadow: 0 5px 10px #333;
+        border-radius: 15px;
+        display : none;
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            li {
+                width: 100%;
+                display: block;
+                float: left;
+                position: relative;
+                background: transparent;
+
+                a {
+                    width: 100%;
+                    padding: 10px 30px;
+                    float: left;
+                    text-decoration: none;
+                    color: #f0f0f0;
+                    font-size: 13px;
+                    background: #c5cedc;
+                    color: black;
+                    border-bottom: solid 1px #427bcc;
+                    white-space: nowrap;
+                    position: relative;
+                    overflow: hidden;
+                    -o-transition: color .2s linear, background .2s linear;
+                    -moz-transition: color .2s linear, background .2s linear;
+                    -webkit-transition: color .2s linear, background .2s linear;
+                    transition: color .2s linear, background .2s linear
+                }
+            }
+        }
+    }
+
+    //.jquery-accordion-menu > ul > li:first-child > a {
+    //    border-radius: 15px 15px 0 0;
+    //}
+    //.jquery-accordion-menu > ul > li:last-child > a {
+    //    border-radius:  0 0 15px 15px;
+    //}
+    //.jquery-accordion-menu > ul > li > a {
+    //    border-bottom: solid 1px #3b424d
+    //}
+
 
 }
 
@@ -416,22 +505,22 @@
 }
 
 .detailsShow {
-        display: block;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        outline: 0;
-        box-sizing: border-box;
-        background: #fff;
-        box-shadow: 0 0 15px #EEE;
-        border-left: 1px solid rgba(0,0,0,.12);
-        border-right: none;
-        width: 60%;
-        max-width: 800px;
-        z-index: 2;
-        right: 0;
-        @include transition(all 0.4s linear);
-        padding-top: 20px;
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    outline: 0;
+    box-sizing: border-box;
+    background: #fff;
+    box-shadow: 0 0 15px #EEE;
+    border-left: 1px solid rgba(0, 0, 0, .12);
+    border-right: none;
+    width: 60%;
+    max-width: 800px;
+    z-index: 2;
+    right: 0;
+    @include transition(all 0.4s linear);
+    padding-top: 20px;
 
     .input-hide {
         border: none !important;
@@ -517,21 +606,25 @@
     background-color: #f9f9f9;
     width: 100%;
     display: inline-block;
-    .add-list{
+
+    .add-list {
         padding-left: 123px;
         display: inline-block;
         padding-top: 15px;
     }
 }
-.boardView{
+
+.boardView {
     width: 100%;
     display: inline-block;
     height: 100%;
 }
-#col10{
+
+#col10 {
     height: calc(100vh - 218px)
 }
-.wrapper{
+
+.wrapper {
     min-height: calc(100vh - 55px) !important;
 }
 
@@ -593,6 +686,7 @@
     max-height: 200px;
     margin-top: 20px;
 }
+
 .file-delete {
     cursor: pointer;
     margin-top: 4px;
@@ -600,7 +694,8 @@
     right: 45px;
     background: #ff0622;
 }
-.assignUser-photo{
+
+.assignUser-photo {
     width: 30px;
     border-radius: 74%;
     background: #2d1931;
@@ -621,15 +716,17 @@
     color: black;
     font-weight: bold;
 }
-.deactiveIteam{
+
+.deactiveIteam {
     background: #fefffd;
     border-radius: 3px;
     color: black;
     font-weight: bold;
 }
-.deactiveIteam:hover{
+
+.deactiveIteam:hover {
     color: black;
-    border : 1px solid #d3dacc;
+    border: 1px solid #d3dacc;
 }
 
 .activeTask:hover {
@@ -641,14 +738,16 @@
     display: inline-block !important;
 }
 
-.log-data{
+.log-data {
     transition: all 0.4s linear;
     display: inline-block;
 }
-.image-auto{
-    width :100%;
+
+.image-auto {
+    width: 100%;
 }
-.tag-manager{
+
+.tag-manager {
     color: #fff;
     font-size: 13px;
     font-weight: bold;
@@ -656,7 +755,8 @@
     right: 5px;
     bottom: 08px;
 }
-.tooltipMakeForTag{
+
+.tooltipMakeForTag {
     display: inline-block;
 
 }

@@ -235,8 +235,7 @@
             }
         },
         mounted() {
-            console.log('Data');
-            console.log(this.selectedDa);
+            
         },
         created() {
 
