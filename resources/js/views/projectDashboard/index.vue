@@ -48,7 +48,8 @@
                               :space="0">
                             <div :class="{eachItemRow: true}" slot-scope="{data, _id,store}"
                                  style="font-size: 12px"
-                                 @click="makeItClick($event, data)" v-on:dblclick="showLog" :id="data._id">
+                                 @contextmenu="makeItClick($event, data)"
+                                 @click="makeItClick($event, data)" v-on:dblclick="showLog" :id="'click'+data.id">
                                 <template v-if="!data.isDragPlaceHolder" v-html="data.html">
 
                                     <a class="task-complete left-content li-opacity "
@@ -138,8 +139,7 @@
                                                                 <li class="badge-pill tags"
                                                                     v-if="tag.text !== 'Dont Forget'"
                                                                     v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                    {{(tag.text !== undefined) ?tag.text.substring(0,12)
-                                                                    : ''}}
+                                                                    {{(tag.text !== undefined) ?tag.text.substring(0,12) : ''}}
                                                                 </li>
                                                             </template>
                                                             <li class="badge-pill tags" style="background: #FB8678"
@@ -359,6 +359,7 @@
                 </div>
             </div>
         </div>
+        
     </div>
 
 </template>
@@ -425,6 +426,7 @@
                 file: null,
                 tag1: '',
                 manageTag: null,
+                selectedIds : [],
             }
         },
         mounted() {
@@ -559,11 +561,29 @@
             },
 
             makeItClick(e, data) {
-                this.selectedData = data;
-                this.tags = data.tags;
-                $('.eachItemRow').removeClass('clicked');
-                $(e.target).addClass('clicked');
-                $(e.target).closest('.eachItemRow').addClass('clicked');
+
+                e.preventDefault();
+                e.stopPropagation();
+                var _this = this;
+                if(e.ctrlKey && e.which === 1){
+                    var index = _this.selectedIds.indexOf(data.id);
+                    if (index > -1) {
+                        _this.selectedIds.splice(index, 1);
+                        $('#click' + data.id).removeClass('clicked');
+                    }else{
+                        _this.selectedIds.push(data.id);
+                        $('#click' + data.id).addClass('clicked');
+                    }
+                }else if(e.which === 1) {
+                    this.selectedData = data;
+                    this.tags = data.tags;
+                    $('.eachItemRow').removeClass('clicked');
+                    $(e.target).addClass('clicked');
+                    $(e.target).closest('.eachItemRow').addClass('clicked');
+                }else if(e.which === 3){
+                    alert('Right Click')
+                }
+
             },
             makeInput(e, data) {
                 this.selectedData = data;
@@ -1138,7 +1158,7 @@
                         _this.getTaskList()
                         _this.selectedData = data;
                         setTimeout(function () {
-                            $("#" + data.id).click();
+                            $("#click" + data.id).click();
                         }, 300)
                     })
                     .catch(error => {
@@ -1163,7 +1183,7 @@
                         console.log(response)
                         _this.getTaskList()
                         setTimeout(function () {
-                            $("#" + data.id).click();
+                            $("#click" + data.id).click();
                         }, 300)
                     })
                     .catch(error => {
@@ -1269,6 +1289,9 @@
                     .then(response => {
                         this.treeList = response.task_list;
                         this.multiple_list = response.multiple_list;
+                        setTimeout(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        }, 500)
                         if (this.treeList.length === 1 && this.treeList[0].text === '') {
                             let id = this.treeList[0].id
                             setTimeout(function () {
@@ -1413,7 +1436,7 @@
             },
 
             shwAssignUserDropDown(data) {
-                let targets = $('#' + data._id).find('.outline-person');
+                let targets = $('#click' + data.id).find('.outline-person');
                 if (targets.length > 0) {
                     $(targets[0]).click();
                 }
