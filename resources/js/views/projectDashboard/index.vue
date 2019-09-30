@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="row page-titles">
-<!--            Navbar Component-->
+        <div class="page-titles">
+            <!-- Navbar Component-->
             <Navbar :projectId="$route.params.projectId"
                     :AllNavItems="AllNavItems"
                     @getNavBars="getNavbar"
@@ -15,63 +15,62 @@
                     <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
                 </div>
             </div>
+        </div>
 
+        <div v-if="AllNavItems === null" class="col-md-8 text-center pt-5">
+            <h2 style="color: #d1a894">Create Task View.</h2>
         </div>
-        <div>
-            <div v-if="AllNavItems === null" class="col-md-8 text-center pt-5">
-                <h2 style="color: #d1a894">Create Task View.</h2>
-            </div>
-            <div v-else-if="AllNavItems !== null && list.type === null" class="col-md-8 text-center pt-5">
-                <h2 style="color: #d1a894">Select Task View.</h2>
+        <div v-else-if="AllNavItems !== null && list.type === null" class="col-md-8 text-center pt-5">
+            <h2 style="color: #d1a894">Select Task View.</h2>
+        </div>
+
+        <div class="container">
+            <div class="col-12">
+                <h2 class="p-t-20" v-if="list.type !== null">
+                    {{list.name}}
+                    <button type="submit" class="btn btn-primary pull-right" @click="UpdateListModel">
+                        EDIT {{list.name}}
+                    </button>
+                </h2>
+                <p v-if="list.description != null" class="compltit-p">{{list.description}}</p>
             </div>
         </div>
-<!--        //tree view component section-->
-        <div class="TaskListAndDetails" v-if="list.type === 'list'">
+        <!--        //tree view component section-->
+        <div class="TaskListAndDetails container-fluid" v-if="list.type === 'list'">
             <div class="task_width" id="task_width" @click="HideDetails">
-                <div id="tree_view_list">
-                    <div class="col-11" id="col10" style="border: none">
-                        <div class="offset-1" >
-                            <div class="container-header pl-5 mr-5">
-                                <h2>
-                                    {{list.name}}
-                                    <button type="submit" class="btn btn-primary pull-right" @click="UpdateListModel">
-                                        EDIT {{list.name}}
-                                    </button>
-                                </h2>
-                                <p v-if="list.description != null" class="compltit-p">{{list.description}}</p>
-                            </div>
-                        </div>
+                <div id="tree_view_list" class="col-11">
 
-                        <Tree class="tree4" :data="treeList" draggable="draggable" cross-tree="cross-tree"
-                              v-if="list.type === 'list'"
-                              @drop="dropNode"
-                              @change="ChangeNode"
-                              :indent="2"
-                              :space="0">
-                            <div :class="{eachItemRow: true}" slot-scope="{data, _id,store}"
-                                 style="font-size: 12px"
-                                 @click="makeItClick($event, data)" v-on:dblclick="showLog" :id="data._id">
-                                <template v-if="!data.isDragPlaceHolder" v-html="data.html">
+                    <Tree class="tree4" :data="treeList" draggable="draggable" cross-tree="cross-tree"
+                          v-if="list.type === 'list'"
+                          @drop="dropNode"
+                          @change="ChangeNode"
+                          :indent="2"
+                          :space="0">
+                        <div :class="{eachItemRow: true}" slot-scope="{data, _id,store}"
+                             style="font-size: 12px"
+                             @contextmenu="makeItClick($event, data)"
+                             @click="makeItClick($event, data)" v-on:dblclick="showLog" :id="'click'+data.id">
+                            <template v-if="!data.isDragPlaceHolder" v-html="data.html">
 
-                                    <a class="task-complete left-content li-opacity "
-                                       :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
-                                       @click="addTaskToComplete(data)"
-                                    >
-                                        <i class="outline-check_circle_outline icon-image-preview "></i>
-                                    </a>
-                                    <a class="delete-icon left-content li-opacity"
-                                       @click="RemoveNodeAndChildren(data)"
-                                       :title="'Remove this node'">
-                                        <i class="baseline-playlist_delete icon-image-preview"></i>
-                                    </a>
-                                    <a class="left-content1 li-opacity ">
-                                        <i class="outline-arrow_upward icon-image-preview"></i>
-                                    </a>
-                                    <b v-if="data.children && data.children.length && data.open"
-                                       @click="store.toggleOpen(data)"><i class="fa fa-fw fa-minus"></i></b>
-                                    <b v-else-if="data.children && data.children.length && !data.open"
-                                       @click="store.toggleOpen(data)"><i class="fa fa-fw fa-plus"></i></b>
-                                    <span>
+                                <a class="task-complete left-content li-opacity "
+                                   :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
+                                   @click="addTaskToComplete(data)"
+                                >
+                                    <i class="outline-check_circle_outline icon-image-preview "></i>
+                                </a>
+                                <a class="delete-icon left-content li-opacity"
+                                   @click="RemoveNodeAndChildren(data)"
+                                   :title="'Remove this node'">
+                                    <i class="baseline-playlist_delete icon-image-preview"></i>
+                                </a>
+                                <a class="left-content1 li-opacity ">
+                                    <i class="outline-arrow_upward icon-image-preview"></i>
+                                </a>
+                                <b v-if="data.children && data.children.length && data.open"
+                                   @click="store.toggleOpen(data)"><i class="fa fa-fw fa-minus"></i></b>
+                                <b v-else-if="data.children && data.children.length && !data.open"
+                                   @click="store.toggleOpen(data)"><i class="fa fa-fw fa-plus"></i></b>
+                                <span>
                                         <input type="text" v-model="data.text"
                                                :id="data.id"
                                                @focus="hideItem($event)"
@@ -81,121 +80,121 @@
                                                class="inp input-hide input-title" @click="makeInput($event,data)">
                                     </span>
 
-                                    <a class="attach-icon hide-item-res">
+                                <a class="attach-icon hide-item-res">
                                         <span v-if="data.files && data.files.length !== 0">
                                             <template v-for="fl in data.files">
                                                 <img class="task-img" :src="'/images/'+fl.file_name"
                                                      @click="showImage(data.files, fl.file_name)">
                                             </template>
                                         </span>
-                                        <i class="fa fa-paperclip icon-image-preview dropdown-toggle-split li-opacity"
-                                           @click="addAttachment(data)"></i>
-                                        <input type="file" :id="'file'+data._id" ref="file" style="display: none; "
-                                               @change="updatePicture($event,data)">
-                                    </a>
+                                    <i class="fa fa-paperclip icon-image-preview dropdown-toggle-split li-opacity"
+                                       @click="addAttachment(data)"></i>
+                                    <input type="file" :id="'file'+data._id" ref="file" style="display: none; "
+                                           @change="updatePicture($event,data)">
+                                </a>
 
 
-                                    <a class="tag-icon hide-item-res" >
-                                        <i v-if="data.tags.length > 0"
-                                           class="dropdown-toggle-split"
-                                           data-toggle="dropdown">
-                                            <template v-for="(tag ,index) in data.tags">
-                                                <template v-if="index < 2">
+                                <a class="tag-icon hide-item-res">
+                                    <i v-if="data.tags.length > 0"
+                                       class="dropdown-toggle-split"
+                                       data-toggle="dropdown">
+                                        <template v-for="(tag ,index) in data.tags">
+                                            <template v-if="index < 2">
                                                     <span class="badge badge-warning" v-if="tag.text !== null"
                                                           data-toggle="tooltip" data-placement="bottom"
                                                           :title="data.tagTooltip"
                                                           v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'},{'float' : 'left'}]">
                                                         {{(data.tags.length > 2 ) ? tag.text.substring(0,3) : tag.text.substring(0,3) }}
                                                     </span>
-                                                        <span class="badge badge-warning" v-else
-                                                              v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]">
+                                                <span class="badge badge-warning" v-else
+                                                      v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]">
                                                         ::
                                                     </span>
-                                                </template>
                                             </template>
+                                        </template>
 
 
-                                        </i>
+                                    </i>
 
 
+                                    <i v-else :id="'tag-'+data._id"
+                                       class="outline-local_offer icon-image-preview li-opacity"
+                                       data-toggle="dropdown">
 
-                                        <i v-else :id="'tag-'+data._id"
-                                           class="outline-local_offer icon-image-preview li-opacity"
-                                           data-toggle="dropdown">
+                                    </i>
+                                    <div class="dropdown-menu dropdown-menu-right" :id="'dropdown'+data._id">
 
-                                        </i>
-                                        <div class="dropdown-menu dropdown-menu-right" :id="'dropdown'+data._id">
-
-                                            <diV class="collapse show switchToggle" style="">
-                                                <div class="container-fluid">
-                                                    <vue-tags-input
-                                                        v-model="tag1"
-                                                        :tags="data.tags"
-                                                        :allow-edit-tags="true"
-                                                        @tags-changed="newTags => (changeTAg(newTags))"
-                                                        @before-deleting-tag="DeleteTag"
-                                                    />
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <template v-for="tag in data.tags">
-                                                                <li class="badge-pill tags"
-                                                                    v-if="tag.text !== 'Dont Forget'"
-                                                                    v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                    {{(tag.text !== undefined) ?tag.text.substring(0,12) : ''}}
-                                                                </li>
-                                                            </template>
-                                                            <li class="badge-pill tags" style="background: #FB8678"
-                                                                @click="addExistingTag($event,data ,'Dont Forget')">
-                                                                Dont Forget
+                                        <diV class="collapse show switchToggle" style="">
+                                            <div class="container-fluid">
+                                                <vue-tags-input
+                                                    v-model="tag1"
+                                                    :tags="data.tags"
+                                                    :allow-edit-tags="true"
+                                                    @tags-changed="newTags => (changeTAg(newTags))"
+                                                    @before-deleting-tag="DeleteTag"
+                                                />
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <template v-for="tag in data.tags">
+                                                            <li class="badge-pill tags"
+                                                                v-if="tag.text !== 'Dont Forget'"
+                                                                v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
+                                                                {{(tag.text !== undefined) ?tag.text.substring(0,12) :
+                                                                ''}}
                                                             </li>
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="col-xs-12" style="margin-top:10px;width: 100%;">
-                                                        <button type="submit"
-                                                                class="btn btn-small btn-primary pull-right"
-                                                                @click="showTagManageModel">Manage Tag
-                                                        </button>
+                                                        </template>
+                                                        <li class="badge-pill tags" style="background: #FB8678"
+                                                            @click="addExistingTag($event,data ,'Dont Forget')">
+                                                            Dont Forget
+                                                        </li>
                                                     </div>
                                                 </div>
+                                                <hr>
+                                                <div class="col-xs-12" style="margin-top:10px;width: 100%;">
+                                                    <button type="submit"
+                                                            class="btn btn-small btn-primary pull-right"
+                                                            @click="showTagManageModel">Manage Tag
+                                                    </button>
+                                                </div>
+                                            </div>
 
-                                            </diV>
-                                        </div>
-                                    </a>
-
-                                    <div class="hide-item-res">
-                                        <a class="calender li-opacity clickHide" v-if="!data.date">
-                                            <i class="outline-event icon-image-preview" title="toggle"
-                                               data-toggle></i>
-                                        </a>
-                                        <datepicker
-                                            :disabled-dates="disabledDates"
-                                            input-class="dateCal"
-                                            v-model="data.date"
-                                            format='dd MMM'
-                                            @selected="updateDate"
-                                            calendar-button-icon='<i class="outline-event icon-image-preview"></i>'>
-                                        </datepicker>
-
-
+                                        </diV>
                                     </div>
-                                    <div>
-                                        <a class="user "><i
-                                            class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
-                                            data-toggle="dropdown"></i>
-                                            <div class="dropdown-menu dropdown-menu-right">
+                                </a>
 
-                                                <diV class="collapse show switchToggle">
-                                                    <li class="assignUser">
-                                                        <input type="text" class="input-group searchUser"
-                                                               placeholder="Set assignee by name and email">
-                                                        <label class="pl-2 ">
-                                                            <small style="font-size: 12px">Or invite a new member by
-                                                                email address
-                                                            </small>
-                                                        </label>
-                                                    </li>
-                                                    <li class="assignUser">
+                                <div class="hide-item-res">
+                                    <a class="calender li-opacity clickHide" v-if="!data.date">
+                                        <i class="outline-event icon-image-preview" title="toggle"
+                                           data-toggle></i>
+                                    </a>
+                                    <datepicker
+                                        :disabled-dates="disabledDates"
+                                        input-class="dateCal"
+                                        v-model="data.date"
+                                        format='dd MMM'
+                                        @selected="updateDate"
+                                        calendar-button-icon='<i class="outline-event icon-image-preview"></i>'>
+                                    </datepicker>
+
+
+                                </div>
+                                <div>
+                                    <a class="user "><i
+                                        class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
+                                        data-toggle="dropdown"></i>
+                                        <div class="dropdown-menu dropdown-menu-right">
+
+                                            <diV class="collapse show switchToggle">
+                                                <li class="assignUser">
+                                                    <input type="text" class="input-group searchUser"
+                                                           placeholder="Set assignee by name and email">
+                                                    <label class="pl-2 ">
+                                                        <small style="font-size: 12px">Or invite a new member by
+                                                            email address
+                                                        </small>
+                                                    </label>
+                                                </li>
+                                                <li class="assignUser">
                                                         <span v-for="user in data.users">
                                                             <div class="row" @click="assignUserToTask(user,data)">
                                                                 <div class="col-md-3 pt-2 pl-5">
@@ -208,33 +207,41 @@
                                                                 </div>
                                                             </div>
                                                         </span>
-                                                    </li>
-                                                </diV>
-                                                <li class="border-top pl-2" @click="switchEvent($event)">
-
-                                                    <span style="font-size: 13px;">Assign an external team</span>
-                                                    <switches v-model="id"
-                                                              style="position:absolute;right: 10px;bottom: -4px"
-                                                              theme="bootstrap"
-                                                              color="success">
-                                                    </switches>
                                                 </li>
-                                            </div>
-                                        </a>
+                                            </diV>
+                                            <li class="border-top pl-2" @click="switchEvent($event)">
 
-                                    </div>
-                                    <a class="subTask_plus li-opacity clickHide" @click="addChild(data)">
-                                        <i class="baseline-playlist_add icon-image-preview"></i>
+                                                <span style="font-size: 13px;">Assign an external team</span>
+                                                <switches v-model="id"
+                                                          style="position:absolute;right: 10px;bottom: -4px"
+                                                          theme="bootstrap"
+                                                          color="success">
+                                                </switches>
+                                            </li>
+                                        </div>
                                     </a>
-                                    <a class="task_plus li-opacity clickHide" @click="addNode(data)">
-                                        <i class="baseline-add icon-image-preview"></i>
-                                    </a>
 
-                                </template>
-                            </div>
-                        </Tree>
+                                </div>
+                                <a class="subTask_plus li-opacity clickHide" @click="addChild(data)">
+                                    <i class="baseline-playlist_add icon-image-preview"></i>
+                                </a>
+                                <a class="task_plus li-opacity clickHide" @click="addNode(data)">
+                                    <i class="baseline-add icon-image-preview"></i>
+                                </a>
 
+                            </template>
+                        </div>
+                    </Tree>
+
+                    <div id="jquery-accordion-menu" class="jquery-accordion-menu" v-click-outside="HideCustomMenu">
+                        <ul>
+                            <li><a href="javascript:void(0)">Deleted </a></li>
+                            <li><a href="javascript:void(0)">Move To Dont Forget Section </a></li>
+                            <li><a href="javascript:void(0)">Action 1 </a></li>
+                            <li><a href="javascript:void(0)">Action 2</a></li>
+                        </ul>
                     </div>
+
                 </div>
             </div>
             <div class="details" id="details">
@@ -246,19 +253,8 @@
             </div>
         </div>
 
-<!--        //board component section-->
+        <!--        //board component section-->
         <div class="boardView" v-if="list.type === 'board'">
-            <div class="offset-1 col-9" >
-                <div class="container-header pl-5 mr-5">
-                    <h2>
-                        {{list.name}}
-                        <button type="submit" class="btn btn-primary pull-right" @click="UpdateListModel">
-                            EDIT {{list.name}}
-                        </button>
-                    </h2>
-                    <p v-if="list.description != null" class="compltit-p">{{list.description}}</p>
-                </div>
-            </div>
             <!-- Board View Component -->
             <BoardView
                 :board_id="list_id"
@@ -373,6 +369,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
 </template>
@@ -399,7 +396,7 @@
             Datepicker,
             VueTagsInput,
             TaskDetails,
-            Navbar,BoardView
+            Navbar, BoardView
         },
         data() {
             return {
@@ -439,6 +436,7 @@
                 file: null,
                 tag1: '',
                 manageTag: null,
+                selectedIds: [],
             }
         },
         mounted() {
@@ -460,7 +458,7 @@
         },
         created() {
             let _this = this;
-            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,ctrl+d,ctrl+b,ctrl+s,ctrl+i,ctrl+shift+3', function (event, handler) {
+            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3', function (event, handler) {
                 event.preventDefault()
                 switch (handler.key) {
                     case "enter" :
@@ -506,7 +504,7 @@
                     case "ctrl+v":
                         _this.pastCopyAndCut(_this.selectedData);
                         break;
-                    case "ctrl+d":
+                    case "delete":
                         _this.RemoveNodeAndChildren(_this.selectedData);
                         break;
                     case "ctrl+u":
@@ -521,7 +519,7 @@
                     case "ctrl+i":
                         _this.addAttachment(_this.selectedData);
                         break;
-                    case "ctrl+shift+3":
+                    case "shift+3":
                         $('#tag-' + _this.selectedData._id).click();
                         console.log(_this.selectedData);
                         break;
@@ -536,9 +534,7 @@
                 var curHeight = text.scrollHeight;
                 if (curHeight > maxHeight) {
                     curHeight = maxHeight;
-                    text.style.overflow = 'auto';
                 } else {
-                    text.style.overflow = 'hidden';
                 }
                 if (curHeight < height) {
                     curHeight = height;
@@ -552,7 +548,6 @@
                     var target = locInputs[i];
                     var height = options.height || '100px';
                     var maxHeight = options.maxHeight || '500px';
-                    target.style.overflow = 'hidden';
                     target.style.resize = 'none';
                     target.style.height = height + 'px';
                     target.style.maxHeight = maxHeight + 'px';
@@ -576,11 +571,65 @@
             },
 
             makeItClick(e, data) {
-                this.selectedData = data;
-                this.tags = data.tags;
-                $('.eachItemRow').removeClass('clicked');
-                $(e.target).addClass('clicked');
-                $(e.target).closest('.eachItemRow').addClass('clicked');
+                var _this = this;
+                if (e.ctrlKey && e.which === 1) {
+                    var index = _this.selectedIds.indexOf(data.id);
+                    if (index > -1) {
+                        _this.selectedIds.splice(index, 1);
+                        $('#click' + data.id).removeClass('clicked');
+                    } else {
+                        _this.selectedIds.push(data.id);
+                        $('#click' + data.id).addClass('clicked');
+                    }
+                    $('.jquery-accordion-menu').hide();
+                    if (_this.selectedIds.length > 1){
+                        this.selectedData = {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       };
+                    }
+
+                } else if (e.which === 1) {
+                    _this.selectedIds=[];
+                    _this.selectedIds.push(data.id);
+                    this.selectedData = data;
+                    this.tags = data.tags;
+                    $('.eachItemRow').removeClass('clicked');
+                    $(e.target).addClass('clicked');
+                    $(e.target).closest('.eachItemRow').addClass('clicked');
+                    $('.jquery-accordion-menu').hide();
+
+                } else if (e.which === 3) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $('#rmenu').addClass('menu-show');
+                    let target = $(e.target);
+                    let w = target.closest('#tree_view_list').width();
+                    let h = target.closest('#tree_view_list').height();
+                    let p = target.closest('#tree_view_list').offset();
+                    let left = e.clientX - p.left;
+                    let top = e.clientY - p.top;
+
+                    let clickH = $('.jquery-accordion-menu').height();
+                    clickH = clickH < 150 ? 400 : clickH;
+                    if ((w - left) < 230) { left = w - 250; }
+                    if(h < top+clickH){ top = top - (top+clickH - h); }
+                    if(top < 10){ top = 10; }
+
+                    let ttarget = target.closest('#tree_view_list').find('.jquery-accordion-menu');
+                    if(_this.selectedIds.length > 0){
+                        var index = _this.selectedIds.indexOf(data.id);
+                        if (index > -1) {
+                            ttarget.css({
+                                top : top,
+                                left : left,
+                            }).fadeIn();
+                        }else{
+                            $('.eachItemRow').removeClass('clicked');
+                            $('.jquery-accordion-menu').hide();
+                            _this.selectedIds=[];
+                        }
+                    }
+
+                }
+
             },
             makeInput(e, data) {
                 this.selectedData = data;
@@ -1155,7 +1204,7 @@
                         _this.getTaskList()
                         _this.selectedData = data;
                         setTimeout(function () {
-                            $("#" + data.id).click();
+                            $("#click" + data.id).click();
                         }, 300)
                     })
                     .catch(error => {
@@ -1180,7 +1229,7 @@
                         console.log(response)
                         _this.getTaskList()
                         setTimeout(function () {
-                            $("#" + data.id).click();
+                            $("#click" + data.id).click();
                         }, 300)
                     })
                     .catch(error => {
@@ -1190,20 +1239,20 @@
             },
             RemoveNodeAndChildren(data) {
                 var _this = this;
-                if (confirm('Are You sure you want to delete this task !! ?')) {
-                    var postData = {
-                        id: data.id,
-                        text: data.text
-                    }
-                    axios.post('/api/task-list/delete-task', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.getTaskList()
-                        })
-                        .catch(error => {
-                            console.log('Api for delete task not Working !!!')
-                        });
+
+                var postData = {
+                    id: data.id,
+                    text: data.text
                 }
+                axios.post('/api/task-list/delete-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getTaskList()
+                    })
+                    .catch(error => {
+                        console.log('Api for delete task not Working !!!')
+                    });
+
             },
             showLog() {
                 var _this = this;
@@ -1286,6 +1335,9 @@
                     .then(response => {
                         this.treeList = response.task_list;
                         this.multiple_list = response.multiple_list;
+                        setTimeout(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        }, 500)
                         if (this.treeList.length === 1 && this.treeList[0].text === '') {
                             let id = this.treeList[0].id
                             setTimeout(function () {
@@ -1430,7 +1482,7 @@
             },
 
             shwAssignUserDropDown(data) {
-                let targets = $('#' + data._id).find('.outline-person');
+                let targets = $('#click' + data.id).find('.outline-person');
                 if (targets.length > 0) {
                     $(targets[0]).click();
                 }
@@ -1485,9 +1537,6 @@
                     $('#task_width').addClass('task_widthNormal');
                     $('#details').removeClass('details');
                     $('#details').addClass('detailsShow');
-                    $('#col10').removeClass('col-10');
-                    $('#col10').addClass('col-12');
-                    $('#col10').removeClass('offset-2');
                 }
             },
             HideDetails() {
@@ -1495,9 +1544,6 @@
                 $('#task_width').removeClass('task_widthNormal');
                 $('#details').addClass('details');
                 $('#details').removeClass('detailsShow');
-                $('#col10').removeClass('col-12');
-                $('#col10').addClass('col-10');
-                $('#col10').addClass('offset-2');
             },
             ShowTextArea(data) {
                 var _this = this;
@@ -1508,24 +1554,9 @@
                 };
                 _this.growInit(option);
             },
-            HideTextArea() {
-                var _this = this;
-                $('.SubmitButton').hide();
+            HideCustomMenu() {
+                $('.jquery-accordion-menu').hide();
             },
-            ShowListDetails(data) {
-                var _this = this;
-                $('.submitdetails').show();
-                var option = {
-                    height: 50,
-                    maxHeight: 400
-                };
-                _this.growInit(option);
-            },
-            HideListDetails() {
-                var _this = this;
-                $('.submitdetails').hide();
-            },
-
             expandAll() {
                 th.breadthFirstSearch(this.tree1data, node => {
                     node.open = true

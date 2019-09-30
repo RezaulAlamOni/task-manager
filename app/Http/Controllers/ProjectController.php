@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Project;
+use App\Team;
 use Carbon\Carbon;
 use http\Env\Response;
 use Illuminate\Http\Request;
@@ -24,7 +25,8 @@ class ProjectController extends Controller
     }
 
     public function getAll(){
-        $Projects = Project::all();
+        $team = Team::where('owner_id',Auth::id())->first();
+        $Projects = Project::where('team_id',$team->id)->get();
         return $this->success(compact($Projects, 'Projects'));
     }
 
@@ -33,25 +35,18 @@ class ProjectController extends Controller
         return view('projects');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
+        $team = Team::where('owner_id',Auth::id())->first();
         $data = [
+            'team_id'=>$team->id,
             'name' => $request->title,
             'description' => $request->description,
             'created_by' => Auth::id(),

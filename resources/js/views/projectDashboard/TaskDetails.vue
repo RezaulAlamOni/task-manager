@@ -21,7 +21,7 @@
                 </datepicker>
             </div>
             <div class="col-1">
-                <img src="/img/n50.png" class="img-responsive" style="height:30px;width:30px;">
+                <img src="/img/12.jpg" class="img-responsive" style="height:30px;width:30px;">
             </div>
             <div class="col-4">
                 <!-- Tags -->
@@ -235,8 +235,7 @@
             }
         },
         mounted() {
-            console.log('Data');
-            console.log(this.selectedDa);
+            
         },
         created() {
 
