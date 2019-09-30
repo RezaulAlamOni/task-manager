@@ -139,7 +139,7 @@
                                                             </li>
                                                         </template>
                                                         <li class="badge-pill tags" style="background: #FB8678"
-                                                            @click="addExistingTag($event,data ,'Dont Forget')">
+                                                            @click="addExistingTag(data ,'Dont Forget')">
                                                             Dont Forget
                                                         </li>
                                                     </div>
@@ -231,7 +231,7 @@
                     <div id="jquery-accordion-menu" class="jquery-accordion-menu" v-click-outside="HideCustomMenu">
                         <ul>
                             <li><a href="javascript:void(0)" @click="deleteSelectedTask">Deleted </a></li>
-                            <li><a href="javascript:void(0)">Move To Dont Forget Section </a></li>
+                            <li><a href="javascript:void(0)" @click="AddDontForgetTagToSelectedIds">Move To Dont Forget Section </a></li>
                             <li><a href="javascript:void(0)">Action 1 </a></li>
                             <li><a href="javascript:void(0)">Action 2</a></li>
                         </ul>
@@ -994,7 +994,7 @@
                         });
                 }
             },
-            addExistingTag(e, data, tag) {
+            addExistingTag(data, tag) {
 
                 var _this = this;
                 var color = (tag === 'Dont Forget') ? '#ff0000' : _this.generateColor();
@@ -1016,6 +1016,7 @@
                     });
 
             },
+
             changeTAg(tags) {
                 var _this = this;
                 var old = this.tags.length;
@@ -1248,6 +1249,7 @@
                     });
 
             },
+
             deleteSelectedTask() {
 
                 var _this = this;
@@ -1263,6 +1265,28 @@
                     .catch(error => {
                         console.log('Api for delete task not Working !!!')
                     });
+
+            },
+            AddDontForgetTagToSelectedIds() {
+
+                var _this = this;
+                var postData = {
+                    ids: _this.selectedIds,
+                    tags: 'Dont Forget',
+                    color: '#ff0000'
+                }
+                axios.post('/api/task-list/add-dont-forget-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.success)
+                        _this.getTaskList()
+                        $('#dropdown' + data._id).toggle();
+                        _this.selectedData.tags[0] = tag
+                    })
+                    .catch(error => {
+                        console.log('Api for add tag not Working !!!')
+                    });
+
 
             },
 

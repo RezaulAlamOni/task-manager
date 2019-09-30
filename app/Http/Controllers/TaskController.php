@@ -332,7 +332,9 @@ class TaskController extends Controller
     public function deleteTaskWithChild($id)
     {
         Tags::where('task_id',$id)->delete();
+
         Files::where('tasks_id',$id)->delete();
+
         Task::findOrFail($id)->delete();
         $childrens = Task::where('parent_id', $id)->get();
         foreach ($childrens as $children) {
