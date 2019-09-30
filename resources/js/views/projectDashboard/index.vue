@@ -58,9 +58,11 @@
                                 >
                                     <i class="outline-check_circle_outline icon-image-preview "></i>
                                 </a>
-                                <a class="delete-icon left-content li-opacity"
+                                <a  class="delete-icon left-content li-opacity"
+                                    data-toggle="tooltip"
+                                    href="javascript:void(0)"
                                    @click="RemoveNodeAndChildren(data)"
-                                   :title="'Remove this node'">
+                                   :title="'Remove this task'">
                                     <i class="baseline-playlist_delete icon-image-preview"></i>
                                 </a>
                                 <a class="left-content1 li-opacity ">
@@ -506,7 +508,7 @@
                         _this.shwAssignUserDropDown(_this.selectedData);
                         break;
                     case "ctrl+b":
-                        _this.AddDontForgetTag(_this.selectedData);//add DON'T FORGET SECTION
+                        _this.AddDontForgetTagToSelectedIds();//add DON'T FORGET SECTION
                         break;
                     case "ctrl+s":
                         $('.searchList').show();
@@ -1546,6 +1548,7 @@
                     }
                 }
             },
+
             keyDownAction(e, data) {
                 if (e.which === 9) {
                     e.stopPropagation();

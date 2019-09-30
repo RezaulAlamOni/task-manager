@@ -52,8 +52,7 @@ class TagsController extends Controller
                     'project_id' => $task->project_id,
                     'list_id' => $task->list_id,
                     'nav_id' => $task->nav_id
-                ])
-                    ->get();
+                ])->get();
                 if ($taskDontForget->count() <= 0) {
                     $data = [
                         'sort_id' => -2,
@@ -101,13 +100,17 @@ class TagsController extends Controller
         foreach ($ids as $id) {
             $data = [
                 'color'=>$request->color,
-                'task_id'=>$request->id ,
+                'task_id'=>$id ,
                 'title'=>$request->tags,
                 'created_at'=>Carbon::now(),
                 'updated_at'=>Carbon::now(),
             ];
-            Tags::create($data);
-            $success = $this->dontForgetTagProcess($id);
+
+            $check_exists = Tags::where(['title'=>'Dont Forget','task_id'=>$id])->get();
+            if ($check_exists->count() <= 0 ) {
+                Tags::create($data);
+                $success = $this->dontForgetTagProcess($id);
+            }
         }
         return ($success)? response()->json(['success'=>1]) : response()->json(['success'=>0]);
     }
@@ -115,44 +118,47 @@ class TagsController extends Controller
     public function dontForgetTagProcess($id){
 
         $task = Task::where('id', $id)->first();
-        $taskDontForget = Task::where([
-            'title' => 'Dont Forget Section',
-            'project_id' => $task->project_id,
-            'list_id' => $task->list_id,
-            'nav_id' => $task->nav_id
-        ])->get();
-        if ($taskDontForget->count() <= 0) {
-            $data = [
-                'sort_id' => -2,
-                'parent_id' => 0,
+        if ($task) {
+            $taskDontForget = Task::where([
+                'title' => 'Dont Forget Section',
                 'project_id' => $task->project_id,
                 'list_id' => $task->list_id,
-                'nav_id' => $task->nav_id,
-                'created_by' => Auth::id(),
-                'updated_by' => Auth::id(),
-                'title' => 'Dont Forget Section',
-                'tag' => 'Dont Forget',
-                'date' => $task->date,
-                'created_at' => Carbon::now(),
-            ];
-            $NewTask = Task::create($data);
-            $TagData = [
-                'color' =>'#ff0000',
-                'task_id' => $NewTask->id,
-                'title' => 'Dont Forget',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ];
-            Tags::create($TagData);
-            $taskUpdate = Task::where('id', $id)->update(['parent_id' => $NewTask->id]);
-            return true;
-        } elseif ($id != $taskDontForget[0]->id) {
-            $parent = Task::join('tags', 'task_lists.id', 'tags.task_id')->where(['task_lists.id' => $task->parent_id, 'tags.title' => 'Dont Forget'])->get();
-            if ($parent->count() <= 0) {
-                $taskUpdate = Task::where('id', $id)->update(['parent_id' => $taskDontForget[0]->id]);
+                'nav_id' => $task->nav_id
+            ])->get();
+            if ($taskDontForget->count() <= 0) {
+                $data = [
+                    'sort_id' => -2,
+                    'parent_id' => 0,
+                    'project_id' => $task->project_id,
+                    'list_id' => $task->list_id,
+                    'nav_id' => $task->nav_id,
+                    'created_by' => Auth::id(),
+                    'updated_by' => Auth::id(),
+                    'title' => 'Dont Forget Section',
+                    'tag' => 'Dont Forget',
+                    'date' => $task->date,
+                    'created_at' => Carbon::now(),
+                ];
+                $NewTask = Task::create($data);
+                $TagData = [
+                    'color' => '#ff0000',
+                    'task_id' => $NewTask->id,
+                    'title' => 'Dont Forget',
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ];
+                Tags::create($TagData);
+                $taskUpdate = Task::where('id', $id)->update(['parent_id' => $NewTask->id]);
                 return true;
+            } elseif ($id != $taskDontForget[0]->id) {
+                $parent = Task::join('tags', 'task_lists.id', 'tags.task_id')->where(['task_lists.id' => $task->parent_id, 'tags.title' => 'Dont Forget'])->get();
+                $sort = Task::where(['parent_id' => $taskDontForget[0]->id])->max('sort_id');
+                if ($parent->count() <= 0) {
+                    $taskUpdate = Task::where('id', $id)->update(['parent_id' => $taskDontForget[0]->id,'sort_id'=>$sort+1]);
+                    return true;
+                }
+                return false;
             }
-            return false;
         }
     }
 
