@@ -33,10 +33,10 @@ class MultipleBoardController extends Controller
         foreach ($board as $key => $value) {
             $boards[$key]['id'] = $value['id'];
             $boards[$key]['column'] = $value['title'];
-            $boards[$key]['hidden'] = 0;
+            $boards[$key]['hidden'] = $value['hidden'];
             $boards[$key]['progress'] = $value['progress'];
             $boards[$key]['color'] = $value['color'];
-            $tasks = TaskBoard::with('tags')->where('parent_id',$value->id)->get();
+            $tasks = TaskBoard::with('tags')->where('parent_id',$value->id)->orderby('sort_id','ASC')->get();
             if(count($tasks) > 0){
                 foreach ($tasks as $keys => $values) {
                     $allTags = Tags::where('board_id',$values['id'])->get();
@@ -74,7 +74,7 @@ class MultipleBoardController extends Controller
     public function create(Request $request)
     {
         // return $request->all();
-        $sortNo = TaskBoard::max('sort_id');
+        $sortNo = TaskBoard::where('parent_id',0)->max('sort_id')   ;
         $data = TaskBoard::create([
             'multiple_board_id' => $request->multiple_board_id,
             'nav_id' => $request->nav_id,
@@ -124,7 +124,7 @@ class MultipleBoardController extends Controller
     {
         $id = $request->id;
         $parent = TaskBoard::find($id);
-        $sortNo = TaskBoard::max('sort_id');
+        $sortNo = TaskBoard::where('parent_id', $parent->id)->max('sort_id');
         if(!$sortNo){
             $sortNo = 0;
         }
@@ -187,17 +187,22 @@ class MultipleBoardController extends Controller
         return response()->json(['success' => false]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Multiple_board  $multiple_board
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $delete = TaskBoard::where('id',$id)
                 ->orWhere('parent_id',$id)
                 ->delete();
+        if($delete){
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+    
+    
+    public function deleteAllBoardWiseCards($id)
+    {
+        $delete = TaskBoard::Where('parent_id',$id)->delete();
         if($delete){
             return response()->json(['success' => true]);
         } else {
@@ -210,6 +215,19 @@ class MultipleBoardController extends Controller
         $delete = TaskBoard::where('id',$id)
                 ->delete();
         if($delete){
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function hideColumn($id, Request $request)
+    {
+        $hide = TaskBoard::where('id',$id)
+                ->update([
+                    'hidden' => $request->hide
+                ]);
+        if($hide){
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);

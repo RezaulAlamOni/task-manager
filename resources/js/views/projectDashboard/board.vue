@@ -13,7 +13,7 @@
                         <Draggable v-for="(column , index ) in scene.children" :key="column.id">
                             <div class="hidden-column" v-if="column.hidden">
                                 <div class="card-column-header">
-                                    <span class="column-drag-handle" @click="showColumn(index)">&#8667;</span>
+                                    <span class="column-drag-handle" @click="showColumn(index, column.boardId)">&#8667;</span>
                                 </div>
                             </div>
                             <div :class="column.props.className" v-else>
@@ -42,10 +42,10 @@
                                                 <diV class="collapse show switchToggle">
                                                     <a class="dropdown-item" href="#" @click="updateColumSow(index)"><i
                                                             class="fa fa-edit opacity"></i> Edit column</a>
-                                                    <a class="dropdown-item" href="#" @click="hideColumn(index)"><i
+                                                    <a class="dropdown-item" href="#" @click="hideColumn(index, column.boardId)"><i
                                                             class="fa fa-angle-double-left opacity" ></i> Hide column</a>
                                                     <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#" @click="deleteColumnCards(index)">
+                                                    <a class="dropdown-item" href="#" @click="deleteColumnCards(index, column.boardId)">
                                                         <i class="fa fa-trash opacity"></i> Peekaboo all tasks in this column</a>
                                                     <div class="dropdown-divider"></div>
                                                     <a class="dropdown-item" href="#" @click="deleteColumn(index,column.boardId)"><i
@@ -157,8 +157,8 @@
                                             <div>
                                                 <a class="tag-icon">
                                                     <div v-if="card.tags && card.tags.length !== 0">
-                                                        <div v-for="item in card.tags" style="float: left;">
-                                                            <div class="dropdown-toggle-split " style="padding-right: 0px; padding-left: 1px;" data-toggle="dropdown">
+                                                        <div v-for="(item, index) in card.tags" style="float: left;">
+                                                            <div class="dropdown-toggle-split " style="padding-right: 0px; padding-left: 1px;" data-toggle="dropdown" v-if="index < 2" >
                                                                 <span class="badge badge-danger "  v-if='item == "Dont Forget"'>{{item.text.substring(0,12)}}</span>
                                                                 <span class="badge badge-success "
                                                                         data-toggle="tooltip" 
@@ -179,6 +179,7 @@
                                                                             :tags="card.tags"
                                                                             :allow-edit-tags="true"
                                                                             @tags-changed="newTags => (changeTag(newTags,card,index,key))"
+                                                                            @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,card,index,key)"
                                                                         />
                                                                             <div class="row">
                                                                                 <div class="col-12">
@@ -208,9 +209,10 @@
                                                             <div class="container-fluid">
                                                                 <vue-tags-input
                                                                     v-model="tag"
+                                                                    :tags="tag1"
                                                                     :allow-edit-tags="true"
                                                                     @tags-changed="newTags => (changeTag(newTags,card,index,key))"
-                                                                    :tags="tag1"
+                                                                    @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,card,index,key)"
                                                                 />
                                                                     <div class="row">
                                                                         <div class="col-12">
@@ -647,7 +649,7 @@
                         }))
                     })),
                 }
-                console.log(scene);
+                // console.log(scene);
 
             },
 
@@ -682,7 +684,7 @@
                 $("#addModal").modal('show');
             },
             setColumn() {
-                console.log(this.nev_id, this.board_id);
+                // console.log(this.nev_id, this.board_id);
                 if (!this.addField.name) {
                     this.addField.error = 'Name is required!';
                 } else if(!this.nav_id || !this.board_id){
@@ -780,7 +782,7 @@
                 axios.post('/api/board-task', data)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response.success);
+                        // console.log(response.success);
                         _this.cards = response.success;
                         _this.getData();
                     })
@@ -823,14 +825,14 @@
             },
             addCard(index,id) {
 
-                console.log(index,id)
+                // console.log(index,id)
                 let _this = this;
                 axios.post('/api/card-add',{'id': id})
                 .then(response => response.data)
                 .then(response => {
                     if(response.success == true){
                         let data = response.data;
-                        console.log(response.data);
+                        // console.log(response.data);
                         _this.cards[index].task.push({id: data.id, name: data.title, date: data.date, tags: [], clicked: 0});
                         let keys = _this.cards[index].task.length-1;
                         _this.getData();
@@ -906,23 +908,54 @@
                     });
                 }
             },
-            deleteColumnCards(index) {
+            deleteColumnCards(index, id) {
                 let _this = this;
                 if (confirm('Are you sure tou want to delete all cards from this board?')) {
-                    _this.cards[index].task = [];
-                    _this.getData();
+                    axios.delete("/api/board-deleteAllCards/"+id)
+                    .then(response => response.data)
+                    .then(response => {
+                        if(response.success){
+                            _this.cards[index].task = [];
+                            _this.getData();
+                        }
+                    })
+                    .catch(error => {
+
+                    })
                 }
             },
             hideItem(index) {
 
             },
-            hideColumn(index) {
-                this.cards[index].hidden = 1;
-                this.getData();
+            hideColumn(index, id) {
+                let _this = this;
+                let ishide = {
+                    "hide":1
+                }
+                axios.post('/api/board-hide/'+id, ishide)
+                .then(response => response.data)
+                .then(response => {
+                    _this.cards[index].hidden = 1;
+                    _this.getData();
+                })
+                .catch(error => {
+
+                });
             },
-            showColumn(index){
-                this.cards[index].hidden = 0;
-                this.getData();
+            showColumn(index, id){
+                let _this = this;
+                let ishide = {
+                    "hide":0
+                }
+                axios.post('/api/board-hide/'+id, ishide)
+                .then(response => response.data)
+                .then(response => {
+                    _this.cards[index].hidden = 0;
+                    _this.getData();
+                })
+                .catch(error => {
+
+                });
             },
             showItem(e,data,index,child_key) {
                 $('.inp').addClass('input-hide');
@@ -957,7 +990,7 @@
             },
             changeTag(tags, card, columnIndex, cardIndex) {
                 var _this = this;
-                console.log(tags)
+                // console.log(tags)
                 var _this = this;
                 var old = this.tags.length;
                 var newl = tags.length;
@@ -984,7 +1017,7 @@
                             'text' : response.data.title,
                         }
                         _this.cards[columnIndex].task[cardIndex].tags.push(cardTags);
-                        console.log(response)
+                        // console.log(response)
                     })
                     .catch(error => {
                         console.log("error")
@@ -993,28 +1026,28 @@
                         _this.getData();
                     },100);
                 }
-            }
-        },
-        deleteCardTag(tags,cards,index,key) {
-            var _this = this;
-            var postData = {
-                id: obj.tag.id,
-            }
-            console.log(tags,cards,index,key);
-            // if (obj.tag.text !== 'Dont Forget') {
-            //     axios.post('/api/task-list/delete-by-tag-id', postData)
-            //         .then(response => response.data)
-            //         .then(response => {
-            //             console.log(response.success)
-            //             _this.getTaskList()
-            //             _this.tag = null
-            //         })
-            //         .catch(error => {
-            //             console.log('Api for move down task not Working !!!')
-            //         });
-            // }
+            },
+            deleteCardTag(obj, card, columnIndex, cardIndex) {
+                var _this = this;
+                var postData = {
+                    id: obj.tag.id,
+                }
+                // console.log(obj);
+                if (obj.tag.text !== 'Dont Forget') {
+                    axios.post('/api/task-list/delete-by-tag-id', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            // console.log(response.success)
+                            _this.cards[columnIndex].task[cardIndex].tags.splice(obj.index,1);
+                            _this.getData()
+                            _this.tags = []
+                        })
+                        .catch(error => {
+                            console.log('Api for delete tag not Working !!!')
+                        });
+                }
 
-
+            },
         },
         directives: {
             ClickOutside
@@ -1027,7 +1060,7 @@
             board_id : function (val) {
                 this.board_id = val;
                 this.getBoardTask()
-                console.log(this.board_id)
+                // console.log(this.board_id)
             },
             nav_id : function (val) {
                 this.nav_id = val;

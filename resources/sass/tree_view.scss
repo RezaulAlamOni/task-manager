@@ -620,6 +620,10 @@
     height: 100%;
 }
 
+#board_view_list {
+    overflow: auto;
+}
+
 #col10 {
     height: calc(100vh - 218px)
 }

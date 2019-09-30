@@ -45,6 +45,8 @@ Route::post('/board-save','MultipleBoardController@create'); //get board item
 Route::post('/board-modify','MultipleBoardController@update'); //column info update
 Route::post('/board-add', 'MultipleBoardController@store'); //add list under project
 Route::delete('/board-delete/{id}','MultipleBoardController@destroy'); //delete board
+Route::delete('/board-deleteAllCards/{id}','MultipleBoardController@deleteAllBoardWiseCards'); //delete board
+Route::post('/board-hide/{id}', 'MultipleBoardController@hideColumn');
 
 Route::post('/card-add', 'MultipleBoardController@cardAdd');
 Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');
