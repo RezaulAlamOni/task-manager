@@ -11,13 +11,11 @@ use phpDocumentor\Reflection\DocBlock\Tag;
 
 class TagsController extends Controller
 {
-
     public function index()
     {
         $tags =  Tags::where('task_id','!=',null)->groupBy('title')->get();
         return response()->json(['tags'=>$tags]);
     }
-
 
     public function create()
     {
@@ -28,7 +26,6 @@ class TagsController extends Controller
     {
         $data = [
             'color'=>$request->color,
-            // 'task_id'=>$request->id ,
             'title'=>$request->tags,
             'created_at'=>Carbon::now(),
             'updated_at'=>Carbon::now(),
@@ -91,9 +88,7 @@ class TagsController extends Controller
             } else {
                 return response()->json(['success' => 1]);
             }
-
         }
-
     }
 
     public function storeDontForgetTag(Request $request){
@@ -160,7 +155,6 @@ class TagsController extends Controller
                 }
                 return response()->json(['success'=>$parent,$task->parent_id, 'data' => $newTag]);
             }
-
         }else{
             return response()->json(['success'=>1, 'data' => $newTag]);
         }
@@ -187,7 +181,6 @@ class TagsController extends Controller
             $tags =  Tags::where('task_id','!=',null)->groupBy('title')->get();
             return response()->json(['success'=>1,'tags'=>$tags]);
         }
-
     }
 
     public function destroy(Request $request)
@@ -196,12 +189,11 @@ class TagsController extends Controller
         $tags =  Tags::where('task_id','!=',null)->groupBy('title')->get();
         return response()->json(['success'=>1,'tags'=>$tags]);
     }
+
     public function delete(Request $request)
     {
         Tags::where('id',$request->id)->delete();
         $tags =  Tags::where('task_id','!=',null)->groupBy('title')->get();
         return response()->json(['success'=>1,'tags'=>$tags]);
     }
-
-
 }

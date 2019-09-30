@@ -133,7 +133,6 @@ class MultipleBoardController extends Controller
             'sort_id' => $sortNo+1,
             'parent_id' => $parent->id,
             'project_id' =>  $parent->project_id,
-            'nav_id' =>  $parent->nav_id,
             'multiple_board_id' =>  $parent->multiple_board_id,
             'hidden' =>  0,
             'date' =>  Carbon::now(),
@@ -198,8 +197,8 @@ class MultipleBoardController extends Controller
             return response()->json(['success' => false]);
         }
     }
-    
-    
+
+
     public function deleteAllBoardWiseCards($id)
     {
         $delete = TaskBoard::Where('parent_id',$id)->delete();

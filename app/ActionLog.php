@@ -10,7 +10,6 @@ class ActionLog extends Model
         'project_id',
         'multiple_list_id',
         'task_id',
-        'nav_id',
         'multiple_board_id',
         'board_id',
         'title',
