@@ -38,7 +38,7 @@ class TagsController extends Controller
         }else{
             $data['task_id'] = $request->id;
         }
-        Tags::create($data);
+        $newTag = Tags::create($data);
 
         if ($request->tags == 'Dont Forget' ){
 
@@ -82,11 +82,11 @@ class TagsController extends Controller
                     $taskUpdate = Task::where('id',$request->id)->update(['parent_id'=>$taskDontForget[0]->id]);
                     return response()->json(['success'=>$taskUpdate]);
                 }
-                return response()->json(['success'=>$parent,$task->parent_id]);
+                return response()->json(['success'=>$parent,$task->parent_id, 'data' => $newTag]);
             }
 
         }else{
-            return response()->json(['success'=>1]);
+            return response()->json(['success'=>1, 'data' => $newTag]);
         }
 
     }

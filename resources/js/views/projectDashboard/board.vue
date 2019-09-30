@@ -153,76 +153,85 @@
                                                     </div>
                                                 </a>
                                             </div>
-                                            <a class="tag-icon">
-                                                <div v-if="card.tags && card.tags.length !== 0">
-                                                    <div v-for="item in card.tags">
-                                                        <div class="dropdown-toggle-split " data-toggle="dropdown">
-                                                            <span class="badge badge-danger "  v-if='item == "Dont Forget"'>{{item.substring(0,12)}}</span>
-                                                            <span class="badge badge-success " v-else>{{item.substring(0,10)}}..</span>
-                                                        </div>
+
+                                            <div>
+                                                <a class="tag-icon">
+                                                    <div v-if="card.tags && card.tags.length !== 0">
+                                                        <div v-for="item in card.tags" style="float: left;">
+                                                            <div class="dropdown-toggle-split " style="padding-right: 0px; padding-left: 1px;" data-toggle="dropdown">
+                                                                <span class="badge badge-danger "  v-if='item == "Dont Forget"'>{{item.text.substring(0,12)}}</span>
+                                                                <span class="badge badge-success "
+                                                                        data-toggle="tooltip" 
+                                                                        data-placement="bottom" 
+                                                                        :title="card.tagTooltip" 
+                                                                        v-else
+                                                                        v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]"
+                                                                >{{item.text.substring(0,10)}}..</span>
+                                                            </div>
 
 
-                                                        <div class="dropdown-menu dropdown-menu1 dropdown-menu-left" :id="'dropdown'+data._id">
+                                                            <div class="dropdown-menu dropdown-menu1 dropdown-menu-left" :id="'dropdown'+card.id">
 
-                                                            <diV class="collapse show switchToggle" style="">
-                                                                <div class="container-fluid">
-                                                                    <vue-tags-input
-                                                                        :tags="data.tags"
-                                                                        :allow-edit-tags="true"
-                                                                    />
-                                                                        <div class="row">
-                                                                            <div class="col-12">
-                                                                                <template>
-                                                                                    <li class="badge-pill tags"
-                                                                                        v-bind:style="[{'background': red },{'margin-left' : 1 +'px'}]">
-                                                                                        sdfasd
-                                                                                    </li>
-                                                                                </template>
-                                                                                <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                                <diV class="collapse show switchToggle" style="">
+                                                                    <div class="container-fluid">
+                                                                        <vue-tags-input
+                                                                            v-model="tag"
+                                                                            :tags="card.tags"
+                                                                            :allow-edit-tags="true"
+                                                                            @tags-changed="newTags => (changeTag(newTags,card,index,key))"
+                                                                        />
+                                                                            <div class="row">
+                                                                                <div class="col-12">
+                                                                                    <template>
+                                                                                        <!-- <li class="badge-pill tags"
+                                                                                            v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
+                                                                                        </li> -->
+                                                                                    </template>
+                                                                                    <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
-                                                                        <hr>
-                                                                        <div class="col-xs-12" style="margin-top:10px;width: 100%;">
-                                                                            <button type="submit" class="btn btn-small btn-primary pull-right">Manage Tag</button>
-                                                                        </div>
-                                                                </div>
+                                                                            <hr>
+                                                                            <div class="col-xs-12" style="margin-top:10px;width: 100%;">
+                                                                                <button type="submit" class="btn btn-small btn-primary pull-right">Manage Tag</button>
+                                                                            </div>
+                                                                    </div>
 
-                                                            </diV>
+                                                                </diV>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <i v-else class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity" data-toggle="dropdown"></i>
-                                                <div class="dropdown-menu dropdown-menu1 dropdown-menu-left">
+                                                    <i v-else class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity" data-toggle="dropdown"></i>
+                                                    <div class="dropdown-menu dropdown-menu1 dropdown-menu-left">
 
-                                                    <diV class="collapse show switchToggle" style="">
-                                                        <div class="container-fluid">
-                                                            <vue-tags-input
-                                                                :allow-edit-tags="true"
-                                                                 @tags-changed="newTags => (changeTAg(newTags,card))"
-                                                                 :tags="tag1"
-                                                                 v-model="tag"
-                                                            />
-                                                                <div class="row">
-                                                                    <div class="col-12">
-                                                                        <template>
-                                                                            <li class="badge-pill tags">
-                                                                                sdfasd
-                                                                            </li>
-                                                                        </template>
-                                                                        <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                        <diV class="collapse show switchToggle" style="">
+                                                            <div class="container-fluid">
+                                                                <vue-tags-input
+                                                                    v-model="tag"
+                                                                    :allow-edit-tags="true"
+                                                                    @tags-changed="newTags => (changeTag(newTags,card,index,key))"
+                                                                    :tags="tag1"
+                                                                />
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <template>
+                                                                                <li class="badge-pill tags">
+                                                                                </li>
+                                                                            </template>
+                                                                            <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <hr>
-                                                                <div class="col-xs-12" style="margin-top:10px;width: 100%;">
-                                                                    <button type="submit" class="btn btn-small btn-primary pull-right">Manage Tag</button>
-                                                                </div>
-                                                        </div>
+                                                                    <hr>
+                                                                    <div class="col-xs-12" style="margin-top:10px;width: 100%;">
+                                                                        <button type="submit" class="btn btn-small btn-primary pull-right">Manage Tag</button>
+                                                                    </div>
+                                                            </div>
 
-                                                    </diV>
-                                                </div>
+                                                        </diV>
+                                                    </div>
 
-                                            </a>
+                                                </a>
+                                            </div>
                                         </div>
                                     </Draggable>
                                 </Container>
@@ -645,6 +654,7 @@
                         }))
                     })),
                 }
+                console.log(scene);
 
             },
 
@@ -725,12 +735,13 @@
                 this.editField.progress = this.cards[index].progress;
                 this.editField.color = this.cards[index].color;
                 this.editField.error = '';
+                // console.log(this.editField)
                 setTimeout(function () {
                     $("#EditModal").modal('show');
                 },100);
             },
             updateColumn() {
-                // console.log(this.editField)
+                let _this = this;
                 if (!this.editField.name || this.editField.name === '') {
                     this.editField.error = 'Name is required!';
                 } else {
@@ -739,15 +750,20 @@
                     axios.post('/api/board-modify',data)
                     .then(response => response.data)
                     .then(response => {
-                        if(response.success === true){
-                            this.cards[this.updateIndex].column = this.editField.name;
+                        // console.log(_this.editField)
+                        if(response.success === true){    
+                            _this.cards[_this.updateIndex].column = _this.editField.name;
                         }
                     })
                     .catch(error => {
 
                     });
-                    this.getData();
-                    this.editField = {};
+                    setTimeout(function () {
+                        // console.log(_this.cards[_this.updateIndex].column);
+                        _this.getData();
+                        // _this.editField = {};
+                        // $("#EditModal").modal('show');
+                    },300);
                 }
             },
             addExistingTask(index){
@@ -771,6 +787,7 @@
                 axios.post('/api/board-task', data)
                     .then(response => response.data)
                     .then(response => {
+                        console.log(response.success);
                         _this.cards = response.success;
                         _this.getData();
                     })
@@ -945,8 +962,9 @@
                 myColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16)
                 return myColor;
             },
-            changeTAg(tags, card) {
-                // console.log(card)
+            changeTag(tags, card, columnIndex, cardIndex) {
+                var _this = this;
+                console.log(tags)
                 var _this = this;
                 var old = this.tags.length;
                 var newl = tags.length;
@@ -962,18 +980,48 @@
                         type: 'board',
                     }
                     axios.post('/api/task-list/add-tag', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            console.log(response.success)
-                            _this.getTaskList()
-                            _this.tag = null
-                        })
-                        .catch(error => {
-                            console.log('Api for move down task not Working !!!')
-                        });
-
+                    .then(response => response.data)
+                    .then(response => {
+                        let cardTags = {
+                            'board_id' : response.data.board_id,
+                            'classes' : '',
+                            'color' : response.data.color,
+                            'id' : response.data.id,
+                            'style' : "background-color: "+response.data.color,
+                            'text' : response.data.title,
+                        }
+                        _this.cards[columnIndex].task[cardIndex].tags.push(cardTags);
+                        console.log(response)
+                    })
+                    .catch(error => {
+                        console.log("error")
+                    });
+                    setTimeout(function () {
+                        _this.getData();
+                    },100);
                 }
             }
+        },
+        deleteCardTag(tags,cards,index,key) {
+            var _this = this;
+            var postData = {
+                id: obj.tag.id,
+            }
+            console.log(tags,cards,index,key);
+            // if (obj.tag.text !== 'Dont Forget') {
+            //     axios.post('/api/task-list/delete-by-tag-id', postData)
+            //         .then(response => response.data)
+            //         .then(response => {
+            //             console.log(response.success)
+            //             _this.getTaskList()
+            //             _this.tag = null
+            //         })
+            //         .catch(error => {
+            //             console.log('Api for move down task not Working !!!')
+            //         });
+            // }
+
+
         },
         directives: {
             ClickOutside
