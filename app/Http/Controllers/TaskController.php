@@ -343,10 +343,13 @@ class TaskController extends Controller
                 'list_id' => $check_dontForgetSection->list_id,
                 'nav_id' => $check_dontForgetSection->nav_id
             ])->first();
-            $check_child = Task::where('parent_id',$taskDontForget->id)->count();
-            if ($check_child <= 0 ){
-                Task::findOrFail($taskDontForget->id)->delete();
+            if ($taskDontForget){
+                $check_child = Task::where('parent_id',$taskDontForget->id)->count();
+                if ($check_child <= 0 ){
+                    Task::findOrFail($taskDontForget->id)->delete();
+                }
             }
+
         }
 
         $childrens = Task::where('parent_id', $id)->get();
