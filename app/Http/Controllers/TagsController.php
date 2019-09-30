@@ -40,12 +40,13 @@ class TagsController extends Controller
             $data['task_id'] = $request->id;
             $check_exists = Tags::where(['title'=>'Dont Forget','task_id'=>$request->id])->get();
         }
+
+        $newTag = Tags::create($data);
+
         if ($check_exists->count() <= 0 ) {
             Tags::create($data);
 
             if ($request->tags == 'Dont Forget') {
-
-
                 $task = Task::where('id', $request->id)->first();
                 $taskDontForget = Task::where([
                     'title' => 'Dont Forget Section',
@@ -157,8 +158,11 @@ class TagsController extends Controller
                     $taskUpdate = Task::where('id', $id)->update(['parent_id' => $taskDontForget[0]->id,'sort_id'=>$sort+1]);
                     return true;
                 }
-                return false;
+                return response()->json(['success'=>$parent,$task->parent_id, 'data' => $newTag]);
             }
+
+        }else{
+            return response()->json(['success'=>1, 'data' => $newTag]);
         }
     }
 
