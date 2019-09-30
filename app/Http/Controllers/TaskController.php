@@ -263,8 +263,18 @@ class TaskController extends Controller
 
     public function deleteTask(Request $request)
     {
-        $this->deleteTaskWithChild($request->id);
-        return response()->json(['success' => 1]);
+
+        if (isset($request->ids)){
+            $ids = $request->ids;
+            foreach ($ids as $id) {
+                $this->deleteTaskWithChild($id);
+            }
+            return response()->json(['success' => 1]);
+        }else{
+            $this->deleteTaskWithChild($request->id);
+            return response()->json(['success' => 1]);
+        }
+
     }
 
     public function deleteImg(Request $request)
@@ -321,6 +331,8 @@ class TaskController extends Controller
 
     public function deleteTaskWithChild($id)
     {
+        Tags::where('task_id',$id)->delete();
+        Files::where('tasks_id',$id)->delete();
         Task::findOrFail($id)->delete();
         $childrens = Task::where('parent_id', $id)->get();
         foreach ($childrens as $children) {

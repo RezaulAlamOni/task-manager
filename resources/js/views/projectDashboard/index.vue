@@ -112,11 +112,7 @@
                                                     </span>
                                             </template>
                                         </template>
-
-
                                     </i>
-
-
                                     <i v-else :id="'tag-'+data._id"
                                        class="outline-local_offer icon-image-preview li-opacity"
                                        data-toggle="dropdown">
@@ -139,8 +135,7 @@
                                                             <li class="badge-pill tags"
                                                                 v-if="tag.text !== 'Dont Forget'"
                                                                 v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                {{(tag.text !== undefined) ?tag.text.substring(0,12) :
-                                                                ''}}
+                                                                {{(tag.text !== undefined) ?tag.text.substring(0,12) : ''}}
                                                             </li>
                                                         </template>
                                                         <li class="badge-pill tags" style="background: #FB8678"
@@ -235,7 +230,7 @@
 
                     <div id="jquery-accordion-menu" class="jquery-accordion-menu" v-click-outside="HideCustomMenu">
                         <ul>
-                            <li><a href="javascript:void(0)">Deleted </a></li>
+                            <li><a href="javascript:void(0)" @click="deleteSelectedTask">Deleted </a></li>
                             <li><a href="javascript:void(0)">Move To Dont Forget Section </a></li>
                             <li><a href="javascript:void(0)">Action 1 </a></li>
                             <li><a href="javascript:void(0)">Action 2</a></li>
@@ -1239,7 +1234,6 @@
             },
             RemoveNodeAndChildren(data) {
                 var _this = this;
-
                 var postData = {
                     id: data.id,
                     text: data.text
@@ -1254,6 +1248,24 @@
                     });
 
             },
+            deleteSelectedTask() {
+
+                var _this = this;
+                var postData = {
+                    ids: _this.selectedIds,
+                }
+                axios.post('/api/task-list/delete-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getTaskList()
+                        $('.jquery-accordion-menu').hide();
+                    })
+                    .catch(error => {
+                        console.log('Api for delete task not Working !!!')
+                    });
+
+            },
+
             showLog() {
                 var _this = this;
                 axios.get('/api/task-list/get-log/' + _this.selectedData.id)
