@@ -58,9 +58,11 @@
                                 >
                                     <i class="outline-check_circle_outline icon-image-preview "></i>
                                 </a>
-                                <a class="delete-icon left-content li-opacity"
+                                <a  class="delete-icon left-content li-opacity"
+                                    data-toggle="tooltip"
+                                    href="javascript:void(0)"
                                    @click="RemoveNodeAndChildren(data)"
-                                   :title="'Remove this node'">
+                                   :title="'Remove this task'">
                                     <i class="baseline-playlist_delete icon-image-preview"></i>
                                 </a>
                                 <a class="left-content1 li-opacity ">
@@ -112,11 +114,7 @@
                                                     </span>
                                             </template>
                                         </template>
-
-
                                     </i>
-
-
                                     <i v-else :id="'tag-'+data._id"
                                        class="outline-local_offer icon-image-preview li-opacity"
                                        data-toggle="dropdown">
@@ -139,12 +137,11 @@
                                                             <li class="badge-pill tags"
                                                                 v-if="tag.text !== 'Dont Forget'"
                                                                 v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                {{(tag.text !== undefined) ?tag.text.substring(0,12) :
-                                                                ''}}
+                                                                {{(tag.text !== undefined) ?tag.text.substring(0,12) : ''}}
                                                             </li>
                                                         </template>
                                                         <li class="badge-pill tags" style="background: #FB8678"
-                                                            @click="addExistingTag($event,data ,'Dont Forget')">
+                                                            @click="addExistingTag(data ,'Dont Forget')">
                                                             Dont Forget
                                                         </li>
                                                     </div>
@@ -235,8 +232,8 @@
 
                     <div id="jquery-accordion-menu" class="jquery-accordion-menu" v-click-outside="HideCustomMenu">
                         <ul>
-                            <li><a href="javascript:void(0)">Deleted </a></li>
-                            <li><a href="javascript:void(0)">Move To Dont Forget Section </a></li>
+                            <li><a href="javascript:void(0)" @click="deleteSelectedTask">Deleted </a></li>
+                            <li><a href="javascript:void(0)" @click="AddDontForgetTagToSelectedIds">Move To Dont Forget Section </a></li>
                             <li><a href="javascript:void(0)">Action 1 </a></li>
                             <li><a href="javascript:void(0)">Action 2</a></li>
                         </ul>
@@ -511,7 +508,7 @@
                         _this.shwAssignUserDropDown(_this.selectedData);
                         break;
                     case "ctrl+b":
-                        _this.AddDontForgetTag(_this.selectedData);//add DON'T FORGET SECTION
+                        _this.AddDontForgetTagToSelectedIds();//add DON'T FORGET SECTION
                         break;
                     case "ctrl+s":
                         $('.searchList').show();
@@ -999,7 +996,7 @@
                         });
                 }
             },
-            addExistingTag(e, data, tag) {
+            addExistingTag(data, tag) {
 
                 var _this = this;
                 var color = (tag === 'Dont Forget') ? '#ff0000' : _this.generateColor();
@@ -1021,6 +1018,7 @@
                     });
 
             },
+
             changeTAg(tags) {
                 var _this = this;
                 var old = this.tags.length;
@@ -1239,7 +1237,6 @@
             },
             RemoveNodeAndChildren(data) {
                 var _this = this;
-
                 var postData = {
                     id: data.id,
                     text: data.text
@@ -1254,6 +1251,47 @@
                     });
 
             },
+
+            deleteSelectedTask() {
+
+                var _this = this;
+                var postData = {
+                    ids: _this.selectedIds,
+                }
+                axios.post('/api/task-list/delete-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getTaskList()
+                        $('.jquery-accordion-menu').hide();
+                    })
+                    .catch(error => {
+                        console.log('Api for delete task not Working !!!')
+                    });
+
+            },
+            AddDontForgetTagToSelectedIds() {
+
+                var _this = this;
+                var postData = {
+                    ids: _this.selectedIds,
+                    tags: 'Dont Forget',
+                    color: '#ff0000'
+                }
+                axios.post('/api/task-list/add-dont-forget-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.success)
+                        _this.getTaskList()
+                        $('#dropdown' + data._id).toggle();
+                        _this.selectedData.tags[0] = tag
+                    })
+                    .catch(error => {
+                        console.log('Api for add tag not Working !!!')
+                    });
+
+
+            },
+
             showLog() {
                 var _this = this;
                 axios.get('/api/task-list/get-log/' + _this.selectedData.id)
@@ -1510,6 +1548,7 @@
                     }
                 }
             },
+
             keyDownAction(e, data) {
                 if (e.which === 9) {
                     e.stopPropagation();

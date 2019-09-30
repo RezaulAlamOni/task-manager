@@ -263,8 +263,18 @@ class TaskController extends Controller
 
     public function deleteTask(Request $request)
     {
-        $this->deleteTaskWithChild($request->id);
-        return response()->json(['success' => 1]);
+
+        if (isset($request->ids)){
+            $ids = $request->ids;
+            foreach ($ids as $id) {
+                $this->deleteTaskWithChild($id);
+            }
+            return response()->json(['success' => 1]);
+        }else{
+            $this->deleteTaskWithChild($request->id);
+            return response()->json(['success' => 1]);
+        }
+
     }
 
     public function deleteImg(Request $request)
@@ -321,7 +331,27 @@ class TaskController extends Controller
 
     public function deleteTaskWithChild($id)
     {
+        Tags::where('task_id',$id)->delete();
+        Files::where('tasks_id',$id)->delete();
+        $check_dontForgetSection = Task::where('id',$id)->first();
         Task::findOrFail($id)->delete();
+
+        if ($check_dontForgetSection) {
+            $taskDontForget = Task::where([
+                'title' => 'Dont Forget Section',
+                'project_id' => $check_dontForgetSection->project_id,
+                'list_id' => $check_dontForgetSection->list_id,
+                'nav_id' => $check_dontForgetSection->nav_id
+            ])->first();
+            if ($taskDontForget){
+                $check_child = Task::where('parent_id',$taskDontForget->id)->count();
+                if ($check_child <= 0 ){
+                    Task::findOrFail($taskDontForget->id)->delete();
+                }
+            }
+
+        }
+
         $childrens = Task::where('parent_id', $id)->get();
         foreach ($childrens as $children) {
             $this->deleteTaskWithChild($children->id);
