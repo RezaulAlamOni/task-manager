@@ -111,8 +111,9 @@ class TaskController extends Controller
                 ->where('sort_id', '>', $request->sort_id)
                 ->where('list_id', $list_id)
                 ->increment('sort_id');
+            $sort_id = ($request->sort_id < 0 ) ? 1 : $request->sort_id ;
             $data = [
-                'sort_id' => $request->sort_id + 1,
+                'sort_id' => $sort_id,
                 'parent_id' => $request->parent_id,
                 'project_id' => $request->project_id,
                 'list_id' => $list_id,
@@ -180,17 +181,18 @@ class TaskController extends Controller
 
     public function reverseChild(Request $request)
     {
+
         if (isset($request->parent_id) && $request->parent_id != 0) {
             $task = Task::where('id', $request->parent_id)->first();
 
             if ($task) {
-                $taskChild = Task::where('parent_id', $task->id)
+                $taskChild = Task::where('parent_id', $task->parent_id)
                     ->where('project_id', $task->project_id)
                     ->where('list_id', $task->list_id)
                     ->where('sort_id', '>', $task->sort_id)
                     ->increment('sort_id');
 
-                $sort_id = $task->sort_id + 1;
+                $sort_id = ($task->sort_id < 0 ) ? 1 : $task->sort_id;
                 Task::where('id', $request->id)->update(['parent_id' => $task->parent_id, 'sort_id' => $sort_id]);
 
                 $this->updateTagWithDataMove($request->id,$task->parent_id);
@@ -456,8 +458,10 @@ class TaskController extends Controller
                 ];
                 Tags::create($TagData);
             }
-
-
+        }
+        $childrens = Task::where('parent_id',$task_id)->get();
+        foreach ($childrens as $children) {
+            $this->updateTagWithDataMove($children->id,$task_id);
         }
 
     }

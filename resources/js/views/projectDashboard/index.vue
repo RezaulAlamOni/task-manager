@@ -1573,7 +1573,7 @@
                 for( var i = 0; i< _this.selectedData.tags.length; i++ ){
                     if (_this.selectedData.tags[i].text === "Dont Forget"){
                         dontForgetText = 1;
-                    } 
+                    }
                 }
 
                 if (_this.selectedData != null && dontForgetText === 0) {
