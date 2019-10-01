@@ -30,15 +30,8 @@ class TagsController extends Controller
             'created_at'=>Carbon::now(),
             'updated_at'=>Carbon::now(),
         ];
-        if($request->type == 'board'){
-            $data['board_id'] = $request->id;
-            $check_exists = Tags::where(['title'=>'Dont Forget','board_id'=>$request->id])->get();
-        }else{
-            $data['task_id'] = $request->id;
-            $check_exists = Tags::where(['title'=>'Dont Forget','task_id'=>$request->id])->get();
-        }
-
-        $newTag = Tags::create($data);
+        $data['task_id'] = $request->id;
+        $check_exists = Tags::where(['title'=>'Dont Forget','task_id'=>$request->id])->get();
 
         if ($check_exists->count() <= 0 ) {
             Tags::create($data);
@@ -77,7 +70,8 @@ class TagsController extends Controller
                 } elseif ($request->id != $taskDontForget[0]->id) {
                     $parent = Task::join('tags', 'task_lists.id', 'tags.task_id')->where(['task_lists.id' => $task->parent_id, 'tags.title' => 'Dont Forget'])->get();
                     if ($parent->count() <= 0) {
-                        $taskUpdate = Task::where('id', $request->id)->update(['parent_id' => $taskDontForget[0]->id]);
+                    $sort = Task::where(['parent_id' => $taskDontForget[0]->id])->max('sort_id');
+                        $taskUpdate = Task::where('id', $request->id)->update(['parent_id' => $taskDontForget[0]->id,'sort_id'=>$sort+1]);
                         return response()->json(['success' => $taskUpdate]);
                     }
                     return response()->json(['success' => $parent, $task->parent_id]);
@@ -149,10 +143,10 @@ class TagsController extends Controller
                     $taskUpdate = Task::where('id', $id)->update(['parent_id' => $taskDontForget[0]->id,'sort_id'=>$sort+1]);
                     return true;
                 }
-                return response()->json(['success'=>$parent,$task->parent_id, 'data' => $newTag]);
+                return response()->json(['success'=>$parent,$task->parent_id, 'data' => '']);
             }
         }else{
-            return response()->json(['success'=>1, 'data' => $newTag]);
+            return response()->json(['success'=>1, 'data' => '']);
         }
     }
 

@@ -1282,8 +1282,7 @@
                     .then(response => {
                         console.log(response.success)
                         _this.getTaskList()
-                        $('#dropdown' + data._id).toggle();
-                        _this.selectedData.tags[0] = tag
+                        $('.jquery-accordion-menu').hide();
                     })
                     .catch(error => {
                         console.log('Api for add tag not Working !!!')
