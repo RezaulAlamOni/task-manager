@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Files;
@@ -47,6 +48,7 @@ class TaskController extends Controller
         $multiple_list = $multiple_list->multiple_list;
         return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list, 'empty_task' => $task]);
     }
+
     public function getAll(Request $request)
     {
         if ($request->list_id == null) {
@@ -162,16 +164,13 @@ class TaskController extends Controller
                 ->where('sort_id', '<', $request->sort_id)
                 ->orderBy('sort_id', 'desc')->first();
             if ($task) {
-                $taskChild = Task::where('parent_id', $task->id)
-                    ->where('project_id', $request->project_id)
-                    ->where('list_id', $request->list_id)
-                    ->orderBy('sort_id', 'desc')->first();
-                if ($taskChild) {
-                    $sort_id = $taskChild->sort_id + 1;
-                    $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => $sort_id]);
-                } else {
-                    $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => 1]);
-                }
+                $taskSortId = Task::where('parent_id', $task->id)->max('sort_id');
+
+                $sort_id = ($taskSortId > 0) ? $taskSortId + 1 : 1;
+                $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => $sort_id]);
+
+                $this->updateTagWithDataMove($request->id,$task->id);
+
                 $this->createLog($request->id, 'updated', 'Update parent', $request->text);
             }
 
@@ -233,26 +232,15 @@ class TaskController extends Controller
         } else if ($request->type == 'cut') {
             $target = Task::where('id', $request->target_id)->first();
             Task::where('project_id', $target->project_id)
-                    ->where('sort_id','>', $target->sort_id)
-                    ->where('parent_id', $target->parent_id)
-                    ->increment('sort_id');
+                ->where('sort_id', '>', $target->sort_id)
+                ->where('parent_id', $target->parent_id)
+                ->increment('sort_id');
 
 
-            $past = Task::where('id', $request->copy_id)->update(['parent_id' => $target->parent_id,'sort_id'=>$target->sort_id + 1]);
+            $past = Task::where('id', $request->copy_id)->update(['parent_id' => $target->parent_id, 'sort_id' => $target->sort_id + 1]);
 
-            $parent = Task::join('tags', 'task_lists.id', 'tags.task_id')->where(['task_lists.id' => $target->parent_id, 'tags.title' => 'Dont Forget'])->get();
-            if ($parent->count() <= 0){
-                Tags::where(['title'=>'Dont Forget','task_id'=>$request->copy_id])->delete();
-            }else{
-                $TagData = [
-                    'color' => '#ff0000',
-                    'task_id' => $request->copy_id,
-                    'title' => 'Dont Forget',
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ];
-                Tags::create($TagData);
-            }
+            $this->updateTagWithDataMove($request->copy_id,$target->parent_id);
+            //check the target task id in the dont forget section and update tag for necessary
 
             $this->createLog($request->copy_id, 'cut', 'Cut and past tsk', $request->text);
 
@@ -263,13 +251,13 @@ class TaskController extends Controller
     public function deleteTask(Request $request)
     {
 
-        if (isset($request->ids)){
+        if (isset($request->ids)) {
             $ids = $request->ids;
             foreach ($ids as $id) {
                 $this->deleteTaskWithChild($id);
             }
             return response()->json(['success' => 1]);
-        }else{
+        } else {
             $this->deleteTaskWithChild($request->id);
             return response()->json(['success' => 1]);
         }
@@ -278,10 +266,10 @@ class TaskController extends Controller
 
     public function deleteImg(Request $request)
     {
-        $delete =  Files::where('file_name',$request->img)->delete();
-        if ($delete){
-            $image_path = public_path()."/images/".$request->img;  // Value is not URL but directory file path
-            if(file_exists($image_path)) {
+        $delete = Files::where('file_name', $request->img)->delete();
+        if ($delete) {
+            $image_path = public_path() . "/images/" . $request->img;  // Value is not URL but directory file path
+            if (file_exists($image_path)) {
                 $del = unlink($image_path);
                 return response()->json(['success' => $del]);
             }
@@ -292,7 +280,7 @@ class TaskController extends Controller
 
     public function addTag(Request $request)
     {
-        Task::where('id',$request->id)->update(['tag'=>$request->tags]);
+        Task::where('id', $request->id)->update(['tag' => $request->tags]);
         return response()->json(['success' => 1]);
     }
 
@@ -328,9 +316,9 @@ class TaskController extends Controller
 
     public function deleteTaskWithChild($id)
     {
-        Tags::where('task_id',$id)->delete();
-        Files::where('tasks_id',$id)->delete();
-        $check_dontForgetSection = Task::where('id',$id)->first();
+        Tags::where('task_id', $id)->delete();
+        Files::where('tasks_id', $id)->delete();
+        $check_dontForgetSection = Task::where('id', $id)->first();
         Task::findOrFail($id)->delete();
 
         if ($check_dontForgetSection) {
@@ -339,9 +327,9 @@ class TaskController extends Controller
                 'project_id' => $check_dontForgetSection->project_id,
                 'list_id' => $check_dontForgetSection->list_id
             ])->first();
-            if ($taskDontForget){
-                $check_child = Task::where('parent_id',$taskDontForget->id)->count();
-                if ($check_child <= 0 ){
+            if ($taskDontForget) {
+                $check_child = Task::where('parent_id', $taskDontForget->id)->count();
+                if ($check_child <= 0) {
                     Task::findOrFail($taskDontForget->id)->delete();
                 }
             }
@@ -354,35 +342,36 @@ class TaskController extends Controller
         }
     }
 
-    public function update(Request $request){
-        if(isset($request->details)){
-            if(Task::where('id',$request->id)->update(['description'=>$request->details])){
-                return response()->json('success',200);
+    public function update(Request $request)
+    {
+        if (isset($request->details)) {
+            if (Task::where('id', $request->id)->update(['description' => $request->details])) {
+                return response()->json('success', 200);
             }
-        }elseif (isset($request->complete)){
-            if(Task::where('id',$request->id)->update(['is_complete'=>1])){
-                return response()->json('success',200);
+        } elseif (isset($request->complete)) {
+            if (Task::where('id', $request->id)->update(['is_complete' => 1])) {
+                return response()->json('success', 200);
             }
-        }elseif (isset($request->date)){
-            if(Task::where('id',$request->id)->update(['date'=>$request->date])){
-                return response()->json('success',200);
+        } elseif (isset($request->date)) {
+            if (Task::where('id', $request->id)->update(['date' => $request->date])) {
+                return response()->json('success', 200);
             }
-        }elseif (isset($request->files)){
+        } elseif (isset($request->files)) {
             $task_id = $request->id;
             $photo = $_FILES['file']['name'];
 
-            if (move_uploaded_file($_FILES["file"]["tmp_name"], "images/".$_FILES['file']['name'])) {
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], "images/" . $_FILES['file']['name'])) {
                 $file = [
-                    'file_name'=>$photo,
-                    'tasks_id'=>$task_id ,
-                    'created_by'=> Auth::id(),
-                    'updated_by'=> Auth::id(),
-                    'created_at'=>Carbon::now()
+                    'file_name' => $photo,
+                    'tasks_id' => $task_id,
+                    'created_by' => Auth::id(),
+                    'updated_by' => Auth::id(),
+                    'created_at' => Carbon::now()
                 ];
                 Files::create($file);
-                return response()->json('success',200);
-            }else{
-                return response()->json('failed',500);
+                return response()->json('success', 200);
+            } else {
+                return response()->json('failed', 500);
             }
         }
     }
@@ -399,18 +388,18 @@ class TaskController extends Controller
             $info['text'] = $task->title;
             $info['clicked'] = 0;
             $info['date'] = $task->date;
-            $allTags = Tags::where('task_id',$task->id)->get();
+            $allTags = Tags::where('task_id', $task->id)->get();
             $tags = [];
             $tagTooltip = '';
-            if ($allTags->count() > 0){
+            if ($allTags->count() > 0) {
                 foreach ($allTags as $key => $tag) {
                     $tags[$key]['id'] = $tag->id;
                     $tags[$key]['task_id'] = $tag->task_id;
                     $tags[$key]['text'] = $tag->title;
                     $tags[$key]['classes'] = '';
-                    $tags[$key]['style'] = 'background-color: '.$tag->color;
+                    $tags[$key]['style'] = 'background-color: ' . $tag->color;
                     $tags[$key]['color'] = $tag->color;
-                    $tagTooltip .= '#'.$tag->title.' ';
+                    $tagTooltip .= '#' . $tag->title . ' ';
                 }
             }
 
@@ -418,7 +407,7 @@ class TaskController extends Controller
             $info['tagTooltip'] = $tagTooltip;
             $info['description'] = $task->description;
             $info['files'] = $task->files;
-            $info['users'] = User::select('id','name')->get()->toArray();
+            $info['users'] = User::select('id', 'name')->get()->toArray();
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
@@ -446,5 +435,28 @@ class TaskController extends Controller
             'action_at' => Carbon::now()
         ];
         $this->actionLog->store($log_data);
+    }
+
+    protected function updateTagWithDataMove($task_id,$target_parent_id)
+    {
+        $parent = Task::join('tags', 'task_lists.id', 'tags.task_id')->where(['task_lists.id' => $target_parent_id, 'tags.title' => 'Dont Forget'])->get();
+        if ($parent->count() <= 0 ){
+            Tags::where(['title'=>'Dont Forget','task_id'=>$task_id])->delete();
+        }else{
+            $self = Task::join('tags', 'task_lists.id', 'tags.task_id')->where(['task_lists.id' => $task_id, 'tags.title' => 'Dont Forget'])->get();
+            if ($self->count() <= 0){
+                $TagData = [
+                    'color' => '#ff0000',
+                    'task_id' => $task_id,
+                    'title' => 'Dont Forget',
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ];
+                Tags::create($TagData);
+            }
+
+
+        }
+
     }
 }
