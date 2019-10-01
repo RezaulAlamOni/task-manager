@@ -1277,7 +1277,7 @@
                     tags: 'Dont Forget',
                     color: '#ff0000'
                 }
-                axios.post('/api/task-list/add-dont-forget-tag', postData)
+                axios.post('/api/task-list/add-tag-to-multiple-task', postData)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response.success)

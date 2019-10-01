@@ -83,8 +83,9 @@ class TagsController extends Controller
         }
     }
 
-    public function storeDontForgetTag(Request $request){
+    public function addTagToMultipleTask(Request $request){
         $ids = $request->ids;
+        $success = 0;
         foreach ($ids as $id) {
             $data = [
                 'color'=>$request->color,
