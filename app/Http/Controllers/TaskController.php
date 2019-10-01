@@ -91,6 +91,7 @@ class TaskController extends Controller
 
     public function addTask(Request $request)
     {
+        $list_id = $request->list_id;
         $etask = Task::where(['id' => $request->id])->get();
         if ($request->text == '') {
             Task::where(['id' => $request->id, 'project_id' => $request->project_id])->delete();

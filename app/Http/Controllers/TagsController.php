@@ -49,7 +49,6 @@ class TagsController extends Controller
                     'title' => 'Dont Forget Section',
                     'project_id' => $task->project_id,
                     'list_id' => $task->list_id,
-                    'nav_id' => $task->nav_id
                 ])->get();
                 if ($taskDontForget->count() <= 0) {
                     $data = [
@@ -57,7 +56,6 @@ class TagsController extends Controller
                         'parent_id' => 0,
                         'project_id' => $task->project_id,
                         'list_id' => $task->list_id,
-                        'nav_id' => $task->nav_id,
                         'created_by' => Auth::id(),
                         'updated_by' => Auth::id(),
                         'title' => 'Dont Forget Section',
@@ -119,7 +117,6 @@ class TagsController extends Controller
                 'title' => 'Dont Forget Section',
                 'project_id' => $task->project_id,
                 'list_id' => $task->list_id,
-                'nav_id' => $task->nav_id
             ])->get();
             if ($taskDontForget->count() <= 0) {
                 $data = [
@@ -127,7 +124,6 @@ class TagsController extends Controller
                     'parent_id' => 0,
                     'project_id' => $task->project_id,
                     'list_id' => $task->list_id,
-                    'nav_id' => $task->nav_id,
                     'created_by' => Auth::id(),
                     'updated_by' => Auth::id(),
                     'title' => 'Dont Forget Section',
