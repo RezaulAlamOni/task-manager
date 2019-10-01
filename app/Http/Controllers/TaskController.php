@@ -232,7 +232,6 @@ class TaskController extends Controller
 
         } else if ($request->type == 'cut') {
             $target = Task::where('id', $request->target_id)->first();
-
             Task::where('project_id', $target->project_id)
                     ->where('sort_id','>', $target->sort_id)
                     ->where('parent_id', $target->parent_id)
@@ -240,6 +239,20 @@ class TaskController extends Controller
 
 
             $past = Task::where('id', $request->copy_id)->update(['parent_id' => $target->parent_id,'sort_id'=>$target->sort_id + 1]);
+
+            $parent = Task::join('tags', 'task_lists.id', 'tags.task_id')->where(['task_lists.id' => $target->parent_id, 'tags.title' => 'Dont Forget'])->get();
+            if ($parent->count() <= 0){
+                Tags::where(['title'=>'Dont Forget','task_id'=>$request->copy_id])->delete();
+            }else{
+                $TagData = [
+                    'color' => '#ff0000',
+                    'task_id' => $request->copy_id,
+                    'title' => 'Dont Forget',
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ];
+                Tags::create($TagData);
+            }
 
             $this->createLog($request->copy_id, 'cut', 'Cut and past tsk', $request->text);
 
