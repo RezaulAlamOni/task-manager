@@ -1569,8 +1569,14 @@
 
             ShowDetails() {
                 var _this = this;
-                console.log(_this.selectedData);
-                if (_this.selectedData != null) {
+                var dontForgetText = 0;
+                for( var i = 0; i< _this.selectedData.tags.length; i++ ){
+                    if (_this.selectedData.tags[i].text === "Dont Forget"){
+                        dontForgetText = 1;
+                    } 
+                }
+
+                if (_this.selectedData != null && dontForgetText === 0) {
                     $('#task_width').removeClass('task_width');
                     $('#task_width').addClass('task_widthNormal');
                     $('#details').removeClass('details');
