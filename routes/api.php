@@ -23,7 +23,7 @@ Route::post('/task-list/delete-img', 'TaskController@deleteImg');//reverse child
 //task list tags related
 Route::get('/task-list/all-tag', 'TagsController@index');//get all tag
 Route::post('/task-list/add-tag', 'TagsController@store');//add tag
-Route::post('/task-list/add-dont-forget-tag', 'TagsController@storeDontForgetTag');//add dont forget tag
+Route::post('/task-list/add-tag-to-multiple-task', 'TagsController@addTagToMultipleTask');//add dont forget tag
 Route::post('/task-list/delete-tag', 'TagsController@destroy');//delete by tag title
 Route::post('/task-list/delete-by-tag-id', 'TagsController@delete');//delete by tag id
 Route::post('/task-list/update-tag', 'TagsController@update');//update tag

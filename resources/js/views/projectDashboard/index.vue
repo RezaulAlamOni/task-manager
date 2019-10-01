@@ -1277,13 +1277,12 @@
                     tags: 'Dont Forget',
                     color: '#ff0000'
                 }
-                axios.post('/api/task-list/add-dont-forget-tag', postData)
+                axios.post('/api/task-list/add-tag-to-multiple-task', postData)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response.success)
                         _this.getTaskList()
-                        $('#dropdown' + data._id).toggle();
-                        _this.selectedData.tags[0] = tag
+                        $('.jquery-accordion-menu').hide();
                     })
                     .catch(error => {
                         console.log('Api for add tag not Working !!!')
@@ -1570,8 +1569,14 @@
 
             ShowDetails() {
                 var _this = this;
-                console.log(_this.selectedData);
-                if (_this.selectedData != null) {
+                var dontForgetText = 0;
+                for( var i = 0; i< _this.selectedData.tags.length; i++ ){
+                    if (_this.selectedData.tags[i].text === "Dont Forget"){
+                        dontForgetText = 1;
+                    }
+                }
+
+                if (_this.selectedData != null && dontForgetText === 0) {
                     $('#task_width').removeClass('task_width');
                     $('#task_width').addClass('task_widthNormal');
                     $('#details').removeClass('details');
