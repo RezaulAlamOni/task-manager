@@ -29,7 +29,6 @@ class TaskController extends Controller
     {
         if ($request->list_id == null) {
             $list = Multiple_list::where('project_id', $request->id)
-                ->where('nav_id', $request->nav_id)
                 ->orderBy('id', 'ASC')->first();
             $list_id = $list->id;
         } else {
@@ -38,7 +37,6 @@ class TaskController extends Controller
         $tasks = Task::where('parent_id', 0)
             ->where('project_id', $request->id)
             ->where('list_id', $list_id)
-            ->where('nav_id', $request->nav_id)
             ->where('is_complete', 0)
             ->orderBy('sort_id', 'ASC')
             ->get();
@@ -52,7 +50,7 @@ class TaskController extends Controller
     public function getAll(Request $request)
     {
         if ($request->list_id == null) {
-            $list = Multiple_list::where('project_id', $request->id)->where('nav_id', $request->nav_id)->orderBy('id', 'ASC')->first();
+            $list = Multiple_list::where('project_id', $request->id)->orderBy('id', 'ASC')->first();
             $list_id = $list->id;
         } else {
             $list_id = $request->list_id;
@@ -60,7 +58,6 @@ class TaskController extends Controller
         $tasks = Task::where('parent_id', 0)
             ->where('project_id', $request->id)
             ->where('list_id', $list_id)
-            ->where('nav_id', $request->nav_id)
             ->orderBy('sort_id', 'ASC')
             ->get();
         $task = [];
@@ -70,7 +67,6 @@ class TaskController extends Controller
                 'parent_id' => 0,
                 'project_id' => $request->id,
                 'list_id' => $list_id,
-                'nav_id' => $request->nav_id,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
                 'title' => '',
@@ -83,9 +79,7 @@ class TaskController extends Controller
             $tasks = Task::where('parent_id', 0)
                 ->where('project_id', $request->id)
                 ->where('list_id', $list_id)
-                ->where('nav_id', $request->nav_id)
                 ->orderBy('sort_id', 'ASC')->get();
-
         }
 
         $data = $this->decorateData($tasks);
@@ -97,20 +91,18 @@ class TaskController extends Controller
 
     public function addTask(Request $request)
     {
-        $list_id = $this->checkListId($request->list_id, $request->nav_id);
-
         $etask = Task::where(['id' => $request->id])->get();
         if ($request->text == '') {
-            Task::where(['id' => $request->id, 'project_id' => $request->project_id,'nav_id' => $request->nav_id])->delete();
+            Task::where(['id' => $request->id, 'project_id' => $request->project_id])->delete();
             $this->createLog($request->id, 'deleted', 'Delete task', '');
-            Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id,'nav_id' => $request->nav_id])->delete();
+            Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id])->delete();
             return response()->json(['success' => ['id' => $request->id]]);
         } else if ($etask->count() > 0 && $request->text != '') {
 
             Task::where('id', $request->id)
                 ->update(['title' => $request->text]);
             $this->createLog($request->id, 'updated', 'Update task', $request->text);
-            Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id,'nav_id' => $request->nav_id])->delete();
+            Task::where(['title' => '', 'parent_id' => $request->parent_id, 'project_id' => $request->project_id])->delete();
 
             Task::where('parent_id', $request->parent_id)
                 ->where('sort_id', '>', $request->sort_id)
@@ -120,7 +112,6 @@ class TaskController extends Controller
                 'sort_id' => $request->sort_id + 1,
                 'parent_id' => $request->parent_id,
                 'project_id' => $request->project_id,
-                'nav_id' => $request->nav_id,
                 'list_id' => $list_id,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
@@ -138,18 +129,17 @@ class TaskController extends Controller
 
     public function addChildTask(Request $request)
     {
-        $tsk_id = Task::where('title', '')->where('parent_id', $request->id)->where('nav_id', $request->nav_id)->first();
-        if ($tsk_id) {
-            Task::where('title', '')->where('parent_id', $request->id)->where('nav_id', $request->nav_id)->delete();
-            $this->createLog($tsk_id->id, 'deleted', 'Delete empty task', '');
+        $task_id = Task::where('title', '')->where('parent_id', $request->id)->first();
+        if ($task_id) {
+            Task::where('title', '')->where('parent_id', $request->id)->delete();
+            $this->createLog($task_id->id, 'deleted', 'Delete empty task', '');
         }
-        $sort_id = Task::where('parent_id', $request->id)->where('nav_id', $request->nav_id)->orderBy('id', 'desc')->first();
+        $sort_id = Task::where('parent_id', $request->id)->orderBy('id', 'desc')->first();
         $data = [
             'sort_id' => $sort_id ? $sort_id->sort_id + 1 : 0,
             'parent_id' => $request->id,
             'project_id' => $request->project_id,
             'list_id' => $request->list_id,
-            'nav_id' => $request->nav_id,
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
             'title' => '',
@@ -168,14 +158,12 @@ class TaskController extends Controller
             $task = Task::where('parent_id', $request->parent_id)
                 ->where('project_id', $request->project_id)
                 ->where('list_id', $request->list_id)
-                ->where('nav_id', $request->nav_id)
                 ->where('sort_id', '<', $request->sort_id)
                 ->orderBy('sort_id', 'desc')->first();
             if ($task) {
                 $taskChild = Task::where('parent_id', $task->id)
                     ->where('project_id', $request->project_id)
                     ->where('list_id', $request->list_id)
-                    ->where('nav_id', $request->nav_id)
                     ->orderBy('sort_id', 'desc')->first();
                 if ($taskChild) {
                     $sort_id = $taskChild->sort_id + 1;
@@ -221,7 +209,6 @@ class TaskController extends Controller
             Task::where('parent_id', $target->parent_id)
                 ->where('project_id', $target->project_id)
                 ->where('list_id', $target->list_id)
-                ->where('nav_id', $request->nav_id)
                 ->where('sort_id', '>', $target->sort_id)
                 ->increment('sort_id');
 
@@ -230,7 +217,6 @@ class TaskController extends Controller
                 'parent_id' => $target->parent_id,
                 'project_id' => $past->project_id,
                 'list_id' => $past->list_id,
-                'nav_id' => $request->nav_id,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
                 'title' => $past->title,
@@ -248,7 +234,6 @@ class TaskController extends Controller
 
             Task::where('project_id', $target->project_id)
                     ->where('sort_id','>', $target->sort_id)
-                    ->where('nav_id', $target->nav_id)
                     ->where('parent_id', $target->parent_id)
                     ->increment('sort_id');
 
@@ -303,7 +288,6 @@ class TaskController extends Controller
             $pre_task = Task::where(['parent_id' => $request->parent_id])
                 ->where('sort_id', '<', $request->sort_id)
                 ->where('project_id', $request->project_id)
-                ->where('nav_id', $request->nav_id)
                 ->where('list_id', $request->list_id)
                 ->orderBy('sort_id', 'desc')->first();
 
@@ -316,7 +300,6 @@ class TaskController extends Controller
             $pre_task = Task::where(['parent_id' => $request->parent_id])
                 ->where('sort_id', '>', $request->sort_id)
                 ->where('project_id', $request->project_id)
-                ->where('nav_id', $request->nav_id)
                 ->where('list_id', $request->list_id)
                 ->orderBy('sort_id', 'asc')->first();
             if (!empty($pre_task)) {
@@ -340,8 +323,7 @@ class TaskController extends Controller
             $taskDontForget = Task::where([
                 'title' => 'Dont Forget Section',
                 'project_id' => $check_dontForgetSection->project_id,
-                'list_id' => $check_dontForgetSection->list_id,
-                'nav_id' => $check_dontForgetSection->nav_id
+                'list_id' => $check_dontForgetSection->list_id
             ])->first();
             if ($taskDontForget){
                 $check_child = Task::where('parent_id',$taskDontForget->id)->count();
@@ -400,7 +382,6 @@ class TaskController extends Controller
             $info['parent_id'] = $task->parent_id;
             $info['sort_id'] = $task->sort_id;
             $info['list_id'] = $task->list_id;//list_id
-            $info['nav_id'] = $task->nav_id;//list_id
             $info['text'] = $task->title;
             $info['clicked'] = 0;
             $info['date'] = $task->date;
@@ -427,7 +408,9 @@ class TaskController extends Controller
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
-                ->where('nav_id', $task->nav_id)->where('is_complete', 0)->orderBy('sort_id', 'ASC')->get();
+                ->where('is_complete', 0)
+                ->orderBy('sort_id', 'ASC')
+                ->get();
             if (!empty($childrens)) {
                 $info['children'] = $this->decorateData($childrens);
             } else {
@@ -436,16 +419,6 @@ class TaskController extends Controller
             $data[] = $info;
         }
         return $data;
-    }
-
-    public function checkListId($list_id, $nav_id)
-    {
-        if ($list_id == null) {
-            $list = Multiple_list::where('nav_id', $nav_id)->orderBy('id', 'ASC')->first();
-            return $list->id;
-        } else {
-            return $list_id;
-        }
     }
 
     protected function createLog($task_id, $type, $message, $title)

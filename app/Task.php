@@ -12,7 +12,6 @@ class Task extends Model
         'sort_id',
         'parent_id',
         'project_id',
-        'nav_id',
         'created_by', 'updated_by',
         'title',
         'tag', 'date',
@@ -47,9 +46,4 @@ class Task extends Model
 
         return $this->hasMany('App\Files','tasks_id','id');
     }
-
-//    public function user(){
-//
-//        return $this->hasMany('App\Files','tasks_id','id');
-//    }
 }

@@ -518,8 +518,7 @@
                     parent_id: data.parent_id,
                     sort_id: data.sort_id,
                     project_id: _this.projectId,
-                    list_id: _this.list_id,
-                    nav_id: _this.nav_id
+                    list_id: _this.list_id
                 };
                 if (text !== '') {
                     axios.post('/api/task-list/add-task', postData)
@@ -553,7 +552,6 @@
                     description: null,
                     id: date,
                     list_id: _this.list_id,
-                    nav_id: data.nav_id,
                     parent_id: data.parent_id,
                     sort_id: data.sort_id,
                     tags: [],
@@ -592,7 +590,6 @@
                     description: null,
                     id: date,
                     list_id: _this.list_id,
-                    nav_id: data.nav_id,
                     parent_id: data.id,
                     sort_id: 0,
                     tags: "",
@@ -616,8 +613,7 @@
                 let postData = {
                     id: data.id,
                     project_id: _this.projectId,
-                    list_id: _this.list_id,
-                    nav_id: _this.nav_id
+                    list_id: _this.list_id
                 };
                 axios.post('/api/task-list/add-child-task', postData)
                     .then(response => response.data)
@@ -645,8 +641,7 @@
                     project_id: _this.projectId,
                     list_id: _this.list_id,
                     sort_id: data.sort_id,
-                    text: data.text,
-                    nav_id: _this.nav_id
+                    text: data.text
                 };
 
                 if (data.text !== '') {
@@ -673,7 +668,6 @@
 
             },
             unMakeChild(data) {
-
                 let _this = this;
                 let postData = {
                     id: data.id,
@@ -713,8 +707,7 @@
                     target_id: data.id,
                     copy_id: (this.selectedCopy === null) ? this.selectedCut.id : this.selectedCopy.id,
                     type: (this.selectedCopy === null) ? 'cut' : 'copy',
-                    text: (this.selectedCopy === null) ? this.selectedCut.text : this.selectedCopy.text,
-                    nav_id: _this.nav_id
+                    text: (this.selectedCopy === null) ? this.selectedCut.text : this.selectedCopy.text
                 }
 
                 axios.post('/api/task-list/copy-cut-past', postData)
@@ -954,7 +947,6 @@
                     sort_id: data.sort_id,
                     project_id: _this.projectId,
                     list_id: data.list_id,
-                    nav_id: _this.nav_id,
                     type: 'up'
                 };
                 axios.post('/api/task-list/move-task', postData)
@@ -980,7 +972,6 @@
                     sort_id: data.sort_id,
                     project_id: _this.projectId,
                     list_id: data.list_id,
-                    nav_id: _this.nav_id,
                     type: 'down'
                 }
                 axios.post('/api/task-list/move-task', postData)
@@ -1040,8 +1031,7 @@
                 };
                 let data = {
                     id: this.projectId,
-                    list_id: this.list_id,
-                    nav_id: this.nav_id
+                    list_id: this.list_id
                 };
                 axios.post('/api/task-list', data)
                     .then(response => response.data)
@@ -1061,7 +1051,6 @@
                                 description: null,
                                 id: date,
                                 list_id: _this.list_id,
-                                nav_id: _this.nav_id,
                                 parent_id: 0,
                                 sort_id: 1,
                                 tags: "",
@@ -1084,10 +1073,8 @@
                     });
             },
 
-            //collect data by child navbar component
             showTask(data) {
                 this.list_id = data.list_id;
-                this.nav_id = data.nav_id;
                 this.list.name = data.title;
                 this.list.description = data.description;
                 this.list.type = data.type;
@@ -1107,7 +1094,6 @@
             UpdateListOrBoard() {
                 var _this = this;
                 this.list.project_id = this.projectId;
-                this.list.nav_id = this.nav_id;
                 this.list.id = this.list_id;
                 axios.post('/api/board-list-update', this.list)
                     .then(response => response.data)
