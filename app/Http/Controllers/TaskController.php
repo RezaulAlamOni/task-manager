@@ -73,7 +73,7 @@ class TaskController extends Controller
                 'updated_by' => Auth::id(),
                 'title' => '',
                 'tag' => '',
-                'date' => Carbon::today(),
+                'date' => '0000-00-00',
                 'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
@@ -121,7 +121,7 @@ class TaskController extends Controller
                 'updated_by' => Auth::id(),
                 'title' => '',
                 'tag' => '',
-                'date' => Carbon::today(),
+                'date' => '0000-00-00',
                 'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
@@ -148,7 +148,7 @@ class TaskController extends Controller
             'updated_by' => Auth::id(),
             'title' => '',
             'tag' => '',
-            'date' => Carbon::today(),
+            'date' => '0000-00-00',
             'created_at' => Carbon::now(),
         ];
         $task = Task::create($data);

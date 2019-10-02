@@ -160,7 +160,7 @@
                                 </a>
 
                                 <div class="hide-item-res">
-                                    <a class="calender li-opacity clickHide" v-if="!data.date">
+                                    <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'">
                                         <i class="outline-event icon-image-preview" title="toggle"
                                            data-toggle></i>
                                     </a>
@@ -388,7 +388,7 @@
     export default {
         components: {
             Tree: DraggableTree,
-            thy: draggableHelper,
+            thy : draggableHelper,
             switches,
             Datepicker,
             VueTagsInput,
