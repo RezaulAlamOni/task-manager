@@ -38,10 +38,10 @@ class MultipleBoardController extends Controller
             $boards[$key]['color'] = $value['color'];
             $tasks = TaskBoard::with('tags')->where('parent_id',$value->id)->orderby('sort_id','ASC')->get();
             if(count($tasks) > 0){
+                $tagTooltip = '';
                 foreach ($tasks as $keys => $values) {
                     $allTags = Tags::where('board_id',$values['id'])->get();
                     $tags = [];
-                    $tagTooltip = '';
 
                     if ($allTags->count() > 0){
                         foreach ($allTags as $tagkey => $tag) {
@@ -81,6 +81,7 @@ class MultipleBoardController extends Controller
             'project_id' => $request->project_id,
             'title' => $request->title,
             'color' => $request->color,
+            'progress' => $request->progress,
             'parent_id' => 0,
             'hidden' => 0,
             'sort_id' => $sortNo+1,
@@ -92,6 +93,8 @@ class MultipleBoardController extends Controller
         // return $data;
         if($data){
             return response()->json(['success'=> true, 'data' => $data]);
+        }else{
+            return response()->json(['success'=> false]);
         }
     }
 

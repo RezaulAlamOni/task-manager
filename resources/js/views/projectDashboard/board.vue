@@ -169,7 +169,6 @@
                                                                 >{{item.text.substring(0,10)}}..</span>
                                                             </div>
 
-
                                                             <div class="dropdown-menu dropdown-menu1 dropdown-menu-left" :id="'dropdown'+card.id">
 
                                                                 <diV class="collapse show switchToggle" style="">
@@ -258,7 +257,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>You need to set a  andprogress color for the new column.</p>
+                        <p>You need to set a name and progress color for the new column.</p>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Name</label>
                             <div class="col-sm-10">
@@ -266,27 +265,19 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Percent Complete</label>
+                            <label class="col-sm-4 col-form-label">Percent Complete </label>
                             <div class="col-sm-8">
                                 <select class="form-control" v-model="addField.progress">
-                                    <option>0%</option>
-                                    <option>10%</option>
-                                    <option>20%</option>
-                                    <option>30%</option>
-                                    <option>40%</option>
-                                    <option>50%</option>
-                                    <option>60%</option>
-                                    <option>70%</option>
-                                    <option>80%</option>
-                                    <option>90%</option>
-                                    <option>100%</option>
+                                    <option value="0" style="background-image:url('/images/0.png');">0% Complete </option>
+                                    <option value="12.5" style="background-image:url('/images/125.png');">12.5% Complete </option>
+                                    <option value="25" style="background-image:url('/images/25.png');">25% Complete </option>
+                                    <option value="37.5" style="background-image:url('/images/375.png');">37.5% Complete </option>
+                                    <option value="50" style="background-image:url('/images/50.png');">50% Complete </option>
+                                    <option value="62.5" style="background-image:url('/images/625.png');">62.5% Complete </option>
+                                    <option value="75" style="background-image:url('/images/75.png');">75% Complete </option>
+                                    <option value="87.5" style="background-image:url('/images/875.png');">87.5% Complete </option>
+                                    <option value="100" style="background-image:url('/images/100.png');">100% Complete </option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Color</label>
-                            <div class="col-sm-10">
-                                <input type="color" class="form-control" v-model="addField.color">
                             </div>
                         </div>
                         <p v-if="addField.error" class="text-danger">{{addField.error}}</p>
@@ -320,24 +311,16 @@
                             <label class="col-sm-4 col-form-label">Percent Complete</label>
                             <div class="col-sm-8">
                                 <select class="form-control" v-model="editField.progress">
-                                    <option>0%</option>
-                                    <option>10%</option>
-                                    <option>20%</option>
-                                    <option>30%</option>
-                                    <option>40%</option>
-                                    <option>50%</option>
-                                    <option>60%</option>
-                                    <option>70%</option>
-                                    <option>80%</option>
-                                    <option>90%</option>
-                                    <option>100%</option>
+                                    <option value="0" style="background-image:url('/images/0.png');">0% Complete </option>
+                                    <option value="12.5" style="background-image:url('/images/125.png');">12.5% Complete </option>
+                                    <option value="25" style="background-image:url('/images/25.png');">25% Complete </option>
+                                    <option value="37.5" style="background-image:url('/images/375.png');">37.5% Complete </option>
+                                    <option value="50" style="background-image:url('/images/50.png');">50% Complete </option>
+                                    <option value="62.5" style="background-image:url('/images/625.png');">62.5% Complete </option>
+                                    <option value="75" style="background-image:url('/images/75.png');">75% Complete </option>
+                                    <option value="87.5" style="background-image:url('/images/875.png');">87.5% Complete </option>
+                                    <option value="100" style="background-image:url('/images/100.png');">100% Complete </option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Color</label>
-                            <div class="col-sm-10">
-                                <input type="color" class="form-control" v-model="editField.color">
                             </div>
                         </div>
                         <p v-if="editField.error" class="text-danger">{{editField.error}}</p>
@@ -645,10 +628,14 @@
                             data: this.cards[i].task[j].name,
                             date: this.cards[i].task[j].date,
                             tags: this.cards[i].task[j].tags,
+                            tagTooltip: this.cards[i].task[j].tagTooltip,
                             delete: this.cards[i].task[j].name
                         }))
                     })),
                 }
+                setTimeout(function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                }, 1000)
                 // console.log(scene);
 
             },
@@ -684,7 +671,7 @@
                 $("#addModal").modal('show');
             },
             setColumn() {
-                // console.log(this.nev_id, this.board_id);
+                // console.log(this.nav_id);
                 if (!this.addField.name) {
                     this.addField.error = 'Name is required!';
                 } else if(!this.nav_id || !this.board_id){
@@ -694,8 +681,8 @@
                     let data = {
                         title: this.addField.name,
                         color: this.addField.color,
+                        progress: this.addField.progress,   
                         project_id: this.projectId,
-                        progress: this.progress,
                         nav_id: this.nav_id,
                         multiple_board_id: this.board_id,
                         task: [{name: '', date: '', tags: [], clicked: 0}]
