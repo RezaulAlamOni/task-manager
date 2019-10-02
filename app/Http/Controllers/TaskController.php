@@ -439,7 +439,7 @@ class TaskController extends Controller
         $this->actionLog->store($log_data);
     }
 
-    protected function updateTagWithDataMove($task_id,$target_parent_id)
+    public function updateTagWithDataMove($task_id,$target_parent_id)
     {
         $parent = Task::join('tags', 'task_lists.id', 'tags.task_id')->where(['task_lists.id' => $target_parent_id, 'tags.title' => 'Dont Forget'])->get();
         if ($parent->count() <= 0 ){

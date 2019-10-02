@@ -11,6 +11,12 @@ use phpDocumentor\Reflection\DocBlock\Tag;
 
 class TagsController extends Controller
 {
+    public $TaskController;
+    public function __construct()
+    {
+        $this->TaskController = new TaskController();
+    }
+
     public function index()
     {
         $tags =  Tags::where('task_id','!=',null)->groupBy('title')->get();
@@ -35,7 +41,6 @@ class TagsController extends Controller
 
         if ($check_exists->count() <= 0 ) {
             Tags::create($data);
-
             if ($request->tags == 'Dont Forget') {
                 $task = Task::where('id', $request->id)->first();
                 $taskDontForget = Task::where([
@@ -66,17 +71,20 @@ class TagsController extends Controller
                     ];
                     Tags::create($TagData);
                     $taskUpdate = Task::where('id', $request->id)->update(['parent_id' => $NewTask->id]);
+                    //update task child tag
+                    $this->TaskController->updateTagWithDataMove($request->id,$NewTask->id);
                     return response()->json(['success' => $taskUpdate]);
                 } elseif ($request->id != $taskDontForget[0]->id) {
                     $parent = Task::join('tags', 'task_lists.id', 'tags.task_id')->where(['task_lists.id' => $task->parent_id, 'tags.title' => 'Dont Forget'])->get();
                     if ($parent->count() <= 0) {
                     $sort = Task::where(['parent_id' => $taskDontForget[0]->id])->max('sort_id');
                         $taskUpdate = Task::where('id', $request->id)->update(['parent_id' => $taskDontForget[0]->id,'sort_id'=>$sort+1]);
+                        //update task child tag
+                        $this->TaskController->updateTagWithDataMove($request->id,$taskDontForget[0]->id);
                         return response()->json(['success' => $taskUpdate]);
                     }
                     return response()->json(['success' => $parent, $task->parent_id]);
                 }
-
             } else {
                 return response()->json(['success' => 1]);
             }
@@ -94,6 +102,7 @@ class TagsController extends Controller
                 'created_at'=>Carbon::now(),
                 'updated_at'=>Carbon::now(),
             ];
+
 
             $check_exists = Tags::where(['title'=>'Dont Forget','task_id'=>$id])->get();
             if ($check_exists->count() <= 0 ) {
@@ -136,12 +145,15 @@ class TagsController extends Controller
                 ];
                 Tags::create($TagData);
                 $taskUpdate = Task::where('id', $id)->update(['parent_id' => $NewTask->id]);
+                $this->TaskController->updateTagWithDataMove($id, $NewTask->id);
                 return true;
             } elseif ($id != $taskDontForget[0]->id) {
                 $parent = Task::join('tags', 'task_lists.id', 'tags.task_id')->where(['task_lists.id' => $task->parent_id, 'tags.title' => 'Dont Forget'])->get();
                 $sort = Task::where(['parent_id' => $taskDontForget[0]->id])->max('sort_id');
                 if ($parent->count() <= 0) {
                     $taskUpdate = Task::where('id', $id)->update(['parent_id' => $taskDontForget[0]->id,'sort_id'=>$sort+1]);
+
+                    $this->TaskController->updateTagWithDataMove($id, $taskDontForget[0]->id);
                     return true;
                 }
                 return response()->json(['success'=>$parent,$task->parent_id, 'data' => '']);
