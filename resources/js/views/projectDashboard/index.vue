@@ -1184,6 +1184,9 @@
                     });
             },
             moveItemUp(data) {
+                if(data.sort_id <= 0){
+                    return false;
+                }
                 var _this = this;
                 var postData = {
                     id: data.id,
@@ -1210,6 +1213,9 @@
                     });
             },
             moveItemDown(data) {
+                if(data.sort_id <  0){
+                    return false;
+                }
                 var _this = this;
                 var postData = {
                     id: data.id,
@@ -1569,14 +1575,8 @@
 
             ShowDetails() {
                 var _this = this;
-                var dontForgetText = 0;
-                for( var i = 0; i< _this.selectedData.tags.length; i++ ){
-                    if (_this.selectedData.tags[i].text === "Dont Forget"){
-                        dontForgetText = 1;
-                    }
-                }
 
-                if (_this.selectedData != null && dontForgetText === 0) {
+                if (_this.selectedData != null && _this.selectedData.sort_id !== -2) {
                     $('#task_width').removeClass('task_width');
                     $('#task_width').addClass('task_widthNormal');
                     $('#details').removeClass('details');

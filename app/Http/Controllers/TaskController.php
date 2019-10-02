@@ -111,7 +111,7 @@ class TaskController extends Controller
                 ->where('sort_id', '>', $request->sort_id)
                 ->where('list_id', $list_id)
                 ->increment('sort_id');
-            $sort_id = ($request->sort_id < 0 ) ? 1 : $request->sort_id ;
+            $sort_id = ($request->sort_id < 0 ) ? 0 : $request->sort_id + 1 ;
             $data = [
                 'sort_id' => $sort_id,
                 'parent_id' => $request->parent_id,
