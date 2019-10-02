@@ -166,40 +166,32 @@ class TaskController extends Controller
                 ->orderBy('sort_id', 'desc')->first();
             if ($task) {
                 $taskSortId = Task::where('parent_id', $task->id)->max('sort_id');
-
                 $sort_id = ($taskSortId > 0) ? $taskSortId + 1 : 1;
                 $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => $sort_id]);
 
                 $this->updateTagWithDataMove($request->id,$task->id);
-
                 $this->createLog($request->id, 'updated', 'Update parent', $request->text);
             }
-
             return response()->json(['success' => $request->id]);
         }
     }
 
     public function reverseChild(Request $request)
     {
-
         if (isset($request->parent_id) && $request->parent_id != 0) {
             $task = Task::where('id', $request->parent_id)->first();
-
             if ($task) {
                 $taskChild = Task::where('parent_id', $task->parent_id)
                     ->where('project_id', $task->project_id)
                     ->where('list_id', $task->list_id)
                     ->where('sort_id', '>', $task->sort_id)
                     ->increment('sort_id');
-
-                $sort_id = ($task->sort_id < 0 ) ? 1 : $task->sort_id;
+                $sort_id = ($task->sort_id < 0 ) ? 1 : $task->sort_id + 1;
                 Task::where('id', $request->id)->update(['parent_id' => $task->parent_id, 'sort_id' => $sort_id]);
 
                 $this->updateTagWithDataMove($request->id,$task->parent_id);
-
                 $this->createLog($request->id, 'updated', 'Update parent', $request->text);
             }
-
             return response()->json(['success' => $request->id]);
         }
     }
@@ -291,6 +283,9 @@ class TaskController extends Controller
     public function moveTask(Request $request)
     {
         if ($request->type == 'up') {
+            if ($request->sort_id <= 0){
+                return false;
+            }
             $pre_task = Task::where(['parent_id' => $request->parent_id])
                 ->where('sort_id', '<', $request->sort_id)
                 ->where('project_id', $request->project_id)
@@ -303,6 +298,9 @@ class TaskController extends Controller
                 Task::where('id', $request->id)->update(['sort_id' => $pre_sort_id]);
             }
         } else if ($request->type == 'down') {
+            if ($request->sort_id < 0){
+                return false;
+            }
             $pre_task = Task::where(['parent_id' => $request->parent_id])
                 ->where('sort_id', '>', $request->sort_id)
                 ->where('project_id', $request->project_id)
