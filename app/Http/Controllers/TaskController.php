@@ -316,6 +316,19 @@ class TaskController extends Controller
         return response()->json($pre_task);
     }
 
+    public function taskDragDrop(Request $request){
+        $id = $request->id;
+        $parent_id = $request->parent_id;
+        $sort_id = $request->sort_id;
+        $child_length = Task::where('parent_id',$parent_id)->count();
+        if ($child_length > 0){
+            Task::where('parent_id',$parent_id)->where('sort_id','>=',$sort_id)->increment('sort_id');
+        }
+        Task::where('id',$id)->update(['parent_id'=>$parent_id,'sort_id'=>$sort_id]);
+//        $this->updateTagWithDataMove($id,$parent_id);
+        return \response()->json(['success'=>1]);
+    }
+
     public function deleteTaskWithChild($id)
     {
         Tags::where('task_id', $id)->delete();

@@ -58,9 +58,9 @@
                                 >
                                     <i class="outline-check_circle_outline icon-image-preview "></i>
                                 </a>
-                                <a  class="delete-icon left-content li-opacity"
-                                    data-toggle="tooltip"
-                                    href="javascript:void(0)"
+                                <a class="delete-icon left-content li-opacity"
+                                   data-toggle="tooltip"
+                                   href="javascript:void(0)"
                                    @click="RemoveNodeAndChildren(data)"
                                    :title="'Remove this task'">
                                     <i class="baseline-playlist_delete icon-image-preview"></i>
@@ -137,7 +137,8 @@
                                                             <li class="badge-pill tags"
                                                                 v-if="tag.text !== 'Dont Forget'"
                                                                 v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                {{(tag.text !== undefined) ?tag.text.substring(0,12) : ''}}
+                                                                {{(tag.text !== undefined) ?tag.text.substring(0,12) :
+                                                                ''}}
                                                             </li>
                                                         </template>
                                                         <li class="badge-pill tags" style="background: #FB8678"
@@ -233,7 +234,8 @@
                     <div id="jquery-accordion-menu" class="jquery-accordion-menu" v-click-outside="HideCustomMenu">
                         <ul>
                             <li><a href="javascript:void(0)" @click="deleteSelectedTask">Deleted </a></li>
-                            <li><a href="javascript:void(0)" @click="AddDontForgetTagToSelectedIds">Move To Dont Forget Section </a></li>
+                            <li><a href="javascript:void(0)" @click="AddDontForgetTagToSelectedIds">Move To Dont Forget
+                                Section </a></li>
                             <li><a href="javascript:void(0)">Action 1 </a></li>
                             <li><a href="javascript:void(0)">Action 2</a></li>
                         </ul>
@@ -388,7 +390,7 @@
     export default {
         components: {
             Tree: DraggableTree,
-            thy : draggableHelper,
+            thy: draggableHelper,
             switches,
             Datepicker,
             VueTagsInput,
@@ -523,6 +525,7 @@
                 }
             });
         },
+
         methods: {
             grow: function (text, options) {
                 var height = options.height || '100px';
@@ -558,11 +561,49 @@
                 }
             },
             dropNode(node, targetTree, oldTree) {
+
             },
             dragNode(node, targetTree, oldTree) {
+
             },
-            ChangeNode(index, new2, old) {
+            ChangeNode(data, taskAfterDrop) {
+                return false
+                if (data.sort_id === -2){
+                    return false
+                }
+                var afterDrop = taskAfterDrop.getPureData();
+                var id = data.id;
+                let _this = this;
+                var position = this.FindDopedTask(0, data, afterDrop);
+                let postData = {
+                    id: data.id,
+                    parent_id: position.parent_id,
+                    sort_id: position.index,
+                };
+                axios.post('/api/task-list/task-drag-drop', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        _this.getTaskList()
+                    })
+                    .catch(error => {
+                        console.log('Api is drag and drop not Working !!!')
+                    });
+
             },
+            FindDopedTask(parent, data, tasks) {
+                for (var i = 0; i < tasks.length; i++) {
+                    if (data.id === tasks[i].id) {
+                        return {index: i, parent_id: parent, task: tasks[i]};
+                    } else if (tasks[i].children !== undefined) {
+                        if (tasks[i].children.length > 0) {
+                            return this.FindDopedTask(tasks[i].id, data, tasks[i].children);
+                        }
+                    }
+                }
+
+            },
+
             assignUserToTask(user, data) {
                 alert('dfsa');
             },
@@ -579,12 +620,12 @@
                         $('#click' + data.id).addClass('clicked');
                     }
                     $('.jquery-accordion-menu').hide();
-                    if (_this.selectedIds.length > 1){
-                        this.selectedData = {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       };
+                    if (_this.selectedIds.length > 1) {
+                        this.selectedData = {};
                     }
 
                 } else if (e.which === 1) {
-                    _this.selectedIds=[];
+                    _this.selectedIds = [];
                     _this.selectedIds.push(data.id);
                     this.selectedData = data;
                     this.tags = data.tags;
@@ -606,22 +647,28 @@
 
                     let clickH = $('.jquery-accordion-menu').height();
                     clickH = clickH < 150 ? 400 : clickH;
-                    if ((w - left) < 230) { left = w - 250; }
-                    if(h < top+clickH){ top = top - (top+clickH - h); }
-                    if(top < 10){ top = 10; }
+                    if ((w - left) < 230) {
+                        left = w - 250;
+                    }
+                    if (h < top + clickH) {
+                        top = top - (top + clickH - h);
+                    }
+                    if (top < 10) {
+                        top = 10;
+                    }
 
                     let ttarget = target.closest('#tree_view_list').find('.jquery-accordion-menu');
-                    if(_this.selectedIds.length > 0){
+                    if (_this.selectedIds.length > 0) {
                         var index = _this.selectedIds.indexOf(data.id);
                         if (index > -1) {
                             ttarget.css({
-                                top : top,
-                                left : left,
+                                top: top,
+                                left: left,
                             }).fadeIn();
-                        }else{
+                        } else {
                             $('.eachItemRow').removeClass('clicked');
                             $('.jquery-accordion-menu').hide();
-                            _this.selectedIds=[];
+                            _this.selectedIds = [];
                         }
                     }
 
@@ -1184,7 +1231,7 @@
                     });
             },
             moveItemUp(data) {
-                if(data.sort_id <= 0){
+                if (data.sort_id <= 0) {
                     return false;
                 }
                 var _this = this;
@@ -1213,7 +1260,7 @@
                     });
             },
             moveItemDown(data) {
-                if(data.sort_id <  0){
+                if (data.sort_id < 0) {
                     return false;
                 }
                 var _this = this;

@@ -19,6 +19,8 @@ Route::post('/task-list/task-make-child', 'TaskController@makeChild');//make chi
 Route::post('/task-list/reverse-child', 'TaskController@reverseChild');//reverse child node
 Route::post('/task-list/update', 'TaskController@update');//reverse child node
 Route::post('/task-list/delete-img', 'TaskController@deleteImg');//reverse child node
+Route::post('/task-list/task-drag-drop', 'TaskController@taskDragDrop');//task-drag-drop
+
 
 //task list tags related
 Route::get('/task-list/all-tag', 'TagsController@index');//get all tag
