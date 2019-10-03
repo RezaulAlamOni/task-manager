@@ -492,7 +492,6 @@
                 $("#popoverData").popover({trigger: "hover"});
             });
             this.getBoardTask();
-            // this.getData();
             $(document).ready(function () {
                 $('.searchList').hide();
             });
@@ -571,8 +570,6 @@
                 setTimeout(function () {
                     $('[data-toggle="tooltip"]').tooltip();
                 }, 1000)
-                // console.log(scene);
-
             },
 
             onColumnDrop(dropResult) {
@@ -667,16 +664,13 @@
                     axios.post('/api/board-modify',data)
                     .then(response => response.data)
                     .then(response => {
-                        // console.log(_this.editField)
                         if(response.success === true){    
                             _this.cards[_this.updateIndex].column = _this.editField.name;
                         }
                     })
                     .catch(error => {
-
                     });
                     setTimeout(function () {
-                        // console.log(_this.cards[_this.updateIndex].column);
                         _this.getData();
                         // _this.editField = {};
                         // $("#EditModal").modal('show');
@@ -692,10 +686,8 @@
                 .then(response => response.data)
                 .then(response => {
                     _this.nav = response.success;
-                    // console.log(response.success);
                 })
                 .catch(error => {
-
                 });
                 this.updateIndex = index;
                 // this.getAllTask();
@@ -708,18 +700,15 @@
                     'projectId' : this.projectId,
                     'navId' : this.selectedNav
                 };
-                axios.post('/api/nev-list',data)
+                axios.post('/api/nav-list',data)
                 .then(response => response.data)
                 .then(response => {
                     _this.subNav = response.success;
                 })
                 .catch(error => {
-
                 });
-                // alert(this.selectedNav);
             },
             getBoardTask(){
-
                 var _this = this;
                 var datePicker = new Date();
                 datePicker.setDate(datePicker.getDate() - 1);
@@ -734,14 +723,11 @@
                 axios.post('/api/board-task', data)
                     .then(response => response.data)
                     .then(response => {
-                        // console.log(response.success);
                         _this.cards = response.success;
                         _this.getData();
                     })
                     .catch(error => {
-
                     });
-
             },
 
             clearInputFeild() {
@@ -769,14 +755,10 @@
                         _this.cards[_this.currentColumnIndex].task.push({id: response.data[i].id, name: response.data[i].title, date: response.data[i].date, tags: response.data[i].tag, clicked: 0});
                         // _this.cards[_this.updateIndex].task.push({name: _this.selectedExistedTask[i], date: '', tags: [], clicked: 0})
                     }
-                    console.log(_this.cards);
                     _this.getData()
                 })
                 .catch(error => {
-                    
                 });
-
-                // console.log(this.selectedExistedTask);
                
                 this.updateIndex = null;
                 this.selectedExistedTask = [];
@@ -805,7 +787,6 @@
                 .then(response => {
                     if(response.success == true){
                         let data = response.data;
-                        // console.log(response.data);
                         _this.cards[index].task.push({id: data.id, name: data.title, date: data.date, tags: [], clicked: 0});
                         let keys = _this.cards[index].task.length-1;
                         _this.getData();
@@ -816,7 +797,6 @@
                     }
                 })
                 .catch(error => {
-
                 });
             },
             deleteCard(index,cardIndex,id){
@@ -832,7 +812,6 @@
                         }
                     })
                     .catch(error => {
-
                     });
                 }
             },
@@ -877,7 +856,6 @@
                         }
                     })
                     .catch(error => {
-
                     });
                 }
             },
@@ -893,7 +871,6 @@
                         }
                     })
                     .catch(error => {
-
                     })
                 }
             },
@@ -912,7 +889,6 @@
                     _this.getData();
                 })
                 .catch(error => {
-
                 });
             },
             showColumn(index, id){
@@ -927,7 +903,6 @@
                     _this.getData();
                 })
                 .catch(error => {
-
                 });
             },
             showItem(e,data,index,child_key) {
@@ -949,10 +924,8 @@
                     axios.post('/api/card-update/'+card.cardId, data)
                     .then(response => response.data)
                     .then(response => {
-
                     })
                     .catch(error => {
-
                     });
                 }, 300)
             },
@@ -963,7 +936,6 @@
             },
             changeTag(tags, card, columnIndex, cardIndex) {
                 var _this = this;
-                // console.log(tags)
                 var _this = this;
                 var old = this.tags.length;
                 var newl = tags.length;
@@ -1010,7 +982,6 @@
                     axios.post('/api/task-list/delete-by-tag-id', postData)
                         .then(response => response.data)
                         .then(response => {
-                            // console.log(response.success)
                             _this.cards[columnIndex].task[cardIndex].tags.splice(obj.index,1);
                             _this.getData()
                             _this.tags = []
@@ -1050,7 +1021,6 @@
             board_id : function (val) {
                 this.board_id = val;
                 this.getBoardTask()
-                // console.log(this.board_id)
             },
             nav_id : function (val) {
                 this.nav_id = val;
