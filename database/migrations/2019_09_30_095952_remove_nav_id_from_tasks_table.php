@@ -13,7 +13,7 @@ class RemoveNavIdFromTasksTable extends Migration
      */
     public function up()
     {
-        Schema::table('tasks', function (Blueprint $table) {
+        Schema::table('task_lists', function (Blueprint $table) {
             $table->dropColumn('nav_id');
         });
         Schema::table('action_logs', function (Blueprint $table) {
@@ -28,7 +28,7 @@ class RemoveNavIdFromTasksTable extends Migration
      */
     public function down()
     {
-        Schema::table('tasks', function (Blueprint $table) {
+        Schema::table('task_lists', function (Blueprint $table) {
             $table->dropColumn('nav_id');
         });
         Schema::table('action_logs', function (Blueprint $table) {
