@@ -325,7 +325,7 @@ class TaskController extends Controller
             Task::where('parent_id',$parent_id)->where('sort_id','>=',$sort_id)->increment('sort_id');
         }
         Task::where('id',$id)->update(['parent_id'=>$parent_id,'sort_id'=>$sort_id]);
-//        $this->updateTagWithDataMove($id,$parent_id);
+        $this->updateTagWithDataMove($id,$parent_id);
         return \response()->json(['success'=>1]);
     }
 

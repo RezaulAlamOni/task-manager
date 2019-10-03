@@ -567,7 +567,6 @@
 
             },
             ChangeNode(data, taskAfterDrop) {
-                return false
                 if (data.sort_id === -2){
                     return false
                 }
@@ -575,15 +574,10 @@
                 var id = data.id;
                 let _this = this;
                 var position = this.FindDopedTask(0, data, afterDrop);
-                let postData = {
-                    id: data.id,
-                    parent_id: position.parent_id,
-                    sort_id: position.index,
-                };
-                axios.post('/api/task-list/task-drag-drop', postData)
+
+                axios.post('/api/task-list/task-drag-drop', position)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response)
                         _this.getTaskList()
                     })
                     .catch(error => {
@@ -594,10 +588,13 @@
             FindDopedTask(parent, data, tasks) {
                 for (var i = 0; i < tasks.length; i++) {
                     if (data.id === tasks[i].id) {
-                        return {index: i, parent_id: parent, task: tasks[i]};
+                        return {sort_id: i,id : data.id, parent_id: parent};
                     } else if (tasks[i].children !== undefined) {
                         if (tasks[i].children.length > 0) {
-                            return this.FindDopedTask(tasks[i].id, data, tasks[i].children);
+                            var ret =  this.FindDopedTask(tasks[i].id, data, tasks[i].children);
+                            if (ret !== undefined ){
+                                return ret;
+                            }
                         }
                     }
                 }
