@@ -42,7 +42,7 @@ Route::post('/allNavs','ProjectNavItemsController@store'); //add new nav item
 Route::post('/nav-item/add-new','ProjectNavItemsController@store'); //add new nav item
 Route::get('/nav-item/{project_id}','ProjectNavItemsController@index'); //all nav item
 Route::post('/nav-item/update','ProjectNavItemsController@edit'); //all nav item
-Route::post('/nev-list','ProjectNavItemsController@navList'); //all nav list item
+Route::post('/nav-list','ProjectNavItemsController@navList'); //all nav list item
 
 //board Section
 Route::post('/board-task','MultipleBoardController@index'); //get board item
