@@ -49,6 +49,7 @@ Route::post('/board-add', 'MultipleBoardController@store'); //add list under pro
 Route::delete('/board-delete/{id}','MultipleBoardController@destroy'); //delete board
 Route::delete('/board-deleteAllCards/{id}','MultipleBoardController@deleteAllBoardWiseCards'); //delete board
 Route::post('/board-hide/{id}', 'MultipleBoardController@hideColumn');
+Route::post('/add-existing-tasks', 'MultipleBoardController@addExistingTasks');
 
 Route::post('/card-add', 'MultipleBoardController@cardAdd');
 Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');

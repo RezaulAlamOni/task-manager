@@ -27,7 +27,7 @@
                                             </span>
                                             <div class="dropdown-menu">
                                                 <diV class="collapse show switchToggle">
-                                                    <a class="dropdown-item" href="javascript:void(0)" @click="addExistingTask(index)">Add existing tasks</a>
+                                                    <a class="dropdown-item" href="javascript:void(0)" @click="addExistingTask(index,column.boardId)">Add existing tasks</a>
                                                     <a class="dropdown-item" href="javascript:void(0)"
                                                        @click="addCard(index,column.boardId)">Create new tasks</a>
                                                 </diV>
@@ -364,23 +364,23 @@
                         <ul class="list-group list-group-flush">
                             <div  v-for="tree in tree4data">
                                 <li class="list-group-item">
-                                    <input type="checkbox" :value="tree.text" v-model="selectedExistedTask"  :id="tree.id" > {{tree.text}}
+                                    <input type="checkbox" :value="tree.id" v-model="selectedExistedTask"  :id="tree.id" > {{tree.text}}
                                     <ul class="list-group list-group-flush" v-if="tree.children">
                                         <div  v-for="child in tree.children">
                                             <li class="list-group-item">
-                                                <input type="checkbox" class="tree-child" :value="child.text" v-model="selectedExistedTask"  :id="child.id" > {{child.text}}
+                                                <input type="checkbox" class="tree-child" :value="child.id" v-model="selectedExistedTask"  :id="child.id" > {{child.text}}
                                                 <ul class="list-group list-group-flush" v-if="child.children">
                                                     <div  v-for="child1 in child.children">
                                                         <li class="list-group-item">
-                                                            <input type="checkbox" class="tree-child" :value="child1.text" v-model="selectedExistedTask"  :id="child1.id" > {{child1.text}}
+                                                            <input type="checkbox" class="tree-child" :value="child1.id" v-model="selectedExistedTask"  :id="child1.id" > {{child1.text}}
                                                             <ul class="list-group list-group-flush" v-if="child1.children">
                                                                 <div  v-for="child2 in child1.children">
                                                                     <li class="list-group-item">
-                                                                        <input type="checkbox" class="tree-child" :value="child2.text" v-model="selectedExistedTask"  :id="child2.id" > {{child2.text}}
+                                                                        <input type="checkbox" class="tree-child" :value="child2.id" v-model="selectedExistedTask"  :id="child2.id" > {{child2.text}}
                                                                         <ul class="list-group list-group-flush" v-if="child2.children">
                                                                             <div  v-for="child3 in child2.children">
                                                                                 <li class="list-group-item">
-                                                                                    <input type="checkbox" class="tree-child" :value="child3.text" v-model="selectedExistedTask"  :id="child3.id" > {{child3.text}}
+                                                                                    <input type="checkbox" class="tree-child" :value="child3.id" v-model="selectedExistedTask"  :id="child3.id" > {{child3.text}}
                                                                                 </li>
                                                                             </div>
                                                                         </ul>
@@ -451,6 +451,8 @@
                 selectedSubNav: 'Select Nav List',
                 project: null,
                 tree4data: [],
+                currentColumn : null,
+                currentColumnIndex : null,
                 cards: [],
                 scene: {},
                 upperDropPlaceholderOptions: {
@@ -681,7 +683,10 @@
                     },300);
                 }
             },
-            addExistingTask(index){
+            addExistingTask(index, id){
+                this.tree4data = [];
+                this.currentColumn = id;
+                this.currentColumnIndex = index;
                 let _this = this;
                 axios.get('/api/nav-item/'+this.projectId)
                 .then(response => response.data)
@@ -697,6 +702,7 @@
                 $("#addExistingTask").modal('show');
             },
             showSubNav(){
+                this.tree4data = [];
                 let _this = this;
                 let data = {
                     'projectId' : this.projectId,
@@ -745,15 +751,33 @@
                 this.addField = {};
             },
             AddExistingTasks(){
+                let _this = this;
                 let total = this.selectedExistedTask.length;
                 if(total <= 0){
                     alert('No task to add');
                     return false;
                 }
-                for (var i =0; i<total; i++) {
-                    this.cards[this.updateIndex].task.push({name: this.selectedExistedTask[i], date: '', tags: [], clicked: 0})
-                }
-                this.getData()
+                let data = {
+                    'tasks' : this.selectedExistedTask,
+                    'id' : this.currentColumn
+                };
+                axios.post('/api/add-existing-tasks',data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response.data);
+                    for (var i =0; i<response.data.length; i++) {
+                        _this.cards[_this.currentColumnIndex].task.push({id: response.data[i].id, name: response.data[i].title, date: response.data[i].date, tags: response.data[i].tag, clicked: 0});
+                        // _this.cards[_this.updateIndex].task.push({name: _this.selectedExistedTask[i], date: '', tags: [], clicked: 0})
+                    }
+                    console.log(_this.cards);
+                    _this.getData()
+                })
+                .catch(error => {
+                    
+                });
+
+                // console.log(this.selectedExistedTask);
+               
                 this.updateIndex = null;
                 this.selectedExistedTask = [];
                 $("#addExistingTask").modal('hide');
@@ -998,6 +1022,7 @@
 
             },
             getAllTask(){
+                this.tree4data = [];
                 let data = {
                     id: this.projectId,
                     nav_id: this.selectedNav,

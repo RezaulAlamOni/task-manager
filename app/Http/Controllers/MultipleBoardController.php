@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Multiple_board;
+use App\existing_tasks_in_board;
 use App\Multiple_list;
 use App\TaskBoard;
 use App\Tags;
+use App\Task;
 use App\Project;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -37,6 +39,7 @@ class MultipleBoardController extends Controller
             $boards[$key]['progress'] = $value['progress'];
             $boards[$key]['color'] = $value['color'];
             $tasks = TaskBoard::with('tags')->where('parent_id',$value->id)->orderby('sort_id','ASC')->get();
+            $existingTask = existing_tasks_in_board::where('board_id', $value->id)->get();
             if(count($tasks) > 0){
                 $tagTooltip = '';
                 foreach ($tasks as $keys => $values) {
@@ -65,6 +68,35 @@ class MultipleBoardController extends Controller
             } else {
                 $boards[$key]['task'] = [];
             }
+            if ($existingTask->count() > 0) {
+                $tagTooltip = '';
+                foreach ($existingTask as $ExTaskkey => $ExTaskvalue) {
+                    $task_list = Task::where('id', $ExTaskvalue->task_id)->get();
+                    foreach ($task_list as $TaskKey => $TaskValue) {
+                        $allTaskTags = Tags::where('task_id',$TaskValue['id'])->get();
+                        $tags = [];
+                        if ($allTaskTags->count() > 0){
+                            foreach ($allTaskTags as $tagkey => $tag) {
+                                $tags[$tagkey]['id'] = $tag->id;
+                                $tags[$tagkey]['board_id'] = $tag->board_id;
+                                $tags[$tagkey]['text'] = $tag->title;
+                                $tags[$tagkey]['classes'] = '';
+                                $tags[$tagkey]['style'] = 'background-color: '.$tag->color;
+                                $tags[$tagkey]['color'] = $tag->color;
+                                $tagTooltip .= '#'.$tag->title.' ';
+                            }
+                            // return $tagTooltip;
+                        }
+                        $boards[$key]['task'][$ExTaskkey]['tags'] = $tags;
+                        $boards[$key]['task'][$ExTaskkey]['tagTooltip'] = $tagTooltip;
+
+                        $boards[$key]['task'][$ExTaskkey]['id'] = $TaskValue['id'];
+                        $boards[$key]['task'][$ExTaskkey]['name'] = $TaskValue['title'];
+                        $boards[$key]['task'][$ExTaskkey]['date'] = date('d M', strtotime($TaskValue['date']));
+                    }
+                }
+            }
+            
         }
         // return $boards;
         return response()->json(['success'=>$boards]);
@@ -234,5 +266,40 @@ class MultipleBoardController extends Controller
         } else {
             return response()->json(['success' => false]);
         }
+    }
+
+    public function addExistingTasks(Request $request){
+        
+        $board_id = $request->id;
+        foreach ($request->tasks as $key => $value) {
+            $data = [
+                'board_id' => $board_id,
+                'task_id' => $value,
+                'date' => Carbon::today()
+            ];
+
+            $insert = existing_tasks_in_board::create($data);
+            $task[$key] = Task::where('id',$value)->first();
+            $tagTooltip = '';
+            $allTags = Tags::where('task_id',$task[$key]->id)->get();
+            $tags = [];
+
+            if ($allTags->count() > 0){
+                foreach ($allTags as $tagkey => $tag) {
+                    $tags[$tagkey]['id'] = $tag->id;
+                    $tags[$tagkey]['board_id'] = $tag->board_id;
+                    $tags[$tagkey]['text'] = $tag->title;
+                    $tags[$tagkey]['classes'] = '';
+                    $tags[$tagkey]['style'] = 'background-color: '.$tag->color;
+                    $tags[$tagkey]['color'] = $tag->color;
+                    $tagTooltip .= '#'.$tag->title.' ';
+                }
+                // return $tagTooltip;
+            }
+            $task[$key]['tag'] = $tags;
+            $task[$key]['tagTooltip'] = $tagTooltip;
+        }
+
+        return response()->json(['success' => True, 'data' => $task] );
     }
 }
