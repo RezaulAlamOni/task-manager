@@ -187,7 +187,7 @@
                                                                                             v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
                                                                                         </li> -->
                                                                                     </template>
-                                                                                    <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                                                    <!-- <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li> -->
                                                                                 </div>
                                                                             </div>
                                                                             <hr>
@@ -213,15 +213,15 @@
                                                                     @tags-changed="newTags => (changeTag(newTags,card,index,key))"
                                                                     @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,card,index,key)"
                                                                 />
-                                                                    <div class="row">
-                                                                        <div class="col-12">
-                                                                            <template>
-                                                                                <li class="badge-pill tags">
-                                                                                </li>
-                                                                            </template>
-                                                                            <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
-                                                                        </div>
-                                                                    </div>
+                                                                    <!-- <div class="row"> -->
+                                                                        <!-- <div class="col-12"> -->
+                                                                            <!-- <template> -->
+                                                                                <!-- <li class="badge-pill tags"> -->
+                                                                                <!-- </li> -->
+                                                                            <!-- </template> -->
+                                                                            <!-- <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li> -->
+                                                                        <!-- </div> -->
+                                                                    <!-- </div> -->
                                                                     <hr>
                                                                     <div class="col-xs-12" style="margin-top:10px;width: 100%;">
                                                                         <button type="submit" class="btn btn-small btn-primary pull-right">Manage Tag</button>
@@ -343,6 +343,24 @@
                         </button>
                     </div>
                     <div class="modal-body list-model">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Select Nav :</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" v-model="selectedNav" @change="showSubNav()">
+                                    <option disabled>Select Nav</option>
+                                    <option v-for="(navs, index) in nav" :key="index" v-bind:value="navs.id" v-if="navs.type === 'list'">{{navs.title}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="subNav.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Nav List :</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" v-model="selectedSubNav" @change="getAllTask()">
+                                    <option disabled>Select Nav List</option>
+                                    <option v-for="(navList, index) in subNav" :key="index" v-bind:value="navList.id">{{navList.list_title}}</option>
+                                </select>
+                            </div>
+                        </div>
                         <ul class="list-group list-group-flush">
                             <div  v-for="tree in tree4data">
                                 <li class="list-group-item">
@@ -427,98 +445,13 @@
                     altFormat: 'Y-m-d',
                     dateFormat: 'd M',
                 },
+                nav: [],
+                subNav: [],
+                selectedNav: 'Select Nav',
+                selectedSubNav: 'Select Nav List',
                 project: null,
-                tree4data: [
-                    {
-                        id: 1, parent: 0,
-                        text: "Don't Forget Section",
-                        clicked: 0,
-                        date: '',
-                        tags: ["Dont Forget"],
-                        children: [
-                            {
-                                id: 2,
-                                parent: 1,
-                                text: 'node 1-1',
-                                html: 'Atik',
-                                tags: ["Dont Forget"],
-                                files: [{file: '/images/logo.png'}],
-                                clicked: 0
-                            },
-                            {
-                                id: 3,
-                                parent: 1,
-                                text: 'node 1-2',
-                                clicked: 0,
-                                tags: ["Dont Forget"],
-                                children: [
-                                    {
-                                        id: 4,
-                                        parent: 3,
-                                        text: 'node 1-2-1',
-                                        date: '10 Aug',
-                                        tags: ["Dont Forget"],
-                                        clicked: 0
-                                    },
-                                    {
-                                        id: 5,
-                                        parent: 3,
-                                        text: 'node 1-2-2',
-                                        date: '25 Aug',
-                                        tags: ["Dont Forget"],
-                                        clicked: 0
-                                    },
-                                ]
-                            },
-                        ]
-                    },
-                    {
-                        id: 6,
-                        parent: 0,
-                        text: 'node 2',
-                        html: 'Test 1',
-                        date: '05 Aug',
-                        clicked: 0,
-                        tags: ['Important'],
-                        assigned_user: {name: 0, picture: 0}
-                    },
-                    {
-                        id: 7, parent: 0,
-                        text: 'node 3',
-                        html: 'oni',
-                        clicked: 0,
-                        tags: ['Important'],
-                        assigned_user: {name: 0, picture: 0}
-                    },
-                    {id: 8, parent: 3, text: 'node 4', draggable: true, html: 'Test', date: '6 Aug', clicked: 0},
-                    {id: 9, parent: 3, text: 'node 5', date: '15 Aug', html: '251  41', clicked: 0, tags: ['Tags']},
-                    {id: 10, parent: 3, text: 'node 6', droppable: false, date: '19 Aug', clicked: 0},
-                    {
-                        id: 11, parent: 10,
-                        text: 'node 7', clicked: 0, date: '', children: [
-                            {id: 12, parent: 11, text: 'node 7-1', html: 'Atik', clicked: 0},
-                            {
-                                id: 13, parent: 11,
-                                text: 'node 7-2', clicked: 0, children: [
-                                    {id: 14, parent: 13, text: 'node 7-2-1', date: '10 Aug', clicked: 0},
-                                    {id: 15, parent: 13, text: 'node 7-2-2', date: '25 Aug', clicked: 0},
-                                ]
-                            },
-                            {
-                                id: 16, parent: 10,
-                                text: 'node 7-3', children: [
-                                    {id: 17, parent: 16, text: 'node 7-3-1', clicked: 0},
-                                    {id: 18, parent: 16, text: 'node 7-3-2 undroppable', droppable: false, clicked: 0},
-                                ], clicked: 0
-                            },
-                            {id: 19, parent: 10, text: 'node 7-4', clicked: 0},
-                            {id: 20, parent: 10, text: 'node 7-5', clicked: 0},
-                            {id: 21, parent: 10, text: 'node 7-6', clicked: 0},
-                        ]
-                    },
-                ],
-                cards: [
-                ],
+                tree4data: [],
+                cards: [],
                 scene: {},
                 upperDropPlaceholderOptions: {
                     className: 'cards-drop-preview',
@@ -749,10 +682,36 @@
                 }
             },
             addExistingTask(index){
+                let _this = this;
+                axios.get('/api/nav-item/'+this.projectId)
+                .then(response => response.data)
+                .then(response => {
+                    _this.nav = response.success;
+                    // console.log(response.success);
+                })
+                .catch(error => {
+
+                });
                 this.updateIndex = index;
+                // this.getAllTask();
                 $("#addExistingTask").modal('show');
             },
+            showSubNav(){
+                let _this = this;
+                let data = {
+                    'projectId' : this.projectId,
+                    'navId' : this.selectedNav
+                };
+                axios.post('/api/nev-list',data)
+                .then(response => response.data)
+                .then(response => {
+                    _this.subNav = response.success;
+                })
+                .catch(error => {
 
+                });
+                // alert(this.selectedNav);
+            },
             getBoardTask(){
 
                 var _this = this;
@@ -787,7 +746,10 @@
             },
             AddExistingTasks(){
                 let total = this.selectedExistedTask.length;
-
+                if(total <= 0){
+                    alert('No task to add');
+                    return false;
+                }
                 for (var i =0; i<total; i++) {
                     this.cards[this.updateIndex].task.push({name: this.selectedExistedTask[i], date: '', tags: [], clicked: 0})
                 }
@@ -1034,6 +996,22 @@
                         });
                 }
 
+            },
+            getAllTask(){
+                let data = {
+                    id: this.projectId,
+                    nav_id: this.selectedNav,
+                    list_id: this.selectedSubNav,
+                };
+                axios.post('/api/all-task-list', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.task_list);
+                        this.tree4data = response.task_list;
+                    })
+                    .catch(error => {
+
+                    });
             },
         },
         directives: {

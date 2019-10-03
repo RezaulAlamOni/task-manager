@@ -71,9 +71,12 @@ class ProjectNavItemsController extends Controller
     }
 
 
-    public function show(ProjectNavItems $projectNavItems)
+    public function navList(Request $request)
     {
-        //
+        // return $request->all();
+        $nav = Multiple_list::where('project_id',$request->projectId)->where('nav_id',$request->navId)->get();
+        
+        return response()->json(['success'=>$nav]); 
     }
 
 

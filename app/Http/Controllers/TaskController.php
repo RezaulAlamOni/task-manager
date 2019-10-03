@@ -89,6 +89,23 @@ class TaskController extends Controller
         return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list, 'empty_task' => $task]);
     }
 
+    public function getAllTask(Request $request)
+    {
+        if ($request->list_id == null) {
+            $list = Multiple_list::where('project_id', $request->id)->orderBy('id', 'ASC')->first();
+            $list_id = $list->id;
+        } else {
+            $list_id = $request->list_id;
+        }
+        $tasks = Task::where('parent_id', 0)
+            ->where('project_id', $request->id)
+            ->where('list_id', $list_id)
+            ->orderBy('sort_id', 'ASC')
+            ->get();
+        $data = $this->decorateData($tasks);
+        return response()->json(['task_list' => $data]);
+    }
+
     public function addTask(Request $request)
     {
         $etask = Task::where(['id' => $request->id])->get();

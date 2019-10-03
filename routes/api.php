@@ -13,6 +13,7 @@ Route::post('/board-list-update', 'MultipleListController@update');//Update list
 //task listmanagement
 Route::post('/add-task-task', 'TaskController@addNewTask');//add new node
 Route::post('/task-list', 'TaskController@getAll');//get task list data
+Route::post('/all-task-list', 'TaskController@getAllTask');//get task list data
 Route::post('/task-list/add-task', 'TaskController@addTask');//update and add node
 Route::post('/task-list/add-child-task', 'TaskController@addChildTask');//add child node
 Route::post('/task-list/task-make-child', 'TaskController@makeChild');//make child node
@@ -34,9 +35,11 @@ Route::post('/task-list/move-task', 'TaskController@moveTask');//move-task
 Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog'); //reverse child node
 
 //navigation management
+Route::post('/allNavs','ProjectNavItemsController@store'); //add new nav item
 Route::post('/nav-item/add-new','ProjectNavItemsController@store'); //add new nav item
 Route::get('/nav-item/{project_id}','ProjectNavItemsController@index'); //all nav item
 Route::post('/nav-item/update','ProjectNavItemsController@edit'); //all nav item
+Route::post('/nev-list','ProjectNavItemsController@navList'); //all nav list item
 
 //board Section
 Route::post('/board-task','MultipleBoardController@index'); //get board item
