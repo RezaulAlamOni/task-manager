@@ -27,7 +27,7 @@
                                             </span>
                                             <div class="dropdown-menu">
                                                 <diV class="collapse show switchToggle">
-                                                    <a class="dropdown-item" href="javascript:void(0)" @click="addExistingTask(index)">Add existing tasks</a>
+                                                    <a class="dropdown-item" href="javascript:void(0)" @click="addExistingTask(index,column.boardId)">Add existing tasks</a>
                                                     <a class="dropdown-item" href="javascript:void(0)"
                                                        @click="addCard(index,column.boardId)">Create new tasks</a>
                                                 </diV>
@@ -169,7 +169,6 @@
                                                                 >{{item.text.substring(0,10)}}..</span>
                                                             </div>
 
-
                                                             <div class="dropdown-menu dropdown-menu1 dropdown-menu-left" :id="'dropdown'+card.id">
 
                                                                 <diV class="collapse show switchToggle" style="">
@@ -188,7 +187,7 @@
                                                                                             v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
                                                                                         </li> -->
                                                                                     </template>
-                                                                                    <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                                                    <!-- <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li> -->
                                                                                 </div>
                                                                             </div>
                                                                             <hr>
@@ -214,15 +213,15 @@
                                                                     @tags-changed="newTags => (changeTag(newTags,card,index,key))"
                                                                     @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,card,index,key)"
                                                                 />
-                                                                    <div class="row">
-                                                                        <div class="col-12">
-                                                                            <template>
-                                                                                <li class="badge-pill tags">
-                                                                                </li>
-                                                                            </template>
-                                                                            <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
-                                                                        </div>
-                                                                    </div>
+                                                                    <!-- <div class="row"> -->
+                                                                        <!-- <div class="col-12"> -->
+                                                                            <!-- <template> -->
+                                                                                <!-- <li class="badge-pill tags"> -->
+                                                                                <!-- </li> -->
+                                                                            <!-- </template> -->
+                                                                            <!-- <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li> -->
+                                                                        <!-- </div> -->
+                                                                    <!-- </div> -->
                                                                     <hr>
                                                                     <div class="col-xs-12" style="margin-top:10px;width: 100%;">
                                                                         <button type="submit" class="btn btn-small btn-primary pull-right">Manage Tag</button>
@@ -258,7 +257,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>You need to set a  andprogress color for the new column.</p>
+                        <p>You need to set a name and progress color for the new column.</p>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Name</label>
                             <div class="col-sm-10">
@@ -266,27 +265,19 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Percent Complete</label>
+                            <label class="col-sm-4 col-form-label">Percent Complete </label>
                             <div class="col-sm-8">
                                 <select class="form-control" v-model="addField.progress">
-                                    <option>0%</option>
-                                    <option>10%</option>
-                                    <option>20%</option>
-                                    <option>30%</option>
-                                    <option>40%</option>
-                                    <option>50%</option>
-                                    <option>60%</option>
-                                    <option>70%</option>
-                                    <option>80%</option>
-                                    <option>90%</option>
-                                    <option>100%</option>
+                                    <option value="0" style="background-image:url('/images/0.png');">0% Complete </option>
+                                    <option value="12.5" style="background-image:url('/images/125.png');">12.5% Complete </option>
+                                    <option value="25" style="background-image:url('/images/25.png');">25% Complete </option>
+                                    <option value="37.5" style="background-image:url('/images/375.png');">37.5% Complete </option>
+                                    <option value="50" style="background-image:url('/images/50.png');">50% Complete </option>
+                                    <option value="62.5" style="background-image:url('/images/625.png');">62.5% Complete </option>
+                                    <option value="75" style="background-image:url('/images/75.png');">75% Complete </option>
+                                    <option value="87.5" style="background-image:url('/images/875.png');">87.5% Complete </option>
+                                    <option value="100" style="background-image:url('/images/100.png');">100% Complete </option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Color</label>
-                            <div class="col-sm-10">
-                                <input type="color" class="form-control" v-model="addField.color">
                             </div>
                         </div>
                         <p v-if="addField.error" class="text-danger">{{addField.error}}</p>
@@ -320,24 +311,16 @@
                             <label class="col-sm-4 col-form-label">Percent Complete</label>
                             <div class="col-sm-8">
                                 <select class="form-control" v-model="editField.progress">
-                                    <option>0%</option>
-                                    <option>10%</option>
-                                    <option>20%</option>
-                                    <option>30%</option>
-                                    <option>40%</option>
-                                    <option>50%</option>
-                                    <option>60%</option>
-                                    <option>70%</option>
-                                    <option>80%</option>
-                                    <option>90%</option>
-                                    <option>100%</option>
+                                    <option value="0" style="background-image:url('/images/0.png');">0% Complete </option>
+                                    <option value="12.5" style="background-image:url('/images/125.png');">12.5% Complete </option>
+                                    <option value="25" style="background-image:url('/images/25.png');">25% Complete </option>
+                                    <option value="37.5" style="background-image:url('/images/375.png');">37.5% Complete </option>
+                                    <option value="50" style="background-image:url('/images/50.png');">50% Complete </option>
+                                    <option value="62.5" style="background-image:url('/images/625.png');">62.5% Complete </option>
+                                    <option value="75" style="background-image:url('/images/75.png');">75% Complete </option>
+                                    <option value="87.5" style="background-image:url('/images/875.png');">87.5% Complete </option>
+                                    <option value="100" style="background-image:url('/images/100.png');">100% Complete </option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Color</label>
-                            <div class="col-sm-10">
-                                <input type="color" class="form-control" v-model="editField.color">
                             </div>
                         </div>
                         <p v-if="editField.error" class="text-danger">{{editField.error}}</p>
@@ -360,26 +343,44 @@
                         </button>
                     </div>
                     <div class="modal-body list-model">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Select Nav :</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" v-model="selectedNav" @change="showSubNav()">
+                                    <option disabled>Select Nav</option>
+                                    <option v-for="(navs, index) in nav" :key="index" v-bind:value="navs.id" v-if="navs.type === 'list'">{{navs.title}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="subNav.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Nav List :</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" v-model="selectedSubNav" @change="getAllTask()">
+                                    <option disabled>Select Nav List</option>
+                                    <option v-for="(navList, index) in subNav" :key="index" v-bind:value="navList.id">{{navList.list_title}}</option>
+                                </select>
+                            </div>
+                        </div>
                         <ul class="list-group list-group-flush">
                             <div  v-for="tree in tree4data">
                                 <li class="list-group-item">
-                                    <input type="checkbox" :value="tree.text" v-model="selectedExistedTask"  :id="tree.id" > {{tree.text}}
+                                    <input type="checkbox" :value="tree.id" v-model="selectedExistedTask"  :id="tree.id" > {{tree.text}}
                                     <ul class="list-group list-group-flush" v-if="tree.children">
                                         <div  v-for="child in tree.children">
                                             <li class="list-group-item">
-                                                <input type="checkbox" class="tree-child" :value="child.text" v-model="selectedExistedTask"  :id="child.id" > {{child.text}}
+                                                <input type="checkbox" class="tree-child" :value="child.id" v-model="selectedExistedTask"  :id="child.id" > {{child.text}}
                                                 <ul class="list-group list-group-flush" v-if="child.children">
                                                     <div  v-for="child1 in child.children">
                                                         <li class="list-group-item">
-                                                            <input type="checkbox" class="tree-child" :value="child1.text" v-model="selectedExistedTask"  :id="child1.id" > {{child1.text}}
+                                                            <input type="checkbox" class="tree-child" :value="child1.id" v-model="selectedExistedTask"  :id="child1.id" > {{child1.text}}
                                                             <ul class="list-group list-group-flush" v-if="child1.children">
                                                                 <div  v-for="child2 in child1.children">
                                                                     <li class="list-group-item">
-                                                                        <input type="checkbox" class="tree-child" :value="child2.text" v-model="selectedExistedTask"  :id="child2.id" > {{child2.text}}
+                                                                        <input type="checkbox" class="tree-child" :value="child2.id" v-model="selectedExistedTask"  :id="child2.id" > {{child2.text}}
                                                                         <ul class="list-group list-group-flush" v-if="child2.children">
                                                                             <div  v-for="child3 in child2.children">
                                                                                 <li class="list-group-item">
-                                                                                    <input type="checkbox" class="tree-child" :value="child3.text" v-model="selectedExistedTask"  :id="child3.id" > {{child3.text}}
+                                                                                    <input type="checkbox" class="tree-child" :value="child3.id" v-model="selectedExistedTask"  :id="child3.id" > {{child3.text}}
                                                                                 </li>
                                                                             </div>
                                                                         </ul>
@@ -444,98 +445,15 @@
                     altFormat: 'Y-m-d',
                     dateFormat: 'd M',
                 },
+                nav: [],
+                subNav: [],
+                selectedNav: 'Select Nav',
+                selectedSubNav: 'Select Nav List',
                 project: null,
-                tree4data: [
-                    {
-                        id: 1, parent: 0,
-                        text: "Don't Forget Section",
-                        clicked: 0,
-                        date: '',
-                        tags: ["Dont Forget"],
-                        children: [
-                            {
-                                id: 2,
-                                parent: 1,
-                                text: 'node 1-1',
-                                html: 'Atik',
-                                tags: ["Dont Forget"],
-                                files: [{file: '/images/logo.png'}],
-                                clicked: 0
-                            },
-                            {
-                                id: 3,
-                                parent: 1,
-                                text: 'node 1-2',
-                                clicked: 0,
-                                tags: ["Dont Forget"],
-                                children: [
-                                    {
-                                        id: 4,
-                                        parent: 3,
-                                        text: 'node 1-2-1',
-                                        date: '10 Aug',
-                                        tags: ["Dont Forget"],
-                                        clicked: 0
-                                    },
-                                    {
-                                        id: 5,
-                                        parent: 3,
-                                        text: 'node 1-2-2',
-                                        date: '25 Aug',
-                                        tags: ["Dont Forget"],
-                                        clicked: 0
-                                    },
-                                ]
-                            },
-                        ]
-                    },
-                    {
-                        id: 6,
-                        parent: 0,
-                        text: 'node 2',
-                        html: 'Test 1',
-                        date: '05 Aug',
-                        clicked: 0,
-                        tags: ['Important'],
-                        assigned_user: {name: 0, picture: 0}
-                    },
-                    {
-                        id: 7, parent: 0,
-                        text: 'node 3',
-                        html: 'oni',
-                        clicked: 0,
-                        tags: ['Important'],
-                        assigned_user: {name: 0, picture: 0}
-                    },
-                    {id: 8, parent: 3, text: 'node 4', draggable: true, html: 'Test', date: '6 Aug', clicked: 0},
-                    {id: 9, parent: 3, text: 'node 5', date: '15 Aug', html: '251  41', clicked: 0, tags: ['Tags']},
-                    {id: 10, parent: 3, text: 'node 6', droppable: false, date: '19 Aug', clicked: 0},
-                    {
-                        id: 11, parent: 10,
-                        text: 'node 7', clicked: 0, date: '', children: [
-                            {id: 12, parent: 11, text: 'node 7-1', html: 'Atik', clicked: 0},
-                            {
-                                id: 13, parent: 11,
-                                text: 'node 7-2', clicked: 0, children: [
-                                    {id: 14, parent: 13, text: 'node 7-2-1', date: '10 Aug', clicked: 0},
-                                    {id: 15, parent: 13, text: 'node 7-2-2', date: '25 Aug', clicked: 0},
-                                ]
-                            },
-                            {
-                                id: 16, parent: 10,
-                                text: 'node 7-3', children: [
-                                    {id: 17, parent: 16, text: 'node 7-3-1', clicked: 0},
-                                    {id: 18, parent: 16, text: 'node 7-3-2 undroppable', droppable: false, clicked: 0},
-                                ], clicked: 0
-                            },
-                            {id: 19, parent: 10, text: 'node 7-4', clicked: 0},
-                            {id: 20, parent: 10, text: 'node 7-5', clicked: 0},
-                            {id: 21, parent: 10, text: 'node 7-6', clicked: 0},
-                        ]
-                    },
-                ],
-                cards: [
-                ],
+                tree4data: [],
+                currentColumn : null,
+                currentColumnIndex : null,
+                cards: [],
                 scene: {},
                 upperDropPlaceholderOptions: {
                     className: 'cards-drop-preview',
@@ -645,10 +563,14 @@
                             data: this.cards[i].task[j].name,
                             date: this.cards[i].task[j].date,
                             tags: this.cards[i].task[j].tags,
+                            tagTooltip: this.cards[i].task[j].tagTooltip,
                             delete: this.cards[i].task[j].name
                         }))
                     })),
                 }
+                setTimeout(function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                }, 1000)
                 // console.log(scene);
 
             },
@@ -684,7 +606,7 @@
                 $("#addModal").modal('show');
             },
             setColumn() {
-                // console.log(this.nev_id, this.board_id);
+                // console.log(this.nav_id);
                 if (!this.addField.name) {
                     this.addField.error = 'Name is required!';
                 } else if(!this.nav_id || !this.board_id){
@@ -694,8 +616,8 @@
                     let data = {
                         title: this.addField.name,
                         color: this.addField.color,
+                        progress: this.addField.progress,   
                         project_id: this.projectId,
-                        progress: this.progress,
                         nav_id: this.nav_id,
                         multiple_board_id: this.board_id,
                         task: [{name: '', date: '', tags: [], clicked: 0}]
@@ -761,11 +683,41 @@
                     },300);
                 }
             },
-            addExistingTask(index){
+            addExistingTask(index, id){
+                this.tree4data = [];
+                this.currentColumn = id;
+                this.currentColumnIndex = index;
+                let _this = this;
+                axios.get('/api/nav-item/'+this.projectId)
+                .then(response => response.data)
+                .then(response => {
+                    _this.nav = response.success;
+                    // console.log(response.success);
+                })
+                .catch(error => {
+
+                });
                 this.updateIndex = index;
+                // this.getAllTask();
                 $("#addExistingTask").modal('show');
             },
+            showSubNav(){
+                this.tree4data = [];
+                let _this = this;
+                let data = {
+                    'projectId' : this.projectId,
+                    'navId' : this.selectedNav
+                };
+                axios.post('/api/nev-list',data)
+                .then(response => response.data)
+                .then(response => {
+                    _this.subNav = response.success;
+                })
+                .catch(error => {
 
+                });
+                // alert(this.selectedNav);
+            },
             getBoardTask(){
 
                 var _this = this;
@@ -799,12 +751,33 @@
                 this.addField = {};
             },
             AddExistingTasks(){
+                let _this = this;
                 let total = this.selectedExistedTask.length;
-
-                for (var i =0; i<total; i++) {
-                    this.cards[this.updateIndex].task.push({name: this.selectedExistedTask[i], date: '', tags: [], clicked: 0})
+                if(total <= 0){
+                    alert('No task to add');
+                    return false;
                 }
-                this.getData()
+                let data = {
+                    'tasks' : this.selectedExistedTask,
+                    'id' : this.currentColumn
+                };
+                axios.post('/api/add-existing-tasks',data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response.data);
+                    for (var i =0; i<response.data.length; i++) {
+                        _this.cards[_this.currentColumnIndex].task.push({id: response.data[i].id, name: response.data[i].title, date: response.data[i].date, tags: response.data[i].tag, clicked: 0});
+                        // _this.cards[_this.updateIndex].task.push({name: _this.selectedExistedTask[i], date: '', tags: [], clicked: 0})
+                    }
+                    console.log(_this.cards);
+                    _this.getData()
+                })
+                .catch(error => {
+                    
+                });
+
+                // console.log(this.selectedExistedTask);
+               
                 this.updateIndex = null;
                 this.selectedExistedTask = [];
                 $("#addExistingTask").modal('hide');
@@ -1047,6 +1020,23 @@
                         });
                 }
 
+            },
+            getAllTask(){
+                this.tree4data = [];
+                let data = {
+                    id: this.projectId,
+                    nav_id: this.selectedNav,
+                    list_id: this.selectedSubNav,
+                };
+                axios.post('/api/all-task-list', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.task_list);
+                        this.tree4data = response.task_list;
+                    })
+                    .catch(error => {
+
+                    });
             },
         },
         directives: {
