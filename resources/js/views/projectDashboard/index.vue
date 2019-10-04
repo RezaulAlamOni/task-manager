@@ -137,8 +137,7 @@
                                                             <li class="badge-pill tags"
                                                                 v-if="tag.text !== 'Dont Forget'"
                                                                 v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                {{(tag.text !== undefined) ?tag.text.substring(0,12) :
-                                                                ''}}
+                                                                {{(tag.text !== undefined) ?tag.text.substring(0,12) : ''}}
                                                             </li>
                                                         </template>
                                                         <li class="badge-pill tags" style="background: #FB8678"
@@ -178,27 +177,32 @@
                                 </div>
                                 <div>
                                     <a class="user ">
-                                        <template class="assigned_user" v-if="data.assigned_user.length > 0">
-                                            <p class="assignUser-photo-for-selected dropdown-toggle-split" data-toggle="dropdown">OM</p>
+                                        <template v-if="data.assigned_user.length > 0">
+                                            <span class="assigned_user dropdown-toggle-split "  v-for="(assign,keyId) in data.assigned_user" data-toggle="dropdown">
+                                                <p class="assignUser-photo-for-selected text-uppercase" data-toggle="tooltip" data-placement="bottom" v-if="keyId <= 1"
+                                                   :title="assign.name">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}</p>
+                                                
+                                            </span>
                                         </template>
+
                                         <i v-else class="outline-person icon-image-preview li-opacity dropdown-toggle-split" data-toggle="dropdown"></i>
                                         <div class="dropdown-menu dropdown-menu-right">
 
                                             <diV class="collapse show switchToggle">
                                                 <li class="assignUser">
                                                     <input type="text" class="input-group searchUser"
-                                                           placeholder="Set assignee by name and email">
-                                                    <label class="pl-2 ">
-                                                        <small style="font-size: 12px">Or invite a new member by
-                                                            email address
-                                                        </small>
+                                                           placeholder="Assign by name and email">
+                                                    <label class="pl-2 label-text">
+                                                        <span class="assign-user-drop-down-text">
+                                                            Or invite a new member by email address
+                                                        </span>
                                                     </label>
                                                 </li>
                                                 <li class="assignUser">
                                                         <template v-for="user in data.users">
                                                             <div class="users-select row" @click="assignUserToTask(user,data)">
                                                                 <div class="col-md-3 pt-1 pl-4">
-                                                                    <p class="assignUser-photo">{{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
+                                                                    <p class="assignUser-photo" >{{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
                                                                 </div>
                                                                 <div class="col-md-9 assign-user-name-email" >
                                                                     <h5>{{user.name}}<br>
@@ -211,7 +215,7 @@
                                             </diV>
                                             <li class="border-top pl-2 assign-user-drop-down-footer" @click="switchEvent($event)">
 
-                                                <span class="">Assign an external team</span>
+                                                <span class="assign-user-drop-down-text">Assign an external team</span>
                                                 <switches v-model="id"
                                                           class="assign-user-switch-for-dropdown"
                                                           theme="bootstrap"
@@ -604,7 +608,21 @@
             },
 
             assignUserToTask(user, data) {
-                console.log(user.id,data.id)
+                var _this = this;
+                var postData = {
+                    task_id : data.id,
+                    user_id : user.id
+                }
+                axios.post('/api/task-list/assign-user', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        if (response === 'success'){
+                            _this.getTaskList()
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Api is not Working !!!')
+                    });
             },
 
             makeItClick(e, data) {

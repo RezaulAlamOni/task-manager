@@ -41,6 +41,9 @@ Route::post('/nav-item/add-new','ProjectNavItemsController@store'); //add new na
 Route::get('/nav-item/{project_id}','ProjectNavItemsController@index'); //all nav item
 Route::post('/nav-item/update','ProjectNavItemsController@edit'); //all nav item
 
+//assign  user to task
+Route::post('/task-list/assign-user','AssignedUserController@store'); //all nav item
+
 //board Section
 Route::post('/board-task','MultipleBoardController@index'); //get board item
 Route::post('/board-save','MultipleBoardController@create'); //get board item
