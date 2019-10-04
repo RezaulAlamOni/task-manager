@@ -137,8 +137,7 @@
                                                             <li class="badge-pill tags"
                                                                 v-if="tag.text !== 'Dont Forget'"
                                                                 v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]">
-                                                                {{(tag.text !== undefined) ?tag.text.substring(0,12) :
-                                                                ''}}
+                                                                {{(tag.text !== undefined) ?tag.text.substring(0,12) : ''}}
                                                             </li>
                                                         </template>
                                                         <li class="badge-pill tags" style="background: #FB8678"
@@ -177,41 +176,48 @@
 
                                 </div>
                                 <div>
-                                    <a class="user "><i
-                                        class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
-                                        data-toggle="dropdown"></i>
+                                    <a class="user ">
+                                        <template v-if="data.assigned_user.length > 0">
+                                            <span class="assigned_user dropdown-toggle-split "  v-for="(assign,keyId) in data.assigned_user" data-toggle="dropdown">
+                                                <p class="assignUser-photo-for-selected text-uppercase" data-toggle="tooltip" data-placement="bottom" v-if="keyId <= 1"
+                                                   :title="assign.name">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}</p>
+                                                
+                                            </span>
+                                        </template>
+
+                                        <i v-else class="outline-person icon-image-preview li-opacity dropdown-toggle-split" data-toggle="dropdown"></i>
                                         <div class="dropdown-menu dropdown-menu-right">
 
                                             <diV class="collapse show switchToggle">
                                                 <li class="assignUser">
                                                     <input type="text" class="input-group searchUser"
-                                                           placeholder="Set assignee by name and email">
-                                                    <label class="pl-2 ">
-                                                        <small style="font-size: 12px">Or invite a new member by
-                                                            email address
-                                                        </small>
+                                                           placeholder="Assign by name and email">
+                                                    <label class="pl-2 label-text">
+                                                        <span class="assign-user-drop-down-text">
+                                                            Or invite a new member by email address
+                                                        </span>
                                                     </label>
                                                 </li>
                                                 <li class="assignUser">
-                                                        <span v-for="user in data.users">
-                                                            <div class="row" @click="assignUserToTask(user,data)">
-                                                                <div class="col-md-3 pt-2 pl-5">
-                                                                    <p class="assignUser-photo">{{(user.name !== null) ? user.name.substring(0,12) : ''}}</p>
+                                                        <template v-for="user in data.users">
+                                                            <div class="users-select row" @click="assignUserToTask(user,data)">
+                                                                <div class="col-md-3 pt-1 pl-4">
+                                                                    <p class="assignUser-photo" >{{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
                                                                 </div>
-                                                                <div class="col-md-9">
+                                                                <div class="col-md-9 assign-user-name-email" >
                                                                     <h5>{{user.name}}<br>
                                                                         <small>{{user.email}}</small>
                                                                     </h5>
                                                                 </div>
                                                             </div>
-                                                        </span>
+                                                        </template>
                                                 </li>
                                             </diV>
-                                            <li class="border-top pl-2" @click="switchEvent($event)">
+                                            <li class="border-top pl-2 assign-user-drop-down-footer" @click="switchEvent($event)">
 
-                                                <span style="font-size: 13px;">Assign an external team</span>
+                                                <span class="assign-user-drop-down-text">Assign an external team</span>
                                                 <switches v-model="id"
-                                                          style="position:absolute;right: 10px;bottom: -4px"
+                                                          class="assign-user-switch-for-dropdown"
                                                           theme="bootstrap"
                                                           color="success">
                                                 </switches>
@@ -567,7 +573,6 @@
 
             },
             ChangeNode(data, taskAfterDrop) {
-                return false
                 if (data.sort_id === -2){
                     return false
                 }
@@ -575,15 +580,10 @@
                 var id = data.id;
                 let _this = this;
                 var position = this.FindDopedTask(0, data, afterDrop);
-                let postData = {
-                    id: data.id,
-                    parent_id: position.parent_id,
-                    sort_id: position.index,
-                };
-                axios.post('/api/task-list/task-drag-drop', postData)
+
+                axios.post('/api/task-list/task-drag-drop', position)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response)
                         _this.getTaskList()
                     })
                     .catch(error => {
@@ -594,10 +594,13 @@
             FindDopedTask(parent, data, tasks) {
                 for (var i = 0; i < tasks.length; i++) {
                     if (data.id === tasks[i].id) {
-                        return {index: i, parent_id: parent, task: tasks[i]};
+                        return {sort_id: i,id : data.id, parent_id: parent};
                     } else if (tasks[i].children !== undefined) {
                         if (tasks[i].children.length > 0) {
-                            return this.FindDopedTask(tasks[i].id, data, tasks[i].children);
+                            var ret =  this.FindDopedTask(tasks[i].id, data, tasks[i].children);
+                            if (ret !== undefined ){
+                                return ret;
+                            }
                         }
                     }
                 }
@@ -605,7 +608,21 @@
             },
 
             assignUserToTask(user, data) {
-                alert('dfsa');
+                var _this = this;
+                var postData = {
+                    task_id : data.id,
+                    user_id : user.id
+                }
+                axios.post('/api/task-list/assign-user', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        if (response === 'success'){
+                            _this.getTaskList()
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Api is not Working !!!')
+                    });
             },
 
             makeItClick(e, data) {
