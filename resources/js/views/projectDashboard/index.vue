@@ -177,9 +177,11 @@
 
                                 </div>
                                 <div>
-                                    <a class="user "><i
-                                        class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
-                                        data-toggle="dropdown"></i>
+                                    <a class="user ">
+                                        <template class="assigned_user" v-if="data.assigned_user.length > 0">
+                                            <p class="assignUser-photo-for-selected dropdown-toggle-split" data-toggle="dropdown">OM</p>
+                                        </template>
+                                        <i v-else class="outline-person icon-image-preview li-opacity dropdown-toggle-split" data-toggle="dropdown"></i>
                                         <div class="dropdown-menu dropdown-menu-right">
 
                                             <diV class="collapse show switchToggle">
@@ -193,25 +195,25 @@
                                                     </label>
                                                 </li>
                                                 <li class="assignUser">
-                                                        <span v-for="user in data.users">
-                                                            <div class="row" @click="assignUserToTask(user,data)">
-                                                                <div class="col-md-3 pt-2 pl-5">
-                                                                    <p class="assignUser-photo">{{(user.name !== null) ? user.name.substring(0,12) : ''}}</p>
+                                                        <template v-for="user in data.users">
+                                                            <div class="users-select row" @click="assignUserToTask(user,data)">
+                                                                <div class="col-md-3 pt-1 pl-4">
+                                                                    <p class="assignUser-photo">{{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
                                                                 </div>
-                                                                <div class="col-md-9">
+                                                                <div class="col-md-9 assign-user-name-email" >
                                                                     <h5>{{user.name}}<br>
                                                                         <small>{{user.email}}</small>
                                                                     </h5>
                                                                 </div>
                                                             </div>
-                                                        </span>
+                                                        </template>
                                                 </li>
                                             </diV>
-                                            <li class="border-top pl-2" @click="switchEvent($event)">
+                                            <li class="border-top pl-2 assign-user-drop-down-footer" @click="switchEvent($event)">
 
-                                                <span style="font-size: 13px;">Assign an external team</span>
+                                                <span class="">Assign an external team</span>
                                                 <switches v-model="id"
-                                                          style="position:absolute;right: 10px;bottom: -4px"
+                                                          class="assign-user-switch-for-dropdown"
                                                           theme="bootstrap"
                                                           color="success">
                                                 </switches>
@@ -602,7 +604,7 @@
             },
 
             assignUserToTask(user, data) {
-                alert('dfsa');
+                console.log(user.id,data.id)
             },
 
             makeItClick(e, data) {

@@ -95,6 +95,7 @@
         &:hover {
             .li-opacity {
                 opacity: 0.65;
+                cursor: pointer;
                 color: rgba(0, 0, 0, 0.75);
                 @include transition(all 0.2s linear);
 
@@ -273,6 +274,7 @@
 
                     .li-opacity {
                         opacity: 1 !important;
+                        cursor: pointer;
                         color: rgba(0, 0, 0, 0.75);
                         @include transition(all 0.2s linear);
 
@@ -299,6 +301,7 @@
         width: 300px;
         border-radius: 4px 4px;
         margin-top: 10px;
+        margin-bottom: 0px !important;
         //box-shadow: 1px 0px #c8ffce;
         &:before {
             content: "";
@@ -711,8 +714,46 @@
     color: white;
     font-size: 20px;
     font-weight: bold;
+    cursor: pointer;
+}
+.assignUser-photo-for-selected {
+    width: 22px;
+    border-radius: 74%;
+    background: #4f4f8a;
+    height: 22px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 23px;
+    color: white;
+    font-size: 10px;
+    padding-left: 3px;
+    cursor: pointer;
+}
+.users-select {
+    padding-top: 5px;
+    margin: 0px;
+}
+.users-select:hover {
+    background: #99c3ff;
+    cursor: pointer;
 }
 
+.assign-user-drop-down-footer {
+    font-size: 13px;
+    padding-top: 6px;
+    padding-bottom: 5px;
+    opacity: 0.6;
+}
+.assign-user-switch-for-dropdown {
+    position:absolute !important;
+    right: 10px;
+    bottom: 5px;
+    opacity : .8 !important;
+}
+.assign-user-name-email{
+    padding: 0px;
+}
 
 .activeTask {
     background: #aec8dd;
