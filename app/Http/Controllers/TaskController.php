@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AssignedUser;
 use App\Files;
 use App\Multiple_list;
 use App\Project;
@@ -12,6 +13,7 @@ use App\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Intervention\Image\File;
 use function GuzzleHttp\Promise\all;
 
@@ -232,14 +234,14 @@ class TaskController extends Controller
                 'list_id' => $past->list_id,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
-                'title' => $past->title,
+                'title' => $past->title.' -copy',
                 'tag' => $past->tag,
                 'date' => $past->date,
                 'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
+            $this->updateTagWithDataMove($task->id,$target->parent_id);
             $this->createLog($task->id, 'copy', 'Copy', $request->text);
-
             return response()->json(['success' => $task->id]);
 
         } else if ($request->type == 'cut') {
@@ -248,15 +250,12 @@ class TaskController extends Controller
                 ->where('sort_id', '>', $target->sort_id)
                 ->where('parent_id', $target->parent_id)
                 ->increment('sort_id');
-
-
-            $past = Task::where('id', $request->copy_id)->update(['parent_id' => $target->parent_id, 'sort_id' => $target->sort_id + 1]);
+            $past = Task::where('id', $request->copy_id)
+                ->update(['parent_id' => $target->parent_id, 'sort_id' => $target->sort_id + 1]);
 
             $this->updateTagWithDataMove($request->copy_id,$target->parent_id);
             //check the target task id in the dont forget section and update tag for necessary
-
             $this->createLog($request->copy_id, 'cut', 'Cut and past tsk', $request->text);
-
             return response()->json(['success' => $request->copy_id]);
         }
     }
@@ -342,7 +341,7 @@ class TaskController extends Controller
             Task::where('parent_id',$parent_id)->where('sort_id','>=',$sort_id)->increment('sort_id');
         }
         Task::where('id',$id)->update(['parent_id'=>$parent_id,'sort_id'=>$sort_id]);
-//        $this->updateTagWithDataMove($id,$parent_id);
+        $this->updateTagWithDataMove($id,$parent_id);
         return \response()->json(['success'=>1]);
     }
 
@@ -439,7 +438,9 @@ class TaskController extends Controller
             $info['tagTooltip'] = $tagTooltip;
             $info['description'] = $task->description;
             $info['files'] = $task->files;
-            $info['users'] = User::select('id', 'name')->get()->toArray();
+            $info['assigned_user'] = AssignedUser::join('users','task_assigned_users.user_id','users.id')->where('task_id',$task->id)->get()->toArray();
+            $team_id = DB::table('team_users')->where('user_id',Auth::id())->first();
+            $info['users'] = User::join('team_users','team_users.user_id','users.id')->where('team_users.team_id',$team_id->team_id)->get()->toArray();
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
