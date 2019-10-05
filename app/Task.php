@@ -34,6 +34,11 @@ class Task extends Model
         return $this->belongsTo('App\Multiple_list','id','list_id');
     }
 
+    public function existingTaskInBoard()
+    {
+        return $this->belongsTo(Existing_tasks_in_board::class,'task_id','id');
+    }
+
     public function action_log(){
 
         return $this->hasMany('App\ActionLog','task_id','id');

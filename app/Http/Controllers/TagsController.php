@@ -192,7 +192,7 @@ class TagsController extends Controller
 
     public function destroy(Request $request)
     {
-        Tags::where('title',$request->title)->delete();
+        Tags::where('id',$request->id)->delete();
         $tags =  Tags::where('task_id','!=',null)->groupBy('title')->get();
         return response()->json(['success'=>1,'tags'=>$tags]);
     }

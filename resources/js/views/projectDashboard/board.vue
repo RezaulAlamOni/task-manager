@@ -809,10 +809,9 @@
                     axios.delete('/api/card-delete/'+id)
                     .then(response => response.data)
                     .then(response => {
+                        _this.cards[index].task.splice(cardIndex,1);    
+                        _this.getData();
                         if(response.success){
-                            delete _this.cards[index].task[cardIndex];
-                            _this.cards[index].task.length = _this.cards[index].task.length-1;
-                            _this.getData();
                         }
                     })
                     .catch(error => {
@@ -827,11 +826,12 @@
                     axios.delete('/api/existing-task-delete/'+id)
                     .then(response => response.data)
                     .then(response => {
-                        if(response.success){
-                            delete _this.cards[index].task[cardIndex];
-                            _this.cards[index].task.length = _this.cards[index].task.length-1;
+                        // if(response.success){
+                            _this.cards[index].task.splice(cardIndex,1);  
+                            // delete _this.cards[index].task[cardIndex];
+                            // _this.cards[index].task.length = _this.cards[index].task.length-1;
                             _this.getData();
-                        }
+                        // }
                     })
                     .catch(error => {
                     });
@@ -986,15 +986,14 @@
                                 'text' : response.data.title,
                             }
                             _this.cards[columnIndex].task[cardIndex].tags.push(cardTags);
+                            setTimeout(function () {
+                                _this.getData();
+                            },100);
                         }
-                        console.log(response)
                     })
                     .catch(error => {
                         console.log("error")
                     });
-                    setTimeout(function () {
-                        _this.getData();
-                    },100);
                 }
             },
             deleteCardTag(obj, card, columnIndex, cardIndex) {
@@ -1004,12 +1003,16 @@
                 }
                 // console.log(obj);
                 if (obj.tag.text !== 'Dont Forget') {
-                    axios.post('/api/task-list/delete-by-tag-id', postData)
+                    axios.post('/api/task-list/delete-tag', postData)
                         .then(response => response.data)
                         .then(response => {
+                            console.log(_this.cards[columnIndex].task[cardIndex].tags[obj.index]);
                             _this.cards[columnIndex].task[cardIndex].tags.splice(obj.index,1);
-                            _this.getData()
+                            setTimeout(function () {
+                                _this.getData();
+                            },100);
                             _this.tags = []
+                            console.log(_this.cards[columnIndex].task[cardIndex].tags[obj.index]);
                         })
                         .catch(error => {
                             console.log('Api for delete tag not Working !!!')
