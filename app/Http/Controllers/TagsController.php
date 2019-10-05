@@ -175,7 +175,7 @@ class TagsController extends Controller
             return response()->json(['success'=>1,'tags'=>$tags]);
         }
     }
-    
+
     public function destroy(Request $request)
     {
         if (isset($request->title)){
