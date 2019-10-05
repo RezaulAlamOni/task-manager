@@ -14,6 +14,20 @@
                 <div class="input-group-btn searchClick" id="searchClick">
                     <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
                 </div>
+
+<!--                <input type="text" id="myInput" placeholder="Search for names.." title="Type in a name">-->
+
+<!--                <ul id="myUL">-->
+<!--                    <li><a href="#">Adele</a></li>-->
+<!--                    <li><a href="#">Agnes</a></li>-->
+
+<!--                    <li><a href="#">Billy</a></li>-->
+<!--                    <li><a href="#">Bob</a></li>-->
+
+<!--                    <li><a href="#">Calvin</a></li>-->
+<!--                    <li><a href="#">Christina</a></li>-->
+<!--                    <li><a href="#">Cindy</a></li>-->
+<!--                </ul>-->
             </div>
         </div>
 
@@ -533,7 +547,7 @@
                         _this.AddDontForgetTagToSelectedIds();//add DON'T FORGET SECTION
                         break;
                     case "ctrl+s":
-                        $('.searchList').show();
+                        $('.searchList').toggle();
                         break;
                     case "ctrl+i":
                         _this.addAttachment(_this.selectedData);

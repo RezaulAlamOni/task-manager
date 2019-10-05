@@ -640,15 +640,44 @@
 .searchList {
     float: right;
     position: absolute;
-    right: 30px;
+    right: 242px;
     top: 7px;
-    //.searchTaskList{
-    //  display: none;
-    //}
-    //.searchTaskList1{
-    //  display: block;
-    //}
 }
+#myInput {
+    background-image: url('../img/searchIcon.png');
+    background-position: 7px 4px;
+    background-repeat: no-repeat;
+    width: 100%;
+    font-size: 14px;
+    padding: 3px 4px 3px 45px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+    line-height: 29px;
+}
+
+#myUL {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#myUL li a {
+    border: 1px solid #ddd;
+    margin-top: -1px; /* Prevent double borders */
+    background-color: #f6f6f6;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    color: black;
+    display: block
+}
+
+#myUL li a:hover:not(.header) {
+    background-color: #eee;
+}
+
+
+
 
 .dateCal {
     border: none;
