@@ -181,7 +181,7 @@
                                             <span class="assigned_user dropdown-toggle-split "  v-for="(assign,keyId) in data.assigned_user" data-toggle="dropdown">
                                                 <p class="assignUser-photo-for-selected text-uppercase" data-toggle="tooltip" data-placement="bottom" v-if="keyId <= 1"
                                                    :title="assign.name">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}</p>
-                                                
+
                                             </span>
                                         </template>
 
@@ -1116,7 +1116,7 @@
                     id: obj.tag.id,
                 }
                 if (obj.tag.text !== 'Dont Forget') {
-                    axios.post('/api/task-list/delete-by-tag-id', postData)
+                    axios.post('/api/task-list/delete-tag', postData)
                         .then(response => response.data)
                         .then(response => {
                             console.log(response.success)
