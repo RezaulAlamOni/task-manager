@@ -95,7 +95,10 @@
                                                 </flatPickr>
                                             </div>
                                             <div style="position: absolute; right: 160px; bottom: 8px; opacity: 0.25">
-                                                <a @click="deleteCard(index, key, card.cardId)">
+                                                <a @click="deleteCard(index, key, card.cardId)" v-if="card.types == 'card'">
+                                                     <i class="baseline-playlist_delete icon-image-preview"></i>
+                                                </a>
+                                                <a @click="deleteTask(index, key, card.cardId)" v-if="card.types == 'task'">
                                                      <i class="baseline-playlist_delete icon-image-preview"></i>
                                                 </a>
                                             </div>
@@ -555,6 +558,7 @@
                             type: 'draggable',
                             id: `${i}${j}`,
                             cardId: this.cards[i].task[j].id,
+                            types: this.cards[i].task[j].type,
                             props: {
                                 className: 'card',
                                 style: {backgroundColor: 'white'}
@@ -815,6 +819,26 @@
                     });
                 }
             },
+            deleteTask(index,cardIndex,id){
+                let _this = this;
+                console.log(index+", "+cardIndex );
+                console.log(this.cards[index].task[cardIndex] );
+                if(confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id){
+                    axios.delete('/api/existing-task-delete/'+id)
+                    .then(response => response.data)
+                    .then(response => {
+                        if(response.success){
+                            delete _this.cards[index].task[cardIndex];
+                            _this.cards[index].task.length = _this.cards[index].task.length-1;
+                            _this.getData();
+                        }
+                    })
+                    .catch(error => {
+                    });
+                }else{
+                    alert("couden't delete");
+                }
+            },
             saveData(data,index,child_key) {
                 let _this = this;
                 if (!data.data ) {
@@ -936,7 +960,6 @@
             },
             changeTag(tags, card, columnIndex, cardIndex) {
                 var _this = this;
-                var _this = this;
                 var old = this.tags.length;
                 var newl = tags.length;
 
@@ -953,16 +976,18 @@
                     axios.post('/api/task-list/add-tag', postData)
                     .then(response => response.data)
                     .then(response => {
-                        let cardTags = {
-                            'board_id' : response.data.board_id,
-                            'classes' : '',
-                            'color' : response.data.color,
-                            'id' : response.data.id,
-                            'style' : "background-color: "+response.data.color,
-                            'text' : response.data.title,
+                        if(response.success){
+                            let cardTags = {
+                                'board_id' : response.data.board_id,
+                                'classes' : '',
+                                'color' : response.data.color,
+                                'id' : response.data.id,
+                                'style' : "background-color: "+response.data.color,
+                                'text' : response.data.title,
+                            }
+                            _this.cards[columnIndex].task[cardIndex].tags.push(cardTags);
                         }
-                        _this.cards[columnIndex].task[cardIndex].tags.push(cardTags);
-                        // console.log(response)
+                        console.log(response)
                     })
                     .catch(error => {
                         console.log("error")

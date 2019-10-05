@@ -8,6 +8,7 @@ class Tags extends Model
 {
     protected $fillable = [
         'task_id',
+        'board_id',
         'title',
         'color',
         'created_at',
