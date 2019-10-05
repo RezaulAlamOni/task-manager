@@ -163,7 +163,6 @@ class TagsController extends Controller
         }
     }
 
-
     public function update(Request $request)
     {
         if (isset($request->tag)){
