@@ -41,9 +41,10 @@ class AssignedUserController extends Controller
 
     }
 
-    public function show(AssignedUser $assignedUser)
+    public function delete(Request $request)
     {
-        //
+        AssignedUser::where($request->all())->delete();
+        return response()->json('success');
     }
 
 

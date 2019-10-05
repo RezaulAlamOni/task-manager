@@ -41,7 +41,8 @@ Route::get('/nav-item/{project_id}','ProjectNavItemsController@index'); //all na
 Route::post('/nav-item/update','ProjectNavItemsController@edit'); //all nav item
 
 //assign  user to task
-Route::post('/task-list/assign-user','AssignedUserController@store'); //all nav item
+Route::post('/task-list/assign-user','AssignedUserController@store'); //Assign user
+Route::post('/task-list/assign-user-remove','AssignedUserController@delete'); //Assign user remove
 
 //board Section
 Route::post('/board-task','MultipleBoardController@index'); //get board item

@@ -176,55 +176,69 @@
 
                                 </div>
                                 <div>
-                                    <a class="user ">
-                                        <template v-if="data.assigned_user.length > 0">
-                                            <span class="assigned_user dropdown-toggle-split "  v-for="(assign,keyId) in data.assigned_user" data-toggle="dropdown">
-                                                <p class="assignUser-photo-for-selected text-uppercase" data-toggle="tooltip" data-placement="bottom" v-if="keyId <= 1"
-                                                   :title="assign.name">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}</p>
+                                    <a class="user dropdown-hide-with-remove-icon">
+                                            <template v-if="data.assigned_user.length > 0">
+                                            <span class="assigned_user dropdown-toggle-split "
+                                                  v-for="(assign,keyId) in data.assigned_user" data-toggle="dropdown">
+                                                <p class="assignUser-photo-for-selected text-uppercase"
+                                                   @click="showAssignedUserRemoveButton(data)" data-toggle="tooltip"
+                                                   data-placement="bottom" v-if="keyId <= 1"
+                                                   :title="assign.name">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
+                                                    <a href="javascript:void(0)"
+                                                       @click="removeAssignedUser(assign)"
+                                                       class="remove-assigned" :id="'remove-assign-user'+data.id">
+                                                        <i class="fa fa-times remove-assign-user-icon"></i>
+                                                    </a>
+                                                </p>
 
                                             </span>
-                                        </template>
+                                            </template>
 
-                                        <i v-else class="outline-person icon-image-preview li-opacity dropdown-toggle-split" data-toggle="dropdown"></i>
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <i v-else
+                                               class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
+                                               data-toggle="dropdown"></i>
+                                            <div class="dropdown-menu dropdown-menu-right">
 
-                                            <diV class="collapse show switchToggle">
-                                                <li class="assignUser">
-                                                    <input type="text" class="input-group searchUser"
-                                                           placeholder="Assign by name and email">
-                                                    <label class="pl-2 label-text">
+                                                <diV class="collapse show switchToggle">
+                                                    <li class="assignUser">
+                                                        <input type="text" class="input-group searchUser"
+                                                               placeholder="Assign by name and email">
+                                                        <label class="pl-2 label-text">
                                                         <span class="assign-user-drop-down-text">
                                                             Or invite a new member by email address
                                                         </span>
-                                                    </label>
-                                                </li>
-                                                <li class="assignUser">
+                                                        </label>
+                                                    </li>
+                                                    <li class="assignUser">
                                                         <template v-for="user in data.users">
-                                                            <div class="users-select row" @click="assignUserToTask(user,data)">
+                                                            <div class="users-select row"
+                                                                 @click="assignUserToTask(user,data)">
                                                                 <div class="col-md-3 pt-1 pl-4">
-                                                                    <p class="assignUser-photo" >{{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
+                                                                    <p class="assignUser-photo">
+                                                                        {{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
                                                                 </div>
-                                                                <div class="col-md-9 assign-user-name-email" >
+                                                                <div class="col-md-9 assign-user-name-email">
                                                                     <h5>{{user.name}}<br>
                                                                         <small>{{user.email}}</small>
                                                                     </h5>
                                                                 </div>
                                                             </div>
                                                         </template>
+                                                    </li>
+                                                </diV>
+                                                <li class="border-top pl-2 assign-user-drop-down-footer"
+                                                    @click="switchEvent($event)">
+
+                                                    <span
+                                                        class="assign-user-drop-down-text">Assign an external team</span>
+                                                    <switches v-model="id"
+                                                              class="assign-user-switch-for-dropdown"
+                                                              theme="bootstrap"
+                                                              color="success">
+                                                    </switches>
                                                 </li>
-                                            </diV>
-                                            <li class="border-top pl-2 assign-user-drop-down-footer" @click="switchEvent($event)">
-
-                                                <span class="assign-user-drop-down-text">Assign an external team</span>
-                                                <switches v-model="id"
-                                                          class="assign-user-switch-for-dropdown"
-                                                          theme="bootstrap"
-                                                          color="success">
-                                                </switches>
-                                            </li>
-                                        </div>
-                                    </a>
-
+                                            </div>
+                                        </a>
                                 </div>
                                 <a class="subTask_plus li-opacity clickHide" @click="addChild(data)">
                                     <i class="baseline-playlist_add icon-image-preview"></i>
@@ -622,6 +636,36 @@
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
+                    });
+            },
+            showAssignedUserRemoveButton(data){
+
+                $('[data-toggle="tooltip"]').tooltip('hide');
+
+                setTimeout(function () {
+                    $('#remove-assign-user'+data.id).toggleClass('remove-assign-user');
+                    $('#remove-assign-user'+data.id).removeClass('remove-assigned');
+                }, 500)
+
+            },
+            removeAssignedUser(user){
+
+                console.log(user.id, user.task_id)
+                var _this = this;
+                var postData = {
+                  user_id : user.id,
+                  task_id : user.task_id
+                };
+                axios.post('/api/task-list/assign-user-remove', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        if (response === 'success'){
+                            _this.getTaskList()
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Api assign-user-remove is not Working !!!')
                     });
             },
 
@@ -1432,6 +1476,7 @@
             },
 
             getTaskList() {
+                var _this = this;
                 let data = {
                     id: this.projectId,
                     list_id: this.list_id,
@@ -1456,6 +1501,10 @@
                         }
                         setTimeout(function () {
                             $('.delete-icon').hide();
+                            $('.dropdown-hide-with-remove-icon').on('hidden.bs.dropdown', function () {
+                                $('.remove-assign-user').addClass('remove-assigned');
+                                $('.remove-assigned').removeClass('remove-assign-user');
+                            })
                         }, 500)
                     })
                     .catch(error => {
