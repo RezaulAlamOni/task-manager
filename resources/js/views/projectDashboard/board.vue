@@ -871,7 +871,7 @@
             deleteColumn(index,id) {
                 let _this = this;
                 if (confirm('Are you sure you want to delete this board?')) {
-                    axios.get('/api/board-delete/'+id)
+                    axios.get('/api/board-delete/'+id)  
                     .then(response => response.data)
                     .then(response => {
                         if(response.success){
