@@ -642,6 +642,7 @@
     position: absolute;
     right: 291px;
     top: 7px;
+    @include transition(all 0.2s linear);
 }
 #myInput {
     background-image: url('../img/icons8-search-26.png');
@@ -655,6 +656,7 @@
     line-height: 29px;
     background-size: 4%;
     height: 38px !important;
+    @include transition(all 0.2s linear);
 }
 .search-nav-icon{
     margin-right: 15px !important;
@@ -667,13 +669,16 @@
     width: 25px;
 }
 #myUL {
+    display: none;
+}
+.myUL-show {
     list-style-type: none;
     padding: 0;
     margin: 0;
     width: 100%;
 }
 
-#myUL li a {
+.myUL-show li a {
     border: 1px solid #ddd;
     margin-top: -1px; /* Prevent double borders */
     background-color: #f6f6f6;
@@ -684,7 +689,7 @@
     display: block
 }
 
-#myUL li a:hover:not(.header) {
+.myUL-show li a:hover:not(.header) {
     background-color: #eee;
 }
 

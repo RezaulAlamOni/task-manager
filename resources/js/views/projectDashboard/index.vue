@@ -5,6 +5,7 @@
             <Navbar :AllNavItems="AllNavItems"
                     :projectId="$route.params.projectId"
                     @getList="showTask"
+                    @showSearchInputField="showSearchInputField"
                     @getNavBars="getNavbar">
             </Navbar>
 
@@ -16,7 +17,7 @@
 
                     <input class="form-control" type="text" id="myInput" placeholder="Search for names.." title="Type in a name">
 
-                    <ul id="myUL">
+                    <ul class="" id="myUL">
                         <li><a href="#">Adele</a></li>
                         <li><a href="#">Agnes</a></li>
 
@@ -550,7 +551,7 @@
                         _this.AddDontForgetTagToSelectedIds();//add DON'T FORGET SECTION
                         break;
                     case "ctrl+s":
-                        $('.searchList').toggle();
+                       _this.showSearchInputField();
                         break;
                     case "ctrl+i":
                         _this.addAttachment(_this.selectedData);
@@ -636,6 +637,11 @@
                     }
                 }
 
+            },
+            showSearchInputField(){
+                if (this.list.type === 'list') {
+                    $('.searchList').toggle();
+                }
             },
 
             assignUserToTask(user, data) {

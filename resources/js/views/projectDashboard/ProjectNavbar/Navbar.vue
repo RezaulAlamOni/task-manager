@@ -46,8 +46,8 @@
                             </ul>
                         </span>
                     <ul class="navbar-nav ml-4" style="position: absolute;right: 60px;">
-                        <li class="nav-item search-nav-icon ">
-                            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                        <li class="nav-item search-nav-icon">
+                            <button class="btn btn-default" type="submit" @click="showSearchInputField"><i class="fa fa-search"></i></button>
                         </li>
                         <li class="nav-item" style="margin-right:20px;">
                             <a @click="shortcutModel" class="d-block d-md-flex text-center nav-link"
@@ -558,6 +558,10 @@
                 this.nav_id = id;
                 $("#addBoardModel").modal('show');
             },
+            showSearchInputField() {
+                this.$emit('showSearchInputField')
+            },
+
             setListId(navList, nav_id, description, type) {
                 this.list_id = navList.id;
                 this.nav_id = nav_id;
