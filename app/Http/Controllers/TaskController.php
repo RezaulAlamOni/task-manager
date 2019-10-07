@@ -52,7 +52,7 @@ class TaskController extends Controller
     }
 
     public function getAll(Request $request)
-    {
+    {   
         if ($request->list_id == null) {
             $list = Multiple_list::where('project_id', $request->id)->orderBy('id', 'ASC')->first();
             $list_id = $list->id;
@@ -94,7 +94,7 @@ class TaskController extends Controller
     }
 
     public function getAllTask(Request $request)
-    {
+    {   
         if ($request->list_id == null) {
             $list = Multiple_list::where('project_id', $request->id)->orderBy('id', 'ASC')->first();
             $list_id = $list->id;
@@ -111,7 +111,7 @@ class TaskController extends Controller
     }
 
     public function addTask(Request $request)
-    {
+    {   
         $list_id = $request->list_id;
         $etask = Task::where(['id' => $request->id])->get();
         if ($request->text == '') {
@@ -151,7 +151,7 @@ class TaskController extends Controller
     }
 
     public function addChildTask(Request $request)
-    {
+    {   
         $task_id = Task::where('title', '')->where('parent_id', $request->id)->first();
         if ($task_id) {
             Task::where('title', '')->where('parent_id', $request->id)->delete();
@@ -172,6 +172,7 @@ class TaskController extends Controller
         ];
         $task = Task::create($data);
         $this->createLog($task->id, 'created', 'create task', 'new');
+
         return response()->json(['success' => $task]);
     }
 
@@ -211,6 +212,7 @@ class TaskController extends Controller
                 $this->updateTagWithDataMove($request->id,$task->parent_id);
                 $this->createLog($request->id, 'updated', 'Update parent', $request->text);
             }
+
             return response()->json(['success' => $request->id]);
         }
     }
