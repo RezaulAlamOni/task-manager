@@ -12,21 +12,21 @@
                         <label class="col-md-4 col-form-label text-md-right">Add Project Title</label>
 
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="name" v-model="project.title">
+                            <input class="form-control" name="name" type="text" v-model="project.title">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label text-md-right">Add Description</label>
 
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="description" v-model="project.description">
+                            <input class="form-control" name="description" type="text" v-model="project.description">
                         </div>
                     </div>
 
                     <!-- Create Button -->
                     <div class="form-group row mb-0">
                         <div class="offset-md-4 col-md-6">
-                            <button type="submit" class="btn btn-primary" @click.prevent="addProject">Create</button>
+                            <button @click.prevent="addProject" class="btn btn-primary" type="submit">Create</button>
                             <a class="btn btn-default" href="/projects">Cancel</a>
                         </div>
                     </div>
@@ -40,30 +40,28 @@
 </template>
 <script>
 
-    import router from "../../routes";
-
     export default {
         data() {
             return {
-                project : {
-                    title : null,
-                    description : null
+                project: {
+                    title: null,
+                    description: null
                 },
 
-                id:this.$route.params.id
+                id: this.$route.params.id
             }
         },
-        mounted(){
+        mounted() {
             $('#header-item').text('Project Create')
 
         },
-        methods:{
+        methods: {
             addProject() {
-                if (this.project.title.length > 3){
+                if (this.project.title.length > 3) {
                     axios.post('/api/project', this.project)
                         .then(response => response.data)
                         .then(response => {
-                            if (response.success == 1){
+                            if (response.success == 1) {
                                 window.location.href = "/projects";
                             }
                         })
