@@ -419,7 +419,7 @@ class TaskController extends Controller
             $info['text'] = $task->title;
             $info['clicked'] = 0;
             $info['date'] = $task->date;
-            $allTags = Tags::where('task_id', $task->id)->get();
+            $allTags = $task->tags;
             $tags = [];
             $tagTooltip = '';
             if ($allTags->count() > 0) {
@@ -433,7 +433,6 @@ class TaskController extends Controller
                     $tagTooltip .= '#' . $tag->title . ' ';
                 }
             }
-
             $info['tags'] = $tags;
             $info['tagTooltip'] = $tagTooltip;
             $info['description'] = $task->description;

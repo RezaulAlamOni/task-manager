@@ -163,16 +163,6 @@ class TagsController extends Controller
         }
     }
 
-    public function show(Tags $tags)
-    {
-        //
-    }
-
-    public function edit(Tags $tags)
-    {
-        //
-    }
-
     public function update(Request $request)
     {
         if (isset($request->tag)){
@@ -188,15 +178,15 @@ class TagsController extends Controller
 
     public function destroy(Request $request)
     {
-        Tags::where('title',$request->title)->delete();
-        $tags =  Tags::where('task_id','!=',null)->groupBy('title')->get();
-        return response()->json(['success'=>1,'tags'=>$tags]);
+        if (isset($request->title)){
+            Tags::where('title',$request->title)->delete();
+            $tags =  Tags::where('task_id','!=',null)->groupBy('title')->get();
+            return response()->json(['success'=>1,'tags'=>$tags]);
+        }elseif (isset($request->id)){
+            Tags::where('id',$request->id)->delete();
+            $tags =  Tags::where('task_id','!=',null)->groupBy('title')->get();
+            return response()->json(['success'=>1,'tags'=>$tags]);
+        }
     }
 
-    public function delete(Request $request)
-    {
-        Tags::where('id',$request->id)->delete();
-        $tags =  Tags::where('task_id','!=',null)->groupBy('title')->get();
-        return response()->json(['success'=>1,'tags'=>$tags]);
-    }
 }
