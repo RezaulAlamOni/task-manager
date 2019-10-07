@@ -8,26 +8,27 @@
                     @getList="showTask">
             </Navbar>
 
-            <div class="input-group col-sm-3 searchList">
-                <input type="text" class="form-control searchTaskList" id="searchTaskList" placeholder="Search task"
-                       name="search">
-                <div class="input-group-btn searchClick" id="searchClick">
+            <div class="input-group col-sm-4 searchList">
+<!--                <input type="text" class="form-control searchTaskList" id="searchTaskList" placeholder="Search task"-->
+<!--                       name="search">-->
+
                     <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
-                </div>
 
-<!--                <input type="text" id="myInput" placeholder="Search for names.." title="Type in a name">-->
+                    <input class="form-control" type="text" id="myInput" placeholder="Search for names.." title="Type in a name">
 
-<!--                <ul id="myUL">-->
-<!--                    <li><a href="#">Adele</a></li>-->
-<!--                    <li><a href="#">Agnes</a></li>-->
+                    <ul id="myUL">
+                        <li><a href="#">Adele</a></li>
+                        <li><a href="#">Agnes</a></li>
 
-<!--                    <li><a href="#">Billy</a></li>-->
-<!--                    <li><a href="#">Bob</a></li>-->
+                        <li><a href="#">Billy</a></li>
+                        <li><a href="#">Bob</a></li>
 
-<!--                    <li><a href="#">Calvin</a></li>-->
-<!--                    <li><a href="#">Christina</a></li>-->
-<!--                    <li><a href="#">Cindy</a></li>-->
-<!--                </ul>-->
+                        <li><a href="#">Calvin</a></li>
+                        <li><a href="#">Christina</a></li>
+                        <li><a href="#">Cindy</a></li>
+                    </ul>
+
+
             </div>
         </div>
 
