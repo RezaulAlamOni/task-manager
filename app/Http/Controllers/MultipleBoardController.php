@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Multiple_board;
-use App\existing_tasks_in_board;
+use App\Existing_tasks_in_board;
 use App\Multiple_list;
 use App\TaskBoard;
 use App\Tags;
@@ -27,27 +27,26 @@ class MultipleBoardController extends Controller
     {
         $boards = [];
         $board = TaskBoard::where('parent_id',0)
+                        ->with('task')
                         ->where('project_id',$request->projectId)
                         ->where('nav_id',$request->nav_id)
                         ->where('multiple_board_id',$request->board_id)
                         ->orderby('sort_id','ASC')
                         ->get();
-        foreach ($board as $key => $value) {
+        // return $this->makeRecursive($board->toArray());
+            foreach ($board as $key => $value) {
+            $keys = -1;
             $boards[$key]['id'] = $value['id'];
             $boards[$key]['column'] = $value['title'];
             $boards[$key]['hidden'] = $value['hidden'];
             $boards[$key]['progress'] = $value['progress'];
             $boards[$key]['color'] = $value['color'];
-            $tasks = TaskBoard::with('tags')->where('parent_id',$value->id)->orderby('sort_id','ASC')->get();
-            $existingTask = existing_tasks_in_board::where('board_id', $value->id)->get();
-            if(count($tasks) > 0){
-                $tagTooltip = '';
-                foreach ($tasks as $keys => $values) {
-                    $allTags = Tags::where('board_id',$values['id'])->get();
+            if(count($value['task']) > 0){
+                foreach ($value['task'] as $keys => $values) {
+                    $tagTooltip = '';
                     $tags = [];
-
-                    if ($allTags->count() > 0){
-                        foreach ($allTags as $tagkey => $tag) {
+                    if (count($values['tags']) > 0){
+                        foreach ($values['tags'] as $tagkey => $tag) {
                             $tags[$tagkey]['id'] = $tag->id;
                             $tags[$tagkey]['board_id'] = $tag->board_id;
                             $tags[$tagkey]['text'] = $tag->title;
@@ -63,20 +62,24 @@ class MultipleBoardController extends Controller
 
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
+                    $boards[$key]['task'][$keys]['type'] = 'card';
                     $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($values['date']));
                 }
             } else {
                 $boards[$key]['task'] = [];
             }
+            $existingTask = Existing_tasks_in_board::with('task')->where('board_id', $value->id)->get();
+            if($value->id == 57){
+                // return $existingTask;
+            }
             if ($existingTask->count() > 0) {
-                $tagTooltip = '';
                 foreach ($existingTask as $ExTaskkey => $ExTaskvalue) {
-                    $task_list = Task::where('id', $ExTaskvalue->task_id)->get();
-                    foreach ($task_list as $TaskKey => $TaskValue) {
-                        $allTaskTags = Tags::where('task_id',$TaskValue['id'])->get();
+                    $keys++;
+                    foreach ($ExTaskvalue['task'] as $TaskKey => $TaskValue) {
+                        $tagTooltip = '';
                         $tags = [];
-                        if ($allTaskTags->count() > 0){
-                            foreach ($allTaskTags as $tagkey => $tag) {
+                        if (count($TaskValue['tags']) > 0){
+                            foreach ($TaskValue['tags'] as $tagkey => $tag) {
                                 $tags[$tagkey]['id'] = $tag->id;
                                 $tags[$tagkey]['board_id'] = $tag->board_id;
                                 $tags[$tagkey]['text'] = $tag->title;
@@ -87,12 +90,12 @@ class MultipleBoardController extends Controller
                             }
                             // return $tagTooltip;
                         }
-                        $boards[$key]['task'][$ExTaskkey]['tags'] = $tags;
-                        $boards[$key]['task'][$ExTaskkey]['tagTooltip'] = $tagTooltip;
-
-                        $boards[$key]['task'][$ExTaskkey]['id'] = $TaskValue['id'];
-                        $boards[$key]['task'][$ExTaskkey]['name'] = $TaskValue['title'];
-                        $boards[$key]['task'][$ExTaskkey]['date'] = date('d M', strtotime($TaskValue['date']));
+                        $boards[$key]['task'][$keys]['tags'] = $tags;
+                        $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
+                        $boards[$key]['task'][$keys]['id'] = $ExTaskvalue->id;
+                        $boards[$key]['task'][$keys]['name'] = $TaskValue['title'];
+                        $boards[$key]['task'][$keys]['type'] = 'task';
+                        $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($TaskValue['date']));
                     }
                 }
             }
@@ -101,7 +104,6 @@ class MultipleBoardController extends Controller
         // return $boards;
         return response()->json(['success'=>$boards]);
     }
-
 
     public function create(Request $request)
     {
@@ -255,6 +257,16 @@ class MultipleBoardController extends Controller
         }
     }
 
+    public function existingTaskDelete($id)
+    {
+        $delete = Existing_tasks_in_board::where('id',$id)->delete();
+        if($delete){
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
     public function hideColumn($id, Request $request)
     {
         $hide = TaskBoard::where('id',$id)
@@ -278,7 +290,7 @@ class MultipleBoardController extends Controller
                 'date' => Carbon::today()
             ];
 
-            $insert = existing_tasks_in_board::create($data);
+            $insert = Existing_tasks_in_board::create($data);
             $task[$key] = Task::where('id',$value)->first();
             $tagTooltip = '';
             $allTags = Tags::where('task_id',$task[$key]->id)->get();

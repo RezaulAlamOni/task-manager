@@ -29,14 +29,18 @@ class TagsController extends Controller
     }
 
     public function store(Request $request)
-    {
+    { 
         $data = [
             'color'=>$request->color,
             'title'=>$request->tags,
             'created_at'=>Carbon::now(),
             'updated_at'=>Carbon::now(),
         ];
-        $data['task_id'] = $request->id;
+        if (isset($request->type) && $request->type == 'board') {
+            $data['board_id'] = $request->id;
+        } else {
+            $data['task_id'] = $request->id;
+        }
         $check_exists = Tags::where(['title'=>'Dont Forget','task_id'=>$request->id])->get();
 
         if ($check_exists->count() <= 0 ) {
