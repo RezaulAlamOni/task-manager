@@ -5,29 +5,43 @@
             <Navbar :AllNavItems="AllNavItems"
                     :projectId="$route.params.projectId"
                     @getList="showTask"
+                    @showSearchInputField="showSearchInputField"
                     @getNavBars="getNavbar">
             </Navbar>
 
-            <div class="input-group col-sm-3 searchList">
-                <input class="form-control searchTaskList" id="searchTaskList" name="search" placeholder="Search task"
-                       type="text">
-                <div class="input-group-btn searchClick" id="searchClick">
-                    <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
-                </div>
+            <div class="input-group col-sm-4 searchList">
 
-                <!--                <input type="text" id="myInput" placeholder="Search for names.." title="Type in a name">-->
+                    <input class="form-control searchTaskList"
+                           type="text" id="myInput"
+                           placeholder="Search for names.."
+                           title="Type in a name"
+                           @keyup="searchDataFormTask($event)"
+                    >
 
-                <!--                <ul id="myUL">-->
-                <!--                    <li><a href="#">Adele</a></li>-->
-                <!--                    <li><a href="#">Agnes</a></li>-->
+                <ul class="myUL" id="myUL">
+                    <li><a href="#">Adele</a></li>
+                    <li><a href="#">Agnes</a></li>
 
-                <!--                    <li><a href="#">Billy</a></li>-->
-                <!--                    <li><a href="#">Bob</a></li>-->
+                    <li><a href="#">Billy</a></li>
+                    <li><a href="#">Bob</a></li>
 
-                <!--                    <li><a href="#">Calvin</a></li>-->
-                <!--                    <li><a href="#">Christina</a></li>-->
-                <!--                    <li><a href="#">Cindy</a></li>-->
-                <!--                </ul>-->
+                    <li><a href="#">Calvin</a></li>
+                    <li><a href="#">Christina</a></li>
+                    <li><a href="#">Cindy</a></li>
+                </ul>
+                <ul class="myUL-user-hide" id="myUL-user">
+                    <li><a href="#">Adele</a></li>
+                    <li><a href="#">Agnes</a></li>
+
+                    <li><a href="#">Billy</a></li>
+                    <li><a href="#">Bob</a></li>
+
+                    <li><a href="#">Calvin</a></li>
+                    <li><a href="#">Christina</a></li>
+                    <li><a href="#">Cindy</a></li>
+                </ul>
+
+
             </div>
         </div>
 
@@ -472,6 +486,10 @@
                 tag1: '',
                 manageTag: null,
                 selectedIds: [],
+                searchData : {
+                    tasks : null,
+                    users: null
+                },
             }
         },
         mounted() {
@@ -549,7 +567,7 @@
                         _this.AddDontForgetTagToSelectedIds();//add DON'T FORGET SECTION
                         break;
                     case "ctrl+s":
-                        $('.searchList').toggle();
+                       _this.showSearchInputField();
                         break;
                     case "ctrl+i":
                         _this.addAttachment(_this.selectedData);
@@ -637,6 +655,30 @@
 
             },
 
+            showSearchInputField(){
+                if (this.list.type === 'list') {
+                    $('.searchList').toggle();
+                }
+            },
+            searchDataFormTask(e){
+                var value = e.target.value;
+                if(value.charAt(0) === '@'){
+                    value = value.substr(1)
+                    $('#myUL-user').addClass('myUL-user');
+
+                }else if(value.charAt(0) === ''){
+                    $('#myUL-user').removeClass('myUL-user');
+                    $('#myUL-user').addClass('myUL-user-hide');
+
+                    $('#myUL').removeClass('myUL-show');
+                    $('#myUL').addClass('myUL');
+                } else {
+
+                    $('#myUL').removeClass('myUL');
+                    $('#myUL').addClass('myUL-show');
+                }
+
+            },
             assignUserToTask(user, data) {
                 var _this = this;
                 var postData = {
