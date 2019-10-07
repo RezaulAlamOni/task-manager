@@ -640,21 +640,32 @@
 .searchList {
     float: right;
     position: absolute;
-    right: 242px;
+    right: 291px;
     top: 7px;
 }
 #myInput {
-    background-image: url('../img/searchIcon.png');
-    background-position: 7px 4px;
+    background-image: url('../img/icons8-search-26.png');
+    background-position: 9px 10px;
     background-repeat: no-repeat;
     width: 100%;
     font-size: 14px;
     padding: 3px 4px 3px 45px;
     border: 1px solid #ddd;
-    margin-bottom: 12px;
+    margin-bottom: 4px;
     line-height: 29px;
+    background-size: 4%;
+    height: 38px !important;
 }
-
+.search-nav-icon{
+    margin-right: 15px !important;
+    padding-top: 8px;
+}
+.search-nav-icon i{
+    margin-left: -7px !important;
+}
+.search-nav-icon button{
+    width: 25px;
+}
 #myUL {
     list-style-type: none;
     padding: 0;

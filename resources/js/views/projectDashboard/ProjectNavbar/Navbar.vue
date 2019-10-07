@@ -7,104 +7,99 @@
                         <span v-for="nav in AllNavItems">
                             <ul class="navbar-nav ml-4 float-sm-left">
                                 <li class="nav-item dropdown">
-                                    <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
-                                       data-toggle="dropdown"
-                                       aria-haspopup="true" aria-expanded="false">
+                                    <a aria-expanded="false" aria-haspopup="true"
+                                       class="d-block d-md-flex text-center nav-link dropdown-toggle"
+                                       data-toggle="dropdown" href="#">
                                         <span class="d-none d-md-block">{{nav.title}}</span>
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-left"
-                                         aria-labelledby="dropdownMenuButton">
+                                    <div aria-labelledby="dropdownMenuButton"
+                                         class="dropdown-menu dropdown-menu-left">
 
                                         <h6 class="dropdown-header" v-if="nav.type === 'list'"> Lists</h6>
                                         <h6 class="dropdown-header" v-else-if="nav.type === 'board'"> Board</h6>
 
                                         <span v-for="nav_list in nav.lists">
-                                        <span @click="setListId(nav_list,nav.id,nav_list.description,nav.type)"
-                                              class="dropdown-item" :id="'list'+nav_list.id">
+                                        <span :id="'list'+nav_list.id"
+                                              @click="setListId(nav_list,nav.id,nav_list.description,nav.type)" class="dropdown-item">
                                             <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>
                                              <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>
                                          </span>
 
                                     </span>
-
-
                                         <div class="dropdown-divider"></div>
 
-                                        <a href="Javascript:void(0)" @click="addListModel(nav.id)"
-                                           v-if="nav.type === 'list'"
-                                           class="dropdown-item">
+                                        <a @click="addListModel(nav.id)" class="dropdown-item"
+                                           href="Javascript:void(0)"
+                                           v-if="nav.type === 'list'">
                                             <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
                                             Create {{nav.title}} List
                                         </a>
 
-                                        <a href="Javascript:void(0)" @click="addBoardModel(nav.id)"
-                                           v-else-if="nav.type === 'board'"
-                                           class="dropdown-item">
+                                        <a @click="addBoardModel(nav.id)" class="dropdown-item"
+                                           href="Javascript:void(0)"
+                                           v-else-if="nav.type === 'board'">
                                             <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
                                             Create {{nav.title}} Board
                                         </a>
-
-
                                     </div>
                                 </li>
                             </ul>
                         </span>
                     <ul class="navbar-nav ml-4" style="position: absolute;right: 60px;">
+                        <li class="nav-item search-nav-icon ">
+                            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                        </li>
                         <li class="nav-item" style="margin-right:20px;">
-                            <a href="Javascript:void(0)" class="d-block d-md-flex text-center nav-link"
-                               @click="shortcutModel">
-                                        <span class="d-none d-md-block">
-                                           Shortcuts
-                                        </span>
+                            <a @click="shortcutModel" class="d-block d-md-flex text-center nav-link"
+                               href="Javascript:void(0)">
+                                    <span class="d-none d-md-block">Shortcuts</span>
                             </a>
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false">
-                                        <span class="d-none d-md-block">
-                                           <i class="fa fa-fw fa-filter" style="font-size: 26px;"></i>
-                                        </span>
+                            <a aria-expanded="false" aria-haspopup="true" class="d-block d-md-flex text-center nav-link"
+                               data-toggle="dropdown" href="#">
+                                <span class="d-none d-md-block"><i class="fa fa-fw fa-filter" style="font-size: 26px;"></i></span>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <div aria-labelledby="dropdownMenuButton" class="dropdown-menu dropdown-menu-right">
 
                                 <h6 class="dropdown-header"> Filters</h6>
                                 <div class="dropdown-divider"></div>
-                                <a href="javascript:void(0)" class="dropdown-item active">
+                                <a class="dropdown-item active" href="javascript:void(0)">
                                     <i class="fa fa-fw fa-tasks"></i>
                                     Show All Tasks
                                 </a>
-                                <a href="javascript:void(0)" class="dropdown-item">
+                                <a class="dropdown-item" href="javascript:void(0)">
                                     <i class="fa fa-user"></i>
                                     Show My Tasks
                                 </a>
-                                <a href="javascript:void(0)" class="dropdown-item">
+                                <a class="dropdown-item" href="javascript:void(0)">
                                     <i class="fa fa-users"></i>
                                     Show Users Tasks
                                 </a>
-                                <a href="javascript:void(0)" class="dropdown-item">
+                                <a class="dropdown-item" href="javascript:void(0)">
                                     <i class="fa fa-clipboard-check"></i>
                                     Show Completed Tasks
                                 </a>
-                                <a href="javascript:void(0)" class="dropdown-item">
+                                <a class="dropdown-item" href="javascript:void(0)">
                                     <i class="fa fa-eye-slash"></i>
                                     Hide Completed Tasks
                                 </a>
                                 <h6 class="dropdown-header"> Sort</h6>
                                 <div class="dropdown-divider"></div>
-                                <a href="javascript:void(0)" class="dropdown-item active">
+                                <a class="dropdown-item active" href="javascript:void(0)">
                                     <i class="fa fa-sort"></i>
                                     Default
                                 </a>
-                                <a href="javascript:void(0)" class="dropdown-item">
+                                <a class="dropdown-item" href="javascript:void(0)">
                                     <i class="fa fa-sort-up"></i>
                                     Oldest
                                 </a>
-                                <a href="javascript:void(0)" class="dropdown-item">
+                                <a class="dropdown-item" href="javascript:void(0)">
                                     <i class="fa fa-sort-down"></i>
                                     Newest
                                 </a>
-                                <a href="javascript:void(0)" class="dropdown-item">
+                                <a class="dropdown-item" href="javascript:void(0)">
                                     <i class="fa fa-calendar-alt"></i>
                                     By Due Date
                                 </a>
@@ -112,26 +107,26 @@
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false">
+                            <a aria-expanded="false" aria-haspopup="true" class="d-block d-md-flex text-center nav-link"
+                               data-toggle="dropdown" href="#">
                                         <span class="d-none d-md-block">
                                            <i class="fa fa-fw fa-plus-circle compltit-blue"
                                               style="font-size: 26px;"></i>
                                         </span>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            <div aria-labelledby="dropdownMenuButton" class="dropdown-menu dropdown-menu-right">
 
                                 <h6 class="dropdown-header"> Manage Nav</h6>
-                                <a href="javascript:void(0)" class="dropdown-item" @click="showModelForNavItem">
+                                <a @click="showModelForNavItem" class="dropdown-item" href="javascript:void(0)">
                                     <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
                                     Create Task View
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <h6 class="dropdown-header"> Edit Task View</h6>
                                 <span v-for="nav in AllNavItems">
-                                             <a href="javascript:void(0)" @click="updateNavbarModel(nav)"
-                                                class="dropdown-item"> {{nav.title}}</a>
-                                        </span>
+                                     <a @click="updateNavbarModel(nav)" class="dropdown-item"
+                                        href="javascript:void(0)"> {{nav.title}}</a>
+                                </span>
                             </div>
                         </li>
                     </ul>
@@ -140,13 +135,13 @@
         </nav>
 
 
-        <div class="modal fade" id="addListModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="addListModel" role="dialog"
+             tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title pl-3"> Add List</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -155,32 +150,32 @@
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">List Title</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="list.name">
+                                <input class="form-control" type="text" v-model="list.name">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">List Description</label>
                             <div class="col-sm-8">
-                                <textarea name="" id="" cols="40" rows="3" v-model="list.description"></textarea>
+                                <textarea cols="40" id="" name="" rows="3" v-model="list.description"></textarea>
                             </div>
                         </div>
                         <!--                        <p v-if="addField.error" class="text-danger"></p>-->
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="AddNewList">Add</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        <button @click="AddNewList" class="btn btn-primary" type="button">Add</button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="addBoardModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="addBoardModel" role="dialog"
+             tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title pl-3"> Add List</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -189,32 +184,32 @@
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">Board Title</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="list.name">
+                                <input class="form-control" type="text" v-model="list.name">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">Board Description</label>
                             <div class="col-sm-8">
-                                <textarea name="" cols="40" rows="3" v-model="list.description"></textarea>
+                                <textarea cols="40" name="" rows="3" v-model="list.description"></textarea>
                             </div>
                         </div>
                         <!--                        <p v-if="addField.error" class="text-danger"></p>-->
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="AddNewBoard">Add</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        <button @click="AddNewBoard" class="btn btn-primary" type="button">Add</button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="shortcutModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="shortcutModel" role="dialog"
+             tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title pl-3"> Shortcuts</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -347,20 +342,20 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">
                             Close
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="addNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="addNavItem" role="dialog"
+             tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title pl-3"> Add Nav Item</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -370,7 +365,7 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="navItem.title">
+                                <input class="form-control" type="text" v-model="navItem.title">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -378,7 +373,7 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
+                                <input class="form-control" min="0" type="number" v-model="navItem.sort_id">
                             </div>
                         </div>
 
@@ -389,13 +384,13 @@
                             <div class="col-sm-8">
                                 <div class="iradio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="list">
+                                        <input id="optionsRadios1" name="optionsRadios" type="radio" value="list">
                                         &nbsp; List view
                                     </label>
                                 </div>
                                 <div class="iradio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="board">
+                                        <input id="optionsRadios2" name="optionsRadios" type="radio" value="board">
                                         &nbsp; Board View
                                     </label>
                                 </div>
@@ -403,20 +398,20 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="AddNavItem">Add</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        <button @click="AddNavItem" class="btn btn-primary" type="button">Add</button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="updateNavItem" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="updateNavItem" role="dialog"
+             tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title pl-3"> Add Nav Item</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -426,7 +421,7 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="navItem.title">
+                                <input class="form-control" type="text" v-model="navItem.title">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -434,14 +429,14 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" min="0" v-model="navItem.sort_id">
+                                <input class="form-control" min="0" type="number" v-model="navItem.sort_id">
                             </div>
                         </div>
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="updateNavItem">Update</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel
+                        <button @click="updateNavItem" class="btn btn-primary" type="button">Update</button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
                     </div>
                 </div>
@@ -455,7 +450,7 @@
 <script>
     export default {
         name: "Navbar",
-        props: ['projectId','AllNavItems'],
+        props: ['projectId', 'AllNavItems'],
         data() {
             return {
                 list: {
@@ -495,8 +490,8 @@
                 axios.post('/api/nav-item/add-new', _this.navItem)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response.success)
-                        _this.AllNavItem()
+                        console.log(response.success);
+                        _this.AllNavItem();
                         $("#addNavItem").modal('hide');
 
                     })
@@ -512,7 +507,7 @@
                 axios.get('/api/nav-item/' + _this.projectId)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response)
+                        console.log(response);
                         _this.AllNavItems = response.success;
                         _this.$emit('getNavBars', {AllNavItems: _this.AllNavItems})
 
@@ -545,8 +540,8 @@
                 axios.post('/api/nav-item/update', _this.navItem)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response.success)
-                        _this.AllNavItem()
+                        console.log(response.success);
+                        _this.AllNavItem();
                         $("#updateNavItem").modal('hide');
 
                     })
@@ -584,10 +579,10 @@
                     .then(response => response.data)
                     .then(response => {
                         this.multiple_list = response.multiple_list;
-                        this.AllNavItem()
+                        this.AllNavItem();
                         setTimeout(function () {
                             $('#list' + response.id.id).click();
-                        }, 300)
+                        }, 300);
                         $("#addListModel").modal('hide');
                     })
                     .catch(error => {
@@ -601,7 +596,7 @@
                     .then(response => response.data)
                     .then(response => {
                         this.multiple_list = response.multiple_board;
-                        this.AllNavItem()
+                        this.AllNavItem();
                         $("#addBoardModel").modal('hide');
                     })
                     .catch(error => {
@@ -613,5 +608,4 @@
 </script>
 
 <style scoped>
-
 </style>
