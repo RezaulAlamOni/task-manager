@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Existing_tasks_in_board extends Model
+class ExistingTasksInBoard extends Model
 {   
     protected $fillable = [
         'task_id','board_id','date'

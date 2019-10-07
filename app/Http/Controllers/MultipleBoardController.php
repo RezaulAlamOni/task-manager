@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Multiple_board;
-use App\Existing_tasks_in_board;
+use App\ExistingTasksInBoard;
 use App\Multiple_list;
 use App\TaskBoard;
 use App\Tags;
@@ -68,7 +68,7 @@ class MultipleBoardController extends Controller
             } else {
                 $boards[$key]['task'] = [];
             }
-            $existingTask = Existing_tasks_in_board::with('task')->where('board_id', $value->id)->get();
+            $existingTask = ExistingTasksInBoard::with('task')->where('board_id', $value->id)->get();
             if($value->id == 57){
                 // return $existingTask;
             }
@@ -259,7 +259,7 @@ class MultipleBoardController extends Controller
 
     public function existingTaskDelete($id)
     {
-        $delete = Existing_tasks_in_board::where('id',$id)->delete();
+        $delete = ExistingTasksInBoard::where('id',$id)->delete();
         if($delete){
             return response()->json(['success' => true]);
         } else {
@@ -290,7 +290,7 @@ class MultipleBoardController extends Controller
                 'date' => Carbon::today()
             ];
 
-            $insert = Existing_tasks_in_board::create($data);
+            $insert = ExistingTasksInBoard::create($data);
             $task[$key] = Task::where('id',$value)->first();
             $tagTooltip = '';
             $allTags = Tags::where('task_id',$task[$key]->id)->get();
