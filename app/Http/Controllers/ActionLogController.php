@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\ActionLog;
-use Illuminate\Http\Request;
 
 class ActionLogController extends Controller
 {
@@ -11,10 +10,12 @@ class ActionLogController extends Controller
     {
     }
 
-    public function getSingleTaskLog($task_id){
-        $log = ActionLog::where('task_id',$task_id)->get();
+    public function getSingleTaskLog($task_id)
+    {
+        $log = ActionLog::where('task_id', $task_id)->get();
         return response()->json($log);
     }
+
     public function index()
     {
         //
@@ -25,14 +26,10 @@ class ActionLogController extends Controller
         //
     }
 
-
     public function store($req = [])
     {
         if ($req) {
             ActionLog::create($req);
         }
     }
-
-
-
 }
