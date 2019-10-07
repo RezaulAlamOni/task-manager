@@ -1,20 +1,21 @@
 <template>
-    <form @submit.prevent="proceed" @keydown="projectForm.errors.clear($event.target.name)">
+    <form @keydown="projectForm.errors.clear($event.target.name)" @submit.prevent="proceed">
         <div class="form-group">
             <label for="">Name</label>
-            <input class="form-control" type="text" value="" v-model="projectForm.name" name="name" :placeholder="Name">
+            <input :placeholder="Name" class="form-control" name="name" type="text" v-model="projectForm.name" value="">
             <show-error :form-name="projectForm" prop-name="name"></show-error>
         </div>
         <div class="form-group">
             <label for="">Description </label>
-            <textarea class="form-control" type="text" value="" v-model="projectForm.description" rows="2" name="description" :placeholder="Description "></textarea>
+            <textarea :placeholder="Description " class="form-control" name="description" rows="2" type="text"
+                      v-model="projectForm.description" value=""></textarea>
             <show-error :form-name="projectForm" prop-name="description"></show-error>
         </div>
-        <button type="submit" class="btn btn-info waves-effect waves-light">
+        <button class="btn btn-info waves-effect waves-light" type="submit">
             <span v-if="id">fdf</span>
             <span v-else>aassa</span>
         </button>
-        <router-link to="/location" class="btn btn-danger waves-effect waves-light" v-show="id">asdda</router-link>
+        <router-link class="btn btn-danger waves-effect waves-light" to="/location" v-show="id">asdda</router-link>
     </form>
 </template>
 
@@ -27,7 +28,7 @@
         data() {
             return {
                 projectForm: new Form({
-                    name : '',
+                    name: '',
                     description: ''
                 }),
                 selected_top_project: null
@@ -35,18 +36,18 @@
         },
         props: ['id'],
         mounted() {
-            if(this.id)
+            if (this.id)
                 this.getProjects();
 
         },
         methods: {
-            proceed(){
-                if(this.id)
+            proceed() {
+                if (this.id)
                     this.updateProject();
                 else
                     this.storeProject();
             },
-            storeProject(){
+            storeProject() {
                 var _this = this;
                 this.projectForm.post('/api/project')
                     .then(response => {
@@ -59,8 +60,8 @@
                         helper.showErrorMsg(error);
                     });
             },
-            getProjects(){
-                axios.get('/api/project/'+this.id)
+            getProjects() {
+                axios.get('/api/project/' + this.id)
                     .then(response => response.data)
                     .then(response => {
                         this.projectForm.name = response.project.name;
@@ -71,8 +72,8 @@
                         this.$router.push('/projects');
                     });
             },
-            updateProject(){
-                this.projectForm.patch('/api/projects/'+this.id)
+            updateProject() {
+                this.projectForm.patch('/api/projects/' + this.id)
                     .then(response => {
                         toastr.success(response.message);
                         this.$router.push('/project');
@@ -81,7 +82,7 @@
                         helper.showErrorMsg(error);
                     });
             },
-            onTopProjectSelect(selectedOption){
+            onTopProjectSelect(selectedOption) {
                 this.projectForm.top_project_id = selectedOption.id;
             }
         }

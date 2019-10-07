@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ActionLog extends Model
 {
+    public $timestamps = false;
+
     protected $fillable = [
         'project_id',
         'multiple_list_id',
@@ -18,7 +20,4 @@ class ActionLog extends Model
         'action_by',
         'action_at'
     ];
-    public $timestamps = false;
-
-
 }
