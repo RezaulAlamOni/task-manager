@@ -703,17 +703,17 @@
                 if (value.charAt(0) === '@') {
                     value = value.substr(1)
                     _this.searchData.users = (_this.treeList[0].users.length > 0) ? _this.treeList[0].users : [];
-
-                    axios.post('/api/task-list/suggest-user', {'user_name':value})
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.searchData.users = response.search_user;
-                            console.log(response.search_user);
-                        })
-                        .catch(error => {
-                            console.log('Api is drag and drop not Working !!!')
-                        });
-
+                    if (value.length > 0){
+                        axios.post('/api/task-list/suggest-user', {'user_name':value})
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.searchData.users = response.search_user;
+                                console.log(response.search_user);
+                            })
+                            .catch(error => {
+                                console.log('Api is drag and drop not Working !!!')
+                            });
+                    }
                     $('#myUL').removeClass('myUL-show');
                     $('#myUL').addClass('myUL');
                     $('#myUL-user').addClass('myUL-user');
