@@ -640,43 +640,89 @@
 .searchList {
     float: right;
     position: absolute;
-    right: 242px;
+    right: 291px;
     top: 7px;
+    @include transition(all 0.2s linear);
 }
 #myInput {
-    background-image: url('../img/searchIcon.png');
-    background-position: 7px 4px;
+    background-image: url('../img/icons8-search-26.png');
+    background-position: 9px 10px;
     background-repeat: no-repeat;
     width: 100%;
     font-size: 14px;
-    padding: 3px 4px 3px 45px;
+    padding: 3px 4px 3px 37px;
     border: 1px solid #ddd;
-    margin-bottom: 12px;
+    margin-bottom: 4px;
     line-height: 29px;
+    background-size: 3%;
+    height: 38px !important;
+    @include transition(all 0.2s linear);
 }
-
-#myUL {
+.search-nav-icon{
+    margin-right: 15px !important;
+    padding-top: 8px;
+}
+.search-nav-icon i{
+    margin-left: -7px !important;
+}
+.search-nav-icon button{
+    width: 25px;
+}
+.myUL {
+    display: none;
+}
+.myUL-show {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    width: 100%;
+    z-index: 999;
 }
 
-#myUL li a {
+.myUL-show li a {
+    border: 1px solid #ddd;
+    margin-top: -1px;
+    background-color: #f6f6f6;
+    padding: 6px 0px 6px 9px;
+    text-decoration: none;
+    font-size: 18px;
+    color: black;
+    display: block;
+}
+
+.myUL-show li a:hover:not(.header) {
+    background-color: #eee;
+}
+.myUL-user-hide{
+    display: none;
+}
+
+.myUL-user {
+    display: inline-block;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 73%;
+    z-index: 999;
+    position: absolute;
+    left: 68px;
+    top: 31px;
+}
+
+.myUL-user li a {
     border: 1px solid #ddd;
     margin-top: -1px; /* Prevent double borders */
     background-color: #f6f6f6;
-    padding: 12px;
+    padding: 3px 0px 3px 9px;
     text-decoration: none;
     font-size: 18px;
     color: black;
     display: block
 }
 
-#myUL li a:hover:not(.header) {
+.myUL-user li a:hover:not(.header) {
     background-color: #eee;
 }
-
-
 
 
 .dateCal {
