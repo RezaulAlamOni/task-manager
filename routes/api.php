@@ -36,6 +36,9 @@ Route::post('/task-list/delete-task', 'TaskController@deleteTask');//delete task
 Route::post('/task-list/move-task', 'TaskController@moveTask');//move-task
 Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog'); //reverse child node
 
+//search task
+Route::post('/task-list/suggest-user','SearchController@suggestUser'); //user suggest for search
+
 //navigation management
 Route::post('/allNavs','ProjectNavItemsController@store'); //add new nav item
 Route::post('/nav-item/add-new','ProjectNavItemsController@store'); //add new nav item

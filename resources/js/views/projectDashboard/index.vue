@@ -11,34 +11,44 @@
 
             <div class="input-group col-sm-4 searchList">
 
-                    <input class="form-control searchTaskList"
-                           type="text" id="myInput"
-                           placeholder="Search for names.."
-                           title="Type in a name"
-                           @keyup="searchDataFormTask($event)"
-                    >
+                <input class="form-control searchTaskList"
+                       type="text" id="myInput"
+                       placeholder="Search for names.."
+                       title="Type in a name"
+                       @keyup="searchDataFormTask($event)"
+                >
 
                 <ul class="myUL" id="myUL">
-                    <li><a href="#">Adele</a></li>
-                    <li><a href="#">Agnes</a></li>
+                    <template v-for="user in searchData.tasks" v-if="searchData.tasks.length > 0">
+                        <li><a href="Javascript:void(0)">{{user.title}}</a></li>
+                    </template>
+                    <template v-else>
+                        <li>
+                            <a href="javascript:void(0)">
+                                No task found!
+                            </a>
+                        </li>
+                    </template>
 
-                    <li><a href="#">Billy</a></li>
-                    <li><a href="#">Bob</a></li>
-
-                    <li><a href="#">Calvin</a></li>
-                    <li><a href="#">Christina</a></li>
-                    <li><a href="#">Cindy</a></li>
                 </ul>
                 <ul class="myUL-user-hide" id="myUL-user">
-                    <li><a href="#">Adele</a></li>
-                    <li><a href="#">Agnes</a></li>
-
-                    <li><a href="#">Billy</a></li>
-                    <li><a href="#">Bob</a></li>
-
-                    <li><a href="#">Calvin</a></li>
-                    <li><a href="#">Christina</a></li>
-                    <li><a href="#">Cindy</a></li>
+                    <template v-for="user in searchData.users" v-if="searchData.users.length > 0">
+                        <li @click="SearchTaskByAssignedUser(user.id,user.name)">
+                            <a href="javascript:void(0)">
+                                <span class="assignUser-suggest-photo">
+                                        {{(user.name !== null) ? user.name.substring(0,2) : ''}}
+                                </span>
+                                {{user.name}}
+                            </a>
+                        </li>
+                    </template>
+                    <template v-else>
+                        <li>
+                            <a href="javascript:void(0)">
+                                No user found!
+                            </a>
+                        </li>
+                    </template>
                 </ul>
 
 
@@ -97,9 +107,11 @@
                                     <i class="outline-arrow_upward icon-image-preview"></i>
                                 </a>
                                 <b @click="store.toggleOpen(data)"
-                                   v-if="data.children && data.children.length && data.open"><i class="fa fa-fw fa-minus"></i></b>
+                                   v-if="data.children && data.children.length && data.open"><i
+                                    class="fa fa-fw fa-minus"></i></b>
                                 <b @click="store.toggleOpen(data)"
-                                   v-else-if="data.children && data.children.length && !data.open"><i class="fa fa-fw fa-plus"></i></b>
+                                   v-else-if="data.children && data.children.length && !data.open"><i
+                                    class="fa fa-fw fa-plus"></i></b>
                                 <span>
                                         <input :id="data.id" @blur="showItem($event,data)"
                                                @click="makeInput($event,data)"
@@ -113,13 +125,15 @@
                                 <a class="attach-icon hide-item-res">
                                         <span v-if="data.files && data.files.length !== 0">
                                             <template v-for="fl in data.files">
-                                                <img :src="'/images/'+fl.file_name" @click="showImage(data.files, fl.file_name)"
+                                                <img :src="'/images/'+fl.file_name"
+                                                     @click="showImage(data.files, fl.file_name)"
                                                      class="task-img">
                                             </template>
                                         </span>
                                     <i @click="addAttachment(data)"
                                        class="fa fa-paperclip icon-image-preview dropdown-toggle-split li-opacity"></i>
-                                    <input :id="'file'+data._id" @change="updatePicture($event,data)" ref="file" style="display: none; "
+                                    <input :id="'file'+data._id" @change="updatePicture($event,data)" ref="file"
+                                           style="display: none; "
                                            type="file">
                                 </a>
 
@@ -136,7 +150,8 @@
                                                           v-if="tag.text !== null">
                                                         {{(data.tags.length > 2 ) ? tag.text.substring(0,3) : tag.text.substring(0,3) }}
                                                     </span>
-                                                <span class="badge badge-warning" v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]"
+                                                <span class="badge badge-warning"
+                                                      v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]"
                                                       v-else>
                                                         ::
                                                     </span>
@@ -169,7 +184,8 @@
                                                                 ''}}
                                                             </li>
                                                         </template>
-                                                        <li @click="addExistingTag(data ,'Dont Forget')" class="badge-pill tags"
+                                                        <li @click="addExistingTag(data ,'Dont Forget')"
+                                                            class="badge-pill tags"
                                                             style="background: #FB8678">
                                                             Dont Forget
                                                         </li>
@@ -210,7 +226,8 @@
                                             <span class="assigned_user dropdown-toggle-split "
                                                   data-toggle="dropdown" v-for="(assign,keyId) in data.assigned_user">
                                                 <p :title="assign.name"
-                                                   @click="showAssignedUserRemoveButton(data)" class="assignUser-photo-for-selected text-uppercase"
+                                                   @click="showAssignedUserRemoveButton(data)"
+                                                   class="assignUser-photo-for-selected text-uppercase"
                                                    data-placement="bottom" data-toggle="tooltip"
                                                    v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
                                                     <a :id="'remove-assign-user'+data.id"
@@ -230,7 +247,8 @@
 
                                             <diV class="collapse show switchToggle">
                                                 <li class="assignUser">
-                                                    <input class="input-group searchUser" placeholder="Assign by name and email"
+                                                    <input class="input-group searchUser"
+                                                           placeholder="Assign by name and email"
                                                            type="text">
                                                     <label class="pl-2 label-text">
                                                         <span class="assign-user-drop-down-text">
@@ -355,12 +373,14 @@
                                 <template v-for="tag in manageTag">
                                     <tr>
                                         <td class="pt-3-half" v-if="tag.title === 'Dont Forget'">{{tag.title}}</td>
-                                        <td @keydown="newLineoff($event)" @keyup="updateTagName($event,tag)" class="pt-3-half"
+                                        <td @keydown="newLineoff($event)" @keyup="updateTagName($event,tag)"
+                                            class="pt-3-half"
                                             contenteditable="true" v-else>
                                             {{tag.title}}
                                         </td>
                                         <td class="pt-3-half">
-                                            <input :value="tag.color" @change="updateTagColor($event,tag)" style="cursor: pointer;background-color: #fff;border: none;"
+                                            <input :value="tag.color" @change="updateTagColor($event,tag)"
+                                                   style="cursor: pointer;background-color: #fff;border: none;"
                                                    type="color">
                                         </td>
                                         <td>
@@ -486,9 +506,9 @@
                 tag1: '',
                 manageTag: null,
                 selectedIds: [],
-                searchData : {
-                    tasks : null,
-                    users: null
+                searchData: {
+                    tasks: [],
+                    users: []
                 },
             }
         },
@@ -567,7 +587,7 @@
                         _this.AddDontForgetTagToSelectedIds();//add DON'T FORGET SECTION
                         break;
                     case "ctrl+s":
-                       _this.showSearchInputField();
+                        _this.showSearchInputField();
                         break;
                     case "ctrl+i":
                         _this.addAttachment(_this.selectedData);
@@ -655,27 +675,68 @@
 
             },
 
-            showSearchInputField(){
+            showSearchInputField() {
                 if (this.list.type === 'list') {
                     $('.searchList').toggle();
                 }
             },
-            searchDataFormTask(e){
-                var value = e.target.value;
-                if(value.charAt(0) === '@'){
-                    value = value.substr(1)
-                    $('#myUL-user').addClass('myUL-user');
+            SearchTaskByAssignedUser(id,name){
+                 $('.searchTaskList').val('@'+name);
+                var _this = this;
+                axios.post('/api/task-list/suggest-user', {'user_id' : id,p_id : _this.projectId})
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.searchData.tasks = response.search_tasks;
+                        console.log(response.search_tasks);
+                        $('#myUL-user').removeClass('myUL-user');
+                        $('#myUL').removeClass('myUL');
+                        $('#myUL').addClass('myUL-show');
 
-                }else if(value.charAt(0) === ''){
-                    $('#myUL-user').removeClass('myUL-user');
-                    $('#myUL-user').addClass('myUL-user-hide');
+                    })
+                    .catch(error => {
+                        console.log('Api is drag and drop not Working !!!')
+                    });
+            },
+            searchDataFormTask(e) {
+                var value = e.target.value;
+                var _this = this;
+                if (value.charAt(0) === '@') {
+                    value = value.substr(1)
+                    _this.searchData.users = (_this.treeList[0].users.length > 0) ? _this.treeList[0].users : [];
+
+                    axios.post('/api/task-list/suggest-user', {'user_name':value})
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.searchData.users = response.search_user;
+                            console.log(response.search_user);
+                        })
+                        .catch(error => {
+                            console.log('Api is drag and drop not Working !!!')
+                        });
 
                     $('#myUL').removeClass('myUL-show');
                     $('#myUL').addClass('myUL');
+                    $('#myUL-user').addClass('myUL-user');
+                } else if (value.charAt(0) === '') {
+                    $('#myUL-user').removeClass('myUL-user');
+                    $('#myUL-user').addClass('myUL-user-hide');
+                    $('#myUL').removeClass('myUL-show');
+                    $('#myUL').addClass('myUL');
                 } else {
+                    axios.post('/api/task-list/suggest-user', {'text':value,'project_id' : _this.projectId})
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.searchData.tasks = response.search_tasks;
+                            console.log(response.search_tasks);
+                        })
+                        .catch(error => {
+                            console.log('Api is drag and drop not Working !!!')
+                        });
 
                     $('#myUL').removeClass('myUL');
                     $('#myUL').addClass('myUL-show');
+
+
                 }
 
             },
