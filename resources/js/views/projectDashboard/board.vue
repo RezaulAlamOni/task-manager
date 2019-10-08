@@ -890,7 +890,7 @@
             deleteCard(index, cardIndex, id) {
                 let _this = this;
                 if (confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id) {
-                    axios.delete('/api/card-delete/' + id)
+                    axios.get('/api/card-delete/' + id)
                         .then(response => response.data)
                         .then(response => {
                             _this.cards[index].task.splice(cardIndex, 1);
@@ -907,7 +907,7 @@
                 console.log(index + ", " + cardIndex);
                 console.log(this.cards[index].task[cardIndex]);
                 if (confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id) {
-                    axios.delete('/api/existing-task-delete/' + id)
+                    axios.get('/api/board-task-delete/' + id)
                         .then(response => response.data)
                         .then(response => {
                             // if(response.success){
@@ -955,7 +955,7 @@
             deleteColumn(index, id) {
                 let _this = this;
                 if (confirm('Are you sure you want to delete this board?')) {
-                    axios.delete('/api/board-delete/' + id)
+                    axios.get('/api/board-delete/' + id)
                         .then(response => response.data)
                         .then(response => {
                             if (response.success) {
@@ -970,7 +970,7 @@
             deleteColumnCards(index, id) {
                 let _this = this;
                 if (confirm('Are you sure tou want to delete all cards from this board?')) {
-                    axios.delete("/api/board-deleteAllCards/" + id)
+                    axios.get("/api/board-deleteAllCards/" + id)
                         .then(response => response.data)
                         .then(response => {
                             if (response.success) {
