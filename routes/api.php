@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/project', 'ProjectController@getAll');
+Route::get('/project', 'ProjectController@getAll')->name('all-project');
 Route::get('/project/{id}', 'ProjectController@show');
 Route::post('/project', 'ProjectController@store');
 Route::patch('/project/{id}', 'ProjectController@update');

@@ -114,7 +114,24 @@
                 $(this).parent().addClass("active");
                 $(this).parent().parent(".collapse.show").parent().addClass("active");
             });
+            showProjectDashboard();
         })
+
+        function showProjectDashboard() {
+            {{--/project-dashboard/{{$project->id}} --}}
+            $.ajax({
+                type:'GET',
+                url:'{{route('all-project')}}',
+                data:
+                    {
+                        render : 'project',
+                        _token: "{{ csrf_token() }}"
+                    },
+                success: function(data) {
+                    $('#collapseProjects').html(data);
+                }
+            });
+        }
 
 
     </script>
