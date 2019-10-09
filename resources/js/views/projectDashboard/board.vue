@@ -7,6 +7,7 @@
                     <Container
                         :drop-placeholder="upperDropPlaceholderOptions"
                         @drag-start="dragStart"
+                        @drag-end="dragEnd"
                         @drop="onColumnDrop($event)"
                         drag-handle-selector=".column-drag-handle"
                         orientation="horizontal">
@@ -65,9 +66,9 @@
                                 <Container
                                     :drop-placeholder="dropPlaceholderOptions"
                                     :get-child-payload="getCardPayload(column.id)"
-                                    @drag-end="(e) => log('drag end', e)"
-                                    @drag-start="(e) => log('drag start', e)"
-                                    @drop="(e) => onCardDrop(column.id, e)"
+                                    @drag-start="(e) => log('', e)" 
+                                    @drag-end="(e) => log('', e)"
+                                    @drop="(e) => onCardDrop(column.id,column.boardId, index,  e)"
                                     drag-class="card-ghost"
                                     drop-class="card-ghost-drop"
                                     group-name="col"
@@ -648,11 +649,23 @@
             },
 
             onColumnDrop(dropResult) {
+                // alert('sdf');
+                // console.log(dropResult);
                 const scene = Object.assign({}, this.scene);
                 scene.children = applyDrag(scene.children, dropResult);
                 this.scene = scene
+                let data = scene;
+                axios.post('/api/column-sort',data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log('sorted');
+                })
+                .catch(error => {
+                    console.log('sorting failed');
+                });
             },
-            onCardDrop(columnId, dropResult) {
+            onCardDrop(columnId, boardId, index, dropResult) {
+                // console.log(columnId, boardId, index, dropResult);
                 if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
                     const scene = Object.assign({}, this.scene);
                     const column = scene.children.filter(p => p.id === columnId)[0];
@@ -661,6 +674,16 @@
                     newColumn.children = applyDrag(newColumn.children, dropResult);
                     scene.children.splice(columnIndex, 1, newColumn);
                     this.scene = scene
+                    // console.log(this.scene.children[index]);
+                    let data = this.scene.children[index];
+                    axios.post('/api/card-sort',data)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log('sorted');
+                    })
+                    .catch(error => {
+                        console.log('sorting failed');
+                    });
                 }
             },
             getCardPayload(columnId) {
@@ -668,8 +691,11 @@
                     return this.scene.children.filter(p => p.id === columnId)[0].children[index]
                 }
             },
-            dragStart() {
-                console.log('drag started')
+            dragStart(dragResult) {
+                console.log(dragResult);
+            },
+            dragEnd(dragResult) {
+                // console.log(dragResult);
             },
             log(...params) {
                 console.log(...params)

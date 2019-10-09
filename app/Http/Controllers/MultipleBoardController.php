@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\ExistingTasksInBoard;
 use App\Multiple_board;
-use App\ExistingTasksInBoard;
 use App\Multiple_list;
 use App\TaskBoard;
 use App\Tags;
@@ -12,6 +11,7 @@ use App\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use DB;
 
 class MultipleBoardController extends Controller
 {
@@ -327,5 +327,48 @@ class MultipleBoardController extends Controller
         }
 
         return response()->json(['success' => true, 'data' => $task]);
+    }
+
+    public function cardSort(Request $request)
+    {
+        if(isset($request->children) && count($request->children) > 0){
+            $ids = '';
+            $caseString = '';
+            foreach ($request->children as $key => $item) {
+                if ($item['types'] == 'card') {
+                    $id = $item['cardId'];
+                    $caseString .= " when id = '".$id."' then '".$key."'";
+                    $ids .= " $id,";
+                }
+            }
+            $ids = trim($ids, ',');
+            $update = DB::update("update task_boards set sort_id = CASE $caseString END where id in ($ids) and parent_id = $request->boardId");
+            if ($update) {
+                return response()->json(['success' => true, 'data' => $update]);
+            } else {
+                return response()->json(['success' => false, 'data' => $update]);
+            }
+        }
+    }
+
+    public function columnSort(Request $request)
+    {
+        if(isset($request->children) && count($request->children) > 0){
+            $ids = '';
+            $caseString = '';
+            foreach ($request->children as $key => $item) {
+                $id = $item['boardId'];
+                $caseString .= " when id = '".$id."' then '".$key."'";
+                $ids .= " $id,";
+            }
+            $ids = trim($ids, ','); 
+            // echo "update task_boards set sort_id = CASE $caseString END where id in ($ids) and parent_id = 0"; exit();
+            $update = DB::update("update task_boards set sort_id = CASE $caseString END where id in ($ids) and parent_id = 0");
+            if ($update) {
+                return response()->json(['success' => true, 'data' => $update]);
+            } else {
+                return response()->json(['success' => false, 'data' => $update]);
+            }
+        }
     }
 }
