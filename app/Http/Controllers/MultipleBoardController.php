@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ExistingTasksInBoard;
 use App\Multiple_board;
 use App\ExistingTasksInBoard;
 use App\Multiple_list;
@@ -69,7 +70,7 @@ class MultipleBoardController extends Controller
                 $boards[$key]['task'] = [];
             }
             $existingTask = ExistingTasksInBoard::with('task')->where('board_id', $value->id)->get();
-            if($value->id == 57){
+            if ($value->id == 57) {
                 // return $existingTask;
             }
             if ($existingTask->count() > 0) {
@@ -304,7 +305,7 @@ class MultipleBoardController extends Controller
             ];
 
             $insert = ExistingTasksInBoard::create($data);
-            $task[$key] = Task::where('id',$value)->first();
+            $task[$key] = Task::where('id', $value)->first();
             $tagTooltip = '';
             $allTags = Tags::where('task_id', $task[$key]->id)->get();
             $tags = [];

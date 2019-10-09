@@ -39,7 +39,7 @@ class Task extends Model
 
     public function existingTaskInBoard()
     {
-        return $this->belongsTo(ExistingTasksInBoard::class,'task_id','id');
+        return $this->belongsTo(ExistingTasksInBoard::class, 'task_id', 'id');
     }
 
     public function action_log()
