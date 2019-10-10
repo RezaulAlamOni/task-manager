@@ -90,12 +90,12 @@
                                                 </a>
                                                 <flatPickr
                                                     :class="{
-                                                                    dateCal:true,
-                                                                    'flatpickr-input': true,
-                                                                    'flatpickr-input1': card.date != '' ? false : true,
-                                                                     active: true,
-                                                                     dateCal1: card.date != '' ? true : false
-                                                                 }"
+                                                            dateCal:true,
+                                                            'flatpickr-input': true,
+                                                            'flatpickr-input1': card.date != '' ? false : true,
+                                                                active: true,
+                                                                dateCal1: card.date != '' ? true : false
+                                                            }"
                                                     :config="date_config"
                                                     @on-change="updateDate(card)"
                                                     name="date"
@@ -268,8 +268,10 @@
                             </div>
                         </Draggable>
                         <div>
-                            <p @click="addColumn" class="add-column" v-if="board_id"><i class="fa fa-plus"></i> add
-                                column</p>
+                            <p @click="addColumn" class="add-column" v-if="board_id">
+                                <i class="fa fa-plus"></i> 
+                                add column
+                            </p>
                         </div>
                     </Container>
                 </div>
@@ -951,8 +953,8 @@
             },
             deleteTask(index, cardIndex, id) {
                 let _this = this;
-                console.log(index + ", " + cardIndex);
-                console.log(this.cards[index].task[cardIndex]);
+                // console.log(index + ", " + cardIndex);
+                // console.log(this.cards[index].task[cardIndex]);
                 if (confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id) {
                     axios.get('/api/board-task-delete/' + id)
                         .then(response => response.data)
@@ -1104,7 +1106,7 @@
                         id: card.cardId,
                         tags: _this.tags[newl - 1].text,
                         color: color,
-                        type: 'board',
+                        type: 'task',
                     };
                     if(card.types == "task"){
                         postData.id = card.id;

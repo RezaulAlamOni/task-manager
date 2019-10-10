@@ -27,14 +27,14 @@ class MultipleBoardController extends Controller
     public function index(Request $request)
     {
         $boards = [];
-        $board = TaskBoard::where('parent_id', 0)
-            ->with('task')
-            ->where('project_id', $request->projectId)
-            ->where('nav_id', $request->nav_id)
-            ->where('multiple_board_id', $request->board_id)
-            ->orderby('sort_id', 'ASC')
-            ->get();
-        // return $this->makeRecursive($board->toArray());
+        $board = Task::where('board_parent_id', 0)
+                ->with('task')
+                ->where('project_id', $request->projectId)
+                // ->where('nav_id', $request->nav_id)
+                ->where('multiple_board_id', $request->board_id)
+                ->orderby('sort_id', 'ASC')
+                ->get();
+
         foreach ($board as $key => $value) {
             $keys = -1;
             $boards[$key]['id'] = $value['id'];
@@ -121,15 +121,15 @@ class MultipleBoardController extends Controller
     public function create(Request $request)
     {
         // return $request->all();
-        $sortNo = TaskBoard::where('parent_id', 0)->max('sort_id');
-        $data = TaskBoard::create([
+        $sortNo = Task::where('board_parent_id', 0)->max('sort_id');
+        $data = Task::create([
             'multiple_board_id' => $request->multiple_board_id,
-            'nav_id' => $request->nav_id,
             'project_id' => $request->project_id,
+            'board_flag' => 1,
             'title' => $request->title,
             'color' => $request->color,
             'progress' => $request->progress,
-            'parent_id' => 0,
+            'board_parent_id' => 0,
             'hidden' => 0,
             'sort_id' => $sortNo + 1,
             'created_by' => Auth::id(),
@@ -173,24 +173,24 @@ class MultipleBoardController extends Controller
     public function cardAdd(Request $request)
     {
         $id = $request->id;
-        $parent = TaskBoard::find($id);
-        $sortNo = TaskBoard::where('parent_id', $parent->id)->max('sort_id');
+        $parent = Task::find($id);
+        $sortNo = Task::where('board_parent_id', $parent->id)->max('sort_id');
         if (!$sortNo) {
             $sortNo = 0;
         }
         $data = [
             'title' => '',
             'sort_id' => $sortNo + 1,
-            'parent_id' => $parent->id,
+            'board_parent_id' => $parent->id,
             'project_id' => $parent->project_id,
             'multiple_board_id' => $parent->multiple_board_id,
             'hidden' => 0,
-            'date' => Carbon::now(),
+            'date' => '',//Carbon::now(),
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
             'created_at' => Carbon::now()
         ];
-        $child = TaskBoard::create($data);
+        $child = Task::create($data);
         if ($child) {
             return response()->json(['success' => true, 'data' => $child]);
         }
@@ -206,9 +206,9 @@ class MultipleBoardController extends Controller
             }
             $data[$key] = $value;
         }
-        $child = TaskBoard::where('id', $id)->update($data);
+        $child = Task::where('id', $id)->update($data);
         if ($child) {
-            $datas = TaskBoard::find($id);
+            $datas = Task::find($id);
             return response()->json(['success' => true, 'data' => $datas]);
         }
         return response()->json(['success' => false]);
@@ -261,7 +261,7 @@ class MultipleBoardController extends Controller
 
     public function cardDelete($id)
     {
-        $delete = TaskBoard::where('id', $id)
+        $delete = Task::where('id', $id)
             ->delete();
         if ($delete) {
             return response()->json(['success' => true]);
