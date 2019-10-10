@@ -17,9 +17,13 @@ class TagsController extends Controller
         $this->TaskController = new TaskController();
     }
 
-    public function index()
+    public function index($project_id)
     {
-        $tags = Tags::where('task_id', '!=', null)->groupBy('title')->get();
+        $tags = Tags::select('tags.*')
+            ->join('task_lists','tags.task_id','task_lists.id')
+            ->where('task_id', '!=', null)
+            ->where('task_lists.project_id',$project_id)
+            ->groupBy('tags.title')->get();
         return response()->json(['tags' => $tags]);
     }
 
@@ -41,7 +45,7 @@ class TagsController extends Controller
         } else {
             $data['task_id'] = $request->id;
         }
-        $check_exists = Tags::where(['title' => 'Dont Forget', 'task_id' => $request->id])->get();
+        $check_exists = Tags::where(['title' =>$request->tags, 'task_id' => $request->id])->get();
 
         if ($check_exists->count() <= 0) {
             $tags = Tags::create($data);
@@ -98,9 +102,6 @@ class TagsController extends Controller
             } else {
                 return response()->json(['success' => true , 'data' => $tags] );
             }
-        } else {
-           $tags = Tags::create($data);
-           return response()->json(['success' => true , 'data' => $tags] );
         }
     }
 
@@ -186,11 +187,15 @@ class TagsController extends Controller
     {
         if (isset($request->tag)) {
             Tags::where('id', $request->id)->update(['title' => $request->tag]);
-            $tags = Tags::where('task_id', '!=', null)->groupBy('title')->get();
+            $taskAndTag = Tags::join('task_lists','tags.task_id','task_lists.id')
+                ->where('tags.id', $request->id)->first();
+            $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
             return response()->json(['success' => 1, 'tags' => $tags]);
         } elseif (isset($request->color)) {
             Tags::where('id', $request->id)->update(['color' => $request->color]);
-            $tags = Tags::where('task_id', '!=', null)->groupBy('title')->get();
+            $taskAndTag = Tags::join('task_lists','tags.task_id','task_lists.id')
+                ->where('tags.id', $request->id)->first();
+            $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
             return response()->json(['success' => 1, 'tags' => $tags]);
         }
     }
@@ -198,14 +203,27 @@ class TagsController extends Controller
     public function destroy(Request $request)
     {
         if (isset($request->title)) {
+            $taskAndTag = Tags::join('task_lists','tags.task_id','task_lists.id')
+                ->where('tags.title', $request->title)->first();
             Tags::where('title', $request->title)->delete();
-            $tags = Tags::where('task_id', '!=', null)->groupBy('title')->get();
+            $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
             return response()->json(['success' => 1, 'tags' => $tags]);
         } elseif (isset($request->id)) {
+            $taskAndTag = Tags::join('task_lists','tags.task_id','task_lists.id')
+                ->where('tags.id', $request->id)->first();
             Tags::where('id', $request->id)->delete();
-            $tags = Tags::where('task_id', '!=', null)->groupBy('title')->get();
+            $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
             return response()->json(['success' => 1, 'tags' => $tags]);
         }
+    }
+
+    public function getAllTagByProjectID($project_id){
+        $tags = Tags::select('tags.*')
+            ->join('task_lists','tags.task_id','task_lists.id')
+            ->where('task_id', '!=', null)
+            ->where('task_lists.project_id',$project_id)
+            ->groupBy('tags.title')->get();
+        return $tags;
     }
 
 }

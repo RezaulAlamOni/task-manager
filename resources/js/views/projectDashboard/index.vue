@@ -176,15 +176,14 @@
                                                 />
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <template v-for="tag in data.tags">
-                                                            <li class="badge-pill tags"
+                                                        <template v-for="tag in data.existing_tags">
+                                                            <li class="badge-pill tags" @click="addExistingTag(data , tag.title,tag.color)"
                                                                 v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
                                                                 v-if="tag.text !== 'Dont Forget'">
-                                                                {{(tag.text !== undefined) ?tag.text.substring(0,12) :
-                                                                ''}}
+                                                                {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
                                                             </li>
                                                         </template>
-                                                        <li @click="addExistingTag(data ,'Dont Forget')"
+                                                        <li @click="addExistingTag(data ,'Dont Forget','')"
                                                             class="badge-pill tags"
                                                             style="background: #FB8678">
                                                             Dont Forget
@@ -1223,10 +1222,10 @@
                         });
                 }
             },
-            addExistingTag(data, tag) {
+            addExistingTag(data, tag,color) {
 
                 var _this = this;
-                var color = (tag === 'Dont Forget') ? '#ff0000' : _this.generateColor();
+                var color = (tag === 'Dont Forget') ? '#ff0000' : color;
                 var postData = {
                     id: data.id,
                     tags: tag,
@@ -1295,7 +1294,7 @@
             },
             showTagManageModel() {
                 var _this = this;
-                axios.get('/api/task-list/all-tag')
+                axios.get('/api/task-list/all-tag/'+_this.projectId)
                     .then(response => response.data)
                     .then(response => {
                         _this.manageTag = response.tags;

@@ -79,6 +79,13 @@ class TaskController extends Controller
                 }
             }
             $info['tags'] = $tags;
+            $info['existing_tags'] = Tags::select('tags.*')
+                ->join('task_lists','tags.task_id','task_lists.id')
+                ->where('tags.task_id', '!=', $task->id)
+                ->where('tags.title', '!=', 'Dont Forget')
+                ->where('task_lists.list_id',$task->list_id)
+                ->groupBy('tags.title')
+                ->get()->toArray();
             $info['tagTooltip'] = $tagTooltip;
             $info['description'] = $task->description;
             $info['files'] = $task->files;
@@ -104,7 +111,7 @@ class TaskController extends Controller
     }
 
     public function getAll(Request $request)
-    {   
+    {
         if ($request->list_id == null) {
             $list = Multiple_list::where('project_id', $request->id)->orderBy('id', 'ASC')->first();
             $list_id = $list->id;
@@ -159,7 +166,7 @@ class TaskController extends Controller
     }
 
     public function getAllTask(Request $request)
-    {   
+    {
         if ($request->list_id == null) {
             $list = Multiple_list::where('project_id', $request->id)->orderBy('id', 'ASC')->first();
             $list_id = $list->id;
@@ -176,7 +183,7 @@ class TaskController extends Controller
     }
 
     public function addTask(Request $request)
-    {   
+    {
         $list_id = $request->list_id;
         $etask = Task::where(['id' => $request->id])->get();
         if ($request->text == '') {
@@ -225,7 +232,7 @@ class TaskController extends Controller
     }
 
     public function addChildTask(Request $request)
-    {   
+    {
         $task_id = Task::where('title', '')->where('parent_id', $request->id)->first();
         if ($task_id) {
             Task::where('title', '')->where('parent_id', $request->id)->delete();
