@@ -44,7 +44,7 @@ class TagsController extends Controller
         $check_exists = Tags::where(['title' => 'Dont Forget', 'task_id' => $request->id])->get();
 
         if ($check_exists->count() <= 0) {
-            Tags::create($data);
+            $tags = Tags::create($data);
             if ($request->tags == 'Dont Forget') {
                 $task = Task::where('id', $request->id)->first();
                 $taskDontForget = Task::where([
@@ -73,7 +73,7 @@ class TagsController extends Controller
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now(),
                     ];
-                    Tags::create($TagData);
+                    $tags = Tags::create($TagData);
                     $taskUpdate = Task::where('id', $request->id)->update(['parent_id' => $NewTask->id]);
                     //update task child tag
                     $this->TaskController->updateTagWithDataMove($request->id, $NewTask->id);
@@ -93,11 +93,14 @@ class TagsController extends Controller
                         $this->TaskController->updateTagWithDataMove($request->id, $taskDontForget[0]->id);
                         return response()->json(['success' => $taskUpdate]);
                     }
-                    return response()->json(['success' => $parent, $task->parent_id]);
+                    return response()->json(['success' => $parent, $task->parent_id, 'data' => $tags]);
                 }
             } else {
-                return response()->json(['success' => 1]);
+                return response()->json(['success' => true , 'data' => $tags] );
             }
+        } else {
+           $tags = Tags::create($data);
+           return response()->json(['success' => true , 'data' => $tags] );
         }
     }
 

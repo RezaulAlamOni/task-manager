@@ -16,6 +16,6 @@ class ExistingTasksInBoard extends Model
 
     public function task()
     {
-        return $this->hasMany(Task::class, 'id', 'task_id')->with('tags');
+        return $this->hasMany(Task::class, 'id', 'task_id')->with(['tags','boardTasksTags']);
     }
 }

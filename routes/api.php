@@ -61,6 +61,8 @@ Route::post('/board-hide/{id}', 'MultipleBoardController@hideColumn');
 Route::post('/add-existing-tasks', 'MultipleBoardController@addExistingTasks');
 
 Route::post('/card-add', 'MultipleBoardController@cardAdd');
+Route::post('/card-sort', 'MultipleBoardController@cardSort');
+Route::post('/column-sort', 'MultipleBoardController@columnSort');
 Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');
 Route::get('/card-delete/{id}','MultipleBoardController@cardDelete'); //delete card
-Route::get('/existing-task-delete/{id}','MultipleBoardController@existingTaskDelete'); //delete card
+Route::get('/board-task-delete/{id}','MultipleBoardController@existingTaskDelete'); //delete card

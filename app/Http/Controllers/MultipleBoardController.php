@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\ExistingTasksInBoard;
 use App\Multiple_board;
-use App\Project;
+use App\Multiple_list;
+use App\TaskBoard;
 use App\Tags;
 use App\Task;
-use App\TaskBoard;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use DB;
 
 class MultipleBoardController extends Controller
 {
@@ -41,11 +42,11 @@ class MultipleBoardController extends Controller
             $boards[$key]['hidden'] = $value['hidden'];
             $boards[$key]['progress'] = $value['progress'];
             $boards[$key]['color'] = $value['color'];
-            if (count($value['task']) > 0) {
+            if (!empty($value['task']) && count($value['task']) > 0) {
                 foreach ($value['task'] as $keys => $values) {
                     $tagTooltip = '';
                     $tags = [];
-                    if (count($values['tags']) > 0) {
+                    if (!empty($values['tags']) && count($values['tags']) > 0) {
                         foreach ($values['tags'] as $tagkey => $tag) {
                             $tags[$tagkey]['id'] = $tag->id;
                             $tags[$tagkey]['board_id'] = $tag->board_id;
@@ -78,7 +79,7 @@ class MultipleBoardController extends Controller
                     foreach ($ExTaskvalue['task'] as $TaskKey => $TaskValue) {
                         $tagTooltip = '';
                         $tags = [];
-                        if (count($TaskValue['tags']) > 0) {
+                        if (!empty($TaskValue['tags']) && count($TaskValue['tags']) > 0) {
                             foreach ($TaskValue['tags'] as $tagkey => $tag) {
                                 $tags[$tagkey]['id'] = $tag->id;
                                 $tags[$tagkey]['board_id'] = $tag->board_id;
@@ -88,7 +89,18 @@ class MultipleBoardController extends Controller
                                 $tags[$tagkey]['color'] = $tag->color;
                                 $tagTooltip .= '#' . $tag->title . ' ';
                             }
-                            // return $tagTooltip;
+                        }
+                        if(!empty($TaskValue['boardTasksTags']) && count($TaskValue['boardTasksTags']) > 0){
+                            foreach ($TaskValue['boardTasksTags'] as $tagExkey => $tag) {
+                                $tagkey++;
+                                $tags[$tagkey]['id'] = $tag->id;
+                                $tags[$tagkey]['board_id'] = $tag->board_id;
+                                $tags[$tagkey]['text'] = $tag->title;
+                                $tags[$tagkey]['classes'] = '';
+                                $tags[$tagkey]['style'] = 'background-color: ' . $tag->color;
+                                $tags[$tagkey]['color'] = $tag->color;
+                                $tagTooltip .= '#' . $tag->title . ' ';
+                            }
                         }
                         $boards[$key]['task'][$keys]['tags'] = $tags;
                         $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
@@ -97,6 +109,7 @@ class MultipleBoardController extends Controller
                         $boards[$key]['task'][$keys]['type'] = 'task';
                         $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($TaskValue['date']));
                     }
+
                 }
             }
 
@@ -259,8 +272,8 @@ class MultipleBoardController extends Controller
 
     public function existingTaskDelete($id)
     {
-        $delete = ExistingTasksInBoard::where('id', $id)->delete();
-        if ($delete) {
+        $delete = ExistingTasksInBoard::where('id',$id)->delete();
+        if($delete){
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -314,5 +327,48 @@ class MultipleBoardController extends Controller
         }
 
         return response()->json(['success' => true, 'data' => $task]);
+    }
+
+    public function cardSort(Request $request)
+    {
+        if(!empty($request->children) && count($request->children) > 0){
+            $ids = '';
+            $caseString = '';
+            foreach ($request->children as $key => $item) {
+                if ($item['types'] == 'card') {
+                    $id = $item['cardId'];
+                    $caseString .= " when id = '".$id."' then '".$key."'";
+                    $ids .= " $id,";
+                }
+            }
+            $ids = trim($ids, ',');
+            $update = DB::update("update task_boards set sort_id = CASE $caseString END where id in ($ids) and parent_id = $request->boardId");
+            if ($update) {
+                return response()->json(['success' => true, 'data' => $update]);
+            } else {
+                return response()->json(['success' => false, 'data' => $update]);
+            }
+        }
+    }
+
+    public function columnSort(Request $request)
+    {
+        if(!empty($request->children) && count($request->children) > 0){
+            $ids = '';
+            $caseString = '';
+            foreach ($request->children as $key => $item) {
+                $id = $item['boardId'];
+                $caseString .= " when id = '".$id."' then '".$key."'";
+                $ids .= " $id,";
+            }
+            $ids = trim($ids, ','); 
+            // echo "update task_boards set sort_id = CASE $caseString END where id in ($ids) and parent_id = 0"; exit();
+            $update = DB::update("update task_boards set sort_id = CASE $caseString END where id in ($ids) and parent_id = 0");
+            if ($update) {
+                return response()->json(['success' => true, 'data' => $update]);
+            } else {
+                return response()->json(['success' => false, 'data' => $update]);
+            }
+        }
     }
 }

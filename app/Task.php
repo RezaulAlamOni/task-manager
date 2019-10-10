@@ -44,14 +44,17 @@ class Task extends Model
 
     public function action_log()
     {
-
         return $this->hasMany('App\ActionLog', 'task_id', 'id');
     }
 
     public function tags()
     {
-
         return $this->hasMany(Tags::class, 'task_id', 'id');
+    }
+    
+    public function boardTasksTags()
+    {
+        return $this->hasMany(Tags::class, 'board_id', 'id');
     }
 
     public function files()
