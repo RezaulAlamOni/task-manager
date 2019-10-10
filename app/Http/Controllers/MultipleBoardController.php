@@ -42,11 +42,11 @@ class MultipleBoardController extends Controller
             $boards[$key]['hidden'] = $value['hidden'];
             $boards[$key]['progress'] = $value['progress'];
             $boards[$key]['color'] = $value['color'];
-            if (count($value['task']) > 0) {
+            if (!empty($value['task']) && count($value['task']) > 0) {
                 foreach ($value['task'] as $keys => $values) {
                     $tagTooltip = '';
                     $tags = [];
-                    if (count($values['tags']) > 0) {
+                    if (!empty($values['tags']) && count($values['tags']) > 0) {
                         foreach ($values['tags'] as $tagkey => $tag) {
                             $tags[$tagkey]['id'] = $tag->id;
                             $tags[$tagkey]['board_id'] = $tag->board_id;
@@ -79,7 +79,7 @@ class MultipleBoardController extends Controller
                     foreach ($ExTaskvalue['task'] as $TaskKey => $TaskValue) {
                         $tagTooltip = '';
                         $tags = [];
-                        if (isset($TaskValue['tags']) && count($TaskValue['tags']) > 0) {
+                        if (!empty($TaskValue['tags']) && count($TaskValue['tags']) > 0) {
                             foreach ($TaskValue['tags'] as $tagkey => $tag) {
                                 $tags[$tagkey]['id'] = $tag->id;
                                 $tags[$tagkey]['board_id'] = $tag->board_id;
@@ -90,7 +90,7 @@ class MultipleBoardController extends Controller
                                 $tagTooltip .= '#' . $tag->title . ' ';
                             }
                         }
-                        if(isset($TaskValue['boardTasksTags']) && count($TaskValue['boardTasksTags']) > 0){
+                        if(!empty($TaskValue['boardTasksTags']) && count($TaskValue['boardTasksTags']) > 0){
                             foreach ($TaskValue['boardTasksTags'] as $tagExkey => $tag) {
                                 $tagkey++;
                                 $tags[$tagkey]['id'] = $tag->id;
@@ -331,7 +331,7 @@ class MultipleBoardController extends Controller
 
     public function cardSort(Request $request)
     {
-        if(isset($request->children) && count($request->children) > 0){
+        if(!empty($request->children) && count($request->children) > 0){
             $ids = '';
             $caseString = '';
             foreach ($request->children as $key => $item) {
@@ -353,7 +353,7 @@ class MultipleBoardController extends Controller
 
     public function columnSort(Request $request)
     {
-        if(isset($request->children) && count($request->children) > 0){
+        if(!empty($request->children) && count($request->children) > 0){
             $ids = '';
             $caseString = '';
             foreach ($request->children as $key => $item) {
