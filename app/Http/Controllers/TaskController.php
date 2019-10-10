@@ -225,6 +225,7 @@ class TaskController extends Controller
                     'created_at' => Carbon::now(),
                 ];
                 $task = Task::create($data);
+                $this->updateTagWithDataMove($task->id,$request->parent_id);
                 $this->createLog($task->id, 'created', 'Create task', $request->text);
                 return response()->json(['success' => $task]);
             }
@@ -252,6 +253,7 @@ class TaskController extends Controller
             'created_at' => Carbon::now(),
         ];
         $task = Task::create($data);
+        $this->updateTagWithDataMove($task->id,$request->id);
         $this->createLog($task->id, 'created', 'create task', 'new');
 
         return response()->json(['success' => $task]);

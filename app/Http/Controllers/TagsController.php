@@ -192,9 +192,11 @@ class TagsController extends Controller
             $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
             return response()->json(['success' => 1, 'tags' => $tags]);
         } elseif (isset($request->color)) {
-            Tags::where('id', $request->id)->update(['color' => $request->color]);
+
             $taskAndTag = Tags::join('task_lists','tags.task_id','task_lists.id')
+                ->select('tags.*','task_lists.project_id')
                 ->where('tags.id', $request->id)->first();
+            Tags::where('title', $taskAndTag->title)->update(['color' => $request->color]);
             $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
             return response()->json(['success' => 1, 'tags' => $tags]);
         }
