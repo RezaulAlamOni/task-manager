@@ -12,9 +12,11 @@ class Task extends Model
         'sort_id',
         'parent_id',
         'project_id',
-        'created_by', 'updated_by',
+        'created_by',
+        'updated_by',
         'title',
-        'tag', 'date',
+        'tag',
+        'date',
         'created_at',
         'updated_at',
         'list_id'
@@ -29,26 +31,32 @@ class Task extends Model
     {
         //
     }
+
     public function List()
     {
-        return $this->belongsTo('App\Multiple_list','id','list_id');
+        return $this->belongsTo('App\Multiple_list', 'id', 'list_id');
     }
 
     public function existingTaskInBoard()
     {
-        return $this->belongsTo(ExistingTasksInBoard::class,'task_id','id');
+        return $this->belongsTo(ExistingTasksInBoard::class, 'task_id', 'id');
     }
 
-    public function action_log(){
+    public function action_log()
+    {
 
-        return $this->hasMany('App\ActionLog','task_id','id');
+        return $this->hasMany('App\ActionLog', 'task_id', 'id');
     }
-    public function tags(){
 
-        return $this->hasMany(Tags::class,'task_id','id');
+    public function tags()
+    {
+
+        return $this->hasMany(Tags::class, 'task_id', 'id');
     }
-    public function files(){
 
-        return $this->hasMany('App\Files','tasks_id','id');
+    public function files()
+    {
+
+        return $this->hasMany('App\Files', 'tasks_id', 'id');
     }
 }

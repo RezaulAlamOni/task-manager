@@ -60,4 +60,4 @@ Route::post('/add-existing-tasks', 'MultipleBoardController@addExistingTasks');
 Route::post('/card-add', 'MultipleBoardController@cardAdd');
 Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');
 Route::get('/card-delete/{id}','MultipleBoardController@cardDelete'); //delete card
-Route::get('/board-task-delete/{id}','MultipleBoardController@existingTaskDelete'); //delete card
+Route::get('/existing-task-delete/{id}','MultipleBoardController@existingTaskDelete'); //delete card
