@@ -113,8 +113,8 @@
                                                 </a>
                                             </div>
                                             <div class="user">
-                                                <a><i
-                                                    class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
+                                                <a>
+                                                    <i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
                                                     data-toggle="dropdown"></i>
                                                     <div class="dropdown-menu dropdown-menu-left">
                                                         <diV class="collapse show switchToggle">
@@ -187,8 +187,7 @@
                                                                 >{{item.text.substring(0,10)}}..</span>
                                                             </div>
 
-                                                            <div :id="'dropdown'+card.id"
-                                                                 class="dropdown-menu dropdown-menu1 dropdown-menu-left">
+                                                            <div :id="'dropdown'+card.id" class="dropdown-menu dropdown-menu1">
 
                                                                 <diV class="collapse show switchToggle" style="">
                                                                     <div class="container-fluid">
@@ -201,15 +200,33 @@
                                                                         />
                                                                         <div class="row">
                                                                             <div class="col-12">
-                                                                                <template>
+                                                                                <template v-for="tag in card.existing_tags">
+                                                                                    <li class="badge-pill tags" @click="addExistingTag(data , tag.title,tag.color)"
+                                                                                        v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
+                                                                                        v-if="tag.text !== 'Dont Forget'">
+                                                                                        {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
+                                                                                    </li>
+                                                                                </template>
+                                                                                <!-- <template> -->
                                                                                     <!-- <li class="badge-pill tags"
                                                                                         v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
                                                                                     </li> -->
-                                                                                </template>
-                                                                                <!-- <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li> -->
+                                                                                <!-- </template> -->
+                                                                                <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
                                                                             </div>
                                                                         </div>
                                                                         <hr>
+                                                                        <!-- <div class="row">
+                                                                            <div class="col-12">
+                                                                                <template>
+                                                                                    <li class="badge-pill tags"
+                                                                                        v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
+                                                                                    </li>
+                                                                                </template>
+                                                                                <li class="badge-pill tags" style="background: #FB8678" >Dont Forget</li>
+                                                                            </div>
+                                                                        </div>
+                                                                        <hr> -->
                                                                         <div class="col-xs-12"
                                                                              style="margin-top:10px;width: 100%;">
                                                                             <button class="btn btn-small btn-primary pull-right"
@@ -227,7 +244,7 @@
                                                     <i class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
                                                        data-toggle="dropdown"
                                                        v-else></i>
-                                                    <div class="dropdown-menu dropdown-menu1 dropdown-menu-left">
+                                                    <div class="dropdown-menu dropdown-menu1 ">
 
                                                         <diV class="collapse show switchToggle" style="">
                                                             <div class="container-fluid">
@@ -238,15 +255,18 @@
                                                                     @tags-changed="newTags => (changeTag(newTags,card,index,key))"
                                                                     v-model="tag"
                                                                 />
-                                                                <!-- <div class="row"> -->
-                                                                <!-- <div class="col-12"> -->
-                                                                <!-- <template> -->
-                                                                <!-- <li class="badge-pill tags"> -->
-                                                                <!-- </li> -->
-                                                                <!-- </template> -->
-                                                                <!-- <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li> -->
-                                                                <!-- </div> -->
-                                                                <!-- </div> -->
+                                                                <div class="row">
+                                                                    <div class="col-12">
+                                                                        <template v-for="tag in card.existing_tags">
+                                                                            <li class="badge-pill tags" @click="addExistingTag(data , tag.title,tag.color)"
+                                                                                v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
+                                                                                v-if="tag.text !== 'Dont Forget'">
+                                                                                {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
+                                                                            </li>
+                                                                        </template>
+                                                                        <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                                    </div>
+                                                                </div>
                                                                 <hr>
                                                                 <div class="col-xs-12"
                                                                      style="margin-top:10px;width: 100%;">
@@ -633,6 +653,7 @@
                             id: `${i}${j}`,
                             cardId: this.cards[i].task[j].id,
                             types: this.cards[i].task[j].type,
+                            existing_tags: this.cards[i].task[j].existing_tags,
                             props: {
                                 className: 'card',
                                 style: {backgroundColor: 'white'}
