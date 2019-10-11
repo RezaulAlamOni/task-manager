@@ -227,6 +227,7 @@
             right: 200px;
             top: 9px;
             font-size: 15px;
+            cursor: pointer;
         }
 
         .subTask_plus {
@@ -717,7 +718,8 @@
     text-decoration: none;
     font-size: 18px;
     color: black;
-    display: block
+    display: block;
+    border-radius: 5px;
 }
 
 .myUL-user li a:hover:not(.header) {
@@ -793,6 +795,20 @@
     font-weight: bold;
     cursor: pointer;
 }
+.assignUser-suggest-photo {
+    width: 21px;
+    border-radius: 74%;
+    background: #2d1931;
+    height: 21px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 20px;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+}
+
 .assignUser-photo-for-selected {
     width: 22px;
     border-radius: 74%;

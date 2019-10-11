@@ -25,11 +25,18 @@ class ProjectController extends Controller
         $this->middleware('auth');
     }
 
-    public function getAll()
+    public function getAll(Request $request)
     {
         $team = Team::where('owner_id', Auth::id())->first();
         $Projects = Project::where('team_id', $team->id)->get();
-        return $this->success(compact($Projects, 'Projects'));
+
+        if (isset($request->render)){
+            $project = view('vendor.spark.layouts.leftmenuProjects',['projects'=>$Projects])->render();
+            return $project;
+        }else{
+            return $this->success(compact($Projects, 'Projects'));
+        }
+
     }
 
     public function success($items = null, $status = 200)

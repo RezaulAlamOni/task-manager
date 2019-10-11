@@ -56,7 +56,6 @@ class MultipleBoardController extends Controller
                             $tags[$tagkey]['color'] = $tag->color;
                             $tagTooltip .= '#' . $tag->title . ' ';
                         }
-                        // return $tagTooltip;
                     }
                     $boards[$key]['task'][$keys]['tags'] = $tags;
                     $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
@@ -70,9 +69,7 @@ class MultipleBoardController extends Controller
                 $boards[$key]['task'] = [];
             }
             $existingTask = ExistingTasksInBoard::with('task')->where('board_id', $value->id)->get();
-            if ($value->id == 57) {
-                // return $existingTask;
-            }
+
             if ($existingTask->count() > 0) {
                 foreach ($existingTask as $ExTaskkey => $ExTaskvalue) {
                     $keys++;
@@ -109,12 +106,9 @@ class MultipleBoardController extends Controller
                         $boards[$key]['task'][$keys]['type'] = 'task';
                         $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($TaskValue['date']));
                     }
-
                 }
             }
-
         }
-        // return $boards;
         return response()->json(['success' => $boards]);
     }
 
@@ -137,7 +131,6 @@ class MultipleBoardController extends Controller
             'date' => Carbon::today(),
             'created_at' => Carbon::today(),
         ]);
-        // return $data;
         if ($data) {
             return response()->json(['success' => true, 'data' => $data]);
         } else {
@@ -221,7 +214,6 @@ class MultipleBoardController extends Controller
 
     public function update(Request $request)
     {
-        // return $request->all();
         $data = [
             'title' => $request->name,
             'color' => $request->color,
@@ -261,8 +253,7 @@ class MultipleBoardController extends Controller
 
     public function cardDelete($id)
     {
-        $delete = Task::where('id', $id)
-            ->delete();
+        $delete = TaskBoard::where('id', $id)->delete();
         if ($delete) {
             return response()->json(['success' => true]);
         } else {
@@ -295,7 +286,6 @@ class MultipleBoardController extends Controller
 
     public function addExistingTasks(Request $request)
     {
-
         $board_id = $request->id;
         foreach ($request->tasks as $key => $value) {
             $data = [
@@ -318,14 +308,13 @@ class MultipleBoardController extends Controller
                     $tags[$tagkey]['classes'] = '';
                     $tags[$tagkey]['style'] = 'background-color: ' . $tag->color;
                     $tags[$tagkey]['color'] = $tag->color;
-                    $tagTooltip .= '#' . $tag->title . ' ';
+                    $tagTooltip = '#' . $tag->title . ' ';
                 }
                 // return $tagTooltip;
             }
             $task[$key]['tag'] = $tags;
             $task[$key]['tagTooltip'] = $tagTooltip;
         }
-
         return response()->json(['success' => true, 'data' => $task]);
     }
 
@@ -362,7 +351,6 @@ class MultipleBoardController extends Controller
                 $ids .= " $id,";
             }
             $ids = trim($ids, ','); 
-            // echo "update task_boards set sort_id = CASE $caseString END where id in ($ids) and parent_id = 0"; exit();
             $update = DB::update("update task_boards set sort_id = CASE $caseString END where id in ($ids) and parent_id = 0");
             if ($update) {
                 return response()->json(['success' => true, 'data' => $update]);

@@ -57,7 +57,7 @@ class Task extends Model
     {
         return $this->hasMany(Tags::class, 'task_id', 'id');
     }
-    
+
     public function boardTasksTags()
     {
         return $this->hasMany(Tags::class, 'board_id', 'id');
@@ -65,7 +65,7 @@ class Task extends Model
 
     public function files()
     {
-        return $this->hasMany('App\Files', 'tasks_id', 'id');
+        return $this->hasMany('App\Files', 'tasks_id', 'id')->orderBY('id','desc');
     }
 
     public function board()

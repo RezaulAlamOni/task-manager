@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/project', 'ProjectController@getAll');
+Route::get('/project', 'ProjectController@getAll')->name('all-project');
 Route::get('/project/{id}', 'ProjectController@show');
 Route::post('/project', 'ProjectController@store');
 Route::patch('/project/{id}', 'ProjectController@update');
@@ -24,7 +24,7 @@ Route::post('/task-list/task-drag-drop', 'TaskController@taskDragDrop');//task-d
 
 
 //task list tags related
-Route::get('/task-list/all-tag', 'TagsController@index');//get all tag
+Route::get('/task-list/all-tag/{project_id}', 'TagsController@index');//get all tag
 Route::post('/task-list/add-tag', 'TagsController@store');//add tag
 Route::post('/task-list/add-tag-to-multiple-task', 'TagsController@addTagToMultipleTask');//add dont forget tag
 Route::post('/task-list/delete-tag', 'TagsController@destroy');//delete by tag title
@@ -35,6 +35,9 @@ Route::post('/task-list/copy-cut-past', 'TaskController@CopyCutPast');//copy and
 Route::post('/task-list/delete-task', 'TaskController@deleteTask');//delete task
 Route::post('/task-list/move-task', 'TaskController@moveTask');//move-task
 Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog'); //reverse child node
+
+//search task
+Route::post('/task-list/suggest-user','SearchController@suggestUser'); //user suggest for search
 
 //navigation management
 Route::post('/allNavs','ProjectNavItemsController@store'); //add new nav item

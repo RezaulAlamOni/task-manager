@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Project;
+use App\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -27,6 +30,8 @@ class HomeController extends Controller
      */
     public function show()
     {
-        return view('home');
+        $team = Team::where('owner_id', Auth::id())->first();
+        $Projects = Project::where('team_id', $team->id)->get();
+        return view('home',['projects'=>$Projects]);
     }
 }
