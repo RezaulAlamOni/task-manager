@@ -281,7 +281,7 @@
             border-left: 10px solid transparent;
             position: absolute;
             top: -5px;
-            left: 50%;
+            left: 45%;
             z-index: 10;
         }
         &:after {
@@ -291,7 +291,7 @@
             border-left: 7px solid transparent;
             position: absolute;
             top: -7px;
-            left: 50%;
+            left: 49.5%;
             z-index: 9;
         }
     }
@@ -303,7 +303,8 @@
     }
     .tag-icon{
         position: absolute;
-        bottom: 7px;
+        top: 60px;
+        bottom: 14px;
         left: 145px;
     }
 
