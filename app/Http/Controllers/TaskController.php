@@ -64,10 +64,11 @@ class TaskController extends Controller
             $info['text'] = $task->title;
             if ($task->title == 'Dont Forget Section'){
                 $info['draggable'] = false;
+                $info['droppable'] = true;
             }else{
                 $info['draggable'] = true;
+                $info['droppable'] = true;
             }
-            $info['droppable'] = true;
             $info['clicked'] = 0;
             $info['date'] = $task->date;
             $allTags = $task->tags;

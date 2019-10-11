@@ -115,7 +115,7 @@
                                 <span>
                                         <input :id="data.id" @blur="showItem($event,data)"
                                                @click="makeInput($event,data)"
-                                               @focus="hideItem($event)"
+                                               @focus="hideItem($event,data)"
                                                @keydown="keyDownAction($event,data)"
                                                @keypress="saveData($event,data)"
                                                class="inp input-hide input-title"
@@ -300,8 +300,8 @@
 
                     <div class="jquery-accordion-menu" id="jquery-accordion-menu" v-click-outside="HideCustomMenu">
                         <ul>
-                            <li><a href="javascript:void(0)">Assign user to selected</a></li>
-                            <li><a href="javascript:void(0)">Add tags to selected</a></li>
+                            <li><a href="javascript:void(0)">Assign User to Selected</a></li>
+                            <li><a href="javascript:void(0)">Add Tags to Selected</a></li>
                             <li><a href="javascript:void(0)">Set Due Date</a></li>
                             <li><a @click="deleteSelectedTask" href="javascript:void(0)">Deleted </a></li>
                             <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">Move To Dont Forget Section </a></li>
@@ -795,6 +795,10 @@
                     if (index > -1) {
                         _this.selectedIds.splice(index, 1);
                         $('#click' + data.id).removeClass('clicked');
+                        if (data.text !== 'Dont Forget Section'){
+                            // data.draggable = true;
+                        }
+
                     } else {
                         _this.selectedIds.push(data.id);
                         $('#click' + data.id).addClass('clicked');
@@ -812,6 +816,9 @@
                     $('.eachItemRow').removeClass('clicked');
                     $(e.target).addClass('clicked');
                     $(e.target).closest('.eachItemRow').addClass('clicked');
+                    if (data.text !== 'Dont Forget Section'){
+                        // data.draggable = true;
+                    }
                     $('.jquery-accordion-menu').hide();
 
                 } else if (e.which === 3) {
@@ -847,6 +854,7 @@
                             }).fadeIn();
                         } else {
                             $('.eachItemRow').removeClass('clicked');
+
                             $('.jquery-accordion-menu').hide();
                             _this.selectedIds = [];
                         }
@@ -857,12 +865,18 @@
             },
             makeInput(e, data) {
                 this.selectedData = data;
-                $('.inp').addClass('input-hide');
-                $('.inp').removeClass('form-control');
-                $(e.target).removeClass('input-hide');
-                $(e.target).addClass('form-control');
+                if (data.text === 'Dont Forget Section'){
+                    $(e.target).attr('disabled','disabled');
+                }else{
+                    $('.inp').addClass('input-hide');
+                    $('.inp').removeClass('form-control');
+                    $(e.target).removeClass('input-hide');
+                    $(e.target).addClass('form-control');
+                }
+
             },
-            hideItem(e) {
+            hideItem(e,data) {
+                // data.draggable = false;
                 $(e.target).closest('.eachItemRow').find('.task-complete').hide();
                 $(e.target).closest('.eachItemRow').find('.tag-icon').hide();
                 $(e.target).closest('.eachItemRow').find('.attach-icon').hide();
