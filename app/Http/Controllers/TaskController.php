@@ -434,8 +434,20 @@ class TaskController extends Controller
                 ]);
             }
             return response()->json(['success' => 1]);
-        } else {
-            $this->deleteTaskWithChild($request->id);
+        } else if (isset($request->type) && $request->type == 'tag') {
+            $ids = $request->ids;
+            $tag = Tags::where('id',$request->value)->first();
+            foreach ($ids as $id) {
+                Tags::create( [
+                    'color' => $tag->color,
+                    'task_id' => $id,
+                    'title' => $tag->title,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+
+
             return response()->json(['success' => 1]);
         }
 
