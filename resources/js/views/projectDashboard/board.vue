@@ -7,6 +7,7 @@
                     <Container
                         :drop-placeholder="upperDropPlaceholderOptions"
                         @drag-start="dragStart"
+                        @drag-end="dragEnd"
                         @drop="onColumnDrop($event)"
                         drag-handle-selector=".column-drag-handle"
                         orientation="horizontal">
@@ -65,9 +66,9 @@
                                 <Container
                                     :drop-placeholder="dropPlaceholderOptions"
                                     :get-child-payload="getCardPayload(column.id)"
-                                    @drag-end="(e) => log('drag end', e)"
-                                    @drag-start="(e) => log('drag start', e)"
-                                    @drop="(e) => onCardDrop(column.id, e)"
+                                    @drag-start="(e) => log('', e)" 
+                                    @drag-end="(e) => log('', e)"
+                                    @drop="(e) => onCardDrop(column.id,column.boardId, index,  e)"
                                     drag-class="card-ghost"
                                     drop-class="card-ghost-drop"
                                     group-name="col"
@@ -89,12 +90,12 @@
                                                 </a>
                                                 <flatPickr
                                                     :class="{
-                                                                    dateCal:true,
-                                                                    'flatpickr-input': true,
-                                                                    'flatpickr-input1': card.date != '' ? false : true,
-                                                                     active: true,
-                                                                     dateCal1: card.date != '' ? true : false
-                                                                 }"
+                                                            dateCal:true,
+                                                            'flatpickr-input': true,
+                                                            'flatpickr-input1': card.date != '' ? false : true,
+                                                                active: true,
+                                                                dateCal1: card.date != '' ? true : false
+                                                            }"
                                                     :config="date_config"
                                                     @on-change="updateDate(card)"
                                                     name="date"
@@ -171,10 +172,10 @@
                                             <div>
                                                 <a class="tag-icon">
                                                     <div v-if="card.tags && card.tags.length !== 0">
-                                                        <div style="float: left;" v-for="(item, index) in card.tags">
+                                                        <div style="float: left;" v-for="(item, tagIndex) in card.tags">
                                                             <div class="dropdown-toggle-split "
                                                                  data-toggle="dropdown"
-                                                                 style="padding-right: 0px; padding-left: 1px;" v-if="index < 2">
+                                                                 style="padding-right: 0px; padding-left: 1px;" v-if="tagIndex < 2">
                                                                 <span class="badge badge-danger "
                                                                       v-if='item == "Dont Forget"'>{{item.text.substring(0,12)}}</span>
                                                                 <span :title="card.tagTooltip"
@@ -267,8 +268,10 @@
                             </div>
                         </Draggable>
                         <div>
-                            <p @click="addColumn" class="add-column" v-if="board_id"><i class="fa fa-plus"></i> add
-                                column</p>
+                            <p @click="addColumn" class="add-column" v-if="board_id">
+                                <i class="fa fa-plus"></i> 
+                                add column
+                            </p>
                         </div>
                     </Container>
                 </div>
@@ -648,11 +651,23 @@
             },
 
             onColumnDrop(dropResult) {
+                // alert('sdf');
+                // console.log(dropResult);
                 const scene = Object.assign({}, this.scene);
                 scene.children = applyDrag(scene.children, dropResult);
                 this.scene = scene
+                let data = scene;
+                axios.post('/api/column-sort',data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log('sorted');
+                })
+                .catch(error => {
+                    console.log('sorting failed');
+                });
             },
-            onCardDrop(columnId, dropResult) {
+            onCardDrop(columnId, boardId, index, dropResult) {
+                // console.log(columnId, boardId, index, dropResult);
                 if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
                     const scene = Object.assign({}, this.scene);
                     const column = scene.children.filter(p => p.id === columnId)[0];
@@ -661,6 +676,16 @@
                     newColumn.children = applyDrag(newColumn.children, dropResult);
                     scene.children.splice(columnIndex, 1, newColumn);
                     this.scene = scene
+                    // console.log(this.scene.children[index]);
+                    let data = this.scene.children[index];
+                    axios.post('/api/card-sort',data)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log('sorted');
+                    })
+                    .catch(error => {
+                        console.log('sorting failed');
+                    });
                 }
             },
             getCardPayload(columnId) {
@@ -668,8 +693,11 @@
                     return this.scene.children.filter(p => p.id === columnId)[0].children[index]
                 }
             },
-            dragStart() {
-                console.log('drag started')
+            dragStart(dragResult) {
+                console.log(dragResult);
+            },
+            dragEnd(dragResult) {
+                // console.log(dragResult);
             },
             log(...params) {
                 console.log(...params)
@@ -861,10 +889,30 @@
                 _this.growInit(option);
             },
             addCard(index, id) {
-
+                
                 // console.log(index,id)
                 let _this = this;
-                axios.post('/api/card-add', {'id': id})
+                axios.post('/api/card-add',{'id': id})
+                .then(response => response.data)
+                .then(response => {
+                    if(response.success == true){
+                        let data = response.data;
+                        _this.cards[index].task.push({id: data.id, name: data.title, date: data.date, tags: [], clicked: 0});
+                        let keys = _this.cards[index].task.length-1;
+                        _this.getData();
+                        setTimeout(function () {
+                            $('#id'+index+keys).click();
+                            $('#id'+index+keys).focus();
+                        },100)
+                    }
+                })
+                .catch(error => {
+                });
+            },
+            deleteCard(index,cardIndex,id){
+                let _this = this;
+                if(confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id){
+                    axios.get('/api/card-delete/'+id)
                     .then(response => response.data)
                     .then(response => {
                         if (response.success == true) {
@@ -886,6 +934,7 @@
                     })
                     .catch(error => {
                     });
+                }
             },
             deleteCard(index, cardIndex, id) {
                 let _this = this;
@@ -904,8 +953,8 @@
             },
             deleteTask(index, cardIndex, id) {
                 let _this = this;
-                console.log(index + ", " + cardIndex);
-                console.log(this.cards[index].task[cardIndex]);
+                // console.log(index + ", " + cardIndex);
+                // console.log(this.cards[index].task[cardIndex]);
                 if (confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id) {
                     axios.get('/api/board-task-delete/' + id)
                         .then(response => response.data)
@@ -1043,10 +1092,12 @@
                 return myColor;
             },
             changeTag(tags, card, columnIndex, cardIndex) {
+                console.log(card);
                 var _this = this;
-                var old = this.tags.length;
+                var old = this.cards[columnIndex].task[cardIndex].tags.length;
                 var newl = tags.length;
-
+                let cardTags = null;
+                // alert(newl +" > "+ old);
                 if (newl > old) {
                     this.tags = tags;
 
@@ -1055,29 +1106,31 @@
                         id: card.cardId,
                         tags: _this.tags[newl - 1].text,
                         color: color,
-                        type: 'board',
+                        type: 'task',
                     };
+                    if(card.types == "task"){
+                        postData.id = card.id;
+                    }
                     axios.post('/api/task-list/add-tag', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            if (response.success) {
-                                let cardTags = {
-                                    'board_id': response.data.board_id,
-                                    'classes': '',
-                                    'color': response.data.color,
-                                    'id': response.data.id,
-                                    'style': "background-color: " + response.data.color,
-                                    'text': response.data.title,
-                                };
-                                _this.cards[columnIndex].task[cardIndex].tags.push(cardTags);
-                                setTimeout(function () {
-                                    _this.getData();
-                                }, 100);
-                            }
-                        })
-                        .catch(error => {
-                            console.log("error")
-                        });
+                    .then(response => response.data)
+                    .then(response => {
+                        cardTags = {
+                            'board_id': response.data.board_id,
+                            'classes': '',
+                            'color': response.data.color,
+                            'id': response.data.id,
+                            'style': "background-color: " + response.data.color,
+                            'text': response.data.title,
+                        };
+                        _this.cards[columnIndex].task[cardIndex].tags.push(cardTags);
+                        setTimeout(function () {
+                            _this.getData();
+                        }, 100);
+                        // $('#dropdown' + columnIndex+cardIndex).toggle();
+                    })
+                    .catch(error => {
+                        console.log("error =>"+error)
+                    });
                 }
             },
             deleteCardTag(obj, card, columnIndex, cardIndex) {
@@ -1090,13 +1143,11 @@
                     axios.post('/api/task-list/delete-tag', postData)
                         .then(response => response.data)
                         .then(response => {
-                            console.log(_this.cards[columnIndex].task[cardIndex].tags[obj.index]);
                             _this.cards[columnIndex].task[cardIndex].tags.splice(obj.index, 1);
                             setTimeout(function () {
                                 _this.getData();
                             }, 100);
                             _this.tags = [];
-                            console.log(_this.cards[columnIndex].task[cardIndex].tags[obj.index]);
                         })
                         .catch(error => {
                             console.log('Api for delete tag not Working !!!')
