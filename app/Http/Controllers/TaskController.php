@@ -413,9 +413,14 @@ class TaskController extends Controller
 
     public function deleteTaskWithChild($id)
     {
+        $check_dontForgetSection = Task::where('id', $id)->first();
+        if($check_dontForgetSection == null){
+            return true;
+        }
+        AssignedUser::where('task_id',$id)->delete();
         Tags::where('task_id', $id)->delete();
         Files::where('tasks_id', $id)->delete();
-        $check_dontForgetSection = Task::where('id', $id)->first();
+
         Task::findOrFail($id)->delete();
 
         if ($check_dontForgetSection) {
@@ -430,13 +435,15 @@ class TaskController extends Controller
                     Task::findOrFail($taskDontForget->id)->delete();
                 }
             }
-
         }
 
         $childrens = Task::where('parent_id', $id)->get();
-        foreach ($childrens as $children) {
-            $this->deleteTaskWithChild($children->id);
+        if ($childrens->count() > 0){
+            foreach ($childrens as $children) {
+                $this->deleteTaskWithChild($children->id);
+            }
         }
+
     }
 
     public function deleteImg(Request $request)

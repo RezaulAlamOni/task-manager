@@ -450,21 +450,20 @@
 
                 a {
                     width: 100%;
-                    padding: 10px 30px;
+                    padding: 10px 0px 10px 13px;
                     float: left;
                     text-decoration: none;
                     color: #f0f0f0;
                     font-size: 13px;
-                    background: #c5cedc;
+                    background: #ecf2fa;
                     color: black;
                     border-bottom: solid 1px #427bcc;
                     white-space: nowrap;
                     position: relative;
                     overflow: hidden;
-                    -o-transition: color .2s linear, background .2s linear;
-                    -moz-transition: color .2s linear, background .2s linear;
+                    border-radius: 5px;
                     -webkit-transition: color .2s linear, background .2s linear;
-                    transition: color .2s linear, background .2s linear
+                    transition: color .2s linear, background .2s linear;
                 }
             }
         }
