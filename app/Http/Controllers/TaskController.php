@@ -62,6 +62,12 @@ class TaskController extends Controller
             $info['sort_id'] = $task->sort_id;
             $info['list_id'] = $task->list_id;//list_id
             $info['text'] = $task->title;
+            if ($task->title == 'Dont Forget Section'){
+                $info['draggable'] = false;
+            }else{
+                $info['draggable'] = true;
+            }
+            $info['droppable'] = true;
             $info['clicked'] = 0;
             $info['date'] = $task->date;
             $allTags = $task->tags;
@@ -86,6 +92,7 @@ class TaskController extends Controller
                 ->where('task_lists.list_id', $task->list_id)
                 ->groupBy('tags.title')
                 ->get()->toArray();
+
             $info['tagTooltip'] = $tagTooltip;
             $info['description'] = $task->description;
             $info['files'] = $task->files;

@@ -300,11 +300,12 @@
 
                     <div class="jquery-accordion-menu" id="jquery-accordion-menu" v-click-outside="HideCustomMenu">
                         <ul>
+                            <li><a href="javascript:void(0)">Assign user to selected</a></li>
+                            <li><a href="javascript:void(0)">Add tags to selected</a></li>
+                            <li><a href="javascript:void(0)">Set Due Date</a></li>
                             <li><a @click="deleteSelectedTask" href="javascript:void(0)">Deleted </a></li>
-                            <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">Move To Dont Forget
-                                Section </a></li>
-                            <li><a href="javascript:void(0)">Action 1 </a></li>
-                            <li><a href="javascript:void(0)">Action 2</a></li>
+                            <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">Move To Dont Forget Section </a></li>
+
                         </ul>
                     </div>
 
