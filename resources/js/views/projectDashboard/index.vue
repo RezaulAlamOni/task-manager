@@ -177,10 +177,12 @@
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <template v-for="tag in data.existing_tags">
-                                                            <li class="badge-pill tags" @click="addExistingTag(data , tag.title,tag.color)"
+                                                            <li class="badge-pill tags"
+                                                                @click="addExistingTag(data , tag.title,tag.color)"
                                                                 v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
                                                                 v-if="tag.text !== 'Dont Forget'">
-                                                                {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
+                                                                {{(tag.title !== undefined) ?tag.title.substring(0,12) :
+                                                                ''}}
                                                             </li>
                                                         </template>
                                                         <li @click="addExistingTag(data ,'Dont Forget','')"
@@ -243,7 +245,6 @@
                                            data-toggle="dropdown"
                                            v-else></i>
                                         <div class="dropdown-menu dropdown-menu-right">
-
                                             <diV class="collapse show switchToggle">
                                                 <li class="assignUser">
                                                     <input class="input-group searchUser"
@@ -300,11 +301,91 @@
 
                     <div class="jquery-accordion-menu" id="jquery-accordion-menu" v-click-outside="HideCustomMenu">
                         <ul>
-                            <li><a href="javascript:void(0)">Assign User to Selected</a></li>
-                            <li><a href="javascript:void(0)">Add Tags to Selected</a></li>
-                            <li><a href="javascript:void(0)">Set Due Date</a></li>
+                            <li>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Assign User to
+                                    Selected</a>
+
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <diV class="collapse show switchToggle">
+
+                                        <ul>
+                                            <li class="assignUser">
+                                                <label class="pl-2 label-text">
+                                                    <span class="assign-user-drop-down-text">
+                                                        Select User For Assign To Selected Task.
+                                                    </span>
+                                                </label>
+                                            </li>
+                                            <li class="assignUser">
+                                                <template v-if="treeList[0].users && treeList[0].users.length > 0" v-for="user in treeList[0].users">
+                                                    <div @click="ActionToSelectedTask(user.id,'user')"
+                                                         class="users-select row">
+                                                        <div class="col-md-3 pt-1 pl-4">
+                                                            <p class="assignUser-photo">
+                                                                {{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
+                                                        </div>
+                                                        <div class="col-md-9 assign-user-name-email">
+                                                            <h5>{{user.name}}<br>
+                                                                <small>{{user.email}}</small>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </li>
+                                        </ul>
+                                    </diV>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Add Tags to
+                                    Selected</a>
+
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <diV class="collapse show switchToggle">
+
+                                        <ul>
+                                            <li class="assignUser">
+                                                <label class="pl-2 label-text">
+                                                    <span class="assign-user-drop-down-text">
+                                                        Select Tag For Add tag To Selected Task.
+                                                    </span>
+                                                </label>
+                                            </li>
+                                            <li class="assignUser">
+                                                <template v-if="treeList[0].existing_tags.length > 0" v-for="user in treeList[0].existing_tags">
+                                                    <div @click="ActionToSelectedTask(user.id,'tag')"
+                                                         class="users-select row">
+                                                        <div class="col-md-9 add-tag-to-selected">
+                                                            <h5>{{user.title}}</h5>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </li>
+                                        </ul>
+                                    </diV>
+                                </div>
+                            </li>
+                            <li style="position: relative">
+                                <datepicker
+                                    :disabled-dates="disabledDates"
+                                    @selected="ActionToSelectedTask('','date')"
+                                    calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
+                                    format='dd MMM'
+                                    input-class="dateCal-selected"
+                                    v-model="date_for_selected">
+
+                                </datepicker>
+
+                                <a class="calender li-opacity clickHide">
+                                    Set Due Date
+                                </a>
+
+
+                            </li>
                             <li><a @click="deleteSelectedTask" href="javascript:void(0)">Deleted </a></li>
-                            <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">Move To Dont Forget Section </a></li>
+                            <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">Move To Dont Forget
+                                Section </a>
+                            </li>
 
                         </ul>
                     </div>
@@ -510,6 +591,7 @@
                     tasks: [],
                     users: []
                 },
+                date_for_selected: null
             }
         },
         mounted() {
@@ -680,10 +762,10 @@
                     $('.searchList').toggle();
                 }
             },
-            SearchTaskByAssignedUser(id,name){
-                 $('.searchTaskList').val('@'+name);
+            SearchTaskByAssignedUser(id, name) {
+                $('.searchTaskList').val('@' + name);
                 var _this = this;
-                axios.post('/api/task-list/suggest-user', {'user_id' : id,p_id : _this.projectId})
+                axios.post('/api/task-list/suggest-user', {'user_id': id, p_id: _this.projectId})
                     .then(response => response.data)
                     .then(response => {
                         _this.searchData.tasks = response.search_tasks;
@@ -703,8 +785,8 @@
                 if (value.charAt(0) === '@') {
                     value = value.substr(1)
                     _this.searchData.users = (_this.treeList[0].users.length > 0) ? _this.treeList[0].users : [];
-                    if (value.length > 0){
-                        axios.post('/api/task-list/suggest-user', {'user_name':value})
+                    if (value.length > 0) {
+                        axios.post('/api/task-list/suggest-user', {'user_name': value})
                             .then(response => response.data)
                             .then(response => {
                                 _this.searchData.users = response.search_user;
@@ -723,7 +805,7 @@
                     $('#myUL').removeClass('myUL-show');
                     $('#myUL').addClass('myUL');
                 } else {
-                    axios.post('/api/task-list/suggest-user', {'text':value,'project_id' : _this.projectId})
+                    axios.post('/api/task-list/suggest-user', {'text': value, 'project_id': _this.projectId})
                         .then(response => response.data)
                         .then(response => {
                             _this.searchData.tasks = response.search_tasks;
@@ -795,7 +877,7 @@
                     if (index > -1) {
                         _this.selectedIds.splice(index, 1);
                         $('#click' + data.id).removeClass('clicked');
-                        if (data.text !== 'Dont Forget Section'){
+                        if (data.text !== 'Dont Forget Section') {
                             // data.draggable = true;
                         }
 
@@ -816,7 +898,7 @@
                     $('.eachItemRow').removeClass('clicked');
                     $(e.target).addClass('clicked');
                     $(e.target).closest('.eachItemRow').addClass('clicked');
-                    if (data.text !== 'Dont Forget Section'){
+                    if (data.text !== 'Dont Forget Section') {
                         // data.draggable = true;
                     }
                     $('.jquery-accordion-menu').hide();
@@ -865,9 +947,9 @@
             },
             makeInput(e, data) {
                 this.selectedData = data;
-                if (data.text === 'Dont Forget Section'){
-                    $(e.target).attr('disabled','disabled');
-                }else{
+                if (data.text === 'Dont Forget Section') {
+                    $(e.target).attr('disabled', 'disabled');
+                } else {
                     $('.inp').addClass('input-hide');
                     $('.inp').removeClass('form-control');
                     $(e.target).removeClass('input-hide');
@@ -875,7 +957,7 @@
                 }
 
             },
-            hideItem(e,data) {
+            hideItem(e, data) {
                 // data.draggable = false;
                 $(e.target).closest('.eachItemRow').find('.task-complete').hide();
                 $(e.target).closest('.eachItemRow').find('.tag-icon').hide();
@@ -1237,7 +1319,7 @@
                         });
                 }
             },
-            addExistingTag(data, tag,color) {
+            addExistingTag(data, tag, color) {
 
                 var _this = this;
                 var color = (tag === 'Dont Forget') ? '#ff0000' : color;
@@ -1309,7 +1391,7 @@
             },
             showTagManageModel() {
                 var _this = this;
-                axios.get('/api/task-list/all-tag/'+_this.projectId)
+                axios.get('/api/task-list/all-tag/' + _this.projectId)
                     .then(response => response.data)
                     .then(response => {
                         _this.manageTag = response.tags;
@@ -1499,6 +1581,25 @@
 
             },
 
+            ActionToSelectedTask(value,type) {
+                var _this = this;
+                console.log(type , value,_this.selectedIds);
+                var postData = {
+                    ids  : _this.selectedIds,
+                    type : type,
+                    value: value,
+                };
+                axios.post('/api/task-list/assign-user-add-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getTaskList();
+                        $('.jquery-accordion-menu').hide();
+                    })
+                    .catch(error => {
+                        console.log('Api for delete task not Working !!!')
+                    });
+
+            },
             deleteSelectedTask() {
 
                 var _this = this;

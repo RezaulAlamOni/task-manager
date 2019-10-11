@@ -435,6 +435,7 @@
         box-shadow: 0 5px 10px #333;
         border-radius: 15px;
         display : none;
+        z-index: 99999;
 
         ul {
             margin: 0;
@@ -478,6 +479,15 @@
     //.jquery-accordion-menu > ul > li > a {
     //    border-bottom: solid 1px #3b424d
     //}
+    .dateCal-selected{
+        border: none;
+        width: 353%;
+        position: absolute;
+        top: 6px;
+        z-index: 1;
+        line-height: 29px;
+        background: transparent;
+    }
 
 
 }
@@ -872,6 +882,10 @@
 }
 .assign-user-name-email{
     padding: 0px;
+}
+.add-tag-to-selected {
+    padding: 5px 5px 5px 23px;
+    border-bottom: 1px solid;
 }
 .label-text {
     letter-spacing: 0px !important;

@@ -419,6 +419,29 @@ class TaskController extends Controller
 
     }
 
+    public function ActionSelectedTask(Request $request)
+    {
+        if (isset($request->type) && $request->type == 'user') {
+            $ids = $request->ids;
+            foreach ($ids as $id) {
+                AssignedUser::create([
+                    'task_id' => $id,
+                    'user_id' => $request->value,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                    'created_by' => Auth::id(),
+                    'updated_by' => Auth::id(),
+                ]);
+            }
+            return response()->json(['success' => 1]);
+        } else {
+            $this->deleteTaskWithChild($request->id);
+            return response()->json(['success' => 1]);
+        }
+
+    }
+
+
     public function deleteTaskWithChild($id)
     {
         $check_dontForgetSection = Task::where('id', $id)->first();
