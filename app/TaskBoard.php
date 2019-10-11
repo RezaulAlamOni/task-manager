@@ -34,6 +34,6 @@ class TaskBoard extends Model
 
     public function task()
     {
-        return $this->hasMany(self::class, 'parent_id', 'id')->with('tags');
+        return $this->hasMany(self::class, 'parent_id', 'id')->with('tags')->orderBy('sort_id','ASC');
     }
 }

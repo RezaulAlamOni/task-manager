@@ -227,6 +227,7 @@
             right: 200px;
             top: 9px;
             font-size: 15px;
+            cursor: pointer;
         }
 
         .subTask_plus {
@@ -434,6 +435,7 @@
         box-shadow: 0 5px 10px #333;
         border-radius: 15px;
         display : none;
+        z-index: 99999;
 
         ul {
             margin: 0;
@@ -449,21 +451,20 @@
 
                 a {
                     width: 100%;
-                    padding: 10px 30px;
+                    padding: 10px 0px 10px 13px;
                     float: left;
                     text-decoration: none;
                     color: #f0f0f0;
                     font-size: 13px;
-                    background: #c5cedc;
+                    background: #ecf2fa;
                     color: black;
                     border-bottom: solid 1px #427bcc;
                     white-space: nowrap;
                     position: relative;
                     overflow: hidden;
-                    -o-transition: color .2s linear, background .2s linear;
-                    -moz-transition: color .2s linear, background .2s linear;
+                    border-radius: 5px;
                     -webkit-transition: color .2s linear, background .2s linear;
-                    transition: color .2s linear, background .2s linear
+                    transition: color .2s linear, background .2s linear;
                 }
             }
         }
@@ -478,6 +479,15 @@
     //.jquery-accordion-menu > ul > li > a {
     //    border-bottom: solid 1px #3b424d
     //}
+    .dateCal-selected{
+        border: none;
+        width: 353%;
+        position: absolute;
+        top: 6px;
+        z-index: 1;
+        line-height: 29px;
+        background: transparent;
+    }
 
 
 }
@@ -717,7 +727,8 @@
     text-decoration: none;
     font-size: 18px;
     color: black;
-    display: block
+    display: block;
+    border-radius: 5px;
 }
 
 .myUL-user li a:hover:not(.header) {
@@ -793,6 +804,20 @@
     font-weight: bold;
     cursor: pointer;
 }
+.assignUser-suggest-photo {
+    width: 21px;
+    border-radius: 74%;
+    background: #2d1931;
+    height: 21px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 20px;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+}
+
 .assignUser-photo-for-selected {
     width: 22px;
     border-radius: 74%;
@@ -857,6 +882,10 @@
 }
 .assign-user-name-email{
     padding: 0px;
+}
+.add-tag-to-selected {
+    padding: 5px 5px 5px 23px;
+    border-bottom: 1px solid;
 }
 .label-text {
     letter-spacing: 0px !important;
