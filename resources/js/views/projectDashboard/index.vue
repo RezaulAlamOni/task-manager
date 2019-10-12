@@ -368,11 +368,11 @@
                             <li style="position: relative">
                                 <datepicker
                                     :disabled-dates="disabledDates"
+                                    v-model="date_for_selected"
                                     @selected="ActionToSelectedTask('','date')"
                                     calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
                                     format='dd MMM'
-                                    input-class="dateCal-selected"
-                                    v-model="date_for_selected">
+                                    input-class="dateCal-selected">
 
                                 </datepicker>
 
@@ -1583,21 +1583,32 @@
 
             ActionToSelectedTask(value,type) {
                 var _this = this;
-                console.log(type , value,_this.selectedIds);
-                var postData = {
-                    ids  : _this.selectedIds,
-                    type : type,
-                    value: value,
-                };
-                axios.post('/api/task-list/assign-user-add-tag', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.getTaskList();
-                        $('.jquery-accordion-menu').hide();
-                    })
-                    .catch(error => {
-                        console.log('Api for delete task not Working !!!')
-                    });
+                setTimeout(function () {
+                    if (type === 'date'){
+                        var date = new Date(_this.date_for_selected)
+                        var month = (parseFloat(date.getMonth() + 1) > 9) ? parseFloat(date.getMonth() + 1) : '0' + parseFloat(date.getMonth() + 1);
+                        var day = (parseFloat(date.getDate() + 1) > 9) ? parseFloat(date.getDate()) : '0' + parseFloat(date.getDate());
+                        var date_for_selected  = date.getFullYear() + '-' + month + '-' + day;
+                    }
+                    var postData = {
+                        ids  : _this.selectedIds,
+                        type : type,
+                        value: type === 'date' ? date_for_selected : value,
+                    };
+                    console.log(postData)
+                    axios.post('/api/task-list/assign-user-add-tag', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.getTaskList();
+                            $('.jquery-accordion-menu').hide();
+                        })
+                        .catch(error => {
+                            console.log('Api for delete task not Working !!!')
+                        });
+                },500)
+
+
+
 
             },
             deleteSelectedTask() {

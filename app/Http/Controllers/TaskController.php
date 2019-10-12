@@ -449,6 +449,12 @@ class TaskController extends Controller
 
 
             return response()->json(['success' => 1]);
+        } else if (isset($request->type) && $request->type == 'date') {
+            $ids = $request->ids;
+            foreach ($ids as $id) {
+                Task::where('id', $id)->update(['date' => $request->value]);
+            }
+            return response()->json(['success' => "Date Update Success"]);
         }
 
     }
