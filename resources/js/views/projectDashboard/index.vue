@@ -731,6 +731,7 @@
                 let _this = this;
                 var position = this.FindDopedTask(0, data, afterDrop);
 
+                console.log(position)
                 axios.post('/api/task-list/task-drag-drop', position)
                     .then(response => response.data)
                     .then(response => {
@@ -744,7 +745,10 @@
             FindDopedTask(parent, data, tasks) {
                 for (var i = 0; i < tasks.length; i++) {
                     if (data.id === tasks[i].id) {
-                        return {sort_id: i, id: data.id, parent_id: parent};
+                        if(i>=1){
+                            var s_id = tasks[i-1].sort_id;
+                        }
+                        return {sort_id: i, pre_sort : s_id , id: data.id, parent_id: parent};
                     } else if (tasks[i].children !== undefined) {
                         if (tasks[i].children.length > 0) {
                             var ret = this.FindDopedTask(tasks[i].id, data, tasks[i].children);
