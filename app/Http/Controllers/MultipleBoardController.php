@@ -62,7 +62,11 @@ class MultipleBoardController extends Controller
 
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
-                    $boards[$key]['task'][$keys]['type'] = 'card';
+                    if ($values['list_id'] != '') {
+                        $boards[$key]['task'][$keys]['type'] = 'task';
+                    } else {
+                        $boards[$key]['task'][$keys]['type'] = 'card';
+                    }
                     $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($values['date']));
                     $boards[$key]['task'][$keys]['existing_tags'] = Tags::select('tags.*')
                                                                     ->join('task_lists', 'tags.task_id', 'task_lists.id')
@@ -188,6 +192,7 @@ class MultipleBoardController extends Controller
             'project_id' => $parent->project_id,
             'multiple_board_id' => $parent->multiple_board_id,
             'hidden' => 0,
+            'board_flag' => 1,
             'date' => '',//Carbon::now(),
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
@@ -273,7 +278,12 @@ class MultipleBoardController extends Controller
 
     public function existingTaskDelete($id)
     {
-        $delete = ExistingTasksInBoard::where('id',$id)->delete();
+        $delete = Task::where('id',$id)->update([
+            'board_parent_id' => null,
+            'board_flag' => null,
+            'task_flag' => 1,
+            'multiple_board_id' => null  
+        ]);
         if($delete){
             return response()->json(['success' => true]);
         } else {
@@ -303,8 +313,14 @@ class MultipleBoardController extends Controller
                 'task_id' => $value,
                 'date' => Carbon::today()
             ];
-
-            $insert = ExistingTasksInBoard::create($data);
+            $update = Task::where('id', $value)
+                            ->update([
+                                'board_parent_id' => $board_id,
+                                'board_flag' => 1,
+                                'task_flag' => 1,
+                                'multiple_board_id' => $request->multiple_board_id  
+                            ]);
+            // $insert = ExistingTasksInBoard::create($data);
             $task[$key] = Task::where('id', $value)->first();
             $tagTooltip = '';
             $allTags = Tags::where('task_id', $task[$key]->id)->get();
@@ -329,19 +345,19 @@ class MultipleBoardController extends Controller
     }
 
     public function cardSort(Request $request)
-    {
+    { 
         if(!empty($request->children) && count($request->children) > 0){
             $ids = '';
             $caseString = '';
             foreach ($request->children as $key => $item) {
-                if ($item['types'] == 'card') {
+                if ($item['types'] == 'card' || $item['types'] == 'task') {
                     $id = $item['cardId'];
                     $caseString .= " when id = '".$id."' then '".$key."'";
                     $ids .= " $id,";
                 }
             }
             $ids = trim($ids, ',');
-            $update = DB::update("update task_boards set sort_id = CASE $caseString END where id in ($ids) and parent_id = $request->boardId");
+            $update = DB::update("update task_lists set sort_id = CASE $caseString END where id in ($ids) and board_parent_id = $request->boardId");
             if ($update) {
                 return response()->json(['success' => true, 'data' => $update]);
             } else {
@@ -361,7 +377,7 @@ class MultipleBoardController extends Controller
                 $ids .= " $id,";
             }
             $ids = trim($ids, ','); 
-            $update = DB::update("update task_boards set sort_id = CASE $caseString END where id in ($ids) and parent_id = 0");
+            $update = DB::update("update task_lists set sort_id = CASE $caseString END where id in ($ids) and board_parent_id = 0");
             if ($update) {
                 return response()->json(['success' => true, 'data' => $update]);
             } else {

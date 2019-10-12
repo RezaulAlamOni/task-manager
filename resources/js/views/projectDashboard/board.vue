@@ -200,8 +200,8 @@
                                                                         />
                                                                         <div class="row">
                                                                             <div class="col-12">
-                                                                                <template v-for="tag in card.existing_tags">
-                                                                                    <li class="badge-pill tags" @click="addExistingTag(data , tag.title,tag.color)"
+                                                                                <template v-for="(tag, tagIndx) in card.existing_tags">
+                                                                                    <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key,card.cardId)"
                                                                                         v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
                                                                                         v-if="tag.text !== 'Dont Forget'">
                                                                                         {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
@@ -257,8 +257,8 @@
                                                                 />
                                                                 <div class="row">
                                                                     <div class="col-12">
-                                                                        <template v-for="tag in card.existing_tags">
-                                                                            <li class="badge-pill tags" @click="addExistingTag(data , tag.title,tag.color)"
+                                                                        <template v-for="(tag, tagIndx) in card.existing_tags">
+                                                                            <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key ,card.cardId)"
                                                                                 v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
                                                                                 v-if="tag.text !== 'Dont Forget'">
                                                                                 {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
@@ -869,6 +869,7 @@
                     return false;
                 }
                 let data = {
+                    'multiple_board_id': this.selectedSubNav,
                     'tasks': this.selectedExistedTask,
                     'id': this.currentColumn
                 };
@@ -882,6 +883,7 @@
                                 name: response.data[i].title,
                                 date: response.data[i].date,
                                 tags: response.data[i].tag,
+                                types: 'task',
                                 clicked: 0
                             });
                             // _this.cards[_this.updateIndex].task.push({name: _this.selectedExistedTask[i], date: '', tags: [], clicked: 0})
@@ -1019,8 +1021,40 @@
                     this.tag = null;
                 }
             },
-            addExistingTag(index, key, tag) {
-                this.cards[index].task[key].tags.splice(0, 1, tag);
+            addExistingTag(index, tagIndx, key, cardId) {
+                let _this = this;
+                let data = {
+                    'board_id' : this.cards[index].task[key].existing_tags[tagIndx].board_id,
+                    'classes' : '',
+                    'color' : this.cards[index].task[key].existing_tags[tagIndx].color,
+                    'id' : this.cards[index].task[key].existing_tags[tagIndx].id,
+                    'style' : "background-color: "+this.cards[index].task[key].existing_tags[tagIndx].color,
+                    'text' : this.cards[index].task[key].existing_tags[tagIndx].title,
+                };
+                
+                // this.getData();
+                var postData = {
+                    id: cardId,
+                    tags: this.cards[index].task[key].existing_tags[tagIndx].title,
+                    color: this.cards[index].task[key].existing_tags[tagIndx].color,
+                    type: 'task',
+                };
+                // if(card.types == "task"){
+                //     postData.id = card.id;
+                // }
+                axios.post('/api/task-list/add-tag', postData)
+                .then(response => response.data)
+                .then(response => {
+                    _this.cards[index].task[key].tags.push(data);
+                    _this.cards[index].task[key].existing_tags.splice(tagIndx, 1);
+                    setTimeout(function () {
+                        _this.getData();
+                    }, 100);
+                    // $('#dropdown' + columnIndex+cardIndex).toggle();
+                })
+                .catch(error => {
+                    console.log("error =>"+error)
+                });
             },
             deleteColumn(index, id) {
                 let _this = this;
