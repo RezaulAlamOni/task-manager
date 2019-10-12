@@ -64,51 +64,61 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
                     $boards[$key]['task'][$keys]['type'] = 'card';
                     $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($values['date']));
+                    $boards[$key]['task'][$keys]['existing_tags'] = Tags::select('tags.*')
+                                                                    ->join('task_lists', 'tags.task_id', 'task_lists.id')
+                                                                    ->where('tags.task_id', '!=', $values->id)
+                                                                    ->where('tags.title', '!=', 'Dont Forget')
+                                                                    ->where('task_lists.multiple_board_id', $value->multiple_board_id)
+                                                                    ->groupBy('tags.title')
+                                                                    ->get()->toArray();
                 }
             } else {
                 $boards[$key]['task'] = [];
             }
-            $existingTask = ExistingTasksInBoard::with('task')->where('board_id', $value->id)->get();
 
-            if ($existingTask->count() > 0) {
-                foreach ($existingTask as $ExTaskkey => $ExTaskvalue) {
-                    $keys++;
-                    foreach ($ExTaskvalue['task'] as $TaskKey => $TaskValue) {
-                        $tagTooltip = '';
-                        $tags = [];
-                        if (!empty($TaskValue['tags']) && count($TaskValue['tags']) > 0) {
-                            foreach ($TaskValue['tags'] as $tagkey => $tag) {
-                                $tags[$tagkey]['id'] = $tag->id;
-                                $tags[$tagkey]['board_id'] = $tag->board_id;
-                                $tags[$tagkey]['text'] = $tag->title;
-                                $tags[$tagkey]['classes'] = '';
-                                $tags[$tagkey]['style'] = 'background-color: ' . $tag->color;
-                                $tags[$tagkey]['color'] = $tag->color;
-                                $tagTooltip .= '#' . $tag->title . ' ';
-                            }
-                        }
-                        if(!empty($TaskValue['boardTasksTags']) && count($TaskValue['boardTasksTags']) > 0){
-                            foreach ($TaskValue['boardTasksTags'] as $tagExkey => $tag) {
-                                $tagkey++;
-                                $tags[$tagkey]['id'] = $tag->id;
-                                $tags[$tagkey]['board_id'] = $tag->board_id;
-                                $tags[$tagkey]['text'] = $tag->title;
-                                $tags[$tagkey]['classes'] = '';
-                                $tags[$tagkey]['style'] = 'background-color: ' . $tag->color;
-                                $tags[$tagkey]['color'] = $tag->color;
-                                $tagTooltip .= '#' . $tag->title . ' ';
-                            }
-                        }
-                        $boards[$key]['task'][$keys]['tags'] = $tags;
-                        $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
-                        $boards[$key]['task'][$keys]['id'] = $ExTaskvalue->id;
-                        $boards[$key]['task'][$keys]['name'] = $TaskValue['title'];
-                        $boards[$key]['task'][$keys]['type'] = 'task';
-                        $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($TaskValue['date']));
-                    }
-                }
-            }
+            
+            // $existingTask = ExistingTasksInBoard::with('task')->where('board_id', $value->id)->get();
+
+            // if ($existingTask->count() > 0) {
+            //     foreach ($existingTask as $ExTaskkey => $ExTaskvalue) {
+            //         $keys++;
+            //         foreach ($ExTaskvalue['task'] as $TaskKey => $TaskValue) {
+            //             $tagTooltip = '';
+            //             $tags = [];
+            //             if (!empty($TaskValue['tags']) && count($TaskValue['tags']) > 0) {
+            //                 foreach ($TaskValue['tags'] as $tagkey => $tag) {
+            //                     $tags[$tagkey]['id'] = $tag->id;
+            //                     $tags[$tagkey]['board_id'] = $tag->board_id;
+            //                     $tags[$tagkey]['text'] = $tag->title;
+            //                     $tags[$tagkey]['classes'] = '';
+            //                     $tags[$tagkey]['style'] = 'background-color: ' . $tag->color;
+            //                     $tags[$tagkey]['color'] = $tag->color;
+            //                     $tagTooltip .= '#' . $tag->title . ' ';
+            //                 }
+            //             }
+            //             if(!empty($TaskValue['boardTasksTags']) && count($TaskValue['boardTasksTags']) > 0){
+            //                 foreach ($TaskValue['boardTasksTags'] as $tagExkey => $tag) {
+            //                     $tagkey++;
+            //                     $tags[$tagkey]['id'] = $tag->id;
+            //                     $tags[$tagkey]['board_id'] = $tag->board_id;
+            //                     $tags[$tagkey]['text'] = $tag->title;
+            //                     $tags[$tagkey]['classes'] = '';
+            //                     $tags[$tagkey]['style'] = 'background-color: ' . $tag->color;
+            //                     $tags[$tagkey]['color'] = $tag->color;
+            //                     $tagTooltip .= '#' . $tag->title . ' ';
+            //                 }
+            //             }
+            //             $boards[$key]['task'][$keys]['tags'] = $tags;
+            //             $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
+            //             $boards[$key]['task'][$keys]['id'] = $ExTaskvalue->id;
+            //             $boards[$key]['task'][$keys]['name'] = $TaskValue['title'];
+            //             $boards[$key]['task'][$keys]['type'] = 'task';
+            //             $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($TaskValue['date']));
+            //         }
+            //     }
+            // }
         }
+        // return $boards;
         return response()->json(['success' => $boards]);
     }
 
@@ -220,7 +230,7 @@ class MultipleBoardController extends Controller
             'progress' => $request->progress
         ];
         if ($request->boardId || $request->boardId != '') {
-            $update = TaskBoard::where('id', $request->boardId)->update($data);
+            $update = Task::where('id', $request->boardId)->update($data);
             if ($update) {
                 return response()->json(['success' => true, 'data' => $update]);
             }
@@ -230,8 +240,8 @@ class MultipleBoardController extends Controller
 
     public function destroy($id)
     {
-        $delete = TaskBoard::where('id', $id)
-            ->orWhere('parent_id', $id)
+        $delete = Task::where('id', $id)
+            ->orWhere('board_parent_id', $id)
             ->delete();
         if ($delete) {
             return response()->json(['success' => true]);
@@ -243,7 +253,7 @@ class MultipleBoardController extends Controller
 
     public function deleteAllBoardWiseCards($id)
     {
-        $delete = TaskBoard::Where('parent_id', $id)->delete();
+        $delete = Task::Where('board_parent_id', $id)->delete();
         if ($delete) {
             return response()->json(['success' => true]);
         } else {
@@ -253,7 +263,7 @@ class MultipleBoardController extends Controller
 
     public function cardDelete($id)
     {
-        $delete = TaskBoard::where('id', $id)->delete();
+        $delete = Task::where('id', $id)->delete();
         if ($delete) {
             return response()->json(['success' => true]);
         } else {
@@ -273,7 +283,7 @@ class MultipleBoardController extends Controller
 
     public function hideColumn($id, Request $request)
     {
-        $hide = TaskBoard::where('id', $id)
+        $hide = Task::where('id', $id)
             ->update([
                 'hidden' => $request->hide
             ]);
