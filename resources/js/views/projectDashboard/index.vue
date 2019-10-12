@@ -20,7 +20,13 @@
 
                 <ul class="myUL" id="myUL">
                     <template v-for="task in searchData.tasks" v-if="searchData.tasks.length > 0">
-                        <li><a @mouseover="selectTaskFromTaskTreList(task)" href="Javascript:void(0)">{{task.title}}</a></li>
+                        <li>
+                            <a @mouseover="selectTaskFromTaskTreeList(task)"
+                               @click="SearchResultClick(task)"
+                               href="Javascript:void(0)">
+                                {{task.title}}
+                            </a>
+                        </li>
                     </template>
                     <template v-else>
                         <li>
@@ -74,7 +80,7 @@
             </div>
         </div>
         <!--        //tree view component section-->
-        <div class="TaskListAndDetails container-fluid" v-if="list.type === 'list'">
+        <div class="TaskListAndDetails container-fluid" v-if="list.type === 'list'" id="TaskListAndDetails">
             <div @click="HideDetails" class="task_width" id="task_width">
                 <div class="col-11" id="tree_view_list">
 
@@ -302,7 +308,8 @@
                     <div class="jquery-accordion-menu" id="jquery-accordion-menu" v-click-outside="HideCustomMenu">
                         <ul>
                             <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Assign User to
+                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Assign
+                                    User to
                                     Selected</a>
 
                                 <div class="dropdown-menu dropdown-menu-right">
@@ -317,12 +324,14 @@
                                                 </label>
                                             </li>
                                             <li class="assignUser">
-                                                <template v-if="treeList[0].users && treeList[0].users.length > 0" v-for="user in treeList[0].users">
+                                                <template v-if="treeList[0].users && treeList[0].users.length > 0"
+                                                          v-for="user in treeList[0].users">
                                                     <div @click="ActionToSelectedTask(user.id,'user')"
                                                          class="users-select row">
                                                         <div class="col-md-3 pt-1 pl-4">
                                                             <p class="assignUser-photo">
-                                                                {{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
+                                                                {{(user.name !== null) ? user.name.substring(0,2) :
+                                                                ''}}</p>
                                                         </div>
                                                         <div class="col-md-9 assign-user-name-email">
                                                             <h5>{{user.name}}<br>
@@ -337,7 +346,8 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Add Tags to
+                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Add
+                                    Tags to
                                     Selected</a>
 
                                 <div class="dropdown-menu dropdown-menu-right">
@@ -352,7 +362,8 @@
                                                 </label>
                                             </li>
                                             <li class="assignUser">
-                                                <template v-if="treeList[0].existing_tags.length > 0" v-for="user in treeList[0].existing_tags">
+                                                <template v-if="treeList[0].existing_tags.length > 0"
+                                                          v-for="user in treeList[0].existing_tags">
                                                     <div @click="ActionToSelectedTask(user.id,'tag')"
                                                          class="users-select row">
                                                         <div class="col-md-9 add-tag-to-selected">
@@ -744,10 +755,10 @@
             FindDopedTask(parent, data, tasks) {
                 for (var i = 0; i < tasks.length; i++) {
                     if (data.id === tasks[i].id) {
-                        if(i>=1){
-                            var s_id = tasks[i-1].sort_id;
+                        if (i >= 1) {
+                            var s_id = tasks[i - 1].sort_id;
                         }
-                        return {sort_id: i, pre_sort : s_id , id: data.id, parent_id: parent};
+                        return {sort_id: i, pre_sort: s_id, id: data.id, parent_id: parent};
                     } else if (tasks[i].children !== undefined) {
                         if (tasks[i].children.length > 0) {
                             var ret = this.FindDopedTask(tasks[i].id, data, tasks[i].children);
@@ -772,6 +783,7 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.searchData.tasks = response.search_tasks;
+                        console.log(_this.searchData.tasks)
                         $('#myUL-user').removeClass('myUL-user');
                         $('#myUL').removeClass('myUL');
                         $('#myUL').addClass('myUL-show');
@@ -806,25 +818,36 @@
                     $('#myUL').removeClass('myUL-show');
                     $('#myUL').addClass('myUL');
                 } else {
-                    axios.post('/api/task-list/suggest-user', {'text': value, 'project_id': _this.projectId})
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.searchData.tasks = response.search_tasks;
-                            // console.log(response.search_tasks);
-                        })
-                        .catch(error => {
-                            console.log('Api is drag and drop not Working !!!')
-                        });
+                    if (value.length >= 2 ){
+                        axios.post('/api/task-list/suggest-user', {'text': value, 'project_id': _this.projectId})
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.searchData.tasks = response.search_tasks;
+                                // console.log(response.search_tasks);
+                            })
+                            .catch(error => {
+                                console.log('Api is drag and drop not Working !!!')
+                            });
 
-                    $('#myUL').removeClass('myUL');
-                    $('#myUL').addClass('myUL-show');
-
-
+                        $('#myUL').removeClass('myUL');
+                        $('#myUL').addClass('myUL-show');
+                    }
                 }
-
             },
-            selectTaskFromTaskTreList(task){
-                console.log(task)
+            selectTaskFromTaskTreeList(task) {
+                $('.eachItemRow').removeClass('clicked');
+                $('#click' + task.id).addClass('clicked');
+                var target = document.getElementById('TaskListAndDetails');
+                var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                target.scrollTo(0, top);
+            },
+
+            SearchResultClick(task) {
+                var target = document.getElementById('TaskListAndDetails');
+                var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                target.scrollTo(0, top);
+                $('#myUL').addClass('myUL');
+                $('#myUL').removeClass('myUL-show');
             },
 
             assignUserToTask(user, data) {
@@ -993,7 +1016,7 @@
                 $('.inp').removeClass('form-control');
 
             },
-            
+
             addEmptyNode(data) {
                 let _this = this;
                 var children = data.parent.children;
@@ -1476,18 +1499,18 @@
 
             },
 
-            ActionToSelectedTask(value,type) {
+            ActionToSelectedTask(value, type) {
                 var _this = this;
                 setTimeout(function () {
-                    if (type === 'date'){
+                    if (type === 'date') {
                         var date = new Date(_this.date_for_selected)
                         var month = (parseFloat(date.getMonth() + 1) > 9) ? parseFloat(date.getMonth() + 1) : '0' + parseFloat(date.getMonth() + 1);
                         var day = (parseFloat(date.getDate() + 1) > 9) ? parseFloat(date.getDate()) : '0' + parseFloat(date.getDate());
-                        var date_for_selected  = date.getFullYear() + '-' + month + '-' + day;
+                        var date_for_selected = date.getFullYear() + '-' + month + '-' + day;
                     }
                     var postData = {
-                        ids  : _this.selectedIds,
-                        type : type,
+                        ids: _this.selectedIds,
+                        type: type,
                         value: type === 'date' ? date_for_selected : value,
                     };
 
@@ -1500,9 +1523,7 @@
                         .catch(error => {
                             console.log('Api for delete task not Working !!!')
                         });
-                },500)
-
-
+                }, 500)
 
 
             },

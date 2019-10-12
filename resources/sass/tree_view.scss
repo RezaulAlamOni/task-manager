@@ -622,6 +622,8 @@
     background-color: #f9f9f9;
     width: 100%;
     display: inline-block;
+    max-height: calc(100vh - 225px);
+    overflow-y: auto;
 
     .add-list {
         padding-left: 123px;
