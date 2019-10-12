@@ -19,8 +19,8 @@
                 >
 
                 <ul class="myUL" id="myUL">
-                    <template v-for="user in searchData.tasks" v-if="searchData.tasks.length > 0">
-                        <li><a href="Javascript:void(0)">{{user.title}}</a></li>
+                    <template v-for="task in searchData.tasks" v-if="searchData.tasks.length > 0">
+                        <li><a @mouseover="selectTaskFromTaskTreList(task)" href="Javascript:void(0)">{{task.title}}</a></li>
                     </template>
                     <template v-else>
                         <li>
@@ -731,7 +731,6 @@
                 let _this = this;
                 var position = this.FindDopedTask(0, data, afterDrop);
 
-                console.log(position)
                 axios.post('/api/task-list/task-drag-drop', position)
                     .then(response => response.data)
                     .then(response => {
@@ -773,7 +772,6 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.searchData.tasks = response.search_tasks;
-                        console.log(response.search_tasks);
                         $('#myUL-user').removeClass('myUL-user');
                         $('#myUL').removeClass('myUL');
                         $('#myUL').addClass('myUL-show');
@@ -794,7 +792,6 @@
                             .then(response => response.data)
                             .then(response => {
                                 _this.searchData.users = response.search_user;
-                                console.log(response.search_user);
                             })
                             .catch(error => {
                                 console.log('Api is drag and drop not Working !!!')
@@ -813,7 +810,7 @@
                         .then(response => response.data)
                         .then(response => {
                             _this.searchData.tasks = response.search_tasks;
-                            console.log(response.search_tasks);
+                            // console.log(response.search_tasks);
                         })
                         .catch(error => {
                             console.log('Api is drag and drop not Working !!!')
@@ -826,6 +823,10 @@
                 }
 
             },
+            selectTaskFromTaskTreList(task){
+                console.log(task)
+            },
+
             assignUserToTask(user, data) {
                 var _this = this;
                 var postData = {
@@ -855,7 +856,7 @@
             },
             removeAssignedUser(user) {
 
-                console.log(user.id, user.task_id);
+                // console.log(user.id, user.task_id);
                 var _this = this;
                 var postData = {
                     user_id: user.id,
@@ -864,7 +865,7 @@
                 axios.post('/api/task-list/assign-user-remove', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
+                        // console.log(response);
                         if (response === 'success') {
                             _this.getTaskList()
                         }
@@ -1011,7 +1012,7 @@
                         .then(response => response.data)
                         .then(response => {
                             // _this.getTaskList()
-                            console.log(response);
+                            // console.log(response);
 
                             setTimeout(function () {
                                 _this.addEmptyNode(data)
@@ -1180,7 +1181,7 @@
                     list_id: _this.list_id,
                     nav_id: _this.nav_id
                 };
-                console.log(postData);
+                // console.log(postData);
                 axios.post('/api/task-list/add-task', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -1208,7 +1209,7 @@
                 axios.post('/api/task-list/add-child-task', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
+                        // console.log(response);
                         _this.newEmptyTaskID = response.success.id;
                         _this.getTaskList();
                         setTimeout(function () {
@@ -1312,7 +1313,6 @@
                     axios.post('/api/task-list/add-tag', postData)
                         .then(response => response.data)
                         .then(response => {
-                            console.log(response.success);
                             _this.getTaskList();
                             $('#dropdown' + data._id).toggle();
                             _this.selectedData = data;
@@ -1335,7 +1335,7 @@
                 axios.post('/api/task-list/add-tag', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response.success);
+
                         _this.getTaskList();
                         $('#dropdown' + data._id).toggle();
                         _this.selectedData.tags[0] = tag
@@ -1363,7 +1363,7 @@
                     axios.post('/api/task-list/add-tag', postData)
                         .then(response => response.data)
                         .then(response => {
-                            console.log(response.success);
+
                             _this.getTaskList();
                             _this.tag = null
                         })
@@ -1382,7 +1382,6 @@
                     axios.post('/api/task-list/delete-tag', postData)
                         .then(response => response.data)
                         .then(response => {
-                            console.log(response.success);
                             _this.getTaskList();
                             _this.tag = null
                         })
@@ -1399,7 +1398,6 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.manageTag = response.tags;
-                        console.log(response);
                         $('#TagManage').modal('show');
                     })
                     .catch(error => {
@@ -1481,7 +1479,6 @@
                 axios.post('/api/task-list/update', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response)
                         // _this.getTaskList()
                         // $('#dropdown' + data._id).toggle();
                         // _this.selectedData.tags = tag
@@ -1500,7 +1497,6 @@
                 axios.post('/api/task-list/update', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
                         _this.getTaskList();
                         alert('Task is added to compete list !!');
                         // $('#dropdown' + data._id).toggle();
@@ -1528,7 +1524,6 @@
                 axios.post('/api/task-list/move-task', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
                         _this.getTaskList();
                         _this.selectedData = data;
                         setTimeout(function () {
@@ -1557,7 +1552,6 @@
                 axios.post('/api/task-list/move-task', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
                         _this.getTaskList();
                         setTimeout(function () {
                             $("#click" + data.id).click();
@@ -1599,7 +1593,7 @@
                         type : type,
                         value: type === 'date' ? date_for_selected : value,
                     };
-                    console.log(postData)
+
                     axios.post('/api/task-list/assign-user-add-tag', postData)
                         .then(response => response.data)
                         .then(response => {
@@ -1643,7 +1637,6 @@
                 axios.post('/api/task-list/add-tag-to-multiple-task', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response.success);
                         _this.getTaskList();
                         $('.jquery-accordion-menu').hide();
                     })
