@@ -33,8 +33,11 @@ Route::post('/task-list/copy-cut-past', 'TaskController@CopyCutPast');//copy and
 
 // task list tasks
 Route::post('/task-list/delete-task', 'TaskController@deleteTask');//delete task
+Route::post('/task-list/assign-user-add-tag', 'TaskController@ActionSelectedTask');//delete task
 Route::post('/task-list/move-task', 'TaskController@moveTask');//move-task
-Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog'); //reverse child node
+Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog'); //lod
+
+
 
 //search task
 Route::post('/task-list/suggest-user','SearchController@suggestUser'); //user suggest for search

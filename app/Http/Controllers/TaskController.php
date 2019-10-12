@@ -62,6 +62,13 @@ class TaskController extends Controller
             $info['sort_id'] = $task->sort_id;
             $info['list_id'] = $task->list_id;//list_id
             $info['text'] = $task->title;
+            if ($task->title == 'Dont Forget Section'){
+                $info['draggable'] = false;
+                $info['droppable'] = true;
+            }else{
+                $info['draggable'] = true;
+                $info['droppable'] = true;
+            }
             $info['clicked'] = 0;
             $info['date'] = $task->date;
             $allTags = $task->tags;
@@ -86,6 +93,7 @@ class TaskController extends Controller
                 ->where('task_lists.list_id', $task->list_id)
                 ->groupBy('tags.title')
                 ->get()->toArray();
+
             $info['tagTooltip'] = $tagTooltip;
             $info['description'] = $task->description;
             $info['files'] = $task->files;
@@ -411,11 +419,57 @@ class TaskController extends Controller
 
     }
 
+    public function ActionSelectedTask(Request $request)
+    {
+        if (isset($request->type) && $request->type == 'user') {
+            $ids = $request->ids;
+            foreach ($ids as $id) {
+                AssignedUser::create([
+                    'task_id' => $id,
+                    'user_id' => $request->value,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                    'created_by' => Auth::id(),
+                    'updated_by' => Auth::id(),
+                ]);
+            }
+            return response()->json(['success' => 1]);
+        } else if (isset($request->type) && $request->type == 'tag') {
+            $ids = $request->ids;
+            $tag = Tags::where('id',$request->value)->first();
+            foreach ($ids as $id) {
+                Tags::create( [
+                    'color' => $tag->color,
+                    'task_id' => $id,
+                    'title' => $tag->title,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+
+
+            return response()->json(['success' => 1]);
+        } else if (isset($request->type) && $request->type == 'date') {
+            $ids = $request->ids;
+            foreach ($ids as $id) {
+                Task::where('id', $id)->update(['date' => $request->value]);
+            }
+            return response()->json(['success' => "Date Update Success"]);
+        }
+
+    }
+
+
     public function deleteTaskWithChild($id)
     {
+        $check_dontForgetSection = Task::where('id', $id)->first();
+        if($check_dontForgetSection == null){
+            return true;
+        }
+        AssignedUser::where('task_id',$id)->delete();
         Tags::where('task_id', $id)->delete();
         Files::where('tasks_id', $id)->delete();
-        $check_dontForgetSection = Task::where('id', $id)->first();
+
         Task::findOrFail($id)->delete();
 
         if ($check_dontForgetSection) {
@@ -430,13 +484,15 @@ class TaskController extends Controller
                     Task::findOrFail($taskDontForget->id)->delete();
                 }
             }
-
         }
 
         $childrens = Task::where('parent_id', $id)->get();
-        foreach ($childrens as $children) {
-            $this->deleteTaskWithChild($children->id);
+        if ($childrens->count() > 0){
+            foreach ($childrens as $children) {
+                $this->deleteTaskWithChild($children->id);
+            }
         }
+
     }
 
     public function deleteImg(Request $request)
@@ -502,11 +558,12 @@ class TaskController extends Controller
         $id = $request->id;
         $parent_id = $request->parent_id;
         $sort_id = $request->sort_id;
+        $pre_sort = $request->pre_sort;
         $child_length = Task::where('parent_id', $parent_id)->count();
         if ($child_length > 0) {
-            Task::where('parent_id', $parent_id)->where('sort_id', '>=', $sort_id)->increment('sort_id');
+            Task::where('parent_id', $parent_id)->where('sort_id', '>', $pre_sort)->increment('sort_id');
         }
-        Task::where('id', $id)->update(['parent_id' => $parent_id, 'sort_id' => $sort_id]);
+        Task::where('id', $id)->update(['parent_id' => $parent_id, 'sort_id' => $pre_sort+1]);
         $this->updateTagWithDataMove($id, $parent_id);
         return response()->json(['success' => 1]);
     }

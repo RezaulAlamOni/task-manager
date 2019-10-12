@@ -29,6 +29,7 @@ class SearchController extends Controller
             return response()->json(['search_tasks'=>$task]);
         } else if (isset($request->user_id) && trim($request->user_id) != '') {
             $task = Task::join('task_assigned_users','task_lists.id','task_assigned_users.task_id')
+                ->select('task_lists.*')
                 ->where('project_id', $request->p_id)
                 ->where('task_assigned_users.user_id',$request->user_id)
                 ->get();
