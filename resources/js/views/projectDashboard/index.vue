@@ -19,8 +19,14 @@
                 >
 
                 <ul class="myUL" id="myUL">
-                    <template v-for="user in searchData.tasks" v-if="searchData.tasks.length > 0">
-                        <li><a href="Javascript:void(0)">{{user.title}}</a></li>
+                    <template v-for="task in searchData.tasks" v-if="searchData.tasks.length > 0">
+                        <li>
+                            <a @mouseover="selectTaskFromTaskTreeList(task)"
+                               @click="SearchResultClick(task)"
+                               href="Javascript:void(0)">
+                                {{task.title}}
+                            </a>
+                        </li>
                     </template>
                     <template v-else>
                         <li>
@@ -74,7 +80,7 @@
             </div>
         </div>
         <!--        //tree view component section-->
-        <div class="TaskListAndDetails container-fluid" v-if="list.type === 'list'">
+        <div class="TaskListAndDetails container-fluid" v-if="list.type === 'list'" id="TaskListAndDetails">
             <div @click="HideDetails" class="task_width" id="task_width">
                 <div class="col-11" id="tree_view_list">
 
@@ -302,7 +308,8 @@
                     <div class="jquery-accordion-menu" id="jquery-accordion-menu" v-click-outside="HideCustomMenu">
                         <ul>
                             <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Assign User to
+                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Assign
+                                    User to
                                     Selected</a>
 
                                 <div class="dropdown-menu dropdown-menu-right">
@@ -317,12 +324,14 @@
                                                 </label>
                                             </li>
                                             <li class="assignUser">
-                                                <template v-if="treeList[0].users && treeList[0].users.length > 0" v-for="user in treeList[0].users">
+                                                <template v-if="treeList[0].users && treeList[0].users.length > 0"
+                                                          v-for="user in treeList[0].users">
                                                     <div @click="ActionToSelectedTask(user.id,'user')"
                                                          class="users-select row">
                                                         <div class="col-md-3 pt-1 pl-4">
                                                             <p class="assignUser-photo">
-                                                                {{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
+                                                                {{(user.name !== null) ? user.name.substring(0,2) :
+                                                                ''}}</p>
                                                         </div>
                                                         <div class="col-md-9 assign-user-name-email">
                                                             <h5>{{user.name}}<br>
@@ -337,7 +346,8 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Add Tags to
+                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Add
+                                    Tags to
                                     Selected</a>
 
                                 <div class="dropdown-menu dropdown-menu-right">
@@ -352,7 +362,8 @@
                                                 </label>
                                             </li>
                                             <li class="assignUser">
-                                                <template v-if="treeList[0].existing_tags.length > 0" v-for="user in treeList[0].existing_tags">
+                                                <template v-if="treeList[0].existing_tags.length > 0"
+                                                          v-for="user in treeList[0].existing_tags">
                                                     <div @click="ActionToSelectedTask(user.id,'tag')"
                                                          class="users-select row">
                                                         <div class="col-md-9 add-tag-to-selected">
@@ -368,11 +379,11 @@
                             <li style="position: relative">
                                 <datepicker
                                     :disabled-dates="disabledDates"
+                                    v-model="date_for_selected"
                                     @selected="ActionToSelectedTask('','date')"
                                     calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
                                     format='dd MMM'
-                                    input-class="dateCal-selected"
-                                    v-model="date_for_selected">
+                                    input-class="dateCal-selected">
 
                                 </datepicker>
 
@@ -744,7 +755,10 @@
             FindDopedTask(parent, data, tasks) {
                 for (var i = 0; i < tasks.length; i++) {
                     if (data.id === tasks[i].id) {
-                        return {sort_id: i, id: data.id, parent_id: parent};
+                        if (i >= 1) {
+                            var s_id = tasks[i - 1].sort_id;
+                        }
+                        return {sort_id: i, pre_sort: s_id, id: data.id, parent_id: parent};
                     } else if (tasks[i].children !== undefined) {
                         if (tasks[i].children.length > 0) {
                             var ret = this.FindDopedTask(tasks[i].id, data, tasks[i].children);
@@ -769,7 +783,7 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.searchData.tasks = response.search_tasks;
-                        console.log(response.search_tasks);
+                        console.log(_this.searchData.tasks)
                         $('#myUL-user').removeClass('myUL-user');
                         $('#myUL').removeClass('myUL');
                         $('#myUL').addClass('myUL-show');
@@ -790,7 +804,6 @@
                             .then(response => response.data)
                             .then(response => {
                                 _this.searchData.users = response.search_user;
-                                console.log(response.search_user);
                             })
                             .catch(error => {
                                 console.log('Api is drag and drop not Working !!!')
@@ -805,23 +818,38 @@
                     $('#myUL').removeClass('myUL-show');
                     $('#myUL').addClass('myUL');
                 } else {
-                    axios.post('/api/task-list/suggest-user', {'text': value, 'project_id': _this.projectId})
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.searchData.tasks = response.search_tasks;
-                            console.log(response.search_tasks);
-                        })
-                        .catch(error => {
-                            console.log('Api is drag and drop not Working !!!')
-                        });
+                    if (value.length >= 2 ){
+                        axios.post('/api/task-list/suggest-user', {'text': value, 'project_id': _this.projectId})
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.searchData.tasks = response.search_tasks;
+                                // console.log(response.search_tasks);
+                            })
+                            .catch(error => {
+                                console.log('Api is drag and drop not Working !!!')
+                            });
 
-                    $('#myUL').removeClass('myUL');
-                    $('#myUL').addClass('myUL-show');
-
-
+                        $('#myUL').removeClass('myUL');
+                        $('#myUL').addClass('myUL-show');
+                    }
                 }
-
             },
+            selectTaskFromTaskTreeList(task) {
+                $('.eachItemRow').removeClass('clicked');
+                $('#click' + task.id).addClass('clicked');
+                var target = document.getElementById('TaskListAndDetails');
+                var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                target.scrollTo(0, top);
+            },
+
+            SearchResultClick(task) {
+                var target = document.getElementById('TaskListAndDetails');
+                var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                target.scrollTo(0, top);
+                $('#myUL').addClass('myUL');
+                $('#myUL').removeClass('myUL-show');
+            },
+
             assignUserToTask(user, data) {
                 var _this = this;
                 var postData = {
@@ -851,7 +879,7 @@
             },
             removeAssignedUser(user) {
 
-                console.log(user.id, user.task_id);
+                // console.log(user.id, user.task_id);
                 var _this = this;
                 var postData = {
                     user_id: user.id,
@@ -860,7 +888,7 @@
                 axios.post('/api/task-list/assign-user-remove', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
+                        // console.log(response);
                         if (response === 'success') {
                             _this.getTaskList()
                         }
@@ -989,38 +1017,6 @@
 
             },
 
-
-            addNodeStatic(data) {
-                let _this = this;
-                var text = data.text;
-                let postData = {
-                    id: data.id,
-                    text: text,
-                    parent_id: data.parent_id,
-                    sort_id: data.sort_id,
-                    project_id: _this.projectId,
-                    list_id: _this.list_id,
-                    nav_id: _this.nav_id
-                };
-                if (text !== '') {
-                    axios.post('/api/task-list/add-task', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            // _this.getTaskList()
-                            console.log(response);
-
-                            setTimeout(function () {
-                                _this.addEmptyNode(data)
-                            }, 500)
-                        })
-                        .catch(error => {
-                            console.log('Api is not Working !!!')
-                        });
-                } else {
-                    console.log('Empty text')
-                }
-
-            },//add static empty node
             addEmptyNode(data) {
                 let _this = this;
                 var children = data.parent.children;
@@ -1092,77 +1088,6 @@
                     $("#" + date).removeClass('input-hide');
                 }, 100)
             },
-            makeChildOld(data) {
-                var children = data.parent.children;
-                let _this = this;
-                let postData = {
-                    id: data.id,
-                    parent_id: data.parent_id,
-                    project_id: _this.projectId,
-                    list_id: _this.list_id,
-                    sort_id: data.sort_id,
-                    text: data.text,
-                    nav_id: _this.nav_id
-                };
-
-                if (data.text !== '') {
-                    axios.post('/api/task-list/task-make-child', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.newEmptyTaskID = response.success;
-                            _this.getTaskList();
-                            setTimeout(function () {
-                                $("#" + _this.newEmptyTaskID).click();
-                            }, 500)
-                        })
-                        .catch(error => {
-                            console.log('Api is task-make-child not Working !!!')
-                        });
-                } else {
-                    for (var i = 0; i < children.length; i++) {
-                        if (children[i].text == '') {
-                            children.splice(i, 1);
-                        }
-                    }
-                    _this.addEmptyChild(_this.reselectParentId)
-                }
-
-            },
-            unMakeChildOld(data) {
-
-                let _this = this;
-                let postData = {
-                    id: data.id,
-                    parent_id: data.parent_id,
-                    project_id: _this.projectId,
-                    list_id: _this.list_id,
-                    sort_id: data.sort_id,
-                    text: data.text
-                };
-                if (data.text !== '') {
-                    axios.post('/api/task-list/reverse-child', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.newEmptyTaskID = response.success;
-                            _this.getTaskList();
-                            setTimeout(function () {
-                                $("#" + _this.newEmptyTaskID).click();
-                            }, 500)
-                        })
-                        .catch(error => {
-                            console.log('Api is task-unmake-child not Working !!!')
-                        });
-                } else {
-                    var children = data.parent.children;
-                    for (var i = 0; i < children.length; i++) {
-                        if (children[i].text == '') {
-                            children.splice(i, 1);
-                        }
-                    }
-                    _this.addEmptyNode(_this.reselectParentId)
-                }
-
-            },
 
             addNode(data) {
                 let _this = this;
@@ -1176,7 +1101,7 @@
                     list_id: _this.list_id,
                     nav_id: _this.nav_id
                 };
-                console.log(postData);
+                // console.log(postData);
                 axios.post('/api/task-list/add-task', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -1204,7 +1129,7 @@
                 axios.post('/api/task-list/add-child-task', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
+                        // console.log(response);
                         _this.newEmptyTaskID = response.success.id;
                         _this.getTaskList();
                         setTimeout(function () {
@@ -1308,7 +1233,6 @@
                     axios.post('/api/task-list/add-tag', postData)
                         .then(response => response.data)
                         .then(response => {
-                            console.log(response.success);
                             _this.getTaskList();
                             $('#dropdown' + data._id).toggle();
                             _this.selectedData = data;
@@ -1331,7 +1255,7 @@
                 axios.post('/api/task-list/add-tag', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response.success);
+
                         _this.getTaskList();
                         $('#dropdown' + data._id).toggle();
                         _this.selectedData.tags[0] = tag
@@ -1359,7 +1283,7 @@
                     axios.post('/api/task-list/add-tag', postData)
                         .then(response => response.data)
                         .then(response => {
-                            console.log(response.success);
+
                             _this.getTaskList();
                             _this.tag = null
                         })
@@ -1378,7 +1302,6 @@
                     axios.post('/api/task-list/delete-tag', postData)
                         .then(response => response.data)
                         .then(response => {
-                            console.log(response.success);
                             _this.getTaskList();
                             _this.tag = null
                         })
@@ -1395,7 +1318,6 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.manageTag = response.tags;
-                        console.log(response);
                         $('#TagManage').modal('show');
                     })
                     .catch(error => {
@@ -1477,7 +1399,6 @@
                 axios.post('/api/task-list/update', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response)
                         // _this.getTaskList()
                         // $('#dropdown' + data._id).toggle();
                         // _this.selectedData.tags = tag
@@ -1496,7 +1417,6 @@
                 axios.post('/api/task-list/update', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
                         _this.getTaskList();
                         alert('Task is added to compete list !!');
                         // $('#dropdown' + data._id).toggle();
@@ -1524,7 +1444,6 @@
                 axios.post('/api/task-list/move-task', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
                         _this.getTaskList();
                         _this.selectedData = data;
                         setTimeout(function () {
@@ -1553,7 +1472,6 @@
                 axios.post('/api/task-list/move-task', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
                         _this.getTaskList();
                         setTimeout(function () {
                             $("#click" + data.id).click();
@@ -1581,23 +1499,32 @@
 
             },
 
-            ActionToSelectedTask(value,type) {
+            ActionToSelectedTask(value, type) {
                 var _this = this;
-                console.log(type , value,_this.selectedIds);
-                var postData = {
-                    ids  : _this.selectedIds,
-                    type : type,
-                    value: value,
-                };
-                axios.post('/api/task-list/assign-user-add-tag', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.getTaskList();
-                        $('.jquery-accordion-menu').hide();
-                    })
-                    .catch(error => {
-                        console.log('Api for delete task not Working !!!')
-                    });
+                setTimeout(function () {
+                    if (type === 'date') {
+                        var date = new Date(_this.date_for_selected)
+                        var month = (parseFloat(date.getMonth() + 1) > 9) ? parseFloat(date.getMonth() + 1) : '0' + parseFloat(date.getMonth() + 1);
+                        var day = (parseFloat(date.getDate() + 1) > 9) ? parseFloat(date.getDate()) : '0' + parseFloat(date.getDate());
+                        var date_for_selected = date.getFullYear() + '-' + month + '-' + day;
+                    }
+                    var postData = {
+                        ids: _this.selectedIds,
+                        type: type,
+                        value: type === 'date' ? date_for_selected : value,
+                    };
+
+                    axios.post('/api/task-list/assign-user-add-tag', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.getTaskList();
+                            $('.jquery-accordion-menu').hide();
+                        })
+                        .catch(error => {
+                            console.log('Api for delete task not Working !!!')
+                        });
+                }, 500)
+
 
             },
             deleteSelectedTask() {
@@ -1628,7 +1555,6 @@
                 axios.post('/api/task-list/add-tag-to-multiple-task', postData)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response.success);
                         _this.getTaskList();
                         $('.jquery-accordion-menu').hide();
                     })

@@ -449,6 +449,12 @@ class TaskController extends Controller
 
 
             return response()->json(['success' => 1]);
+        } else if (isset($request->type) && $request->type == 'date') {
+            $ids = $request->ids;
+            foreach ($ids as $id) {
+                Task::where('id', $id)->update(['date' => $request->value]);
+            }
+            return response()->json(['success' => "Date Update Success"]);
         }
 
     }
@@ -552,11 +558,12 @@ class TaskController extends Controller
         $id = $request->id;
         $parent_id = $request->parent_id;
         $sort_id = $request->sort_id;
+        $pre_sort = $request->pre_sort;
         $child_length = Task::where('parent_id', $parent_id)->count();
         if ($child_length > 0) {
-            Task::where('parent_id', $parent_id)->where('sort_id', '>=', $sort_id)->increment('sort_id');
+            Task::where('parent_id', $parent_id)->where('sort_id', '>', $pre_sort)->increment('sort_id');
         }
-        Task::where('id', $id)->update(['parent_id' => $parent_id, 'sort_id' => $sort_id]);
+        Task::where('id', $id)->update(['parent_id' => $parent_id, 'sort_id' => $pre_sort+1]);
         $this->updateTagWithDataMove($id, $parent_id);
         return response()->json(['success' => 1]);
     }
