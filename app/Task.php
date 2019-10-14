@@ -75,6 +75,6 @@ class Task extends Model
 
     public function task()
     {
-        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('tags')->orderBy('sort_id','ASC');
+        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('tags')->orderBy('board_sort_id','ASC');
     }
 }

@@ -66,7 +66,7 @@
                                 <Container
                                     :drop-placeholder="dropPlaceholderOptions"
                                     :get-child-payload="getCardPayload(column.id)"
-                                    @drag-start="(e) => log('', e)" 
+                                    @drag-start="(e) => onDragStart(column.id,column.boardId, index,  e)" 
                                     @drag-end="(e) => log('', e)"
                                     @drop="(e) => onCardDrop(column.id,column.boardId, index,  e)"
                                     drag-class="card-ghost"
@@ -447,36 +447,37 @@
                         <ul class="list-group list-group-flush">
                             <div v-for="tree in tree4data">
                                 <li class="list-group-item">
-                                    <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask">
+                                    <input type="checkbox" @change="selectAll()"> All <br>
+                                    <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask" class="selectAll">
                                     {{tree.text}}
                                     <ul class="list-group list-group-flush" v-if="tree.children">
                                         <div v-for="child in tree.children">
                                             <li class="list-group-item">
-                                                <input :id="child.id" :value="child.id" class="tree-child"
-                                                       type="checkbox" v-model="selectedExistedTask"> {{child.text}}
+                                                <input :id="child.id" class="tree-child selectAll" :value="child.id" 
+                                                       type="checkbox" v-model="selectedExistedTask" > {{child.text}}
                                                 <ul class="list-group list-group-flush" v-if="child.children">
                                                     <div v-for="child1 in child.children">
                                                         <li class="list-group-item">
-                                                            <input :id="child1.id" :value="child1.id" class="tree-child"
-                                                                   type="checkbox" v-model="selectedExistedTask">
+                                                            <input :id="child1.id" :value="child1.id" class="tree-child selectAll"
+                                                                   type="checkbox" v-model="selectedExistedTask" >
                                                             {{child1.text}}
                                                             <ul class="list-group list-group-flush"
                                                                 v-if="child1.children">
                                                                 <div v-for="child2 in child1.children">
                                                                     <li class="list-group-item">
                                                                         <input :id="child2.id" :value="child2.id"
-                                                                               class="tree-child"
+                                                                               class="tree-child selectAll"
                                                                                type="checkbox"
-                                                                               v-model="selectedExistedTask"> {{child2.text}}
+                                                                               v-model="selectedExistedTask" > {{child2.text}}
                                                                         <ul class="list-group list-group-flush"
                                                                             v-if="child2.children">
                                                                             <div v-for="child3 in child2.children">
                                                                                 <li class="list-group-item">
                                                                                     <input :id="child3.id"
                                                                                            :value="child3.id"
-                                                                                           class="tree-child"
+                                                                                           class="tree-child selectAll"
                                                                                            type="checkbox"
-                                                                                           v-model="selectedExistedTask">
+                                                                                           v-model="selectedExistedTask" >
                                                                                     {{child3.text}}
                                                                                 </li>
                                                                             </div>
@@ -670,7 +671,16 @@
                     $('[data-toggle="tooltip"]').tooltip();
                 }, 1000)
             },
+            selectAll(){
+                if($('.selectAll').prop('checked')){
+                    $('.selectAll').prop('checked', false);
+                }else{
+                    $('.selectAll').prop('checked', true);
 
+                }
+
+                console.log(this.selectedExistedTask);
+            },
             onColumnDrop(dropResult) {
                 // alert('sdf');
                 // console.log(dropResult);
@@ -681,15 +691,31 @@
                 axios.post('/api/column-sort',data)
                 .then(response => response.data)
                 .then(response => {
-                    console.log('sorted');
+                    // console.log('sorted');
                 })
                 .catch(error => {
                     console.log('sorting failed');
                 });
             },
             onCardDrop(columnId, boardId, index, dropResult) {
-                // console.log(columnId, boardId, index, dropResult);
+
                 if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
+                    if( dropResult.removedIndex === null && dropResult.addedIndex !== null ) {
+                        console.log("Drag started",columnId, boardId, index, dropResult);
+                        let data = {
+                            'id' : dropResult.payload.cardId,
+                            'board_parent_id' : boardId
+                        }
+                        axios.post('/api/change-board-parent', data)
+                        .then(response => response.data)
+                        .then(response => {
+                            console.log('shifted');
+                        })
+                        .catch(error => {
+                            console.log('shifting failed');
+                        });
+                    }
+
                     const scene = Object.assign({}, this.scene);
                     const column = scene.children.filter(p => p.id === columnId)[0];
                     const columnIndex = scene.children.indexOf(column);
@@ -699,6 +725,7 @@
                     this.scene = scene
                     // console.log(this.scene.children[index]);
                     let data = this.scene.children[index];
+                    console.log("sort",data);
                     axios.post('/api/card-sort',data)
                     .then(response => response.data)
                     .then(response => {
@@ -707,6 +734,11 @@
                     .catch(error => {
                         console.log('sorting failed');
                     });
+                }
+            },
+            onDragStart(columnId, boardId, index, dropResult) {
+                if(dropResult.addedIndex != null){
+                    console.log("Drag started",columnId, boardId, index, dropResult);
                 }
             },
             getCardPayload(columnId) {
@@ -804,6 +836,7 @@
             },
             addExistingTask(index, id) {
                 this.tree4data = [];
+                this.subNav = [];
                 this.currentColumn = id;
                 this.currentColumnIndex = index;
                 let _this = this;
