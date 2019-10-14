@@ -5,7 +5,15 @@
         <div class="container-fluid" v-if="user">
 
             <div class="collapse navbar-collapse show">
-
+                <ul class="navbar-nav ml-4 float-sm-left">
+                    <li class="nav-item ">
+                        <a href="#" class="d-block d-md-flex text-center nav-link">
+                                <span class="d-none d-md-block">
+                                   Overview
+                                </span>
+                        </a>
+                    </li>
+                </ul>
                 <ul class="navbar-nav ml-4 float-sm-left">
                     <li class="nav-item dropdown">
                         <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
@@ -172,13 +180,122 @@
         <!-- Application Dashboard -->
         <div class="row">
             <div class="col-md-12">
-                <div class="card card-default border-primary">
-                    <div class="card-header bg-primary text-white">{{__('Dashboard')}}</div>
-
-                    <div class="card-body">
-                        {{__('Your application\'s dashboard.')}}
-                    </div>
-                </div>
+                <h2 style="margin: 20px;">This is the list name
+                    <span style="float: right;">
+                        <span class="dropdown-toggle-split col-md-12 opacity"
+                              data-toggle="dropdown">
+                            <i class="fa fa-ellipsis-h"></i>
+                        </span>
+                        <div class="dropdown-menu">
+                            <diV class="collapse show switchToggle">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa fa-edit opacity"></i> Add to list/board
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa fa-edit opacity"></i> Create List
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa fa-angle-double-left opacity"></i> Delete
+                                </a>
+                            </diV>
+                        </div>
+                    </span>
+                </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <img src="/img/taskimg.png" class="img-responsive"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h2 style="margin: 20px;">This is the list 2 name
+                    <span style="float: right;">
+                        <span class="dropdown-toggle-split col-md-12 opacity"
+                              data-toggle="dropdown">
+                            <i class="fa fa-ellipsis-h"></i>
+                        </span>
+                        <div class="dropdown-menu">
+                            <diV class="collapse show switchToggle">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa fa-edit opacity"></i> Add to list/board
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa fa-edit opacity"></i> Create List
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa fa-angle-double-left opacity"></i> Delete
+                                </a>
+                            </diV>
+                        </div>
+                    </span>
+                </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <img src="/img/taskimg.png" class="img-responsive"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h2 style="margin: 20px;">This is the list name
+                    <span style="float: right;">
+                        <span class="dropdown-toggle-split col-md-12 opacity"
+                              data-toggle="dropdown">
+                            <i class="fa fa-ellipsis-h"></i>
+                        </span>
+                        <div class="dropdown-menu">
+                            <diV class="collapse show switchToggle">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa fa-edit opacity"></i> Add to list/board
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa fa-edit opacity"></i> Create List
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa fa-angle-double-left opacity"></i> Delete
+                                </a>
+                            </diV>
+                        </div>
+                    </span>
+                </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <img src="/img/taskimg.png" class="img-responsive"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h2 style="margin: 20px;">This is the list 3 name
+                    <span style="float: right;">
+                        <span class="dropdown-toggle-split col-md-12 opacity"
+                              data-toggle="dropdown">
+                            <i class="fa fa-ellipsis-h"></i>
+                        </span>
+                        <div class="dropdown-menu">
+                            <diV class="collapse show switchToggle">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa fa-edit opacity"></i> Add to list/board
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa fa-edit opacity"></i> Create List
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fa fa-angle-double-left opacity"></i> Delete
+                                </a>
+                            </diV>
+                        </div>
+                    </span>
+                </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <img src="/img/taskimg.png" class="img-responsive"/>
             </div>
         </div>
     </div>
