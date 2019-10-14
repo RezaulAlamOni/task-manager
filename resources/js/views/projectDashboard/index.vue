@@ -331,8 +331,7 @@
                                                          class="users-select row">
                                                         <div class="col-md-3 pt-1 pl-4">
                                                             <p class="assignUser-photo">
-                                                                {{(user.name !== null) ? user.name.substring(0,2) :
-                                                                ''}}</p>
+                                                                {{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
                                                         </div>
                                                         <div class="col-md-9 assign-user-name-email">
                                                             <h5>{{user.name}}<br>
