@@ -32,7 +32,7 @@ class MultipleBoardController extends Controller
                 ->where('project_id', $request->projectId)
                 // ->where('nav_id', $request->nav_id)
                 ->where('multiple_board_id', $request->board_id)
-                ->orderby('sort_id', 'ASC')
+                ->orderby('board_sort_id', 'ASC')
                 ->get();
 
         foreach ($board as $key => $value) {
@@ -129,7 +129,7 @@ class MultipleBoardController extends Controller
     public function create(Request $request)
     {
         // return $request->all();
-        $sortNo = Task::where('board_parent_id', 0)->max('sort_id');
+        $sortNo = Task::where('board_parent_id', 0)->max('board_sort_id');
         $data = Task::create([
             'multiple_board_id' => $request->multiple_board_id,
             'project_id' => $request->project_id,
@@ -139,7 +139,7 @@ class MultipleBoardController extends Controller
             'progress' => $request->progress,
             'board_parent_id' => 0,
             'hidden' => 0,
-            'sort_id' => $sortNo + 1,
+            'board_sort_id' => $sortNo + 1,
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
             'date' => Carbon::today(),
@@ -181,13 +181,13 @@ class MultipleBoardController extends Controller
     {
         $id = $request->id;
         $parent = Task::find($id);
-        $sortNo = Task::where('board_parent_id', $parent->id)->max('sort_id');
+        $sortNo = Task::where('board_parent_id', $parent->id)->max('board_sort_id');
         if (!$sortNo) {
             $sortNo = 0;
         }
         $data = [
             'title' => '',
-            'sort_id' => $sortNo + 1,
+            'board_sort_id' => $sortNo + 1,
             'board_parent_id' => $parent->id,
             'project_id' => $parent->project_id,
             'multiple_board_id' => $parent->multiple_board_id,
@@ -203,6 +203,20 @@ class MultipleBoardController extends Controller
             return response()->json(['success' => true, 'data' => $child]);
         }
         return response()->json(['success' => false]);
+    }
+
+    public function changeParentId(Request $request)
+    {
+         $request->all();
+         $update = Task::where('id',$request->id)
+                    ->where('board_parent_id',"!=",0)
+                    ->update([
+                        'board_parent_id' => $request->board_parent_id
+                    ]);
+        if ($update) {
+            return response()->json(['success' => true, 'data' => $update]);
+        }
+        return response()->json(['success' => false]); 
     }
 
     public function cardEdit($id, Request $request)
@@ -318,7 +332,7 @@ class MultipleBoardController extends Controller
                                 'board_parent_id' => $board_id,
                                 'board_flag' => 1,
                                 'task_flag' => 1,
-                                'multiple_board_id' => $request->multiple_board_id  
+                                'multiple_board_id' => $request->multiple_board_id
                             ]);
             // $insert = ExistingTasksInBoard::create($data);
             $task[$key] = Task::where('id', $value)->first();
@@ -357,7 +371,7 @@ class MultipleBoardController extends Controller
                 }
             }
             $ids = trim($ids, ',');
-            $update = DB::update("update task_lists set sort_id = CASE $caseString END where id in ($ids) and board_parent_id = $request->boardId");
+            $update = DB::update("update task_lists set board_sort_id = CASE $caseString END where id in ($ids) and board_parent_id = $request->boardId");
             if ($update) {
                 return response()->json(['success' => true, 'data' => $update]);
             } else {
@@ -377,7 +391,7 @@ class MultipleBoardController extends Controller
                 $ids .= " $id,";
             }
             $ids = trim($ids, ','); 
-            $update = DB::update("update task_lists set sort_id = CASE $caseString END where id in ($ids) and board_parent_id = 0");
+            $update = DB::update("update task_lists set board_sort_id = CASE $caseString END where id in ($ids) and board_parent_id = 0");
             if ($update) {
                 return response()->json(['success' => true, 'data' => $update]);
             } else {
