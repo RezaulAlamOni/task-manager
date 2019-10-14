@@ -582,6 +582,10 @@ class TaskController extends Controller
             if (Task::where('id', $request->id)->update(['date' => $request->date])) {
                 return response()->json('success', 200);
             }
+        }elseif (isset($request->text)){
+            if (Task::where('id', $request->id)->update(['title' => $request->text])) {
+                return response()->json('success', 200);
+            }
         } elseif (isset($request->files)) {
             $task_id = $request->id;
             $photo = $_FILES['file']['name'];
