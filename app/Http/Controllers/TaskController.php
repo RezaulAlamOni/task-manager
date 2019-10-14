@@ -558,7 +558,7 @@ class TaskController extends Controller
         $id = $request->id;
         $parent_id = $request->parent_id;
         $sort_id = $request->sort_id;
-        $pre_sort = $request->pre_sort;
+        $pre_sort = (isset($request->pre_sort) && $request->pre_sort > 0 ) ? $request->pre_sort : 0 ;
         $child_length = Task::where('parent_id', $parent_id)->count();
         if ($child_length > 0) {
             Task::where('parent_id', $parent_id)->where('sort_id', '>', $pre_sort)->increment('sort_id');
@@ -580,6 +580,10 @@ class TaskController extends Controller
             }
         } elseif (isset($request->date)) {
             if (Task::where('id', $request->id)->update(['date' => $request->date])) {
+                return response()->json('success', 200);
+            }
+        }elseif (isset($request->text)){
+            if (Task::where('id', $request->id)->update(['title' => $request->text])) {
                 return response()->json('success', 200);
             }
         } elseif (isset($request->files)) {

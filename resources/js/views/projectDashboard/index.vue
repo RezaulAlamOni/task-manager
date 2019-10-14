@@ -124,6 +124,7 @@
                                                @focus="hideItem($event,data)"
                                                @keydown="keyDownAction($event,data)"
                                                @keypress="saveData($event,data)"
+
                                                class="inp input-hide input-title"
                                                type="text" v-model="data.text">
                                     </span>
@@ -330,8 +331,7 @@
                                                          class="users-select row">
                                                         <div class="col-md-3 pt-1 pl-4">
                                                             <p class="assignUser-photo">
-                                                                {{(user.name !== null) ? user.name.substring(0,2) :
-                                                                ''}}</p>
+                                                                {{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
                                                         </div>
                                                         <div class="col-md-9 assign-user-name-email">
                                                             <h5>{{user.name}}<br>
@@ -768,7 +768,6 @@
                         }
                     }
                 }
-
             },
 
             showSearchInputField() {
@@ -999,6 +998,7 @@
 
             },
             showItem(e, data) {
+                this.SaveDataWithoutCreateNewNode(data);
                 setTimeout(function () {
                     $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
                     $(e.target).closest('.eachItemRow').find('.task-complete').show();
@@ -1727,6 +1727,22 @@
                     this.addNode(data);
                 }
             },
+            SaveDataWithoutCreateNewNode(data) {
+                var _this = this;
+                var postData = {
+                    id: data.id,
+                    text: data.text,
+                };
+                axios.post('/api/task-list/update', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        // _this.getTaskList();
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+            },
+
             dataCopy(data) {
                 var _this = this;
                 var targetData = data.parent.children;
