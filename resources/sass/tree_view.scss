@@ -429,7 +429,7 @@
     }
 
     .jquery-accordion-menu {
-        max-width: 290px;
+        width: 310px;
         float: left;
         position: absolute;
         box-shadow: 0 5px 10px #333;
@@ -903,7 +903,14 @@
     color: black;
     font-weight: bold;
 }
-
+.contex-menu-icon{
+    height: 12px !important;
+}
+.contex-menu-sortcut{
+    position: absolute;
+    right: 3px;
+    bottom: 8px;
+}
 .deactiveIteam {
     background: #fefffd;
     border-radius: 3px;

@@ -87,6 +87,7 @@
                     <Tree :data="treeList" :indent="2" :space="0" @change="ChangeNode"
                           @drop="dropNode"
                           class="tree4"
+                          @drag="dragNode"
                           cross-tree="cross-tree"
                           draggable="draggable"
                           v-if="list.type === 'list'">
@@ -309,9 +310,12 @@
                     <div class="jquery-accordion-menu" id="jquery-accordion-menu" v-click-outside="HideCustomMenu">
                         <ul>
                             <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Assign
-                                    User to
-                                    Selected</a>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
+                                    <i class="outline-person icon-image-preview contex-menu-icon"></i>
+                                    Assign User to Selected </a>
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">U</span>
+                                </span>
 
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <diV class="collapse show switchToggle">
@@ -346,9 +350,13 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Add
-                                    Tags to
-                                    Selected</a>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
+                                    <i class="outline-local_offer icon-image-preview contex-menu-icon"></i>
+                                    Add Tags to Selected
+                                </a>
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Shift</span>+<span class="badge-pill badge-default">#</span>
+                                </span>
 
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <diV class="collapse show switchToggle">
@@ -377,6 +385,7 @@
                                 </div>
                             </li>
                             <li style="position: relative">
+
                                 <datepicker
                                     :disabled-dates="disabledDates"
                                     v-model="date_for_selected"
@@ -388,14 +397,20 @@
                                 </datepicker>
 
                                 <a class="calender li-opacity clickHide">
-                                    Set Due Date
+                                    <i class="outline-event icon-image-preview contex-menu-icon" data-toggle
+                                       title="toggle"></i>  Set Due Date
                                 </a>
 
 
                             </li>
-                            <li><a @click="deleteSelectedTask" href="javascript:void(0)">Deleted </a></li>
-                            <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">Move To Dont Forget
-                                Section </a>
+                            <li><a @click="deleteSelectedTask" href="javascript:void(0)">
+                                <i class="baseline-playlist_delete icon-image-preview contex-menu-icon" data-toggle
+                                   title="toggle"></i>
+                                Delete Selected  <span class="badge-pill badge-default contex-menu-sortcut">Delete</span></a></li>
+                            <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">
+                                <i class="baseline-playlist_delete icon-image-preview contex-menu-icon" data-toggle
+                                   title="toggle"></i>
+                                Move To Dont Forget Section </a>
                             </li>
 
                         </ul>
@@ -730,8 +745,8 @@
             dropNode(node, targetTree, oldTree) {
 
             },
-            dragNode(node, targetTree, oldTree) {
-
+            dragNode(node) {
+                console.log(node);
             },
             ChangeNode(data, taskAfterDrop) {
                 if (data.sort_id === -2) {
