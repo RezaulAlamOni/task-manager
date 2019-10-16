@@ -311,16 +311,31 @@
                         <ul>
                             <li>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split "
+                                   v-if="selectedData.text !== 'Dont Forget Section'"
                                    @click="copyTask"
                                    data-toggle="dropdown">
                                     <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
                                     Copy </a>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split disabled" v-else style="color: gray"
+                                   data-toggle="dropdown">
+                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    Copy </a>
+
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">C</span>
                                 </span>
+
                             </li>
                             <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
+                                <a href="javascript:void(0)" class="dropdown-toggle-split "
+                                   v-if="selectedData.text !== 'Dont Forget Section'"
+                                   @click="cutTask"
+                                   data-toggle="dropdown">
+                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    Cut </a>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split disabled"
+                                   v-else style="color: gray"
+                                   data-toggle="dropdown">
                                     <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
                                     Cut </a>
                                 <span class="contex-menu-sortcut">
@@ -331,7 +346,7 @@
                                 <a href="javascript:void(0)" class="dropdown-toggle-split "
                                    @click="pastCopyAndCut"
                                     data-toggle="dropdown"
-                                    v-if="selectedCopy !== null">
+                                    v-if="selectedCopy !== null || selectedCut !== null" >
                                     <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
                                     Paste </a>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split disabled" style="color: gray"
@@ -712,8 +727,7 @@
                         _this.copyTask();
                         break;
                     case "ctrl+x":
-                        _this.selectedCut = _this.selectedData;
-                        _this.selectedCopy = null;
+                        _this.cutTask()
                         break;
                     case "ctrl+v":
                         _this.pastCopyAndCut();
@@ -1070,9 +1084,30 @@
                 if (_this.selectedIds.length > 1){
                     alert('Copy and past now working on single task !')
                 }else {
-                    _this.selectedCopy = _this.selectedData;
-                    _this.selectedCut = null;
-                    $('.jquery-accordion-menu').hide();
+                    if (_this.selectedData.text !== 'Dont Forget Section'){
+                        _this.selectedCopy = _this.selectedData;
+                        _this.selectedCut = null;
+                        $('.jquery-accordion-menu').hide();
+                    }else {
+                        alert("you can't copy this task !")
+                    }
+
+                }
+
+            },
+            cutTask(){
+                var _this = this;
+                if (_this.selectedIds.length > 1){
+                    alert('Cut and past now working on single task !')
+                }else {
+                    if (_this.selectedData.text !== 'Dont Forget Section'){
+                        _this.selectedCut = _this.selectedData;
+                        _this.selectedCopy = null;
+                        $('.jquery-accordion-menu').hide();
+                    }else {
+                        alert("you can't cut this task !")
+                    }
+
                 }
 
             },
