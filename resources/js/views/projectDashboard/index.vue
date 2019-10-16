@@ -358,6 +358,10 @@
                                     <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">v</span>
                                 </span>
                             </li>
+                            <li><a @click="deleteSelectedTask" href="javascript:void(0)">
+                                <i class="baseline-playlist_delete icon-image-preview contex-menu-icon" data-toggle
+                                   title="toggle"></i>
+                                Delete Selected  <span class="badge-pill badge-default contex-menu-sortcut">Delete</span></a></li>
                             <li>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
                                     <i class="outline-person icon-image-preview contex-menu-icon"></i>
@@ -455,10 +459,6 @@
 
 
                             </li>
-                            <li><a @click="deleteSelectedTask" href="javascript:void(0)">
-                                <i class="baseline-playlist_delete icon-image-preview contex-menu-icon" data-toggle
-                                   title="toggle"></i>
-                                Delete Selected  <span class="badge-pill badge-default contex-menu-sortcut">Delete</span></a></li>
                             <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">
                                 <i class="baseline-playlist_delete icon-image-preview contex-menu-icon" data-toggle
                                    title="toggle"></i>
