@@ -310,6 +310,40 @@
                     <div class="jquery-accordion-menu" id="jquery-accordion-menu" v-click-outside="HideCustomMenu">
                         <ul>
                             <li>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split "
+                                   @click="copyTask"
+                                   data-toggle="dropdown">
+                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    Copy </a>
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">C</span>
+                                </span>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
+                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    Cut </a>
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">X</span>
+                                </span>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split "
+                                   @click="pastCopyAndCut"
+                                    data-toggle="dropdown"
+                                    v-if="selectedCopy !== null">
+                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    Paste </a>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split disabled" style="color: gray"
+                                   data-toggle="dropdown"
+                                   v-else>
+                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    Paste </a>
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">v</span>
+                                </span>
+                            </li>
+                            <li>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
                                     <i class="outline-person icon-image-preview contex-menu-icon"></i>
                                     Assign User to Selected </a>
@@ -675,15 +709,14 @@
                         }, 500);
                         break;
                     case "ctrl+c":
-                        _this.selectedCopy = _this.selectedData;
-                        _this.selectedCut = null;
+                        _this.copyTask();
                         break;
                     case "ctrl+x":
                         _this.selectedCut = _this.selectedData;
                         _this.selectedCopy = null;
                         break;
                     case "ctrl+v":
-                        _this.pastCopyAndCut(_this.selectedData);
+                        _this.pastCopyAndCut();
                         break;
                     case "delete":
                         _this.RemoveNodeAndChildren(_this.selectedData);
@@ -1032,6 +1065,18 @@
 
             },
 
+            copyTask(){
+                var _this = this;
+                if (_this.selectedIds.length > 1){
+                    alert('Copy and past now working on single task !')
+                }else {
+                    _this.selectedCopy = _this.selectedData;
+                    _this.selectedCut = null;
+                    $('.jquery-accordion-menu').hide();
+                }
+
+            },
+
             addEmptyNode(data) {
                 let _this = this;
                 var children = data.parent.children;
@@ -1207,8 +1252,12 @@
                         console.log('Api is task-unmake-child not Working !!!')
                     });
             },
-            pastCopyAndCut(data) {
+            pastCopyAndCut() {
                 var _this = this;
+                var data = _this.selectedData;
+                if(_this.selectedIds.length > 1){
+                    return false;
+                }
                 var postData = {
                     target_id: data.id,
                     copy_id: (this.selectedCopy === null) ? this.selectedCut.id : this.selectedCopy.id,
