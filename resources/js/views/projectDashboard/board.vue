@@ -444,22 +444,24 @@
                                 </select>
                             </div>
                         </div>
-                        <ul class="list-group list-group-flush">
+                        <ul class="list-group list-group-flush"> 
+                            <div v-if="tree4data.length > 0">
+                                <input type="checkbox" @change="selectAll()" class="checkedAll"> All <br>
+                            </div>
                             <div v-for="tree in tree4data">
                                 <li class="list-group-item">
-                                    <input type="checkbox" @change="selectAll()"> All <br>
-                                    <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask" class="selectAll">
+                                    <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask" class="selectAll" @change="selectChild(tree.id)">
                                     {{tree.text}}
                                     <ul class="list-group list-group-flush" v-if="tree.children">
                                         <div v-for="child in tree.children">
                                             <li class="list-group-item">
                                                 <input :id="child.id" class="tree-child selectAll" :value="child.id" 
-                                                       type="checkbox" v-model="selectedExistedTask" > {{child.text}}
+                                                       type="checkbox" v-model="selectedExistedTask" @change="selectChild(child.id)"> {{child.text}}
                                                 <ul class="list-group list-group-flush" v-if="child.children">
                                                     <div v-for="child1 in child.children">
                                                         <li class="list-group-item">
                                                             <input :id="child1.id" :value="child1.id" class="tree-child selectAll"
-                                                                   type="checkbox" v-model="selectedExistedTask" >
+                                                                   type="checkbox" v-model="selectedExistedTask" @change="selectChild(child1.id)">
                                                             {{child1.text}}
                                                             <ul class="list-group list-group-flush"
                                                                 v-if="child1.children">
@@ -468,7 +470,8 @@
                                                                         <input :id="child2.id" :value="child2.id"
                                                                                class="tree-child selectAll"
                                                                                type="checkbox"
-                                                                               v-model="selectedExistedTask" > {{child2.text}}
+                                                                               v-model="selectedExistedTask" 
+                                                                               @change="selectChild(child2.id)"> {{child2.text}}
                                                                         <ul class="list-group list-group-flush"
                                                                             v-if="child2.children">
                                                                             <div v-for="child3 in child2.children">
@@ -477,7 +480,8 @@
                                                                                            :value="child3.id"
                                                                                            class="tree-child selectAll"
                                                                                            type="checkbox"
-                                                                                           v-model="selectedExistedTask" >
+                                                                                           v-model="selectedExistedTask" 
+                                                                                           @change="selectChild(child3.id)">
                                                                                     {{child3.text}}
                                                                                 </li>
                                                                             </div>
@@ -496,6 +500,7 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
+                        <!-- {{ selectedExistedTask }} -->
                         <button @click="AddExistingTasks" class="btn btn-primary" type="button">Add Tasks</button>
                         <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button>
                     </div>
@@ -671,15 +676,45 @@
                     $('[data-toggle="tooltip"]').tooltip();
                 }, 1000)
             },
-            selectAll(){
-                if($('.selectAll').prop('checked')){
-                    $('.selectAll').prop('checked', false);
-                }else{
-                    $('.selectAll').prop('checked', true);
-
+            selectChild(id){
+                 for (let index = 0; index < this.tree4data.length; index++) {
+                        // this.selectedExistedTask.push(this.tree4data[index].id);
+                    if(this.tree4data[index].id === id){
+                        // console.log(this.tree4data[index].children);
+                        this.recursive(this.tree4data[index].children);
+                    }
                 }
 
                 console.log(this.selectedExistedTask);
+            },
+            selectAll(){
+                if($('.checkedAll').prop('checked') === false){
+                    $('.selectAll').prop('checked', false);
+                    this.selectedExistedTask = [];
+                }else{
+                    $('.selectAll').prop('checked', true);
+
+                    // console.log(this.tree4data);
+                    for (let index = 0; index < this.tree4data.length; index++) {
+                        this.selectedExistedTask.push(this.tree4data[index].id);
+                        this.recursive(this.tree4data[index].children);
+                    }
+                    // console.log(this.selectedExistedTask);
+                }
+
+            },
+            recursive(child,action = '') {
+                for (let index = 0; index < child.length; index++) {
+                    let key = this.selectedExistedTask.indexOf(child[index].id);
+                    if(key !== -1){
+                        this.selectedExistedTask.splice(key,1);
+                    } else {
+                        this.selectedExistedTask.push(child[index].id);
+                    }
+                    if(child[index].children.length > 0) {
+                        this.recursive(child[index].children);
+                    }
+                }
             },
             onColumnDrop(dropResult) {
                 // alert('sdf');
@@ -837,6 +872,9 @@
             addExistingTask(index, id) {
                 this.tree4data = [];
                 this.subNav = [];
+                this.selectedNav= 'Select Nav';
+                this.selectedSubNav= 'Select Nav List';
+                this.selectedExistedTask = [];
                 this.currentColumn = id;
                 this.currentColumnIndex = index;
                 let _this = this;
