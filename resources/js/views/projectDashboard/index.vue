@@ -424,6 +424,9 @@
                                                     <div @click="ActionToSelectedTask(user.id,'tag')"
                                                          class="users-select row">
                                                         <div class="col-md-9 add-tag-to-selected">
+                                                            <span class="badge badge-default tag-color-custom-contextmenu"
+                                                            :style="{'background' : user.color}"
+                                                            >.</span>
                                                             <h5>{{user.title}}</h5>
                                                         </div>
                                                     </div>

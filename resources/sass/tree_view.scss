@@ -804,7 +804,7 @@
     vertical-align: middle;
     line-height: 29px;
     color: white;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -889,7 +889,15 @@
 }
 .add-tag-to-selected {
     padding: 5px 5px 5px 23px;
-    border-bottom: 1px solid;
+    //border-bottom: 1px solid;
+    display: inherit;
+}
+.tag-color-custom-contextmenu {
+    margin-right: 10px;
+    height: 20px;
+    width: 32px;
+    border-radius: 10px;
+    color: transparent;
 }
 .label-text {
     letter-spacing: 0px !important;
