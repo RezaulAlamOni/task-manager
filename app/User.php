@@ -2,11 +2,15 @@
 
 namespace App;
 
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Spark\CanJoinTeams;
 use Laravel\Spark\User as SparkUser;
 
-class User extends SparkUser
+class User extends SparkUser implements MustVerifyEmail
 {
+    use Notifiable;
     use CanJoinTeams;
 
     /**
