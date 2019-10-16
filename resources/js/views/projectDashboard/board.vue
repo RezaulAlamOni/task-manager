@@ -680,12 +680,28 @@
                  for (let index = 0; index < this.tree4data.length; index++) {
                         // this.selectedExistedTask.push(this.tree4data[index].id);
                     if(this.tree4data[index].id === id){
-                        // console.log(this.tree4data[index].children);
-                        this.recursive(this.tree4data[index].children);
+                        this.recursive(this.tree4data[index].children, this.tree4data[index].id);
+                    }
+                    for (let secondIndex = 0; secondIndex < this.tree4data[index].children.length; secondIndex++) {
+                        if(this.tree4data[index].children[secondIndex] !== undefined){
+                            if(this.tree4data[index].children[secondIndex].id === id){
+                                this.recursive(this.tree4data[index].children[secondIndex].children, this.tree4data[index].children[secondIndex].id);
+                            }
+                        }
+                        for (let thirdIndex = 0; thirdIndex < this.tree4data[index].children[index].children.length; thirdIndex++) {
+                            if(this.tree4data[index].children[secondIndex].children[thirdIndex] !== undefined){
+                                if(this.tree4data[index].children[secondIndex].children[thirdIndex].id === id){
+                                    this.recursive(this.tree4data[index].children[secondIndex].children[thirdIndex].children, this.tree4data[index].children[secondIndex].children[thirdIndex].id);
+                                }
+                            }
+                        }
                     }
                 }
 
                 console.log(this.selectedExistedTask);
+            },
+            childRecursive(){
+
             },
             selectAll(){
                 if($('.checkedAll').prop('checked') === false){
@@ -697,22 +713,25 @@
                     // console.log(this.tree4data);
                     for (let index = 0; index < this.tree4data.length; index++) {
                         this.selectedExistedTask.push(this.tree4data[index].id);
-                        this.recursive(this.tree4data[index].children);
+                        this.recursive(this.tree4data[index].children, this.tree4data[index].id);
                     }
                     // console.log(this.selectedExistedTask);
                 }
 
             },
-            recursive(child,action = '') {
+            recursive(child, parent_id) {
                 for (let index = 0; index < child.length; index++) {
                     let key = this.selectedExistedTask.indexOf(child[index].id);
-                    if(key !== -1){
+                    let parentKey = this.selectedExistedTask.indexOf(parent_id);
+                    if(key !== -1 && parentKey === -1){
                         this.selectedExistedTask.splice(key,1);
                     } else {
-                        this.selectedExistedTask.push(child[index].id);
+                        if(key === -1){
+                            this.selectedExistedTask.push(child[index].id);
+                        }
                     }
                     if(child[index].children.length > 0) {
-                        this.recursive(child[index].children);
+                        this.recursive(child[index].children, child[index].id);
                     }
                 }
             },
@@ -821,10 +840,13 @@
                 axios.post('/api/board-save', data)
                     .then(response => response.data)
                     .then(response => {
+                        console.log(response);
                         if (response.success == true) {
+                            _this.editField.progress = response.data.progress;
                             _this.cards.push({
                                 id: response.data.id,
                                 column: response.data.title,
+                                progress: response.data.progress,
                                 hidden: response.data.hidden,
                                 task: []
                             });
@@ -858,6 +880,7 @@
                         .then(response => {
                             if (response.success === true) {
                                 _this.cards[_this.updateIndex].column = _this.editField.name;
+                               _this.cards[_this.updateIndex].progress = _this.editField.progress;
                             }
                         })
                         .catch(error => {
