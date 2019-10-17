@@ -117,8 +117,6 @@ class TagsController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
-
-
             $check_exists = Tags::where(['title' => 'Dont Forget', 'task_id' => $id])->get();
             if ($check_exists->count() <= 0) {
                 Tags::create($data);

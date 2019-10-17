@@ -438,13 +438,16 @@ class TaskController extends Controller
             $ids = $request->ids;
             $tag = Tags::where('id',$request->value)->first();
             foreach ($ids as $id) {
-                Tags::create( [
-                    'color' => $tag->color,
-                    'task_id' => $id,
-                    'title' => $tag->title,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
+                $tag_check = Tags::where(['task_id' => $id,'title' => $tag->title])->count();
+                if ($tag_check <= 0) {
+                    Tags::create( [
+                        'color' => $tag->color,
+                        'task_id' => $id,
+                        'title' => $tag->title,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ]);
+                }
             }
 
 

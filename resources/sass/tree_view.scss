@@ -67,7 +67,7 @@
 
 #tree_view_list {
     padding: 0px;
-    min-height: 900px;
+    //min-height: 900px;
 
     .offset-2 {
         margin-left: 0;
@@ -286,6 +286,9 @@
                 }
             }
         }
+        &.dragging{
+            //position: fixed!important;
+        }
     }
 
     .assignUser {
@@ -429,7 +432,7 @@
     }
 
     .jquery-accordion-menu {
-        max-width: 290px;
+        width: 310px;
         float: left;
         position: absolute;
         box-shadow: 0 5px 10px #333;
@@ -496,7 +499,7 @@
 .task_width {
     width: 100%;
     @include transition(all 0.4s linear);
-    height: calc(100vh - 130px);
+    //height: calc(100vh - 130px);
     display: inline-block;
 
 }
@@ -622,7 +625,7 @@
     background-color: #f9f9f9;
     width: 100%;
     display: inline-block;
-    max-height: calc(100vh - 300px);
+    height: calc(100vh - 300px);
     overflow-y: auto;
     overflow-x: hidden;
 
@@ -804,7 +807,7 @@
     vertical-align: middle;
     line-height: 29px;
     color: white;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -889,7 +892,15 @@
 }
 .add-tag-to-selected {
     padding: 5px 5px 5px 23px;
-    border-bottom: 1px solid;
+    //border-bottom: 1px solid;
+    display: inherit;
+}
+.tag-color-custom-contextmenu {
+    margin-right: 10px;
+    height: 20px;
+    width: 32px;
+    border-radius: 10px;
+    color: transparent;
 }
 .label-text {
     letter-spacing: 0px !important;
@@ -903,7 +914,14 @@
     color: black;
     font-weight: bold;
 }
-
+.contex-menu-icon{
+    height: 12px !important;
+}
+.contex-menu-sortcut{
+    position: absolute;
+    right: 3px;
+    bottom: 8px;
+}
 .deactiveIteam {
     background: #fefffd;
     border-radius: 3px;
