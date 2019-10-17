@@ -88,6 +88,7 @@
                           @drop="dropNode"
                           class="tree4"
                           @drag="dragNode"
+                          @moving="dragNode"
                           cross-tree="cross-tree"
                           draggable="draggable"
                           v-if="list.type === 'list'">
@@ -669,7 +670,9 @@
                     tasks: [],
                     users: []
                 },
-                date_for_selected: null
+                date_for_selected: null,
+                dNode: null,
+                dNodeInterval: null,
             }
         },
         mounted() {
@@ -793,10 +796,20 @@
                 }
             },
             dropNode(node, targetTree, oldTree) {
+                let THIS = this;
+                clearInterval(THIS.dNodeInterval);
 
             },
             dragNode(node) {
-                console.log(node);
+                let THIS = this;
+                this.dNode = node;
+                this.dNodeInterval = setInterval(function () {
+                    var target = document.getElementById('TaskListAndDetails');
+                    var top = $('#' + node._id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                    target.scrollTo(0, top);
+                    console.log(top);
+
+                }, 100);
             },
             ChangeNode(data, taskAfterDrop) {
                 if (data.sort_id === -2) {

@@ -66,7 +66,7 @@
                                 <Container
                                     :drop-placeholder="dropPlaceholderOptions"
                                     :get-child-payload="getCardPayload(column.id)"
-                                    @drag-start="(e) => onDragStart(column.id,column.boardId, index,  e)" 
+                                    @drag-start="(e) => onDragStart(column.id,column.boardId, index,  e)"
                                     @drag-end="(e) => log('', e)"
                                     @drop="(e) => onCardDrop(column.id,column.boardId, index,  e)"
                                     drag-class="card-ghost"
@@ -289,7 +289,7 @@
                         </Draggable>
                         <div>
                             <p @click="addColumn" class="add-column" v-if="board_id">
-                                <i class="fa fa-plus"></i> 
+                                <i class="fa fa-plus"></i>
                                 add column
                             </p>
                         </div>
@@ -444,7 +444,7 @@
                                 </select>
                             </div>
                         </div>
-                        <ul class="list-group list-group-flush"> 
+                        <ul class="list-group list-group-flush">
                             <div v-if="tree4data.length > 0">
                                 <input type="checkbox" @change="selectAll()" class="checkedAll"> All <br>
                             </div>
@@ -455,7 +455,7 @@
                                     <ul class="list-group list-group-flush" v-if="tree.children">
                                         <div v-for="child in tree.children">
                                             <li class="list-group-item">
-                                                <input :id="child.id" class="tree-child selectAll" :value="child.id" 
+                                                <input :id="child.id" class="tree-child selectAll" :value="child.id"
                                                        type="checkbox" v-model="selectedExistedTask" @change="selectChild(child.id)"> {{child.text}}
                                                 <ul class="list-group list-group-flush" v-if="child.children">
                                                     <div v-for="child1 in child.children">
@@ -470,7 +470,7 @@
                                                                         <input :id="child2.id" :value="child2.id"
                                                                                class="tree-child selectAll"
                                                                                type="checkbox"
-                                                                               v-model="selectedExistedTask" 
+                                                                               v-model="selectedExistedTask"
                                                                                @change="selectChild(child2.id)"> {{child2.text}}
                                                                         <ul class="list-group list-group-flush"
                                                                             v-if="child2.children">
@@ -480,7 +480,7 @@
                                                                                            :value="child3.id"
                                                                                            class="tree-child selectAll"
                                                                                            type="checkbox"
-                                                                                           v-model="selectedExistedTask" 
+                                                                                           v-model="selectedExistedTask"
                                                                                            @change="selectChild(child3.id)">
                                                                                     {{child3.text}}
                                                                                 </li>
@@ -584,6 +584,7 @@
                     sort_id: null,
                     project_id: null,
                 },
+                check_uncheck_child : null,
             }
         },
         mounted() {
@@ -676,33 +677,80 @@
                     $('[data-toggle="tooltip"]').tooltip();
                 }, 1000)
             },
+            // selectChild(id){
+            //      for (let index = 0; index < this.tree4data.length; index++) {
+            //             // this.selectedExistedTask.push(this.tree4data[index].id);
+            //         if(this.tree4data[index].id === id){
+            //             this.recursive(this.tree4data[index].children, this.tree4data[index].id);
+            //         }
+            //         for (let secondIndex = 0; secondIndex < this.tree4data[index].children.length; secondIndex++) {
+            //             if(this.tree4data[index].children[secondIndex] !== undefined){
+            //                 if(this.tree4data[index].children[secondIndex].id === id){
+            //                     this.recursive(this.tree4data[index].children[secondIndex].children, this.tree4data[index].children[secondIndex].id);
+            //                 }
+            //             }
+            //             for (let thirdIndex = 0; thirdIndex < this.tree4data[index].children[index].children.length; thirdIndex++) {
+            //                 if(this.tree4data[index].children[secondIndex].children[thirdIndex] !== undefined){
+            //                     if(this.tree4data[index].children[secondIndex].children[thirdIndex].id === id){
+            //                         this.recursive(this.tree4data[index].children[secondIndex].children[thirdIndex].children, this.tree4data[index].children[secondIndex].children[thirdIndex].id);
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            //
+            //     console.log(this.selectedExistedTask);
+            // },
             selectChild(id){
-                 for (let index = 0; index < this.tree4data.length; index++) {
-                        // this.selectedExistedTask.push(this.tree4data[index].id);
-                    if(this.tree4data[index].id === id){
-                        this.recursive(this.tree4data[index].children, this.tree4data[index].id);
-                    }
-                    for (let secondIndex = 0; secondIndex < this.tree4data[index].children.length; secondIndex++) {
-                        if(this.tree4data[index].children[secondIndex] !== undefined){
-                            if(this.tree4data[index].children[secondIndex].id === id){
-                                this.recursive(this.tree4data[index].children[secondIndex].children, this.tree4data[index].children[secondIndex].id);
-                            }
-                        }
-                        for (let thirdIndex = 0; thirdIndex < this.tree4data[index].children[index].children.length; thirdIndex++) {
-                            if(this.tree4data[index].children[secondIndex].children[thirdIndex] !== undefined){
-                                if(this.tree4data[index].children[secondIndex].children[thirdIndex].id === id){
-                                    this.recursive(this.tree4data[index].children[secondIndex].children[thirdIndex].children, this.tree4data[index].children[secondIndex].children[thirdIndex].id);
-                                }
-                            }
+                var _this = this;
+                _this.findChild(id,_this.tree4data)
+                var is_checked = _this.selectedExistedTask.indexOf(id);
+                if (is_checked > -1){
+                   _this.CheckWithChild(id,_this.check_uncheck_child);
+                }else{
+                   _this.UncheckWithChild(id,_this.check_uncheck_child);
+                }
+            },
+            findChild(id,data){
+                if (data.length > 0){
+                    for (let index = 0; index < data.length; index++) {
+                        if(index !== undefined && data[index].id === id){
+                            this.check_uncheck_child = data[index].children;
+                            return true;
+                        }else {
+                            this.findChild(id,data[index].children);
                         }
                     }
                 }
 
-                console.log(this.selectedExistedTask);
             },
-            childRecursive(){
+            CheckWithChild(id , child){
+                var _this = this;
+                if (_this.selectedExistedTask.indexOf(id) === -1){
+                    _this.selectedExistedTask.push(id);
+                }
+                if (child.length > 0){
+                    for (let index = 0; index < child.length; index++) {
+                        _this.CheckWithChild(child[index].id,child[index].children);
+                    }
+                }
+            },
+            UncheckWithChild(id,child){
+                var _this = this;
+                var key = _this.selectedExistedTask.indexOf(id);
+                if (key !== -1){
+                    console.log(key)
+                    _this.selectedExistedTask.splice(key,1);
+                }
+
+                if (child.length > 0){
+                    for (let index = 0; index < child.length; index++) {
+                        _this.UncheckWithChild(child[index].id,child[index].children);
+                    }
+                }
 
             },
+
             selectAll(){
                 if($('.checkedAll').prop('checked') === false){
                     $('.selectAll').prop('checked', false);
@@ -735,6 +783,7 @@
                     }
                 }
             },
+
             onColumnDrop(dropResult) {
                 // alert('sdf');
                 // console.log(dropResult);
@@ -1006,7 +1055,7 @@
                 _this.growInit(option);
             },
             addCard(index, id) {
-                
+
                 // console.log(index,id)
                 let _this = this;
                 axios.post('/api/card-add',{'id': id})
@@ -1125,7 +1174,7 @@
                     'style' : "background-color: "+this.cards[index].task[key].existing_tags[tagIndx].color,
                     'text' : this.cards[index].task[key].existing_tags[tagIndx].title,
                 };
-                
+
                 // this.getData();
                 var postData = {
                     id: cardId,
