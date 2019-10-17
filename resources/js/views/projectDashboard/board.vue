@@ -68,13 +68,13 @@
                                     :get-child-payload="getCardPayload(column.id)"
                                     @drag-start="(e) => onDragStart(column.id,column.boardId, index,  e)" 
                                     @drag-end="(e) => log('', e)"
-                                    @drop="(e) => onCardDrop(column.id,column.boardId, index,  e)"
+                                    @drop="(e) => onCardDrop(column.id, column.boardId, index, e)"
                                     drag-class="card-ghost"
                                     drop-class="card-ghost-drop"
                                     group-name="col"
                                 >
-                                    <Draggable :key="card.id" v-for="(card , key) in column.children">
-                                        <div :class="card.props.className" :style="card.props.style" class="card-list">
+                                    <Draggable :key="card.id" v-for="(card , key) in column.children" >
+                                        <div :class="card.props.className" :style="card.props.style" class="card-list" @click="selectCard(card)" :id="'card_'+card.cardId">
                                             <textarea
                                                 :id="'id'+index+key" @blur="showItem($event,card,index,key)"
                                                 @click="makeInput($event)"
@@ -507,6 +507,13 @@
                 </div>
             </div>
         </div>
+        <div class="details" id="details">
+            <TaskDetails
+                :selectedData="selectedData"
+                :task_logs="task_logs"
+                @textArea="ShowTextArea">
+            </TaskDetails>
+        </div>
 
     </div>
 
@@ -515,15 +522,17 @@
     import flatPickr from 'vue-flatpickr-component';
     import 'flatpickr/dist/flatpickr.css';
     import switches from 'vue-switches';
+    import hotkeys from 'hotkeys-js';
     import ClickOutside from 'vue-click-outside';
     import Datepicker from 'vuejs-datepicker';
     import {Container, Draggable} from 'vue-smooth-dnd';
     import {applyDrag, generateItems} from '../../../assets/plugins/utils/helpers';
     import VueTagsInput from '@johmun/vue-tags-input';
+    import TaskDetails from "./boardCardDetails";
 
     export default {
         props: ['nav_id', 'board_id', 'projectId'],
-        components: {Container, Draggable, flatPickr, switches, VueTagsInput, Datepicker},
+        components: {Container, Draggable, flatPickr, switches, VueTagsInput, Datepicker, TaskDetails},
         data() {
             return {
                 id: 0,
@@ -584,6 +593,9 @@
                     sort_id: null,
                     project_id: null,
                 },
+                task_logs: null,
+                selectedData: {},
+                selectedCard : 0,
             }
         },
         mounted() {
@@ -599,7 +611,76 @@
                 $('.searchList').hide();
             });
         },
-
+        created() {
+            let _this = this;
+             hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3', function (event, handler) {
+                event.preventDefault();
+                switch (handler.key) {
+                    case "enter" :
+                        // _this.addNode(_this.selectedData);
+                        break;
+                    case "tab" :
+                        // _this.makeChild(_this.selectedData);
+                        break;
+                    case "shift+tab":
+                        // _this.unMakeChild(_this.selectedData);
+                        break;
+                    case "up" :
+                        // if (Object.keys(_this.selectedData).length > 0) {
+                            // _this.moveItemUp(_this.selectedData);
+                        // }
+                        _this.selectedData = {};
+                        break;
+                    case "down" :
+                        // if (Object.keys(_this.selectedData).length > 0) {
+                            // _this.moveItemDown(_this.selectedData);
+                        // }
+                        // _this.selectedData = {};
+                        break;
+                    case "left" :
+                        _this.HideDetails();
+                        break;
+                    case "right" :
+                        _this.showLog();
+                        // _this.task_logs = null;
+                        // _this.ShowDetails(_this.selectedData);
+                        setTimeout(function () {
+                            $('#_details').click();
+                        }, 500);
+                        break;
+                    case "ctrl+c":
+                        // _this.selectedCopy = _this.selectedData;
+                        // _this.selectedCut = null;
+                        break;
+                    case "ctrl+x":
+                        // _this.selectedCut = _this.selectedData;
+                        // _this.selectedCopy = null;
+                        break;
+                    case "ctrl+v":
+                        // _this.pastCopyAndCut(_this.selectedData);
+                        break;
+                    case "delete":
+                        // _this.RemoveNodeAndChildren(_this.selectedData);
+                        break;
+                    case "ctrl+u":
+                        // _this.shwAssignUserDropDown(_this.selectedData);
+                        break;
+                    case "ctrl+b":
+                        // _this.AddDontForgetTagToSelectedIds();//add DON'T FORGET SECTION
+                        break;
+                    case "ctrl+s":
+                        // _this.showSearchInputField();
+                        break;
+                    case "ctrl+i":
+                        // _this.addAttachment(_this.selectedData);
+                        break;
+                    case "shift+3":
+                        // $('#tag-' + _this.selectedData._id).click();
+                        // console.log(_this.selectedData);
+                        break;
+                }
+            });
+        },
         methods: {
             grow: function (text, options) {
                 var height = options.height || '100px';
@@ -665,6 +746,7 @@
                                 style: {backgroundColor: 'white'}
                             },
                             data: this.cards[i].task[j].name,
+                            description: this.cards[i].task[j].name,
                             date: this.cards[i].task[j].date,
                             tags: this.cards[i].task[j].tags,
                             tagTooltip: this.cards[i].task[j].tagTooltip,
@@ -1320,6 +1402,55 @@
                     .catch(error => {
 
                     });
+            },
+            showLog() {
+                var _this = this;
+                axios.get('/api/task-list/get-log/' + _this.selectedData.cardId)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response);
+                        _this.task_logs = response;
+                        _this.ShowDetails(_this.selectedData);
+                        setTimeout(function () {
+                            $('#_log').click()
+                        }, 300)
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+            },
+            selectCard(card){
+                this.selectedData = card;
+                this.selectedCard = card.cardId;
+                this.task_logs = null;
+                this.HideDetails();
+                $('.card-list').css("background-color", "#ffffff");
+                $('#card_'+this.selectedCard).css("background-color","#ddf3fd");
+                // console.log(card);
+            },
+            ShowDetails() {
+                var _this = this;
+                if (_this.selectedData != null && _this.selectedData.sort_id !== -2) {
+                    $('#task_width').removeClass('task_width');
+                    $('#task_width').addClass('task_widthNormal');
+                    $('#details').removeClass('details');
+                    $('#details').addClass('detailsShow');
+                }
+            },
+            HideDetails() {
+                $('#task_width').addClass('task_width');
+                $('#task_width').removeClass('task_widthNormal');
+                $('#details').addClass('details');
+                $('#details').removeClass('detailsShow');
+            },
+            ShowTextArea(data) {
+                var _this = this;
+                $('.SubmitButton').show();
+                var option = {
+                    height: 50,
+                    maxHeight: 200
+                };
+                _this.growInit(option);
             },
         },
         directives: {

@@ -146,6 +146,7 @@ class MultipleBoardController extends Controller
             'created_at' => Carbon::today(),
         ]);
         if ($data) {
+            $this->createLog($data->id, 'created', 'Create Column', 'Board Column Created');
             return response()->json(['success' => true, 'data' => $data]);
         } else {
             return response()->json(['success' => false]);
@@ -200,6 +201,7 @@ class MultipleBoardController extends Controller
         ];
         $child = Task::create($data);
         if ($child) {
+            $this->createLog($child->id, 'created', 'Create Card', 'Board Card Created');
             return response()->json(['success' => true, 'data' => $child]);
         }
         return response()->json(['success' => false]);
@@ -214,6 +216,7 @@ class MultipleBoardController extends Controller
                         'board_parent_id' => $request->board_parent_id
                     ]);
         if ($update) {
+            $this->createLog($request->id, 'Update', 'Parent changed', 'Board Card Parent Changed');
             return response()->json(['success' => true, 'data' => $update]);
         }
         return response()->json(['success' => false]); 
@@ -231,6 +234,7 @@ class MultipleBoardController extends Controller
         $child = Task::where('id', $id)->update($data);
         if ($child) {
             $datas = Task::find($id);
+            $this->createLog($id, 'Update', 'Card Update', 'Board Card Updated');
             return response()->json(['success' => true, 'data' => $datas]);
         }
         return response()->json(['success' => false]);
@@ -251,6 +255,7 @@ class MultipleBoardController extends Controller
         if ($request->boardId || $request->boardId != '') {
             $update = Task::where('id', $request->boardId)->update($data);
             if ($update) {
+                $this->createLog($request->boardId, 'Update', 'Column Update', 'Board Column Updated');
                 return response()->json(['success' => true, 'data' => $update]);
             }
         }
@@ -263,6 +268,7 @@ class MultipleBoardController extends Controller
             ->orWhere('board_parent_id', $id)
             ->delete();
         if ($delete) {
+            $this->createLog($id, 'Delete', 'Column Deleted', 'Board Column Deleted With All Card');
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -274,6 +280,7 @@ class MultipleBoardController extends Controller
     {
         $delete = Task::Where('board_parent_id', $id)->delete();
         if ($delete) {
+            $this->createLog($id, 'Delete', 'Card Deleted', 'Board All Card Deleted');
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -284,6 +291,7 @@ class MultipleBoardController extends Controller
     {
         $delete = Task::where('id', $id)->delete();
         if ($delete) {
+            $this->createLog($request->boardId, 'Delete', 'Card Deleted', 'Board Single Card Deleted');
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -299,6 +307,7 @@ class MultipleBoardController extends Controller
             'multiple_board_id' => null  
         ]);
         if($delete){
+            $this->createLog($request->boardId, 'Delete', 'Card Deleted', 'Board Existing Task Card Deleted');
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -312,6 +321,7 @@ class MultipleBoardController extends Controller
                 'hidden' => $request->hide
             ]);
         if ($hide) {
+            $this->createLog($id, 'Update', 'Column Update', 'Board Column Hide/Show');
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -355,6 +365,7 @@ class MultipleBoardController extends Controller
             $task[$key]['tag'] = $tags;
             $task[$key]['tagTooltip'] = $tagTooltip;
         }
+        $this->createLog($board_id, 'Created', 'Card Create', 'Board Card Create From Existing Task');
         return response()->json(['success' => true, 'data' => $task]);
     }
 
@@ -373,6 +384,7 @@ class MultipleBoardController extends Controller
             $ids = trim($ids, ',');
             $update = DB::update("update task_lists set board_sort_id = CASE $caseString END where id in ($ids) and board_parent_id = $request->boardId");
             if ($update) {
+                $this->createLog($request->boardId, 'Updated', 'Card Updated', 'Board Card sorting');
                 return response()->json(['success' => true, 'data' => $update]);
             } else {
                 return response()->json(['success' => false, 'data' => $update]);
@@ -393,10 +405,25 @@ class MultipleBoardController extends Controller
             $ids = trim($ids, ','); 
             $update = DB::update("update task_lists set board_sort_id = CASE $caseString END where id in ($ids) and board_parent_id = 0");
             if ($update) {
+                $this->createLog($id, 'Updated', 'Column Updated', 'Board Column sorting');
                 return response()->json(['success' => true, 'data' => $update]);
             } else {
                 return response()->json(['success' => false, 'data' => $update]);
             }
         }
+    }
+    
+
+    protected function createLog($task_id, $type, $message, $title)
+    {
+        $log_data = [
+            'task_id' => $task_id,
+            'title' => $title,
+            'log_type' => $message,
+            'action_type' => $type,
+            'action_by' => Auth::id(),
+            'action_at' => Carbon::now()
+        ];
+        $this->actionLog->store($log_data);
     }
 }
