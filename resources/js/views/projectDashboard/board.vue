@@ -739,7 +739,6 @@
                 var _this = this;
                 var key = _this.selectedExistedTask.indexOf(id);
                 if (key !== -1){
-                    console.log(key)
                     _this.selectedExistedTask.splice(key,1);
                 }
 
