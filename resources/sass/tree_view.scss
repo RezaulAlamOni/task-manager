@@ -67,7 +67,7 @@
 
 #tree_view_list {
     padding: 0px;
-    min-height: 900px;
+    //min-height: 900px;
 
     .offset-2 {
         margin-left: 0;
@@ -286,6 +286,9 @@
                 }
             }
         }
+        &.dragging{
+            //position: fixed!important;
+        }
     }
 
     .assignUser {
@@ -496,7 +499,7 @@
 .task_width {
     width: 100%;
     @include transition(all 0.4s linear);
-    height: calc(100vh - 130px);
+    //height: calc(100vh - 130px);
     display: inline-block;
 
 }
@@ -622,7 +625,7 @@
     background-color: #f9f9f9;
     width: 100%;
     display: inline-block;
-    max-height: calc(100vh - 300px);
+    height: calc(100vh - 300px);
     overflow-y: auto;
     overflow-x: hidden;
 
