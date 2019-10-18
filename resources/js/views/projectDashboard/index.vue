@@ -727,7 +727,7 @@
                         _this.task_logs = null;
                         _this.ShowDetails(_this.selectedData);
                         setTimeout(function () {
-                            $('#_details').click()
+                            $('#_details').click();
                         }, 500);
                         break;
                     case "ctrl+c":
