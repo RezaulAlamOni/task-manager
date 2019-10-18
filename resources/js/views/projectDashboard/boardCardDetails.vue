@@ -240,7 +240,7 @@
             }
         },
         mounted() {
-            console.log(selectedData);
+            // console.log(selectedData);
         },
         created() {
 

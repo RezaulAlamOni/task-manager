@@ -87,6 +87,8 @@
                     <Tree :data="treeList" :indent="2" :space="0" @change="ChangeNode"
                           @drop="dropNode"
                           class="tree4"
+                          @drag="dragNode"
+                          @moving="dragNode"
                           cross-tree="cross-tree"
                           draggable="draggable"
                           v-if="list.type === 'list'">
@@ -309,9 +311,65 @@
                     <div class="jquery-accordion-menu" id="jquery-accordion-menu" v-click-outside="HideCustomMenu">
                         <ul>
                             <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Assign
-                                    User to
-                                    Selected</a>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split "
+                                   v-if="selectedData.text !== 'Dont Forget Section'"
+                                   @click="copyTask"
+                                   data-toggle="dropdown">
+                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    Copy </a>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split disabled" v-else style="color: gray"
+                                   data-toggle="dropdown">
+                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    Copy </a>
+
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">C</span>
+                                </span>
+
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split "
+                                   v-if="selectedData.text !== 'Dont Forget Section'"
+                                   @click="cutTask"
+                                   data-toggle="dropdown">
+                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    Cut </a>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split disabled"
+                                   v-else style="color: gray"
+                                   data-toggle="dropdown">
+                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    Cut </a>
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">X</span>
+                                </span>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split "
+                                   @click="pastCopyAndCut"
+                                    data-toggle="dropdown"
+                                    v-if="selectedCopy !== null || selectedCut !== null" >
+                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    Paste </a>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split disabled" style="color: gray"
+                                   data-toggle="dropdown"
+                                   v-else>
+                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    Paste </a>
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">v</span>
+                                </span>
+                            </li>
+                            <li><a @click="deleteSelectedTask" href="javascript:void(0)">
+                                <i class="baseline-playlist_delete icon-image-preview contex-menu-icon" data-toggle
+                                   title="toggle"></i>
+                                Delete Selected  <span class="badge-pill badge-default contex-menu-sortcut">Delete</span></a></li>
+                            <li>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
+                                    <i class="outline-person icon-image-preview contex-menu-icon"></i>
+                                    Assign User to Selected </a>
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">U</span>
+                                </span>
 
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <diV class="collapse show switchToggle">
@@ -346,9 +404,13 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">Add
-                                    Tags to
-                                    Selected</a>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
+                                    <i class="outline-local_offer icon-image-preview contex-menu-icon"></i>
+                                    Add Tags to Selected
+                                </a>
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Shift</span>+<span class="badge-pill badge-default">#</span>
+                                </span>
 
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <diV class="collapse show switchToggle">
@@ -367,6 +429,9 @@
                                                     <div @click="ActionToSelectedTask(user.id,'tag')"
                                                          class="users-select row">
                                                         <div class="col-md-9 add-tag-to-selected">
+                                                            <span class="badge badge-default tag-color-custom-contextmenu"
+                                                            :style="{'background' : user.color}"
+                                                            >.</span>
                                                             <h5>{{user.title}}</h5>
                                                         </div>
                                                     </div>
@@ -377,6 +442,7 @@
                                 </div>
                             </li>
                             <li style="position: relative">
+
                                 <datepicker
                                     :disabled-dates="disabledDates"
                                     v-model="date_for_selected"
@@ -388,14 +454,16 @@
                                 </datepicker>
 
                                 <a class="calender li-opacity clickHide">
-                                    Set Due Date
+                                    <i class="outline-event icon-image-preview contex-menu-icon" data-toggle
+                                       title="toggle"></i>  Set Due Date
                                 </a>
 
 
                             </li>
-                            <li><a @click="deleteSelectedTask" href="javascript:void(0)">Deleted </a></li>
-                            <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">Move To Dont Forget
-                                Section </a>
+                            <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">
+                                <i class="baseline-playlist_delete icon-image-preview contex-menu-icon" data-toggle
+                                   title="toggle"></i>
+                                Move To Dont Forget Section </a>
                             </li>
 
                         </ul>
@@ -602,7 +670,9 @@
                     tasks: [],
                     users: []
                 },
-                date_for_selected: null
+                date_for_selected: null,
+                dNode: null,
+                dNodeInterval: null,
             }
         },
         mounted() {
@@ -660,15 +730,13 @@
                         }, 500);
                         break;
                     case "ctrl+c":
-                        _this.selectedCopy = _this.selectedData;
-                        _this.selectedCut = null;
+                        _this.copyTask();
                         break;
                     case "ctrl+x":
-                        _this.selectedCut = _this.selectedData;
-                        _this.selectedCopy = null;
+                        _this.cutTask()
                         break;
                     case "ctrl+v":
-                        _this.pastCopyAndCut(_this.selectedData);
+                        _this.pastCopyAndCut();
                         break;
                     case "delete":
                         _this.RemoveNodeAndChildren(_this.selectedData);
@@ -728,10 +796,20 @@
                 }
             },
             dropNode(node, targetTree, oldTree) {
+                let THIS = this;
+                clearInterval(THIS.dNodeInterval);
 
             },
-            dragNode(node, targetTree, oldTree) {
+            dragNode(node) {
+                let THIS = this;
+                this.dNode = node;
+                this.dNodeInterval = setInterval(function () {
+                    var target = document.getElementById('TaskListAndDetails');
+                    var top = $('#' + node._id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                    target.scrollTo(0, top);
+                    console.log(top);
 
+                }, 100);
             },
             ChangeNode(data, taskAfterDrop) {
                 if (data.sort_id === -2) {
@@ -1017,6 +1095,39 @@
 
             },
 
+            copyTask(){
+                var _this = this;
+                if (_this.selectedIds.length > 1){
+                    alert('Copy and past now working on single task !')
+                }else {
+                    if (_this.selectedData.text !== 'Dont Forget Section'){
+                        _this.selectedCopy = _this.selectedData;
+                        _this.selectedCut = null;
+                        $('.jquery-accordion-menu').hide();
+                    }else {
+                        alert("you can't copy this task !")
+                    }
+
+                }
+
+            },
+            cutTask(){
+                var _this = this;
+                if (_this.selectedIds.length > 1){
+                    alert('Cut and past now working on single task !')
+                }else {
+                    if (_this.selectedData.text !== 'Dont Forget Section'){
+                        _this.selectedCut = _this.selectedData;
+                        _this.selectedCopy = null;
+                        $('.jquery-accordion-menu').hide();
+                    }else {
+                        alert("you can't cut this task !")
+                    }
+
+                }
+
+            },
+
             addEmptyNode(data) {
                 let _this = this;
                 var children = data.parent.children;
@@ -1192,8 +1303,12 @@
                         console.log('Api is task-unmake-child not Working !!!')
                     });
             },
-            pastCopyAndCut(data) {
+            pastCopyAndCut() {
                 var _this = this;
+                var data = _this.selectedData;
+                if(_this.selectedIds.length > 1){
+                    return false;
+                }
                 var postData = {
                     target_id: data.id,
                     copy_id: (this.selectedCopy === null) ? this.selectedCut.id : this.selectedCopy.id,
