@@ -81,7 +81,7 @@
         </div>
         <!--        //tree view component section-->
         <div class="TaskListAndDetails container-fluid" v-if="list.type === 'list'" id="TaskListAndDetails">
-            <div @click="HideDetails" class="task_width" id="task_width">
+            <div class="task_width" id="task_width">
                 <div class="col-11" id="tree_view_list">
 
                     <Tree :data="treeList" :indent="2" :space="0" @change="ChangeNode"
@@ -802,16 +802,16 @@
 
             },
             dragNode(node) {
-                let THIS = this;
-                this.dNode = node;
-                this.dNodeHeght = $('#' + node._id)[0].getBoundingClientRect().top + window.scrollY;
-                this.dNodeInterval = setInterval(function () {
-                    var target = document.getElementById('TaskListAndDetails');
-                    var top = $('#' + node._id)[0].getBoundingClientRect().top + target.scrollTop -241;
-                    // var cssTop = top+241+THIS.dNodeHeght;
-                    // $('#' + node._id).css({top: cssTop+'px'});
-                    target.scrollTo(0, top);
-                }, 100);
+                // let THIS = this;
+                // this.dNode = node;
+                // this.dNodeHeght = $('#' + node._id)[0].getBoundingClientRect().top + window.scrollY;
+                // this.dNodeInterval = setInterval(function () {
+                //     var target = document.getElementById('TaskListAndDetails');
+                //     var top = $('#' + node._id)[0].getBoundingClientRect().top + target.scrollTop -241;
+                //     // var cssTop = top+241+THIS.dNodeHeght;
+                //     // $('#' + node._id).css({top: cssTop+'px'});
+                //     target.scrollTo(0, top);
+                // }, 100);
             },
             ChangeNode(data, taskAfterDrop) {
                 if (data.sort_id === -2) {
