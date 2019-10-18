@@ -33,6 +33,7 @@
                                 {{(selectedData.tags.length > 2 ) ? tag.text.substring(0,2) : tag.text.substring(0,3) }}
                             </li>
                         </template>
+
                     </i>
 
                     <i :id="'tag-'+selectedData._id" class="outline-local_offer icon-image-preview li-opacity details-header-tag"
@@ -110,7 +111,7 @@
                                            href="javascript:void(0)"
                                            style="background: #7BB348;">Post</a>
                                         <a class="btn btn-default" href="javascript:void(0)"
-                                           style="border: 1px solid #f1efe6">Cancel</a>
+                                           style="border: 1px solid #f1efe6" @click="HideListDetails">Cancel</a>
                                     </div>
                                 </div>
                             </div>
@@ -136,16 +137,21 @@
                     </div>
                 </div>
                 <!-- Comments -->
-                <div class="row">
+                <div class="row comment-section-in-task-details">
                     <div class="col-12">
-                        <img alt="user" class="commentPic" src="/images/avatar.png">
                         <div class="textAreaExtend" v-click-outside="HideTextArea">
-                            <textarea @focus="ShowTextArea(selectedData)" class="form-control commentInput"
+                            <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                               data-placement="bottom" data-toggle="tooltip"> PI</p>
+                            <textarea @focus="ShowTextArea(selectedData)"
+                                      class="form-control commentInput"
                                       data-grow="auto"
-                                      placeholder="Add comment"></textarea>
+                                      placeholder="Add comment">
+
+                            </textarea>
+
                             <div class="SubmitButton" id="SubmitButton">
                                 <a class="btn btn-default btn-sm" style="background: #7BB348;">Post</a>
-                                <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6">Cancel</a>
+                                <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6" @click="HideTextArea">Cancel</a>
                                 <a @click="addAttachment(selectedData)" class="btn btn-default btn-sm"
                                    style="border: 1px solid #f1efe6">
                                     <i class="fa fa-paperclip"></i>
