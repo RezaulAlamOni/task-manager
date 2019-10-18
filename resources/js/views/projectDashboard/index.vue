@@ -673,6 +673,7 @@
                 date_for_selected: null,
                 dNode: null,
                 dNodeInterval: null,
+                dNodeHeght: 0,
             }
         },
         mounted() {
@@ -803,12 +804,13 @@
             dragNode(node) {
                 let THIS = this;
                 this.dNode = node;
+                this.dNodeHeght = $('#' + node._id)[0].getBoundingClientRect().top + window.scrollY;
                 this.dNodeInterval = setInterval(function () {
                     var target = document.getElementById('TaskListAndDetails');
-                    var top = $('#' + node._id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                    var top = $('#' + node._id)[0].getBoundingClientRect().top + target.scrollTop -241;
+                    // var cssTop = top+241+THIS.dNodeHeght;
+                    // $('#' + node._id).css({top: cssTop+'px'});
                     target.scrollTo(0, top);
-                    console.log(top);
-
                 }, 100);
             },
             ChangeNode(data, taskAfterDrop) {
