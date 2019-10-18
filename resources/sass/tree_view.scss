@@ -745,6 +745,7 @@
 
 .dateCal {
     border: none;
+    background: transparent;
 }
 
 ::-webkit-scrollbar {
@@ -965,6 +966,14 @@
     display: inline-block;
 
 }
+
+.calender-for-details {
+    position: absolute;
+    top: 1px;
+    /* z-index: 1; */
+    left: 33px;
+}
+
 
 @media only screen and (max-width: 880px) {
     .hide-item-res {

@@ -6,11 +6,10 @@
                 <h4 class="compltit-blue">#ID12</h4>
             </div>
             <div class="col-2">
-                <i class="fa fa-calendar details-title"></i>
-                <a class="calender li-opacity clickHide" v-if="!selectedData.date">
-                    <i class="outline-event icon-image-preview" data-toggle title="toggle"></i>
-                </a>
-
+                <i class="fa fa-calendar details-title calender-for-details" v-if="selectedData.date === '0000-00-00'"></i>
+<!--                <a class="calender li-opacity clickHide">-->
+<!--                    <i class="outline-event icon-image-preview" data-toggle title="toggle"></i>-->
+<!--                </a>-->
                 <datepicker
                     :disabled-dates="disabledDates"
                     @selected="updateDate"
