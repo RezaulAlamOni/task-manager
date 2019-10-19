@@ -314,6 +314,7 @@
 
                             </template>
                         </div>
+
                     </Tree>
 
                     <div class="jquery-accordion-menu" id="jquery-accordion-menu" v-click-outside="HideCustomMenu">
@@ -485,6 +486,8 @@
 
                         </ul>
                     </div>
+                </div>
+                <div style="height: 50px;">
 
                 </div>
             </div>
