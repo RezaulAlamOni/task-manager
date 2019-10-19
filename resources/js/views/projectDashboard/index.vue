@@ -305,10 +305,10 @@
                                         </div>
                                     </a>
                                 </div>
-                                <a @click="addChild(data)" class="subTask_plus li-opacity clickHide">
+                                <a @click="addChild(data)" class="subTask_plus li-opacity clickHide " data-toggle="tooltip" title="Add Child">
                                     <i class="baseline-playlist_add icon-image-preview"></i>
                                 </a>
-                                <a @click="addNode(data)" class="task_plus li-opacity clickHide">
+                                <a @click="addNode(data)" class="task_plus li-opacity clickHide"  data-toggle="tooltip" title="Add Task Bellow">
                                     <i class="baseline-add icon-image-preview"></i>
                                 </a>
 
