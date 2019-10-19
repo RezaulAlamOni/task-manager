@@ -114,10 +114,10 @@
                                 <a class="left-content1 li-opacity ">
                                     <i class="outline-arrow_upward icon-image-preview"></i>
                                 </a>
-                                <b @click="store.toggleOpen(data)"
+                                <b @click="HideShowChild(store , data)"
                                    v-if="data.children && data.children.length && data.open"><i
                                     class="fa fa-fw fa-minus"></i></b>
-                                <b @click="store.toggleOpen(data)"
+                                <b @click="HideShowChild(store , data)"
                                    v-else-if="data.children && data.children.length && !data.open"><i
                                     class="fa fa-fw fa-plus"></i></b>
                                 <span>
@@ -944,6 +944,22 @@
                 target.scrollTo(0, top);
                 $('#myUL').addClass('myUL');
                 $('#myUL').removeClass('myUL-show');
+            },
+            HideShowChild(store, data){
+                var _this = this;
+                var postData = {
+                    id: data.id,
+                    open: (data.open === 1) ? 0 : 1
+                };
+                axios.post('/api/task-list/update', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        store.toggleOpen(data)
+                    })
+                    .catch(error => {
+                        console.log('Api for complete task not Working !!!')
+                    });
+
             },
 
             assignUserToTask(user, data) {

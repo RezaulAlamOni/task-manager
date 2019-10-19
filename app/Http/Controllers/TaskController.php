@@ -71,7 +71,7 @@ class TaskController extends Controller
             }
             $info['clicked'] = 0;
             $info['date'] = $task->date;
-            $info['open'] = 1;
+            $info['open'] = $task->open;
             $allTags = $task->tags;
             $tags = [];
             $tagTooltip = '';
@@ -590,7 +590,11 @@ class TaskController extends Controller
             if (Task::where('id', $request->id)->update(['title' => $request->text])) {
                 return response()->json('success', 200);
             }
-        } elseif (isset($request->files)) {
+        }elseif (isset($request->open)){
+            if (Task::where('id', $request->id)->update(['open' => $request->open])) {
+                return response()->json('success', 200);
+            }
+        }elseif (isset($request->file)) {
             $task_id = $request->id;
             $photo = $_FILES['file']['name'];
 
