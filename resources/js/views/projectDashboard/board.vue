@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <div id="board_view_list">
             <div class="col-12" id="col10" style="border: none">
                 <div class="card-scene">
@@ -112,57 +111,68 @@
                                                     <i class="baseline-playlist_delete icon-image-preview"></i>
                                                 </a>
                                             </div>
-                                            <div class="user">
-                                                <a>
+                                            <div>
+                                                <a class="user dropdown-hide-with-remove-icon">
+                                                    <template v-if="card.assigned_user.length > 0">
+                                                        <span class="assigned_user dropdown-toggle-split "
+                                                            data-toggle="dropdown" v-for="(assign,keyId) in card.assigned_user">
+                                                            <p :title="assign.name"
+                                                            @click="showAssignedUserRemoveButton(card)"
+                                                            class="assignUser-photo-for-selected text-uppercase"
+                                                            data-placement="bottom" data-toggle="tooltip"
+                                                            v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
+                                                                <a :id="'remove-assign-user'+card.cardId"
+                                                                @click="removeAssignedUser(assign)"
+                                                                class="remove-assigned" href="javascript:void(0)">
+                                                                    <i class="fa fa-times remove-assign-user-icon"></i>
+                                                                </a>
+                                                            </p>
+
+                                                        </span>
+                                                    </template>
+
                                                     <i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
-                                                    data-toggle="dropdown"></i>
-                                                    <div class="dropdown-menu dropdown-menu-left">
+                                                    data-toggle="dropdown"
+                                                    v-else></i>
+                                                    <div class="dropdown-menu dropdown-menu-right">
                                                         <diV class="collapse show switchToggle">
                                                             <li class="assignUser">
-                                                                <input class="input-group searchUser" placeholder="Set assignee by name and email"
-                                                                       type="text">
-                                                                <label class="pl-2 ">
-                                                                    <small style="font-size: 12px">Or invite a new
-                                                                        member by
-                                                                        email address
-                                                                    </small>
+                                                                <input class="input-group searchUser"
+                                                                    placeholder="Assign by name and email"
+                                                                    type="text">
+                                                                <label class="pl-2 label-text">
+                                                                    <span class="assign-user-drop-down-text">
+                                                                        Or invite a new member by email address
+                                                                    </span>
                                                                 </label>
                                                             </li>
                                                             <li class="assignUser">
-                                                                <div class="row">
-                                                                    <div class="col-md-3 pt-2 pl-5">
-                                                                        <img alt="not found"
-                                                                             class="img-circle" src=""
-                                                                             style="width: 30px">
+                                                                <template v-for="user in card.users">
+                                                                    <div @click="assignUserToTask(user,card)"
+                                                                        class="users-select row">
+                                                                        <div class="col-md-3 pt-1 pl-4">
+                                                                            <p class="assignUser-photo">
+                                                                                {{(user.name !== null) ? user.name.substring(0,2) :
+                                                                                ''}}</p>
+                                                                        </div>
+                                                                        <div class="col-md-9 assign-user-name-email">
+                                                                            <h5>{{user.name}}<br>
+                                                                                <small>{{user.email}}</small>
+                                                                            </h5>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="col-md-9">
-                                                                        <h5>Haassa Jklcsad <br>
-                                                                            <small>dasda@gad.con</small>
-                                                                        </h5>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-md-3 pt-2 pl-5">
-                                                                        <img alt="not found"
-                                                                             class="img-circle" src=""
-                                                                             style="width: 30px">
-                                                                    </div>
-                                                                    <div class="col-md-9">
-                                                                        <h5>jakibul Nahid<br>
-                                                                            <small>asdsafa@opo.con</small>
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
+                                                                </template>
                                                             </li>
                                                         </diV>
-                                                        <li @click="switchEvent($event)" class="border-top pl-2">
-                                                            <span
-                                                                style="font-size: 13px;">Assign an external team</span>
-                                                            <switches color="success"
-                                                                      style="position:absolute; right: 10px;bottom: -4px"
-                                                                      theme="bootstrap"
-                                                                      v-model="id">
+                                                        <li @click="switchEvent($event)"
+                                                            class="border-top pl-2 assign-user-drop-down-footer">
+
+                                                                <span
+                                                                    class="assign-user-drop-down-text">Assign an external team</span>
+                                                            <switches class="assign-user-switch-for-dropdown"
+                                                                    color="success"
+                                                                    theme="bootstrap"
+                                                                    v-model="id">
                                                             </switches>
                                                         </li>
                                                     </div>
@@ -740,6 +750,8 @@
                             id: `${i}${j}`,
                             cardId: this.cards[i].task[j].id,
                             types: this.cards[i].task[j].type,
+                            assigned_user: this.cards[i].task[j].assigned_user,
+                            users: this.cards[i].task[j].users,
                             existing_tags: this.cards[i].task[j].existing_tags,
                             props: {
                                 className: 'card',
@@ -1227,15 +1239,13 @@
                         'title': data.data
                     };
                     axios.post('/api/card-update/' + data.cardId, title)
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.cards[index].task[child_key].name = data.data;
-                            _this.getData();
-
-                        })
-                        .catch(error => {
-
-                        });
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.cards[index].task[child_key].name = data.data;
+                        _this.getData();
+                    })
+                    .catch(error => {
+                    });
                 }
             },
             addTag(e, index, key) {
@@ -1498,6 +1508,56 @@
                     maxHeight: 200
                 };
                 _this.growInit(option);
+            },
+            showAssignedUserRemoveButton(data) {
+
+                $('[data-toggle="tooltip"]').tooltip('hide');
+
+                setTimeout(function () {
+                    $('#remove-assign-user' + data.cardId).toggleClass('remove-assign-user');
+                    $('#remove-assign-user' + data.cardId).removeClass('remove-assigned');
+                }, 500)
+
+            },
+            removeAssignedUser(user) {
+
+                // console.log(user.id, user.task_id);
+                var _this = this;
+                var postData = {
+                    user_id: user.cardId,
+                    task_id: user.task_id
+                };
+                axios.post('/api/task-list/assign-user-remove', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        // console.log(response);
+                        if (response === 'success') {
+                            _this.getData()
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Api assign-user-remove is not Working !!!')
+                    });
+            },  
+            assignUserToTask(user, data) {
+                var _this = this;
+                var postData = {
+                    task_id: data.cardId,
+                    user_id: user.id
+                };
+                axios.post('/api/task-list/assign-user', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        if (response === 'success') {
+                            _this.getData()
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Api is not Working !!!')
+                    });
+            },
+            switchEvent(e) {
+                $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
             },
         },
         directives: {
