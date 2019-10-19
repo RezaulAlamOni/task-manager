@@ -99,7 +99,7 @@
                             <template v-html="data.html" v-if="!data.isDragPlaceHolder">
 
                                 <a :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
-                                   @click="addTaskToComplete(data)"
+                                   @click="addTaskToComplete(data)" data-toggle="tooltip"
                                    class="task-complete left-content li-opacity "
                                 >
                                     <i class="outline-check_circle_outline icon-image-preview "></i>
@@ -133,14 +133,17 @@
 
                                 <a class="attach-icon hide-item-res">
                                         <span v-if="data.files && data.files.length !== 0">
-                                            <template v-for="fl in data.files">
-                                                <img :src="'/images/'+fl.file_name"
+                                            <template v-for="(fl,file_id ) in data.files">
+                                                <img :src="'/images/'+fl.file_name" v-if="file_id < 2"
                                                      @click="showImage(data.files, fl.file_name)"
                                                      class="task-img">
                                             </template>
                                         </span>
                                     <i @click="addAttachment(data)"
-                                       class="fa fa-paperclip icon-image-preview dropdown-toggle-split li-opacity"></i>
+                                       class="fa fa-paperclip icon-image-preview dropdown-toggle-split li-opacity"
+                                       title="File"
+                                       data-toggle="tooltip"></i>
+
                                     <input :id="'file'+data._id" @change="updatePicture($event,data)" ref="file"
                                            style="display: none; "
                                            type="file">
@@ -167,11 +170,12 @@
                                             </template>
                                         </template>
                                     </i>
-                                    <i :id="'tag-'+data._id" class="outline-local_offer icon-image-preview li-opacity"
-                                       data-toggle="dropdown"
-                                       v-else>
+                                    <span :id="'tag-'+data._id" data-toggle="dropdown" v-else>
+                                        <i class="outline-local_offer icon-image-preview li-opacity"
+                                           data-toggle="tooltip" title="Tag">
+                                        </i>
+                                    </span>
 
-                                    </i>
                                     <div :id="'dropdown'+data._id" class="dropdown-menu dropdown-menu-right">
 
                                         <diV class="collapse show switchToggle" style="">
@@ -215,7 +219,8 @@
                                 </a>
 
                                 <div class="hide-item-res">
-                                    <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'">
+                                    <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'"
+                                       title="Due Date" data-toggle="tooltip">
                                         <i class="outline-event icon-image-preview" data-toggle
                                            title="toggle"></i>
                                     </a>
@@ -225,6 +230,7 @@
                                         calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
                                         format='dd MMM'
                                         input-class="dateCal"
+                                        title="Due Date" data-toggle="tooltip"
                                         v-model="data.date">
                                     </datepicker>
 
@@ -249,10 +255,12 @@
 
                                             </span>
                                         </template>
+                                        <span  data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
+                                            <i class="outline-person icon-image-preview li-opacity "
+                                               data-toggle="tooltip" title="Assignee">
+                                            </i>
+                                        </span>
 
-                                        <i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
-                                           data-toggle="dropdown"
-                                           v-else></i>
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <diV class="collapse show switchToggle">
                                                 <li class="assignUser">
@@ -317,13 +325,15 @@
                                    data-toggle="dropdown">
                                     <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
                                     Copy </a>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split disabled" v-else style="color: gray"
+                                <a href="javascript:void(0)" class="dropdown-toggle-split disabled" v-else
+                                   style="color: gray"
                                    data-toggle="dropdown">
                                     <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
                                     Copy </a>
 
                                 <span class="contex-menu-sortcut">
-                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">C</span>
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span
+                                    class="badge-pill badge-default">C</span>
                                 </span>
 
                             </li>
@@ -340,14 +350,15 @@
                                     <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
                                     Cut </a>
                                 <span class="contex-menu-sortcut">
-                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">X</span>
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span
+                                    class="badge-pill badge-default">X</span>
                                 </span>
                             </li>
                             <li>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split "
                                    @click="pastCopyAndCut"
-                                    data-toggle="dropdown"
-                                    v-if="selectedCopy !== null || selectedCut !== null" >
+                                   data-toggle="dropdown"
+                                   v-if="selectedCopy !== null || selectedCut !== null">
                                     <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
                                     Paste </a>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split disabled" style="color: gray"
@@ -356,19 +367,22 @@
                                     <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
                                     Paste </a>
                                 <span class="contex-menu-sortcut">
-                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">v</span>
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span
+                                    class="badge-pill badge-default">v</span>
                                 </span>
                             </li>
                             <li><a @click="deleteSelectedTask" href="javascript:void(0)">
                                 <i class="baseline-playlist_delete icon-image-preview contex-menu-icon" data-toggle
                                    title="toggle"></i>
-                                Delete Selected  <span class="badge-pill badge-default contex-menu-sortcut">Delete</span></a></li>
+                                Delete Selected <span class="badge-pill badge-default contex-menu-sortcut">Delete</span></a>
+                            </li>
                             <li>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
                                     <i class="outline-person icon-image-preview contex-menu-icon"></i>
                                     Assign User to Selected </a>
                                 <span class="contex-menu-sortcut">
-                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">U</span>
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span
+                                    class="badge-pill badge-default">U</span>
                                 </span>
 
                                 <div class="dropdown-menu dropdown-menu-right">
@@ -389,7 +403,8 @@
                                                          class="users-select row">
                                                         <div class="col-md-3 pt-1 pl-4">
                                                             <p class="assignUser-photo">
-                                                                {{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
+                                                                {{(user.name !== null) ? user.name.substring(0,2) :
+                                                                ''}}</p>
                                                         </div>
                                                         <div class="col-md-9 assign-user-name-email">
                                                             <h5>{{user.name}}<br>
@@ -409,7 +424,8 @@
                                     Add Tags to Selected
                                 </a>
                                 <span class="contex-menu-sortcut">
-                                    <span class="badge-pill badge-default">Shift</span>+<span class="badge-pill badge-default">#</span>
+                                    <span class="badge-pill badge-default">Shift</span>+<span
+                                    class="badge-pill badge-default">#</span>
                                 </span>
 
                                 <div class="dropdown-menu dropdown-menu-right">
@@ -429,8 +445,9 @@
                                                     <div @click="ActionToSelectedTask(user.id,'tag')"
                                                          class="users-select row">
                                                         <div class="col-md-9 add-tag-to-selected">
-                                                            <span class="badge badge-default tag-color-custom-contextmenu"
-                                                            :style="{'background' : user.color}"
+                                                            <span
+                                                                class="badge badge-default tag-color-custom-contextmenu"
+                                                                :style="{'background' : user.color}"
                                                             >.</span>
                                                             <h5>{{user.title}}</h5>
                                                         </div>
@@ -455,7 +472,7 @@
 
                                 <a class="calender li-opacity clickHide">
                                     <i class="outline-event icon-image-preview contex-menu-icon" data-toggle
-                                       title="toggle"></i>  Set Due Date
+                                       title="toggle"></i> Set Due Date
                                 </a>
 
 
@@ -897,7 +914,7 @@
                     $('#myUL').removeClass('myUL-show');
                     $('#myUL').addClass('myUL');
                 } else {
-                    if (value.length >= 2 ){
+                    if (value.length >= 2) {
                         axios.post('/api/task-list/suggest-user', {'text': value, 'project_id': _this.projectId})
                             .then(response => response.data)
                             .then(response => {
@@ -1097,32 +1114,32 @@
 
             },
 
-            copyTask(){
+            copyTask() {
                 var _this = this;
-                if (_this.selectedIds.length > 1){
+                if (_this.selectedIds.length > 1) {
                     alert('Copy and past now working on single task !')
-                }else {
-                    if (_this.selectedData.text !== 'Dont Forget Section'){
+                } else {
+                    if (_this.selectedData.text !== 'Dont Forget Section') {
                         _this.selectedCopy = _this.selectedData;
                         _this.selectedCut = null;
                         $('.jquery-accordion-menu').hide();
-                    }else {
+                    } else {
                         alert("you can't copy this task !")
                     }
 
                 }
 
             },
-            cutTask(){
+            cutTask() {
                 var _this = this;
-                if (_this.selectedIds.length > 1){
+                if (_this.selectedIds.length > 1) {
                     alert('Cut and past now working on single task !')
-                }else {
-                    if (_this.selectedData.text !== 'Dont Forget Section'){
+                } else {
+                    if (_this.selectedData.text !== 'Dont Forget Section') {
                         _this.selectedCut = _this.selectedData;
                         _this.selectedCopy = null;
                         $('.jquery-accordion-menu').hide();
-                    }else {
+                    } else {
                         alert("you can't cut this task !")
                     }
 
@@ -1308,7 +1325,7 @@
             pastCopyAndCut() {
                 var _this = this;
                 var data = _this.selectedData;
-                if(_this.selectedIds.length > 1){
+                if (_this.selectedIds.length > 1) {
                     return false;
                 }
                 var postData = {
