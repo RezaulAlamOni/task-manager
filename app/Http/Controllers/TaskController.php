@@ -71,6 +71,7 @@ class TaskController extends Controller
             }
             $info['clicked'] = 0;
             $info['date'] = $task->date;
+            $info['open'] = 1;
             $allTags = $task->tags;
             $tags = [];
             $tagTooltip = '';

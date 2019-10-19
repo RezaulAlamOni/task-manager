@@ -499,7 +499,7 @@
 .task_width {
     width: 100%;
     @include transition(all 0.4s linear);
-    //height: calc(100vh - 130px);
+    min-height: calc(100vh - 245px);
     display: inline-block;
 
 }
@@ -631,7 +631,7 @@
     background-color: #f9f9f9;
     width: 100%;
     display: inline-block;
-    height: calc(100vh - 300px);
+    height: calc(100vh - 225px);
     overflow-y: auto;
     overflow-x: hidden;
 
@@ -998,6 +998,19 @@
     font-size: 20px;
     font-weight: bold;
     padding: 0px;
+}
+.page-titles {
+    width: 100%;
+    display: table;
+    background: #fff;
+    height: 50px;
+    box-shadow: 0 2px 4px rgba(55, 63, 67, 0.04);
+}
+
+.nav-bar-right{
+    position: absolute;
+    right: 60px;
+    top: 0;
 }
 
 
