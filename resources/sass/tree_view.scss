@@ -499,7 +499,7 @@
 .task_width {
     width: 100%;
     @include transition(all 0.4s linear);
-    //height: calc(100vh - 130px);
+    min-height: calc(100vh - 245px);
     display: inline-block;
 
 }
@@ -526,7 +526,7 @@
 .detailsShow {
     display: block;
     position: absolute;
-    top: 0;
+    top: 50px;
     bottom: 0;
     outline: 0;
     box-sizing: border-box;
@@ -594,8 +594,14 @@
 
     .commentInput {
         margin-left: 39px;
-        width: 90%;
+        width: 95%;
         padding: 5px 7px !important;
+    }
+    .comment-section-in-task-details {
+        position: absolute;
+        bottom: 5px;
+        width: 100%;
+
     }
 
     .detailsInput {
@@ -625,7 +631,7 @@
     background-color: #f9f9f9;
     width: 100%;
     display: inline-block;
-    height: calc(100vh - 300px);
+    height: calc(100vh - 225px);
     overflow-y: auto;
     overflow-x: hidden;
 
@@ -745,6 +751,7 @@
 
 .dateCal {
     border: none;
+    background: transparent;
 }
 
 ::-webkit-scrollbar {
@@ -965,6 +972,47 @@
     display: inline-block;
 
 }
+
+.calender-for-details {
+    position: absolute;
+    top: 1px;
+    /* z-index: 1; */
+    left: 33px;
+}
+.details-header {
+    margin-top: 8px !important;
+    margin-bottom: 0px !important;
+}
+.details-header-tag {
+    margin-top: 10px !important;
+    margin-bottom: 0px !important;
+}
+
+.details-comments-pic {
+    top: 8px;
+    position: absolute;
+    height: 35px;
+    width: 35px;
+    line-height: 35px;
+    left: 26px;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 0px;
+}
+.page-titles {
+    width: 100%;
+    display: table;
+    background: #fff;
+    height: 50px;
+    box-shadow: 0 2px 4px rgba(55, 63, 67, 0.04);
+}
+
+.nav-bar-right{
+    position: absolute;
+    right: 60px;
+    top: 0;
+}
+
 
 @media only screen and (max-width: 880px) {
     .hide-item-res {

@@ -1,25 +1,27 @@
 <template>
     <div class="container" v-if="Object.keys(selectedData).length > 0">
-        <!-- Title -->
+        <!-- {{selectedData}} -->
         <div class="row">
             <div class="col-2">
-                <h4 class="compltit-blue details-header">#ID12</h4>
+                <h4 class="compltit-blue">#ID12</h4>
             </div>
             <div class="col-2">
-                <i class="fa fa-calendar details-title calender-for-details details-header"
-                   v-if="selectedData.date === '0000-00-00'"></i>
+                <i class="fa fa-calendar details-title"></i>
+                <a class="calender li-opacity clickHide" v-if="!selectedData.date">
+                    <i class="outline-event icon-image-preview" data-toggle title="toggle"></i>
+                </a>
 
                 <datepicker
                     :disabled-dates="disabledDates"
                     @selected="updateDate"
                     calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
                     format='dd MMM'
-                    input-class="dateCal due-details details-header"
+                    input-class="dateCal due-details"
                     v-model="selectedData.date">
                 </datepicker>
             </div>
             <div class="col-1">
-                <img class="img-responsive details-header" src="/img/12.jpg" style="height:30px;width:30px;">
+                <img class="img-responsive" src="/img/12.jpg" style="height:30px;width:30px;">
             </div>
             <div class="col-4">
                 <!-- Tags -->
@@ -27,39 +29,71 @@
 
                     <i v-if="selectedData.tags.length > 0">
                         <template v-for="tag in selectedData.tags">
-                            <li class="badge-pill tags details-header-tag"
-                                v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'},{'float' : 'left'}]"
+                            <li class="badge-pill tags" v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'},{'float' : 'left'}]"
                                 v-if="tag.text !== null">
                                 {{(selectedData.tags.length > 2 ) ? tag.text.substring(0,2) : tag.text.substring(0,3) }}
                             </li>
                         </template>
-
                     </i>
 
-                    <i :id="'tag-'+selectedData._id" class="outline-local_offer icon-image-preview li-opacity details-header-tag"
+                    <i :id="'tag-'+selectedData._id" class="outline-local_offer icon-image-preview li-opacity"
                        data-toggle="dropdown"
                        v-else>
+
                     </i>
                 </ul>
             </div>
             <!-- Assign Users -->
             <div class="col-3">
                 <a class="user">
-                    <template v-if="selectedData.assigned_user.length > 0">
-                        <span class="assigned_user dropdown-toggle-split "
-                              data-toggle="dropdown" v-for="(assign,keyId) in selectedData.assigned_user">
-                            <p :title="assign.name"
-                               class="assignUser-photo-for-selected text-uppercase details-header"
-                               data-placement="bottom" data-toggle="tooltip"
-                               v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
-                                <a :id="'remove-assign-user'+selectedData.id"
-                                   class="remove-assigned" href="javascript:void(0)">
-                                    <i class="fa fa-times remove-assign-user-icon"></i>
-                                </a>
-                            </p>
-
-                        </span>
-                    </template>
+                    <span data-toggle="dropdown">
+                        <i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"></i>
+                        <span class="i-text">Add assignee</span>
+                    </span>
+                    <div class="dropdown-menu">
+                        <diV class="collapse show switchToggle">
+                            <li class="assignUser">
+                                <input class="input-group searchUser" placeholder="Set assignee by name and email"
+                                       type="text">
+                                <label class="pl-2 ">
+                                    <small style="font-size: 12px">
+                                        Or invite a new member by email address
+                                    </small>
+                                </label>
+                            </li>
+                            <li class="assignUser">
+                                <div class="row">
+                                    <div class="col-md-3 pt-2 pl-5">
+                                        <img
+                                            alt="not found"
+                                            class="img-circle" src="" style="width: 30px">
+                                    </div>
+                                    <div class="col-md-9">
+                                        <h5>Haassa Jklcsad <br>
+                                            <small>dasda@gad.con</small>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 pt-2 pl-5">
+                                        <img
+                                            alt="not found"
+                                            class="img-circle" src="" style="width: 30px">
+                                    </div>
+                                    <div class="col-md-9">
+                                        <h5>jakibul Nahid<br>
+                                            <small>asdsafa@opo.con</small>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </li>
+                        </diV>
+                        <li class="border-top pl-2">
+                            <span style="font-size: 13px;">Assign an external team</span>
+                            <switches color="success" style="position:absolute;right: 10px;bottom: -4px"
+                                      theme="bootstrap" v-model="id"></switches>
+                        </li>
+                    </div>
                 </a>
 
             </div>
@@ -67,7 +101,7 @@
         <div class="row">
             <div class="col-12">
                 <h5 class="">
-                    {{selectedData.text}}
+                    {{selectedData.data}}
                 </h5>
             </div>
         </div>
@@ -76,13 +110,11 @@
             <div class="col-12">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a aria-controls="home" aria-selected="true" class="nav-link active" data-toggle="tab"
-                           href="#home"
+                        <a aria-controls="home" aria-selected="true" class="nav-link active" data-toggle="tab" href="#home"
                            id="_details" role="tab">Details</a>
                     </li>
                     <li class="nav-item">
-                        <a aria-controls="profile" aria-selected="false" class="nav-link" data-toggle="tab"
-                           href="#profile"
+                        <a aria-controls="profile" aria-selected="false" class="nav-link" data-toggle="tab" href="#profile"
                            id="_log" role="tab">Logs</a>
                     </li>
                 </ul>
@@ -111,7 +143,7 @@
                                            href="javascript:void(0)"
                                            style="background: #7BB348;">Post</a>
                                         <a class="btn btn-default" href="javascript:void(0)"
-                                           style="border: 1px solid #f1efe6" @click="HideListDetails">Cancel</a>
+                                           style="border: 1px solid #f1efe6">Cancel</a>
                                     </div>
                                 </div>
                             </div>
@@ -137,21 +169,15 @@
                     </div>
                 </div>
                 <!-- Comments -->
-                <div class="row comment-section-in-task-details">
+                <div class="row">
                     <div class="col-12">
+                        <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater">
                         <div class="textAreaExtend" v-click-outside="HideTextArea">
-                            <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
-                               data-placement="bottom" data-toggle="tooltip"> PI</p>
-                            <textarea @focus="ShowTextArea(selectedData)"
-                                      class="form-control commentInput"
-                                      data-grow="auto"
-                                      placeholder="Add comment">
-
-                            </textarea>
-
+                            <textarea @focus="ShowTextArea(selectedData)" class="form-control commentInput" data-grow="auto"
+                                      placeholder="Add comment"></textarea>
                             <div class="SubmitButton" id="SubmitButton">
                                 <a class="btn btn-default btn-sm" style="background: #7BB348;">Post</a>
-                                <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6" @click="HideTextArea">Cancel</a>
+                                <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6">Cancel</a>
                                 <a @click="addAttachment(selectedData)" class="btn btn-default btn-sm"
                                    style="border: 1px solid #f1efe6">
                                     <i class="fa fa-paperclip"></i>
@@ -214,7 +240,7 @@
             }
         },
         mounted() {
-
+            // console.log(selectedData);
         },
         created() {
 
