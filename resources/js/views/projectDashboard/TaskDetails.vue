@@ -120,15 +120,18 @@
                 </div>
                 <!-- files -->
                 <div class="row">
-                    <div class="col-12" v-if="selectedData.files && selectedData.files.length !== 0">
+                    <div class="col-12" >
                         <h3 style="margin-top: 20px;">Files</h3>
-                        <template v-for="fl in selectedData.files">
+                        <div class="details-image">
                             <div class="row">
-                                <div class="col-12">
-                                    <img :src="'/images/'+fl.file_name" class="task-img-right-pane">
-                                </div>
+                                <template v-for="fl in selectedData.files" v-if="selectedData.files && selectedData.files.length !== 0">
+                                    <div class="col-md-6">
+                                        <img :src="'/images/'+fl.file_name" class="task-img-right-pane">
+                                    </div>
+                                </template>
                             </div>
-                        </template>
+                        </div>
+
                         <div style="cursor: pointer; background-color: #F8F8F8; margin:10px 0;">
                             <input :id="'file'+selectedData._id" :ref="selectedData._id" style="display: none;"
                                    type="file">
