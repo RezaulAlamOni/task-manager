@@ -72,37 +72,30 @@ class TaskController extends Controller
             $info['clicked'] = 0;
             $info['date'] = $task->date;
             $info['open'] = $task->open;
-            $allTags = $task->tags;
+            $allTags = $task->Assign_tags;
             $tags = [];
             $tagTooltip = '';
             if ($allTags->count() > 0) {
                 foreach ($allTags as $key => $tag) {
-                    $tags[$key]['id'] = $tag->id;
-                    $tags[$key]['task_id'] = $tag->task_id;
-                    $tags[$key]['text'] = $tag->title;
+                    $tags[$key]['id'] = $tag->tag->id;
+                    $tags[$key]['text'] = $tag->tag->title;
                     $tags[$key]['classes'] = '';
-                    $tags[$key]['style'] = 'background-color: ' . $tag->color;
-                    $tags[$key]['color'] = $tag->color;
-                    $tagTooltip .= '#' . $tag->title . ' ';
+                    $tags[$key]['style'] = 'background-color: ' . $tag->tag->color;
+                    $tags[$key]['color'] = $tag->tag->color;
+                    $tagTooltip .= '#' . $tag->tag->title . ' ';
                 }
             }
             $info['tags'] = $tags;
-            $info['existing_tags'] = Tags::select('tags.*')
-                ->join('task_lists', 'tags.task_id', 'task_lists.id')
-                ->where('tags.task_id', '!=', $task->id)
-                ->where('tags.title', '!=', 'Dont Forget')
-                ->where('task_lists.list_id', $task->list_id)
-                ->groupBy('tags.title')
-                ->get()->toArray();
-
             $info['tagTooltip'] = $tagTooltip;
             $info['description'] = $task->description;
             $info['files'] = $task->files;
-            $info['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id',
-                'users.id')->where('task_id', $task->id)->get()->toArray();
+            $info['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id', 'users.id')
+                ->where('task_id', $task->id)->get()->toArray();
             $team_id = DB::table('team_users')->where('user_id', Auth::id())->first();
-            $info['users'] = User::join('team_users', 'team_users.user_id', 'users.id')->where('team_users.team_id',
-                $team_id->team_id)->get()->toArray();
+            $info['users'] = User::join('team_users', 'team_users.user_id', 'users.id')
+                ->where('team_users.team_id', $team_id->team_id)->get()->toArray();
+            $info['existing_tags'] = Tags::where('team_id', $team_id->team_id)
+                ->get()->toArray();
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\AssignTag;
 use App\Tags;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TagsController extends Controller
 {
@@ -34,21 +36,31 @@ class TagsController extends Controller
 
     public function store(Request $request)
     {
-        $data = [
-            'color' => $request->color,
-            'title' => $request->tags,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ];
-        if (isset($request->type) && $request->type == 'board') {
-            $data['board_id'] = $request->id;
-        } else {
-            $data['task_id'] = $request->id;
-        }
-        $check_exists = Tags::where(['title' =>$request->tags, 'task_id' => $request->id])->get();
+        $check_tag = Tags::where(['title' =>$request->tags])->get();
 
-        if ($check_exists->count() <= 0) {
-            $tags = Tags::create($data);
+        if ($check_tag->count() > 0 ){
+            $check_assign = AssignTag::where(['task_id'=>$request->id,'tag_id'=>$check_tag[0]->id])->get();
+            if ($check_assign->count() <= 0){
+                AssignTag::create(['task_id'=>$request->id,'tag_id'=>$check_tag[0]->id]);
+            }
+            return response()->json('assign-tag');
+        }else{
+            $team_id = DB::table('team_users')->where('user_id', Auth::id())->first();
+            $tag_data = [
+                'team_id'=>$team_id->team_id,
+                'color' => $request->color,
+                'title' => $request->tags,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+            $tags = Tags::create($tag_data);
+            AssignTag::create(['task_id'=>$request->id,'tag_id'=>$tags->id]);
+            return response()->json('tag-and-assign-tag-created');
+        }
+
+
+        if ($check_tag->count() <= 0) {
+            $tags = Tags::create($tag_data);
             if ($request->tags == 'Dont Forget') {
                 $task = Task::where('id', $request->id)->first();
                 $taskDontForget = Task::where([

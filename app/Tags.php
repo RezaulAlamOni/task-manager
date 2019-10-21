@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tags extends Model
 {
     protected $fillable = [
-        'task_id',
-        'status',
+        'team_id',
         'title',
         'color',
         'created_at',
