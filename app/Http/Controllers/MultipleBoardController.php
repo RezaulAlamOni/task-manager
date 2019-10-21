@@ -300,7 +300,7 @@ class MultipleBoardController extends Controller
     {
         $delete = Task::where('id', $id)->delete();
         if ($delete) {
-            $this->createLog($request->boardId, 'Delete', 'Card Deleted', 'Board Single Card Deleted');
+            $this->createLog($id, 'Delete', 'Card Deleted', 'Board Single Card Deleted');
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);

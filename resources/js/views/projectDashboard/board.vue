@@ -1155,7 +1155,7 @@
                 .then(response => {
                     if(response.success == true){
                         let data = response.data;
-                        _this.cards[index].task.push({id: data.id, name: data.title, date: data.date, tags: [], clicked: 0});
+                        _this.cards[index].task.push({id: data.id, name: data.title, date: data.date, tags: [], assigned_user:[], users:[], clicked: 0});
                         let keys = _this.cards[index].task.length-1;
                         _this.getData();
                         setTimeout(function () {
