@@ -53,9 +53,9 @@ class Task extends Model
         return $this->hasMany('App\ActionLog', 'task_id', 'id');
     }
 
-    public function tags()
+    public function Assign_tags()
     {
-        return $this->hasMany(Tags::class, 'task_id', 'id');
+        return $this->hasMany(AssignTag::class, 'task_id', 'id')->with('tag');
     }
 
     public function boardTasksTags()

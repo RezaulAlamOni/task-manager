@@ -8,25 +8,17 @@ class Tags extends Model
 {
     protected $fillable = [
         'task_id',
-        'board_id',
+        'status',
         'title',
         'color',
         'created_at',
         'updated_at'
     ];
 
-    public function task()
+
+    public function assign_to()
     {
-        return $this->belongsTo(Task::class, 'id', 'task_id');
+        return $this->hasOne(AssignTag::class, 'tag_id', 'id')->with('task');
     }
 
-    public function board()
-    {
-        return $this->belongsTo(TaskBoard::class, 'id', 'board_id');
-    }
-
-    public function boardTask()
-    {
-        return $this->belongsTo(ExistingTasksInBoard::class, 'id', 'board_id');
-    }
 }

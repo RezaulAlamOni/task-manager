@@ -210,11 +210,17 @@ class TagsController extends Controller
             $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
             return response()->json(['success' => 1, 'tags' => $tags]);
         } elseif (isset($request->id)) {
-            $taskAndTag = Tags::join('task_lists','tags.task_id','task_lists.id')
+            $taskAndTag = Tags::join('task_lists','tags.task_id','task_lists.id')->select('tags.*','task_lists.project_id')
                 ->where('tags.id', $request->id)->first();
-            Tags::where('id', $request->id)->delete();
+            $check_tag = Tags::where('title',$taskAndTag->title)->count();
+            if ($check_tag > 1){
+                Tags::where('id', $request->id)->delete();
+            }else{
+                Tags::where('id', $request->id)->update(['status'=>1]);
+            }
+
             $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
-            return response()->json(['success' => 1, 'tags' => $tags]);
+            return response()->json(['success' => 1, 'tags' => $tags,$check_tag]);
         }
     }
 
