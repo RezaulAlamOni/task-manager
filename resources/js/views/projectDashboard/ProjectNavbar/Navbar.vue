@@ -45,7 +45,7 @@
                                 </li>
                             </ul>
                         </span>
-                    <ul class="navbar-nav ml-4" style="position: absolute;right: 60px;">
+                    <ul class="navbar-nav ml-4 nav-bar-right">
                         <li class="nav-item search-nav-icon">
                             <button class="btn btn-default" type="submit" @click="showSearchInputField"><i class="fa fa-search"></i></button>
                         </li>
@@ -312,9 +312,7 @@
                         <ul class="list-group list-group-horizontal multi-list-group"
                             style="margin-left: 0px !important;">
                             <li class="list-group-item">
-                                <span class="badge-pill badge-default">CTRL</span>
-                                +
-                                <span class="badge-pill badge-default">D</span>
+                                <span class="badge-pill badge-default">Delete</span>
                             </li>
                             <li class="list-group-item">Delete Task</li>
                         </ul>
