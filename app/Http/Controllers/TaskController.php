@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AssignedUser;
+use App\AssignTag;
 use App\Files;
 use App\Multiple_list;
 use App\Project;
@@ -464,7 +465,7 @@ class TaskController extends Controller
             return true;
         }
         AssignedUser::where('task_id',$id)->delete();
-        Tags::where('task_id', $id)->delete();
+        AssignTag::where('task_id', $id)->delete();
         Files::where('tasks_id', $id)->delete();
 
         Task::findOrFail($id)->delete();

@@ -20,5 +20,9 @@ class AssignTag extends Model
     {
         return $this->hasOne(Tags::class, 'id', 'tag_id');
     }
+    public function dont_forget()
+    {
+        return $this->hasOne(Tags::class, 'id', 'tag_id')->where('title','Dont Forget');
+    }
 
 }

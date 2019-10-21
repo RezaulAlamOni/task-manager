@@ -57,6 +57,10 @@ class Task extends Model
     {
         return $this->hasMany(AssignTag::class, 'task_id', 'id')->with('tag');
     }
+    public function Dont_Forget_tag()
+    {
+        return $this->hasMany(AssignTag::class, 'task_id', 'id')->with('dont_forget');
+    }
 
     public function boardTasksTags()
     {
