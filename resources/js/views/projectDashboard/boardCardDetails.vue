@@ -36,7 +36,7 @@
                         </template>
                     </i>
 
-                    <i :id="'tag-'+selectedData._id" class="outline-local_offer icon-image-preview li-opacity"
+                    <i :id="'tag-'+selectedData.id" class="outline-local_offer icon-image-preview li-opacity"
                        data-toggle="dropdown"
                        v-else>
 
@@ -132,7 +132,7 @@
                                 <div class="col-12">
                                     <textarea @focus="ShowListDetails(selectedData)" class="form-control detailsInput"
                                               data-grow="auto"
-                                              placeholder="Task Description" v-model="selectedData.description">
+                                              placeholder="Task Description" v-model="selectedData.data">
                                     </textarea>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@
                                            href="javascript:void(0)"
                                            style="background: #7BB348;">Post</a>
                                         <a class="btn btn-default" href="javascript:void(0)"
-                                           style="border: 1px solid #f1efe6">Cancel</a>
+                                           style="border: 1px solid #f1efe6" @click="HideTextArea">Cancel</a>
                                     </div>
                                 </div>
                             </div>
@@ -177,7 +177,7 @@
                                       placeholder="Add comment"></textarea>
                             <div class="SubmitButton" id="SubmitButton">
                                 <a class="btn btn-default btn-sm" style="background: #7BB348;">Post</a>
-                                <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6">Cancel</a>
+                                <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6" @click="HideTextArea">Cancel</a>
                                 <a @click="addAttachment(selectedData)" class="btn btn-default btn-sm"
                                    style="border: 1px solid #f1efe6">
                                     <i class="fa fa-paperclip"></i>
@@ -289,13 +289,13 @@
                 var formatedDate = date.getFullYear() + '-' + month + '-' + date.getDate();
 
                 var postData = {
-                    id: _this.selectedData.id,
-                    date: formatedDate
+                    id: _this.selectedData.cardId,
+                    date: date
                 };
-                axios.post('/api/task-list/update', postData)
+                axios.post('/api/card-update/' + _this.selectedData.cardId, postData)
                     .then(response => response.data)
                     .then(response => {
-                        _this.getTaskList()
+                        // _this.getTaskList();
                     })
                     .catch(error => {
                         console.log('Api for task date update not Working !!!')
@@ -308,13 +308,14 @@
             updateDescription() {
                 var _this = this;
                 var postData = {
-                    id: _this.selectedData.id,
-                    details: _this.selectedData.description
+                    id: _this.selectedData.cardId,
+                    title: _this.selectedData.data
                 };
-                axios.post('/api/task-list/update', postData)
+                axios.post('/api/card-update/' + _this.selectedData.cardId, postData)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response)
+                        $('.submitdetails').hide();
                         // _this.getTaskList()
                         // $('#dropdown' + data._id).toggle();
                         // _this.selectedData.tags = tag
