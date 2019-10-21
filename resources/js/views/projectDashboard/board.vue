@@ -82,6 +82,7 @@
                                                 data-grow="auto"
                                                 type="text" v-model="card.data">
                                             </textarea>
+                                            <br>
                                             <div>
                                                 <a class="calender li-opacity clickHide" v-if="!card.date">
                                                     <i class="outline-event icon-image-preview" data-toggle
@@ -119,10 +120,11 @@
                                                             <p :title="assign.name"
                                                             @click="showAssignedUserRemoveButton(card)"
                                                             class="assignUser-photo-for-selected text-uppercase"
+                                                            style="top: 7px;"
                                                             data-placement="bottom" data-toggle="tooltip"
                                                             v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
                                                                 <a :id="'remove-assign-user'+card.cardId"
-                                                                @click="removeAssignedUser(assign)"
+                                                                @click="removeAssignedUser(assign, index, key)"
                                                                 class="remove-assigned" href="javascript:void(0)">
                                                                     <i class="fa fa-times remove-assign-user-icon"></i>
                                                                 </a>
@@ -139,7 +141,9 @@
                                                             <li class="assignUser">
                                                                 <input class="input-group searchUser"
                                                                     placeholder="Assign by name and email"
-                                                                    type="text">
+                                                                    type="text"
+                                                                    style="width: 90%; padding: 12px 20px; margin: 10px; display: inline-block; border: 1px solid #ccc;
+                                                                                border-radius: 4px; box-sizing: border-box; ">
                                                                 <label class="pl-2 label-text">
                                                                     <span class="assign-user-drop-down-text">
                                                                         Or invite a new member by email address
@@ -148,7 +152,7 @@
                                                             </li>
                                                             <li class="assignUser">
                                                                 <template v-for="user in card.users">
-                                                                    <div @click="assignUserToTask(user,card)"
+                                                                    <div @click="assignUserToTask(user, index, key, card)"
                                                                         class="users-select row">
                                                                         <div class="col-md-3 pt-1 pl-4">
                                                                             <p class="assignUser-photo">
@@ -211,7 +215,7 @@
                                                                         <div class="row">
                                                                             <div class="col-12">
                                                                                 <template v-for="(tag, tagIndx) in card.existing_tags">
-                                                                                    <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key,card.cardId)"
+                                                                                    <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key, card.cardId, '')"
                                                                                         v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
                                                                                         v-if="tag.text !== 'Dont Forget'">
                                                                                         {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
@@ -222,7 +226,7 @@
                                                                                         v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
                                                                                     </li> -->
                                                                                 <!-- </template> -->
-                                                                                <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                                                <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')" class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
                                                                             </div>
                                                                         </div>
                                                                         <hr>
@@ -239,7 +243,8 @@
                                                                         <hr> -->
                                                                         <div class="col-xs-12"
                                                                              style="margin-top:10px;width: 100%;">
-                                                                            <button class="btn btn-small btn-primary pull-right"
+                                                                            <button @click="showTagManageModel"
+                                                                                    class="btn btn-small btn-primary pull-right"
                                                                                     type="submit">
                                                                                 Manage Tag
                                                                             </button>
@@ -268,19 +273,21 @@
                                                                 <div class="row">
                                                                     <div class="col-12">
                                                                         <template v-for="(tag, tagIndx) in card.existing_tags">
-                                                                            <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key ,card.cardId)"
+                                                                            <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key, card.cardId ,'')"
                                                                                 v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
                                                                                 v-if="tag.text !== 'Dont Forget'">
                                                                                 {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
                                                                             </li>
                                                                         </template>
-                                                                        <li class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                                        <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')" 
+                                                                            class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
                                                                     </div>
                                                                 </div>
                                                                 <hr>
                                                                 <div class="col-xs-12"
                                                                      style="margin-top:10px;width: 100%;">
-                                                                    <button class="btn btn-small btn-primary pull-right"
+                                                                    <button @click="showTagManageModel"
+                                                                            class="btn btn-small btn-primary pull-right"
                                                                             type="submit">
                                                                         Manage Tag
                                                                     </button>
@@ -416,6 +423,60 @@
                     <div class="modal-footer">
                         <button @click="updateColumn" class="btn btn-primary" type="button">Update</button>
                         <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="TagManage" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="text-center text-uppercase">Manage All Tag</h3>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive" id="table">
+                            <table class="table" data-v-095ab3dc="">
+                                <thead data-v-095ab3dc="">
+                                <tr data-v-095ab3dc="">
+                                    <th>Tag Title</th>
+                                    <th>Color</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <template v-for="tag in manageTag">
+                                    <tr>
+                                        <td class="pt-3-half" v-if="tag.title === 'Dont Forget'">{{tag.title}}</td>
+                                        <td @keydown="newLineoff($event)" @keyup="updateTagName($event,tag)"
+                                            class="pt-3-half"
+                                            contenteditable="true" v-else>
+                                            {{tag.title}}
+                                        </td>
+                                        <td class="pt-3-half">
+                                            <input :value="tag.color" @change="updateTagColor($event,tag)"
+                                                   style="cursor: pointer;background-color: #fff;border: none;"
+                                                   type="color">
+                                        </td>
+                                        <td>
+                                            <a @click="DeleteTagFromModal(tag)" class="compltit-blue-a"
+                                               href="javascript:void(0)">
+                                                Delete
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </template>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
                     </div>
                 </div>
             </div>
@@ -606,6 +667,7 @@
                 selectedData : {},
                 task_logs : null,
                 check_uncheck_child : null,
+                manageTag: null,
             }
         },
         mounted() {
@@ -1254,24 +1316,33 @@
                     this.tag = null;
                 }
             },
-            addExistingTag(index, tagIndx, key, cardId) {
+            addExistingTag(index, tagIndx, key, cardId, dntfrgt = '') {
                 let _this = this;
-                let data = {
-                    'board_id' : this.cards[index].task[key].existing_tags[tagIndx].board_id,
-                    'classes' : '',
-                    'color' : this.cards[index].task[key].existing_tags[tagIndx].color,
-                    'id' : this.cards[index].task[key].existing_tags[tagIndx].id,
-                    'style' : "background-color: "+this.cards[index].task[key].existing_tags[tagIndx].color,
-                    'text' : this.cards[index].task[key].existing_tags[tagIndx].title,
-                };
+                // let data = {
+                //     'board_id' : this.cards[index].task[key].existing_tags[tagIndx].board_id,
+                //     'classes' : '',
+                //     'color' : this.cards[index].task[key].existing_tags[tagIndx].color,
+                //     'id' : this.cards[index].task[key].existing_tags[tagIndx].id,
+                //     'style' : "background-color: "+this.cards[index].task[key].existing_tags[tagIndx].color,
+                //     'text' : this.cards[index].task[key].existing_tags[tagIndx].title,
+                // };
 
                 // this.getData();
-                var postData = {
-                    id: cardId,
-                    tags: this.cards[index].task[key].existing_tags[tagIndx].title,
-                    color: this.cards[index].task[key].existing_tags[tagIndx].color,
-                    type: 'task',
-                };
+                if(dntfrgt !== ''){
+                    var postData = {
+                        id: cardId,
+                        tags: "Dont Forget",
+                        color: "#FF0000",
+                        type: 'task',
+                    };
+                }else{
+                    var postData = {
+                        id: cardId,
+                        tags: this.cards[index].task[key].existing_tags[tagIndx].title,
+                        color: this.cards[index].task[key].existing_tags[tagIndx].color,
+                        type: 'task',
+                    };
+                }
                 // if(card.types == "task"){
                 //     postData.id = card.id;
                 // }
@@ -1280,10 +1351,10 @@
                 .then(response => {
                     _this.cards[index].task[key].tags.push(data);
                     _this.cards[index].task[key].existing_tags.splice(tagIndx, 1);
+                    $('#dropdown' + columnIndex+cardIndex).toggle();
                     setTimeout(function () {
-                        _this.getData();
+                        _this.getBoardTask();
                     }, 100);
-                    // $('#dropdown' + columnIndex+cardIndex).toggle();
                 })
                 .catch(error => {
                     console.log("error =>"+error)
@@ -1412,9 +1483,10 @@
                         };
                         _this.cards[columnIndex].task[cardIndex].tags.push(cardTags);
                         setTimeout(function () {
+                            _this.getBoardTask();
                             _this.getData();
                         }, 100);
-                        // $('#dropdown' + columnIndex+cardIndex).toggle();
+                        $('#dropdown' + columnIndex+cardIndex).toggle();
                     })
                     .catch(error => {
                         console.log("error =>"+error)
@@ -1519,7 +1591,7 @@
                 }, 500)
 
             },
-            removeAssignedUser(user) {
+            removeAssignedUser(user, index, key) {
 
                 // console.log(user.id, user.task_id);
                 var _this = this;
@@ -1532,14 +1604,17 @@
                     .then(response => {
                         // console.log(response);
                         if (response === 'success') {
-                            _this.getData()
+                            _this.cards[index].task[key].assigned_user.splice(0,1);
+                            setTimeout(function () {
+                                _this.getData();
+                            }, 100);
                         }
                     })
                     .catch(error => {
                         console.log('Api assign-user-remove is not Working !!!')
                     });
             },  
-            assignUserToTask(user, data) {
+            assignUserToTask(user, index, key, data) {
                 var _this = this;
                 var postData = {
                     task_id: data.cardId,
@@ -1548,13 +1623,100 @@
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
-                        if (response === 'success') {
-                            _this.getData()
+                        if (response.success === 'success') {
+                            _this.cards[index].task[key].assigned_user.push(response.data);
+                             console.log(_this.cards);
+                            setTimeout(function () {
+                                _this.getData();
+                            }, 100);
                         }
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
                     });
+            },
+            showTagManageModel() {
+                var _this = this;
+                axios.get('/api/task-list/all-tag/' + _this.projectId)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.manageTag = response.tags;
+                        $('#TagManage').modal('show');
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
+            },
+            updateTagColor(e, tag) {
+                var color = e.target.value;
+                var _this = this;
+                var postData = {
+                    id: tag.id,
+                    color: color,
+                };
+                axios.post('/api/task-list/update-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        // _this.manageTag = response.tags;
+                        _this.showTagManageModel();
+                        _this.getBoardTask();
+                        // _this.getData();
+                        // $('#dropdown' + data._id).toggle();
+                        // _this.selectedData = data
+                        // _this.tag = null
+                    })
+                    .catch(error => {
+                        console.log('Api for update color of tag not Working !!!')
+                    });
+
+            },
+            DeleteTagFromModal(tag) {   
+                // if(confirm("Are you ")){
+
+                // }
+                var _this = this;
+                var postData = {
+                    title: tag.title,
+                };
+                axios.post('/api/task-list/delete-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        // _this.manageTag = response.tags;
+                        _this.showTagManageModel();
+                        _this.getBoardTask();
+                        // _this.getData();
+                        // _this.tag = null
+                    })
+                    .catch(error => {
+                        console.log('Api for delete tag not Working !!!')
+                    });
+
+            },
+            updateTagName(e, tag) {
+                var newTag = e.target.innerText;
+                if (e.which == 13) {
+                    var _this = this;
+                    var postData = {
+                        id: tag.id,
+                        tag: newTag,
+                    };
+                    axios.post('/api/task-list/update-tag', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.manageTag = response.tags;
+                            _this.getBoardTask();
+                            // _this.tag = null
+                        })
+                        .catch(error => {
+                            console.log('Api for update tag not Working !!!')
+                        });
+                }
+            },
+            newLineoff(e) {
+                if (e.which == 13) {
+                    e.preventDefault();
+                }
             },
             switchEvent(e) {
                 $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
