@@ -30,10 +30,10 @@ class ProjectController extends Controller
     {
         $team_id = Auth::user()->current_team_id;
         $Projects = Project::where('team_id', $team_id)->get();
-        if (isset($request->render)){
-            $project = view('vendor.spark.layouts.leftmenuProjects',['projects'=>$Projects])->render();
+        if (isset($request->render)) {
+            $project = view('vendor.spark.layouts.leftmenuProjects', ['projects' => $Projects])->render();
             return $project;
-        }else{
+        } else {
             return $this->success(compact($Projects, 'Projects'));
         }
 
@@ -76,23 +76,25 @@ class ProjectController extends Controller
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
         ];
-        $project = Project::create($data);
-
-        if ($project) {
-            $log_data = [
-                'project_id' => $project->id,
-                'multiple_list_id' => null,
-                'task_id' => null,
-                'multiple_board_id' => null,
-                'board_id' => null,
-                'title' => $request->title,
-                'log_type' => 'Create project',
-                'action_type' => 'created',
-                'action_by' => Auth::id(),
-                'action_at' => Carbon::now()
-            ];
-            $this->actionLog->store($log_data);
-            return response()->json(['success' => 1]);
+        $check_project = Project::Where(['team_id' => $team_id, 'name' => $request->title])->count();
+        if ($check_project <= 0) {
+            $project = Project::create($data);
+            if ($project) {
+                $log_data = [
+                    'project_id' => $project->id,
+                    'multiple_list_id' => null,
+                    'task_id' => null,
+                    'multiple_board_id' => null,
+                    'board_id' => null,
+                    'title' => $request->title,
+                    'log_type' => 'Create project',
+                    'action_type' => 'created',
+                    'action_by' => Auth::id(),
+                    'action_at' => Carbon::now()
+                ];
+                $this->actionLog->store($log_data);
+                return response()->json(['success' => 1]);
+            }
         }
 
     }
@@ -109,9 +111,9 @@ class ProjectController extends Controller
 
     public function UpdateUserCurrentTeam(Request $request)
     {
-        if (isset($request->team_id)){
-            User::where('id',Auth::id())->update(['current_team_id'=>$request->team_id]);
-            return \response()->json(['status'=>'success','data'=>1]);
+        if (isset($request->team_id)) {
+            User::where('id', Auth::id())->update(['current_team_id' => $request->team_id]);
+            return \response()->json(['status' => 'success', 'data' => 1]);
         }
     }
 
