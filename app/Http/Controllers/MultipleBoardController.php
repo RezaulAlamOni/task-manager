@@ -8,6 +8,8 @@ use App\Multiple_list;
 use App\TaskBoard;
 use App\Tags;
 use App\Task;
+use App\User;
+use App\AssignedUser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,6 +59,13 @@ class MultipleBoardController extends Controller
                             $tagTooltip .= '#' . $tag->title . ' ';
                         }
                     }
+
+                    $boards[$key]['task'][$keys]['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id','users.id')->where('task_id', $values['id'])->get()->toArray();
+                    $team_id = DB::table('team_users')->where('user_id', Auth::id())->first();
+                    $boards[$key]['task'][$keys]['users'] = User::join('team_users', 'team_users.user_id', 'users.id')
+                                                            ->where('team_users.team_id', $team_id->team_id)->get()->toArray();
+
+
                     $boards[$key]['task'][$keys]['tags'] = $tags;
                     $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
 
@@ -291,7 +300,7 @@ class MultipleBoardController extends Controller
     {
         $delete = Task::where('id', $id)->delete();
         if ($delete) {
-            $this->createLog($request->boardId, 'Delete', 'Card Deleted', 'Board Single Card Deleted');
+            $this->createLog($id, 'Delete', 'Card Deleted', 'Board Single Card Deleted');
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
