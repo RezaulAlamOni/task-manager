@@ -99,6 +99,7 @@
     <!-- Scripts -->
     @yield('custom_scripts', '')
     <script>
+        var team_id = null;
         $(document).ready(function () {
             $(".navbar .fa-bars").on("click",function () {
 
@@ -132,6 +133,29 @@
                 }
             });
         }
+        function SetTeam_id(trigger) {
+            var trigger = $(trigger);
+            var team = JSON.parse(trigger.attr('data-type'));
+            window.team_id = team.id;
+            $.ajax({
+                type:'POST',
+                url:'{{route('update-current-team')}}',
+                data:
+                    {
+                        "_token": "{{ csrf_token() }}",
+                        team_id : team.id,
+                    },
+                success: function(data) {
+                    if (data.data === 1){
+                        showProjectDashboard();
+                        setTimeout(function () {
+                            window.location.href = '/projects';
+                        },100)
+                    }
+                }
+            });
+        }
+
 
 
     </script>

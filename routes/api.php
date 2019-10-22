@@ -5,6 +5,7 @@ Route::get('/project/{id}', 'ProjectController@show');
 Route::post('/project', 'ProjectController@store');
 Route::patch('/project/{id}', 'ProjectController@update');
 Route::post('/project/{id}', 'ProjectController@destroy');
+Route::post('/update-current-team', 'ProjectController@UpdateUserCurrentTeam')->name('update-current-team');
 
 //List section
 Route::post('/list-add', 'MultipleListController@store');//add list under project

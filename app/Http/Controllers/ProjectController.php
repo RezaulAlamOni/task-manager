@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Project;
 use App\Team;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,9 +28,8 @@ class ProjectController extends Controller
 
     public function getAll(Request $request)
     {
-        $team = Team::where('owner_id', Auth::id())->first();
-        $Projects = Project::where('team_id', $team->id)->get();
-
+        $team_id = Auth::user()->current_team_id;
+        $Projects = Project::where('team_id', $team_id)->get();
         if (isset($request->render)){
             $project = view('vendor.spark.layouts.leftmenuProjects',['projects'=>$Projects])->render();
             return $project;
@@ -97,12 +97,7 @@ class ProjectController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Request $request
-     * @return void
-     */
+
     public function show(Request $request)
     {
         $project = Project::findOrFail($request->id);
@@ -112,35 +107,21 @@ class ProjectController extends Controller
         return response()->json(['success' => 1, 'project' => $project, 'multiple_list' => $multiple_list]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Project $project
-     * @return Response
-     */
-    public function edit(Project $project)
+    public function UpdateUserCurrentTeam(Request $request)
     {
-        //
+        if (isset($request->team_id)){
+            User::where('id',Auth::id())->update(['current_team_id'=>$request->team_id]);
+            return \response()->json(['status'=>'success','data'=>1]);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Project $project
-     * @return Response
-     */
+
     public function update(Request $request, Project $project)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Request $request
-     * @return void
-     */
+
     public function destroy(Request $request)
     {
         Project::findOrFail($request->id)->delete();
