@@ -76,19 +76,24 @@ class TaskController extends Controller
             $info['date'] = $task->date;
             $info['open'] = $task->open;
             $allTags = $task->Assign_tags;
-            $tags = [];
+            $infoTags = [];
             $tagTooltip = '';
-            if ($allTags->count() > 0) {
+            if (!empty($allTags) && $allTags->count() > 0) {
                 foreach ($allTags as $key => $tag) {
-                    $tags[$key]['id'] = $tag->tag->id;
-                    $tags[$key]['text'] = $tag->tag->title;
-                    $tags[$key]['classes'] = '';
-                    $tags[$key]['style'] = 'background-color: ' . $tag->tag->color;
-                    $tags[$key]['color'] = $tag->tag->color;
-                    $tagTooltip .= '#' . $tag->tag->title . ' ';
+                    if (!empty($tag->tag)){
+                        $infoTags[] = array(
+                            'assign_id' => $tag->id,
+                            'id' => $tag->tag->id,
+                            'text' => $tag->tag->title,
+                            'classes' => '',
+                            'style' => 'background-color: ' . $tag->tag->color,
+                            'color' => $tag->tag->color,
+                        );
+                        $tagTooltip .= '#' . $tag->tag->title . ' ';
+                    }
                 }
             }
-            $info['tags'] = $tags;
+            $info['tags'] = $infoTags;
             $info['tagTooltip'] = $tagTooltip;
             $info['description'] = $task->description;
             $info['files'] = $task->files;

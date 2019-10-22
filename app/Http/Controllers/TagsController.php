@@ -22,10 +22,9 @@ class TagsController extends Controller
     public function index()
     {
         $tags = Tags::where('team_id', Auth::user()->current_team_id)
-            ->groupBy('title')->get();
+            ->groupBy('title')->orderBy('id','DESC')->get();
         return response()->json(['tags' => $tags]);
     }
-
 
     public function store(Request $request)
     {
@@ -185,53 +184,31 @@ class TagsController extends Controller
     public function update(Request $request)
     {
         if (isset($request->tag)) {
-            $taskAndTag = Tags::join('task_lists', 'tags.task_id', 'task_lists.id')
-                ->select('tags.*', 'task_lists.project_id')
-                ->where('tags.id', $request->id)->first();
-            Tags::where('title', $taskAndTag->title)->update(['title' => $request->tag]);
-            $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
+            Tags::where('id', $request->id)->update(['title' => $request->tag]);
+            $tags = $this->getAllTagByTeamId();
             return response()->json(['success' => 1, 'tags' => $tags]);
         } elseif (isset($request->color)) {
-
-            $taskAndTag = Tags::join('task_lists', 'tags.task_id', 'task_lists.id')
-                ->select('tags.*', 'task_lists.project_id')
-                ->where('tags.id', $request->id)->first();
-            Tags::where('title', $taskAndTag->title)->update(['color' => $request->color]);
-            $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
+            Tags::where('id', $request->id)->update(['color' => $request->color]);
+            $tags = $this->getAllTagByTeamId();
             return response()->json(['success' => 1, 'tags' => $tags]);
         }
     }
 
     public function destroy(Request $request)
     {
-        if (isset($request->title)) {
-            $taskAndTag = Tags::join('task_lists', 'tags.task_id', 'task_lists.id')
-                ->where('tags.title', $request->title)->first();
-            Tags::where('title', $request->title)->delete();
-            $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
-            return response()->json(['success' => 1, 'tags' => $tags]);
+        if (isset($request->assign_id)) {
+            AssignTag::where('id', $request->assign_id)->delete();
+            return response()->json(['success' => 1, 'tags' => []]);
         } elseif (isset($request->id)) {
-            $taskAndTag = Tags::join('task_lists', 'tags.task_id', 'task_lists.id')->select('tags.*', 'task_lists.project_id')
-                ->where('tags.id', $request->id)->first();
-            $check_tag = Tags::where('title', $taskAndTag->title)->count();
-            if ($check_tag > 1) {
-                Tags::where('id', $request->id)->delete();
-            } else {
-                Tags::where('id', $request->id)->update(['status' => 1]);
-            }
-
-            $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
-            return response()->json(['success' => 1, 'tags' => $tags, $check_tag]);
+            Tags::where('id', $request->id)->delete();
+            $tags = $this->getAllTagByTeamId();
+            return response()->json(['success' => 1, 'tags' => $tags]);
         }
     }
 
-    public function getAllTagByProjectID($project_id)
+    public function getAllTagByTeamId()
     {
-        $tags = Tags::select('tags.*')
-            ->join('task_lists', 'tags.task_id', 'task_lists.id')
-            ->where('task_id', '!=', null)
-            ->where('task_lists.project_id', $project_id)
-            ->groupBy('tags.title')->get();
+        $tags = Tags::where('team_id', Auth::user()->current_team_id)->groupBy('title')->orderBy('id','DESC')->get();
         return $tags;
     }
 
