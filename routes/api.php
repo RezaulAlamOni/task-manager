@@ -25,7 +25,7 @@ Route::post('/task-list/task-drag-drop', 'TaskController@taskDragDrop');//task-d
 
 
 //task list tags related
-Route::get('/task-list/all-tag/{project_id}', 'TagsController@index');//get all tag
+Route::get('/task-list/all-tag-for-manage', 'TagsController@index');//get all tag
 Route::post('/task-list/add-tag', 'TagsController@store');//add tag
 Route::post('/task-list/add-tag-to-multiple-task', 'TagsController@addTagToMultipleTask');//add dont forget tag
 Route::post('/task-list/delete-tag', 'TagsController@destroy');//delete by tag title

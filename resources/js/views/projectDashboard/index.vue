@@ -1467,7 +1467,7 @@
             },
             showTagManageModel() {
                 var _this = this;
-                axios.get('/api/task-list/all-tag/' + _this.projectId)
+                axios.get('/api/task-list/all-tag-for-manage')
                     .then(response => response.data)
                     .then(response => {
                         _this.manageTag = response.tags;

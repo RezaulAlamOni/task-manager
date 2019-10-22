@@ -19,20 +19,13 @@ class TagsController extends Controller
         $this->TaskController = new TaskController();
     }
 
-    public function index($project_id)
+    public function index()
     {
-        $tags = Tags::select('tags.*')
-            ->join('task_lists', 'tags.task_id', 'task_lists.id')
-            ->where('task_id', '!=', null)
-            ->where('task_lists.project_id', $project_id)
-            ->groupBy('tags.title')->get();
+        $tags = Tags::where('team_id', Auth::user()->current_team_id)
+            ->groupBy('title')->get();
         return response()->json(['tags' => $tags]);
     }
 
-    public function create()
-    {
-        //
-    }
 
     public function store(Request $request)
     {
