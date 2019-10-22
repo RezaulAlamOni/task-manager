@@ -36,7 +36,8 @@ class TagsController extends Controller
 
     public function store(Request $request)
     {
-        $tags = Tags::where(['title' => $request->tags])->get();
+        $team_id = Auth::user()->current_team_id;
+        $tags = Tags::where(['title' => $request->tags,'team_id'=>$team_id])->get();
 
         if ($tags->count() > 0) {
             $check_assign = AssignTag::where(['task_id' => $request->id, 'tag_id' => $tags[0]->id])->get();
@@ -46,7 +47,7 @@ class TagsController extends Controller
             $tag_id = $tags[0]->id;
 //            return response()->json('assign-tag');
         } else {
-            $team_id = Auth::user()->current_team_id;
+
             $tag_data = [
                 'team_id' => $team_id,
                 'color' => $request->color,
