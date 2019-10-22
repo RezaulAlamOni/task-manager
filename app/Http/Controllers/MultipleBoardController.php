@@ -8,6 +8,7 @@ use App\Multiple_list;
 use App\TaskBoard;
 use App\Tags;
 use App\Task;
+use App\Project;
 use App\User;
 use App\AssignedUser;
 use Carbon\Carbon;
@@ -316,7 +317,7 @@ class MultipleBoardController extends Controller
             'multiple_board_id' => null  
         ]);
         if($delete){
-            $this->createLog($request->boardId, 'Delete', 'Card Deleted', 'Board Existing Task Card Deleted');
+            $this->createLog($id, 'Delete', 'Card Deleted', 'Board Existing Task Card Deleted');
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
