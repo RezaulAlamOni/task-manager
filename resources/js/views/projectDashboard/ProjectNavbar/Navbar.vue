@@ -587,14 +587,20 @@
                 axios.post('/api/list-add', this.list)
                     .then(response => response.data)
                     .then(response => {
-                        this.multiple_list = response.multiple_list;
-                        this.AllNavItem();
-                        setTimeout(function () {
-                            $('#list' + response.id.id).click();
-                        }, 300);
-                        this.list.name = null;
-                        this.list.description = null;
-                        $("#addListModel").modal('hide');
+
+                        if (response.status == 'exists'){
+                            swal("Already Exist! ", "Enter Another Board Name !", "warning")
+                        }else {
+                            this.multiple_list = response.multiple_list;
+                            this.AllNavItem();
+                            setTimeout(function () {
+                                $('#list' + response.id.id).click();
+                            }, 300);
+                            swal("Created", "Board Create Successful", "success")
+                            $("#addListModel").modal('hide');
+                            this.list.name = null;
+                            this.list.description = null;
+                        }
                     })
                     .catch(error => {
                         console.log('Add list api not working!!')
