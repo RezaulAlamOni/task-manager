@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\AssignTag;
 use App\Tags;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TagsController extends Controller
 {
@@ -17,92 +19,90 @@ class TagsController extends Controller
         $this->TaskController = new TaskController();
     }
 
-    public function index($project_id)
+    public function index()
     {
-        $tags = Tags::select('tags.*')
-            ->join('task_lists','tags.task_id','task_lists.id')
-            ->where('task_id', '!=', null)
-            ->where('task_lists.project_id',$project_id)
-            ->groupBy('tags.title')->get();
+        $tags = Tags::where('team_id', Auth::user()->current_team_id)
+            ->groupBy('title')->orderBy('id','DESC')->get();
         return response()->json(['tags' => $tags]);
-    }
-
-    public function create()
-    {
-        //
     }
 
     public function store(Request $request)
     {
-        $data = [
-            'color' => $request->color,
-            'title' => $request->tags,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ];
-        if (isset($request->type) && $request->type == 'board') {
-            $data['board_id'] = $request->id;
-        } else {
-            $data['task_id'] = $request->id;
-        }
-        $check_exists = Tags::where(['title' =>$request->tags, 'task_id' => $request->id])->get();
+        $team_id = Auth::user()->current_team_id;
+        $tags = Tags::where(['title' => $request->tags,'team_id'=>$team_id])->get();
 
-        if ($check_exists->count() <= 0) {
-            $tags = Tags::create($data);
-            if ($request->tags == 'Dont Forget') {
-                $task = Task::where('id', $request->id)->first();
-                $taskDontForget = Task::where([
-                    'title' => 'Dont Forget Section',
+        if ($tags->count() > 0) {
+            $check_assign = AssignTag::where(['task_id' => $request->id, 'tag_id' => $tags[0]->id])->get();
+            if ($check_assign->count() <= 0) {
+                $assign = AssignTag::create(['task_id' => $request->id, 'tag_id' => $tags[0]->id]);
+            }
+            $tag_id = $tags[0]->id;
+//            return response()->json('assign-tag');
+        } else {
+
+            $tag_data = [
+                'team_id' => $team_id,
+                'color' => $request->color,
+                'title' => $request->tags,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+            $tags = Tags::create($tag_data);
+            $tag_id = $tags->id;
+            $check_assign = AssignTag::where(['task_id' => $request->id, 'tag_id' => $tags->id])->get();
+            if ($check_assign->count() <= 0) {
+                $assign = AssignTag::create(['task_id' => $request->id, 'tag_id' => $tags->id]);
+            }
+//            return response()->json('tag-and-assign-tag-created');
+        }
+
+        if ($request->tags == 'Dont Forget') {
+            $task = Task::where('id', $request->id)->first();
+            $taskDontForget = Task::where([
+                'title' => 'Dont Forget Section',
+                'project_id' => $task->project_id,
+                'list_id' => $task->list_id,
+            ])->get();
+            if ($taskDontForget->count() <= 0) {
+                $data = [
+                    'sort_id' => -2,
+                    'parent_id' => 0,
                     'project_id' => $task->project_id,
                     'list_id' => $task->list_id,
-                ])->get();
-                if ($taskDontForget->count() <= 0) {
-                    $data = [
-                        'sort_id' => -2,
-                        'parent_id' => 0,
-                        'project_id' => $task->project_id,
-                        'list_id' => $task->list_id,
-                        'created_by' => Auth::id(),
-                        'updated_by' => Auth::id(),
-                        'title' => 'Dont Forget Section',
-                        'tag' => 'Dont Forget',
-                        'date' => $task->date,
-                        'created_at' => Carbon::now(),
-                    ];
-                    $NewTask = Task::create($data);
-                    $TagData = [
-                        'color' => $request->color,
-                        'task_id' => $NewTask->id,
-                        'title' => 'Dont Forget',
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
-                    ];
-                    $tags = Tags::create($TagData);
-                    $taskUpdate = Task::where('id', $request->id)->update(['parent_id' => $NewTask->id]);
-                    //update task child tag
-                    $this->TaskController->updateTagWithDataMove($request->id, $NewTask->id);
-                    return response()->json(['success' => $taskUpdate]);
-                } elseif ($request->id != $taskDontForget[0]->id) {
-                    $parent = Task::join('tags', 'task_lists.id', 'tags.task_id')->where([
-                        'task_lists.id' => $task->parent_id,
-                        'tags.title' => 'Dont Forget'
-                    ])->get();
-                    if ($parent->count() <= 0) {
-                        $sort = Task::where(['parent_id' => $taskDontForget[0]->id])->max('sort_id');
-                        $taskUpdate = Task::where('id', $request->id)->update([
-                            'parent_id' => $taskDontForget[0]->id,
-                            'sort_id' => $sort + 1
-                        ]);
-                        //update task child tag
-                        $this->TaskController->updateTagWithDataMove($request->id, $taskDontForget[0]->id);
-                        return response()->json(['success' => $taskUpdate]);
-                    }
-                    return response()->json(['success' => $parent, $task->parent_id, 'data' => $tags]);
-                }
-            } else {
-                return response()->json(['success' => true , 'data' => $tags] );
+                    'created_by' => Auth::id(),
+                    'updated_by' => Auth::id(),
+                    'title' => 'Dont Forget Section',
+                    'tag' => 'Dont Forget',
+                    'date' => $task->date,
+                    'created_at' => Carbon::now(),
+                ];
+                $NewTask = Task::create($data);
+                $assign = AssignTag::create(['task_id' => $NewTask->id, 'tag_id' => $tag_id]);
+
+                $taskUpdate = Task::where('id', $request->id)->update(['parent_id' => $NewTask->id]);
+                //update task child tag
+//                $this->TaskController->updateTagWithDataMove($request->id, $NewTask->id);
+                return response()->json(['success' => $taskUpdate]);
+            } elseif ($request->id != $taskDontForget[0]->id) {
+                $parent = Task::where(['id' => $task->parent_id])->with('Dont_Forget_tag');
+
+//                if ($parent->count() <= 0) {
+//                    $sort = Task::where(['parent_id' => $taskDontForget[0]->id])->max('sort_id');
+//                    $taskUpdate = Task::where('id', $request->id)->update([
+//                        'parent_id' => $taskDontForget[0]->id,
+//                        'sort_id' => $sort + 1
+//                    ]);
+//                    //update task child tag
+//                    $this->TaskController->updateTagWithDataMove($request->id, $taskDontForget[0]->id);
+//                    return response()->json(['success' => $taskUpdate]);
+//                }
+                return response()->json([$parent]);
+//                return response()->json(['success' => $parent, $task->parent_id, 'data' => $tags]);
             }
+        } else {
+//            return response()->json(['success' => true, 'data' => $tags]);
         }
+
     }
 
     public function addTagToMultipleTask(Request $request)
@@ -184,46 +184,31 @@ class TagsController extends Controller
     public function update(Request $request)
     {
         if (isset($request->tag)) {
-            $taskAndTag = Tags::join('task_lists','tags.task_id','task_lists.id')
-                ->select('tags.*','task_lists.project_id')
-                ->where('tags.id', $request->id)->first();
-            Tags::where('title', $taskAndTag->title)->update(['title' => $request->tag]);
-            $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
+            Tags::where('id', $request->id)->update(['title' => $request->tag]);
+            $tags = $this->getAllTagByTeamId();
             return response()->json(['success' => 1, 'tags' => $tags]);
         } elseif (isset($request->color)) {
-
-            $taskAndTag = Tags::join('task_lists','tags.task_id','task_lists.id')
-                ->select('tags.*','task_lists.project_id')
-                ->where('tags.id', $request->id)->first();
-            Tags::where('title', $taskAndTag->title)->update(['color' => $request->color]);
-            $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
+            Tags::where('id', $request->id)->update(['color' => $request->color]);
+            $tags = $this->getAllTagByTeamId();
             return response()->json(['success' => 1, 'tags' => $tags]);
         }
     }
 
     public function destroy(Request $request)
     {
-        if (isset($request->title)) {
-            $taskAndTag = Tags::join('task_lists','tags.task_id','task_lists.id')
-                ->where('tags.title', $request->title)->first();
-            Tags::where('title', $request->title)->delete();
-            $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
-            return response()->json(['success' => 1, 'tags' => $tags]);
+        if (isset($request->assign_id)) {
+            AssignTag::where('id', $request->assign_id)->delete();
+            return response()->json(['success' => 1, 'tags' => []]);
         } elseif (isset($request->id)) {
-            $taskAndTag = Tags::join('task_lists','tags.task_id','task_lists.id')
-                ->where('tags.id', $request->id)->first();
             Tags::where('id', $request->id)->delete();
-            $tags = $this->getAllTagByProjectID($taskAndTag->project_id);
+            $tags = $this->getAllTagByTeamId();
             return response()->json(['success' => 1, 'tags' => $tags]);
         }
     }
 
-    public function getAllTagByProjectID($project_id){
-        $tags = Tags::select('tags.*')
-            ->join('task_lists','tags.task_id','task_lists.id')
-            ->where('task_id', '!=', null)
-            ->where('task_lists.project_id',$project_id)
-            ->groupBy('tags.title')->get();
+    public function getAllTagByTeamId()
+    {
+        $tags = Tags::where('team_id', Auth::user()->current_team_id)->groupBy('title')->orderBy('id','DESC')->get();
         return $tags;
     }
 

@@ -35,26 +35,32 @@ class MultipleListController extends Controller
 
     public function store(Request $request)
     {
-        $id = Multiple_list::create([
-            'project_id' => $request->project_id,
-            'nav_id' => $request->nav_id,
-            'list_title' => $request->name,
-            'description' => $request->description,
-            'created_at' => Carbon::today(),
-        ]);
-        $multiple_list = Project::with('multiple_list')->findOrFail($request->project_id);
-        $multiple_list = $multiple_list->multiple_list;
-        $log_data = [
-            'multiple_list_id' => $id->id,
-            'title' => $request->name,
-            'log_type' => 'Create list',
-            'action_type' => 'created',
-            'action_by' => Auth::id(),
-            'action_at' => Carbon::now()
-        ];
-        $this->actionLog->store($log_data);
+        $check_exist = Multiple_list::where(['project_id' => $request->project_id, 'nav_id' => $request->nav_id, 'list_title' => $request->name])->count();
+        if ($check_exist > 0) {
+            return response()->json(['status'=>'exists']);
+        } else {
+            $id = Multiple_list::create([
+                'project_id' => $request->project_id,
+                'nav_id' => $request->nav_id,
+                'list_title' => $request->name,
+                'description' => $request->description,
+                'created_at' => Carbon::today(),
+            ]);
+            $multiple_list = Project::with('multiple_list')->findOrFail($request->project_id);
+            $multiple_list = $multiple_list->multiple_list;
+            $log_data = [
+                'multiple_list_id' => $id->id,
+                'title' => $request->name,
+                'log_type' => 'Create list',
+                'action_type' => 'created',
+                'action_by' => Auth::id(),
+                'action_at' => Carbon::now()
+            ];
+            $this->actionLog->store($log_data);
 
-        return response()->json(['multiple_list' => $multiple_list, 'id' => $id]);
+            return response()->json(['multiple_list' => $multiple_list, 'id' => $id,'status'=>'create']);
+
+        }
     }
 
     public function show(Multiple_list $multiple_list)

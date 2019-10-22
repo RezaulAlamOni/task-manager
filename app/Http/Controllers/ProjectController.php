@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Project;
 use App\Team;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -27,13 +28,12 @@ class ProjectController extends Controller
 
     public function getAll(Request $request)
     {
-        $team = Team::where('owner_id', Auth::id())->first();
-        $Projects = Project::where('team_id', $team->id)->get();
-
-        if (isset($request->render)){
-            $project = view('vendor.spark.layouts.leftmenuProjects',['projects'=>$Projects])->render();
+        $team_id = Auth::user()->current_team_id;
+        $Projects = Project::where('team_id', $team_id)->get();
+        if (isset($request->render)) {
+            $project = view('vendor.spark.layouts.leftmenuProjects', ['projects' => $Projects])->render();
             return $project;
-        }else{
+        } else {
             return $this->success(compact($Projects, 'Projects'));
         }
 
@@ -68,41 +68,38 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
-        $team = Team::where('owner_id', Auth::id())->first();
+        $team_id = Auth::user()->current_team_id;
         $data = [
-            'team_id' => $team->id,
+            'team_id' => $team_id,
             'name' => $request->title,
             'description' => $request->description,
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
         ];
-        $project = Project::create($data);
-
-        if ($project) {
-            $log_data = [
-                'project_id' => $project->id,
-                'multiple_list_id' => null,
-                'task_id' => null,
-                'multiple_board_id' => null,
-                'board_id' => null,
-                'title' => $request->title,
-                'log_type' => 'Create project',
-                'action_type' => 'created',
-                'action_by' => Auth::id(),
-                'action_at' => Carbon::now()
-            ];
-            $this->actionLog->store($log_data);
-            return response()->json(['success' => 1]);
+        $check_project = Project::Where(['team_id' => $team_id, 'name' => $request->title])->count();
+        if ($check_project <= 0) {
+            $project = Project::create($data);
+            if ($project) {
+                $log_data = [
+                    'project_id' => $project->id,
+                    'multiple_list_id' => null,
+                    'task_id' => null,
+                    'multiple_board_id' => null,
+                    'board_id' => null,
+                    'title' => $request->title,
+                    'log_type' => 'Create project',
+                    'action_type' => 'created',
+                    'action_by' => Auth::id(),
+                    'action_at' => Carbon::now()
+                ];
+                $this->actionLog->store($log_data);
+                return response()->json(['success' => 1]);
+            }
         }
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param Request $request
-     * @return void
-     */
+
     public function show(Request $request)
     {
         $project = Project::findOrFail($request->id);
@@ -112,35 +109,21 @@ class ProjectController extends Controller
         return response()->json(['success' => 1, 'project' => $project, 'multiple_list' => $multiple_list]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Project $project
-     * @return Response
-     */
-    public function edit(Project $project)
+    public function UpdateUserCurrentTeam(Request $request)
     {
-        //
+        if (isset($request->team_id)) {
+            User::where('id', Auth::id())->update(['current_team_id' => $request->team_id]);
+            return \response()->json(['status' => 'success', 'data' => 1]);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param Project $project
-     * @return Response
-     */
+
     public function update(Request $request, Project $project)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Request $request
-     * @return void
-     */
+
     public function destroy(Request $request)
     {
         Project::findOrFail($request->id)->delete();

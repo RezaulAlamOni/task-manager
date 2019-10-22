@@ -1449,7 +1449,7 @@
             DeleteTag(obj) {
                 var _this = this;
                 var postData = {
-                    id: obj.tag.id,
+                    assign_id: obj.tag.assign_id
                 };
                 if (obj.tag.text !== 'Dont Forget') {
                     axios.post('/api/task-list/delete-tag', postData)
@@ -1467,7 +1467,7 @@
             },
             showTagManageModel() {
                 var _this = this;
-                axios.get('/api/task-list/all-tag/' + _this.projectId)
+                axios.get('/api/task-list/all-tag-for-manage')
                     .then(response => response.data)
                     .then(response => {
                         _this.manageTag = response.tags;
@@ -1527,6 +1527,7 @@
             DeleteTagFromModal(tag) {
                 var _this = this;
                 var postData = {
+                    id : tag.id,
                     title: tag.title,
                 };
                 axios.post('/api/task-list/delete-tag', postData)

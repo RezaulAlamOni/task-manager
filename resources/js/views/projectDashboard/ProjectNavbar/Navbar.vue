@@ -488,9 +488,17 @@
                 axios.post('/api/nav-item/add-new', _this.navItem)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response.success);
-                        _this.AllNavItem();
-                        $("#addNavItem").modal('hide');
+                        if (response.status == 'exists'){
+                            swal("Already Exist! ", "Enter Another Board Name !", "warning")
+                        }else {
+                            _this.AllNavItem();
+                            $("#addNavItem").modal('hide');
+                            _this.navItem.title = null;
+                            _this.navItem.type = null;
+                            _this.navItem.sort_id = null;
+                            _this.navItem.project_id = null;
+                            swal("Created", "Nav Create Successful", "success")
+                        }
 
                     })
                     .catch(error => {
@@ -505,7 +513,6 @@
                 axios.get('/api/nav-item/' + _this.projectId)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
                         _this.AllNavItems = response.success;
                         _this.$emit('getNavBars', {AllNavItems: _this.AllNavItems})
 
@@ -553,6 +560,8 @@
                 $("#addListModel").modal('show');
             },
             addBoardModel(id) {
+                this.list.name = '';
+                this.list.description = '';
                 this.nav_id = id;
                 $("#addBoardModel").modal('show');
             },
@@ -580,12 +589,20 @@
                 axios.post('/api/list-add', this.list)
                     .then(response => response.data)
                     .then(response => {
-                        this.multiple_list = response.multiple_list;
-                        this.AllNavItem();
-                        setTimeout(function () {
-                            $('#list' + response.id.id).click();
-                        }, 300);
-                        $("#addListModel").modal('hide');
+
+                        if (response.status == 'exists'){
+                            swal("Already Exist! ", "Enter Another Board Name !", "warning")
+                        }else {
+                            this.multiple_list = response.multiple_list;
+                            this.AllNavItem();
+                            setTimeout(function () {
+                                $('#list' + response.id.id).click();
+                            }, 300);
+                            $("#addListModel").modal('hide');
+                            this.list.name = null;
+                            this.list.description = null;
+                            swal("Created", "Board Create Successful", "success")
+                        }
                     })
                     .catch(error => {
                         console.log('Add list api not working!!')
@@ -597,9 +614,16 @@
                 axios.post('/api/board-add', this.list)
                     .then(response => response.data)
                     .then(response => {
-                        this.multiple_list = response.multiple_board;
-                        this.AllNavItem();
                         $("#addBoardModel").modal('hide');
+                        if (response.status == 'exists'){
+                            swal("Already Exist! ", "Enter Another Board Name !", "warning")
+                        }else {
+                            this.multiple_list = response.multiple_board;
+                            this.AllNavItem();
+                            this.list.name = null;
+                            this.list.description = null;
+                            swal("Created", "Board Create Successful", "success")
+                        }
                     })
                     .catch(error => {
                         console.log('Add list api not working!!')

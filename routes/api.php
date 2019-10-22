@@ -5,6 +5,7 @@ Route::get('/project/{id}', 'ProjectController@show');
 Route::post('/project', 'ProjectController@store');
 Route::patch('/project/{id}', 'ProjectController@update');
 Route::post('/project/{id}', 'ProjectController@destroy');
+Route::post('/update-current-team', 'ProjectController@UpdateUserCurrentTeam')->name('update-current-team');
 
 //List section
 Route::post('/list-add', 'MultipleListController@store');//add list under project
@@ -24,7 +25,7 @@ Route::post('/task-list/task-drag-drop', 'TaskController@taskDragDrop');//task-d
 
 
 //task list tags related
-Route::get('/task-list/all-tag/{project_id}', 'TagsController@index');//get all tag
+Route::get('/task-list/all-tag-for-manage', 'TagsController@index');//get all tag
 Route::post('/task-list/add-tag', 'TagsController@store');//add tag
 Route::post('/task-list/add-tag-to-multiple-task', 'TagsController@addTagToMultipleTask');//add dont forget tag
 Route::post('/task-list/delete-tag', 'TagsController@destroy');//delete by tag title

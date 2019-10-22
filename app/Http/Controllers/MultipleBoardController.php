@@ -8,6 +8,7 @@ use App\Multiple_list;
 use App\TaskBoard;
 use App\Tags;
 use App\Task;
+use App\Project;
 use App\User;
 use App\AssignedUser;
 use Carbon\Carbon;
@@ -89,7 +90,7 @@ class MultipleBoardController extends Controller
                 $boards[$key]['task'] = [];
             }
 
-            
+
             // $existingTask = ExistingTasksInBoard::with('task')->where('board_id', $value->id)->get();
 
             // if ($existingTask->count() > 0) {
@@ -228,7 +229,7 @@ class MultipleBoardController extends Controller
             $this->createLog($request->id, 'Update', 'Parent changed', 'Board Card Parent Changed');
             return response()->json(['success' => true, 'data' => $update]);
         }
-        return response()->json(['success' => false]); 
+        return response()->json(['success' => false]);
     }
 
     public function cardEdit($id, Request $request)
@@ -313,7 +314,7 @@ class MultipleBoardController extends Controller
             'board_parent_id' => null,
             'board_flag' => null,
             'task_flag' => 1,
-            'multiple_board_id' => null  
+            'multiple_board_id' => null
         ]);
         if($delete){
             $this->createLog($request->boardId, 'Delete', 'Card Deleted', 'Board Existing Task Card Deleted');
@@ -379,7 +380,7 @@ class MultipleBoardController extends Controller
     }
 
     public function cardSort(Request $request)
-    { 
+    {
         if(!empty($request->children) && count($request->children) > 0){
             $ids = '';
             $caseString = '';
@@ -411,7 +412,7 @@ class MultipleBoardController extends Controller
                 $caseString .= " when id = '".$id."' then '".$key."'";
                 $ids .= " $id,";
             }
-            $ids = trim($ids, ','); 
+            $ids = trim($ids, ',');
             $update = DB::update("update task_lists set board_sort_id = CASE $caseString END where id in ($ids) and board_parent_id = 0");
             if ($update) {
                 $this->createLog($id, 'Updated', 'Column Updated', 'Board Column sorting');
@@ -421,7 +422,7 @@ class MultipleBoardController extends Controller
             }
         }
     }
-    
+
 
     protected function createLog($task_id, $type, $message, $title)
     {

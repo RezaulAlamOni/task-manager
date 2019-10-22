@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AssignedUser;
+use App\AssignTag;
 use App\Files;
 use App\Multiple_list;
 use App\Project;
@@ -21,11 +22,13 @@ use function response;
 class TaskController extends Controller
 {
     protected $actionLog;
+    protected $dont_forget_tag;
 
     public function __construct()
     {
         date_default_timezone_set('UTC');
         $this->actionLog = new ActionLogController;
+        $this->dont_forget_tag = 'Dont Forget';
         $this->middleware('auth');
     }
 
@@ -62,47 +65,46 @@ class TaskController extends Controller
             $info['sort_id'] = $task->sort_id;
             $info['list_id'] = $task->list_id;//list_id
             $info['text'] = $task->title;
-            if ($task->title == 'Dont Forget Section'){
+            if ($task->title == 'Dont Forget Section') {
                 $info['draggable'] = false;
                 $info['droppable'] = true;
-            }else{
+            } else {
                 $info['draggable'] = true;
                 $info['droppable'] = true;
             }
             $info['clicked'] = 0;
             $info['date'] = $task->date;
             $info['open'] = $task->open;
-            $allTags = $task->tags;
-            $tags = [];
+            $allTags = $task->Assign_tags;
+            $infoTags = [];
             $tagTooltip = '';
-            if ($allTags->count() > 0) {
+            if (!empty($allTags) && $allTags->count() > 0) {
                 foreach ($allTags as $key => $tag) {
-                    $tags[$key]['id'] = $tag->id;
-                    $tags[$key]['task_id'] = $tag->task_id;
-                    $tags[$key]['text'] = $tag->title;
-                    $tags[$key]['classes'] = '';
-                    $tags[$key]['style'] = 'background-color: ' . $tag->color;
-                    $tags[$key]['color'] = $tag->color;
-                    $tagTooltip .= '#' . $tag->title . ' ';
+                    if (!empty($tag->tag)){
+                        $infoTags[] = array(
+                            'assign_id' => $tag->id,
+                            'id' => $tag->tag->id,
+                            'text' => $tag->tag->title,
+                            'classes' => '',
+                            'style' => 'background-color: ' . $tag->tag->color,
+                            'color' => $tag->tag->color,
+                        );
+                        $tagTooltip .= '#' . $tag->tag->title . ' ';
+                    }
                 }
             }
-            $info['tags'] = $tags;
-            $info['existing_tags'] = Tags::select('tags.*')
-                ->join('task_lists', 'tags.task_id', 'task_lists.id')
-                ->where('tags.task_id', '!=', $task->id)
-                ->where('tags.title', '!=', 'Dont Forget')
-                ->where('task_lists.list_id', $task->list_id)
-                ->groupBy('tags.title')
-                ->get()->toArray();
-
+            $info['tags'] = $infoTags;
             $info['tagTooltip'] = $tagTooltip;
             $info['description'] = $task->description;
             $info['files'] = $task->files;
-            $info['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id',
-                'users.id')->where('task_id', $task->id)->get()->toArray();
-            $team_id = DB::table('team_users')->where('user_id', Auth::id())->first();
-            $info['users'] = User::join('team_users', 'team_users.user_id', 'users.id')->where('team_users.team_id',
-                $team_id->team_id)->get()->toArray();
+            $info['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id', 'users.id')
+                ->where('task_id', $task->id)->get()->toArray();
+
+            $team_id = Auth::user()->current_team_id;
+            $info['users'] = User::join('team_users', 'team_users.user_id', 'users.id')
+                ->where('team_users.team_id', $team_id)->get()->toArray();
+            $info['existing_tags'] = Tags::where('team_id', $team_id)->where('title','!=', $this->dont_forget_tag)
+                ->get()->toArray();
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
@@ -290,49 +292,37 @@ class TaskController extends Controller
 
     public function updateTagWithDataMove($task_id, $target_parent_id)
     {
-        $parent = Task::join('tags', 'task_lists.id', 'tags.task_id')
-            ->where([
-                'task_lists.id' => $target_parent_id,
-                'tags.title' => 'Dont Forget'
-            ])
-            ->get()->toArray();
-        if (count($parent) <= 0) {
-            Tags::where(['title' => 'Dont Forget', 'task_id' => $task_id])->delete();
-            $task_find = Task::where('id',$task_id)->first();
-            $taskDontForgetSection = Task::where([
-                'title' => 'Dont Forget Section',
-                'project_id' => $task_find->project_id,
-                'list_id' => $task_find->list_id,
-            ])->first();
-            if ($taskDontForgetSection != null){
-                $childrenOfDontForgetSection = Task::where('parent_id', $taskDontForgetSection->id)->get()->toArray();
-                if (count($childrenOfDontForgetSection) <= 0) {
-                    AssignedUser::where('task_id',$taskDontForgetSection->id)->delete();
-                    Tags::where(['task_id' => $taskDontForgetSection->id])->delete();
-                    Task::where('id', $taskDontForgetSection->id)->delete();
+        $tag_ids = $tags = Tags::where(['title' => $this->dont_forget_tag, 'team_id' => Auth::user()->current_team_id])->first();
+        if ($tag_ids) {
+            $check_tag_assign = AssignTag::where(['task_id' => $target_parent_id, 'tag_id' => $tag_ids->id])->count();
+            if ($check_tag_assign <= 0) {
+                AssignTag::where(['task_id' => $task_id, 'tag_id' => $tag_ids->id])->delete();
+                $task_find = Task::where('id', $task_id)->first();
+                $taskDontForgetSection = Task::where([
+                    'title' => 'Dont Forget Section',
+                    'project_id' => $task_find->project_id,
+                    'list_id' => $task_find->list_id,
+                ])->first();
+                if ($taskDontForgetSection != null) {
+                    $childrenOfDontForgetSection = Task::where('parent_id', $taskDontForgetSection->id)->get()->toArray();
+                    if (count($childrenOfDontForgetSection) <= 0) {
+                        AssignedUser::where('task_id', $taskDontForgetSection->id)->delete();
+                        AssignTag::where(['task_id' => $taskDontForgetSection->id, 'tag_id' => $tag_ids->id])->delete();
+                        Task::where('id', $taskDontForgetSection->id)->delete();
+                    }
+                }
+
+            } else {
+                $self = AssignTag::where(['task_id' => $task_id, 'tag_id' => $tag_ids->id])->get();
+                if ($self->count() <= 0) {
+                    AssignTag::create(['task_id' => $task_id, 'tag_id' => $tag_ids->id]);
                 }
             }
-
-
-        } else {
-            $self = Task::join('tags', 'task_lists.id', 'tags.task_id')->where([
-                'task_lists.id' => $task_id,
-                'tags.title' => 'Dont Forget'
-            ])->get();
-            if ($self->count() <= 0) {
-                $TagData = [
-                    'color' => '#ff0000',
-                    'task_id' => $task_id,
-                    'title' => 'Dont Forget',
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ];
-                Tags::create($TagData);
+            $childrens = Task::where('parent_id', $task_id)->get();
+            foreach ($childrens as $children) {
+                $this->updateTagWithDataMove($children->id, $task_id);
             }
-        }
-        $childrens = Task::where('parent_id', $task_id)->get();
-        foreach ($childrens as $children) {
-            $this->updateTagWithDataMove($children->id, $task_id);
+
         }
 
     }
@@ -437,11 +427,11 @@ class TaskController extends Controller
             return response()->json(['success' => 1]);
         } else if (isset($request->type) && $request->type == 'tag') {
             $ids = $request->ids;
-            $tag = Tags::where('id',$request->value)->first();
+            $tag = Tags::where('id', $request->value)->first();
             foreach ($ids as $id) {
-                $tag_check = Tags::where(['task_id' => $id,'title' => $tag->title])->count();
+                $tag_check = Tags::where(['task_id' => $id, 'title' => $tag->title])->count();
                 if ($tag_check <= 0) {
-                    Tags::create( [
+                    Tags::create([
                         'color' => $tag->color,
                         'task_id' => $id,
                         'title' => $tag->title,
@@ -467,11 +457,11 @@ class TaskController extends Controller
     public function deleteTaskWithChild($id)
     {
         $check_dontForgetSection = Task::where('id', $id)->first();
-        if($check_dontForgetSection == null){
+        if ($check_dontForgetSection == null) {
             return true;
         }
-        AssignedUser::where('task_id',$id)->delete();
-        Tags::where('task_id', $id)->delete();
+        AssignedUser::where('task_id', $id)->delete();
+        AssignTag::where('task_id', $id)->delete();
         Files::where('tasks_id', $id)->delete();
 
         Task::findOrFail($id)->delete();
@@ -491,7 +481,7 @@ class TaskController extends Controller
         }
 
         $childrens = Task::where('parent_id', $id)->get();
-        if ($childrens->count() > 0){
+        if ($childrens->count() > 0) {
             foreach ($childrens as $children) {
                 $this->deleteTaskWithChild($children->id);
             }
@@ -562,12 +552,12 @@ class TaskController extends Controller
         $id = $request->id;
         $parent_id = $request->parent_id;
         $sort_id = $request->sort_id;
-        $pre_sort = (isset($request->pre_sort) && $request->pre_sort > 0 ) ? $request->pre_sort : 0 ;
+        $pre_sort = (isset($request->pre_sort) && $request->pre_sort > 0) ? $request->pre_sort : 0;
         $child_length = Task::where('parent_id', $parent_id)->count();
         if ($child_length > 0) {
             Task::where('parent_id', $parent_id)->where('sort_id', '>', $pre_sort)->increment('sort_id');
         }
-        Task::where('id', $id)->update(['parent_id' => $parent_id, 'sort_id' => $pre_sort+1]);
+        Task::where('id', $id)->update(['parent_id' => $parent_id, 'sort_id' => $pre_sort + 1]);
         $this->updateTagWithDataMove($id, $parent_id);
         return response()->json(['success' => 1]);
     }
@@ -586,15 +576,15 @@ class TaskController extends Controller
             if (Task::where('id', $request->id)->update(['date' => $request->date])) {
                 return response()->json('success', 200);
             }
-        }elseif (isset($request->text)){
+        } elseif (isset($request->text)) {
             if (Task::where('id', $request->id)->update(['title' => $request->text])) {
                 return response()->json('success', 200);
             }
-        }elseif (isset($request->open)){
+        } elseif (isset($request->open)) {
             if (Task::where('id', $request->id)->update(['open' => $request->open])) {
                 return response()->json('success', 200);
             }
-        }elseif (isset($request->file)) {
+        } elseif (isset($request->file)) {
             $task_id = $request->id;
             $photo = $_FILES['file']['name'];
 
@@ -613,4 +603,6 @@ class TaskController extends Controller
             }
         }
     }
+
+
 }

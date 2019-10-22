@@ -30,8 +30,8 @@ class HomeController extends Controller
      */
     public function show()
     {
-        $team = Team::where('owner_id', Auth::id())->first();
-        $Projects = Project::where('team_id', $team->id)->get();
+        $team_id = Auth::user()->current_team_id;
+        $Projects = Project::where('team_id', $team_id)->get();
         return view('home',['projects'=>$Projects]);
     }
 }

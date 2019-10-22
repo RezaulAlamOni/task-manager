@@ -201,7 +201,7 @@
                                                                 >{{item.text.substring(0,10)}}..</span>
                                                             </div>
 
-                                                            <div :id="'dropdown'+card.id" class="dropdown-menu dropdown-menu1">
+                                                            <div :id="'dropdown1'+card.cardId" class="dropdown-menu dropdown-menu1">
 
                                                                 <diV class="collapse show switchToggle" style="">
                                                                     <div class="container-fluid">
@@ -427,7 +427,7 @@
                 </div>
             </div>
         </div>
-         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="TagManage" role="dialog"
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="TagManage" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -481,6 +481,18 @@
                 </div>
             </div>
         </div>
+
+
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="loader" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div > <!-- class="spinner-border text-light" role="status" style="width: 0rem; height: 0rem;" -->
+                    <!-- <span class="sr-only">Loading...</span> -->
+                </div>
+            </div>
+        </div>
+
+
         <div aria-hidden="true" aria-labelledby="exampleModalCenterTitle" class="modal fade" id="addExistingTask"
              role="dialog"
              tabindex="-1">
@@ -521,7 +533,7 @@
                             </div>
                             <div v-for="tree in tree4data">
                                 <li class="list-group-item">
-                                    <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask" class="selectAll" @change="selectChild(tree.id)">
+                                    <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask" class="selectAll" @change="selectChild(tree.id)" v-if="tree.text !== ''">
                                     {{tree.text}}
                                     <ul class="list-group list-group-flush" v-if="tree.children">
                                         <div v-for="child in tree.children">
@@ -945,17 +957,19 @@
                 scene.children = applyDrag(scene.children, dropResult);
                 this.scene = scene
                 let data = scene;
+                $('#loader').modal('show');
                 axios.post('/api/column-sort',data)
                 .then(response => response.data)
                 .then(response => {
                     // console.log('sorted');
+                    $('#loader').modal('hide');
                 })
                 .catch(error => {
                     console.log('sorting failed');
                 });
             },
             onCardDrop(columnId, boardId, index, dropResult) {
-
+                let _this = this;
                 if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
                     if( dropResult.removedIndex === null && dropResult.addedIndex !== null ) {
                         console.log("Drag started",columnId, boardId, index, dropResult);
@@ -963,9 +977,12 @@
                             'id' : dropResult.payload.cardId,
                             'board_parent_id' : boardId
                         }
+                        $('#loader').modal('show');
                         axios.post('/api/change-board-parent', data)
                         .then(response => response.data)
                         .then(response => {
+                            _this.getBoardTask();
+                            $('#loader').modal('hide');
                             console.log('shifted');
                         })
                         .catch(error => {
@@ -1185,7 +1202,8 @@
                             });
                             // _this.cards[_this.updateIndex].task.push({name: _this.selectedExistedTask[i], date: '', tags: [], clicked: 0})
                         }
-                        _this.getData()
+                        // _this.getData()
+                        _this.getBoardTask();
                     })
                     .catch(error => {
                     });
@@ -1289,7 +1307,7 @@
                         .catch(error => {
                         });
                 } else {
-                    alert("couden't delete");
+                    // alert("couden't delete");
                 }
             },
             saveData(data, index, child_key) {
@@ -1349,15 +1367,15 @@
                 axios.post('/api/task-list/add-tag', postData)
                 .then(response => response.data)
                 .then(response => {
-                    _this.cards[index].task[key].tags.push(data);
+                    // _this.cards[index].task[key].tags.push(data);
                     _this.cards[index].task[key].existing_tags.splice(tagIndx, 1);
-                    $('#dropdown' + columnIndex+cardIndex).toggle();
+                    // $('#dropdown' + cardId).toggle();
                     setTimeout(function () {
                         _this.getBoardTask();
                     }, 100);
                 })
                 .catch(error => {
-                    console.log("error =>"+error)
+                    console.log("1st error =>"+error)
                 });
             },
             deleteColumn(index, id) {
@@ -1468,7 +1486,7 @@
                         type: 'task',
                     };
                     if(card.types == "task"){
-                        postData.id = card.id;
+                        postData.id = card.cardId;
                     }
                     axios.post('/api/task-list/add-tag', postData)
                     .then(response => response.data)
@@ -1484,12 +1502,12 @@
                         _this.cards[columnIndex].task[cardIndex].tags.push(cardTags);
                         setTimeout(function () {
                             _this.getBoardTask();
-                            _this.getData();
+                           $('.dropdown-menu').removeClass('show');
+                            // _this.getData();
                         }, 100);
-                        $('#dropdown' + columnIndex+cardIndex).toggle();
                     })
                     .catch(error => {
-                        console.log("error =>"+error)
+                        console.log("2nd error =>"+error)
                     });
                 }
             },

@@ -1,5 +1,5 @@
 <li>
-    <a href="/projects">
+    <a href="/projects" id="team-change-click">
         <i class="fa fa-fw fa-tasks"></i>
         <span class="mm-text ">All Project</span>
     </a>

@@ -53,9 +53,13 @@ class Task extends Model
         return $this->hasMany('App\ActionLog', 'task_id', 'id');
     }
 
-    public function tags()
+    public function Assign_tags()
     {
-        return $this->hasMany(Tags::class, 'task_id', 'id');
+        return $this->hasMany(AssignTag::class, 'task_id', 'id')->with('tag');
+    }
+    public function Dont_Forget_tag()
+    {
+        return $this->hasMany(AssignTag::class, 'task_id', 'id')->with('dont_forget');
     }
 
     public function boardTasksTags()
@@ -75,6 +79,6 @@ class Task extends Model
 
     public function task()
     {
-        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('tags')->orderBy('board_sort_id','ASC');
+        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags')->orderBy('board_sort_id','ASC');
     }
 }
