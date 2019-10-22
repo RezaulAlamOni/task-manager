@@ -4,11 +4,11 @@
 <!-- Switch Current Team -->
 @if (Spark::showsTeamSwitcher())
     <a class="dropdown-item" v-for="team in teams" href="javascript:void(0)"  :data-type="JSON.stringify(team)" onclick="SetTeam_id(this)">
-{{--        <span v-if="user.current_team_id == team.id">--}}
-{{--            <i class="fa fa-fw text-left fa-btn fa-check text-success"></i> @{{ team.name }}--}}
-{{--        </span>--}}
+        <span v-if="user.current_team_id == team.id">
+            <i class="fa fa-fw text-left fa-btn fa-check text-success"></i> @{{ team.name }}
+        </span>
 
-        <span id="selected-team">
+        <span v-else>
             <img :src="team.photo_url" class="spark-profile-photo-xs"
                  alt="{{__('Team Photo')}}" /><i class="fa fa-btn"></i> @{{ team.name }}
         </span>

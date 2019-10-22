@@ -62,9 +62,9 @@ class ProjectNavItemsController extends Controller
         if ($check <= 0) {
             $nav = ProjectNavItems::create($data);
             $this->createLog($nav->id, 'created', 'Navbar Create', $request->title);
-            return response()->json(['success' => $nav]);
+            return response()->json(['success' => $nav ,'status'=>'create']);
         } else {
-            return response()->json(['success' => 'This title is already taken !']);
+            return response()->json(['success' => 'This title is already taken !','status'=>'exists']);
         }
 
     }
