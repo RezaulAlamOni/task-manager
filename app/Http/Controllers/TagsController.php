@@ -46,9 +46,9 @@ class TagsController extends Controller
             $tag_id = $tags[0]->id;
 //            return response()->json('assign-tag');
         } else {
-            $team_id = DB::table('team_users')->where('user_id', Auth::id())->first();
+            $team_id = Auth::user()->current_team_id;
             $tag_data = [
-                'team_id' => $team_id->team_id,
+                'team_id' => $team_id,
                 'color' => $request->color,
                 'title' => $request->tags,
                 'created_at' => Carbon::now(),

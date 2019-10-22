@@ -490,6 +490,11 @@
                     .then(response => {
                         console.log(response.success);
                         _this.AllNavItem();
+                        _this.navItem.title = null,
+                        _this.navItem.type = null,
+                        _this.navItem.sort_id = null,
+                        _this.navItem.project_id = null,
+
                         $("#addNavItem").modal('hide');
 
                     })
@@ -505,7 +510,6 @@
                 axios.get('/api/nav-item/' + _this.projectId)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
                         _this.AllNavItems = response.success;
                         _this.$emit('getNavBars', {AllNavItems: _this.AllNavItems})
 
@@ -585,6 +589,8 @@
                         setTimeout(function () {
                             $('#list' + response.id.id).click();
                         }, 300);
+                        this.list.name = null;
+                        this.list.description = null;
                         $("#addListModel").modal('hide');
                     })
                     .catch(error => {
@@ -599,6 +605,8 @@
                     .then(response => {
                         this.multiple_list = response.multiple_board;
                         this.AllNavItem();
+                        this.list.name = null;
+                        this.list.description = null;
                         $("#addBoardModel").modal('hide');
                     })
                     .catch(error => {

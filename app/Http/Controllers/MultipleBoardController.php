@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\ExistingTasksInBoard;
 use App\Multiple_board;
 use App\Multiple_list;
+use App\Project;
 use App\TaskBoard;
 use App\Tags;
 use App\Task;
@@ -61,9 +62,9 @@ class MultipleBoardController extends Controller
                     }
 
                     $boards[$key]['task'][$keys]['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id','users.id')->where('task_id', $values['id'])->get()->toArray();
-                    $team_id = DB::table('team_users')->where('user_id', Auth::id())->first();
+                    $team_id = Auth::user()->current_team_id;
                     $boards[$key]['task'][$keys]['users'] = User::join('team_users', 'team_users.user_id', 'users.id')
-                                                            ->where('team_users.team_id', $team_id->team_id)->get()->toArray();
+                                                            ->where('team_users.team_id', $team_id)->get()->toArray();
 
 
                     $boards[$key]['task'][$keys]['tags'] = $tags;
@@ -78,10 +79,7 @@ class MultipleBoardController extends Controller
                     }
                     $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($values['date']));
                     $boards[$key]['task'][$keys]['existing_tags'] = Tags::select('tags.*')
-                                                                    ->join('task_lists', 'tags.task_id', 'task_lists.id')
-                                                                    ->where('tags.task_id', '!=', $values->id)
-                                                                    ->where('tags.title', '!=', 'Dont Forget')
-                                                                    ->where('task_lists.multiple_board_id', $value->multiple_board_id)
+                                                                    ->where('team_id', Auth::user()->current_team_id)
                                                                     ->groupBy('tags.title')
                                                                     ->get()->toArray();
                 }
@@ -89,7 +87,7 @@ class MultipleBoardController extends Controller
                 $boards[$key]['task'] = [];
             }
 
-            
+
             // $existingTask = ExistingTasksInBoard::with('task')->where('board_id', $value->id)->get();
 
             // if ($existingTask->count() > 0) {
@@ -228,7 +226,7 @@ class MultipleBoardController extends Controller
             $this->createLog($request->id, 'Update', 'Parent changed', 'Board Card Parent Changed');
             return response()->json(['success' => true, 'data' => $update]);
         }
-        return response()->json(['success' => false]); 
+        return response()->json(['success' => false]);
     }
 
     public function cardEdit($id, Request $request)
@@ -313,7 +311,7 @@ class MultipleBoardController extends Controller
             'board_parent_id' => null,
             'board_flag' => null,
             'task_flag' => 1,
-            'multiple_board_id' => null  
+            'multiple_board_id' => null
         ]);
         if($delete){
             $this->createLog($request->boardId, 'Delete', 'Card Deleted', 'Board Existing Task Card Deleted');
@@ -379,7 +377,7 @@ class MultipleBoardController extends Controller
     }
 
     public function cardSort(Request $request)
-    { 
+    {
         if(!empty($request->children) && count($request->children) > 0){
             $ids = '';
             $caseString = '';
@@ -411,7 +409,7 @@ class MultipleBoardController extends Controller
                 $caseString .= " when id = '".$id."' then '".$key."'";
                 $ids .= " $id,";
             }
-            $ids = trim($ids, ','); 
+            $ids = trim($ids, ',');
             $update = DB::update("update task_lists set board_sort_id = CASE $caseString END where id in ($ids) and board_parent_id = 0");
             if ($update) {
                 $this->createLog($id, 'Updated', 'Column Updated', 'Board Column sorting');
@@ -421,7 +419,7 @@ class MultipleBoardController extends Controller
             }
         }
     }
-    
+
 
     protected function createLog($task_id, $type, $message, $title)
     {

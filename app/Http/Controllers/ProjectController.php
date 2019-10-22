@@ -68,9 +68,9 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
-        $team = Team::where('owner_id', Auth::id())->first();
+        $team_id = Auth::user()->current_team_id;
         $data = [
-            'team_id' => $team->id,
+            'team_id' => $team_id,
             'name' => $request->title,
             'description' => $request->description,
             'created_by' => Auth::id(),
