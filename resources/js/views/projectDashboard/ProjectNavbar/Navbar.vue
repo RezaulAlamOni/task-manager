@@ -493,11 +493,11 @@
                         }else {
                             _this.AllNavItem();
                             $("#addNavItem").modal('hide');
-                            swal("Created", "Nav Create Successful", "success")
                             _this.navItem.title = null;
                             _this.navItem.type = null;
                             _this.navItem.sort_id = null;
                             _this.navItem.project_id = null;
+                            swal("Created", "Nav Create Successful", "success")
                         }
 
                     })
@@ -596,10 +596,10 @@
                             setTimeout(function () {
                                 $('#list' + response.id.id).click();
                             }, 300);
-                            swal("Created", "Board Create Successful", "success")
                             $("#addListModel").modal('hide');
                             this.list.name = null;
                             this.list.description = null;
+                            swal("Created", "Board Create Successful", "success")
                         }
                     })
                     .catch(error => {
@@ -612,14 +612,14 @@
                 axios.post('/api/board-add', this.list)
                     .then(response => response.data)
                     .then(response => {
-                        this.list.name = null;
-                        this.list.description = null;
                         $("#addBoardModel").modal('hide');
                         if (response.status == 'exists'){
                             swal("Already Exist! ", "Enter Another Board Name !", "warning")
                         }else {
                             this.multiple_list = response.multiple_board;
                             this.AllNavItem();
+                            this.list.name = null;
+                            this.list.description = null;
                             swal("Created", "Board Create Successful", "success")
                         }
                     })
