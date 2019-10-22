@@ -560,6 +560,8 @@
                 $("#addListModel").modal('show');
             },
             addBoardModel(id) {
+                this.list.name = '';
+                this.list.description = '';
                 this.nav_id = id;
                 $("#addBoardModel").modal('show');
             },

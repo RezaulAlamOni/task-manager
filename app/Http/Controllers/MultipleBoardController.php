@@ -31,12 +31,12 @@ class MultipleBoardController extends Controller
     {
         $boards = [];
         $board = Task::where('board_parent_id', 0)
-            ->with('task')
-            ->where('project_id', $request->projectId)
-            // ->where('nav_id', $request->nav_id)
-            ->where('multiple_board_id', $request->board_id)
-            ->orderby('board_sort_id', 'ASC')
-            ->get();
+                ->with('task')
+                ->where('project_id', $request->projectId)
+                // ->where('nav_id', $request->nav_id)
+                ->where('multiple_board_id', $request->board_id)
+                ->orderby('board_sort_id', 'ASC')
+                ->get();
 
         foreach ($board as $key => $value) {
             $keys = -1;
@@ -61,10 +61,10 @@ class MultipleBoardController extends Controller
                         }
                     }
 
-                    $boards[$key]['task'][$keys]['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id', 'users.id')->where('task_id', $values['id'])->get()->toArray();
-                    $team_id = Auth::user()->current_team_id;
+                    $boards[$key]['task'][$keys]['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id','users.id')->where('task_id', $values['id'])->get()->toArray();
+                    $team_id = DB::table('team_users')->where('user_id', Auth::id())->first();
                     $boards[$key]['task'][$keys]['users'] = User::join('team_users', 'team_users.user_id', 'users.id')
-                        ->where('team_users.team_id', $team_id)->get()->toArray();
+                                                            ->where('team_users.team_id', $team_id->team_id)->get()->toArray();
 
 
                     $boards[$key]['task'][$keys]['tags'] = $tags;
@@ -79,9 +79,12 @@ class MultipleBoardController extends Controller
                     }
                     $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($values['date']));
                     $boards[$key]['task'][$keys]['existing_tags'] = Tags::select('tags.*')
-                        ->where('team_id', Auth::user()->current_team_id)
-                        ->groupBy('tags.title')
-                        ->get()->toArray();
+                                                                    ->join('task_lists', 'tags.task_id', 'task_lists.id')
+                                                                    ->where('tags.task_id', '!=', $values->id)
+                                                                    ->where('tags.title', '!=', 'Dont Forget')
+                                                                    ->where('task_lists.multiple_board_id', $value->multiple_board_id)
+                                                                    ->groupBy('tags.title')
+                                                                    ->get()->toArray();
                 }
             } else {
                 $boards[$key]['task'] = [];
@@ -162,31 +165,26 @@ class MultipleBoardController extends Controller
 
     public function store(Request $request)
     {
-        $check_exist = Multiple_board::where(['project_id' => $request->project_id, 'nav_id' => $request->nav_id,'board_title' => $request->name])->get();
-        if ($check_exist->count() > 0) {
-            return response()->json(['status'=>'exists']);
-        } else {
-            $id = Multiple_board::create([
-                'project_id' => $request->project_id,
-                'nav_id' => $request->nav_id,
-                'board_title' => $request->name,
-                'description' => $request->description,
-                'created_at' => Carbon::today(),
-            ]);
-            $multiple_board = Project::findOrFail($request->project_id);
-            $multiple_board = $multiple_board->multiple_board;
-            $log_data = [
-                'multiple_board_id' => $id->id,
-                'title' => $request->name,
-                'log_type' => 'Create board',
-                'action_type' => 'created',
-                'action_by' => Auth::id(),
-                'action_at' => Carbon::now()
-            ];
-            $this->actionLog->store($log_data);
-            return response()->json(['multiple_board' => $multiple_board, 'id' => $id, 'status'=>'create']);
+        $id = Multiple_board::create([
+            'project_id' => $request->project_id,
+            'nav_id' => $request->nav_id,
+            'board_title' => $request->name,
+            'description' => $request->description,
+            'created_at' => Carbon::today(),
+        ]);
+        $multiple_board = Project::findOrFail($request->project_id);
+        $multiple_board = $multiple_board->multiple_board;
+        $log_data = [
+            'multiple_board_id' => $id->id,
+            'title' => $request->name,
+            'log_type' => 'Create board',
+            'action_type' => 'created',
+            'action_by' => Auth::id(),
+            'action_at' => Carbon::now()
+        ];
+        $this->actionLog->store($log_data);
 
-        }
+        return response()->json(['multiple_board' => $multiple_board, 'id' => $id]);
     }
 
 
@@ -221,12 +219,12 @@ class MultipleBoardController extends Controller
 
     public function changeParentId(Request $request)
     {
-        $request->all();
-        $update = Task::where('id', $request->id)
-            ->where('board_parent_id', "!=", 0)
-            ->update([
-                'board_parent_id' => $request->board_parent_id
-            ]);
+         $request->all();
+         $update = Task::where('id',$request->id)
+                    ->where('board_parent_id',"!=",0)
+                    ->update([
+                        'board_parent_id' => $request->board_parent_id
+                    ]);
         if ($update) {
             $this->createLog($request->id, 'Update', 'Parent changed', 'Board Card Parent Changed');
             return response()->json(['success' => true, 'data' => $update]);
@@ -312,13 +310,13 @@ class MultipleBoardController extends Controller
 
     public function existingTaskDelete($id)
     {
-        $delete = Task::where('id', $id)->update([
+        $delete = Task::where('id',$id)->update([
             'board_parent_id' => null,
             'board_flag' => null,
             'task_flag' => 1,
             'multiple_board_id' => null
         ]);
-        if ($delete) {
+        if($delete){
             $this->createLog($request->boardId, 'Delete', 'Card Deleted', 'Board Existing Task Card Deleted');
             return response()->json(['success' => true]);
         } else {
@@ -350,12 +348,12 @@ class MultipleBoardController extends Controller
                 'date' => Carbon::today()
             ];
             $update = Task::where('id', $value)
-                ->update([
-                    'board_parent_id' => $board_id,
-                    'board_flag' => 1,
-                    'task_flag' => 1,
-                    'multiple_board_id' => $request->multiple_board_id
-                ]);
+                            ->update([
+                                'board_parent_id' => $board_id,
+                                'board_flag' => 1,
+                                'task_flag' => 1,
+                                'multiple_board_id' => $request->multiple_board_id
+                            ]);
             // $insert = ExistingTasksInBoard::create($data);
             $task[$key] = Task::where('id', $value)->first();
             $tagTooltip = '';
@@ -383,13 +381,13 @@ class MultipleBoardController extends Controller
 
     public function cardSort(Request $request)
     {
-        if (!empty($request->children) && count($request->children) > 0) {
+        if(!empty($request->children) && count($request->children) > 0){
             $ids = '';
             $caseString = '';
             foreach ($request->children as $key => $item) {
                 if ($item['types'] == 'card' || $item['types'] == 'task') {
                     $id = $item['cardId'];
-                    $caseString .= " when id = '" . $id . "' then '" . $key . "'";
+                    $caseString .= " when id = '".$id."' then '".$key."'";
                     $ids .= " $id,";
                 }
             }
@@ -406,12 +404,12 @@ class MultipleBoardController extends Controller
 
     public function columnSort(Request $request)
     {
-        if (!empty($request->children) && count($request->children) > 0) {
+        if(!empty($request->children) && count($request->children) > 0){
             $ids = '';
             $caseString = '';
             foreach ($request->children as $key => $item) {
                 $id = $item['boardId'];
-                $caseString .= " when id = '" . $id . "' then '" . $key . "'";
+                $caseString .= " when id = '".$id."' then '".$key."'";
                 $ids .= " $id,";
             }
             $ids = trim($ids, ',');
