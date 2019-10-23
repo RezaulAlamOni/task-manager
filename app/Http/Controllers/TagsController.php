@@ -198,6 +198,7 @@ class TagsController extends Controller
             return response()->json(['success' => 1, 'tags' => []]);
         } elseif (isset($request->id)) {
             Tags::where('id', $request->id)->delete();
+            AssignTag::where('tag_id',$request->id)->delete();
             $tags = $this->getAllTagByTeamId();
             return response()->json(['success' => 1, 'tags' => $tags]);
         }
