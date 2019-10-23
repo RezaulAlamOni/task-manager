@@ -1468,14 +1468,14 @@
             showTagManageModel() {
                 var _this = this;
                 axios.get('/api/task-list/all-tag-for-manage')
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.manageTag = response.tags;
-                        $('#TagManage').modal('show');
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
+                .then(response => response.data)
+                .then(response => {
+                    _this.manageTag = response.tags;
+                    $('#TagManage').modal('show');
+                })
+                .catch(error => {
+                    console.log('Api for move down task not Working !!!')
+                });
 
             },
             updateTagColor(e, tag) {

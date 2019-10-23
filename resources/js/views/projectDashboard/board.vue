@@ -75,229 +75,232 @@
                                     <Draggable :key="card.id" v-for="(card , key) in column.children" >
                                         <div :class="card.props.className" :style="card.props.style" class="card-list" @click="selectCard(card)" :id="'card_'+card.cardId">
                                             <textarea
+                                                :data-text="card.data"
                                                 :id="'id'+index+key" @blur="showItem($event,card,index,key)"
                                                 @click="makeInput($event)"
                                                 @focus="hideItem($event)"
                                                 class="inp input-hide text-area"
                                                 data-grow="auto"
-                                                type="text" v-model="card.data">
+                                                type="text">{{card.data}}
                                             </textarea>
                                             <br>
                                             <div>
-                                                <a class="calender li-opacity clickHide" v-if="!card.date">
-                                                    <i class="outline-event icon-image-preview" data-toggle
-                                                       title="toggle"></i>
-                                                </a>
-                                                <flatPickr
-                                                    :class="{
-                                                            dateCal:true,
-                                                            'flatpickr-input': true,
-                                                            'flatpickr-input1': card.date != '' ? false : true,
-                                                                active: true,
-                                                                dateCal1: card.date != '' ? true : false
-                                                            }"
-                                                    :config="date_config"
-                                                    @on-change="updateDate(card)"
-                                                    name="date"
-                                                    v-model="card.date">
-                                                </flatPickr>
-                                            </div>
-                                            <div style="position: absolute; right: 160px; bottom: 8px; opacity: 0.25">
-                                                <a @click="deleteCard(index, key, card.cardId)"
-                                                   v-if="card.types == 'card'">
-                                                    <i class="baseline-playlist_delete icon-image-preview"></i>
-                                                </a>
-                                                <a @click="deleteTask(index, key, card.cardId)"
-                                                   v-if="card.types == 'task'">
-                                                    <i class="baseline-playlist_delete icon-image-preview"></i>
-                                                </a>
-                                            </div>
-                                            <div>
-                                                <a class="user dropdown-hide-with-remove-icon">
-                                                    <template v-if="card.assigned_user.length > 0">
-                                                        <span class="assigned_user dropdown-toggle-split "
-                                                            data-toggle="dropdown" v-for="(assign,keyId) in card.assigned_user">
-                                                            <p :title="assign.name"
-                                                            @click="showAssignedUserRemoveButton(card)"
-                                                            class="assignUser-photo-for-selected text-uppercase"
-                                                            style="top: 7px;"
-                                                            data-placement="bottom" data-toggle="tooltip"
-                                                            v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
-                                                                <a :id="'remove-assign-user'+card.cardId"
-                                                                @click="removeAssignedUser(assign, index, key)"
-                                                                class="remove-assigned" href="javascript:void(0)">
-                                                                    <i class="fa fa-times remove-assign-user-icon"></i>
-                                                                </a>
-                                                            </p>
+                                                <div>
+                                                    <a class="calender li-opacity clickHide" v-if="!card.date">
+                                                        <i class="outline-event icon-image-preview" data-toggle
+                                                        title="toggle"></i>
+                                                    </a>
+                                                    <flatPickr
+                                                        :class="{
+                                                                dateCal:true,
+                                                                'flatpickr-input': true,
+                                                                'flatpickr-input1': card.date != '' ? false : true,
+                                                                    active: true,
+                                                                    dateCal1: card.date != '' ? true : false
+                                                                }"
+                                                        :config="date_config"
+                                                        @on-change="updateDate(card)"
+                                                        name="date"
+                                                        v-model="card.date">
+                                                    </flatPickr>
+                                                </div>
+                                                <div style="position: absolute; right: 160px; bottom: 8px; opacity: 0.25">
+                                                    <a @click="deleteCard(index, key, card.cardId)"
+                                                    v-if="card.types == 'card'">
+                                                        <i class="baseline-playlist_delete icon-image-preview"></i>
+                                                    </a>
+                                                    <a @click="deleteTask(index, key, card.cardId)"
+                                                    v-if="card.types == 'task'">
+                                                        <i class="baseline-playlist_delete icon-image-preview"></i>
+                                                    </a>
+                                                </div>
+                                                <div>
+                                                    <a class="user dropdown-hide-with-remove-icon">
+                                                        <template v-if="card.assigned_user.length > 0">
+                                                            <span class="assigned_user dropdown-toggle-split "
+                                                                data-toggle="dropdown" v-for="(assign,keyId) in card.assigned_user">
+                                                                <p :title="assign.name"
+                                                                @click="showAssignedUserRemoveButton(card)"
+                                                                class="assignUser-photo-for-selected text-uppercase"
+                                                                style="top: 7px;"
+                                                                data-placement="bottom" data-toggle="tooltip"
+                                                                v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
+                                                                    <a :id="'remove-assign-user'+card.cardId"
+                                                                    @click="removeAssignedUser(assign, index, key)"
+                                                                    class="remove-assigned" href="javascript:void(0)">
+                                                                        <i class="fa fa-times remove-assign-user-icon"></i>
+                                                                    </a>
+                                                                </p>
 
-                                                        </span>
-                                                    </template>
+                                                            </span>
+                                                        </template>
 
-                                                    <i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
-                                                    data-toggle="dropdown"
-                                                    v-else></i>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <diV class="collapse show switchToggle">
-                                                            <li class="assignUser">
-                                                                <input class="input-group searchUser"
-                                                                    placeholder="Assign by name and email"
-                                                                    type="text"
-                                                                    style="width: 90%; padding: 12px 20px; margin: 10px; display: inline-block; border: 1px solid #ccc;
-                                                                                border-radius: 4px; box-sizing: border-box; ">
-                                                                <label class="pl-2 label-text">
-                                                                    <span class="assign-user-drop-down-text">
-                                                                        Or invite a new member by email address
-                                                                    </span>
-                                                                </label>
-                                                            </li>
-                                                            <li class="assignUser">
-                                                                <template v-for="user in card.users">
-                                                                    <div @click="assignUserToTask(user, index, key, card)"
-                                                                        class="users-select row">
-                                                                        <div class="col-md-3 pt-1 pl-4">
-                                                                            <p class="assignUser-photo">
-                                                                                {{(user.name !== null) ? user.name.substring(0,2) :
-                                                                                ''}}</p>
-                                                                        </div>
-                                                                        <div class="col-md-9 assign-user-name-email">
-                                                                            <h5>{{user.name}}<br>
-                                                                                <small>{{user.email}}</small>
-                                                                            </h5>
-                                                                        </div>
-                                                                    </div>
-                                                                </template>
-                                                            </li>
-                                                        </diV>
-                                                        <li @click="switchEvent($event)"
-                                                            class="border-top pl-2 assign-user-drop-down-footer">
-
-                                                                <span
-                                                                    class="assign-user-drop-down-text">Assign an external team</span>
-                                                            <switches class="assign-user-switch-for-dropdown"
-                                                                    color="success"
-                                                                    theme="bootstrap"
-                                                                    v-model="id">
-                                                            </switches>
-                                                        </li>
-                                                    </div>
-                                                </a>
-                                            </div>
-
-                                            <div>
-                                                <a class="tag-icon">
-                                                    <div v-if="card.tags && card.tags.length !== 0">
-                                                        <div style="float: left;" v-for="(item, tagIndex) in card.tags">
-                                                            <div class="dropdown-toggle-split "
-                                                                 data-toggle="dropdown"
-                                                                 style="padding-right: 0px; padding-left: 1px;" v-if="tagIndex < 2">
-                                                                <span class="badge badge-danger "
-                                                                      v-if='item == "Dont Forget"'>{{item.text.substring(0,12)}}</span>
-                                                                <span :title="card.tagTooltip"
-                                                                      class="badge badge-success "
-                                                                      data-placement="bottom"
-                                                                      data-toggle="tooltip"
-                                                                      v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]"
-                                                                      v-else
-                                                                >{{item.text.substring(0,10)}}..</span>
-                                                            </div>
-
-                                                            <div :id="'dropdown1'+card.cardId" class="dropdown-menu dropdown-menu1">
-
-                                                                <diV class="collapse show switchToggle" style="">
-                                                                    <div class="container-fluid">
-                                                                        <vue-tags-input
-                                                                            :allow-edit-tags="true"
-                                                                            :tags="card.tags"
-                                                                            @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,card,index,key)"
-                                                                            @tags-changed="newTags => (changeTag(newTags,card,index,key))"
-                                                                            v-model="tag"
-                                                                        />
-                                                                        <div class="row">
-                                                                            <div class="col-12">
-                                                                                <template v-for="(tag, tagIndx) in card.existing_tags">
-                                                                                    <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key, card.cardId, '')"
-                                                                                        v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
-                                                                                        v-if="tag.text !== 'Dont Forget'">
-                                                                                        {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
-                                                                                    </li>
-                                                                                </template>
-                                                                                <!-- <template> -->
-                                                                                    <!-- <li class="badge-pill tags"
-                                                                                        v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
-                                                                                    </li> -->
-                                                                                <!-- </template> -->
-                                                                                <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')" class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                        <i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
+                                                        data-toggle="dropdown"
+                                                        v-else></i>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <diV class="collapse show switchToggle">
+                                                                <li class="assignUser">
+                                                                    <input class="input-group searchUser"
+                                                                        placeholder="Assign by name and email"
+                                                                        type="text"
+                                                                        style="width: 90%; padding: 12px 20px; margin: 10px; display: inline-block; border: 1px solid #ccc;
+                                                                                    border-radius: 4px; box-sizing: border-box; ">
+                                                                    <label class="pl-2 label-text">
+                                                                        <span class="assign-user-drop-down-text">
+                                                                            Or invite a new member by email address
+                                                                        </span>
+                                                                    </label>
+                                                                </li>
+                                                                <li class="assignUser">
+                                                                    <template v-for="user in card.users">
+                                                                        <div @click="assignUserToTask(user, index, key, card)"
+                                                                            class="users-select row">
+                                                                            <div class="col-md-3 pt-1 pl-4">
+                                                                                <p class="assignUser-photo">
+                                                                                    {{(user.name !== null) ? user.name.substring(0,2) :
+                                                                                    ''}}</p>
+                                                                            </div>
+                                                                            <div class="col-md-9 assign-user-name-email">
+                                                                                <h5>{{user.name}}<br>
+                                                                                    <small>{{user.email}}</small>
+                                                                                </h5>
                                                                             </div>
                                                                         </div>
-                                                                        <hr>
-                                                                        <!-- <div class="row">
-                                                                            <div class="col-12">
-                                                                                <template>
-                                                                                    <li class="badge-pill tags"
-                                                                                        v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
-                                                                                    </li>
-                                                                                </template>
-                                                                                <li class="badge-pill tags" style="background: #FB8678" >Dont Forget</li>
+                                                                    </template>
+                                                                </li>
+                                                            </diV>
+                                                            <li @click="switchEvent($event)"
+                                                                class="border-top pl-2 assign-user-drop-down-footer">
+
+                                                                    <span
+                                                                        class="assign-user-drop-down-text">Assign an external team</span>
+                                                                <switches class="assign-user-switch-for-dropdown"
+                                                                        color="success"
+                                                                        theme="bootstrap"
+                                                                        v-model="id">
+                                                                </switches>
+                                                            </li>
+                                                        </div>
+                                                    </a>
+                                                </div>
+
+                                                <div>
+                                                    <a class="tag-icon">
+                                                        <div v-if="card.tags && card.tags.length !== 0">
+                                                            <div style="float: left;" v-for="(item, tagIndex) in card.tags">
+                                                                <div class="dropdown-toggle-split "
+                                                                    data-toggle="dropdown"
+                                                                    style="padding-right: 0px; padding-left: 1px;" v-if="tagIndex < 2">
+                                                                    <span class="badge badge-danger "
+                                                                        v-if='item == "Dont Forget"'>{{item.text.substring(0,12)}}</span>
+                                                                    <span :title="card.tagTooltip"
+                                                                        class="badge badge-success "
+                                                                        data-placement="bottom"
+                                                                        data-toggle="tooltip"
+                                                                        v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]"
+                                                                        v-else
+                                                                    >{{item.text.substring(0,10)}}..</span>
+                                                                </div>
+
+                                                                <div :id="'dropdown1'+card.cardId" class="dropdown-menu dropdown-menu1">
+
+                                                                    <diV class="collapse show switchToggle" style="">
+                                                                        <div class="container-fluid">
+                                                                            <vue-tags-input
+                                                                                :allow-edit-tags="true"
+                                                                                :tags="card.tags"
+                                                                                @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,card,index,key)"
+                                                                                @tags-changed="newTags => (changeTag(newTags,card,index,key))"
+                                                                                v-model="tag"
+                                                                            />
+                                                                            <div class="row">
+                                                                                <div class="col-12">
+                                                                                    <template v-for="(tag, tagIndx) in card.existing_tags">
+                                                                                        <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key, card.cardId, '')"
+                                                                                            v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
+                                                                                            v-if="tag.text !== 'Dont Forget'">
+                                                                                            {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
+                                                                                        </li>
+                                                                                    </template>
+                                                                                    <!-- <template> -->
+                                                                                        <!-- <li class="badge-pill tags"
+                                                                                            v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
+                                                                                        </li> -->
+                                                                                    <!-- </template> -->
+                                                                                    <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')" class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                                                </div>
+                                                                            </div>
+                                                                            <hr>
+                                                                            <!-- <div class="row">
+                                                                                <div class="col-12">
+                                                                                    <template>
+                                                                                        <li class="badge-pill tags"
+                                                                                            v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
+                                                                                        </li>
+                                                                                    </template>
+                                                                                    <li class="badge-pill tags" style="background: #FB8678" >Dont Forget</li>
+                                                                                </div>
+                                                                            </div>
+                                                                            <hr> -->
+                                                                            <div class="col-xs-12"
+                                                                                style="margin-top:10px;width: 100%;">
+                                                                                <button @click="showTagManageModel"
+                                                                                        class="btn btn-small btn-primary pull-right"
+                                                                                        type="submit">
+                                                                                    Manage Tag
+                                                                                </button>
                                                                             </div>
                                                                         </div>
-                                                                        <hr> -->
-                                                                        <div class="col-xs-12"
-                                                                             style="margin-top:10px;width: 100%;">
-                                                                            <button @click="showTagManageModel"
-                                                                                    class="btn btn-small btn-primary pull-right"
-                                                                                    type="submit">
-                                                                                Manage Tag
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
 
-                                                                </diV>
+                                                                    </diV>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                        <i class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
+                                                            data-toggle="dropdown"
+                                                            v-else></i>
+                                                       
+                                                        <div class="dropdown-menu dropdown-menu1 ">
 
-                                                    <i class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
-                                                       data-toggle="dropdown"
-                                                       v-else></i>
-                                                    <div class="dropdown-menu dropdown-menu1 ">
-
-                                                        <diV class="collapse show switchToggle" style="">
-                                                            <div class="container-fluid">
-                                                                <vue-tags-input
-                                                                    :allow-edit-tags="true"
-                                                                    :tags="tag1"
-                                                                    @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,card,index,key)"
-                                                                    @tags-changed="newTags => (changeTag(newTags,card,index,key))"
-                                                                    v-model="tag"
-                                                                />
-                                                                <div class="row">
-                                                                    <div class="col-12">
-                                                                        <template v-for="(tag, tagIndx) in card.existing_tags">
-                                                                            <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key, card.cardId ,'')"
-                                                                                v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
-                                                                                v-if="tag.text !== 'Dont Forget'">
-                                                                                {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
-                                                                            </li>
-                                                                        </template>
-                                                                        <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')" 
-                                                                            class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                            <diV class="collapse show switchToggle" style="">
+                                                                <div class="container-fluid">
+                                                                    <vue-tags-input
+                                                                        :allow-edit-tags="true"
+                                                                        :tags="tag1"
+                                                                        @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,card,index,key)"
+                                                                        @tags-changed="newTags => (changeTag(newTags,card,index,key))"
+                                                                        v-model="tag"
+                                                                    />
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <template v-for="(tag, tagIndx) in card.existing_tags">
+                                                                                <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key, card.cardId ,'')"
+                                                                                    v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
+                                                                                    v-if="tag.text !== 'Dont Forget'">
+                                                                                    {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
+                                                                                </li>
+                                                                            </template>
+                                                                            <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')" 
+                                                                                class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div class="col-xs-12"
+                                                                        style="margin-top:10px;width: 100%;">
+                                                                        <button @click="showTagManageModel"
+                                                                                class="btn btn-small btn-primary pull-right"
+                                                                                type="submit">
+                                                                            Manage Tag
+                                                                        </button>
                                                                     </div>
                                                                 </div>
-                                                                <hr>
-                                                                <div class="col-xs-12"
-                                                                     style="margin-top:10px;width: 100%;">
-                                                                    <button @click="showTagManageModel"
-                                                                            class="btn btn-small btn-primary pull-right"
-                                                                            type="submit">
-                                                                        Manage Tag
-                                                                    </button>
-                                                                </div>
-                                                            </div>
 
-                                                        </diV>
-                                                    </div>
+                                                            </diV>
+                                                        </div>
 
-                                                </a>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </Draggable>
@@ -683,6 +686,9 @@
             }
         },
         mounted() {
+            alert('board');
+            delete sessionStorage.data;
+            sessionStorage.data = JSON.stringify({board_id: this.board_id, nav_id: this.nav_id, projectId: this.projectId});
             $('#header-item').text('Project  / Task Board');
             $(document).ready(function () {
                 $(function () {
@@ -951,8 +957,6 @@
             },
 
             onColumnDrop(dropResult) {
-                // alert('sdf');
-                // console.log(dropResult);
                 const scene = Object.assign({}, this.scene);
                 scene.children = applyDrag(scene.children, dropResult);
                 this.scene = scene
@@ -961,7 +965,6 @@
                 axios.post('/api/column-sort',data)
                 .then(response => response.data)
                 .then(response => {
-                    // console.log('sorted');
                     $('#loader').modal('hide');
                 })
                 .catch(error => {
@@ -1440,6 +1443,14 @@
                     });
             },
             showItem(e, data, index, child_key) {
+                let attData = $(e.target).attr('data-text');
+                let attDataNew = e.target.value;
+                if( $.trim(attData) === $.trim(attDataNew)){
+                console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
+                    this.getData();
+                    return false;
+                }
+                data.data = attDataNew;
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
                 this.saveData(data, index, child_key)
@@ -1474,7 +1485,6 @@
                 var old = this.cards[columnIndex].task[cardIndex].tags.length;
                 var newl = tags.length;
                 let cardTags = null;
-                // alert(newl +" > "+ old);
                 if (newl > old) {
                     this.tags = tags;
 
@@ -1485,21 +1495,10 @@
                         color: color,
                         type: 'task',
                     };
-                    if(card.types == "task"){
-                        postData.id = card.cardId;
-                    }
                     axios.post('/api/task-list/add-tag', postData)
                     .then(response => response.data)
                     .then(response => {
-                        cardTags = {
-                            'board_id': response.data.board_id,
-                            'classes': '',
-                            'color': response.data.color,
-                            'id': response.data.id,
-                            'style': "background-color: " + response.data.color,
-                            'text': response.data.title,
-                        };
-                        _this.cards[columnIndex].task[cardIndex].tags.push(cardTags);
+                        
                         setTimeout(function () {
                             _this.getBoardTask();
                            $('.dropdown-menu').removeClass('show');
@@ -1514,7 +1513,8 @@
             deleteCardTag(obj, card, columnIndex, cardIndex) {
                 var _this = this;
                 var postData = {
-                    id: obj.tag.id,
+                    assign_id: obj.tag.assign_id,
+                    // id: obj.tag.id,
                 };
                 // console.log(obj);
                 if (obj.tag.text !== 'Dont Forget') {
@@ -1655,7 +1655,7 @@
             },
             showTagManageModel() {
                 var _this = this;
-                axios.get('/api/task-list/all-tag/' + _this.projectId)
+                axios.get('/api/task-list/all-tag-for-manage')
                     .then(response => response.data)
                     .then(response => {
                         _this.manageTag = response.tags;
@@ -1676,8 +1676,8 @@
                 axios.post('/api/task-list/update-tag', postData)
                     .then(response => response.data)
                     .then(response => {
-                        // _this.manageTag = response.tags;
-                        _this.showTagManageModel();
+                        _this.manageTag = response.tags;
+                        // _this.showTagManageModel();
                         _this.getBoardTask();
                         // _this.getData();
                         // $('#dropdown' + data._id).toggle();
@@ -1689,26 +1689,71 @@
                     });
 
             },
-            DeleteTagFromModal(tag) {   
-                // if(confirm("Are you ")){
-
-                // }
+            DeleteTagFromModal(tag) {
                 var _this = this;
-                var postData = {
-                    title: tag.title,
-                };
-                axios.post('/api/task-list/delete-tag', postData)
+                swal({
+                    title: 'Are you sure to delete the tag?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                },
+                function(){
+                    var postData = {
+                        id : tag.id,
+                        title: tag.title,
+                    };
+                    axios.post('/api/task-list/delete-tag', postData)
                     .then(response => response.data)
                     .then(response => {
                         // _this.manageTag = response.tags;
-                        _this.showTagManageModel();
+                        // _this.showTagManageModel();
                         _this.getBoardTask();
+                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                        
                         // _this.getData();
                         // _this.tag = null
                     })
                     .catch(error => {
-                        console.log('Api for delete tag not Working !!!')
-                    });
+                        console.log('Api for delete tag not Working !!!');
+                    }); 
+                        
+                });
+
+
+// .then((result) => {
+//                     if (result.value) {
+//                         var _this = this;
+//                         var postData = {
+//                             id : tag.id,
+//                             title: tag.title,
+//                         };
+//                         axios.post('/api/task-list/delete-tag', postData)
+//                         .then(response => response.data)
+//                         .then(response => {
+//                             // _this.manageTag = response.tags;
+//                             _this.showTagManageModel();
+//                             _this.getBoardTask();
+                            
+//                             // _this.getData();
+//                             // _this.tag = null
+//                         })
+//                         .catch(error => {
+//                             console.log('Api for delete tag not Working !!!');
+//                         }); 
+//                             Swal.fire(
+//                                 'Deleted!',
+//                                 'Tag has been deleted.',
+//                                 'success'
+//                             );
+                        
+//                     }
+//                 });
+
+
+                
 
             },
             updateTagName(e, tag) {

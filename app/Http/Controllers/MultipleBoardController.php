@@ -19,6 +19,7 @@ use DB;
 class MultipleBoardController extends Controller
 {
     protected $actionLog;
+    protected $dont_forget_tag;
 
     public function __construct()
     {
@@ -37,7 +38,7 @@ class MultipleBoardController extends Controller
                 ->where('multiple_board_id', $request->board_id)
                 ->orderby('board_sort_id', 'ASC')
                 ->get();
-
+        $team_id = Auth::user()->current_team_id;
         foreach ($board as $key => $value) {
             $keys = -1;
             $boards[$key]['id'] = $value['id'];
@@ -49,22 +50,35 @@ class MultipleBoardController extends Controller
                 foreach ($value['task'] as $keys => $values) {
                     $tagTooltip = '';
                     $tags = [];
-                    if (!empty($values['tags']) && count($values['tags']) > 0) {
-                        foreach ($values['tags'] as $tagkey => $tag) {
-                            $tags[$tagkey]['id'] = $tag->id;
-                            $tags[$tagkey]['board_id'] = $tag->board_id;
-                            $tags[$tagkey]['text'] = $tag->title;
-                            $tags[$tagkey]['classes'] = '';
-                            $tags[$tagkey]['style'] = 'background-color: ' . $tag->color;
-                            $tags[$tagkey]['color'] = $tag->color;
-                            $tagTooltip .= '#' . $tag->title . ' ';
+                    if (!empty($values['Assign_tags']) && count($values['Assign_tags']) > 0) {
+                        foreach ($values['Assign_tags'] as $tagkey => $tag) {
+                                if (!empty($tag->tag)){
+                                    $infoTags = array(
+                                        'assign_id' => $tag->id,
+                                        'id' => $tag->tag->id,
+                                        'board_id' => $tag->task_id,
+                                        'text' => $tag->tag->title,
+                                        'classes' => '',
+                                        'style' => 'background-color: ' . $tag->tag->color,
+                                        'color' => $tag->tag->color,
+                                    );
+                                    $tagTooltip .= '#' . $tag->tag->title . ' ';
+                                    $tags[$tagkey] = $infoTags;
+                                }
+                            // $tags[$tagkey]['id'] = $tag->id;
+                            // $tags[$tagkey]['board_id'] = $tag->board_id;
+                            // $tags[$tagkey]['text'] = $tag->title;
+                            // $tags[$tagkey]['classes'] = '';
+                            // $tags[$tagkey]['style'] = 'background-color: ' . $tag->color;
+                            // $tags[$tagkey]['color'] = $tag->color;
+                            // $tagTooltip .= '#' . $tag->title . ' ';
                         }
                     }
 
                     $boards[$key]['task'][$keys]['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id','users.id')->where('task_id', $values['id'])->get()->toArray();
-                    $team_id = DB::table('team_users')->where('user_id', Auth::id())->first();
+                    $team = DB::table('team_users')->where('user_id', Auth::id())->first();
                     $boards[$key]['task'][$keys]['users'] = User::join('team_users', 'team_users.user_id', 'users.id')
-                                                            ->where('team_users.team_id', $team_id->team_id)->get()->toArray();
+                                                            ->where('team_users.team_id', $team->team_id)->get()->toArray();
 
 
                     $boards[$key]['task'][$keys]['tags'] = $tags;
@@ -78,59 +92,19 @@ class MultipleBoardController extends Controller
                         $boards[$key]['task'][$keys]['type'] = 'card';
                     }
                     $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($values['date']));
-                    $boards[$key]['task'][$keys]['existing_tags'] = Tags::select('tags.*')
-                                                                    ->join('task_lists', 'tags.task_id', 'task_lists.id')
-                                                                    ->where('tags.task_id', '!=', $values->id)
-                                                                    ->where('tags.title', '!=', 'Dont Forget')
-                                                                    ->where('task_lists.multiple_board_id', $value->multiple_board_id)
-                                                                    ->groupBy('tags.title')
-                                                                    ->get()->toArray();
+                    $boards[$key]['task'][$keys]['existing_tags'] = Tags::where('team_id', $team_id)->where('title','!=', $this->dont_forget_tag)->get()->toArray();
+                    
+                    // Tags::select('tags.*')
+                    // ->join('task_lists', 'tags.task_id', 'task_lists.id')
+                    // ->where('tags.task_id', '!=', $values->id)
+                    // ->where('tags.title', '!=', 'Dont Forget')
+                    // ->where('task_lists.multiple_board_id', $value->multiple_board_id)
+                    // ->groupBy('tags.title')
+                    // ->get()->toArray();
                 }
             } else {
                 $boards[$key]['task'] = [];
             }
-
-
-            // $existingTask = ExistingTasksInBoard::with('task')->where('board_id', $value->id)->get();
-
-            // if ($existingTask->count() > 0) {
-            //     foreach ($existingTask as $ExTaskkey => $ExTaskvalue) {
-            //         $keys++;
-            //         foreach ($ExTaskvalue['task'] as $TaskKey => $TaskValue) {
-            //             $tagTooltip = '';
-            //             $tags = [];
-            //             if (!empty($TaskValue['tags']) && count($TaskValue['tags']) > 0) {
-            //                 foreach ($TaskValue['tags'] as $tagkey => $tag) {
-            //                     $tags[$tagkey]['id'] = $tag->id;
-            //                     $tags[$tagkey]['board_id'] = $tag->board_id;
-            //                     $tags[$tagkey]['text'] = $tag->title;
-            //                     $tags[$tagkey]['classes'] = '';
-            //                     $tags[$tagkey]['style'] = 'background-color: ' . $tag->color;
-            //                     $tags[$tagkey]['color'] = $tag->color;
-            //                     $tagTooltip .= '#' . $tag->title . ' ';
-            //                 }
-            //             }
-            //             if(!empty($TaskValue['boardTasksTags']) && count($TaskValue['boardTasksTags']) > 0){
-            //                 foreach ($TaskValue['boardTasksTags'] as $tagExkey => $tag) {
-            //                     $tagkey++;
-            //                     $tags[$tagkey]['id'] = $tag->id;
-            //                     $tags[$tagkey]['board_id'] = $tag->board_id;
-            //                     $tags[$tagkey]['text'] = $tag->title;
-            //                     $tags[$tagkey]['classes'] = '';
-            //                     $tags[$tagkey]['style'] = 'background-color: ' . $tag->color;
-            //                     $tags[$tagkey]['color'] = $tag->color;
-            //                     $tagTooltip .= '#' . $tag->title . ' ';
-            //                 }
-            //             }
-            //             $boards[$key]['task'][$keys]['tags'] = $tags;
-            //             $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
-            //             $boards[$key]['task'][$keys]['id'] = $ExTaskvalue->id;
-            //             $boards[$key]['task'][$keys]['name'] = $TaskValue['title'];
-            //             $boards[$key]['task'][$keys]['type'] = 'task';
-            //             $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($TaskValue['date']));
-            //         }
-            //     }
-            // }
         }
         // return $boards;
         return response()->json(['success' => $boards]);
