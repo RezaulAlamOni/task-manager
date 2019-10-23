@@ -974,9 +974,7 @@
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
-                        if (response === 'success') {
-                            _this.getTaskList()
-                        }
+                        _this.getTaskList()
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')

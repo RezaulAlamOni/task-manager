@@ -72,7 +72,6 @@ class TagsController extends Controller
                     'created_by' => Auth::id(),
                     'updated_by' => Auth::id(),
                     'title' => 'Dont Forget Section',
-                    'tag' => 'Dont Forget',
                     'date' => $task->date,
                     'created_at' => Carbon::now(),
                 ];
@@ -145,7 +144,6 @@ class TagsController extends Controller
                     'created_by' => Auth::id(),
                     'updated_by' => Auth::id(),
                     'title' => 'Dont Forget Section',
-                    'tag' => 'Dont Forget',
                     'date' => $task->date,
                     'created_at' => Carbon::now(),
                 ];
