@@ -687,15 +687,6 @@
         },
         mounted() {
             var _this = this;
-            // if(localStorage.selected_nav !== undefined ){
-            //     var session_data = JSON.parse(localStorage.selected_nav);
-            //     if (session_data.type === 'board'){
-            //         console.log(_this.nav_id, _this.board_id ,session_data )
-            //         setTimeout(function () {
-            //
-            //         }, 300)
-            //     }
-            // }
             $('#header-item').text('Project  / Task Board');
             $(document).ready(function () {
                 $(function () {
@@ -858,30 +849,7 @@
                     $('[data-toggle="tooltip"]').tooltip();
                 }, 1000)
             },
-            // selectChild(id){
-            //      for (let index = 0; index < this.tree4data.length; index++) {
-            //             // this.selectedExistedTask.push(this.tree4data[index].id);
-            //         if(this.tree4data[index].id === id){
-            //             this.recursive(this.tree4data[index].children, this.tree4data[index].id);
-            //         }
-            //         for (let secondIndex = 0; secondIndex < this.tree4data[index].children.length; secondIndex++) {
-            //             if(this.tree4data[index].children[secondIndex] !== undefined){
-            //                 if(this.tree4data[index].children[secondIndex].id === id){
-            //                     this.recursive(this.tree4data[index].children[secondIndex].children, this.tree4data[index].children[secondIndex].id);
-            //                 }
-            //             }
-            //             for (let thirdIndex = 0; thirdIndex < this.tree4data[index].children[index].children.length; thirdIndex++) {
-            //                 if(this.tree4data[index].children[secondIndex].children[thirdIndex] !== undefined){
-            //                     if(this.tree4data[index].children[secondIndex].children[thirdIndex].id === id){
-            //                         this.recursive(this.tree4data[index].children[secondIndex].children[thirdIndex].children, this.tree4data[index].children[secondIndex].children[thirdIndex].id);
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     }
-            //
-            //     console.log(this.selectedExistedTask);
-            // },
+
             selectChild(id){
                 var _this = this;
                 _this.findChild(id,_this.tree4data)
