@@ -81,8 +81,7 @@
                                                 @focus="hideItem($event)"
                                                 class="inp input-hide text-area"
                                                 data-grow="auto"
-                                                type="text">{{card.data}}
-                                            </textarea>
+                                                type="text">{{ card.data }}</textarea>
                                             <br>
                                             <div>
                                                 <div>
@@ -686,7 +685,6 @@
             }
         },
         mounted() {
-            alert('board');
             delete sessionStorage.data;
             sessionStorage.data = JSON.stringify({board_id: this.board_id, nav_id: this.nav_id, projectId: this.projectId});
             $('#header-item').text('Project  / Task Board');
@@ -1251,47 +1249,63 @@
                 });
             },
             deleteCard(index,cardIndex,id){
+
                 let _this = this;
-                if(confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id){
-                    axios.get('/api/card-delete/'+id)
-                    .then(response => response.data)
-                    .then(response => {
-                        if (response.success == true) {
-                            let data = response.data;
-                            _this.cards[index].task.push({
-                                id: data.id,
-                                name: data.title,
-                                date: data.date,
-                                tags: [],
-                                clicked: 0
-                            });
-                            let keys = _this.cards[index].task.length - 1;
-                            _this.getData();
-                            setTimeout(function () {
-                                $('#id' + index + keys).click();
-                                $('#id' + index + keys).focus();
-                            }, 100)
-                        }
-                    })
-                    .catch(error => {
-                    });
-                }
-            },
-            deleteCard(index, cardIndex, id) {
-                let _this = this;
-                if (confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id) {
-                    axios.get('/api/card-delete/' + id)
+                swal({
+                    title: 'Are you sure to delete the card?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                },function(){
+                    if(_this.cards[index].task[cardIndex].id == id){
+                        axios.get('/api/card-delete/'+id)
                         .then(response => response.data)
                         .then(response => {
-                            _this.cards[index].task.splice(cardIndex, 1);
-                            _this.getData();
-                            if (response.success) {
+                            if (response.success == true) {
+                                // let data = response.data;
+                                // _this.cards[index].task.push({
+                                //     id: data.id,
+                                //     name: data.title,
+                                //     date: data.date,
+                                //     tags: [],
+                                //     clicked: 0
+                                // });
+                                let keys = _this.cards[index].task.length - 1;
+                                _this.getBoardTask();
+                                _this.getData();
+                                setTimeout(function () {
+                                    $('#id' + index + keys).click();
+                                    $('#id' + index + keys).focus();
+                                }, 100)
+                                swal("Deleted!", "The card has been deleted.", "success");
                             }
                         })
                         .catch(error => {
+                            console.log('error => '+error);
                         });
-                }
+                    }
+                });
+
+                
             },
+            // deleteCard(index, cardIndex, id) {
+            //     let _this = this;
+            //     if (confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id) {
+            //         axios.get('/api/card-delete/' + id)
+            //             .then(response => response.data)
+            //             .then(response => {
+            //                 _this.cards[index].task.splice(cardIndex, 1);
+            //                 _this.getData();
+            //                 if (response.success) {
+            //                 }
+            //             })
+            //             .catch(error => {
+            //             });
+            //     }
+            // },
             deleteTask(index, cardIndex, id) {
                 let _this = this;
                 // console.log(index + ", " + cardIndex);
@@ -1711,7 +1725,7 @@
                         // _this.manageTag = response.tags;
                         // _this.showTagManageModel();
                         _this.getBoardTask();
-                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                        swal("Deleted!", "The tag has been deleted.", "success");
                         
                         // _this.getData();
                         // _this.tag = null
@@ -1721,40 +1735,6 @@
                     }); 
                         
                 });
-
-
-// .then((result) => {
-//                     if (result.value) {
-//                         var _this = this;
-//                         var postData = {
-//                             id : tag.id,
-//                             title: tag.title,
-//                         };
-//                         axios.post('/api/task-list/delete-tag', postData)
-//                         .then(response => response.data)
-//                         .then(response => {
-//                             // _this.manageTag = response.tags;
-//                             _this.showTagManageModel();
-//                             _this.getBoardTask();
-                            
-//                             // _this.getData();
-//                             // _this.tag = null
-//                         })
-//                         .catch(error => {
-//                             console.log('Api for delete tag not Working !!!');
-//                         }); 
-//                             Swal.fire(
-//                                 'Deleted!',
-//                                 'Tag has been deleted.',
-//                                 'success'
-//                             );
-                        
-//                     }
-//                 });
-
-
-                
-
             },
             updateTagName(e, tag) {
                 var newTag = e.target.innerText;
