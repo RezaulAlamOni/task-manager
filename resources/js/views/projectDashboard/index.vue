@@ -611,7 +611,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button @click="UpdateListOrBoard" class="btn btn-primary" type="button">Update</button>
+<!--                        <button @click="UpdateListOrBoard" class="btn btn-primary" type="button">Update</button>-->
+                        <button @click="UpdateListOrBoard" class="btn btn-primary ladda-button ladda_update_list_board" data-style="expand-right">
+                            Update
+                        </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
                     </div>
@@ -636,7 +639,7 @@
     import TaskDetails from "./TaskDetails";
     import Navbar from "./ProjectNavbar/Navbar";
     import BoardView from "./board";
-
+    import * as Ladda from 'ladda';
     export default {
         components: {
             Tree: DraggableTree,
@@ -645,7 +648,8 @@
             Datepicker,
             VueTagsInput,
             TaskDetails,
-            Navbar, BoardView
+            Navbar, BoardView,
+            Ladda
         },
         data() {
             return {
@@ -708,9 +712,14 @@
                 setTimeout(function () {
                     $('.delete-icon').hide();
                 }, 1000);
-                setTimeout(function () {
-                    $('#list' + _this.multiple_list[0].id).click();
-                }, 300)
+                if(localStorage.selected_nav !== undefined ){
+                    var session_data = JSON.parse(localStorage.selected_nav);
+                    if (session_data.type === 'list'){
+                        setTimeout(function () {
+                            $('#list' + session_data.list_id).click();
+                        }, 300)
+                    }
+                }
             });
         },
         created() {
@@ -1832,7 +1841,10 @@
                 this.list.description = data.description;
                 this.list.type = data.type;
                 if (data.type === 'list') {
+                    localStorage.selected_nav = JSON.stringify({list_id : data.list_id,nav_id : data.nav_id,project_id : this.projectId, type: 'list'});
                     this.getTaskList()
+                }else{
+                    localStorage.selected_nav = JSON.stringify({list_id : data.list_id,nav_id : data.nav_id,project_id : this.projectId, type: 'board'});
                 }
 
             },
@@ -1845,12 +1857,15 @@
             },
             UpdateListOrBoard() {
                 var _this = this;
+                var l = Ladda.create(document.querySelector( '.ladda_update_list_board' ) );
+                l.start();
                 this.list.project_id = this.projectId;
                 this.list.nav_id = this.nav_id;
                 this.list.id = this.list_id;
                 axios.post('/api/board-list-update', this.list)
                     .then(response => response.data)
                     .then(response => {
+                        l.stop();
                         _this.AllNavItems = response.navItems.original.success;
                         $("#updateListBoardModel").modal('hide');
                     })

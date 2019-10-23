@@ -279,7 +279,7 @@
                                                                                 {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
                                                                             </li>
                                                                         </template>
-                                                                        <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')" 
+                                                                        <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')"
                                                                             class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
                                                                     </div>
                                                                 </div>
@@ -1631,7 +1631,7 @@
                     .catch(error => {
                         console.log('Api assign-user-remove is not Working !!!')
                     });
-            },  
+            },
             assignUserToTask(user, index, key, data) {
                 var _this = this;
                 var postData = {
@@ -1689,7 +1689,7 @@
                     });
 
             },
-            DeleteTagFromModal(tag) {   
+            DeleteTagFromModal(tag) {
                 // if(confirm("Are you ")){
 
                 // }
