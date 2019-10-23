@@ -564,7 +564,7 @@
                                                    type="color">
                                         </td>
                                         <td>
-                                            <a @click="DeleteTagFromModal(tag)" class="compltit-blue-a"
+                                            <a @click="DeleteTagFromModal(tag)" class="compltit-blue-a badge badge-danger"
                                                href="javascript:void(0)">
                                                 Delete
                                             </a>
@@ -611,7 +611,10 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button @click="UpdateListOrBoard" class="btn btn-primary" type="button">Update</button>
+<!--                        <button @click="UpdateListOrBoard" class="btn btn-primary" type="button">Update</button>-->
+                        <button @click="UpdateListOrBoard" class="btn btn-primary ladda-button ladda_update_list_board" data-style="expand-right">
+                            Update
+                        </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
                     </div>
@@ -636,7 +639,7 @@
     import TaskDetails from "./TaskDetails";
     import Navbar from "./ProjectNavbar/Navbar";
     import BoardView from "./board";
-
+    import * as Ladda from 'ladda';
     export default {
         components: {
             Tree: DraggableTree,
@@ -645,7 +648,8 @@
             Datepicker,
             VueTagsInput,
             TaskDetails,
-            Navbar, BoardView
+            Navbar, BoardView,
+            Ladda
         },
         data() {
             return {
@@ -708,9 +712,18 @@
                 setTimeout(function () {
                     $('.delete-icon').hide();
                 }, 1000);
-                setTimeout(function () {
-                    $('#list' + _this.multiple_list[0].id).click();
-                }, 300)
+                if(localStorage.selected_nav !== undefined ){
+                    var session_data = JSON.parse(localStorage.selected_nav);
+                    if (session_data.type === 'list'){
+                        setTimeout(function () {
+                            $('#list' + session_data.list_id).click();
+                        }, 1000)
+                    }else {
+                        setTimeout(function () {
+                            $('.board' + session_data.list_id).click();
+                        }, 1000)
+                    }
+                }
             });
         },
         created() {
@@ -974,9 +987,7 @@
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
-                        if (response === 'success') {
-                            _this.getTaskList()
-                        }
+                        _this.getTaskList()
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -1304,6 +1315,7 @@
                     text: data.text,
                     nav_id: _this.nav_id
                 };
+
                 axios.post('/api/task-list/task-make-child', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -1311,6 +1323,7 @@
                         _this.getTaskList();
                         setTimeout(function () {
                             $("#" + _this.newEmptyTaskID).click();
+                            $("#" + _this.newEmptyTaskID).focus();
                         }, 500)
                     })
                     .catch(error => {
@@ -1335,6 +1348,7 @@
                         _this.getTaskList();
                         setTimeout(function () {
                             $("#" + _this.newEmptyTaskID).click();
+                            $("#" + _this.newEmptyTaskID).focus();
                         }, 500)
                     })
                     .catch(error => {
@@ -1468,14 +1482,14 @@
             showTagManageModel() {
                 var _this = this;
                 axios.get('/api/task-list/all-tag-for-manage')
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.manageTag = response.tags;
-                        $('#TagManage').modal('show');
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
+                .then(response => response.data)
+                .then(response => {
+                    _this.manageTag = response.tags;
+                    $('#TagManage').modal('show');
+                })
+                .catch(error => {
+                    console.log('Api for move down task not Working !!!')
+                });
 
             },
             updateTagColor(e, tag) {
@@ -1568,17 +1582,29 @@
                     id: data.id,
                     complete: 1
                 };
-                axios.post('/api/task-list/update', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.getTaskList();
-                        alert('Task is added to compete list !!');
-                        // $('#dropdown' + data._id).toggle();
-                        // _this.selectedData.tags = tag
-                    })
-                    .catch(error => {
-                        console.log('Api for complete task not Working !!!')
+                    swal({
+                        title: "Are you sure?",
+                        text: "Is this task is complete !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, Complete it!",
+                        closeOnConfirm: false
+                    },
+                    function(){
+                        axios.post('/api/task-list/update', postData)
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.getTaskList();
+                                swal("Complete!", "This task is added to complete", "success");
+                            })
+                            .catch(error => {
+                                console.log('Api for complete task not Working !!!')
+                            });
+
                     });
+
+
             },
             moveItemUp(data) {
                 if (data.sort_id <= 0) {
@@ -1642,14 +1668,28 @@
                     id: data.id,
                     text: data.text
                 };
-                axios.post('/api/task-list/delete-task', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.getTaskList()
-                    })
-                    .catch(error => {
-                        console.log('Api for delete task not Working !!!')
+                swal({
+                        title: "Are you sure?",
+                        text: "You want to delete this task !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger btn",
+                        confirmButtonText: "Yes, delete it!",
+                        closeOnConfirm: false
+                    },
+                    function(){
+                        axios.post('/api/task-list/delete-task', postData)
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.getTaskList()
+                                swal("Deleted!", "Successfully delete task !", "success");
+                            })
+                            .catch(error => {
+                                console.log('Api for delete task not Working !!!')
+                            });
+
                     });
+
 
             },
 
@@ -1834,7 +1874,10 @@
                 this.list.description = data.description;
                 this.list.type = data.type;
                 if (data.type === 'list') {
+                    localStorage.selected_nav = JSON.stringify({list_id : data.list_id,nav_id : data.nav_id,project_id : this.projectId, type: 'list'});
                     this.getTaskList()
+                }else{
+                    localStorage.selected_nav = JSON.stringify({list_id : data.list_id,nav_id : data.nav_id,project_id : this.projectId, type: 'board'});
                 }
 
             },
@@ -1847,12 +1890,15 @@
             },
             UpdateListOrBoard() {
                 var _this = this;
+                var l = Ladda.create(document.querySelector( '.ladda_update_list_board' ) );
+                l.start();
                 this.list.project_id = this.projectId;
                 this.list.nav_id = this.nav_id;
                 this.list.id = this.list_id;
                 axios.post('/api/board-list-update', this.list)
                     .then(response => response.data)
                     .then(response => {
+                        l.stop();
                         _this.AllNavItems = response.navItems.original.success;
                         $("#updateListBoardModel").modal('hide');
                     })
@@ -1873,11 +1919,9 @@
                 children.splice(index, 1);
             },
             saveData(e, data) {
-
                 if (e.which === 13) {
                     $('.inp').addClass('input-hide');
                     $('.inp').removeClass('form-control');
-
                     this.addNode(data);
                 }
             },

@@ -144,7 +144,6 @@ class TaskController extends Controller
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
                 'title' => '',
-                'tag' => '',
                 'date' => '0000-00-00',
                 'created_at' => Carbon::now(),
             ];
@@ -231,7 +230,6 @@ class TaskController extends Controller
                     'created_by' => Auth::id(),
                     'updated_by' => Auth::id(),
                     'title' => '',
-                    'tag' => '',
                     'date' => '0000-00-00',
                     'created_at' => Carbon::now(),
                 ];
@@ -259,7 +257,6 @@ class TaskController extends Controller
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
             'title' => '',
-            'tag' => '',
             'date' => '0000-00-00',
             'created_at' => Carbon::now(),
         ];
@@ -281,7 +278,7 @@ class TaskController extends Controller
             if ($task) {
                 $taskSortId = Task::where('parent_id', $task->id)->max('sort_id');
                 $sort_id = ($taskSortId > 0) ? $taskSortId + 1 : 1;
-                $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => $sort_id]);
+                $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => $sort_id,'title'=>$request->text]);
 
                 $this->updateTagWithDataMove($request->id, $task->id);
                 $this->createLog($request->id, 'updated', 'Update parent', $request->text);
@@ -338,7 +335,7 @@ class TaskController extends Controller
                     ->where('sort_id', '>', $task->sort_id)
                     ->increment('sort_id');
                 $sort_id = ($task->sort_id < 0) ? 1 : $task->sort_id + 1;
-                Task::where('id', $request->id)->update(['parent_id' => $task->parent_id, 'sort_id' => $sort_id]);
+                Task::where('id', $request->id)->update(['parent_id' => $task->parent_id, 'sort_id' => $sort_id,'title'=>$request->text]);
 
                 $this->updateTagWithDataMove($request->id, $task->parent_id);
                 $this->createLog($request->id, 'updated', 'Update parent', $request->text);
@@ -368,7 +365,6 @@ class TaskController extends Controller
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
                 'title' => $past->title . ' -copy',
-                'tag' => $past->tag,
                 'date' => $past->date,
                 'created_at' => Carbon::now(),
             ];
@@ -505,8 +501,8 @@ class TaskController extends Controller
 
     public function addTag(Request $request)
     {
-        Task::where('id', $request->id)->update(['tag' => $request->tags]);
-        return response()->json(['success' => 1]);
+//        Task::where('id', $request->id)->update(['tag' => $request->tags]);
+//        return response()->json(['success' => 1]);
     }
 
     public function moveTask(Request $request)
