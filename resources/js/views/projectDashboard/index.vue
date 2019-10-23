@@ -564,7 +564,7 @@
                                                    type="color">
                                         </td>
                                         <td>
-                                            <a @click="DeleteTagFromModal(tag)" class="compltit-blue-a"
+                                            <a @click="DeleteTagFromModal(tag)" class="compltit-blue-a badge badge-danger"
                                                href="javascript:void(0)">
                                                 Delete
                                             </a>
@@ -717,11 +717,11 @@
                     if (session_data.type === 'list'){
                         setTimeout(function () {
                             $('#list' + session_data.list_id).click();
-                        }, 300)
+                        }, 1000)
                     }else {
                         setTimeout(function () {
                             $('.board' + session_data.list_id).click();
-                        }, 300)
+                        }, 1000)
                     }
                 }
             });
@@ -1582,17 +1582,29 @@
                     id: data.id,
                     complete: 1
                 };
-                axios.post('/api/task-list/update', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.getTaskList();
-                        alert('Task is added to compete list !!');
-                        // $('#dropdown' + data._id).toggle();
-                        // _this.selectedData.tags = tag
-                    })
-                    .catch(error => {
-                        console.log('Api for complete task not Working !!!')
+                    swal({
+                        title: "Are you sure?",
+                        text: "Is this task is complete !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, Complete it!",
+                        closeOnConfirm: false
+                    },
+                    function(){
+                        axios.post('/api/task-list/update', postData)
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.getTaskList();
+                                swal("Complete!", "This task is added to complete", "success");
+                            })
+                            .catch(error => {
+                                console.log('Api for complete task not Working !!!')
+                            });
+
                     });
+
+
             },
             moveItemUp(data) {
                 if (data.sort_id <= 0) {
@@ -1656,14 +1668,28 @@
                     id: data.id,
                     text: data.text
                 };
-                axios.post('/api/task-list/delete-task', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.getTaskList()
-                    })
-                    .catch(error => {
-                        console.log('Api for delete task not Working !!!')
+                swal({
+                        title: "Are you sure?",
+                        text: "You want to delete this task !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger btn",
+                        confirmButtonText: "Yes, delete it!",
+                        closeOnConfirm: false
+                    },
+                    function(){
+                        axios.post('/api/task-list/delete-task', postData)
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.getTaskList()
+                                swal("Deleted!", "Successfully delete task !", "success");
+                            })
+                            .catch(error => {
+                                console.log('Api for delete task not Working !!!')
+                            });
+
                     });
+
 
             },
 
