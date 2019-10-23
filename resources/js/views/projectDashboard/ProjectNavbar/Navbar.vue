@@ -19,13 +19,14 @@
                                         <h6 class="dropdown-header" v-else-if="nav.type === 'board'"> Board</h6>
 
                                         <span v-for="nav_list in nav.lists">
-                                        <span :id="'list'+nav_list.id"
-                                              @click="setListId(nav_list,nav.id,nav_list.description,nav.type)" class="dropdown-item">
-                                            <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>
-                                             <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>
-                                         </span>
+                                            <span :id="'list'+nav_list.id" :class="'board'+nav_list.id"
+                                                  @click="setListId(nav_list,nav.id,nav_list.description,nav.type)"
+                                                  class="dropdown-item">
+                                                <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>
+                                                 <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>
+                                             </span>
 
-                                    </span>
+                                        </span>
                                         <div class="dropdown-divider"></div>
 
                                         <a @click="addListModel(nav.id)" class="dropdown-item"

@@ -718,6 +718,10 @@
                         setTimeout(function () {
                             $('#list' + session_data.list_id).click();
                         }, 300)
+                    }else {
+                        setTimeout(function () {
+                            $('.board' + session_data.list_id).click();
+                        }, 300)
                     }
                 }
             });
@@ -1475,14 +1479,14 @@
             showTagManageModel() {
                 var _this = this;
                 axios.get('/api/task-list/all-tag-for-manage')
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.manageTag = response.tags;
-                        $('#TagManage').modal('show');
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
+                .then(response => response.data)
+                .then(response => {
+                    _this.manageTag = response.tags;
+                    $('#TagManage').modal('show');
+                })
+                .catch(error => {
+                    console.log('Api for move down task not Working !!!')
+                });
 
             },
             updateTagColor(e, tag) {
