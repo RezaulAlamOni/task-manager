@@ -1315,6 +1315,7 @@
                     text: data.text,
                     nav_id: _this.nav_id
                 };
+
                 axios.post('/api/task-list/task-make-child', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -1322,6 +1323,7 @@
                         _this.getTaskList();
                         setTimeout(function () {
                             $("#" + _this.newEmptyTaskID).click();
+                            $("#" + _this.newEmptyTaskID).focus();
                         }, 500)
                     })
                     .catch(error => {
@@ -1346,6 +1348,7 @@
                         _this.getTaskList();
                         setTimeout(function () {
                             $("#" + _this.newEmptyTaskID).click();
+                            $("#" + _this.newEmptyTaskID).focus();
                         }, 500)
                     })
                     .catch(error => {
@@ -1890,11 +1893,9 @@
                 children.splice(index, 1);
             },
             saveData(e, data) {
-
                 if (e.which === 13) {
                     $('.inp').addClass('input-hide');
                     $('.inp').removeClass('form-control');
-
                     this.addNode(data);
                 }
             },

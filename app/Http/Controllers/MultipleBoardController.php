@@ -93,7 +93,7 @@ class MultipleBoardController extends Controller
                     }
                     $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($values['date']));
                     $boards[$key]['task'][$keys]['existing_tags'] = Tags::where('team_id', $team_id)->where('title','!=', $this->dont_forget_tag)->get()->toArray();
-                    
+
                     // Tags::select('tags.*')
                     // ->join('task_lists', 'tags.task_id', 'task_lists.id')
                     // ->where('tags.task_id', '!=', $values->id)
@@ -291,7 +291,7 @@ class MultipleBoardController extends Controller
             'multiple_board_id' => null
         ]);
         if($delete){
-            $this->createLog($request->boardId, 'Delete', 'Card Deleted', 'Board Existing Task Card Deleted');
+            $this->createLog($id, 'Delete', 'Card Deleted', 'Board Existing Task Card Deleted');
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);

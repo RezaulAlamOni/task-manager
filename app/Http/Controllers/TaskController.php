@@ -278,7 +278,7 @@ class TaskController extends Controller
             if ($task) {
                 $taskSortId = Task::where('parent_id', $task->id)->max('sort_id');
                 $sort_id = ($taskSortId > 0) ? $taskSortId + 1 : 1;
-                $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => $sort_id]);
+                $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => $sort_id,'title'=>$request->text]);
 
                 $this->updateTagWithDataMove($request->id, $task->id);
                 $this->createLog($request->id, 'updated', 'Update parent', $request->text);
