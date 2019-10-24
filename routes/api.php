@@ -9,7 +9,8 @@ Route::post('/update-current-team', 'ProjectController@UpdateUserCurrentTeam')->
 
 //List section
 Route::post('/list-add', 'MultipleListController@store');//add list under project
-Route::post('/board-list-update', 'MultipleListController@update');//Update list
+Route::post('/board-list-update', 'MultipleListController@update');//Update list board
+Route::post('/board-list-delete', 'MultipleListController@delete');//delete list or board
 
 //task listmanagement
 Route::post('/add-task-task', 'TaskController@addNewTask');//add new node

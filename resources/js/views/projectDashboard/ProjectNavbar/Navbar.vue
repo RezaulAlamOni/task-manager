@@ -119,16 +119,16 @@
                             </a>
                             <div aria-labelledby="dropdownMenuButton" class="dropdown-menu dropdown-menu-right">
 
-                                <h6 class="dropdown-header"> Manage Nav</h6>
+                                <h6 class="dropdown-header text-uppercase"> Manage Nav</h6>
                                 <a @click="showModelForNavItem" class="dropdown-item" href="javascript:void(0)">
                                     <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
                                     Create Task View
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <h6 class="dropdown-header"> Edit Task View</h6>
-                                <span v-for="nav in AllNavItems">
-                                     <a @click="updateNavbarModel(nav)" class="dropdown-item"
-                                        href="javascript:void(0)"> {{nav.title}}</a>
+                                <h6 class="dropdown-header text-uppercase"> Update Nav Item</h6>
+                                <span @click="updateNavbarModel(nav)" v-for="nav in AllNavItems">
+                                     <a class="dropdown-item"
+                                        href="javascript:void(0)"><span>{{nav.title}}</span></a>
                                 </span>
                             </div>
                         </li>
@@ -411,7 +411,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title pl-3"> Add Nav Item</h5>
+                        <h5 class="modal-title pl-3 text-uppercase"> Update <span v-if="update_navItem.type === 'list'">List</span> <span v-else>Board</span> Nav Item</h5>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -422,7 +422,7 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Nav Title</label>
                             </div>
                             <div class="col-sm-8">
-                                <input class="form-control" type="text" v-model="navItem.title">
+                                <input class="form-control" type="text" v-model="update_navItem.title">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -430,12 +430,36 @@
                                 <label class="control-label float-right m-t-ng-8 txt_media1">Sort Number</label>
                             </div>
                             <div class="col-sm-8">
-                                <input class="form-control" min="0" type="number" v-model="navItem.sort_id">
+                                <input class="form-control" min="0" type="number" v-model="update_navItem.sort_id">
                             </div>
                         </div>
 
                     </div>
                     <div class="modal-footer">
+                        <div class="action-task">
+                            <h2>
+                                <span class="btn btn-default pull-right dropdown-toggle action-list-board"
+                                      data-toggle="dropdown">
+                                    Option
+                                </span>
+
+                                <div aria-labelledby="dropdownMenuButton"
+                                     class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
+                                    <h6 class="dropdown-header text-uppercase">
+                                        Action For <span v-if="update_navItem.type === 'list'">List</span> <span v-else>Board</span>
+                                    </h6>
+                                    <div class="dropdown-divider"></div>
+                                    <span class="dropdown-item custom-dropdown-item">
+                                        <a href="javascript:void(0)"> <i class="fa fa-trash"></i> Delete with all <span v-if="update_navItem.type === 'list'">List</span> <span v-else>Board</span></a>
+                                    </span>
+                                    <span class="dropdown-item custom-dropdown-item">
+                                        <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move <span v-if="update_navItem.type === 'list'">List</span> <span v-else>Board</span> </a>
+                                    </span>
+
+                                </div>
+
+                            </h2>
+                        </div>
                         <button @click="updateNavItem" class="btn btn-primary" type="button">Update</button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
@@ -460,6 +484,12 @@
                     nav_id: null
                 },
                 navItem: {
+                    title: null,
+                    type: null,
+                    sort_id: null,
+                    project_id: null,
+                },
+                update_navItem: {
                     title: null,
                     type: null,
                     sort_id: null,
@@ -529,11 +559,11 @@
             },
             updateNavbarModel(data) {
                 this.nav_id = data.id;
-                this.navItem.title = data.title;
-                this.navItem.type = data.type;
-                this.navItem.sort_id = data.sort_id;
-                this.navItem.nav_id = data.id;
-                this.navItem.project_id = data.project_id;
+                this.update_navItem.title = data.title;
+                this.update_navItem.type = data.type;
+                this.update_navItem.sort_id = data.sort_id;
+                this.update_navItem.nav_id = data.id;
+                this.update_navItem.project_id = data.project_id;
 
                 $("#updateNavItem").modal('show');
                 $('input[name="optionsRadios"]').iCheck({

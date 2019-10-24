@@ -72,24 +72,21 @@
             <div class="col-12 action-task">
                 <h2 class="p-t-20" v-if="list.type !== null">
                     {{list.name}}
-                    <!--                    <button @click="UpdateListModel" class="btn btn-primary pull-right" type="submit">-->
-                    <!--                        EDIT {{list.name}}-->
-                    <!--                    </button>-->
                     <span class="btn btn-default pull-right dropdown-toggle action-list-board" data-toggle="dropdown">
                         Option
                     </span>
 
                     <div aria-labelledby="dropdownMenuButton"
                          class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
-                        <h6 class="dropdown-header">Action For Board or List</h6>
+                        <h6 class="dropdown-header text-uppercase">Action For Board or List</h6>
                         <div class="dropdown-divider"></div>
                         <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
                             <a href="javascript:void(0)"> <i class="fa fa-edit"></i> Edit  </a>
                         </span>
-                        <span class="dropdown-item custom-dropdown-item">
+                        <span class="dropdown-item custom-dropdown-item" @click="DeleteListOrBoard(list.type,'delete')">
                             <a href="javascript:void(0)"> <i class="fa fa-trash"></i> Delete with all task</a>
                         </span>
-                        <span class="dropdown-item custom-dropdown-item">
+                        <span class="dropdown-item custom-dropdown-item" @click="DeleteListOrBoard(list.type,'move')">
                             <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move task </a>
                         </span>
 
@@ -1948,6 +1945,37 @@
                     .catch(error => {
                         console.log('Add list api not working!!')
                     });
+            },
+            DeleteListOrBoard(type,action){
+                console.log(type,this.list_id,action)
+                var _this = this;
+
+                swal({
+                        title: "Are you sure?",
+                        text: "If you delete this "+ type +" then all task will delete !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, Complete it!",
+                        closeOnConfirm: false
+                    },
+                    function () {
+                        axios.post('/api/board-list-delete',{type : type, id : _this.list_id, action : action})
+                            .then(response => response.data)
+                            .then(response => {
+                                // _this.AllNavItems = response.navItems.original.success;
+                                swal("Complete!", "This task is added to complete", "success");
+                                window.location.href = '/project-dashboard/'+_this.projectId;
+                            })
+                            .catch(error => {
+                                console.log('Add list api not working!!')
+                            });
+
+
+                    });
+
+
+
             },
 
 
