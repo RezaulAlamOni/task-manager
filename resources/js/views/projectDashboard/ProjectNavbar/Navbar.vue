@@ -33,14 +33,14 @@
                                            href="Javascript:void(0)"
                                            v-if="nav.type === 'list'">
                                             <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                            Create {{nav.title}} List
+                                           Create  <b>{{nav.title}}</b> List
                                         </a>
 
                                         <a @click="addBoardModel(nav.id)" class="dropdown-item"
                                            href="Javascript:void(0)"
                                            v-else-if="nav.type === 'board'">
                                             <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                            Create {{nav.title}} Board
+                                            Create <b>{{nav.title}}</b> Board
                                         </a>
                                     </div>
                                 </li>

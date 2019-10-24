@@ -69,12 +69,32 @@
         </div>
 
         <div class="container">
-            <div class="col-12">
+            <div class="col-12 action-task">
                 <h2 class="p-t-20" v-if="list.type !== null">
                     {{list.name}}
-                    <button @click="UpdateListModel" class="btn btn-primary pull-right" type="submit">
-                        EDIT {{list.name}}
-                    </button>
+                    <!--                    <button @click="UpdateListModel" class="btn btn-primary pull-right" type="submit">-->
+                    <!--                        EDIT {{list.name}}-->
+                    <!--                    </button>-->
+                    <span class="btn btn-default pull-right dropdown-toggle action-list-board" data-toggle="dropdown">
+                        Option
+                    </span>
+
+                    <div aria-labelledby="dropdownMenuButton"
+                         class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
+                        <h6 class="dropdown-header">Action For Board or List</h6>
+                        <div class="dropdown-divider"></div>
+                        <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
+                            <a href="javascript:void(0)"> <i class="fa fa-edit"></i> Edit  </a>
+                        </span>
+                        <span class="dropdown-item custom-dropdown-item">
+                            <a href="javascript:void(0)"> <i class="fa fa-trash"></i> Delete with all task</a>
+                        </span>
+                        <span class="dropdown-item custom-dropdown-item">
+                            <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move task </a>
+                        </span>
+
+                    </div>
+
                 </h2>
                 <p class="compltit-p" v-if="list.description != null">{{list.description}}</p>
             </div>
@@ -1853,8 +1873,9 @@
                     .then(response => {
                         this.treeList = response.task_list;
                         this.multiple_list = response.multiple_list;
+                        $('[data-toggle="tooltip"]').tooltip('dispose');
                         setTimeout(function () {
-                            $('[data-toggle="tooltip"]').tooltip();
+                            $('[data-toggle="tooltip"]').tooltip('enable');
                         }, 500);
                         if (this.treeList.length === 1 && this.treeList[0].text === '') {
                             let id = this.treeList[0].id;
