@@ -168,12 +168,12 @@ class MultipleBoardController extends Controller
         $id = $request->id;
         $parent = Task::find($id);
         $sortNo = Task::where('board_parent_id', $parent->id)->max('board_sort_id');
-        if (!$sortNo) {
-            $sortNo = 0;
-        }
+        // if ($sortNo == '') {
+        //     $sortNo = 0;
+        // }
         $data = [
             'title' => '',
-            'board_sort_id' => $sortNo + 1,
+            'board_sort_id' => ++$sortNo,
             'board_parent_id' => $parent->id,
             'project_id' => $parent->project_id,
             'multiple_board_id' => $parent->multiple_board_id,
@@ -248,7 +248,7 @@ class MultipleBoardController extends Controller
     }
 
     public function destroy($id)
-    {   
+    {
         $child  = Task::where('board_parent_id', $id)->get();
         foreach ($child as $key => $value) {
             $this->cardDelete($value->id);
@@ -267,9 +267,12 @@ class MultipleBoardController extends Controller
 
     public function deleteAllBoardWiseCards($id)
     {
-        $delete = Task::Where('board_parent_id', $id)->delete();
+        $cards = Task::Where('board_parent_id', $id)->get();
+        foreach ($cards as $key => $value) {
+            $delete = $this->cardDelete($value->id);
+        }
         if ($delete) {
-            $this->createLog($id, 'Delete', 'Card Deleted', 'Board All Card Deleted');
+            // $this->createLog($id, 'Delete', 'Card Deleted', 'Board All Card Deleted');
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -278,15 +281,26 @@ class MultipleBoardController extends Controller
 
     public function cardDelete($id)
     {
-        $assiagnUser = AssignedUser::where('task_id', $id)->delete();
-        $assiagnTag = AssignTag::where('task_id', $id)->delete();
-        $delete = Task::where('id', $id)->delete();
-        if ($delete) {
-            $this->createLog($id, 'Delete', 'Card Deleted', 'Board Single Card Deleted');
-            return response()->json(['success' => true]);
+        $cards = Task::where('id', $id)->first();
+        if ($cards->list_id === null) {
+            $assiagnUser = AssignedUser::where('task_id', $id)->delete();
+            $assiagnTag = AssignTag::where('task_id', $id)->delete();
+            $delete = Task::where('id', $id)->delete();
+            if ($delete) {
+                $this->createLog($id, 'Delete', 'Card Deleted', 'Board Single Card Deleted');
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false]);
+            }
         } else {
-            return response()->json(['success' => false]);
+            $delete = $this->existingTaskDelete($id);
+            if ($delete) {
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false]);
+            }
         }
+        return response()->json(['success' => false]);
     }
 
     public function existingTaskDelete($id)

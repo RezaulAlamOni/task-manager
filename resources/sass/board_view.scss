@@ -202,7 +202,8 @@
 
 }
 .list-group-item {
-    padding: 2px !important;
+    border-top: solid 0.5px lightgray;
+    padding: 5px !important;
 }
 .list-group{
     margin-left: 35px !important;
@@ -387,3 +388,72 @@
         }
     }
 }
+
+
+
+.checkbox_cus_mini {
+    display: inherit;
+    position: relative;
+    padding: 5px 0 5px 20px;
+    cursor: pointer;
+    margin: 0;
+   &._pen_disable{
+       pointer-events: none;
+   }
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+  
+    .checkmark {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      height: 15px;
+      width: 15px;
+      border-radius: 4px;
+      background-color: #eee;
+      @include transition(all 0.2s linear);
+    }
+  
+    input ~ .checkmark {
+      background-color: #FFF;
+      border: 1px solid #c8c8c8;
+      @include transition(all 0.2s linear);
+    }
+  
+    input:checked ~ .checkmark {
+      background-color: #0099ff;
+      border: 1px solid #0099ff;
+      @include transition(all 0.2s linear);
+    }
+  
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+  
+    input:checked ~ .checkmark:after {
+      display: block;
+    }
+  
+    .checkmark:after {
+      left: 4px;
+      top: 2px;
+      width: 4px;
+      height: 8px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+      @include transition(all 0.2s linear);
+    }
+  }
+
+  .disabledTask {
+    opacity: 0.3;
+  }
+  

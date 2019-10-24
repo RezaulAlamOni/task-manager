@@ -530,45 +530,110 @@
                                 </select>
                             </div>
                         </div>
-                        <ul class="list-group list-group-flush">
+                        <!-- <ul class="list-group list-group-flush"> -->
                             <div v-if="tree4data.length > 0">
-                                <input type="checkbox" @change="selectAll()" class="checkedAll"> All <br>
+                                <label class="checkbox_cus_mini">
+                                    <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All
+                                    <span class="checkmark"></span>
+                                </label>
+                                <!-- <input type="checkbox" @change="selectAll()" class="checkedAll"> All <br> -->
                             </div>
                             <div v-for="tree in tree4data">
                                 <li class="list-group-item">
-                                    <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask" class="selectAll" @change="selectChild(tree.id)" v-if="tree.text !== ''">
-                                    {{tree.text}}
+                                    <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': tree.board_parent_id !== null}" 
+                                            v-if="tree.text !== '' && tree.board_parent_id !== null" >
+                                        <input :id="tree.id" :value="tree.id" type="checkbox"
+                                                v-if="tree.text !== '' && tree.board_parent_id !== null"
+                                                checked disable>
+                                        {{tree.text}}
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="checkbox_cus_mini"  v-if="tree.text !== '' && tree.board_parent_id == null" >
+                                        <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask"
+                                                :class="{'selectAll': true}" @change="selectChild(tree.id)" v-if="tree.text !== '' && tree.board_parent_id === null">{{tree.text}}
+                                        <span class="checkmark"></span>
+                                    </label>
                                     <ul class="list-group list-group-flush" v-if="tree.children">
                                         <div v-for="child in tree.children">
-                                            <li class="list-group-item">
-                                                <input :id="child.id" class="tree-child selectAll" :value="child.id"
-                                                       type="checkbox" v-model="selectedExistedTask" @change="selectChild(child.id)"> {{child.text}}
+                                            <li class="list-group-item" >
+                                                <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child.board_parent_id !== null}"   v-if="child.text !== '' && child.board_parent_id !== null" >
+                                                    <input :id="child.id" class="tree-child" :value="child.id"
+                                                       type="checkbox" 
+                                                       checked disable> {{child.text}}
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                                <label class="checkbox_cus_mini" v-if="child.text !== '' && child.board_parent_id == null">
+                                                    <input :id="child.id" class="tree-child selectAll" :value="child.id"
+                                                       type="checkbox" v-model="selectedExistedTask" @change="selectChild(child.id)" > {{child.text}}
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                                
                                                 <ul class="list-group list-group-flush" v-if="child.children">
                                                     <div v-for="child1 in child.children">
-                                                        <li class="list-group-item">
-                                                            <input :id="child1.id" :value="child1.id" class="tree-child selectAll"
-                                                                   type="checkbox" v-model="selectedExistedTask" @change="selectChild(child1.id)">
-                                                            {{child1.text}}
-                                                            <ul class="list-group list-group-flush"
-                                                                v-if="child1.children">
+                                                        <li class="list-group-item" > 
+                                                            <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child1.board_parent_id !== null}"  
+                                                            v-if="child1.text !== '' && child1.board_parent_id !== null">
+                                                                <input :id="child1.id" :value="child1.id" class="tree-child"
+                                                                    type="checkbox"
+                                                                    checked disable> {{child1.text}}
+                                                                <span class="checkmark"></span>
+                                                            </label>
+
+                                                            <label class="checkbox_cus_mini" v-if="child1.text !== '' && child1.board_parent_id == null">
+                                                                <input :id="child1.id" :value="child1.id" class="tree-child selectAll"
+                                                                    type="checkbox" v-model="selectedExistedTask" @change="selectChild(child1.id)">{{child1.text}}
+                                                                <span class="checkmark"></span>
+                                                            </label>
+                                                            <ul class="list-group list-group-flush" v-if="child1.children">
                                                                 <div v-for="child2 in child1.children">
-                                                                    <li class="list-group-item">
-                                                                        <input :id="child2.id" :value="child2.id"
+                                                                    <li class="list-group-item" >
+                                                                        <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"  
+                                                                                v-if="child2.text !== '' && child2.board_parent_id !== null">
+                                                                            <input :id="child2.id" :value="child2.id"
+                                                                               class="tree-child"
+                                                                               type="checkbox"
+                                                                               checked disable> {{child2.text}}
+                                                                            <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+                                                                        
+                                                                        <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
+                                                                            <input :id="child2.id" :value="child2.id"
                                                                                class="tree-child selectAll"
                                                                                type="checkbox"
                                                                                v-model="selectedExistedTask"
                                                                                @change="selectChild(child2.id)"> {{child2.text}}
-                                                                        <ul class="list-group list-group-flush"
-                                                                            v-if="child2.children">
+                                                                            <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+
+                                                                        <ul class="list-group list-group-flush" v-if="child2.children">
                                                                             <div v-for="child3 in child2.children">
                                                                                 <li class="list-group-item">
-                                                                                    <input :id="child3.id"
-                                                                                           :value="child3.id"
-                                                                                           class="tree-child selectAll"
-                                                                                           type="checkbox"
-                                                                                           v-model="selectedExistedTask"
-                                                                                           @change="selectChild(child3.id)">
-                                                                                    {{child3.text}}
+                                                                                    <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"   
+                                                                                            v-if="child3.text !== '' && child3.board_parent_id !== null">
+                                                                                        <input :id="child3.id"
+                                                                                                :value="child3.id"
+                                                                                                class="tree-child"
+                                                                                                type="checkbox"
+                                                                                                 checked disable>
+                                                                                            {{child3.text}}
+                                                                                        <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
+                                                                                        <span class="checkmark"></span>
+                                                                                    </label>
+
+                                                                                    <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
+                                                                                        <input :id="child3.id"
+                                                                                                :value="child3.id"
+                                                                                                class="tree-child selectAll"
+                                                                                                type="checkbox"
+                                                                                                v-model="selectedExistedTask"
+                                                                                                @change="selectChild(child3.id)">
+                                                                                            {{child3.text}}
+                                                                                        <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
+                                                                                        <span class="checkmark"></span>
+                                                                                    </label>
+                                                                                    
                                                                                 </li>
                                                                             </div>
                                                                         </ul>
@@ -1061,6 +1126,7 @@
                                 task: []
                             });
                             _this.getData();
+                            swal("Successful", "Board successfuly created", "success")
                         }
                     })
                     .catch(error => {
@@ -1228,7 +1294,7 @@
                         let data = response.data;
                         _this.cards[index].task.push({id: data.id, name: data.title, date: data.date, tags: [], assigned_user:[], users:[], clicked: 0});
                         let keys = _this.cards[index].task.length-1;
-                        _this.getData();
+                        _this.getBoardTask();
                         setTimeout(function () {
                             $('#id'+index+keys).click();
                             $('#id'+index+keys).focus();
@@ -1396,33 +1462,56 @@
             },
             deleteColumn(index, id) {
                 let _this = this;
-                if (confirm('Are you sure you want to delete this board?')) {
+                swal({
+                    title: "Are you sure?",
+                    text: "Your will not be able to recover this",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                },
+                function(){
                     axios.get('/api/board-delete/' + id)
                         .then(response => response.data)
                         .then(response => {
                             if (response.success) {
                                 _this.cards.splice(index, 1);
                                 _this.getData();
+                                swal("Deleted!", "Your imaginary file has been deleted.", "success");
                             }
                         })
                         .catch(error => {
                         });
-                }
+                });
             },
             deleteColumnCards(index, id) {
                 let _this = this;
-                if (confirm('Are you sure tou want to delete all cards from this board?')) {
+
+                swal({
+                    title: "Are you sure?",
+                    text: "Your will not be able to recover this",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                },
+                function(){
                     axios.get("/api/board-deleteAllCards/" + id)
-                        .then(response => response.data)
-                        .then(response => {
-                            if (response.success) {
-                                _this.cards[index].task = [];
-                                _this.getData();
-                            }
-                        })
-                        .catch(error => {
-                        })
-                }
+                    .then(response => response.data)
+                    .then(response => {
+                        if (response.success) {
+                            _this.cards[index].task = [];
+                            _this.getData();
+                            swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                        }
+                    })
+                    .catch(error => {
+                        
+                    })
+                });
+
             },
             hideItem(index) {
 
@@ -1556,14 +1645,14 @@
                     list_id: this.selectedSubNav,
                 };
                 axios.post('/api/all-task-list', data)
-                    .then(response => response.data)
-                    .then(response => {
-                        console.log(response.task_list);
-                        this.tree4data = response.task_list;
-                    })
-                    .catch(error => {
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response.task_list);
+                    this.tree4data = response.task_list;
+                })
+                .catch(error => {
 
-                    });
+                });
             },
             showLog() {
                 var _this = this;

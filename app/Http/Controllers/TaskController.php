@@ -63,6 +63,7 @@ class TaskController extends Controller
             $info['id'] = $task->id;
             $info['parent_id'] = $task->parent_id;
             $info['sort_id'] = $task->sort_id;
+            $info['board_parent_id'] = $task->board_parent_id;
             $info['list_id'] = $task->list_id;//list_id
             $info['text'] = $task->title;
             if ($task->title == 'Dont Forget Section') {
@@ -98,7 +99,7 @@ class TaskController extends Controller
             $info['description'] = $task->description;
             $info['files'] = $task->files;
             $info['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id', 'users.id')
-                ->where('task_id', $task->id)->get()->toArray();
+                                    ->where('task_id', $task->id)->get()->toArray();
 
             $team_id = Auth::user()->current_team_id;
             $info['users'] = User::join('team_users', 'team_users.user_id', 'users.id')
