@@ -11,6 +11,7 @@ class Task extends Model
     protected $fillable = [
         'multiple_board_id',
         'sort_id',
+        'board_sort_id',
         'board_flag',
         'parent_id',
         'board_parent_id',

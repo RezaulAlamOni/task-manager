@@ -81,8 +81,7 @@
                                                 @focus="hideItem($event)"
                                                 class="inp input-hide text-area"
                                                 data-grow="auto"
-                                                type="text">{{card.data}}
-                                            </textarea>
+                                                type="text">{{ card.data }}</textarea>
                                             <br>
                                             <div>
                                                 <div>
@@ -186,7 +185,7 @@
                                                 </div>
 
                                                 <div>
-                                                    <a class="tag-icon">
+                                                    <a :class="{'tag-icon': true, 'tag-icon-free': card.tags == undefined || card.tags.length == 0}">
                                                         <div v-if="card.tags && card.tags.length !== 0">
                                                             <div style="float: left;" v-for="(item, tagIndex) in card.tags">
                                                                 <div class="dropdown-toggle-split "
@@ -200,7 +199,9 @@
                                                                         data-toggle="tooltip"
                                                                         v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]"
                                                                         v-else
-                                                                    >{{item.text.substring(0,10)}}..</span>
+                                                                    >{{item.text.substring(0,10)}}
+                                                                        <span v-if="item.text.length > 10">..</span>
+                                                                    </span>
                                                                 </div>
 
                                                                 <div :id="'dropdown1'+card.cardId" class="dropdown-menu dropdown-menu1">
@@ -489,8 +490,7 @@
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="loader" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
-                <div > <!-- class="spinner-border text-light" role="status" style="width: 0rem; height: 0rem;" -->
-                    <!-- <span class="sr-only">Loading...</span> -->
+                <div>   
                 </div>
             </div>
         </div>
@@ -530,45 +530,110 @@
                                 </select>
                             </div>
                         </div>
-                        <ul class="list-group list-group-flush">
+                        <!-- <ul class="list-group list-group-flush"> -->
                             <div v-if="tree4data.length > 0">
-                                <input type="checkbox" @change="selectAll()" class="checkedAll"> All <br>
+                                <label class="checkbox_cus_mini">
+                                    <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All
+                                    <span class="checkmark"></span>
+                                </label>
+                                <!-- <input type="checkbox" @change="selectAll()" class="checkedAll"> All <br> -->
                             </div>
                             <div v-for="tree in tree4data">
                                 <li class="list-group-item">
-                                    <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask" class="selectAll" @change="selectChild(tree.id)" v-if="tree.text !== ''">
-                                    {{tree.text}}
+                                    <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': tree.board_parent_id !== null}" 
+                                            v-if="tree.text !== '' && tree.board_parent_id !== null" >
+                                        <input :id="tree.id" :value="tree.id" type="checkbox"
+                                                v-if="tree.text !== '' && tree.board_parent_id !== null"
+                                                checked disable>
+                                        {{tree.text}}
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="checkbox_cus_mini"  v-if="tree.text !== '' && tree.board_parent_id == null" >
+                                        <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask"
+                                                :class="{'selectAll': true}" @change="selectChild(tree.id)" v-if="tree.text !== '' && tree.board_parent_id === null">{{tree.text}}
+                                        <span class="checkmark"></span>
+                                    </label>
                                     <ul class="list-group list-group-flush" v-if="tree.children">
                                         <div v-for="child in tree.children">
-                                            <li class="list-group-item">
-                                                <input :id="child.id" class="tree-child selectAll" :value="child.id"
-                                                       type="checkbox" v-model="selectedExistedTask" @change="selectChild(child.id)"> {{child.text}}
+                                            <li class="list-group-item" >
+                                                <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child.board_parent_id !== null}"   v-if="child.text !== '' && child.board_parent_id !== null" >
+                                                    <input :id="child.id" class="tree-child" :value="child.id"
+                                                       type="checkbox" 
+                                                       checked disable> {{child.text}}
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                                <label class="checkbox_cus_mini" v-if="child.text !== '' && child.board_parent_id == null">
+                                                    <input :id="child.id" class="tree-child selectAll" :value="child.id"
+                                                       type="checkbox" v-model="selectedExistedTask" @change="selectChild(child.id)" > {{child.text}}
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                                
                                                 <ul class="list-group list-group-flush" v-if="child.children">
                                                     <div v-for="child1 in child.children">
-                                                        <li class="list-group-item">
-                                                            <input :id="child1.id" :value="child1.id" class="tree-child selectAll"
-                                                                   type="checkbox" v-model="selectedExistedTask" @change="selectChild(child1.id)">
-                                                            {{child1.text}}
-                                                            <ul class="list-group list-group-flush"
-                                                                v-if="child1.children">
+                                                        <li class="list-group-item" > 
+                                                            <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child1.board_parent_id !== null}"  
+                                                            v-if="child1.text !== '' && child1.board_parent_id !== null">
+                                                                <input :id="child1.id" :value="child1.id" class="tree-child"
+                                                                    type="checkbox"
+                                                                    checked disable> {{child1.text}}
+                                                                <span class="checkmark"></span>
+                                                            </label>
+
+                                                            <label class="checkbox_cus_mini" v-if="child1.text !== '' && child1.board_parent_id == null">
+                                                                <input :id="child1.id" :value="child1.id" class="tree-child selectAll"
+                                                                    type="checkbox" v-model="selectedExistedTask" @change="selectChild(child1.id)">{{child1.text}}
+                                                                <span class="checkmark"></span>
+                                                            </label>
+                                                            <ul class="list-group list-group-flush" v-if="child1.children">
                                                                 <div v-for="child2 in child1.children">
-                                                                    <li class="list-group-item">
-                                                                        <input :id="child2.id" :value="child2.id"
+                                                                    <li class="list-group-item" >
+                                                                        <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"  
+                                                                                v-if="child2.text !== '' && child2.board_parent_id !== null">
+                                                                            <input :id="child2.id" :value="child2.id"
+                                                                               class="tree-child"
+                                                                               type="checkbox"
+                                                                               checked disable> {{child2.text}}
+                                                                            <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+                                                                        
+                                                                        <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
+                                                                            <input :id="child2.id" :value="child2.id"
                                                                                class="tree-child selectAll"
                                                                                type="checkbox"
                                                                                v-model="selectedExistedTask"
                                                                                @change="selectChild(child2.id)"> {{child2.text}}
-                                                                        <ul class="list-group list-group-flush"
-                                                                            v-if="child2.children">
+                                                                            <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+
+                                                                        <ul class="list-group list-group-flush" v-if="child2.children">
                                                                             <div v-for="child3 in child2.children">
                                                                                 <li class="list-group-item">
-                                                                                    <input :id="child3.id"
-                                                                                           :value="child3.id"
-                                                                                           class="tree-child selectAll"
-                                                                                           type="checkbox"
-                                                                                           v-model="selectedExistedTask"
-                                                                                           @change="selectChild(child3.id)">
-                                                                                    {{child3.text}}
+                                                                                    <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"   
+                                                                                            v-if="child3.text !== '' && child3.board_parent_id !== null">
+                                                                                        <input :id="child3.id"
+                                                                                                :value="child3.id"
+                                                                                                class="tree-child"
+                                                                                                type="checkbox"
+                                                                                                 checked disable>
+                                                                                            {{child3.text}}
+                                                                                        <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
+                                                                                        <span class="checkmark"></span>
+                                                                                    </label>
+
+                                                                                    <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
+                                                                                        <input :id="child3.id"
+                                                                                                :value="child3.id"
+                                                                                                class="tree-child selectAll"
+                                                                                                type="checkbox"
+                                                                                                v-model="selectedExistedTask"
+                                                                                                @change="selectChild(child3.id)">
+                                                                                            {{child3.text}}
+                                                                                        <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
+                                                                                        <span class="checkmark"></span>
+                                                                                    </label>
+                                                                                    
                                                                                 </li>
                                                                             </div>
                                                                         </ul>
@@ -845,6 +910,7 @@
                         }))
                     })),
                 };
+                $('[data-toggle="tooltip"]').tooltip('dispose');
                 setTimeout(function () {
                     $('[data-toggle="tooltip"]').tooltip();
                 }, 1000)
@@ -941,9 +1007,14 @@
                 axios.post('/api/column-sort',data)
                 .then(response => response.data)
                 .then(response => {
-                    $('#loader').modal('hide');
+                    setTimeout(() => {
+                        $('#loader').modal('hide');
+                    }, 500);
                 })
                 .catch(error => {
+                    setTimeout(() => {
+                                $('#loader').modal('hide');
+                            }, 500);
                     console.log('sorting failed');
                 });
             },
@@ -960,11 +1031,16 @@
                         axios.post('/api/change-board-parent', data)
                         .then(response => response.data)
                         .then(response => {
-                            _this.getBoardTask();
-                            $('#loader').modal('hide');
+                            setTimeout(() => {
+                                _this.getBoardTask();
+                                $('#loader').modal('hide');
+                            }, 500);
                             console.log('shifted');
                         })
                         .catch(error => {
+                            setTimeout(() => {
+                                $('#loader').modal('hide');
+                            }, 500);
                             console.log('shifting failed');
                         });
                     }
@@ -1050,6 +1126,7 @@
                                 task: []
                             });
                             _this.getData();
+                            swal("Successful", "Board successfuly created", "success")
                         }
                     })
                     .catch(error => {
@@ -1143,6 +1220,7 @@
                     .then(response => {
                         _this.cards = response.success;
                         _this.getData();
+                        
                     })
                     .catch(error => {
                     });
@@ -1216,7 +1294,7 @@
                         let data = response.data;
                         _this.cards[index].task.push({id: data.id, name: data.title, date: data.date, tags: [], assigned_user:[], users:[], clicked: 0});
                         let keys = _this.cards[index].task.length-1;
-                        _this.getData();
+                        _this.getBoardTask();
                         setTimeout(function () {
                             $('#id'+index+keys).click();
                             $('#id'+index+keys).focus();
@@ -1227,67 +1305,92 @@
                 });
             },
             deleteCard(index,cardIndex,id){
+
                 let _this = this;
-                if(confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id){
-                    axios.get('/api/card-delete/'+id)
-                    .then(response => response.data)
-                    .then(response => {
-                        if (response.success == true) {
-                            let data = response.data;
-                            _this.cards[index].task.push({
-                                id: data.id,
-                                name: data.title,
-                                date: data.date,
-                                tags: [],
-                                clicked: 0
-                            });
-                            let keys = _this.cards[index].task.length - 1;
-                            _this.getData();
-                            setTimeout(function () {
-                                $('#id' + index + keys).click();
-                                $('#id' + index + keys).focus();
-                            }, 100)
-                        }
-                    })
-                    .catch(error => {
-                    });
-                }
-            },
-            deleteCard(index, cardIndex, id) {
-                let _this = this;
-                if (confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id) {
-                    axios.get('/api/card-delete/' + id)
+                swal({
+                    title: 'Are you sure to delete the card?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                },function(){
+                    if(_this.cards[index].task[cardIndex].id == id){
+                        axios.get('/api/card-delete/'+id)
                         .then(response => response.data)
                         .then(response => {
-                            _this.cards[index].task.splice(cardIndex, 1);
-                            _this.getData();
-                            if (response.success) {
+                            if (response.success == true) {
+                                // let data = response.data;
+                                // _this.cards[index].task.push({
+                                //     id: data.id,
+                                //     name: data.title,
+                                //     date: data.date,
+                                //     tags: [],
+                                //     clicked: 0
+                                // });
+                                let keys = _this.cards[index].task.length - 1;
+                                _this.getBoardTask();
+                                _this.getData();
+                                setTimeout(function () {
+                                    $('#id' + index + keys).click();
+                                    $('#id' + index + keys).focus();
+                                }, 100)
+                                swal("Deleted!", "The card has been deleted.", "success");
                             }
                         })
                         .catch(error => {
+                            console.log('error => '+error);
                         });
-                }
+                    }
+                });
+
+                
             },
+            // deleteCard(index, cardIndex, id) {
+            //     let _this = this;
+            //     if (confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id) {
+            //         axios.get('/api/card-delete/' + id)
+            //             .then(response => response.data)
+            //             .then(response => {
+            //                 _this.cards[index].task.splice(cardIndex, 1);
+            //                 _this.getData();
+            //                 if (response.success) {
+            //                 }
+            //             })
+            //             .catch(error => {
+            //             });
+            //     }
+            // },
             deleteTask(index, cardIndex, id) {
                 let _this = this;
-                // console.log(index + ", " + cardIndex);
-                // console.log(this.cards[index].task[cardIndex]);
-                if (confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id) {
-                    axios.get('/api/board-task-delete/' + id)
-                        .then(response => response.data)
-                        .then(response => {
-                            // if(response.success){
-                            _this.cards[index].task.splice(cardIndex, 1);
-                            // delete _this.cards[index].task[cardIndex];
-                            // _this.cards[index].task.length = _this.cards[index].task.length-1;
-                            _this.getData();
-                            // }
-                        })
-                        .catch(error => {
-                        });
-                } else {
-                    // alert("couden't delete");
-                }
+                swal({
+                    title: 'Are you sure to delete the card?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                },function(){
+                    if ( _this.cards[index].task[cardIndex].id == id ) {
+                        axios.get('/api/board-task-delete/' + id)
+                            .then(response => response.data)
+                            .then(response => {
+                                // if(response.success){
+                                _this.cards[index].task.splice(cardIndex, 1);
+                                // delete _this.cards[index].task[cardIndex];
+                                // _this.cards[index].task.length = _this.cards[index].task.length-1;
+                                _this.getData();
+                                swal("Deleted!", "The card has been deleted.", "success");
+                                // }
+                            })
+                            .catch(error => {
+                            });
+                    } else {
+                        // alert("couden't delete");
+                    }
+                });
             },
             saveData(data, index, child_key) {
                 let _this = this;
@@ -1359,33 +1462,56 @@
             },
             deleteColumn(index, id) {
                 let _this = this;
-                if (confirm('Are you sure you want to delete this board?')) {
+                swal({
+                    title: "Are you sure?",
+                    text: "Your will not be able to recover this",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                },
+                function(){
                     axios.get('/api/board-delete/' + id)
                         .then(response => response.data)
                         .then(response => {
                             if (response.success) {
                                 _this.cards.splice(index, 1);
                                 _this.getData();
+                                swal("Deleted!", "Your imaginary file has been deleted.", "success");
                             }
                         })
                         .catch(error => {
                         });
-                }
+                });
             },
             deleteColumnCards(index, id) {
                 let _this = this;
-                if (confirm('Are you sure tou want to delete all cards from this board?')) {
+
+                swal({
+                    title: "Are you sure?",
+                    text: "Your will not be able to recover this",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                },
+                function(){
                     axios.get("/api/board-deleteAllCards/" + id)
-                        .then(response => response.data)
-                        .then(response => {
-                            if (response.success) {
-                                _this.cards[index].task = [];
-                                _this.getData();
-                            }
-                        })
-                        .catch(error => {
-                        })
-                }
+                    .then(response => response.data)
+                    .then(response => {
+                        if (response.success) {
+                            _this.cards[index].task = [];
+                            _this.getData();
+                            swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                        }
+                    })
+                    .catch(error => {
+                        
+                    })
+                });
+
             },
             hideItem(index) {
 
@@ -1422,8 +1548,10 @@
                 let attData = $(e.target).attr('data-text');
                 let attDataNew = e.target.value;
                 if( $.trim(attData) === $.trim(attDataNew)){
-                console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
+                    //console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
                     this.getData();
+                    $('.inp').addClass('input-hide');
+                    $('.inp').removeClass('form-control');
                     return false;
                 }
                 data.data = attDataNew;
@@ -1517,14 +1645,14 @@
                     list_id: this.selectedSubNav,
                 };
                 axios.post('/api/all-task-list', data)
-                    .then(response => response.data)
-                    .then(response => {
-                        console.log(response.task_list);
-                        this.tree4data = response.task_list;
-                    })
-                    .catch(error => {
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response.task_list);
+                    this.tree4data = response.task_list;
+                })
+                .catch(error => {
 
-                    });
+                });
             },
             showLog() {
                 var _this = this;
@@ -1687,8 +1815,8 @@
                         // _this.manageTag = response.tags;
                         // _this.showTagManageModel();
                         _this.getBoardTask();
-                        swal("Deleted!", "Your imaginary file has been deleted.", "success");
-
+                        swal("Deleted!", "The tag has been deleted.", "success");
+                        
                         // _this.getData();
                         // _this.tag = null
                     })
@@ -1697,40 +1825,6 @@
                     });
 
                 });
-
-
-// .then((result) => {
-//                     if (result.value) {
-//                         var _this = this;
-//                         var postData = {
-//                             id : tag.id,
-//                             title: tag.title,
-//                         };
-//                         axios.post('/api/task-list/delete-tag', postData)
-//                         .then(response => response.data)
-//                         .then(response => {
-//                             // _this.manageTag = response.tags;
-//                             _this.showTagManageModel();
-//                             _this.getBoardTask();
-
-//                             // _this.getData();
-//                             // _this.tag = null
-//                         })
-//                         .catch(error => {
-//                             console.log('Api for delete tag not Working !!!');
-//                         });
-//                             Swal.fire(
-//                                 'Deleted!',
-//                                 'Tag has been deleted.',
-//                                 'success'
-//                             );
-
-//                     }
-//                 });
-
-
-
-
             },
             updateTagName(e, tag) {
                 var newTag = e.target.innerText;
