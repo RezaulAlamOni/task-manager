@@ -159,7 +159,7 @@
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">List Description</label>
                             <div class="col-sm-8">
-                                <textarea cols="40" id="" name="" rows="3" v-model="list.description"></textarea>
+                                <textarea class="form-control" cols="40" id="" name="" rows="3" v-model="list.description"></textarea>
                             </div>
                         </div>
                         <!--                        <p v-if="addField.error" class="text-danger"></p>-->
@@ -193,7 +193,7 @@
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">Board Description</label>
                             <div class="col-sm-8">
-                                <textarea cols="40" name="" rows="3" v-model="list.description"></textarea>
+                                <textarea class="form-control" cols="40" name="" rows="3" v-model="list.description"></textarea>
                             </div>
                         </div>
                         <!--                        <p v-if="addField.error" class="text-danger"></p>-->
