@@ -121,7 +121,8 @@
                                    v-else-if="data.children && data.children.length && !data.open"><i
                                     class="fa fa-fw fa-plus"></i></b>
                                 <span>
-                                        <input :id="data.id" @blur="showItem($event,data)"
+                                        <input :id="data.id"
+                                               @blur="showItem($event,data)"
                                                @click="makeInput($event,data)"
                                                @focus="hideItem($event,data)"
                                                @keydown="keyDownAction($event,data)"
@@ -255,7 +256,7 @@
 
                                             </span>
                                         </template>
-                                        <span  data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
+                                        <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
                                             <i class="outline-person icon-image-preview li-opacity "
                                                data-toggle="tooltip" title="Assignee">
                                             </i>
@@ -305,10 +306,12 @@
                                         </div>
                                     </a>
                                 </div>
-                                <a @click="addChild(data)" class="subTask_plus li-opacity clickHide " data-toggle="tooltip" title="Add Child">
+                                <a @click="addChild(data)" class="subTask_plus li-opacity clickHide "
+                                   data-toggle="tooltip" title="Add Child">
                                     <i class="baseline-playlist_add icon-image-preview"></i>
                                 </a>
-                                <a @click="addNode(data)" class="task_plus li-opacity clickHide"  data-toggle="tooltip" title="Add Task Bellow">
+                                <a @click="addNode(data)" class="task_plus li-opacity clickHide" data-toggle="tooltip"
+                                   title="Add Task Bellow">
                                     <i class="baseline-add icon-image-preview"></i>
                                 </a>
 
@@ -564,7 +567,8 @@
                                                    type="color">
                                         </td>
                                         <td>
-                                            <a @click="DeleteTagFromModal(tag)" class="compltit-blue-a badge badge-danger"
+                                            <a @click="DeleteTagFromModal(tag)"
+                                               class="compltit-blue-a badge badge-danger"
                                                href="javascript:void(0)">
                                                 Delete
                                             </a>
@@ -611,8 +615,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-<!--                        <button @click="UpdateListOrBoard" class="btn btn-primary" type="button">Update</button>-->
-                        <button @click="UpdateListOrBoard" class="btn btn-primary ladda-button ladda_update_list_board" data-style="expand-right">
+                        <!--                        <button @click="UpdateListOrBoard" class="btn btn-primary" type="button">Update</button>-->
+                        <button @click="UpdateListOrBoard" class="btn btn-primary ladda-button ladda_update_list_board"
+                                data-style="expand-right">
                             Update
                         </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
@@ -640,6 +645,7 @@
     import Navbar from "./ProjectNavbar/Navbar";
     import BoardView from "./board";
     import * as Ladda from 'ladda';
+
     export default {
         components: {
             Tree: DraggableTree,
@@ -654,7 +660,7 @@
         data() {
             return {
                 disabledDates: {
-                    id: null
+                    id: null,
                 },
                 id: 0,
                 treeList: [],
@@ -698,6 +704,7 @@
                 dNode: null,
                 dNodeInterval: null,
                 dNodeHeght: 0,
+                context_menu_flag: 0
             }
         },
         mounted() {
@@ -712,13 +719,13 @@
                 setTimeout(function () {
                     $('.delete-icon').hide();
                 }, 1000);
-                if(localStorage.selected_nav !== undefined ){
+                if (localStorage.selected_nav !== undefined) {
                     var session_data = JSON.parse(localStorage.selected_nav);
-                    if (session_data.type === 'list'){
+                    if (session_data.type === 'list') {
                         setTimeout(function () {
                             $('#list' + session_data.list_id).click();
                         }, 1000)
-                    }else {
+                    } else {
                         setTimeout(function () {
                             $('.board' + session_data.list_id).click();
                         }, 1000)
@@ -840,7 +847,7 @@
                 this.dNodeHeght = $('#' + node._id)[0].getBoundingClientRect().top + window.scrollY;
                 this.dNodeInterval = setInterval(function () {
                     var target = document.getElementById('TaskListAndDetails');
-                    var top = $('#' + node._id)[0].getBoundingClientRect().top + target.scrollTop -241;
+                    var top = $('#' + node._id)[0].getBoundingClientRect().top + target.scrollTop - 241;
                     // var cssTop = top+241+THIS.dNodeHeght;
                     // $('#' + node._id).css({top: cssTop+'px'});
                     target.scrollTo(0, top);
@@ -961,7 +968,7 @@
                 $('#myUL').addClass('myUL');
                 $('#myUL').removeClass('myUL-show');
             },
-            HideShowChild(store, data){
+            HideShowChild(store, data) {
                 var _this = this;
                 var postData = {
                     id: data.id,
@@ -1042,6 +1049,7 @@
                     $('.jquery-accordion-menu').hide();
                     if (_this.selectedIds.length > 1) {
                         this.selectedData = {};
+                        _this.context_menu_flag = 0;
                     }
 
                 } else if (e.which === 1) {
@@ -1060,50 +1068,52 @@
                 } else if (e.which === 3) {
                     e.preventDefault();
                     e.stopPropagation();
-                    $('#rmenu').addClass('menu-show');
-                    let target = $(e.target);
-                    let w = target.closest('#tree_view_list').width();
-                    let h = target.closest('#tree_view_list').height();
-                    let p = target.closest('#tree_view_list').offset();
-                    let left = e.clientX - p.left;
-                    let top = e.clientY - p.top;
+                    if (_this.context_menu_flag !== 1) {
+                        $('#rmenu').addClass('menu-show');
+                        let target = $(e.target);
+                        let w = target.closest('#tree_view_list').width();
+                        let h = target.closest('#tree_view_list').height();
+                        let p = target.closest('#tree_view_list').offset();
+                        let left = e.clientX - p.left;
+                        let top = e.clientY - p.top;
 
-                    let clickH = $('.jquery-accordion-menu').height();
-                    clickH = clickH < 150 ? 400 : clickH;
-                    if ((w - left) < 230) {
-                        left = w - 250;
-                    }
-                    if (h < top + clickH) {
-                        top = top - (top + clickH - h);
-                    }
-                    if (top < 10) {
-                        top = 10;
-                    }
+                        let clickH = $('.jquery-accordion-menu').height();
+                        clickH = clickH < 150 ? 400 : clickH;
+                        if ((w - left) < 230) {
+                            left = w - 250;
+                        }
+                        if (h < top + clickH) {
+                            top = top - (top + clickH - h);
+                        }
+                        if (top < 10) {
+                            top = 10;
+                        }
 
-                    let ttarget = target.closest('#tree_view_list').find('.jquery-accordion-menu');
-                    if (_this.selectedIds.length > 0) {
-                        var index = _this.selectedIds.indexOf(data.id);
-                        if (index > -1) {
-                            ttarget.css({
-                                top: top,
-                                left: left,
-                            }).fadeIn();
-                        } else {
-                            $('.eachItemRow').removeClass('clicked');
+                        let ttarget = target.closest('#tree_view_list').find('.jquery-accordion-menu');
+                        if (_this.selectedIds.length > 0) {
+                            var index = _this.selectedIds.indexOf(data.id);
+                            if (index > -1) {
+                                ttarget.css({
+                                    top: top,
+                                    left: left,
+                                }).fadeIn();
+                            } else {
+                                $('.eachItemRow').removeClass('clicked');
 
-                            $('.jquery-accordion-menu').hide();
-                            _this.selectedIds = [];
+                                $('.jquery-accordion-menu').hide();
+                                _this.selectedIds = [];
+                            }
                         }
                     }
-
                 }
-
             },
             makeInput(e, data) {
+                var _this = this;
                 this.selectedData = data;
                 if (data.text === 'Dont Forget Section') {
                     $(e.target).attr('disabled', 'disabled');
                 } else {
+                    _this.context_menu_flag = 1;
                     $('.inp').addClass('input-hide');
                     $('.inp').removeClass('form-control');
                     $(e.target).removeClass('input-hide');
@@ -1112,6 +1122,7 @@
 
             },
             hideItem(e, data) {
+                this.context_menu_flag = 1;
                 // data.draggable = false;
                 $(e.target).closest('.eachItemRow').find('.task-complete').hide();
                 $(e.target).closest('.eachItemRow').find('.tag-icon').hide();
@@ -1125,6 +1136,7 @@
 
             },
             showItem(e, data) {
+                this.context_menu_flag = 0;
                 this.SaveDataWithoutCreateNewNode(data);
                 setTimeout(function () {
                     $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
@@ -1482,14 +1494,14 @@
             showTagManageModel() {
                 var _this = this;
                 axios.get('/api/task-list/all-tag-for-manage')
-                .then(response => response.data)
-                .then(response => {
-                    _this.manageTag = response.tags;
-                    $('#TagManage').modal('show');
-                })
-                .catch(error => {
-                    console.log('Api for move down task not Working !!!')
-                });
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.manageTag = response.tags;
+                        $('#TagManage').modal('show');
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
 
             },
             updateTagColor(e, tag) {
@@ -1541,7 +1553,7 @@
             DeleteTagFromModal(tag) {
                 var _this = this;
                 var postData = {
-                    id : tag.id,
+                    id: tag.id,
                     title: tag.title,
                 };
                 axios.post('/api/task-list/delete-tag', postData)
@@ -1582,7 +1594,7 @@
                     id: data.id,
                     complete: 1
                 };
-                    swal({
+                swal({
                         title: "Are you sure?",
                         text: "Is this task is complete !!!",
                         type: "warning",
@@ -1591,7 +1603,7 @@
                         confirmButtonText: "Yes, Complete it!",
                         closeOnConfirm: false
                     },
-                    function(){
+                    function () {
                         axios.post('/api/task-list/update', postData)
                             .then(response => response.data)
                             .then(response => {
@@ -1677,7 +1689,7 @@
                         confirmButtonText: "Yes, delete it!",
                         closeOnConfirm: false
                     },
-                    function(){
+                    function () {
                         axios.post('/api/task-list/delete-task', postData)
                             .then(response => response.data)
                             .then(response => {
@@ -1874,10 +1886,20 @@
                 this.list.description = data.description;
                 this.list.type = data.type;
                 if (data.type === 'list') {
-                    localStorage.selected_nav = JSON.stringify({list_id : data.list_id,nav_id : data.nav_id,project_id : this.projectId, type: 'list'});
+                    localStorage.selected_nav = JSON.stringify({
+                        list_id: data.list_id,
+                        nav_id: data.nav_id,
+                        project_id: this.projectId,
+                        type: 'list'
+                    });
                     this.getTaskList()
-                }else{
-                    localStorage.selected_nav = JSON.stringify({list_id : data.list_id,nav_id : data.nav_id,project_id : this.projectId, type: 'board'});
+                } else {
+                    localStorage.selected_nav = JSON.stringify({
+                        list_id: data.list_id,
+                        nav_id: data.nav_id,
+                        project_id: this.projectId,
+                        type: 'board'
+                    });
                 }
 
             },
@@ -1890,7 +1912,7 @@
             },
             UpdateListOrBoard() {
                 var _this = this;
-                var l = Ladda.create(document.querySelector( '.ladda_update_list_board' ) );
+                var l = Ladda.create(document.querySelector('.ladda_update_list_board'));
                 l.start();
                 this.list.project_id = this.projectId;
                 this.list.nav_id = this.nav_id;
