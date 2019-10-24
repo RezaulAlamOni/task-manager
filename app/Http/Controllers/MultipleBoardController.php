@@ -11,6 +11,7 @@ use App\Task;
 use App\Project;
 use App\User;
 use App\AssignedUser;
+use App\AssignTag;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -167,12 +168,12 @@ class MultipleBoardController extends Controller
         $id = $request->id;
         $parent = Task::find($id);
         $sortNo = Task::where('board_parent_id', $parent->id)->max('board_sort_id');
-        if (!$sortNo) {
-            $sortNo = 0;
-        }
+        // if ($sortNo == '') {
+        //     $sortNo = 0;
+        // }
         $data = [
             'title' => '',
-            'board_sort_id' => $sortNo + 1,
+            'board_sort_id' => ++$sortNo,
             'board_parent_id' => $parent->id,
             'project_id' => $parent->project_id,
             'multiple_board_id' => $parent->multiple_board_id,
@@ -248,6 +249,10 @@ class MultipleBoardController extends Controller
 
     public function destroy($id)
     {
+        $child  = Task::where('board_parent_id', $id)->get();
+        foreach ($child as $key => $value) {
+            $this->cardDelete($value->id);
+        }
         $delete = Task::where('id', $id)
             ->orWhere('board_parent_id', $id)
             ->delete();
@@ -262,9 +267,12 @@ class MultipleBoardController extends Controller
 
     public function deleteAllBoardWiseCards($id)
     {
-        $delete = Task::Where('board_parent_id', $id)->delete();
+        $cards = Task::Where('board_parent_id', $id)->get();
+        foreach ($cards as $key => $value) {
+            $delete = $this->cardDelete($value->id);
+        }
         if ($delete) {
-            $this->createLog($id, 'Delete', 'Card Deleted', 'Board All Card Deleted');
+            // $this->createLog($id, 'Delete', 'Card Deleted', 'Board All Card Deleted');
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -273,13 +281,26 @@ class MultipleBoardController extends Controller
 
     public function cardDelete($id)
     {
-        $delete = Task::where('id', $id)->delete();
-        if ($delete) {
-            $this->createLog($id, 'Delete', 'Card Deleted', 'Board Single Card Deleted');
-            return response()->json(['success' => true]);
+        $cards = Task::where('id', $id)->first();
+        if ($cards->list_id === null) {
+            $assiagnUser = AssignedUser::where('task_id', $id)->delete();
+            $assiagnTag = AssignTag::where('task_id', $id)->delete();
+            $delete = Task::where('id', $id)->delete();
+            if ($delete) {
+                $this->createLog($id, 'Delete', 'Card Deleted', 'Board Single Card Deleted');
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false]);
+            }
         } else {
-            return response()->json(['success' => false]);
+            $delete = $this->existingTaskDelete($id);
+            if ($delete) {
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false]);
+            }
         }
+        return response()->json(['success' => false]);
     }
 
     public function existingTaskDelete($id)
@@ -331,18 +352,19 @@ class MultipleBoardController extends Controller
             // $insert = ExistingTasksInBoard::create($data);
             $task[$key] = Task::where('id', $value)->first();
             $tagTooltip = '';
-            $allTags = Tags::where('task_id', $task[$key]->id)->get();
+            $allTags = AssignTag::where('task_id', $task[$key]->id)->with('tag')->get();
             $tags = [];
 
             if ($allTags->count() > 0) {
                 foreach ($allTags as $tagkey => $tag) {
-                    $tags[$tagkey]['id'] = $tag->id;
-                    $tags[$tagkey]['board_id'] = $tag->board_id;
-                    $tags[$tagkey]['text'] = $tag->title;
+                    $tags[$tagkey]['assign_id'] = $tag->id;
+                    $tags[$tagkey]['id'] = $tag->tag->id;
+                    $tags[$tagkey]['board_id'] = $tag->task_id;
+                    $tags[$tagkey]['text'] = $tag->tag->title;
                     $tags[$tagkey]['classes'] = '';
-                    $tags[$tagkey]['style'] = 'background-color: ' . $tag->color;
-                    $tags[$tagkey]['color'] = $tag->color;
-                    $tagTooltip = '#' . $tag->title . ' ';
+                    $tags[$tagkey]['style'] = 'background-color: ' . $tag->tag->color;
+                    $tags[$tagkey]['color'] = $tag->tag->color;
+                    $tagTooltip = '#' . $tag->tag->title . ' ';
                 }
                 // return $tagTooltip;
             }
