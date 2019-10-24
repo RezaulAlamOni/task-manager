@@ -11,6 +11,7 @@ use App\Task;
 use App\Project;
 use App\User;
 use App\AssignedUser;
+use App\AssignTag;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -247,7 +248,11 @@ class MultipleBoardController extends Controller
     }
 
     public function destroy($id)
-    {
+    {   
+        $child  = Task::where('board_parent_id', $id)->get();
+        foreach ($child as $key => $value) {
+            $this->cardDelete($value->id);
+        }
         $delete = Task::where('id', $id)
             ->orWhere('board_parent_id', $id)
             ->delete();
@@ -273,6 +278,8 @@ class MultipleBoardController extends Controller
 
     public function cardDelete($id)
     {
+        $assiagnUser = AssignedUser::where('task_id', $id)->delete();
+        $assiagnTag = AssignTag::where('task_id', $id)->delete();
         $delete = Task::where('id', $id)->delete();
         if ($delete) {
             $this->createLog($id, 'Delete', 'Card Deleted', 'Board Single Card Deleted');
@@ -291,7 +298,7 @@ class MultipleBoardController extends Controller
             'multiple_board_id' => null
         ]);
         if($delete){
-            $this->createLog($request->boardId, 'Delete', 'Card Deleted', 'Board Existing Task Card Deleted');
+            $this->createLog($id, 'Delete', 'Card Deleted', 'Board Existing Task Card Deleted');
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -331,18 +338,19 @@ class MultipleBoardController extends Controller
             // $insert = ExistingTasksInBoard::create($data);
             $task[$key] = Task::where('id', $value)->first();
             $tagTooltip = '';
-            $allTags = Tags::where('task_id', $task[$key]->id)->get();
+            $allTags = AssignTag::where('task_id', $task[$key]->id)->with('tag')->get();
             $tags = [];
 
             if ($allTags->count() > 0) {
                 foreach ($allTags as $tagkey => $tag) {
-                    $tags[$tagkey]['id'] = $tag->id;
-                    $tags[$tagkey]['board_id'] = $tag->board_id;
-                    $tags[$tagkey]['text'] = $tag->title;
+                    $tags[$tagkey]['assign_id'] = $tag->id;
+                    $tags[$tagkey]['id'] = $tag->tag->id;
+                    $tags[$tagkey]['board_id'] = $tag->task_id;
+                    $tags[$tagkey]['text'] = $tag->tag->title;
                     $tags[$tagkey]['classes'] = '';
-                    $tags[$tagkey]['style'] = 'background-color: ' . $tag->color;
-                    $tags[$tagkey]['color'] = $tag->color;
-                    $tagTooltip = '#' . $tag->title . ' ';
+                    $tags[$tagkey]['style'] = 'background-color: ' . $tag->tag->color;
+                    $tags[$tagkey]['color'] = $tag->tag->color;
+                    $tagTooltip = '#' . $tag->tag->title . ' ';
                 }
                 // return $tagTooltip;
             }

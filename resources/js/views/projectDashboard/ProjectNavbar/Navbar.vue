@@ -19,13 +19,14 @@
                                         <h6 class="dropdown-header" v-else-if="nav.type === 'board'"> Board</h6>
 
                                         <span v-for="nav_list in nav.lists">
-                                        <span :id="'list'+nav_list.id"
-                                              @click="setListId(nav_list,nav.id,nav_list.description,nav.type)" class="dropdown-item">
-                                            <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>
-                                             <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>
-                                         </span>
+                                            <span :id="'list'+nav_list.id" :class="'board'+nav_list.id"
+                                                  @click="setListId(nav_list,nav.id,nav_list.description,nav.type)"
+                                                  class="dropdown-item">
+                                                <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>
+                                                 <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>
+                                             </span>
 
-                                    </span>
+                                        </span>
                                         <div class="dropdown-divider"></div>
 
                                         <a @click="addListModel(nav.id)" class="dropdown-item"
@@ -47,19 +48,21 @@
                         </span>
                     <ul class="navbar-nav ml-4 nav-bar-right">
                         <li class="nav-item search-nav-icon">
-                            <button class="btn btn-default" type="submit" @click="showSearchInputField"><i class="fa fa-search"></i></button>
+                            <button class="btn btn-default" type="submit" @click="showSearchInputField"><i
+                                class="fa fa-search"></i></button>
                         </li>
                         <li class="nav-item" style="margin-right:20px;">
                             <a @click="shortcutModel" class="d-block d-md-flex text-center nav-link"
                                href="Javascript:void(0)">
-                                    <span class="d-none d-md-block">Shortcuts</span>
+                                <span class="d-none d-md-block">Shortcuts</span>
                             </a>
                         </li>
 
                         <li class="nav-item dropdown">
                             <a aria-expanded="false" aria-haspopup="true" class="d-block d-md-flex text-center nav-link"
                                data-toggle="dropdown" href="#">
-                                <span class="d-none d-md-block"><i class="fa fa-fw fa-filter" style="font-size: 26px;"></i></span>
+                                <span class="d-none d-md-block"><i class="fa fa-fw fa-filter"
+                                                                   style="font-size: 26px;"></i></span>
                             </a>
                             <div aria-labelledby="dropdownMenuButton" class="dropdown-menu dropdown-menu-right">
 
@@ -156,7 +159,7 @@
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">List Description</label>
                             <div class="col-sm-8">
-                                <textarea cols="40" id="" name="" rows="3" v-model="list.description"></textarea>
+                                <textarea class="form-control" cols="40" id="" name="" rows="3" v-model="list.description"></textarea>
                             </div>
                         </div>
                         <!--                        <p v-if="addField.error" class="text-danger"></p>-->
@@ -190,7 +193,7 @@
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">Board Description</label>
                             <div class="col-sm-8">
-                                <textarea cols="40" name="" rows="3" v-model="list.description"></textarea>
+                                <textarea class="form-control" cols="40" name="" rows="3" v-model="list.description"></textarea>
                             </div>
                         </div>
                         <!--                        <p v-if="addField.error" class="text-danger"></p>-->
@@ -488,9 +491,9 @@
                 axios.post('/api/nav-item/add-new', _this.navItem)
                     .then(response => response.data)
                     .then(response => {
-                        if (response.status == 'exists'){
+                        if (response.status == 'exists') {
                             swal("Already Exist! ", "Enter Another Board Name !", "warning")
-                        }else {
+                        } else {
                             _this.AllNavItem();
                             $("#addNavItem").modal('hide');
                             _this.navItem.title = null;
@@ -590,9 +593,9 @@
                     .then(response => response.data)
                     .then(response => {
 
-                        if (response.status == 'exists'){
+                        if (response.status == 'exists') {
                             swal("Already Exist! ", "Enter Another Board Name !", "warning")
-                        }else {
+                        } else {
                             this.multiple_list = response.multiple_list;
                             this.AllNavItem();
                             setTimeout(function () {
@@ -615,9 +618,9 @@
                     .then(response => response.data)
                     .then(response => {
                         $("#addBoardModel").modal('hide');
-                        if (response.status == 'exists'){
+                        if (response.status == 'exists') {
                             swal("Already Exist! ", "Enter Another Board Name !", "warning")
-                        }else {
+                        } else {
                             this.multiple_list = response.multiple_board;
                             this.AllNavItem();
                             this.list.name = null;

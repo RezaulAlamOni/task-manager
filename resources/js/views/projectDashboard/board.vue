@@ -185,7 +185,7 @@
                                                 </div>
 
                                                 <div>
-                                                    <a class="tag-icon">
+                                                    <a :class="{'tag-icon': true, 'tag-icon-free': card.tags == undefined || card.tags.length == 0}">
                                                         <div v-if="card.tags && card.tags.length !== 0">
                                                             <div style="float: left;" v-for="(item, tagIndex) in card.tags">
                                                                 <div class="dropdown-toggle-split "
@@ -199,7 +199,9 @@
                                                                         data-toggle="tooltip"
                                                                         v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]"
                                                                         v-else
-                                                                    >{{item.text.substring(0,10)}}..</span>
+                                                                    >{{item.text.substring(0,10)}}
+                                                                        <span v-if="item.text.length > 10">..</span>
+                                                                    </span>
                                                                 </div>
 
                                                                 <div :id="'dropdown1'+card.cardId" class="dropdown-menu dropdown-menu1">
@@ -259,7 +261,7 @@
                                                         <i class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
                                                             data-toggle="dropdown"
                                                             v-else></i>
-                                                       
+
                                                         <div class="dropdown-menu dropdown-menu1 ">
 
                                                             <diV class="collapse show switchToggle" style="">
@@ -280,7 +282,7 @@
                                                                                     {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
                                                                                 </li>
                                                                             </template>
-                                                                            <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')" 
+                                                                            <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')"
                                                                                 class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
                                                                         </div>
                                                                     </div>
@@ -488,8 +490,7 @@
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="loader" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
-                <div > <!-- class="spinner-border text-light" role="status" style="width: 0rem; height: 0rem;" -->
-                    <!-- <span class="sr-only">Loading...</span> -->
+                <div>   
                 </div>
             </div>
         </div>
@@ -685,8 +686,7 @@
             }
         },
         mounted() {
-            delete sessionStorage.data;
-            sessionStorage.data = JSON.stringify({board_id: this.board_id, nav_id: this.nav_id, projectId: this.projectId});
+            var _this = this;
             $('#header-item').text('Project  / Task Board');
             $(document).ready(function () {
                 $(function () {
@@ -694,10 +694,11 @@
                 });
                 $("#popoverData").popover({trigger: "hover"});
             });
-            this.getBoardTask();
+            _this.getBoardTask();
             $(document).ready(function () {
                 $('.searchList').hide();
             });
+
         },
         created() {
             let _this = this;
@@ -844,34 +845,12 @@
                         }))
                     })),
                 };
+                $('[data-toggle="tooltip"]').tooltip('dispose');
                 setTimeout(function () {
                     $('[data-toggle="tooltip"]').tooltip();
                 }, 1000)
             },
-            // selectChild(id){
-            //      for (let index = 0; index < this.tree4data.length; index++) {
-            //             // this.selectedExistedTask.push(this.tree4data[index].id);
-            //         if(this.tree4data[index].id === id){
-            //             this.recursive(this.tree4data[index].children, this.tree4data[index].id);
-            //         }
-            //         for (let secondIndex = 0; secondIndex < this.tree4data[index].children.length; secondIndex++) {
-            //             if(this.tree4data[index].children[secondIndex] !== undefined){
-            //                 if(this.tree4data[index].children[secondIndex].id === id){
-            //                     this.recursive(this.tree4data[index].children[secondIndex].children, this.tree4data[index].children[secondIndex].id);
-            //                 }
-            //             }
-            //             for (let thirdIndex = 0; thirdIndex < this.tree4data[index].children[index].children.length; thirdIndex++) {
-            //                 if(this.tree4data[index].children[secondIndex].children[thirdIndex] !== undefined){
-            //                     if(this.tree4data[index].children[secondIndex].children[thirdIndex].id === id){
-            //                         this.recursive(this.tree4data[index].children[secondIndex].children[thirdIndex].children, this.tree4data[index].children[secondIndex].children[thirdIndex].id);
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     }
-            //
-            //     console.log(this.selectedExistedTask);
-            // },
+
             selectChild(id){
                 var _this = this;
                 _this.findChild(id,_this.tree4data)
@@ -963,9 +942,14 @@
                 axios.post('/api/column-sort',data)
                 .then(response => response.data)
                 .then(response => {
-                    $('#loader').modal('hide');
+                    setTimeout(() => {
+                        $('#loader').modal('hide');
+                    }, 500);
                 })
                 .catch(error => {
+                    setTimeout(() => {
+                                $('#loader').modal('hide');
+                            }, 500);
                     console.log('sorting failed');
                 });
             },
@@ -982,11 +966,16 @@
                         axios.post('/api/change-board-parent', data)
                         .then(response => response.data)
                         .then(response => {
-                            _this.getBoardTask();
-                            $('#loader').modal('hide');
+                            setTimeout(() => {
+                                _this.getBoardTask();
+                                $('#loader').modal('hide');
+                            }, 500);
                             console.log('shifted');
                         })
                         .catch(error => {
+                            setTimeout(() => {
+                                $('#loader').modal('hide');
+                            }, 500);
                             console.log('shifting failed');
                         });
                     }
@@ -1165,6 +1154,7 @@
                     .then(response => {
                         _this.cards = response.success;
                         _this.getData();
+                        
                     })
                     .catch(error => {
                     });
@@ -1308,24 +1298,33 @@
             // },
             deleteTask(index, cardIndex, id) {
                 let _this = this;
-                // console.log(index + ", " + cardIndex);
-                // console.log(this.cards[index].task[cardIndex]);
-                if (confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id) {
-                    axios.get('/api/board-task-delete/' + id)
-                        .then(response => response.data)
-                        .then(response => {
-                            // if(response.success){
-                            _this.cards[index].task.splice(cardIndex, 1);
-                            // delete _this.cards[index].task[cardIndex];
-                            // _this.cards[index].task.length = _this.cards[index].task.length-1;
-                            _this.getData();
-                            // }
-                        })
-                        .catch(error => {
-                        });
-                } else {
-                    // alert("couden't delete");
-                }
+                swal({
+                    title: 'Are you sure to delete the card?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                },function(){
+                    if ( _this.cards[index].task[cardIndex].id == id ) {
+                        axios.get('/api/board-task-delete/' + id)
+                            .then(response => response.data)
+                            .then(response => {
+                                // if(response.success){
+                                _this.cards[index].task.splice(cardIndex, 1);
+                                // delete _this.cards[index].task[cardIndex];
+                                // _this.cards[index].task.length = _this.cards[index].task.length-1;
+                                _this.getData();
+                                swal("Deleted!", "The card has been deleted.", "success");
+                                // }
+                            })
+                            .catch(error => {
+                            });
+                    } else {
+                        // alert("couden't delete");
+                    }
+                });
             },
             saveData(data, index, child_key) {
                 let _this = this;
@@ -1460,8 +1459,10 @@
                 let attData = $(e.target).attr('data-text');
                 let attDataNew = e.target.value;
                 if( $.trim(attData) === $.trim(attDataNew)){
-                console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
+                    //console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
                     this.getData();
+                    $('.inp').addClass('input-hide');
+                    $('.inp').removeClass('form-control');
                     return false;
                 }
                 data.data = attDataNew;
@@ -1512,7 +1513,7 @@
                     axios.post('/api/task-list/add-tag', postData)
                     .then(response => response.data)
                     .then(response => {
-                        
+
                         setTimeout(function () {
                             _this.getBoardTask();
                            $('.dropdown-menu').removeClass('show');
@@ -1645,7 +1646,7 @@
                     .catch(error => {
                         console.log('Api assign-user-remove is not Working !!!')
                     });
-            },  
+            },
             assignUserToTask(user, index, key, data) {
                 var _this = this;
                 var postData = {
@@ -1732,8 +1733,8 @@
                     })
                     .catch(error => {
                         console.log('Api for delete tag not Working !!!');
-                    }); 
-                        
+                    });
+
                 });
             },
             updateTagName(e, tag) {

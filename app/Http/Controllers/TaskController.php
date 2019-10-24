@@ -144,7 +144,6 @@ class TaskController extends Controller
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
                 'title' => '',
-                'tag' => '',
                 'date' => '0000-00-00',
                 'created_at' => Carbon::now(),
             ];
@@ -231,7 +230,6 @@ class TaskController extends Controller
                     'created_by' => Auth::id(),
                     'updated_by' => Auth::id(),
                     'title' => '',
-                    'tag' => '',
                     'date' => '0000-00-00',
                     'created_at' => Carbon::now(),
                 ];
@@ -259,7 +257,6 @@ class TaskController extends Controller
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
             'title' => '',
-            'tag' => '',
             'date' => '0000-00-00',
             'created_at' => Carbon::now(),
         ];
@@ -368,7 +365,6 @@ class TaskController extends Controller
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
                 'title' => $past->title . ' -copy',
-                'tag' => $past->tag,
                 'date' => $past->date,
                 'created_at' => Carbon::now(),
             ];
@@ -505,8 +501,8 @@ class TaskController extends Controller
 
     public function addTag(Request $request)
     {
-        Task::where('id', $request->id)->update(['tag' => $request->tags]);
-        return response()->json(['success' => 1]);
+//        Task::where('id', $request->id)->update(['tag' => $request->tags]);
+//        return response()->json(['success' => 1]);
     }
 
     public function moveTask(Request $request)
