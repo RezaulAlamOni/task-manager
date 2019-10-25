@@ -30,6 +30,17 @@ class ProjectNavItemsController extends Controller
         return response()->json(['success' => $navItem]);
     }
 
+    public function allBoard($project_id)
+    {
+        $navItem = [];
+        $nav = ProjectNavItems::where('project_id', $project_id)->where('type','board')->orderBy('sort_id', 'asc')->get();
+        foreach ($nav as $item) {
+            $item->lists = $this->getList($project_id, $item->id, $item->type);
+            $navItem[] = $item;
+        }
+        return response()->json(['success' => $navItem]);
+    }
+
     public function getList($project_id, $nav_id, $type)
     {
         if ($type == 'list') {

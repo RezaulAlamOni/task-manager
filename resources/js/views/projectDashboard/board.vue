@@ -15,11 +15,13 @@
                                 <div class="card-column-header">
                                     <span @click="showColumn(index, column.boardId)"
                                           class="column-drag-handle">&#8667;</span>
+                                          
                                 </div>
                             </div>
                             <div :class="column.props.className" v-else>
                                 <div class="card-column-header">
                                     <span class="column-drag-handle">&#x2630;</span>
+                                    <img :src="baseUrl+'/img/'+column.progress+'.png'" height="40" width="40" />
                                     <span class="col_name">{{ column.name }}</span> <span class="total-task">{{column.children.length}}</span>
                                     <span class="pull-right">
                                         <span>
@@ -74,6 +76,35 @@
                                 >
                                     <Draggable :key="card.id" v-for="(card , key) in column.children" >
                                         <div :class="card.props.className" :style="card.props.style" class="card-list" @click="selectCard(card)" :id="'card_'+card.cardId">
+
+                                            <span class="pull-right">
+                                                <span >
+                                                    <span class="dropdown-toggle-split col-md-12 opacity"
+                                                        data-toggle="dropdown">
+                                                        <i class="fa fa-ellipsis-h"></i>
+                                                    </span>
+                                                    <div class="dropdown-menu">
+                                                        <diV class="collapse show switchToggle">
+                                                            <!-- <a @click="updateColumSow()" class="dropdown-item" href="#"><i
+                                                                class="fa fa-edit opacity"></i> Edit column</a> -->
+                                                           
+                                                            <a @click="showTransferModel(index, key, card.cardId, column.boardId)" class="dropdown-item"
+                                                            href="#"><i
+                                                                class="fa fa-share-square-o opacity"></i> Transfer task to another board</a>
+                                                            <div class="dropdown-divider" v-if="card.types === 'task'"></div>
+                                                            <a @click="deleteTask(index, key, card.cardId)" class="dropdown-item"
+                                                            href="#" v-if="card.types === 'task'">
+                                                                <i class="fa fa-minus-circle opacity"></i> Remove task from <strong>This Board</strong> </a>
+                                                            <div class="dropdown-divider" v-if="card.types === 'card'"></div>
+                                                            <a @click="deleteTask(index, key, card.cardId)" class="dropdown-item"
+                                                            href="#" v-if="card.types === 'card'"><i
+                                                                class="fa fa-trash opacity"></i> Delete the task</a>
+                                                        </diV>
+                                                    </div>
+                                                </span>
+                                            </span> 
+                                            
+                                            
                                             <textarea
                                                 :data-text="card.data"
                                                 :id="'id'+index+key" @blur="showItem($event,card,index,key)"
@@ -81,7 +112,9 @@
                                                 @focus="hideItem($event)"
                                                 class="inp input-hide text-area"
                                                 data-grow="auto"
-                                                type="text">{{ card.data }}</textarea>
+                                                type="text">{{ card.data }}
+                                            </textarea>
+                                                
                                             <br>
                                             <div>
                                                 <div>
@@ -323,7 +356,7 @@
              tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header" style="border-radius: 13px;">
                         <h5 class="modal-title">Add column</h5>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
@@ -379,7 +412,7 @@
              tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header" style="border-radius: 13px;">
                         <h5 class="modal-title">Update column</h5>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
@@ -435,7 +468,7 @@
              tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header" style="border-radius: 13px;">
                         <h3 class="text-center text-uppercase">Manage All Tag</h3>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
@@ -487,6 +520,52 @@
         </div>
 
 
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transferCard" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h4 class="text-center ">Transfer Task To Another Board</h4>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Select Board :</label>
+                            <div class="col-sm-8">
+                                <!-- {{nav}} -->
+                                <select @change="showSubNav()" class="form-control" v-model="selectedBoard">
+                                    <option disabled>Select Board</option>
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav"
+                                            v-if="navs.type === 'list'">{{navs.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="subNav.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Board List :</label>
+                            <div class="col-sm-8">
+                                <select @change="getColumn()" class="form-control" v-model="selectedSubNav">
+                                    <option disabled>Select Board List</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in subNav">
+                                        {{navList.list_title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button aria-label="Close" class="btn btn-success" data-dismiss="modal" type="button">Add
+                        </button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="loader" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
@@ -501,7 +580,7 @@
              tabindex="-1">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header" style="border-radius: 13px;">
                         <h5 class="modal-title">Add Existing Task</h5>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
@@ -539,6 +618,7 @@
                                 <!-- <input type="checkbox" @change="selectAll()" class="checkedAll"> All <br> -->
                             </div>
                             <div v-for="tree in tree4data">
+                                {{ board_id }}
                                 <li class="list-group-item">
                                     <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': tree.board_parent_id !== null}" 
                                             v-if="tree.text !== '' && tree.board_parent_id !== null" >
@@ -686,6 +766,7 @@
         components: {Container, Draggable, flatPickr, switches, VueTagsInput, Datepicker, TaskDetails},
         data() {
             return {
+                baseUrl : window.location.origin,
                 id: 0,
                 tags: [],
                 addField: {
@@ -709,7 +790,9 @@
                     dateFormat: 'd M',
                 },
                 nav: [],
+                board: [],
                 subNav: [],
+                selectedBoard: 'Select Board',
                 selectedNav: 'Select Nav',
                 selectedSubNav: 'Select Nav List',
                 project: null,
@@ -884,6 +967,7 @@
                         boardId: this.cards[i].id,
                         type: 'container',
                         name: this.cards[i].column,
+                        progress: this.cards[i].progress,
                         props: {
                             orientation: 'vertical',
                             className: 'card-container'
@@ -1162,7 +1246,8 @@
                         .catch(error => {
                         });
                     setTimeout(function () {
-                        _this.getData();
+                        _this.getBoardTask();
+                        // _this.getData();
                         // _this.editField = {};
                         // $("#EditModal").modal('show');
                     }, 300);
@@ -1202,6 +1287,48 @@
                     })
                     .catch(error => {
                     });
+            },
+            showTransferModel(index, key, cardId, id) {
+                this.tree4data = [];
+                this.subNav = [];
+                this.selectedBoard= 'Select Board';
+                this.selectedSubNav= 'Select Nav List';
+                this.selectedExistedTask = [];
+                this.currentColumn = id;
+                this.currentColumnIndex = index;
+                let _this = this;
+                axios.get('/api/board-item/' + this.projectId)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.nav = response.success;
+                    })
+                    .catch(error => {
+                    });
+                this.updateIndex = index;
+                this.getAllTask();
+                $('#transferCard').modal('show');
+            },
+            getColumn(){
+                let _this = this;
+                let data = {
+                    id: this.projectId,
+                    nav_id: this.selectedBoard,
+                    list_id: this.selectedSubNav,
+                };
+
+                axios.post('/api/all-board', data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response.task_list);
+                    this.tree4data = response.task_list;
+                })
+                .catch(error => {
+
+                });
+
+            },
+            transferCardToOtherBoard(index, key, cardId) {
+                var _this = this;
             },
             getBoardTask() {
                 var _this = this;
@@ -1392,24 +1519,6 @@
                     }
                 });
             },
-            saveData(data, index, child_key) {
-                let _this = this;
-                if (!data.data) {
-                    // alert('Title is required!');
-                } else {
-                    let title = {
-                        'title': data.data
-                    };
-                    axios.post('/api/card-update/' + data.cardId, title)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.cards[index].task[child_key].name = data.data;
-                        _this.getData();
-                    })
-                    .catch(error => {
-                    });
-                }
-            },
             addTag(e, index, key) {
                 if (e.which === 13) {
                     this.cards[index].task[key].tags.splice(0, 1, this.tag);
@@ -1547,8 +1656,9 @@
             showItem(e, data, index, child_key) {
                 let attData = $(e.target).attr('data-text');
                 let attDataNew = e.target.value;
+                console.log(attDataNew);
                 if( $.trim(attData) === $.trim(attDataNew)){
-                    //console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
+                    console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
                     this.getData();
                     $('.inp').addClass('input-hide');
                     $('.inp').removeClass('form-control');
@@ -1557,7 +1667,26 @@
                 data.data = attDataNew;
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
-                this.saveData(data, index, child_key)
+                this.saveData(data, index, child_key);
+            },
+            saveData(data, index, child_key) {
+                let _this = this;
+                console.log("data = "+data.data);
+                if (data.data !== "") {
+                    alert('Title is required!');
+                } else {
+                    let title = {
+                        'title': data.data
+                    };
+                    axios.post('/api/card-update/' + data.cardId, title)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.cards[index].task[child_key].name = data.data;
+                        _this.getData();
+                    })
+                    .catch(error => {
+                    });
+                }
             },
             saveCardData(e, data) {
                 if (e.which === 13) {

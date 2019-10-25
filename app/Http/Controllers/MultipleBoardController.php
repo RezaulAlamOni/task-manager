@@ -419,6 +419,9 @@ class MultipleBoardController extends Controller
         }
     }
 
+    public function getAllColumnBylist(Request $request){
+        return $request->all();
+    }
 
     protected function createLog($task_id, $type, $message, $title)
     {
