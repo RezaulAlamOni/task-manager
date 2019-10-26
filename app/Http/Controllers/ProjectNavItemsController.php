@@ -90,6 +90,14 @@ class ProjectNavItemsController extends Controller
         return response()->json(['success' => $nav]);
     }
 
+    public function boardList(Request $request)
+    {
+        // return $request->all();
+        $nav = Multiple_board::where('project_id', $request->projectId)->where('nav_id', $request->boardId)->get();
+
+        return response()->json(['success' => $nav]);
+    }
+
     public function edit(Request $request)
     {
         $check = ProjectNavItems::where('title', $request->title)->where('project_id', $request->project_id)->count();
