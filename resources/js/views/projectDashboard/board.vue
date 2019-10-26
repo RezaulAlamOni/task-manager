@@ -534,29 +534,40 @@
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">Select Board :</label>
                             <div class="col-sm-8">
-                                <!-- {{nav}} -->
-                                <select @change="showSubNav()" class="form-control" v-model="selectedBoard">
+                                <!-- {{ selectedBoard }} -->
+                                <select @change="showSubBoard()" class="form-control" v-model="selectedBoard">
                                     <option disabled>Select Board</option>
-                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav"
-                                            v-if="navs.type === 'list'">{{navs.title}}
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in board"
+                                            v-if="navs.type === 'board'">{{navs.title}}
                                     </option>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row" v-if="subNav.length > 0">
+                        <div class="form-group row" v-if="subBoard.length > 0">
                             <label class="col-sm-4 col-form-label">Select Board List :</label>
                             <div class="col-sm-8">
-                                <select @change="getColumn()" class="form-control" v-model="selectedSubNav">
+                                <select @change="getColumn()" class="form-control" v-model="selectedSubBoard">
                                     <option disabled>Select Board List</option>
-                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in subNav">
-                                        {{navList.list_title}}
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in subBoard">
+                                        {{navList.board_title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="boardColumn.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Board Column :</label>
+                            <div class="col-sm-8">
+                                <select  class="form-control" v-model="selectedBoardColumn">
+                                    <option disabled>Select Board Column</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in boardColumn">
+                                        {{navList.title}}
                                     </option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button aria-label="Close" class="btn btn-success" data-dismiss="modal" type="button">Add
+                        <button aria-label="Close" @click="transferCardToOtherBoard" class="btn btn-success" data-dismiss="modal" type="button">Transfer
                         </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
@@ -792,9 +803,13 @@
                 nav: [],
                 board: [],
                 subNav: [],
+                subBoard: [],
+                boardColumn: [],
                 selectedBoard: 'Select Board',
                 selectedNav: 'Select Nav',
                 selectedSubNav: 'Select Nav List',
+                selectedSubBoard: 'Select Board List',
+                selectedBoardColumn: 'Select Board Column',
                 project: null,
                 tree4data: [],
                 currentColumn: null,
@@ -1290,45 +1305,71 @@
             },
             showTransferModel(index, key, cardId, id) {
                 this.tree4data = [];
-                this.subNav = [];
+                this.board = [];
+                this.subBoard = [];
+                this.boardColumn = [];
                 this.selectedBoard= 'Select Board';
-                this.selectedSubNav= 'Select Nav List';
+                this.selectedSubBoard= 'Select Board List';
                 this.selectedExistedTask = [];
                 this.currentColumn = id;
                 this.currentColumnIndex = index;
                 let _this = this;
-                axios.get('/api/board-item/' + this.projectId)
+                axios.get('/api/nav-item/' + this.projectId)
+                .then(response => response.data)
+                .then(response => {
+                    // console.log(response.success);
+                    _this.board = response.success;
+                    console.log(_this.board);
+                    setTimeout(() => {
+                        $('#transferCard').modal('show');
+                    }, 500);
+                })
+                .catch(error => {
+
+                });
+                this.updateIndex = index;
+                // this.getAllTask();
+            },
+            showSubBoard() {
+                let _this = this;
+                this.subBoard = [];
+                this.boardColumn = [];
+                this.selectedSubBoard= 'Select Board List';
+                let data = {
+                    'projectId': this.projectId,
+                    'boardId': this.selectedBoard
+                };
+                axios.post('/api/board-list', data)
                     .then(response => response.data)
                     .then(response => {
-                        _this.nav = response.success;
+                        _this.subBoard = response.success;
                     })
                     .catch(error => {
                     });
-                this.updateIndex = index;
-                this.getAllTask();
-                $('#transferCard').modal('show');
             },
             getColumn(){
                 let _this = this;
+                this.selectedBoardColumn = 'Select Board Column';
                 let data = {
                     id: this.projectId,
                     nav_id: this.selectedBoard,
-                    list_id: this.selectedSubNav,
+                    list_id: this.selectedSubBoard,
                 };
 
-                axios.post('/api/all-board', data)
+                axios.post('/api/board-column', data)
                 .then(response => response.data)
                 .then(response => {
-                    console.log(response.task_list);
-                    this.tree4data = response.task_list;
+                    // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
+                    _this.boardColumn = response.data;
                 })
                 .catch(error => {
 
                 });
 
             },
-            transferCardToOtherBoard(index, key, cardId) {
+            transferCardToOtherBoard() {
                 var _this = this;
+                
             },
             getBoardTask() {
                 var _this = this;

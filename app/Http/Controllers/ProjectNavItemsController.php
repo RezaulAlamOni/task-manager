@@ -30,17 +30,6 @@ class ProjectNavItemsController extends Controller
         return response()->json(['success' => $navItem]);
     }
 
-    public function allBoard($project_id)
-    {
-        $navItem = [];
-        $nav = ProjectNavItems::where('project_id', $project_id)->where('type','board')->orderBy('sort_id', 'asc')->get();
-        foreach ($nav as $item) {
-            $item->lists = $this->getList($project_id, $item->id, $item->type);
-            $navItem[] = $item;
-        }
-        return response()->json(['success' => $navItem]);
-    }
-
     public function getList($project_id, $nav_id, $type)
     {
         if ($type == 'list') {
@@ -97,6 +86,14 @@ class ProjectNavItemsController extends Controller
     {
         // return $request->all();
         $nav = Multiple_list::where('project_id', $request->projectId)->where('nav_id', $request->navId)->get();
+
+        return response()->json(['success' => $nav]);
+    }
+
+    public function boardList(Request $request)
+    {
+        // return $request->all();
+        $nav = Multiple_board::where('project_id', $request->projectId)->where('nav_id', $request->boardId)->get();
 
         return response()->json(['success' => $nav]);
     }

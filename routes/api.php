@@ -48,9 +48,11 @@ Route::post('/task-list/suggest-user','SearchController@suggestUser'); //user su
 Route::post('/allNavs','ProjectNavItemsController@store'); //add new nav item
 Route::post('/nav-item/add-new','ProjectNavItemsController@store'); //add new nav item
 Route::get('/nav-item/{project_id}','ProjectNavItemsController@index'); //all nav item
-Route::get('/board-item/{project_id}','ProjectNavItemsController@allBoard'); //all nav item
+// Route::get('/board-item/{project_id}','ProjectNavItemsController@allBoard'); //all nav item
 Route::post('/nav-item/update','ProjectNavItemsController@edit'); //all nav item
 Route::post('/nav-list','ProjectNavItemsController@navList'); //all nav list item
+Route::post('/board-list','ProjectNavItemsController@boardList'); //all nav list item
+Route::post('/board-column','MultipleBoardController@getAllColumnBylist'); //all nav list item
 
 //assign  user to task
 Route::post('/task-list/assign-user','AssignedUserController@store'); //Assign user

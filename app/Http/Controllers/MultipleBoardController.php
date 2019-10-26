@@ -420,7 +420,14 @@ class MultipleBoardController extends Controller
     }
 
     public function getAllColumnBylist(Request $request){
-        return $request->all();
+
+        $column = Task::where('board_parent_id',0)->where('multiple_board_id',$request->list_id)->get();
+        if ($column) {
+            // $this->createLog($id, 'Updated', 'Column Updated', 'Board Column sorting');
+            return response()->json(['success' => true, 'data' => $column]);
+        } else {
+            return response()->json(['success' => false]);
+        }
     }
 
     protected function createLog($task_id, $type, $message, $title)
