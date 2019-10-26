@@ -430,6 +430,22 @@ class MultipleBoardController extends Controller
         }
     }
 
+    public function transferToAnotherBoard(Request $request)
+    {
+        $sortNo = Task::where('board_parent_id', $request->board_parent_id)->max('board_sort_id');
+        $data = Task::where('id', $request->cardId)
+                        ->update([
+                            'board_parent_id' => $request->board_parent_id,
+                            'board_sort_id' => $sortNo+1
+                        ]);
+        if ($data) {
+            // $this->createLog($id, 'Updated', 'Column Updated', 'Board Column sorting');
+            return response()->json(['success' => true, 'data' => $data]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
     protected function createLog($task_id, $type, $message, $title)
     {
         $log_data = [

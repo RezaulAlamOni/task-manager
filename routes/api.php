@@ -53,6 +53,7 @@ Route::post('/nav-item/update','ProjectNavItemsController@edit'); //all nav item
 Route::post('/nav-list','ProjectNavItemsController@navList'); //all nav list item
 Route::post('/board-list','ProjectNavItemsController@boardList'); //all nav list item
 Route::post('/board-column','MultipleBoardController@getAllColumnBylist'); //all nav list item
+Route::post('/Transfer-to-board','MultipleBoardController@transferToAnotherBoard'); //all nav list item
 
 //assign  user to task
 Route::post('/task-list/assign-user','AssignedUserController@store'); //Assign user

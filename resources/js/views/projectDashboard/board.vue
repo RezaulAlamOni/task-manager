@@ -95,10 +95,9 @@
                                                             <a @click="deleteTask(index, key, card.cardId)" class="dropdown-item"
                                                             href="#" v-if="card.types === 'task'">
                                                                 <i class="fa fa-minus-circle opacity"></i> Remove task from <strong>This Board</strong> </a>
-                                                            <div class="dropdown-divider" v-if="card.types === 'card'"></div>
-                                                            <a @click="deleteTask(index, key, card.cardId)" class="dropdown-item"
-                                                            href="#" v-if="card.types === 'card'"><i
-                                                                class="fa fa-trash opacity"></i> Delete the task</a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a @click="RemoveNodeAndChildren()" class="dropdown-item"
+                                                            href="#"><i class="fa fa-trash opacity"></i> Delete the task</a>
                                                         </diV>
                                                     </div>
                                                 </span>
@@ -557,7 +556,7 @@
                         <div class="form-group row" v-if="boardColumn.length > 0">
                             <label class="col-sm-4 col-form-label">Select Board Column :</label>
                             <div class="col-sm-8">
-                                <select  class="form-control" v-model="selectedBoardColumn">
+                                <select @change="getBttn()" class="form-control" v-model="selectedBoardColumn">
                                     <option disabled>Select Board Column</option>
                                     <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in boardColumn">
                                         {{navList.title}}
@@ -567,7 +566,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button aria-label="Close" @click="transferCardToOtherBoard" class="btn btn-success" data-dismiss="modal" type="button">Transfer
+                        <button v-if="transferBtn" aria-label="Close" @click="transferCardToOtherBoard" class="btn btn-success" data-dismiss="modal" type="button">Transfer
                         </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
@@ -629,7 +628,6 @@
                                 <!-- <input type="checkbox" @change="selectAll()" class="checkedAll"> All <br> -->
                             </div>
                             <div v-for="tree in tree4data">
-                                {{ board_id }}
                                 <li class="list-group-item">
                                     <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': tree.board_parent_id !== null}" 
                                             v-if="tree.text !== '' && tree.board_parent_id !== null" >
@@ -724,7 +722,6 @@
                                                                                         <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
                                                                                         <span class="checkmark"></span>
                                                                                     </label>
-                                                                                    
                                                                                 </li>
                                                                             </div>
                                                                         </ul>
@@ -810,6 +807,7 @@
                 selectedSubNav: 'Select Nav List',
                 selectedSubBoard: 'Select Board List',
                 selectedBoardColumn: 'Select Board Column',
+                transferBtn : false,
                 project: null,
                 tree4data: [],
                 currentColumn: null,
@@ -1311,6 +1309,7 @@
                 this.selectedBoard= 'Select Board';
                 this.selectedSubBoard= 'Select Board List';
                 this.selectedExistedTask = [];
+                this.transferBtn = false;
                 this.currentColumn = id;
                 this.currentColumnIndex = index;
                 let _this = this;
@@ -1334,6 +1333,7 @@
                 let _this = this;
                 this.subBoard = [];
                 this.boardColumn = [];
+                this.transferBtn = false;
                 this.selectedSubBoard= 'Select Board List';
                 let data = {
                     'projectId': this.projectId,
@@ -1350,6 +1350,7 @@
             getColumn(){
                 let _this = this;
                 this.selectedBoardColumn = 'Select Board Column';
+                this.transferBtn = false;
                 let data = {
                     id: this.projectId,
                     nav_id: this.selectedBoard,
@@ -1367,9 +1368,62 @@
                 });
 
             },
+            getBttn() {
+                this.transferBtn = true;
+            },
             transferCardToOtherBoard() {
                 var _this = this;
+                let data = {
+                    'cardId' : this.selectedData.cardId,
+                    'board_parent_id' : this.selectedBoardColumn,
+                };
+                axios.post('/api/Transfer-to-board', data)
+                .then(response => response.data)
+                .then(response => {
+
+                    if (response.success) {
+                        _this.getBoardTask();
+                        $('#transferCard').modal('hide');
+                    } else {
+                        $('#transferCard').modal('hide');
+                    }
+                    // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
+                    // _this.boardColumn = response.data;
+                })
+                .catch(error => {
+
+                });
                 
+
+            },
+            RemoveNodeAndChildren() {
+                var _this = this;
+                var postData = {
+                    id: this.selectedData.cardId,
+                    text: this.selectedData.data
+                };
+                swal({
+                    title: "Are you sure?",
+                    text: "You want to delete this task !!!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger btn",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                },
+                function () {
+                    axios.post('/api/task-list/delete-task', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.getBoardTask()
+                            swal("Deleted!", "Successfully delete task !", "success");
+                        })
+                        .catch(error => {
+                            console.log('Api for delete task not Working !!!')
+                        });
+
+                });
+
             },
             getBoardTask() {
                 var _this = this;
