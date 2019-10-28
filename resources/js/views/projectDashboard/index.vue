@@ -83,6 +83,9 @@
                         <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
                             <a href="javascript:void(0)"> <i class="fa fa-edit"></i> Edit  </a>
                         </span>
+                        <span class="dropdown-item custom-dropdown-item">
+                            <a href="javascript:void(0)" @click="MoveListTOAnotherNav"> <i class="fa fa-arrows-alt"></i> Move List to Another Nav </a>
+                        </span>
                         <span class="dropdown-item custom-dropdown-item" @click="DeleteListOrBoard(list.type,'delete')">
                             <a href="javascript:void(0)"> <i class="fa fa-trash"></i> Delete with all task</a>
                         </span>
@@ -90,7 +93,7 @@
                             <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move task </a>
                         </span>
                         <span class="dropdown-item custom-dropdown-item">
-                            <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Create PDF </a>
+                            <a href="javascript:void(0)"> <i class="fa fa-file"></i> Create PDF </a>
                         </span>
 
                     </div>
@@ -675,7 +678,7 @@
                             <div class="col-sm-8">
                                 <select class="form-control" v-model="selectedSubList" @change="get_T_Bttn()">
                                     <option disabled>Select List</option>
-                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T">
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T" :disabled="((navList.id !== list_id) ? false : true)">
                                         {{navList.list_title}}
                                     </option>
                                 </select>
@@ -777,6 +780,9 @@
                 nav_T: [],
                 list_T: [],
                 boardColumn: [],
+                action_T : '',
+                type_T : '',
+
             }
         },
         mounted() {
@@ -2003,23 +2009,27 @@
             },
             DeleteListOrBoard(type, action) {
                 var _this = this;
+                _this.action_T = action;
+                _this.type_T= type;
                 if (action === 'move') {
                     _this.list_T = [];
                     _this.nav_T = [];
                     _this.selectedListNav = 'Select List Nav';
                     _this.transferBtn = false;
+                    if (type === 'list'){
+                        axios.get('/api/nav-item/' + _this.projectId)
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.nav_T = response.success;
+                                setTimeout(() => {
+                                    $('#transferCard').modal('show');
+                                }, 500);
+                            })
+                            .catch(error => {
 
-                    axios.get('/api/nav-item/' + _this.projectId)
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.nav_T = response.success;
-                            setTimeout(() => {
-                                $('#transferCard').modal('show');
-                            }, 500);
-                        })
-                        .catch(error => {
+                            });
+                    }
 
-                        });
 
                 } else {
                     swal({
@@ -2035,8 +2045,7 @@
                             axios.post('/api/board-list-delete', {type: type, id: _this.list_id, action: action})
                                 .then(response => response.data)
                                 .then(response => {
-                                    // _this.AllNavItems = response.navItems.original.success;
-                                    swal("Complete!", "This task is added to complete", "success");
+                                    swal("Complete!", "This List is deleted successfully !", "success");
                                     window.location.href = '/project-dashboard/' + _this.projectId;
                                 })
                                 .catch(error => {
@@ -2081,18 +2090,22 @@
                         closeOnConfirm: false
                     },
                     function () {
-                        // axios.post('/api/board-list-delete', {type: type, id: _this.list_id, action: action})
-                        //     .then(response => response.data)
-                        //     .then(response => {
-                                // _this.AllNavItems = response.navItems.original.success;
+                    // console.log({type: _this.type_T, id: _this.list_id, action: _this.action_T, target : _this.selectedSubList })
+                        axios.post('/api/board-list-delete', {type: _this.type_T, id: _this.list_id, action: _this.action_T, target : _this.selectedSubList })
+                            .then(response => response.data)
+                            .then(response => {
                                 swal("Complete!", "This list is deleted and all task are moved !"+_this.selectedSubList, "success");
-                                // window.location.href = '/project-dashboard/' + _this.projectId;
-                            // })
-                            // .catch(error => {
-                                // console.log('Add list api not working!!')
-                            // });
+                                window.location.href = '/project-dashboard/' + _this.projectId;
+                            })
+                            .catch(error => {
+                                console.log('Add list api not working!!')
+                            });
 
                     });
+            },
+
+            MoveListTOAnotherNav(){
+
             },
 
             RemoveNewEmptyChildren(data) {

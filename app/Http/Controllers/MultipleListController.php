@@ -16,6 +16,7 @@ class MultipleListController extends Controller
     protected $actionLog;
     protected $NavBar;
     protected $Task_Controller;
+    protected $MultipleBoardController;
 
     public function __construct()
     {
@@ -23,6 +24,7 @@ class MultipleListController extends Controller
         $this->actionLog = new ActionLogController;
         $this->NavBar = new ProjectNavItemsController();
         $this->Task_Controller = new TaskController();
+        $this->MultipleBoardController = new MultipleBoardController();
         $this->middleware('auth');
     }
 
@@ -111,12 +113,17 @@ class MultipleListController extends Controller
                 }
                 Multiple_list::where('id', $id)->delete();
             } elseif ($request->action == 'move') {
-
+                (Task::where(['list_id'=>$id])->update(['list_id'=>$request->target])) ? Multiple_list::where('id', $id)->delete() : '';
             }
 
         } else {
             if ($request->action == 'delete') {
                 $tasks = Task::where(['multiple_board_id'=>$id,'board_parent_id'=>0])->get();
+                foreach ($tasks as $task) {
+                    $this->MultipleBoardController->destroy($task->id);
+                }
+                Multiple_board::where('id', $id)->delete();
+
 
             } elseif ($request->action == 'move') {
 
