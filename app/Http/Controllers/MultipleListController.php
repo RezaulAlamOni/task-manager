@@ -126,6 +126,8 @@ class MultipleListController extends Controller
 
             } elseif ($request->action == 'move') {
 
+                (Task::where(['multiple_board_id'=>$id])->update(['multiple_board_id'=>$request->target])) ? Multiple_board::where('id', $id)->delete() : '';
+
             }
         }
         $navBar = $this->NavBar->index($request->project_id);
