@@ -84,7 +84,7 @@
                             <a href="javascript:void(0)"> <i class="fa fa-edit"></i> Edit  <span v-if="list.type === 'board'">Board</span>  <span v-else>List</span></a>
                         </span>
                         <span class="dropdown-item custom-dropdown-item">
-                            <a href="javascript:void(0)" @click="MoveListTOAnotherNav"> <i class="fa fa-arrows-alt"></i> Move <span v-if="list.type === 'board'">Board</span>  <span v-else>List</span> to Another Nav </a>
+                            <a href="javascript:void(0)" @click="MoveListTOAnotherNav(list.type)"> <i class="fa fa-arrows-alt"></i> Move <span v-if="list.type === 'board'">Board</span>  <span v-else>List</span> to Another Nav </a>
                         </span>
                         <span class="dropdown-item custom-dropdown-item" @click="DeleteListOrBoard(list.type,'delete')">
                             <a href="javascript:void(0)"> <i class="fa fa-trash"></i> Delete with all <span v-if="list.type === 'board'">Card</span>  <span v-else> Task</span></a>
@@ -689,6 +689,40 @@
                     <div class="modal-footer">
                         <button v-if="transferBtn" aria-label="Close" @click="DeleteAndMoveAllTask"
                                 class="btn btn-danger" data-dismiss="modal" type="button">Delete & Move All <span v-if="type_T === 'board'">Card</span>  <span v-else>Task</span>
+                        </button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transToNav" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h4 class="text-center ">Move  <span v-if="type_T === 'board'">Board</span>  <span v-else>List</span></h4>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Select <span v-if="type_T === 'board'">Board</span>  <span v-else>List</span> Nav :</label>
+                            <div class="col-sm-8">
+                                <select @change="get_T_Bttn()" class="form-control" v-model="selectedListNav">
+                                    <option disabled value="Select list Nav">Select <span v-if="type_T === 'board'">Board</span>  <span v-else>List</span> Nav</option>
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav_T"
+                                            v-if="navs.type === type_T" :disabled="((navs.id !== nav_id) ? false : true)">{{navs.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button v-if="transferBtn" aria-label="Close" @click="MoveAllTask"
+                                class="btn btn-danger" data-dismiss="modal" type="button">Move <span v-if="type_T === 'board'">Board</span>  <span v-else>List</span>
                         </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
@@ -1986,7 +2020,6 @@
             getNavbar(data) {
                 this.AllNavItems = data.AllNavItems;
             },
-
             UpdateListModel() {
                 $("#updateListBoardModel").modal('show');
             },
@@ -2008,6 +2041,7 @@
                         console.log('Add list api not working!!')
                     });
             },
+
             DeleteListOrBoard(type, action) {
                 var _this = this;
                 _this.action_T = action;
@@ -2109,9 +2143,54 @@
 
                     });
             },
+            MoveAllTask() {
+                var _this = this;
+                swal({
+                        title: "Are you sure?",
+                        text: "You want to delete the list and move all task ?!!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, Delete  & Move Task",
+                        closeOnConfirm: false
+                    },
+                    function () {
+                        axios.post('/api/board-list-move', {
+                            type: _this.type_T,
+                            id: _this.list_id,
+                            target: _this.selectedListNav
+                        })
+                            .then(response => response.data)
+                            .then(response => {
+                                swal("Complete!", "This "+_this.type_T+" is Moved Successfully !", "success");
+                                window.location.href = '/project-dashboard/' + _this.projectId;
+                            })
+                            .catch(error => {
+                                console.log('Add list api not working!!')
+                            });
 
-            MoveListTOAnotherNav() {
+                    });
+            },
 
+            MoveListTOAnotherNav(type) {
+                var _this = this;
+                _this.type_T = type;
+                _this.list_T = [];
+                _this.nav_T = [];
+                _this.selectedListNav = 'Select list Nav';
+                _this.transferBtn = false;
+
+                axios.get('/api/nav-item/' + _this.projectId)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.nav_T = response.success;
+                        setTimeout(() => {
+                            $('#transToNav').modal('show');
+                        }, 300);
+                    })
+                    .catch(error => {
+
+                    });
             },
 
             RemoveNewEmptyChildren(data) {
