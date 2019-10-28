@@ -97,6 +97,11 @@ class ProjectNavItemsController extends Controller
 
         return response()->json(['success' => $nav]);
     }
+    public function multipleList(Request $request)
+    {
+        $nav = $this->getList($request->projectId,$request->listId,'list');
+        return response()->json(['success' => $nav]);
+    }
 
     public function edit(Request $request)
     {

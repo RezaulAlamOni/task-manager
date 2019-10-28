@@ -89,6 +89,9 @@
                         <span class="dropdown-item custom-dropdown-item" @click="DeleteListOrBoard(list.type,'move')">
                             <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move task </a>
                         </span>
+                        <span class="dropdown-item custom-dropdown-item">
+                            <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Create PDF </a>
+                        </span>
 
                     </div>
 
@@ -627,7 +630,8 @@
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">Description</label>
                             <div class="col-sm-8">
-                                <textarea  class="form-control" cols="40" id="" name="" rows="3" v-model="list.description"></textarea>
+                                <textarea class="form-control" cols="40" id="" name="" rows="3"
+                                          v-model="list.description"></textarea>
                             </div>
                         </div>
                     </div>
@@ -636,6 +640,51 @@
                         <button @click="UpdateListOrBoard" class="btn btn-primary ladda-button ladda_update_list_board"
                                 data-style="expand-right">
                             Update
+                        </button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transferCard" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h4 class="text-center ">Delete And Move Task To Another List</h4>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Select List Nav :</label>
+                            <div class="col-sm-8">
+                                <!-- {{ selectedBoard }} -->
+                                <select @change="showSubList_T()" class="form-control" v-model="selectedListNav">
+                                    <option disabled>Select List Nav</option>
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav_T"
+                                            v-if="navs.type === 'list'">{{navs.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="list_T.length > 0">
+                            <label class="col-sm-4 col-form-label">Select List :</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" v-model="selectedSubList" @change="get_T_Bttn()">
+                                    <option disabled>Select List</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T">
+                                        {{navList.list_title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button v-if="transferBtn" aria-label="Close" @click="DeleteAndMoveAllTask"
+                                class="btn btn-danger" data-dismiss="modal" type="button">Delete & Move All Task
                         </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
@@ -717,11 +766,17 @@
                     tasks: [],
                     users: []
                 },
+                transferBtn: false,
                 date_for_selected: null,
                 dNode: null,
                 dNodeInterval: null,
                 dNodeHeght: 0,
-                context_menu_flag: 0
+                context_menu_flag: 0,
+                selectedListNav: 'Select List Nav',
+                selectedSubList: 'Select List',
+                nav_T: [],
+                list_T: [],
+                boardColumn: [],
             }
         },
         mounted() {
@@ -1946,38 +2001,99 @@
                         console.log('Add list api not working!!')
                     });
             },
-            DeleteListOrBoard(type,action){
-                console.log(type,this.list_id,action)
+            DeleteListOrBoard(type, action) {
                 var _this = this;
+                if (action === 'move') {
+                    _this.list_T = [];
+                    _this.nav_T = [];
+                    _this.selectedListNav = 'Select List Nav';
+                    _this.transferBtn = false;
 
+                    axios.get('/api/nav-item/' + _this.projectId)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.nav_T = response.success;
+                            setTimeout(() => {
+                                $('#transferCard').modal('show');
+                            }, 500);
+                        })
+                        .catch(error => {
+
+                        });
+
+                } else {
+                    swal({
+                            title: "Are you sure?",
+                            text: "If you delete this " + type + " then all task will delete !!!",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-danger",
+                            confirmButtonText: "Yes, Complete it!",
+                            closeOnConfirm: false
+                        },
+                        function () {
+                            axios.post('/api/board-list-delete', {type: type, id: _this.list_id, action: action})
+                                .then(response => response.data)
+                                .then(response => {
+                                    // _this.AllNavItems = response.navItems.original.success;
+                                    swal("Complete!", "This task is added to complete", "success");
+                                    window.location.href = '/project-dashboard/' + _this.projectId;
+                                })
+                                .catch(error => {
+                                    console.log('Add list api not working!!')
+                                });
+
+                        });
+
+
+                }
+
+            },
+            showSubList_T() {
+                let _this = this;
+                _this.transferBtn = false;
+                _this.list_T = false;
+                _this.selectedSubList= 'Select List';
+                let data = {
+                    'projectId': _this.projectId,
+                    'listId': _this.selectedListNav
+                };
+                axios.post('/api/multiple-list', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.list_T = response.success;
+                    })
+                    .catch(error => {
+                    });
+            },
+            get_T_Bttn(){
+                this.transferBtn = true;
+            },
+            DeleteAndMoveAllTask(){
+                var _this = this;
                 swal({
                         title: "Are you sure?",
-                        text: "If you delete this "+ type +" then all task will delete !!!",
+                        text: "You want to delete the list and move all task ?!!!",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger",
-                        confirmButtonText: "Yes, Complete it!",
+                        confirmButtonText: "Yes, Delete  & Move Task",
                         closeOnConfirm: false
                     },
                     function () {
-                        axios.post('/api/board-list-delete',{type : type, id : _this.list_id, action : action})
-                            .then(response => response.data)
-                            .then(response => {
+                        // axios.post('/api/board-list-delete', {type: type, id: _this.list_id, action: action})
+                        //     .then(response => response.data)
+                        //     .then(response => {
                                 // _this.AllNavItems = response.navItems.original.success;
-                                swal("Complete!", "This task is added to complete", "success");
-                                window.location.href = '/project-dashboard/'+_this.projectId;
-                            })
-                            .catch(error => {
-                                console.log('Add list api not working!!')
-                            });
-
+                                swal("Complete!", "This list is deleted and all task are moved !"+_this.selectedSubList, "success");
+                                // window.location.href = '/project-dashboard/' + _this.projectId;
+                            // })
+                            // .catch(error => {
+                                // console.log('Add list api not working!!')
+                            // });
 
                     });
-
-
-
             },
-
 
             RemoveNewEmptyChildren(data) {
                 var children = data.children;
