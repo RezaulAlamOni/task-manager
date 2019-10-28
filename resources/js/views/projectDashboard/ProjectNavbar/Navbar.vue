@@ -656,6 +656,9 @@
                             this.list.name = null;
                             this.list.description = null;
                             swal("Created", "Board Create Successful", "success")
+                            setTimeout(function () {
+                                $('.board' + response.id.id).click();
+                            }, 300);
                         }
                     })
                     .catch(error => {

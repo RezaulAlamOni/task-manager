@@ -124,7 +124,6 @@ class MultipleListController extends Controller
                 }
                 Multiple_board::where('id', $id)->delete();
 
-
             } elseif ($request->action == 'move') {
 
             }
