@@ -93,7 +93,7 @@
                             <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move <span v-if="list.type === 'board'">Card</span>  <span v-else>Task</span> </a>
                         </span>
                         <span class="dropdown-item custom-dropdown-item" v-if="list.type === 'list'">
-                            <a href="javascript:void(0)"> <i class="fa fa-file"></i> Create PDF </a>
+                            <a href="javascript:void(0)" @click="DownloadTaskPDF"> <i class="fa fa-file"></i> Create PDF </a>
                         </span>
 
                     </div>
@@ -2170,6 +2170,9 @@
                             });
 
                     });
+            },
+            DownloadTaskPDF(){
+                swal("Under Process!", "Working under process", "success");
             },
 
             MoveListTOAnotherNav(type) {
