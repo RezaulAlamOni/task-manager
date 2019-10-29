@@ -27,7 +27,8 @@ class TagsController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {   
+        // return $request->all();
         $team_id = Auth::user()->current_team_id;
         $tags = Tags::where(['title' => $request->tags,'team_id'=>$team_id])->get();
 
@@ -37,7 +38,6 @@ class TagsController extends Controller
                 $assign = AssignTag::create(['task_id' => $request->id, 'tag_id' => $tags[0]->id]);
             }
             $tag_id = $tags[0]->id;
-//            return response()->json('assign-tag');
         } else {
 
             $tag_data = [
@@ -51,9 +51,10 @@ class TagsController extends Controller
             $tag_id = $tags->id;
             $check_assign = AssignTag::where(['task_id' => $request->id, 'tag_id' => $tags->id])->get();
             if ($check_assign->count() <= 0) {
-                $assign = AssignTag::create(['task_id' => $request->id, 'tag_id' => $tags->id]);
+                $check_assign = AssignTag::create(['task_id' => $request->id, 'tag_id' => $tags->id]);
             }
-//            return response()->json('tag-and-assign-tag-created');
+            $tags->assign_id = $check_assign->id;
+            $tags->board_id = $check_assign->task_id;
         }
 
         if ($request->tags == 'Dont Forget') {
@@ -81,7 +82,7 @@ class TagsController extends Controller
                 $taskUpdate = Task::where('id', $request->id)->update(['parent_id' => $NewTask->id]);
                 //update task child tag
                 $this->TaskController->updateTagWithDataMove($request->id, $NewTask->id);
-                return response()->json(['success' => $taskUpdate]);
+                return response()->json(['success' => $taskUpdate, 'data' => $tags]);
             } elseif ($request->id != $taskDontForget[0]->id) {
                 $parent_assign_dont_Forget_tag = AssignTag::where(['task_id' => $task->parent_id , 'tag_id' => $tag_id])->count();
 
@@ -93,13 +94,13 @@ class TagsController extends Controller
                     ]);
                     //update task child tag
                     $this->TaskController->updateTagWithDataMove($request->id, $taskDontForget[0]->id);
-                    return response()->json(['success' => $taskUpdate]);
+                    return response()->json(['success' => $taskUpdate, 'data' => $tags]);
                 }
-                return response()->json(['success']);
+                return response()->json(['success' => true, 'data' => $tags]);
 //                return response()->json(['success' => $parent, $task->parent_id, 'data' => $tags]);
             }
         } else {
-//            return response()->json(['success' => true, 'data' => $tags]);
+           return response()->json(['success' => true, 'data' => $tags]);
         }
 
     }
