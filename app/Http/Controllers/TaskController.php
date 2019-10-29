@@ -579,7 +579,7 @@ class TaskController extends Controller
             $task_id = $request->id;
             $photo = $_FILES['file']['name'];
 
-            if (move_uploaded_file($_FILES["file"]["tmp_name"], "images/" . $_FILES['file']['name'])) {
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], public_path()."/images/" . $_FILES['file']['name'])) {
                 $file = [
                     'file_name' => $photo,
                     'tasks_id' => $task_id,
