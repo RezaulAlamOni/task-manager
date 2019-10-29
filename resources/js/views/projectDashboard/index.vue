@@ -577,11 +577,10 @@
                                 </thead>
                                 <tbody>
                                 <template v-for="tag in manageTag">
-                                    <tr>
-                                        <td class="pt-3-half" v-if="tag.title === 'Dont Forget'">{{tag.title}}</td>
+                                    <tr v-if="tag.title !== 'Dont Forget'">
                                         <td @keydown="newLineoff($event)" @keyup="updateTagName($event,tag)"
                                             class="pt-3-half"
-                                            contenteditable="true" v-else>
+                                            contenteditable="true">
                                             {{tag.title}}
                                         </td>
                                         <td class="pt-3-half">
