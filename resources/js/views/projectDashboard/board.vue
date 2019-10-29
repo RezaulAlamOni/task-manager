@@ -55,6 +55,9 @@
                                                     <a @click="deleteColumnCards(index, column.boardId)" class="dropdown-item"
                                                        href="#">
                                                         <i class="fa fa-trash opacity"></i> Peekaboo all tasks in this column</a>
+                                                    <a @click="transferColumnToOtherBoard(index, column.boardId)" class="dropdown-item"
+                                                       href="#">
+                                                        <i class="fa fa-share-square-o opacity"></i> Transfer Column to another board</a>
                                                     <div class="dropdown-divider"></div>
                                                     <a @click="deleteColumn(index,column.boardId)" class="dropdown-item"
                                                        href="#"><i
@@ -110,9 +113,7 @@
                                                 @click="makeInput($event)"
                                                 @focus="hideItem($event)"
                                                 class="inp input-hide text-area"
-                                                data-grow="auto"
-                                                type="text">{{ card.data }}
-                                            </textarea>
+                                                data-grow="auto">{{ card.data }}</textarea>
                                                 
                                             <br>
                                             <div>
@@ -498,7 +499,7 @@
                                                    type="color">
                                         </td>
                                         <td>
-                                            <a @click="DeleteTagFromModal(tag)" class="compltit-blue-a"
+                                            <a @click="DeleteTagFromModal(tag)" class="compltit-blue-link"
                                                href="javascript:void(0)">
                                                 Delete
                                             </a>
@@ -567,6 +568,63 @@
                     </div>
                     <div class="modal-footer">
                         <button v-if="transferBtn" aria-label="Close" @click="transferCardToOtherBoard" class="btn btn-success" data-dismiss="modal" type="button">Transfer
+                        </button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transferColumn" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h4 class="text-center ">Transfer Column To Another Board </h4>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Select Board :</label>
+                            <div class="col-sm-8">
+                                <!-- {{ selectedBoard }} -->
+                                <select @change="showSubBoard()" class="form-control" v-model="selectedBoard">
+                                    <option disabled>Select Board</option>
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in board"
+                                            v-if="navs.type === 'board'">{{navs.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="subBoard.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Board List :</label>
+                            <div class="col-sm-8">
+                                <select @change="getBttn()" class="form-control" v-model="selectedSubBoard">
+                                    <option disabled>Select Board List</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in subBoard">
+                                        {{navList.board_title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group row" v-if="boardColumn.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Board Column :</label>
+                            <div class="col-sm-8">
+                                <select @change="getBttn()" class="form-control" v-model="selectedBoardColumn">
+                                    <option disabled>Select Board Column</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in boardColumn">
+                                        {{navList.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="modal-footer">
+                        <button v-if="transferBtn" aria-label="Close" @click="transferColumnToOtherBoardSave" class="btn btn-success" data-dismiss="modal" type="button">Transfer
                         </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
@@ -1302,7 +1360,6 @@
                     });
             },
             showTransferModel(index, key, cardId, id) {
-                this.tree4data = [];
                 this.board = [];
                 this.subBoard = [];
                 this.boardColumn = [];
@@ -1393,8 +1450,57 @@
                 .catch(error => {
 
                 });
-                
+            },
+            transferColumnToOtherBoard(index, id){
 
+                this.board = [];
+                this.subBoard = [];
+                this.boardColumn = [];
+                this.selectedBoard= 'Select Board';
+                this.selectedSubBoard= 'Select Board List';
+                this.selectedExistedTask = [];
+                this.transferBtn = false;
+                this.currentColumn = id;
+                this.currentColumnIndex = index;
+                let _this = this;
+                axios.get('/api/nav-item/' + this.projectId)
+                .then(response => response.data)
+                .then(response => {
+                    // console.log(response.success);
+                    _this.board = response.success;
+                    console.log(_this.board);
+                    setTimeout(() => {
+                        $('#transferColumn').modal('show');
+                    }, 500);
+                })
+                .catch(error => {
+
+                });
+                this.updateIndex = index;
+            },
+            transferColumnToOtherBoardSave(){
+                var _this = this;
+                
+                let data = {
+                    'columnId' : this.currentColumn,
+                    'multiple_board_id' : this.selectedSubBoard,
+                };
+                axios.post('/api/Transfer-column-to-board', data)
+                .then(response => response.data)
+                .then(response => {
+
+                    if (response.success) {
+                        _this.getBoardTask();
+                        $('#transferColumn').modal('hide');
+                    } else {
+                        $('#transferColumn').modal('hide');
+                    }
+                    // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
+                    // _this.boardColumn = response.data;
+                })
+                .catch(error => {
+
+                });
             },
             RemoveNodeAndChildren() {
                 var _this = this;
@@ -1751,9 +1857,9 @@
             showItem(e, data, index, child_key) {
                 let attData = $(e.target).attr('data-text');
                 let attDataNew = e.target.value;
-                console.log(attDataNew);
+                // console.log(attDataNew);
                 if( $.trim(attData) === $.trim(attDataNew)){
-                    console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
+                    // console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
                     this.getData();
                     $('.inp').addClass('input-hide');
                     $('.inp').removeClass('form-control');
@@ -1766,9 +1872,10 @@
             },
             saveData(data, index, child_key) {
                 let _this = this;
-                console.log("data = "+data.data);
-                if (data.data !== "") {
-                    alert('Title is required!');
+                // console.log("data = "+data.data);
+                if (data.data === "") {
+                    _this.getBoardTask();
+                    swal('Blank!','Title is required!','warning');
                 } else {
                     let title = {
                         'title': data.data
@@ -1851,7 +1958,7 @@
                         .then(response => {
                             _this.cards[columnIndex].task[cardIndex].tags.splice(obj.index, 1);
                             setTimeout(function () {
-                                _this.getData();
+                                _this.getBoardTask();
                             }, 100);
                             _this.tags = [];
                         })
@@ -1895,6 +2002,7 @@
                     });
             },
             selectCard(card){
+                console.log(card);
                 this.selectedData = card;
                 this.selectedCard = card.cardId;
                 this.task_logs = null;

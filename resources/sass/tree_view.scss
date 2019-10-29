@@ -198,6 +198,7 @@
             border: none;
             background: transparent;
             width: 50px;
+            cursor: pointer;
         }
 
         .hide-item-res {
@@ -268,6 +269,7 @@
                 border: 1px solid #f2f2f2;
                 border-radius: 4px;
                 background-color: #fff;
+                cursor: pointer;
 
                 &.clicked {
                     background: #99c3ff;
@@ -382,6 +384,7 @@
     .input-hide {
         border: none !important;
         background: none !important;
+        cursor: pointer;
 
     }
 
@@ -389,6 +392,7 @@
         padding: 0px !important;
         width: 70%;
         font-size: 16px;
+        cursor: pointer;
     }
 
     .form-control {
@@ -491,6 +495,7 @@
         line-height: 29px;
         background: transparent;
         opacity: 0;
+        cursor: pointer;
     }
 
 
@@ -505,7 +510,8 @@
 }
 
 .task_widthNormal {
-    width: calc(40% - 0px);
+    //width: calc(40% - 0px);
+    width: calc(50% - 0px);
     @include transition(all 0.4s linear);
     height: calc(100vh - 130px);
     display: inline-block;
@@ -535,7 +541,8 @@
     border-left: 1px solid rgba(0, 0, 0, .12);
     border-right: none;
     width: 60%;
-    max-width: 800px;
+    //max-width: 800px;
+    max-width: 650px;
     z-index: 2;
     right: 0;
     @include transition(all 0.4s linear);
@@ -549,6 +556,7 @@
 
     .inp {
         padding: 0px !important;
+        cursor: pointer;
     }
 
     .form-control {
@@ -752,6 +760,12 @@
 .dateCal {
     border: none;
     background: transparent;
+    cursor: pointer;
+}
+.vdp-datepicker__calendar {
+    left: -100px !important;
+    z-index: 999999;
+    //top: -100px !important;
 }
 
 ::-webkit-scrollbar {
@@ -1054,7 +1068,7 @@
     .custom-dropdown-item:hover {
         background: #99c3ff;
     }
-   .dropdown-menu-custom {
+    .dropdown-menu-custom {
         border-radius:7px !important;
         box-shadow:none;
         margin-top:10px;
