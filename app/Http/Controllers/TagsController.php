@@ -47,11 +47,17 @@ class TagsController extends Controller
         }
         $check_assign = AssignTag::where(['task_id' => $request->id, 'tag_id' => $tag_id])->count();
         if ($check_assign <= 0) {
-            AssignTag::create(['task_id' => $request->id, 'tag_id' => $tag_id]);
+            $check_assign = AssignTag::create(['task_id' => $request->id, 'tag_id' => $tag_id]);
+            $tags->assign_id = $check_assign->id;
+            $tags->board_id = $check_assign->task_id;
         }
+
         if ($request->tags == $this->dont_Forget_tag) {
             $this->dontForgetTagProcess($request->id,$tag_id);
+        }else {
+            return response()->json(['success' => true, 'data' => $tags]);
         }
+
     }
 
     public function addTagToMultipleTask(Request $request)

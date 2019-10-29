@@ -25,27 +25,6 @@
             </div> -->
             <div class="col-4">
                 <!-- Tags -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 <div>
                     <a :class="{'tag-icon': true, 'tag-icon-free': selectedData.tags == undefined || selectedData.tags.length == 0}">
                         <div v-if="selectedData.tags && selectedData.tags.length !== 0">
@@ -94,7 +73,7 @@
                                                     <li @click="addExistingTag( 0, selectedData.cardId, 'Dont Forget')" class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
                                                 </div>
                                             </div>
-                                            <hr>
+                                            <!-- <hr> -->
                                             <!-- <div class="row">
                                                 <div class="col-12">
                                                     <template>
@@ -106,14 +85,14 @@
                                                 </div>
                                             </div>
                                             <hr> -->
-                                            <div class="col-xs-12"
+                                            <!-- <div class="col-xs-12"
                                                 style="margin-top:10px;width: 100%;">
                                                 <button @click="showTagManageModel"
                                                         class="btn btn-small btn-primary pull-right"
                                                         type="submit">
                                                     Manage Tag
                                                 </button>
-                                            </div>
+                                            </div> -->
                                         </div>
 
                                     </diV>
@@ -165,30 +144,7 @@
                     </a>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            <!-- user assign -->
             <div class="col-4">
                 <a class="user dropdown-hide-with-remove-icon">
                     <template v-if="selectedData.assigned_user.length > 0">
@@ -258,65 +214,6 @@
                     </div>
                 </a>
             </div>
-
-
-
-
-
-            <!-- Assign Users -->
-            <!-- <div class="col-3">
-                <a class="user dropdown-hide-with-remove-icon">
-                    <span data-toggle="dropdown">
-                        <i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"></i>
-                        <span class="i-text">Add assignee</span>
-                    </span>
-                    <div class="dropdown-menu">
-                        <diV class="collapse show switchToggle">
-                            <li class="assignUser">
-                                <input class="input-group searchUser" placeholder="Set assignee by name and email"
-                                       type="text">
-                                <label class="pl-2 ">
-                                    <small style="font-size: 12px">
-                                        Or invite a new member by email address
-                                    </small>
-                                </label>
-                            </li>
-                            <li class="assignUser">
-                                <div class="row">
-                                    <div class="col-md-3 pt-2 pl-5">
-                                        <img
-                                            alt="not found"
-                                            class="img-circle" src="" style="width: 30px">
-                                    </div>
-                                    <div class="col-md-9">
-                                        <h5>Haassa Jklcsad <br>
-                                            <small>dasda@gad.con</small>
-                                        </h5>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3 pt-2 pl-5">
-                                        <img
-                                            alt="not found"
-                                            class="img-circle" src="" style="width: 30px">
-                                    </div>
-                                    <div class="col-md-9">
-                                        <h5>jakibul Nahid<br>
-                                            <small>asdsafa@opo.con</small>
-                                        </h5>
-                                    </div>
-                                </div>
-                            </li>
-                        </diV>
-                        <li class="border-top pl-2">
-                            <span style="font-size: 13px;">Assign an external team</span>
-                            <switches color="success" style="position:absolute;right: 10px;bottom: -4px"
-                                      theme="bootstrap" v-model="id"></switches>
-                        </li>
-                    </div>
-                </a>
-
-            </div> -->
         </div>
         <div class="row">
             <div class="col-12">
@@ -528,7 +425,7 @@
                     project_id: null,
                 },
                 selectedData : {},
-                task_logs : null,
+                // task_logs : null,
                 check_uncheck_child : null,
                 manageTag: null,
             }
@@ -721,9 +618,9 @@
                     axios.post('/api/task-list/delete-tag', postData)
                         .then(response => response.data)
                         .then(response => {
-                            _this.cards[columnIndex].task[cardIndex].tags.splice(obj.index, 1);
+                            _this.selectedData.tags.splice(obj.index, 1);
                             setTimeout(function () {
-                                _this.getData();
+                                // _this.getData();
                             }, 100);
                             _this.tags = [];
                         })
@@ -734,9 +631,9 @@
 
             },
             changeTag(tags, card, columnIndex, cardIndex) {
-                console.log(card);
+                // console.log(card);
                 var _this = this;
-                var old = this.cards[columnIndex].task[cardIndex].tags.length;
+                var old = this.selectedData.tags.length;
                 var newl = tags.length;
                 let cardTags = null;
                 if (newl > old) {
@@ -754,7 +651,17 @@
                     .then(response => {
 
                         setTimeout(function () {
-                            _this.getBoardTask();
+                            // _this.getBoardTask();
+                            console.log(response);
+                            _this.selectedData.tags.push({
+                                assign_id: response.data.assign_id,
+                                board_id: response.data.board_id,
+                                classes: "",
+                                color: response.data.color,
+                                id: response.data.id,
+                                style: 'style="background: "'+response.data.color,
+                                text: response.data.title,
+                            });
                            $('.dropdown-menu').removeClass('show');
                             // _this.getData();
                         }, 100);
@@ -764,18 +671,9 @@
                     });
                 }
             },
-            addExistingTag(index, tagIndx, key, cardId, dntfrgt = '') {
+            addExistingTag(index, cardId, dntfrgt = '') {
                 let _this = this;
-                // let data = {
-                //     'board_id' : this.cards[index].task[key].existing_tags[tagIndx].board_id,
-                //     'classes' : '',
-                //     'color' : this.cards[index].task[key].existing_tags[tagIndx].color,
-                //     'id' : this.cards[index].task[key].existing_tags[tagIndx].id,
-                //     'style' : "background-color: "+this.cards[index].task[key].existing_tags[tagIndx].color,
-                //     'text' : this.cards[index].task[key].existing_tags[tagIndx].title,
-                // };
-
-                // this.getData();
+                console.log(this.selectedData.existing_tags[index]);
                 if(dntfrgt !== ''){
                     var postData = {
                         id: cardId,
@@ -786,8 +684,8 @@
                 }else{
                     var postData = {
                         id: cardId,
-                        tags: this.cards[index].task[key].existing_tags[tagIndx].title,
-                        color: this.cards[index].task[key].existing_tags[tagIndx].color,
+                        tags: this.selectedData.existing_tags[index].title,
+                        color: this.selectedData.existing_tags[index].color,
                         type: 'task',
                     };
                 }
@@ -797,11 +695,22 @@
                 axios.post('/api/task-list/add-tag', postData)
                 .then(response => response.data)
                 .then(response => {
-                    // _this.cards[index].task[key].tags.push(data);
-                    _this.cards[index].task[key].existing_tags.splice(tagIndx, 1);
+                    _this.selectedData.tags.push({
+                        assign_id: response.data.assign_id,
+                        board_id: response.data.board_id,
+                        classes: "",
+                        color: _this.selectedData.existing_tags[index].color,
+                        id: _this.selectedData.existing_tags[index].id,
+                        style: '',
+                        text: _this.selectedData.existing_tags[index].title,
+
+
+                         id : _this.selectedData.existing_tags[index]
+                    });
+                    _this.selectedData.existing_tags.splice(index, 1);
                     // $('#dropdown' + cardId).toggle();
                     setTimeout(function () {
-                        _this.getBoardTask();
+                        // _this.getBoardTask();
                     }, 100);
                 })
                 .catch(error => {
@@ -820,6 +729,11 @@
                         console.log('Api for move down task not Working !!!')
                     });
 
+            },
+            generateColor() {
+                var myColor = '#000000';
+                myColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+                return myColor;
             },
         },
         
