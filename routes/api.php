@@ -11,6 +11,7 @@ Route::post('/update-current-team', 'ProjectController@UpdateUserCurrentTeam')->
 Route::post('/list-add', 'MultipleListController@store');//add list under project
 Route::post('/board-list-update', 'MultipleListController@update');//Update list board
 Route::post('/board-list-delete', 'MultipleListController@delete');//delete list or board
+Route::post('/board-list-move', 'ProjectNavItemsController@boardListMove');//move list or board
 
 //task listmanagement
 Route::post('/add-task-task', 'TaskController@addNewTask');//add new node
@@ -54,7 +55,7 @@ Route::post('/nav-list','ProjectNavItemsController@navList'); //all nav list ite
 Route::post('/board-list','ProjectNavItemsController@boardList'); //all nav list item
 Route::post('/board-column','MultipleBoardController@getAllColumnBylist'); //all nav list item
 Route::post('/Transfer-to-board','MultipleBoardController@transferToAnotherBoard'); //all nav list item
-
+Route::post('/multiple-list','ProjectNavItemsController@multipleList'); //all nav list item
 //assign  user to task
 Route::post('/task-list/assign-user','AssignedUserController@store'); //Assign user
 Route::post('/task-list/assign-user-remove','AssignedUserController@delete'); //Assign user remove
