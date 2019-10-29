@@ -575,7 +575,7 @@
             },
             updateNavItem() {
                 var _this = this;
-                axios.post('/api/nav-item/update', _this.navItem)
+                axios.post('/api/nav-item/update', _this.update_navItem)
                     .then(response => response.data)
                     .then(response => {
                         console.log(response.success);
@@ -656,6 +656,9 @@
                             this.list.name = null;
                             this.list.description = null;
                             swal("Created", "Board Create Successful", "success")
+                            setTimeout(function () {
+                                $('.board' + response.id.id).click();
+                            }, 300);
                         }
                     })
                     .catch(error => {

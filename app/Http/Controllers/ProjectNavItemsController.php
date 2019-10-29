@@ -97,6 +97,11 @@ class ProjectNavItemsController extends Controller
 
         return response()->json(['success' => $nav]);
     }
+    public function multipleList(Request $request)
+    {
+        $nav = $this->getList($request->projectId,$request->listId,$request->type);
+        return response()->json(['success' => $nav]);
+    }
 
     public function edit(Request $request)
     {
@@ -130,13 +135,19 @@ class ProjectNavItemsController extends Controller
         }
     }
 
-    public function update(Request $request, ProjectNavItems $projectNavItems)
+    public function boardListMove(Request $request)
     {
-        //
-    }
+        $id = $request->id;
+        $type = $request->type;
+        $nav_id = $request->target;
 
-    public function destroy(ProjectNavItems $projectNavItems)
-    {
-        //
+        if ($type == 'list') {
+            Multiple_list::where('id', $id)->update(['nav_id' => $nav_id]);
+        } else {
+            Multiple_board::where('id', $id)->update(['nav_id' => $nav_id]);
+        }
+
+        return response()->json(['success'=>1]);
+
     }
 }
