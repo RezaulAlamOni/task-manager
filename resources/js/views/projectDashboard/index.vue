@@ -254,7 +254,7 @@
                                         calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
                                         format='dd MMM'
                                         input-class="dateCal"
-                                        title="Due Date" data-toggle="tooltip" data-placement="leftleft"
+                                        title="Due Date" data-toggle="tooltip" data-placement="left"
                                         v-model="data.date">
                                     </datepicker>
 
