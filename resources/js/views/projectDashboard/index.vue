@@ -127,13 +127,13 @@
                                 >
                                     <i class="outline-check_circle_outline icon-image-preview "></i>
                                 </a>
-                                <a :title="'Remove this task'"
-                                   @click="RemoveNodeAndChildren(data)"
-                                   class="delete-icon left-content li-opacity"
-                                   data-toggle="tooltip"
-                                   href="javascript:void(0)">
-                                    <i class="baseline-playlist_delete icon-image-preview"></i>
-                                </a>
+<!--                                <a :title="'Remove this task'"-->
+<!--                                   @click="RemoveNodeAndChildren(data)"-->
+<!--                                   class="delete-icon left-content li-opacity"-->
+<!--                                   data-toggle="tooltip"-->
+<!--                                   href="javascript:void(0)">-->
+<!--                                    <i class="baseline-playlist_delete icon-image-preview"></i>-->
+<!--                                </a>-->
                                 <a class="left-content1 li-opacity ">
                                     <i class="outline-arrow_upward icon-image-preview"></i>
                                 </a>
@@ -254,7 +254,7 @@
                                         calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
                                         format='dd MMM'
                                         input-class="dateCal"
-                                        title="Due Date" data-toggle="tooltip" data-placement="left"
+                                        title="Due Date" data-toggle="tooltip" data-placement="leftleft"
                                         v-model="data.date">
                                     </datepicker>
 
@@ -828,9 +828,9 @@
                 $('.searchList').hide();
                 $('.SubmitButton').hide();
                 $('.submitdetails').hide();
-                setTimeout(function () {
-                    $('.delete-icon').hide();
-                }, 1000);
+                // setTimeout(function () {
+                //     $('.delete-icon').hide();
+                // }, 1000);
                 if (localStorage.selected_nav !== undefined) {
                     var session_data = JSON.parse(localStorage.selected_nav);
                     if (session_data.type === 'list') {
@@ -1236,7 +1236,7 @@
             hideItem(e, data) {
                 this.context_menu_flag = 1;
                 // data.draggable = false;
-                $(e.target).closest('.eachItemRow').find('.task-complete').hide();
+                // $(e.target).closest('.eachItemRow').find('.task-complete').hide();
                 $(e.target).closest('.eachItemRow').find('.tag-icon').hide();
                 $(e.target).closest('.eachItemRow').find('.attach-icon').hide();
                 $(e.target).closest('.eachItemRow').find('.subTask_plus').hide();
@@ -1244,14 +1244,14 @@
                 $(e.target).closest('.eachItemRow').find('.calender').hide();
                 $(e.target).closest('.eachItemRow').find('.user').hide();
                 $(e.target).closest('.eachItemRow').find('.dateCal').hide();
-                $(e.target).closest('.eachItemRow').find('.delete-icon').show();
+                // $(e.target).closest('.eachItemRow').find('.delete-icon').show();
 
             },
             showItem(e, data) {
                 this.context_menu_flag = 0;
                 this.SaveDataWithoutCreateNewNode(data);
                 setTimeout(function () {
-                    $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
+                    // $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
                     $(e.target).closest('.eachItemRow').find('.task-complete').show();
                     $(e.target).closest('.eachItemRow').find('.tag-icon').show();
                     $(e.target).closest('.eachItemRow').find('.attach-icon').show();
@@ -1944,9 +1944,9 @@
                                 $("#" + date).removeClass('input-hide');
                             }, 100)
                         }
-                        setTimeout(function () {
-                            $('.delete-icon').hide();
-                        }, 500)
+                        // setTimeout(function () {
+                        //     $('.delete-icon').hide();
+                        // }, 500)
                     })
                     .catch(error => {
 
@@ -1979,7 +1979,7 @@
                             }, 300)
                         }
                         setTimeout(function () {
-                            $('.delete-icon').hide();
+                            // $('.delete-icon').hide();
                             $('.dropdown-hide-with-remove-icon').on('hidden.bs.dropdown', function () {
                                 $('.remove-assign-user').addClass('remove-assigned');
                                 $('.remove-assigned').removeClass('remove-assign-user');
