@@ -244,7 +244,7 @@
 
                                 <div class="hide-item-res">
                                     <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'"
-                                       title="Due Date" data-toggle="tooltip">
+                                       title="Due Date">
                                         <i class="outline-event icon-image-preview" data-toggle
                                            title="toggle"></i>
                                     </a>
@@ -254,7 +254,7 @@
                                         calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
                                         format='dd MMM'
                                         input-class="dateCal"
-                                        title="Due Date" data-toggle="tooltip"
+                                        title="Due Date" data-toggle="tooltip" data-placement="left"
                                         v-model="data.date">
                                     </datepicker>
 
