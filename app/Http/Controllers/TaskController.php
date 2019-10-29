@@ -424,17 +424,11 @@ class TaskController extends Controller
             return response()->json(['success' => 1]);
         } else if (isset($request->type) && $request->type == 'tag') {
             $ids = $request->ids;
-            $tag = Tags::where('id', $request->value)->first();
+            $tag_id =  $request->value;
             foreach ($ids as $id) {
-                $tag_check = Tags::where(['task_id' => $id, 'title' => $tag->title])->count();
-                if ($tag_check <= 0) {
-                    Tags::create([
-                        'color' => $tag->color,
-                        'task_id' => $id,
-                        'title' => $tag->title,
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
-                    ]);
+                $check_assign = AssignTag::where(['task_id' => $id, 'tag_id' => $tag_id])->get();
+                if ($check_assign->count() <= 0) {
+                    $assign = AssignTag::create(['task_id' => $id, 'tag_id' => $tag_id]);
                 }
             }
 
