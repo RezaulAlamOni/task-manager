@@ -35,7 +35,7 @@ class TagsController extends Controller
         if ($tags) {
             $tag_id = $tags->id;
         } else {
-            $tag_data = [ 
+            $tag_data = [
                 'team_id' => $team_id,
                 'color' => $request->color,
                 'title' => $request->tags,

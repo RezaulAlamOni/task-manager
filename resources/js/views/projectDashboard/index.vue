@@ -78,19 +78,25 @@
 
                     <div aria-labelledby="dropdownMenuButton"
                          class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
-                        <h6 class="dropdown-header text-uppercase">Action For <span v-if="list.type === 'board'">Board</span>  <span v-else>List</span> </h6>
+                        <h6 class="dropdown-header text-uppercase">Action For <span
+                            v-if="list.type === 'board'">Board</span> <span v-else>List</span></h6>
                         <div class="dropdown-divider"></div>
                         <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
-                            <a href="javascript:void(0)"> <i class="fa fa-edit"></i> Edit  <span v-if="list.type === 'board'">Board</span>  <span v-else>List</span></a>
+                            <a href="javascript:void(0)"> <i class="fa fa-edit"></i> Edit  <span
+                                v-if="list.type === 'board'">Board</span>  <span v-else>List</span></a>
                         </span>
                         <span class="dropdown-item custom-dropdown-item">
-                            <a href="javascript:void(0)" @click="MoveListTOAnotherNav(list.type)"> <i class="fa fa-arrows-alt"></i> Move <span v-if="list.type === 'board'">Board</span>  <span v-else>List</span> to Another Nav </a>
+                            <a href="javascript:void(0)" @click="MoveListTOAnotherNav(list.type)"> <i
+                                class="fa fa-arrows-alt"></i> Move <span
+                                v-if="list.type === 'board'">Board</span>  <span v-else>List</span> to Another Nav </a>
                         </span>
                         <span class="dropdown-item custom-dropdown-item" @click="DeleteListOrBoard(list.type,'delete')">
-                            <a href="javascript:void(0)"> <i class="fa fa-trash"></i> Delete with all <span v-if="list.type === 'board'">Card</span>  <span v-else> Task</span></a>
+                            <a href="javascript:void(0)"> <i class="fa fa-trash"></i> Delete with all <span
+                                v-if="list.type === 'board'">Card</span>  <span v-else> Task</span></a>
                         </span>
                         <span class="dropdown-item custom-dropdown-item" @click="DeleteListOrBoard(list.type,'move')">
-                            <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move <span v-if="list.type === 'board'">Card</span>  <span v-else>Task</span> </a>
+                            <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move <span
+                                v-if="list.type === 'board'">Card</span>  <span v-else>Task</span> </a>
                         </span>
                         <span class="dropdown-item custom-dropdown-item" v-if="list.type === 'list'">
                             <a href="javascript:void(0)" @click="DownloadTaskPDF"> <i class="fa fa-file"></i> Create PDF </a>
@@ -107,7 +113,7 @@
             <div class="task_width" id="task_width">
                 <div class="col-11" id="tree_view_list">
 
-                    <Tree :data="treeList" :indent="2" :space="0" @change="ChangeNode"
+                    <Tree :data="treeList" :indent="2" :space="0" @change="ChangeNode" v-click-outside="DeleteEmptyTask"
                           @drop="dropNode"
                           class="tree4"
                           @drag="dragNode"
@@ -127,16 +133,16 @@
                                 >
                                     <i class="outline-check_circle_outline icon-image-preview "></i>
                                 </a>
-<!--                                <a :title="'Remove this task'"-->
-<!--                                   @click="RemoveNodeAndChildren(data)"-->
-<!--                                   class="delete-icon left-content li-opacity"-->
-<!--                                   data-toggle="tooltip"-->
-<!--                                   href="javascript:void(0)">-->
-<!--                                    <i class="baseline-playlist_delete icon-image-preview"></i>-->
+                                <!--                                <a :title="'Remove this task'"-->
+                                <!--                                   @click="RemoveNodeAndChildren(data)"-->
+                                <!--                                   class="delete-icon left-content li-opacity"-->
+                                <!--                                   data-toggle="tooltip"-->
+                                <!--                                   href="javascript:void(0)">-->
+                                <!--                                    <i class="baseline-playlist_delete icon-image-preview"></i>-->
+                                <!--                                </a>-->
+<!--                                <a class="left-content1 li-opacity ">-->
+<!--                                    <i class="outline-arrow_upward icon-image-preview"></i>-->
 <!--                                </a>-->
-                                <a class="left-content1 li-opacity ">
-                                    <i class="outline-arrow_upward icon-image-preview"></i>
-                                </a>
                                 <b @click="HideShowChild(store , data)"
                                    v-if="data.children && data.children.length && data.open"><i
                                     class="fa fa-fw fa-minus"></i></b>
@@ -242,7 +248,7 @@
                                     </div>
                                 </a>
 
-                                <div class="hide-item-res">
+                                <div class="hide-item-res" @click="openPicker()">
                                     <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'"
                                        title="Due Date">
                                         <i class="outline-event icon-image-preview" data-toggle
@@ -266,11 +272,11 @@
                                             <span class="assigned_user dropdown-toggle-split "
                                                   data-toggle="dropdown" v-for="(assign,keyId) in data.assigned_user">
                                                 <p :title="assign.name"
-                                                   @click="showAssignedUserRemoveButton(data)"
+                                                   @click="showAssignedUserRemoveButton(assign)"
                                                    class="assignUser-photo-for-selected text-uppercase"
                                                    data-placement="bottom" data-toggle="tooltip"
                                                    v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
-                                                    <a :id="'remove-assign-user'+data.id"
+                                                    <a :id="'remove-assign-user'+assign.id"
                                                        @click="removeAssignedUser(assign)"
                                                        class="remove-assigned" href="javascript:void(0)">
                                                         <i class="fa fa-times remove-assign-user-icon"></i>
@@ -485,7 +491,7 @@
                                     </diV>
                                 </div>
                             </li>
-                            <li style="position: relative">
+                            <li style="position: relative" @click="openPicker()">
 
                                 <datepicker
                                     :disabled-dates="disabledDates"
@@ -649,23 +655,28 @@
                 </div>
             </div>
         </div>
-        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transAndMoveTAsk" role="dialog"
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transAndMoveTAsk"
+             role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header" style="border-radius: 13px;">
-                        <h4 class="text-center ">Delete And Move <span v-if="type_T === 'board'">Card</span>  <span v-else>Task</span>
-                            To Another <span v-if="type_T === 'board'">Board</span>  <span v-else>List</span></h4>
+                        <h4 class="text-center ">Delete And Move <span v-if="type_T === 'board'">Card</span> <span
+                            v-else>Task</span>
+                            To Another <span v-if="type_T === 'board'">Board</span> <span v-else>List</span></h4>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Select <span v-if="type_T === 'board'">Board</span>  <span v-else>List</span> Nav :</label>
+                            <label class="col-sm-4 col-form-label">Select <span v-if="type_T === 'board'">Board</span>
+                                <span v-else>List</span> Nav :</label>
                             <div class="col-sm-8">
                                 <select @change="showSubList_T()" class="form-control" v-model="selectedListNav">
-                                    <option disabled value="Select list Nav">Select <span v-if="type_T === 'board'">Board</span>  <span v-else>List</span> Nav</option>
+                                    <option disabled value="Select list Nav">Select <span v-if="type_T === 'board'">Board</span>
+                                        <span v-else>List</span> Nav
+                                    </option>
                                     <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav_T"
                                             v-if="navs.type === type_T">{{navs.title}}
                                     </option>
@@ -673,13 +684,15 @@
                             </div>
                         </div>
                         <div class="form-group row" v-if="list_T.length > 0">
-                            <label class="col-sm-4 col-form-label">Select <span v-if="type_T === 'board'">Board</span>  <span v-else>List</span> :</label>
+                            <label class="col-sm-4 col-form-label">Select <span v-if="type_T === 'board'">Board</span>
+                                <span v-else>List</span> :</label>
                             <div class="col-sm-8">
                                 <select class="form-control" v-model="selectedSubList" @change="get_T_Bttn()">
-                                    <option disabled value="Select list">Select <span v-if="type_T === 'board'">Board</span>  <span v-else>List</span></option>
+                                    <option disabled value="Select list">Select <span
+                                        v-if="type_T === 'board'">Board</span> <span v-else>List</span></option>
                                     <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T"
                                             :disabled="((navList.id !== list_id) ? false : true)">
-                                         <span v-if="type_T === 'board'">{{navList.board_title}}</span>  <span v-else>{{navList.list_title}}</span>
+                                        <span v-if="type_T === 'board'">{{navList.board_title}}</span> <span v-else>{{navList.list_title}}</span>
                                     </option>
                                 </select>
                             </div>
@@ -687,7 +700,8 @@
                     </div>
                     <div class="modal-footer">
                         <button v-if="transferBtn" aria-label="Close" @click="DeleteAndMoveAllTask"
-                                class="btn btn-danger" data-dismiss="modal" type="button">Delete & Move All <span v-if="type_T === 'board'">Card</span>  <span v-else>Task</span>
+                                class="btn btn-danger" data-dismiss="modal" type="button">Delete & Move All <span
+                            v-if="type_T === 'board'">Card</span> <span v-else>Task</span>
                         </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
@@ -701,19 +715,24 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header" style="border-radius: 13px;">
-                        <h4 class="text-center ">Move  <span v-if="type_T === 'board'">Board</span>  <span v-else>List</span></h4>
+                        <h4 class="text-center ">Move <span v-if="type_T === 'board'">Board</span> <span
+                            v-else>List</span></h4>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Select <span v-if="type_T === 'board'">Board</span>  <span v-else>List</span> Nav :</label>
+                            <label class="col-sm-4 col-form-label">Select <span v-if="type_T === 'board'">Board</span>
+                                <span v-else>List</span> Nav :</label>
                             <div class="col-sm-8">
                                 <select @change="get_T_Bttn()" class="form-control" v-model="selectedListNav">
-                                    <option disabled value="Select list Nav">Select <span v-if="type_T === 'board'">Board</span>  <span v-else>List</span> Nav</option>
+                                    <option disabled value="Select list Nav">Select <span v-if="type_T === 'board'">Board</span>
+                                        <span v-else>List</span> Nav
+                                    </option>
                                     <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav_T"
-                                            v-if="navs.type === type_T" :disabled="((navs.id !== nav_id) ? false : true)">{{navs.title}}
+                                            v-if="navs.type === type_T"
+                                            :disabled="((navs.id !== nav_id) ? false : true)">{{navs.title}}
                                     </option>
                                 </select>
                             </div>
@@ -721,7 +740,8 @@
                     </div>
                     <div class="modal-footer">
                         <button v-if="transferBtn" aria-label="Close" @click="MoveAllTask"
-                                class="btn btn-danger" data-dismiss="modal" type="button">Move <span v-if="type_T === 'board'">Board</span>  <span v-else>List</span>
+                                class="btn btn-danger" data-dismiss="modal" type="button">Move <span
+                            v-if="type_T === 'board'">Board</span> <span v-else>List</span>
                         </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
@@ -1146,13 +1166,13 @@
             makeItClick(e, data) {
                 var _this = this;
                 if (e.ctrlKey && e.which === 1) {
+                    if (data.text !== '' && _this.selectedIds.length <= 1) {
+                        _this.DeleteEmptyTask();
+                    }
                     var index = _this.selectedIds.indexOf(data.id);
                     if (index > -1) {
                         _this.selectedIds.splice(index, 1);
                         $('#click' + data.id).removeClass('clicked');
-                        if (data.text !== 'Dont Forget Section') {
-                            // data.draggable = true;
-                        }
 
                     } else {
                         _this.selectedIds.push(data.id);
@@ -1160,11 +1180,15 @@
                     }
                     $('.jquery-accordion-menu').hide();
                     if (_this.selectedIds.length > 1) {
-                        this.selectedData = {};
+                        _this.selectedData = {};
                         _this.context_menu_flag = 0;
                     }
 
+
                 } else if (e.which === 1) {
+                    if (data.text !== '') {
+                        _this.DeleteEmptyTask();
+                    }
                     _this.selectedIds = [];
                     _this.selectedIds.push(data.id);
                     this.selectedData = data;
@@ -1176,6 +1200,7 @@
                         // data.draggable = true;
                     }
                     $('.jquery-accordion-menu').hide();
+
 
                 } else if (e.which === 3) {
                     e.preventDefault();
@@ -1846,20 +1871,33 @@
 
             },
             deleteSelectedTask() {
-
                 var _this = this;
                 var postData = {
                     ids: _this.selectedIds,
                 };
-                axios.post('/api/task-list/delete-task', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.getTaskList();
-                        $('.jquery-accordion-menu').hide();
-                    })
-                    .catch(error => {
-                        console.log('Api for delete task not Working !!!')
+                $('.jquery-accordion-menu').hide();
+                swal({
+                        title: "Are you sure?",
+                        text: "You want to delete all selected task !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger btn",
+                        confirmButtonText: "Yes, delete it!",
+                        closeOnConfirm: true
+                    },
+                    function () {
+                        axios.post('/api/task-list/delete-task', postData)
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.getTaskList();
+                                // $('.jquery-accordion-menu').hide();
+                                // swal("Deleted!", "Successfully delete selected task !", "success");
+                            })
+                            .catch(error => {
+                                console.log('Api for delete task not Working !!!')
+                            });
                     });
+
 
             },
             AddDontForgetTagToSelectedIds() {
@@ -2099,7 +2137,7 @@
                 let data = {
                     'projectId': _this.projectId,
                     'listId': _this.selectedListNav,
-                    'type' : _this.type_T,
+                    'type': _this.type_T,
 
                 };
                 axios.post('/api/multiple-list', data)
@@ -2133,7 +2171,7 @@
                         })
                             .then(response => response.data)
                             .then(response => {
-                                swal("Complete!", "This "+_this.type_T+" is deleted and all task are moved !", "success");
+                                swal("Complete!", "This " + _this.type_T + " is deleted and all task are moved !", "success");
                                 window.location.href = '/project-dashboard/' + _this.projectId;
                             })
                             .catch(error => {
@@ -2161,7 +2199,7 @@
                         })
                             .then(response => response.data)
                             .then(response => {
-                                swal("Complete!", "This "+_this.type_T+" is Moved Successfully !", "success");
+                                swal("Complete!", "This " + _this.type_T + " is Moved Successfully !", "success");
                                 window.location.href = '/project-dashboard/' + _this.projectId;
                             })
                             .catch(error => {
@@ -2170,7 +2208,7 @@
 
                     });
             },
-            DownloadTaskPDF(){
+            DownloadTaskPDF() {
                 swal("Under Process!", "Working under process", "success");
             },
 
@@ -2212,6 +2250,7 @@
                     this.addNode(data);
                 }
             },
+
             SaveDataWithoutCreateNewNode(data) {
                 var _this = this;
                 var postData = {
@@ -2221,11 +2260,47 @@
                 axios.post('/api/task-list/update', postData)
                     .then(response => response.data)
                     .then(response => {
-                        // _this.getTaskList();
+                        if (response == 'Delete') {
+                            // _this.getTaskList();
+                        } else {
+                            console.log('Save task');
+                        }
+
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
                     });
+            },
+            DeleteEmptyTask() {
+                var _this = this;
+                var postData = {
+                    id: _this.list_id
+                };
+                axios.post('/api/task-list/delete-empty-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        if (response.success === 1) {
+                            var id =  response.id;
+                            _this.RemoveEmptyTask(id,_this.treeList);
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+            },
+            RemoveEmptyTask(id,data){
+                if (data.length > 0){
+                    for (let index = 0; index < data.length; index++) {
+                        if(index !== undefined && data[index].id === id){
+                            data.splice(index,1)
+                            // this.check_uncheck_child = data[index].children;
+                            return true;
+                        }else {
+                            this.RemoveEmptyTask(id,data[index].children);
+                        }
+                    }
+                }
+
             },
 
             dataCopy(data) {
@@ -2237,6 +2312,19 @@
                         break;
                     }
                 }
+            },
+            openPicker: function () {
+                let _this = this;
+                setTimeout(function () {
+                    let target = $('.vdp-datepicker__calendar:visible');
+                    let wH = window.innerHeight + 140;
+                    let position = target.offset();
+                    let tH = target.height();
+                    let cH = wH - position.top;
+                    if (cH < tH) {
+                        target.css({bottom: 0 + 'px'});
+                    }
+                }, 200)
             },
             updateDate(date) {
                 date = new Date(date);

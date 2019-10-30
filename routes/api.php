@@ -22,6 +22,7 @@ Route::post('/task-list/add-child-task', 'TaskController@addChildTask');//add ch
 Route::post('/task-list/task-make-child', 'TaskController@makeChild');//make child node
 Route::post('/task-list/reverse-child', 'TaskController@reverseChild');//reverse child node
 Route::post('/task-list/update', 'TaskController@update');//reverse child node
+Route::post('/task-list/delete-empty-task', 'TaskController@deleteEmptyTask');//delete empty node
 Route::post('/task-list/delete-img', 'TaskController@deleteImg');//reverse child node
 Route::post('/task-list/task-drag-drop', 'TaskController@taskDragDrop');//task-drag-drop
 
