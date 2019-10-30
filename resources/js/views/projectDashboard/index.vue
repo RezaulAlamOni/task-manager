@@ -2315,7 +2315,6 @@
             },
             openPicker: function () {
                 let _this = this;
-                console.log('amiemai');
                 setTimeout(function () {
                     let target = $('.vdp-datepicker__calendar:visible');
                     let wH = window.innerHeight + 140;
