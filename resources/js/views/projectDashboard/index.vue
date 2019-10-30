@@ -1846,20 +1846,34 @@
 
             },
             deleteSelectedTask() {
-
                 var _this = this;
                 var postData = {
                     ids: _this.selectedIds,
                 };
-                axios.post('/api/task-list/delete-task', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.getTaskList();
-                        $('.jquery-accordion-menu').hide();
-                    })
-                    .catch(error => {
-                        console.log('Api for delete task not Working !!!')
+                $('.jquery-accordion-menu').hide();
+                swal({
+                        title: "Are you sure?",
+                        text: "You want to delete all selected task !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger btn",
+                        confirmButtonText: "Yes, delete it!",
+                        closeOnConfirm: true
+                    },
+                    function () {
+                        axios.post('/api/task-list/delete-task', postData)
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.getTaskList();
+                                // $('.jquery-accordion-menu').hide();
+                                // swal("Deleted!", "Successfully delete selected task !", "success");
+                            })
+                            .catch(error => {
+                                console.log('Api for delete task not Working !!!')
+                            });
                     });
+
+
 
             },
             AddDontForgetTagToSelectedIds() {
