@@ -52,9 +52,9 @@
                                                        href="#"><i
                                                         class="fa fa-angle-double-left opacity"></i> Hide column</a>
                                                     <div class="dropdown-divider"></div>
-                                                    <a @click="deleteColumnCards(index, column.boardId)" class="dropdown-item"
+                                                    <!-- <a @click="deleteColumnCards(index, column.boardId)" class="dropdown-item"
                                                        href="#">
-                                                        <i class="fa fa-trash opacity"></i> Peekaboo all tasks in this column</a>
+                                                        <i class="fa fa-trash opacity"></i> Peekaboo all tasks in this column</a> -->
                                                     <a @click="transferColumnToOtherBoard(index, column.boardId)" class="dropdown-item"
                                                        href="#">
                                                         <i class="fa fa-share-square-o opacity"></i> Transfer Column to another board</a>
@@ -78,7 +78,12 @@
                                     group-name="col"
                                 >
                                     <Draggable :key="card.id" v-for="(card , key) in column.children" >
-                                        <div :class="card.props.className" :style="card.props.style" class="card-list" @click="selectCard(card)" :id="'card_'+card.cardId">
+                                        <div :class="card.props.className" 
+                                                :style="card.props.style" 
+                                                class="card-list" 
+                                                @click="selectCard(card)" 
+                                                :id="'card_'+card.cardId" 
+                                                v-on:dblclick="showLog">
 
                                             <span class="pull-right">
                                                 <span >
@@ -113,12 +118,12 @@
                                                 @click="makeInput($event)"
                                                 @focus="hideItem($event)"
                                                 class="inp input-hide text-area"
-                                                data-grow="auto">{{ card.data }}</textarea>
+                                                data-grow="auto" style="padding: 10px !important;">{{ card.data }}</textarea>
                                                 
                                             <br>
                                             <div>
                                                 <div>
-                                                    <a class="calender li-opacity clickHide" v-if="!card.date">
+                                                    <a class="calender li-opacity clickHide" v-if="card.date === '0000-00-00'">
                                                         <i class="outline-event icon-image-preview" data-toggle
                                                         title="toggle"></i>
                                                     </a>
@@ -126,9 +131,9 @@
                                                         :class="{
                                                                 dateCal:true,
                                                                 'flatpickr-input': true,
-                                                                'flatpickr-input1': card.date != '' ? false : true,
+                                                                'flatpickr-input1': card.date != '0000-00-00' ? false : true,
                                                                     active: true,
-                                                                    dateCal1: card.date != '' ? true : false
+                                                                    dateCal1: card.date != '0000-00-00' ? true : false
                                                                 }"
                                                         :config="date_config"
                                                         @on-change="updateDate(card)"
@@ -257,26 +262,10 @@
                                                                                             {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
                                                                                         </li>
                                                                                     </template>
-                                                                                    <!-- <template> -->
-                                                                                        <!-- <li class="badge-pill tags"
-                                                                                            v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
-                                                                                        </li> -->
-                                                                                    <!-- </template> -->
                                                                                     <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')" class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
                                                                                 </div>
                                                                             </div>
                                                                             <hr>
-                                                                            <!-- <div class="row">
-                                                                                <div class="col-12">
-                                                                                    <template>
-                                                                                        <li class="badge-pill tags"
-                                                                                            v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
-                                                                                        </li>
-                                                                                    </template>
-                                                                                    <li class="badge-pill tags" style="background: #FB8678" >Dont Forget</li>
-                                                                                </div>
-                                                                            </div>
-                                                                            <hr> -->
                                                                             <div class="col-xs-12"
                                                                                 style="margin-top:10px;width: 100%;">
                                                                                 <button @click="showTagManageModel"
@@ -499,7 +488,7 @@
                                                    type="color">
                                         </td>
                                         <td>
-                                            <a @click="DeleteTagFromModal(tag)" class="compltit-blue-link"
+                                            <a @click="DeleteTagFromModal(tag)" class="compltit-blue-a badge badge-danger"
                                                href="javascript:void(0)">
                                                 Delete
                                             </a>
@@ -952,9 +941,7 @@
                         _this.showLog();
                         // _this.task_logs = null;
                         // _this.ShowDetails(_this.selectedData);
-                        setTimeout(function () {
-                            $('#_details').click();
-                        }, 500);
+                        
                         break;
                     case "ctrl+c":
                         // _this.selectedCopy = _this.selectedData;
@@ -1085,7 +1072,9 @@
                 if (data.length > 0){
                     for (let index = 0; index < data.length; index++) {
                         if(index !== undefined && data[index].id === id){
-                            this.check_uncheck_child = data[index].children;
+                            if(data[index].board_parent_id === null){
+                                this.check_uncheck_child = data[index].children;
+                            }
                             return true;
                         }else {
                             this.findChild(id,data[index].children);
@@ -1095,13 +1084,18 @@
 
             },
             CheckWithChild(id , child){
+                // console.log(id);
                 var _this = this;
-                if (_this.selectedExistedTask.indexOf(id) === -1){
+                if (id !== 0 && _this.selectedExistedTask.indexOf(id) === -1){
                     _this.selectedExistedTask.push(id);
                 }
                 if (child.length > 0){
                     for (let index = 0; index < child.length; index++) {
-                        _this.CheckWithChild(child[index].id,child[index].children);
+                        if(child[index].board_parent_id === null){
+                            _this.CheckWithChild(child[index].id,child[index].children);
+                        } else {
+                            _this.CheckWithChild(0,child[index].children);
+                        }
                     }
                 }
             },
@@ -1129,8 +1123,11 @@
 
                     // console.log(this.tree4data);
                     for (let index = 0; index < this.tree4data.length; index++) {
-                        this.selectedExistedTask.push(this.tree4data[index].id);
-                        this.recursive(this.tree4data[index].children, this.tree4data[index].id);
+                        if (this.tree4data[index].board_parent_id === null) {
+                            // console.log(this.tree4data[index].id);
+                            this.selectedExistedTask.push(this.tree4data[index].id);
+                        }
+                            this.recursive(this.tree4data[index].children, this.tree4data[index].id);
                     }
                     // console.log(this.selectedExistedTask);
                 }
@@ -1143,7 +1140,7 @@
                     if(key !== -1 && parentKey === -1){
                         this.selectedExistedTask.splice(key,1);
                     } else {
-                        if(key === -1){
+                        if(key === -1 && child[index].board_parent_id === null){
                             this.selectedExistedTask.push(child[index].id);
                         }
                     }
@@ -1564,7 +1561,7 @@
                 let _this = this;
                 let total = this.selectedExistedTask.length;
                 if (total <= 0) {
-                    alert('No task to add');
+                    swal('Warning!','No Task To Add','warning');
                     return false;
                 }
                 let data = {
@@ -1795,34 +1792,35 @@
                         });
                 });
             },
-            deleteColumnCards(index, id) {
-                let _this = this;
+            // peekabo option commented. don't remove the code yet
+            // deleteColumnCards(index, id) {
+            //     let _this = this;
 
-                swal({
-                    title: "Are you sure?",
-                    text: "Your will not be able to recover this",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonClass: "btn-danger",
-                    confirmButtonText: "Yes, delete it!",
-                    closeOnConfirm: false
-                },
-                function(){
-                    axios.get("/api/board-deleteAllCards/" + id)
-                    .then(response => response.data)
-                    .then(response => {
-                        if (response.success) {
-                            _this.cards[index].task = [];
-                            _this.getData();
-                            swal("Deleted!", "Your imaginary file has been deleted.", "success");
-                        }
-                    })
-                    .catch(error => {
+            //     swal({
+            //         title: "Are you sure?",
+            //         text: "Your will not be able to recover this",
+            //         type: "warning",
+            //         showCancelButton: true,
+            //         confirmButtonClass: "btn-danger",
+            //         confirmButtonText: "Yes, delete it!",
+            //         closeOnConfirm: false
+            //     },
+            //     function(){
+            //         axios.get("/api/board-deleteAllCards/" + id)
+            //         .then(response => response.data)
+            //         .then(response => {
+            //             if (response.success) {
+            //                 _this.cards[index].task = [];
+            //                 _this.getData();
+            //                 swal("Deleted!", "Your imaginary file has been deleted.", "success");
+            //             }
+            //         })
+            //         .catch(error => {
                         
-                    })
-                });
+            //         })
+            //     });
 
-            },
+            // },
             hideItem(index) {
 
             },
@@ -1994,6 +1992,7 @@
                         _this.task_logs = response;
                         _this.ShowDetails(_this.selectedData);
                         setTimeout(function () {
+                            $('#_details').click();
                             $('#_log').click()
                         }, 300)
                     })
@@ -2021,6 +2020,7 @@
                 }
             },
             HideDetails() {
+                this.getBoardTask();
                 $('#task_width').addClass('task_width');
                 $('#task_width').removeClass('task_widthNormal');
                 $('#details').addClass('details');

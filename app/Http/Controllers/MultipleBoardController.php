@@ -92,7 +92,7 @@ class MultipleBoardController extends Controller
                     } else {
                         $boards[$key]['task'][$keys]['type'] = 'card';
                     }
-                    $boards[$key]['task'][$keys]['date'] = date('d M', strtotime($values['date']));
+                    $boards[$key]['task'][$keys]['date'] = ($values['date'] == '0000-00-00')? $values['date'] : date('d M', strtotime($values['date']));
                     $boards[$key]['task'][$keys]['existing_tags'] = Tags::where('team_id', $team_id)->where('title','!=', $this->dont_forget_tag)->get()->toArray();
 
                     // Tags::select('tags.*')
@@ -179,7 +179,7 @@ class MultipleBoardController extends Controller
             'multiple_board_id' => $parent->multiple_board_id,
             'hidden' => 0,
             'board_flag' => 1,
-            'date' => '',//Carbon::now(),
+            'date' => '0000-00-00',//Carbon::now(),
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
             'created_at' => Carbon::now()
