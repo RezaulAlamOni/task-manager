@@ -168,7 +168,8 @@
                 <span>
                     <div class="log-data">
                         <h3 class="p-3">Log data for <b>{{selectedData.text}}</b></h3>
-                        <table class="table table-striped table-bordered">
+                        <div class="task-log">
+                            <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
                               <th scope="col">Title</th>
@@ -187,6 +188,8 @@
 
                           </tbody>
                         </table>
+                        </div>
+
                     </div>
                 </span>
 

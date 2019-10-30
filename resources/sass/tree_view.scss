@@ -1029,6 +1029,10 @@
     right: 60px;
     top: 0;
 }
+.task-log {
+    max-height: 720px;
+    overflow-y: auto;
+}
 .details-image {
     display: inline-flex;
     max-width: 100%;
