@@ -554,10 +554,11 @@ class TaskController extends Controller
     }
 
     public function deleteEmptyTask(Request $request){
-        $find = Task::where(['list_id'=>$request->id,'title'=> ''])->get();
-        if ($find->count() > 0 ){
-            Task::where(['list_id'=>$request->id,'title'=> ''])->delete();
-            return response()->json(['success'=>1,'id'=>$find[0]->id]);
+        $total_task = Task::where(['list_id'=>$request->id])->count();
+        $find = Task::where(['list_id'=>$request->id,'title'=> ''])->orderBy('id','desc')->first();
+        if (!empty($find) && $total_task > 1){
+            Task::where(['id'=>$find->id])->delete();
+            return response()->json(['success'=>1,'id'=>$find->id]);
         }
 
     }
@@ -576,13 +577,13 @@ class TaskController extends Controller
             if (Task::where('id', $request->id)->update(['date' => $request->date])) {
                 return response()->json('success', 200);
             }
-        } elseif (isset($request->text) || $request->text == null) {
-
+        } elseif (isset($request->text) && $request->text != '') {
             if (Task::where('id', $request->id)->update(['title' => $request->text])) {
                 return response()->json('success', 200);
             }
 
         } elseif (isset($request->open)) {
+
             if (Task::where('id', $request->id)->update(['open' => $request->open])) {
                 return response()->json('success', 200);
             }

@@ -140,9 +140,9 @@
                                 <!--                                   href="javascript:void(0)">-->
                                 <!--                                    <i class="baseline-playlist_delete icon-image-preview"></i>-->
                                 <!--                                </a>-->
-                                <a class="left-content1 li-opacity ">
-                                    <i class="outline-arrow_upward icon-image-preview"></i>
-                                </a>
+<!--                                <a class="left-content1 li-opacity ">-->
+<!--                                    <i class="outline-arrow_upward icon-image-preview"></i>-->
+<!--                                </a>-->
                                 <b @click="HideShowChild(store , data)"
                                    v-if="data.children && data.children.length && data.open"><i
                                     class="fa fa-fw fa-minus"></i></b>
@@ -2283,7 +2283,6 @@
                             var id =  response.id;
                             _this.RemoveEmptyTask(id,_this.treeList);
                         }
-
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
