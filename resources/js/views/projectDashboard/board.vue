@@ -20,52 +20,65 @@
                             </div>
                             <div :class="column.props.className" v-else>
                                 <div class="card-column-header">
-                                    <span class="column-drag-handle">&#x2630;</span>
-                                    <img :src="baseUrl+'/img/'+column.progress+'.png'" height="40" width="40" />
-                                    <span class="col_name">{{ column.name }}</span> <span class="total-task">{{column.children.length}}</span>
-                                    <span class="pull-right">
-                                        <span>
-                                            <span class="dropdown-toggle-split col-md-12 opacity"
-                                                  data-toggle="dropdown">
-                                                <i class="fa fa-plus"></i>
-                                            </span>
-                                            <div class="dropdown-menu">
-                                                <diV class="collapse show switchToggle">
-                                                    <a @click="addExistingTask(index,column.boardId)" class="dropdown-item"
-                                                       href="javascript:void(0)">Add existing tasks</a>
-                                                    <a @click="addCard(index,column.boardId)" class="dropdown-item"
-                                                       href="javascript:void(0)">Create new tasks</a>
-                                                </diV>
-                                            </div>
-                                        </span>
+                                    <div class="row">
+                                        <div class="col-md-3" style="margin: 0px;  padding : 0px;">
+                                            <span class="column-drag-handle">&nbsp; &#x2630;</span>
+                                            <img :src="baseUrl+'/img/'+column.progress+'.png'" height="40" width="40" />
+                                        </div>
+                                        <div class="col-md-5" style="margin: 0px; padding : 0px;">
+                                            <span class="col_name">{{ column.name }}</span> 
+                                        </div>
+                                        <div class="col-md-2" style="margin: 0px; padding : 0px;">
+                                            <span class="total-task">{{column.children.length}}</span>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <span class="pull-right" style="display: inline-flex;">
+                                                <span>
+                                                    <span class="dropdown-toggle-split  opacity"
+                                                        data-toggle="dropdown">
+                                                        <i class="fa fa-plus"></i>
+                                                    </span>
+                                                    <div class="dropdown-menu">
+                                                        <diV class="collapse show switchToggle">
+                                                            <a @click="addExistingTask(index,column.boardId)" class="dropdown-item"
+                                                            href="javascript:void(0)">Add existing tasks</a>
+                                                            <a @click="addCard(index,column.boardId)" class="dropdown-item"
+                                                            href="javascript:void(0)">Create new tasks</a>
+                                                        </diV>
+                                                    </div>
+                                                </span>
 
-                                        <span>
-                                            <span class="dropdown-toggle-split col-md-12 opacity"
-                                                  data-toggle="dropdown">
-                                                <i class="fa fa-ellipsis-h"></i>
+                                                <span>
+                                                    <span class="dropdown-toggle-split  opacity"
+                                                        data-toggle="dropdown">
+                                                        <i class="fa fa-ellipsis-h"></i>
+                                                    </span>
+                                                    <div class="dropdown-menu">
+                                                        <diV class="collapse show switchToggle">
+                                                            <a @click="updateColumSow(index)" class="dropdown-item" href="#"><i
+                                                                class="fa fa-edit opacity"></i> Edit column</a>
+                                                            <a @click="hideColumn(index, column.boardId)" class="dropdown-item"
+                                                            href="#"><i
+                                                                class="fa fa-angle-double-left opacity"></i> Hide column</a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <!-- <a @click="deleteColumnCards(index, column.boardId)" class="dropdown-item"
+                                                            href="#">
+                                                                <i class="fa fa-trash opacity"></i> Peekaboo all tasks in this column</a> -->
+                                                            <a @click="transferColumnToOtherBoard(index, column.boardId)" class="dropdown-item"
+                                                                href="#">
+                                                                <i class="fa fa-share-square-o opacity"></i> Transfer Column to another board</a>
+                                                            <a @click="showLinkModel(index, column.boardId)" class="dropdown-item"
+                                                                href="#"><i class="fa fa-link opacity"></i> Link to List </a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a @click="deleteColumn(index,column.boardId)" class="dropdown-item"
+                                                            href="#"><i
+                                                                class="fa fa-trash opacity"></i> Delete column</a>
+                                                        </diV>
+                                                    </div>
+                                                </span>
                                             </span>
-                                            <div class="dropdown-menu">
-                                                <diV class="collapse show switchToggle">
-                                                    <a @click="updateColumSow(index)" class="dropdown-item" href="#"><i
-                                                        class="fa fa-edit opacity"></i> Edit column</a>
-                                                    <a @click="hideColumn(index, column.boardId)" class="dropdown-item"
-                                                       href="#"><i
-                                                        class="fa fa-angle-double-left opacity"></i> Hide column</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <!-- <a @click="deleteColumnCards(index, column.boardId)" class="dropdown-item"
-                                                       href="#">
-                                                        <i class="fa fa-trash opacity"></i> Peekaboo all tasks in this column</a> -->
-                                                    <a @click="transferColumnToOtherBoard(index, column.boardId)" class="dropdown-item"
-                                                       href="#">
-                                                        <i class="fa fa-share-square-o opacity"></i> Transfer Column to another board</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a @click="deleteColumn(index,column.boardId)" class="dropdown-item"
-                                                       href="#"><i
-                                                        class="fa fa-trash opacity"></i> Delete column</a>
-                                                </diV>
-                                            </div>
-                                        </span>
-                                    </span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <Container
                                     :drop-placeholder="dropPlaceholderOptions"
@@ -84,33 +97,31 @@
                                                 @click="selectCard(card)" 
                                                 :id="'card_'+card.cardId" 
                                                 v-on:dblclick="showLog">
-
-                                            <span class="pull-right">
-                                                <span >
-                                                    <span class="dropdown-toggle-split col-md-12 opacity"
-                                                        data-toggle="dropdown">
-                                                        <i class="fa fa-ellipsis-h"></i>
-                                                    </span>
-                                                    <div class="dropdown-menu">
-                                                        <diV class="collapse show switchToggle">
-                                                            <!-- <a @click="updateColumSow()" class="dropdown-item" href="#"><i
-                                                                class="fa fa-edit opacity"></i> Edit column</a> -->
-                                                           
-                                                            <a @click="showTransferModel(index, key, card.cardId, column.boardId)" class="dropdown-item"
-                                                            href="#"><i
-                                                                class="fa fa-share-square-o opacity"></i> Transfer task to another board</a>
-                                                            <div class="dropdown-divider" v-if="card.types === 'task'"></div>
-                                                            <a @click="deleteTask(index, key, card.cardId)" class="dropdown-item"
-                                                            href="#" v-if="card.types === 'task'">
-                                                                <i class="fa fa-minus-circle opacity"></i> Remove task from <strong>This Board</strong> </a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a @click="RemoveNodeAndChildren()" class="dropdown-item"
-                                                            href="#"><i class="fa fa-trash opacity"></i> Delete the task</a>
-                                                        </diV>
-                                                    </div>
+                                                
+                                            <span style="position: absolute; right: 8px; top: 8px; ">
+                                                <span class="dropdown-toggle-split opacity"
+                                                    data-toggle="dropdown">
+                                                    <i class="fa fa-ellipsis-h"></i>
                                                 </span>
-                                            </span> 
-                                            
+                                                <div class="dropdown-menu">
+                                                    <diV class="collapse show switchToggle">
+                                                        <!-- <a @click="updateColumSow()" class="dropdown-item" href="#"><i
+                                                            class="fa fa-edit opacity"></i> Edit column</a> -->
+                                                        
+                                                        <a @click="showTransferModel(index, key, card.cardId, column.boardId)" class="dropdown-item"
+                                                        href="#"><i
+                                                            class="fa fa-share-square-o opacity"></i> Transfer task to another board</a>
+                                                        
+                                                        <div class="dropdown-divider" v-if="card.types === 'task'"></div>
+                                                        <a @click="deleteTask(index, key, card.cardId)" class="dropdown-item"
+                                                        href="#" v-if="card.types === 'task'">
+                                                            <i class="fa fa-minus-circle opacity"></i> Remove task from <strong>This Board</strong> </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a @click="RemoveNodeAndChildren()" class="dropdown-item"
+                                                        href="#"><i class="fa fa-trash opacity"></i> Delete the task</a>
+                                                    </diV>
+                                                </div>
+                                            </span>
                                             
                                             <textarea
                                                 :data-text="card.data"
@@ -623,6 +634,62 @@
         </div>
 
 
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="listLinkColumn" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h4 class="text-center ">Link List To Column  </h4>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Select Nav :</label>
+                            <div class="col-sm-9">
+                                <select @change="showSubNav()" class="form-control" v-model="selectedNav">
+                                    <option disabled>Select Nav</option>
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav"
+                                            v-if="navs.type === 'list'">{{navs.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="subNav.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Nav List :</label>
+                            <div class="col-sm-8">
+                                <select @change="linkToCol()" class="form-control" v-model="selectedSubNav">
+                                    <option disabled>Select Nav List</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in subNav">
+                                        {{navList.list_title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group row" v-if="boardColumn.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Board Column :</label>
+                            <div class="col-sm-8">
+                                <select @change="getBttn()" class="form-control" v-model="selectedBoardColumn">
+                                    <option disabled>Select Board Column</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in boardColumn">
+                                        {{navList.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="modal-footer">
+                        <button v-if="linkBtn" aria-label="Close" @click="listLinkToCol" class="btn btn-success" data-dismiss="modal" type="button">Link
+                        </button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="loader" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
@@ -855,6 +922,7 @@
                 selectedSubBoard: 'Select Board List',
                 selectedBoardColumn: 'Select Board Column',
                 transferBtn : false,
+                linkBtn : false,
                 project: null,
                 tree4data: [],
                 currentColumn: null,
@@ -1382,6 +1450,38 @@
                 });
                 this.updateIndex = index;
                 // this.getAllTask();
+            },
+            showLinkModel(index, boardId){
+                this.nav = [];
+                this.subNav = [];
+                this.selectedNav = 'Select Nav';
+                this.selectedSubNav = 'Select Nav List';
+                this.selectedExistedTask = [];
+                this.currentColumn = boardId;
+                this.currentColumnIndex = index;
+                let _this = this;
+                this.linkBtn = false;
+                axios.get('/api/nav-item/' + this.projectId)
+                .then(response => response.data)
+                .then(response => {
+                    // console.log(response.success);
+                    _this.nav = response.success;
+                    console.log(_this.nav);
+                    setTimeout(() => {
+                        $('#listLinkColumn').modal('show');
+                    }, 500);
+                })
+                .catch(error => {
+
+                });
+                this.updateIndex = index;
+                
+            },
+            linkToCol(){
+                this.linkBtn = true;
+            },
+            listLinkToCol(){
+                swal('Warning!!','Work in progress','warning'); 
             },
             showSubBoard() {
                 let _this = this;
