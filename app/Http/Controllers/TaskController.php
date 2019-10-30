@@ -553,6 +553,15 @@ class TaskController extends Controller
         return response()->json(['success' => 1]);
     }
 
+    public function deleteEmptyTask(Request $request){
+        $find = Task::where(['list_id'=>$request->id,'title'=> ''])->get();
+        if ($find->count() > 0 ){
+            Task::where(['list_id'=>$request->id,'title'=> ''])->delete();
+            return response()->json(['success'=>1,'id'=>$find[0]->id]);
+        }
+
+    }
+
     public function update(Request $request)
     {
         if (isset($request->details)) {
@@ -568,13 +577,9 @@ class TaskController extends Controller
                 return response()->json('success', 200);
             }
         } elseif (isset($request->text) || $request->text == null) {
-            if ($request->text == null){
-//                Task::where('id', $request->id)->delete();
-                return response()->json('Delete', 200);
-            }else{
-                if (Task::where('id', $request->id)->update(['title' => $request->text])) {
-                    return response()->json('success', 200);
-                }
+
+            if (Task::where('id', $request->id)->update(['title' => $request->text])) {
+                return response()->json('success', 200);
             }
 
         } elseif (isset($request->open)) {
