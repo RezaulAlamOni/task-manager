@@ -497,10 +497,11 @@
         opacity: 0;
         cursor: pointer;
     }
-
-
 }
-
+.assigned_user {
+    padding: 1px;
+    position: relative;
+}
 .task_width {
     width: 100%;
     @include transition(all 0.4s linear);
@@ -867,7 +868,7 @@
 .remove-assign-user{
     display: inline-block !important;
     position: absolute;
-    width: 22px;
+    width: 21px;
     height: 22px;
     left: 10px;
     z-index: 9999;

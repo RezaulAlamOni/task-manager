@@ -266,11 +266,11 @@
                                             <span class="assigned_user dropdown-toggle-split "
                                                   data-toggle="dropdown" v-for="(assign,keyId) in data.assigned_user">
                                                 <p :title="assign.name"
-                                                   @click="showAssignedUserRemoveButton(data)"
+                                                   @click="showAssignedUserRemoveButton(assign)"
                                                    class="assignUser-photo-for-selected text-uppercase"
                                                    data-placement="bottom" data-toggle="tooltip"
                                                    v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
-                                                    <a :id="'remove-assign-user'+data.id"
+                                                    <a :id="'remove-assign-user'+assign.id"
                                                        @click="removeAssignedUser(assign)"
                                                        class="remove-assigned" href="javascript:void(0)">
                                                         <i class="fa fa-times remove-assign-user-icon"></i>
