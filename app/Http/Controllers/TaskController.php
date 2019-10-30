@@ -567,10 +567,16 @@ class TaskController extends Controller
             if (Task::where('id', $request->id)->update(['date' => $request->date])) {
                 return response()->json('success', 200);
             }
-        } elseif (isset($request->text)) {
-            if (Task::where('id', $request->id)->update(['title' => $request->text])) {
-                return response()->json('success', 200);
+        } elseif (isset($request->text) || $request->text == null) {
+            if ($request->text == null){
+//                Task::where('id', $request->id)->delete();
+                return response()->json('Delete', 200);
+            }else{
+                if (Task::where('id', $request->id)->update(['title' => $request->text])) {
+                    return response()->json('success', 200);
+                }
             }
+
         } elseif (isset($request->open)) {
             if (Task::where('id', $request->id)->update(['open' => $request->open])) {
                 return response()->json('success', 200);

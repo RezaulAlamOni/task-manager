@@ -242,7 +242,7 @@
                                     </div>
                                 </a>
 
-                                <div class="hide-item-res">
+                                <div class="hide-item-res" @click="openPicker()">
                                     <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'"
                                        title="Due Date">
                                         <i class="outline-event icon-image-preview" data-toggle
@@ -485,7 +485,7 @@
                                     </diV>
                                 </div>
                             </li>
-                            <li style="position: relative">
+                            <li style="position: relative" @click="openPicker()">
 
                                 <datepicker
                                     :disabled-dates="disabledDates"
@@ -1249,7 +1249,7 @@
             },
             showItem(e, data) {
                 this.context_menu_flag = 0;
-                this.SaveDataWithoutCreateNewNode(data);
+                // this.SaveDataWithoutCreateNewNode(data);
                 setTimeout(function () {
                     // $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
                     $(e.target).closest('.eachItemRow').find('.task-complete').show();
@@ -2235,7 +2235,12 @@
                 axios.post('/api/task-list/update', postData)
                     .then(response => response.data)
                     .then(response => {
-                        // _this.getTaskList();
+                        if (response == 'Delete'){
+                            _this.getTaskList();
+                        }else{
+                            console.log('Save task');
+                        }
+
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
@@ -2251,6 +2256,20 @@
                         break;
                     }
                 }
+            },
+            openPicker: function(){
+              let _this = this;
+              console.log('amiemai');
+              setTimeout(function () {
+                  let target = $('.vdp-datepicker__calendar:visible');
+                  let wH = window.innerHeight+140;
+                  let position = target.offset();
+                  let tH = target.height();
+                  let cH = wH - position.top;
+                  if(cH < tH){
+                      target.css({bottom: 0+'px'});
+                  }
+              }, 100)
             },
             updateDate(date) {
                 date = new Date(date);
