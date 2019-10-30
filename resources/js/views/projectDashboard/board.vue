@@ -98,7 +98,7 @@
                                                 :id="'card_'+card.cardId" 
                                                 v-on:dblclick="showLog">
                                                 
-                                            <span style="position: absolute; right: 8px; top: 8px; ">
+                                            <span style="position: absolute; right: 20px; top: 8px; ">
                                                 <span class="dropdown-toggle-split opacity"
                                                     data-toggle="dropdown">
                                                     <i class="fa fa-ellipsis-h"></i>
