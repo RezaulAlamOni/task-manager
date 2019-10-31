@@ -140,9 +140,9 @@
                                 <!--                                   href="javascript:void(0)">-->
                                 <!--                                    <i class="baseline-playlist_delete icon-image-preview"></i>-->
                                 <!--                                </a>-->
-<!--                                <a class="left-content1 li-opacity ">-->
-<!--                                    <i class="outline-arrow_upward icon-image-preview"></i>-->
-<!--                                </a>-->
+                                <!--                                <a class="left-content1 li-opacity ">-->
+                                <!--                                    <i class="outline-arrow_upward icon-image-preview"></i>-->
+                                <!--                                </a>-->
                                 <b @click="HideShowChild(store , data)"
                                    v-if="data.children && data.children.length && data.open"><i
                                     class="fa fa-fw fa-minus"></i></b>
@@ -299,8 +299,11 @@
                                                 </li>
                                                 <li class="assignUser">
                                                     <template v-for="user in data.users">
-                                                        <div @click="(data.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user,data) " :class="(data.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
-                                                             class=" row" v-bind:disabled="(data.assigned_user_ids.includes(user.id)) ? true : false">
+                                                        <div
+                                                            @click="(data.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user,data) "
+                                                            :class="(data.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
+                                                            class=" row"
+                                                            v-bind:disabled="(data.assigned_user_ids.includes(user.id)) ? true : false">
                                                             <div class="col-md-3 pt-1 pl-4">
                                                                 <p class="assignUser-photo">
                                                                     {{(user.name !== null) ? user.name.substring(0,2) :
@@ -311,13 +314,18 @@
                                                                     <small>{{user.email}}</small>
                                                                 </h5>
                                                             </div>
-                                                            <a :id="'remove-assign-user'+user.id" v-if="data.assigned_user_ids.includes(user.id)"
-                                                               @click="removeAssignedUser(user.id, data.id)" data-toggle="tooltip" title="Remove user from assigned !"
-                                                               class="remove-assign-user badge badge-danger" href="javascript:void(0)">
+                                                            <a :id="'remove-assign-user'+user.id"
+                                                               v-if="data.assigned_user_ids.includes(user.id)"
+                                                               @click="removeAssignedUser(user.id, data.id)"
+                                                               data-toggle="tooltip" title="Remove user from assigned !"
+                                                               class="remove-assign-user badge badge-danger"
+                                                               href="javascript:void(0)">
                                                                 <i class="fa fa-user-times remove-assign-user-icon"></i>
                                                             </a>
-                                                            <a :id="'remove-assign-user'+user.id" v-else data-toggle="tooltip" title="Assign user to task!"
-                                                               class="remove-assign-user badge badge-success" href="javascript:void(0)">
+                                                            <a :id="'remove-assign-user'+user.id" v-else
+                                                               data-toggle="tooltip" title="Assign user to task!"
+                                                               class="remove-assign-user badge badge-success"
+                                                               href="javascript:void(0)">
                                                                 <i class="fa fa-user-plus remove-assign-user-icon"></i>
                                                             </a>
                                                         </div>
@@ -840,6 +848,7 @@
                 boardColumn: [],
                 action_T: '',
                 type_T: '',
+                delete_popup: 0,
 
             }
         },
@@ -875,7 +884,13 @@
                 event.preventDefault();
                 switch (handler.key) {
                     case "enter" :
-                        _this.addNode(_this.selectedData);
+                        if (_this.delete_popup === 1) {
+                            swal.close();
+                            _this.delete_popup = 0;
+                        } else {
+                            _this.addNode(_this.selectedData);
+                        }
+
                         break;
                     case "tab" :
                         _this.makeChild(_this.selectedData);
@@ -916,6 +931,7 @@
                         _this.pastCopyAndCut();
                         break;
                     case "delete":
+                        _this.delete_popup = 1;
                         _this.RemoveNodeAndChildren(_this.selectedData);
                         break;
                     case "ctrl+u":
@@ -1827,6 +1843,7 @@
                             .then(response => response.data)
                             .then(response => {
                                 _this.getTaskList()
+                                _this.delete_popup = 0;
                                 swal("Deleted!", "Successfully delete task !", "success");
                             })
                             .catch(error => {
@@ -2269,23 +2286,23 @@
                     .then(response => response.data)
                     .then(response => {
                         if (response.success === 1) {
-                            var id =  response.id;
-                            _this.RemoveEmptyTask(id,_this.treeList);
+                            var id = response.id;
+                            _this.RemoveEmptyTask(id, _this.treeList);
                         }
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
                     });
             },
-            RemoveEmptyTask(id,data){
-                if (data.length > 0){
+            RemoveEmptyTask(id, data) {
+                if (data.length > 0) {
                     for (let index = 0; index < data.length; index++) {
-                        if(index !== undefined && data[index].id === id){
-                            data.splice(index,1)
+                        if (index !== undefined && data[index].id === id) {
+                            data.splice(index, 1)
                             // this.check_uncheck_child = data[index].children;
                             return true;
-                        }else {
-                            this.RemoveEmptyTask(id,data[index].children);
+                        } else {
+                            this.RemoveEmptyTask(id, data[index].children);
                         }
                     }
                 }
