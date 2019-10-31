@@ -890,7 +890,6 @@
                         } else {
                             _this.addNode(_this.selectedData);
                         }
-
                         break;
                     case "tab" :
                         _this.makeChild(_this.selectedData);
@@ -1307,35 +1306,61 @@
 
             copyTask() {
                 var _this = this;
-                if (_this.selectedIds.length > 1) {
-                    alert('Copy and past now working on single task !')
+                if (_this.selectedData.text !== 'Dont Forget Section') {
+                    _this.selectedCopy = _this.selectedIds;
+                    _this.selectedCut = null;
+                    $('.jquery-accordion-menu').hide();
+                    console.log(_this.selectedData)
+                    console.log(_this.selectedIds)
                 } else {
-                    if (_this.selectedData.text !== 'Dont Forget Section') {
-                        _this.selectedCopy = _this.selectedData;
-                        _this.selectedCut = null;
-                        $('.jquery-accordion-menu').hide();
-                    } else {
-                        alert("you can't copy this task !")
-                    }
-
+                    swal('Sorry!!','You can\'t do copy  Dont Forget Section! task', 'warning')
                 }
+
+
 
             },
             cutTask() {
                 var _this = this;
                 if (_this.selectedIds.length > 1) {
-                    alert('Cut and past now working on single task !')
+                    swal('Sorry!!','You can\'t do Cut  more then 1 task', 'warning')
                 } else {
                     if (_this.selectedData.text !== 'Dont Forget Section') {
-                        _this.selectedCut = _this.selectedData;
+                        _this.selectedCut = _this.selectedIds;
                         _this.selectedCopy = null;
                         $('.jquery-accordion-menu').hide();
                     } else {
-                        alert("you can't cut this task !")
+                        swal('Sorry!!','You can\'t do Cut Dont Forget Section! task', 'warning')
                     }
 
                 }
 
+            },
+            pastCopyAndCut() {
+                var _this = this;
+                var data = _this.selectedData;
+                // if (_this.selectedIds.length > 1) {
+                //     return false;
+                // }
+                var postData = {
+                    target_id: data.id,
+                    copy_ids: (this.selectedCopy === null) ? this.selectedCut : this.selectedCopy,
+                    type: (this.selectedCopy === null) ? 'cut' : 'copy',
+                    nav_id: _this.nav_id
+                };
+
+                axios.post('/api/task-list/copy-cut-past', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getTaskList();
+                        $('.jquery-accordion-menu').hide();
+                        _this.selectedIds = [];
+                        _this.selectedCopy = null;
+                        _this.selectedCut = null;
+
+                    })
+                    .catch(error => {
+                        console.log('Api is copy and cut not Working !!!')
+                    });
             },
 
             addEmptyNode(data) {
@@ -1514,32 +1539,6 @@
                     })
                     .catch(error => {
                         console.log('Api is task-unmake-child not Working !!!')
-                    });
-            },
-            pastCopyAndCut() {
-                var _this = this;
-                var data = _this.selectedData;
-                if (_this.selectedIds.length > 1) {
-                    return false;
-                }
-                var postData = {
-                    target_id: data.id,
-                    copy_id: (this.selectedCopy === null) ? this.selectedCut.id : this.selectedCopy.id,
-                    type: (this.selectedCopy === null) ? 'cut' : 'copy',
-                    text: (this.selectedCopy === null) ? this.selectedCut.text : this.selectedCopy.text,
-                    nav_id: _this.nav_id
-                };
-
-                axios.post('/api/task-list/copy-cut-past', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.getTaskList();
-                        setTimeout(function () {
-                            $("#" + response.success).click();
-                        }, 500)
-                    })
-                    .catch(error => {
-                        console.log('Api is copy and cut not Working !!!')
                     });
             },
             generateColor() {
@@ -2314,7 +2313,7 @@
                 var targetData = data.parent.children;
                 for (i = 0; i < targetData.length; i++) {
                     if (targetData[i].text == targetData.text) {
-                        _this.selectedCopy = targetData[i];
+                        // _this.selectedCopy = targetData[i];
                         break;
                     }
                 }
