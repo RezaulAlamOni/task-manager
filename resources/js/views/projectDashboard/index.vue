@@ -1883,7 +1883,9 @@
 
             },
             deleteSelectedTask() {
+
                 var _this = this;
+                _this.delete_popup = 1;
                 var postData = {
                     ids: _this.selectedIds,
                 };
@@ -1902,7 +1904,8 @@
                             .then(response => response.data)
                             .then(response => {
                                 _this.getTaskList();
-                                // $('.jquery-accordion-menu').hide();
+                                $('.jquery-accordion-menu').hide();
+                                _this.delete_popup = 0;
                                 // swal("Deleted!", "Successfully delete selected task !", "success");
                             })
                             .catch(error => {
