@@ -100,6 +100,11 @@ class TaskController extends Controller
             $info['files'] = $task->files;
             $info['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id', 'users.id')
                                     ->where('task_id', $task->id)->get()->toArray();
+            $assigned_user_ids = [];
+            foreach ($info['assigned_user'] as $id) {
+                $assigned_user_ids[] = $id['id'];
+            }
+            $info['assigned_user_ids'] = $assigned_user_ids;
 
             $team_id = Auth::user()->current_team_id;
             $info['users'] = User::join('team_users', 'team_users.user_id', 'users.id')
@@ -349,30 +354,13 @@ class TaskController extends Controller
     public function CopyCutPast(Request $request)
     {
         if ($request->type == 'copy') {
-            $target = Task::where('id', $request->target_id)->first();
-            $past = Task::where('id', $request->copy_id)->first();
 
-            Task::where('parent_id', $target->parent_id)
-                ->where('project_id', $target->project_id)
-                ->where('list_id', $target->list_id)
-                ->where('sort_id', '>', $target->sort_id)
-                ->increment('sort_id');
-
-            $data = [
-                'sort_id' => $target->sort_id + 1,
-                'parent_id' => $target->parent_id,
-                'project_id' => $past->project_id,
-                'list_id' => $past->list_id,
-                'created_by' => Auth::id(),
-                'updated_by' => Auth::id(),
-                'title' => $past->title . ' -copy',
-                'date' => $past->date,
-                'created_at' => Carbon::now(),
-            ];
-            $task = Task::create($data);
-            $this->updateTagWithDataMove($task->id, $target->parent_id);
-            $this->createLog($task->id, 'copy', 'Copy', $request->text);
-            return response()->json(['success' => $task->id]);
+            $target_id = $request->target_id;
+            $copy_ids = $request->copy_ids;
+            foreach ($copy_ids as $copy_id) {
+                $target_id = $this->CopayPast($target_id,$copy_id);
+            }
+            return response()->json(['success' => $target_id]);
 
         } else {
             if ($request->type == 'cut') {
@@ -381,15 +369,44 @@ class TaskController extends Controller
                     ->where('sort_id', '>', $target->sort_id)
                     ->where('parent_id', $target->parent_id)
                     ->increment('sort_id');
-                $past = Task::where('id', $request->copy_id)
+                $past = Task::where('id', $request->copy_ids[0])
                     ->update(['parent_id' => $target->parent_id, 'sort_id' => $target->sort_id + 1]);
 
-                $this->updateTagWithDataMove($request->copy_id, $target->parent_id);
+                $past = Task::where('id', $request->copy_ids[0])->first();
+                $this->updateTagWithDataMove($past->id, $target->parent_id);
                 //check the target task id in the dont forget section and update tag for necessary
-                $this->createLog($request->copy_id, 'cut', 'Cut and past tsk', $request->text);
-                return response()->json(['success' => $request->copy_id]);
+                $this->createLog($past->id, 'cut', 'Cut and past tsk', $past->title);
+                return response()->json(['success' => $past->id]);
             }
         }
+    }
+
+    function CopayPast($target_id , $copy_id ){
+
+        $target = Task::where('id', $target_id)->first();
+        $past = Task::where('id', $copy_id)->first();
+
+        Task::where('parent_id', $target->parent_id)
+            ->where('project_id', $target->project_id)
+            ->where('list_id', $target->list_id)
+            ->where('sort_id', '>', $target->sort_id)
+            ->increment('sort_id');
+
+        $data = [
+            'sort_id' => $target->sort_id + 1,
+            'parent_id' => $target->parent_id,
+            'project_id' => $past->project_id,
+            'list_id' => $past->list_id,
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
+            'title' => $past->title . ' -copy',
+            'date' => $past->date,
+            'created_at' => Carbon::now(),
+        ];
+        $task = Task::create($data);
+        $this->updateTagWithDataMove($task->id, $target->parent_id);
+        $this->createLog($task->id, 'copy', 'Copy', $task->title);
+        return $task->id;
     }
 
     public function deleteTask(Request $request)

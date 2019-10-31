@@ -118,9 +118,12 @@ class ProjectController extends Controller
     }
 
 
-    public function update(Request $request, Project $project)
+    public function update(Request $request)
     {
-        //
+        if (Project::where('id',$request->id)->update(['name'=>$request->title,'description'=>$request->description])){
+            return \response()->json(['status' => 'success', 'data' => $request->all()]);
+        }
+
     }
 
 

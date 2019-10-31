@@ -41,11 +41,11 @@
                                                 <td v-text="project.description ? project.description : ''"></td>
                                                 <td>Active</td>
                                                 <td class="table-option">
-                                                    <a @click.prevent="editProject(project)" class="compltit-blue-a"
+                                                    <a @click.prevent="editProject(project)" class="compltit-blue-a badge badge-info"
                                                        href="javascript:void(0)"
                                                        title="edit_project">Edit</a>
                                                     <a :key="project.id" @click.prevent="deleteProject(project)"
-                                                       class="compltit-blue-a" href="javascript:void(0)"
+                                                       class="compltit-blue-a badge badge-danger" href="javascript:void(0)"
                                                        title="Delete">Delete</a>
                                                 </td>
                                             </tr>

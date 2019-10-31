@@ -140,9 +140,9 @@
                                 <!--                                   href="javascript:void(0)">-->
                                 <!--                                    <i class="baseline-playlist_delete icon-image-preview"></i>-->
                                 <!--                                </a>-->
-<!--                                <a class="left-content1 li-opacity ">-->
-<!--                                    <i class="outline-arrow_upward icon-image-preview"></i>-->
-<!--                                </a>-->
+                                <!--                                <a class="left-content1 li-opacity ">-->
+                                <!--                                    <i class="outline-arrow_upward icon-image-preview"></i>-->
+                                <!--                                </a>-->
                                 <b @click="HideShowChild(store , data)"
                                    v-if="data.children && data.children.length && data.open"><i
                                     class="fa fa-fw fa-minus"></i></b>
@@ -272,15 +272,9 @@
                                             <span class="assigned_user dropdown-toggle-split "
                                                   data-toggle="dropdown" v-for="(assign,keyId) in data.assigned_user">
                                                 <p :title="assign.name"
-                                                   @click="showAssignedUserRemoveButton(assign)"
                                                    class="assignUser-photo-for-selected text-uppercase"
                                                    data-placement="bottom" data-toggle="tooltip"
                                                    v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
-                                                    <a :id="'remove-assign-user'+assign.id"
-                                                       @click="removeAssignedUser(assign)"
-                                                       class="remove-assigned" href="javascript:void(0)">
-                                                        <i class="fa fa-times remove-assign-user-icon"></i>
-                                                    </a>
                                                 </p>
 
                                             </span>
@@ -291,7 +285,7 @@
                                             </i>
                                         </span>
 
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
                                             <diV class="collapse show switchToggle">
                                                 <li class="assignUser">
                                                     <input class="input-group searchUser"
@@ -305,8 +299,11 @@
                                                 </li>
                                                 <li class="assignUser">
                                                     <template v-for="user in data.users">
-                                                        <div @click="assignUserToTask(user,data)"
-                                                             class="users-select row">
+                                                        <div
+                                                            @click="(data.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user,data) "
+                                                            :class="(data.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
+                                                            class=" row"
+                                                            v-bind:disabled="(data.assigned_user_ids.includes(user.id)) ? true : false">
                                                             <div class="col-md-3 pt-1 pl-4">
                                                                 <p class="assignUser-photo">
                                                                     {{(user.name !== null) ? user.name.substring(0,2) :
@@ -317,7 +314,22 @@
                                                                     <small>{{user.email}}</small>
                                                                 </h5>
                                                             </div>
+                                                            <a :id="'remove-assign-user'+user.id"
+                                                               v-if="data.assigned_user_ids.includes(user.id)"
+                                                               @click="removeAssignedUser(user.id, data.id)"
+                                                               data-toggle="tooltip" title="Remove user from assigned !"
+                                                               class="remove-assign-user badge badge-danger"
+                                                               href="javascript:void(0)">
+                                                                <i class="fa fa-user-times remove-assign-user-icon"></i>
+                                                            </a>
+                                                            <a :id="'remove-assign-user'+user.id" v-else
+                                                               data-toggle="tooltip" title="Assign user to task!"
+                                                               class="remove-assign-user badge badge-success"
+                                                               href="javascript:void(0)">
+                                                                <i class="fa fa-user-plus remove-assign-user-icon"></i>
+                                                            </a>
                                                         </div>
+
                                                     </template>
                                                 </li>
                                             </diV>
@@ -836,6 +848,7 @@
                 boardColumn: [],
                 action_T: '',
                 type_T: '',
+                delete_popup: 0,
 
             }
         },
@@ -871,7 +884,12 @@
                 event.preventDefault();
                 switch (handler.key) {
                     case "enter" :
-                        _this.addNode(_this.selectedData);
+                        if (_this.delete_popup === 1) {
+                            swal.close();
+                            _this.delete_popup = 0;
+                        } else {
+                            _this.addNode(_this.selectedData);
+                        }
                         break;
                     case "tab" :
                         _this.makeChild(_this.selectedData);
@@ -912,6 +930,7 @@
                         _this.pastCopyAndCut();
                         break;
                     case "delete":
+                        _this.delete_popup = 1;
                         _this.RemoveNodeAndChildren(_this.selectedData);
                         break;
                     case "ctrl+u":
@@ -1132,24 +1151,16 @@
                         console.log('Api is not Working !!!')
                     });
             },
-            showAssignedUserRemoveButton(data) {
 
-                $('[data-toggle="tooltip"]').tooltip('hide');
-
-                setTimeout(function () {
-                    $('#remove-assign-user' + data.id).toggleClass('remove-assign-user');
-                    $('#remove-assign-user' + data.id).removeClass('remove-assigned');
-                }, 500)
-
-            },
-            removeAssignedUser(user) {
+            removeAssignedUser(user_id, task_id) {
 
                 // console.log(user.id, user.task_id);
                 var _this = this;
                 var postData = {
-                    user_id: user.id,
-                    task_id: user.task_id
+                    user_id: user_id,
+                    task_id: task_id
                 };
+                console.log(postData)
                 axios.post('/api/task-list/assign-user-remove', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -1295,35 +1306,61 @@
 
             copyTask() {
                 var _this = this;
-                if (_this.selectedIds.length > 1) {
-                    alert('Copy and past now working on single task !')
+                if (_this.selectedData.text !== 'Dont Forget Section') {
+                    _this.selectedCopy = _this.selectedIds;
+                    _this.selectedCut = null;
+                    $('.jquery-accordion-menu').hide();
+                    console.log(_this.selectedData)
+                    console.log(_this.selectedIds)
                 } else {
-                    if (_this.selectedData.text !== 'Dont Forget Section') {
-                        _this.selectedCopy = _this.selectedData;
-                        _this.selectedCut = null;
-                        $('.jquery-accordion-menu').hide();
-                    } else {
-                        alert("you can't copy this task !")
-                    }
-
+                    swal('Sorry!!','You can\'t do copy  Dont Forget Section! task', 'warning')
                 }
+
+
 
             },
             cutTask() {
                 var _this = this;
                 if (_this.selectedIds.length > 1) {
-                    alert('Cut and past now working on single task !')
+                    swal('Sorry!!','You can\'t do Cut  more then 1 task', 'warning')
                 } else {
                     if (_this.selectedData.text !== 'Dont Forget Section') {
-                        _this.selectedCut = _this.selectedData;
+                        _this.selectedCut = _this.selectedIds;
                         _this.selectedCopy = null;
                         $('.jquery-accordion-menu').hide();
                     } else {
-                        alert("you can't cut this task !")
+                        swal('Sorry!!','You can\'t do Cut Dont Forget Section! task', 'warning')
                     }
 
                 }
 
+            },
+            pastCopyAndCut() {
+                var _this = this;
+                var data = _this.selectedData;
+                // if (_this.selectedIds.length > 1) {
+                //     return false;
+                // }
+                var postData = {
+                    target_id: data.id,
+                    copy_ids: (this.selectedCopy === null) ? this.selectedCut : this.selectedCopy,
+                    type: (this.selectedCopy === null) ? 'cut' : 'copy',
+                    nav_id: _this.nav_id
+                };
+
+                axios.post('/api/task-list/copy-cut-past', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getTaskList();
+                        $('.jquery-accordion-menu').hide();
+                        _this.selectedIds = [];
+                        _this.selectedCopy = null;
+                        _this.selectedCut = null;
+
+                    })
+                    .catch(error => {
+                        console.log('Api is copy and cut not Working !!!')
+                    });
             },
 
             addEmptyNode(data) {
@@ -1502,32 +1539,6 @@
                     })
                     .catch(error => {
                         console.log('Api is task-unmake-child not Working !!!')
-                    });
-            },
-            pastCopyAndCut() {
-                var _this = this;
-                var data = _this.selectedData;
-                if (_this.selectedIds.length > 1) {
-                    return false;
-                }
-                var postData = {
-                    target_id: data.id,
-                    copy_id: (this.selectedCopy === null) ? this.selectedCut.id : this.selectedCopy.id,
-                    type: (this.selectedCopy === null) ? 'cut' : 'copy',
-                    text: (this.selectedCopy === null) ? this.selectedCut.text : this.selectedCopy.text,
-                    nav_id: _this.nav_id
-                };
-
-                axios.post('/api/task-list/copy-cut-past', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.getTaskList();
-                        setTimeout(function () {
-                            $("#" + response.success).click();
-                        }, 500)
-                    })
-                    .catch(error => {
-                        console.log('Api is copy and cut not Working !!!')
                     });
             },
             generateColor() {
@@ -1831,6 +1842,7 @@
                             .then(response => response.data)
                             .then(response => {
                                 _this.getTaskList()
+                                _this.delete_popup = 0;
                                 swal("Deleted!", "Successfully delete task !", "success");
                             })
                             .catch(error => {
@@ -1871,7 +1883,9 @@
 
             },
             deleteSelectedTask() {
+
                 var _this = this;
+                _this.delete_popup = 1;
                 var postData = {
                     ids: _this.selectedIds,
                 };
@@ -1890,7 +1904,8 @@
                             .then(response => response.data)
                             .then(response => {
                                 _this.getTaskList();
-                                // $('.jquery-accordion-menu').hide();
+                                $('.jquery-accordion-menu').hide();
+                                _this.delete_popup = 0;
                                 // swal("Deleted!", "Successfully delete selected task !", "success");
                             })
                             .catch(error => {
@@ -2016,13 +2031,6 @@
                                 $("#" + id).removeClass('input-hide');
                             }, 300)
                         }
-                        setTimeout(function () {
-                            // $('.delete-icon').hide();
-                            $('.dropdown-hide-with-remove-icon').on('hidden.bs.dropdown', function () {
-                                $('.remove-assign-user').addClass('remove-assigned');
-                                $('.remove-assigned').removeClass('remove-assign-user');
-                            })
-                        }, 500)
                     })
                     .catch(error => {
 
@@ -2280,23 +2288,23 @@
                     .then(response => response.data)
                     .then(response => {
                         if (response.success === 1) {
-                            var id =  response.id;
-                            _this.RemoveEmptyTask(id,_this.treeList);
+                            var id = response.id;
+                            _this.RemoveEmptyTask(id, _this.treeList);
                         }
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
                     });
             },
-            RemoveEmptyTask(id,data){
-                if (data.length > 0){
+            RemoveEmptyTask(id, data) {
+                if (data.length > 0) {
                     for (let index = 0; index < data.length; index++) {
-                        if(index !== undefined && data[index].id === id){
-                            data.splice(index,1)
+                        if (index !== undefined && data[index].id === id) {
+                            data.splice(index, 1)
                             // this.check_uncheck_child = data[index].children;
                             return true;
-                        }else {
-                            this.RemoveEmptyTask(id,data[index].children);
+                        } else {
+                            this.RemoveEmptyTask(id, data[index].children);
                         }
                     }
                 }
@@ -2308,7 +2316,7 @@
                 var targetData = data.parent.children;
                 for (i = 0; i < targetData.length; i++) {
                     if (targetData[i].text == targetData.text) {
-                        _this.selectedCopy = targetData[i];
+                        // _this.selectedCopy = targetData[i];
                         break;
                     }
                 }
