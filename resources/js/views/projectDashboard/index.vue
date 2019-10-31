@@ -272,15 +272,9 @@
                                             <span class="assigned_user dropdown-toggle-split "
                                                   data-toggle="dropdown" v-for="(assign,keyId) in data.assigned_user">
                                                 <p :title="assign.name"
-                                                   @click="showAssignedUserRemoveButton(assign)"
                                                    class="assignUser-photo-for-selected text-uppercase"
                                                    data-placement="bottom" data-toggle="tooltip"
                                                    v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
-                                                    <a :id="'remove-assign-user'+assign.id"
-                                                       @click="removeAssignedUser(assign)"
-                                                       class="remove-assigned" href="javascript:void(0)">
-                                                        <i class="fa fa-times remove-assign-user-icon"></i>
-                                                    </a>
                                                 </p>
 
                                             </span>
@@ -291,7 +285,7 @@
                                             </i>
                                         </span>
 
-                                        <div class="dropdown-menu dropdown-menu-right">
+                                        <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
                                             <diV class="collapse show switchToggle">
                                                 <li class="assignUser">
                                                     <input class="input-group searchUser"
@@ -305,8 +299,8 @@
                                                 </li>
                                                 <li class="assignUser">
                                                     <template v-for="user in data.users">
-                                                        <div @click="assignUserToTask(user,data)"
-                                                             class="users-select row">
+                                                        <div @click="(data.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user,data) " :class="(data.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
+                                                             class=" row" v-bind:disabled="(data.assigned_user_ids.includes(user.id)) ? true : false">
                                                             <div class="col-md-3 pt-1 pl-4">
                                                                 <p class="assignUser-photo">
                                                                     {{(user.name !== null) ? user.name.substring(0,2) :
@@ -317,7 +311,17 @@
                                                                     <small>{{user.email}}</small>
                                                                 </h5>
                                                             </div>
+                                                            <a :id="'remove-assign-user'+user.id" v-if="data.assigned_user_ids.includes(user.id)"
+                                                               @click="removeAssignedUser(user.id, data.id)" data-toggle="tooltip" title="Remove user from assigned !"
+                                                               class="remove-assign-user badge badge-danger" href="javascript:void(0)">
+                                                                <i class="fa fa-user-times remove-assign-user-icon"></i>
+                                                            </a>
+                                                            <a :id="'remove-assign-user'+user.id" v-else data-toggle="tooltip" title="Assign user to task!"
+                                                               class="remove-assign-user badge badge-success" href="javascript:void(0)">
+                                                                <i class="fa fa-user-plus remove-assign-user-icon"></i>
+                                                            </a>
                                                         </div>
+
                                                     </template>
                                                 </li>
                                             </diV>
@@ -1132,24 +1136,16 @@
                         console.log('Api is not Working !!!')
                     });
             },
-            showAssignedUserRemoveButton(data) {
 
-                $('[data-toggle="tooltip"]').tooltip('hide');
-
-                setTimeout(function () {
-                    $('#remove-assign-user' + data.id).toggleClass('remove-assign-user');
-                    $('#remove-assign-user' + data.id).removeClass('remove-assigned');
-                }, 500)
-
-            },
-            removeAssignedUser(user) {
+            removeAssignedUser(user_id, task_id) {
 
                 // console.log(user.id, user.task_id);
                 var _this = this;
                 var postData = {
-                    user_id: user.id,
-                    task_id: user.task_id
+                    user_id: user_id,
+                    task_id: task_id
                 };
+                console.log(postData)
                 axios.post('/api/task-list/assign-user-remove', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -2016,13 +2012,6 @@
                                 $("#" + id).removeClass('input-hide');
                             }, 300)
                         }
-                        setTimeout(function () {
-                            // $('.delete-icon').hide();
-                            $('.dropdown-hide-with-remove-icon').on('hidden.bs.dropdown', function () {
-                                $('.remove-assign-user').addClass('remove-assigned');
-                                $('.remove-assigned').removeClass('remove-assign-user');
-                            })
-                        }, 500)
                     })
                     .catch(error => {
 

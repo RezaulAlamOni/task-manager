@@ -865,25 +865,31 @@
     position: relative;
 }
 .remove-assigned {
-    display: none;
+    display: inline-block !important;
+    position: absolute;
+    right: 10px;
+    z-index: 9999;
+    color: #000;
+    top: 16px;
 }
 .remove-assign-user{
     display: inline-block !important;
     position: absolute;
-    width: 21px;
-    height: 22px;
-    left: 10px;
+    //width: 21px;
+    //height: 22px;
+    right: 10px;
     z-index: 9999;
     color: #000;
-    background: #d0e3fd;
-    top: 0;
+    //background: #d0e3fd;
+    top: 16px;
 }
 .users-select {
+    position: relative;
     padding-top: 5px;
     margin: 0px;
 }
 .users-select:hover {
-    background: #99c3ff;
+    background: #a8d7ff;
     cursor: pointer;
 }
 
@@ -988,6 +994,13 @@
 .tooltipMakeForTag {
     display: inline-block;
 
+}
+.active-user {
+    position: relative;
+    background: #fff2f2;
+    color: #bfaeae;
+    padding-top: 5px;
+    margin: 0px;
 }
 
 .calender-for-details {

@@ -100,6 +100,11 @@ class TaskController extends Controller
             $info['files'] = $task->files;
             $info['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id', 'users.id')
                                     ->where('task_id', $task->id)->get()->toArray();
+            $assigned_user_ids = [];
+            foreach ($info['assigned_user'] as $id) {
+                $assigned_user_ids[] = $id['id'];
+            }
+            $info['assigned_user_ids'] = $assigned_user_ids;
 
             $team_id = Auth::user()->current_team_id;
             $info['users'] = User::join('team_users', 'team_users.user_id', 'users.id')
