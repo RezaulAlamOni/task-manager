@@ -127,12 +127,33 @@
                              slot-scope="{data, _id,store}" style="font-size: 12px" v-on:dblclick="showLog">
                             <template v-html="data.html" v-if="!data.isDragPlaceHolder">
 
-                                <a :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
-                                   @click="addTaskToComplete(data)" data-toggle="tooltip"
-                                   class="task-complete left-content li-opacity "
-                                >
-                                    <i class="outline-check_circle_outline icon-image-preview "></i>
-                                </a>
+                                <span class="progress-bar-custom">
+                                    <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28" width="28" v-if="(data.progress !== null)"
+                                           class="task-complete-progress left-content">
+
+                                    <div v-else class="task-complete-progress empty-progress left-content li-opacity "></div>
+
+                                    <img :src="baseUrl+'/img/check.png'" alt="" height="28" width="28"
+                                         @click="addTaskToComplete(data)" data-toggle="tooltip"
+                                         :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
+                                         class="task-complete left-content li-opacity ">
+
+<!--                                    <a :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"-->
+<!--                                       style="height: 30px;width: 30px"-->
+<!--                                       @click="addTaskToComplete(data)" data-toggle="tooltip"-->
+<!--                                       class=" left-content li-opacity "-->
+<!--                                    >-->
+<!--                                </a>-->
+                                </span>
+
+
+<!--                                <a :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"-->
+<!--                                   :style="{'background-image':baseUrl+'/img/0.png'}"-->
+<!--                                   @click="addTaskToComplete(data)" data-toggle="tooltip"-->
+<!--                                   class="task-complete left-content li-opacity "-->
+<!--                                >-->
+<!--                                    <i class="outline-check_circle_outline icon-image-preview "></i>-->
+<!--                                </a>-->
                                 <!--                                <a :title="'Remove this task'"-->
                                 <!--                                   @click="RemoveNodeAndChildren(data)"-->
                                 <!--                                   class="delete-icon left-content li-opacity"-->
@@ -794,6 +815,7 @@
         },
         data() {
             return {
+                baseUrl : window.location.origin,
                 disabledDates: {
                     id: null,
                 },
