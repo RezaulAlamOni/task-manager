@@ -1473,7 +1473,8 @@
                             $("#" + _this.newEmptyTaskID).focus();
                             $("#" + _this.newEmptyTaskID).addClass('form-control');
                             $("#" + _this.newEmptyTaskID).removeClass('input-hide');
-                        }, 500)
+                            console.log('input focus')
+                        }, 1000)
                         _this.empty_task_delete_flag = 1;
                     })
                     .catch(error => {
@@ -1499,7 +1500,8 @@
                             $("#" + _this.newEmptyTaskID).focus();
                             $("#" + _this.newEmptyTaskID).addClass('form-control');
                             $("#" + _this.newEmptyTaskID).removeClass('input-hide');
-                        }, 500)
+                            console.log('input focus')
+                        }, 1000)
                         _this.empty_task_delete_flag = 1;
                     })
                     .catch(error => {
@@ -1527,7 +1529,8 @@
                         setTimeout(function () {
                             $("#" + _this.newEmptyTaskID).click();
                             $("#" + _this.newEmptyTaskID).focus();
-                        }, 500)
+                            console.log('input focus')
+                        }, 1000)
                     })
                     .catch(error => {
                         console.log('Api is task-make-child not Working !!!')
