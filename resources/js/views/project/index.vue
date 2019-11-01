@@ -112,6 +112,7 @@
         methods: {
 
             projectView(id, name) {
+                localStorage.browser_last_project = JSON.stringify(id);
                 this.$router.push({name: 'project-dashboard', params: {projectId: id, name: name}});
             },
             getProjects() {

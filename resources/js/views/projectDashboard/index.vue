@@ -127,22 +127,27 @@
                              slot-scope="{data, _id,store}" style="font-size: 12px" v-on:dblclick="showLog">
                             <template v-html="data.html" v-if="!data.isDragPlaceHolder">
 
-                                <a :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
-                                   @click="addTaskToComplete(data)" data-toggle="tooltip"
-                                   class="task-complete left-content li-opacity "
-                                >
-                                    <i class="outline-check_circle_outline icon-image-preview "></i>
-                                </a>
-                                <!--                                <a :title="'Remove this task'"-->
-                                <!--                                   @click="RemoveNodeAndChildren(data)"-->
-                                <!--                                   class="delete-icon left-content li-opacity"-->
-                                <!--                                   data-toggle="tooltip"-->
-                                <!--                                   href="javascript:void(0)">-->
-                                <!--                                    <i class="baseline-playlist_delete icon-image-preview"></i>-->
-                                <!--                                </a>-->
-                                <!--                                <a class="left-content1 li-opacity ">-->
-                                <!--                                    <i class="outline-arrow_upward icon-image-preview"></i>-->
-                                <!--                                </a>-->
+                                <span class="progress-bar-custom">
+                                    <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28" width="28" v-if="(data.progress !== null)"
+                                           class="task-complete-progress left-content">
+
+                                    <div v-else class="task-complete-progress empty-progress left-content li-opacity "></div>
+
+                                    <img :src="baseUrl+'/img/check.png'" alt="" height="28" width="28"
+                                         @click="addTaskToComplete(data)" data-toggle="tooltip"
+                                         :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
+                                         class="task-complete left-content li-opacity ">
+                                </span>
+
+
+<!--                                <a :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"-->
+<!--                                   :style="{'background-image':baseUrl+'/img/0.png'}"-->
+<!--                                   @click="addTaskToComplete(data)" data-toggle="tooltip"-->
+<!--                                   class="task-complete left-content li-opacity "-->
+<!--                                >-->
+<!--                                    <i class="outline-check_circle_outline icon-image-preview "></i>-->
+<!--                                </a>-->
+
                                 <b @click="HideShowChild(store , data)"
                                    v-if="data.children && data.children.length && data.open"><i
                                     class="fa fa-fw fa-minus"></i></b>
@@ -794,6 +799,7 @@
         },
         data() {
             return {
+                baseUrl : window.location.origin,
                 disabledDates: {
                     id: null,
                 },
@@ -849,6 +855,7 @@
                 action_T: '',
                 type_T: '',
                 delete_popup: 0,
+                empty_task_delete_flag : 0,
 
             }
         },
@@ -885,10 +892,18 @@
                 switch (handler.key) {
                     case "enter" :
                         if (_this.delete_popup === 1) {
-                            swal.close();
+                            // swal.close();
+                            $('.confirm').click();
                             _this.delete_popup = 0;
+                            _this.selectedIds = [];
                         } else {
-                            _this.addNode(_this.selectedData);
+
+                            if (_this.selectedIds.length === 1){
+                                _this.addNode(_this.selectedData);
+                                swal.close();
+                            }else {
+                                swal.close();
+                            }
                         }
                         break;
                     case "tab" :
@@ -1458,7 +1473,9 @@
                             $("#" + _this.newEmptyTaskID).focus();
                             $("#" + _this.newEmptyTaskID).addClass('form-control');
                             $("#" + _this.newEmptyTaskID).removeClass('input-hide');
-                        }, 500)
+                            console.log('input focus')
+                        }, 1000)
+                        _this.empty_task_delete_flag = 1;
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -1483,7 +1500,9 @@
                             $("#" + _this.newEmptyTaskID).focus();
                             $("#" + _this.newEmptyTaskID).addClass('form-control');
                             $("#" + _this.newEmptyTaskID).removeClass('input-hide');
-                        }, 500)
+                            console.log('input focus')
+                        }, 1000)
+                        _this.empty_task_delete_flag = 1;
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -1510,7 +1529,8 @@
                         setTimeout(function () {
                             $("#" + _this.newEmptyTaskID).click();
                             $("#" + _this.newEmptyTaskID).focus();
-                        }, 500)
+                            console.log('input focus')
+                        }, 1000)
                     })
                     .catch(error => {
                         console.log('Api is task-make-child not Working !!!')
@@ -2263,38 +2283,43 @@
                 var _this = this;
                 var postData = {
                     id: data.id,
-                    text: data.text,
+                    text: (data.text === null) ? '' : data.text,
                 };
-                axios.post('/api/task-list/update', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        if (response == 'Delete') {
-                            // _this.getTaskList();
-                        } else {
-                            console.log('Save task');
-                        }
+                // console.log(postData)
+                // if (data.text !== ''){
+                    axios.post('/api/task-list/update', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            if (response.empty){
+                                _this.empty_task_delete_flag = 0;
+                            }
+                        })
+                        .catch(error => {
+                            console.log('Api for move down task not Working !!!')
+                        });
+                // }
 
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
             },
             DeleteEmptyTask() {
                 var _this = this;
                 var postData = {
                     id: _this.list_id
                 };
-                axios.post('/api/task-list/delete-empty-task', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        if (response.success === 1) {
-                            var id = response.id;
-                            _this.RemoveEmptyTask(id, _this.treeList);
-                        }
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
+                // if (_this.empty_task_delete_flag === 1){
+                    axios.post('/api/task-list/delete-empty-task', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            if (response.success === 1) {
+                                _this.empty_task_delete_flag = 0;
+                                var id = response.id;
+                                _this.RemoveEmptyTask(id, _this.treeList);
+                            }
+                        })
+                        .catch(error => {
+                            console.log('Api for move down task not Working !!!')
+                        });
+                // }
+
             },
             RemoveEmptyTask(id, data) {
                 if (data.length > 0) {
