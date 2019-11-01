@@ -978,7 +978,7 @@
                     curHeight = maxHeight;
                 } else {
                 }
-                if (curHeight < height) {
+                if (curHeight < height) { 
                     curHeight = height;
                 }
                 text.style.height = curHeight + 'px';
