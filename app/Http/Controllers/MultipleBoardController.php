@@ -179,6 +179,7 @@ class MultipleBoardController extends Controller
             'multiple_board_id' => $parent->multiple_board_id,
             'hidden' => 0,
             'board_flag' => 1,
+            'progress'=>$parent->progress,
             'date' => '0000-00-00',//Carbon::now(),
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
@@ -195,10 +196,12 @@ class MultipleBoardController extends Controller
     public function changeParentId(Request $request)
     {
          $request->all();
+         $parent = Task::find($request->board_parent_id);
          $update = Task::where('id',$request->id)
                     ->where('board_parent_id',"!=",0)
                     ->update([
-                        'board_parent_id' => $request->board_parent_id
+                        'board_parent_id' => $request->board_parent_id,
+                        'progress'=>$parent->progress
                     ]);
         if ($update) {
             $this->createLog($request->id, 'Update', 'Parent changed', 'Board Card Parent Changed');
@@ -239,6 +242,7 @@ class MultipleBoardController extends Controller
         ];
         if ($request->boardId || $request->boardId != '') {
             $update = Task::where('id', $request->boardId)->update($data);
+            $update = Task::Where('board_parent_id',$request->boardId)->update(['progress' => $request->progress]);
             if ($update) {
                 $this->createLog($request->boardId, 'Update', 'Column Update', 'Board Column Updated');
                 return response()->json(['success' => true, 'data' => $update]);
@@ -336,6 +340,7 @@ class MultipleBoardController extends Controller
     public function addExistingTasks(Request $request)
     {
         $board_id = $request->id;
+        $parent = Task::find($board_id);
         foreach ($request->tasks as $key => $value) {
             $data = [
                 'board_id' => $board_id,
@@ -346,6 +351,7 @@ class MultipleBoardController extends Controller
                             ->update([
                                 'board_parent_id' => $board_id,
                                 'board_flag' => 1,
+                                'progress'=>$parent->progress,
                                 'task_flag' => 1,
                                 'multiple_board_id' => $request->multiple_board_id
                             ]);
