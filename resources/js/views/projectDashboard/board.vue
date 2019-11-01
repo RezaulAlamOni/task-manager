@@ -1,303 +1,420 @@
 <template>
-    <div class="card pt-0 pr-0">
-        <div class="row page-titles">
-            <div class="col-md-12 col-12 align-self-center">
-                <ul class="nav" style="border-bottom: 1px solid #cedcc4">
-                    <li class="nav-item">
-                        <div class="btn-group">
-                            <button type="button" class="btn dropdown-toggle deactiveIteam" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                List
-                            </button>
-                            <div class="dropdown-menu">
-                                <span v-for="list in multiple_list">
-                                     <router-link class="nav-link drop-item"
-                                                  :to="{ name: 'project-dashboard', params: { projectId: projectId }}">{{list.list_title}}<i
-                                         class="i-btn x20 task-complete icon-circle-o"></i></router-link>
-                                </span>
-                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add List</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="btn-group">
-                            <button type="button" class="btn dropdown-toggle activeTask" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span>Board</span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <router-link class="nav-link" :to="{ name: 'project-board', params: { projectId: projectId }}">
-                                    Board <i
-                                    class="tree-toggle i-btn x30"></i>
-                                </router-link>
-                                <a class="dropdown-item" href="#"><i class="fa fa-plus"></i> Add Board</a>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="input-group col-sm-3 searchList">
-                <input type="text" class="form-control searchTaskList" id="searchTaskList" placeholder="Search task"
-                       name="search">
-                <div class="input-group-btn searchClick" id="searchClick">
-                    <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
-                </div>
-            </div>
-
-        </div>
-
+    <div>
         <div id="board_view_list">
             <div class="col-12" id="col10" style="border: none">
                 <div class="card-scene">
-                    <p><a href="#" @click="addColumn"><i class="fa fa-plus"></i> Add Column</a></p>
                     <Container
-                            orientation="horizontal"
-                            @drop="onColumnDrop($event)"
-                            drag-handle-selector=".column-drag-handle"
-                            @drag-start="dragStart"
-                            :drop-placeholder="upperDropPlaceholderOptions"
-                    >
-                        <Draggable v-for="(column , index ) in scene.children" :key="column.id">
+                        :drop-placeholder="upperDropPlaceholderOptions"
+                        @drag-start="dragStart"
+                        @drag-end="dragEnd"
+                        @drop="onColumnDrop($event)"
+                        drag-handle-selector=".column-drag-handle"
+                        orientation="horizontal">
+                        <Draggable :key="column.id" v-for="(column , index ) in scene.children">
                             <div class="hidden-column" v-if="column.hidden">
                                 <div class="card-column-header">
-                                    <span class="column-drag-handle" @click="showColumn(index)">&#8667;</span>
+                                    <span @click="showColumn(index, column.boardId)"
+                                          class="column-drag-handle">&#8667;</span>
+                                          
                                 </div>
                             </div>
                             <div :class="column.props.className" v-else>
                                 <div class="card-column-header">
-                                    <span class="column-drag-handle">&#x2630;</span>
-                                    <span class="col_name">{{ column.name }}</span> <span class="total-task">{{column.children.length}}</span>
-                                    <span class="pull-right">
-                                        <span>
-                                            <span class="dropdown-toggle-split col-md-12 opacity" data-toggle="dropdown">
-                                                <i class="fa fa-plus"></i>
-                                            </span>
-                                            <div class="dropdown-menu">
-                                                <diV class="collapse show switchToggle">
-                                                    <a class="dropdown-item" style="cursor:pointer;" href="#" @click="addExistingTask(index)">Add existing tasks</a>
-                                                    <a class="dropdown-item" style="cursor:pointer;"
-                                                       @click="addCard(index)">Create new tasks</a>
-                                                </diV>
-                                            </div>
-                                        </span>
+                                    <div class="row">
+                                        <div class="col-md-3" style="margin: 0px;  padding : 0px;">
+                                            <span class="column-drag-handle">&nbsp; &#x2630;</span>
+                                            <img :src="baseUrl+'/img/'+column.progress+'.png'" height="40" width="40" />
+                                        </div>
+                                        <div class="col-md-5" style="margin: 0px; padding : 0px;">
+                                            <span class="col_name">{{ column.name }}</span> 
+                                        </div>
+                                        <div class="col-md-2" style="margin: 0px; padding : 0px;">
+                                            <span class="total-task">{{column.children.length}}</span>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <span class="pull-right" style="display: inline-flex;">
+                                                <span>
+                                                    <span class="dropdown-toggle-split  opacity"
+                                                        data-toggle="dropdown">
+                                                        <i class="fa fa-plus"></i>
+                                                    </span>
+                                                    <div class="dropdown-menu">
+                                                        <diV class="collapse show switchToggle">
+                                                            <a @click="addExistingTask(index,column.boardId)" class="dropdown-item"
+                                                            href="javascript:void(0)">Add existing tasks</a>
+                                                            <a @click="addCard(index,column.boardId)" class="dropdown-item"
+                                                            href="javascript:void(0)">Create new tasks</a>
+                                                        </diV>
+                                                    </div>
+                                                </span>
 
-                                        <span>
-                                            <span class="dropdown-toggle-split col-md-12 opacity" data-toggle="dropdown">
-                                                <i class="fa fa-ellipsis-h"></i>
+                                                <span>
+                                                    <span class="dropdown-toggle-split  opacity"
+                                                        data-toggle="dropdown">
+                                                        <i class="fa fa-ellipsis-h"></i>
+                                                    </span>
+                                                    <div class="dropdown-menu">
+                                                        <diV class="collapse show switchToggle">
+                                                            <a @click="updateColumSow(index)" class="dropdown-item" href="#"><i
+                                                                class="fa fa-edit opacity"></i> Edit column</a>
+                                                            <a @click="hideColumn(index, column.boardId)" class="dropdown-item"
+                                                            href="#"><i
+                                                                class="fa fa-angle-double-left opacity"></i> Hide column</a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <!-- <a @click="deleteColumnCards(index, column.boardId)" class="dropdown-item"
+                                                            href="#">
+                                                                <i class="fa fa-trash opacity"></i> Peekaboo all tasks in this column</a> -->
+                                                            <a @click="transferColumnToOtherBoard(index, column.boardId)" class="dropdown-item"
+                                                                href="#">
+                                                                <i class="fa fa-share-square-o opacity"></i> Transfer Column to another board</a>
+                                                            <a @click="showLinkModel(index, column.boardId)" class="dropdown-item"
+                                                                href="#"><i class="fa fa-link opacity"></i> Link to List </a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a @click="deleteColumn(index,column.boardId)" class="dropdown-item"
+                                                            href="#"><i
+                                                                class="fa fa-trash opacity"></i> Delete column</a>
+                                                        </diV>
+                                                    </div>
+                                                </span>
                                             </span>
-                                            <div class="dropdown-menu">
-                                                <diV class="collapse show switchToggle">
-                                                    <a class="dropdown-item" href="#" @click="updateColumSow(index)"><i
-                                                            class="fa fa-edit opacity"></i> Edit column</a>
-                                                    <a class="dropdown-item" href="#" @click="hideColumn(index)"><i
-                                                            class="fa fa-angle-double-left opacity" ></i> Hide column</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#" @click="deleteColumnCards(index)">
-                                                        <i class="fa fa-trash opacity"></i> Peekaboo all tasks in this column</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#" @click="deleteColumn(index)"><i
-                                                            class="fa fa-trash opacity"></i> Delete column</a>
-                                                </diV>
-                                            </div>
-                                        </span>
-                                    </span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <Container
-                                        group-name="col"
-                                        @drop="(e) => onCardDrop(column.id, e)"
-                                        @drag-start="(e) => log('drag start', e)"
-                                        @drag-end="(e) => log('drag end', e)"
-                                        :get-child-payload="getCardPayload(column.id)"
-                                        drag-class="card-ghost"
-                                        drop-class="card-ghost-drop"
-                                        :drop-placeholder="dropPlaceholderOptions"
+                                    :drop-placeholder="dropPlaceholderOptions"
+                                    :get-child-payload="getCardPayload(column.id)"
+                                    @drag-start="(e) => onDragStart(column.id,column.boardId, index,  e)"
+                                    @drag-end="(e) => log('', e)"
+                                    @drop="(e) => onCardDrop(column.id, column.boardId, index, e)"
+                                    drag-class="card-ghost"
+                                    drop-class="card-ghost-drop"
+                                    group-name="col"
                                 >
-                                    <Draggable v-for="(card , key) in column.children" :key="card.id">
-                                        <div class="card-list" :class="card.props.className" :style="card.props.style">
-                                            <textarea
-                                                      type="text" v-model="card.data"
-                                                      @focus="hideItem($event)"
-                                                      @blur="showItem($event,card.data,index,key)"
-                                                      data-grow="auto"
-                                                      :id="'id'+index+key"
-                                                      class="inp input-hide text-area" @click="makeInput($event)">
-                                            </textarea>
-                                            <!--                                            <p>{{ card.data }}</p>-->
-                                            <div>
-                                                <a class="calender li-opacity clickHide" v-if="!card.date">
-                                                    <i class="outline-event icon-image-preview" title="toggle"
-                                                       data-toggle></i>
-                                                </a>
-                                                <flatPickr
-                                                        v-model="card.date"
-                                                        :config="date_config"
-                                                        :class="{
-                                                                    dateCal:true,
-                                                                    'flatpickr-input': true,
-                                                                    'flatpickr-input1': card.date != '' ? false : true,
-                                                                     active: true,
-                                                                     dateCal1: card.date != '' ? true : false
-                                                                 }"
-                                                        name="date">
-                                                </flatPickr>
-                                            </div>
-                                            <div class="user">
-                                                <a><i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
-                                                      data-toggle="dropdown"></i>
-                                                    <div class="dropdown-menu dropdown-menu-left">
-                                                        <diV class="collapse show switchToggle">
-                                                            <li class="assignUser">
-                                                                <input type="text" class="input-group searchUser"
-                                                                       placeholder="Set assignee by name and email">
-                                                                <label class="pl-2 ">
-                                                                    <small style="font-size: 12px">Or invite a new
-                                                                        member by
-                                                                        email address
-                                                                    </small>
-                                                                </label>
-                                                            </li>
-                                                            <li class="assignUser">
-                                                                <div class="row">
-                                                                    <div class="col-md-3 pt-2 pl-5">
-                                                                        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMSEhUTEhMWFRUXGBobFxgYGRofIBsbHR8gGx0aGxkaHSggGBolHRgXIjEiJSkrLi4uGB8zODMtNygtLisBCgoKDg0OGxAQGy0lHyUtLy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAM4A9QMBIgACEQEDEQH/xAAcAAACAgMBAQAAAAAAAAAAAAAFBgQHAQIDAAj/xABKEAACAQIEAwYCCAIHBQYHAAABAhEAAwQSITEFQVEGEyJhcYEykQcjQqGxwdHwFFIVJDNicpLhQ4KisvEIFlRjc8IXJVNkk6Pi/8QAGgEAAwEBAQEAAAAAAAAAAAAAAQIDAAQFBv/EAC4RAAICAgICAQMCBAcAAAAAAAABAhEDIRIxBEFREyJhBdFxgaHBFBUjQlKRsf/aAAwDAQACEQMRAD8ASCgBBG1bKJMDXoBXWNB869aQKfiy+fMeYEiT5TUYjG+ID2yFdSCeTAg/fttWmC4gy+AgFCZjoBroamnjVo4l71wPcQqFUXLaE5gAslC7AroYOadfKu/EcXhXsi1bskPMh+6QEjNIDOrljCzI1kj3rSS9hsE/xaM5LGY2gRIHp0qSb6ghs5UACRBgnfXqTNE8ZirNtrNyxbGa3MgogDKAvxRIYk5tSJOatb/ErLvcTxC2TbK2xatye7gy5DLJYd5I1gvSLZrBi4u4Wtu+qwR4dIn862sWsrF7b7nQnl6jXWimI4pYhldSEY25RLKICytM+F5VSpZYlozFtzFbWeI4YAjIGBgSMPaX/wCpqFDwh8dkaanuydDuaTBZFW3A11005T/puaH4i8QwMCJiRTPe4th4Di3LBcqBrNsgmVILeLeM4JA+1sai8VvWDb7rKC3dli1lVA71gAgOZA2UKJYDXMzVoL5MwOl8qZABB2WJ+deRMwILD0ioeHtleflPSpSSoJEEdSd/TqafiLZ0WyNekax+9q7cHsuFnNmTMBz6dfLatcGocxMvyA/SjVjDFUyZSu7EdTtvt7VHK+MR4bZI4NYRQzgRmUKPFp5nyqRdxB/hyndq2UEkEzG+0yT7114fwS5dUALA68o2P7FMXDOygQatPoPuPXauN+NkyPkvkosijoql7oUyAwy8iefkK42sYCpX7Tc+VWb2k7FLdUuAc8aGSNvfePWkLEcAu4ecyDKR8W8noBEgiu76bUba2ST5OvRBwuJSZcQBupJ399q6jiy25XLII+Inb0jagtpyDmOsGDPy59Kk4i9ZGVgNSdh1GgkUrhvY8cjrsL2uI2coVUbNqVJY78pHzonbtqtuww0a7e1jYCDMdd6XMVixcVSqIpUa5REn0/e9MnE07v8AgbY0gBiJ/mIH5VWEa2JObYGTH27T3AEZzDJqYHSYG4rNnFsEgJmgEeInnzHpUPHW8t24oO5Oo9fPavYV2zETBAkdAByI51Cb+CuNV2dsPeaCzgiPMVPW8LYttnytGbUHc8jG2kVH4Vgy7Lnkk3ANIg6Zp9IrGJuo9150GYxO0bCPuor7VYX9zoYuzfFjnLOUY7DcfdTPY4s91AbdrxFouBoAyjQgSBPz96QMJhXJOVNFE5iIEcvmeYo5ZW/3YtklczHMpgRMazynpVY5OKqhHC3bYcu2MMhIuWijZvCwI9RuYIj8K7YDiSOGF1VhZzjKMzclIA000ofh+Eju80l7iscwPKOQ12rFnhF0Zrh0AzQAN/LKdqHN3dDUqqwhetXSqlbt5pHUDTlp1r1RsDxC8+YOrSpjQaeo1r1M2pbJ8GVwu2sGJ1rzoIGaCfIbCiuI7LYpIhVcf3WH4NFQb+BvWyM1px/u6fMaUGmvQqZD4daDYqyGCMCyZhcOVQsjNJzCIWTvyHpRHDYBLzXu8ZLTofq0FxApMMRBYnOoKqvxfb35ETfnMes7c6j2SZ1+f750G7DIb8fwawps5L2bMxFyXtnIZGpymQIJ36CtV4TYXEiGR0YSxa4vhGxJdWUZgdYPXY0J4bbS5ct27jsgdgoZVDGWMA5Sy6Sw5/OuyYQNea1al4zQz5UlVEszS5VQArHfYddKUKYbbheHZEFy6J1zL3iCCAfCN4IYAT4gQZEaTpb4Xh1UqLiEm7/ad5bEgC74FWSQCy2fFB/tAdt42H7P4i6WFu2CUIH9pbGpAI1LDNIIIIkGhLEzlYlY66x7Vo6MHFwFowFuqHZ2RWa5byADKczwZVSGcZo3QH7ULAVbZDTmDabHn+lR7SnZdJrQCSxkR1/e9USFOty14vCZFcMThNfP8K3a9l68tP1r1u6KYxz4bfuWHDroRzqwuGIQme+upOYJ09Z/D50r8Cwoe6C3wp4vfl9/4VjGWmvX8veMLY+LUyfLyo8E9syvpDVju2Qt+FVLnkqan3jQCp/DeP3ngiw49dqHcDtW0gIoHnGvudzTVYMxEUzkyqxJdnK7xG8RJt+3WsqbWJtkMsHY+XtRDIKHNYyXQy7HRvyNZSYJQVaKr4x2bc37ltQRr8RA8Q9tyNp8qW7t25YYrkBGaCrLocp6dKtztpgrmX+Iszp8YBO3UVUvaLiF2FOZp5aT6+I+g0pXt0yS1tGli8z3FtgBFZwIA5E7elNvbRAuMsAaFFtqfMSTQLs1hxdfDsWly3iH3g0T7Us1ziUa6Mij2A0j3o1QHsjcYsouIugAhQ5389T95oVdTVhlnQQZ896Ldo1ZsXdIGgbXSOQG3rUS/wAMugiB5+3L11qbjbGi2EuCYhkt3Hy6LIUkfaIj8KxwfigtQVS0zQJnX3A6k1K47Ya0FsliZt5n8mI/IGlYXltRGsSZG4naPOhODpV6KRkk9hzFdt3SUfDp3baZhJgTy5jXlW1ztmFATww2rOdSR/KDvyFC8Vcw95ANbRlRmiQeevOZ0rbGXVtlA9pHzGNhOvrU3v1sbr2F+DdrWWWSIGsdT169K7P9JFx7i2wgIM6gkbAk/hQHD8PRXa2gdLT5VLg/CRqTB9YjyrHd4fvrSWrhY21uFmKxyMz1NPCSugSXsYz22u5VyWlZTMZm8UecHevVXmJtMrsEaQIEiQDXqpX5JuSLd/jTrBIqTb4g3WfWKDu8KfWi3AwhkumaXVROeNZJX6s5gx0gwdjpVbEo9cvq5+st229VB/Gh+P4Fg3Gbush6oSPu2+6jN62uQDulkWnZrgzfEjsoBObKQ0Bdt2EVvxk2lJtKiyQRK55Q5mWCCSWOin57yKzowq2+Ad063LLpdZCCqXgw1BkHMjKTBA0kedC7GKe3euXDbW28MGQd4AC2hytn7xSdTIfmY0MU48QsLbZWQlwc0EgDVTEQGJ6bwdag9q8NYbEPbACd1ba69y2rFgquyG2UZhmYDu2zEiBmOoqU4qtBQOXtHeRge6tSxVpIuTKAKJPea6KJ50HvMrFmH2jMCYHPSSTA8zRxuAKxt289whnRR9Xqq3LfeISA/L7Q2GpBaoOE4bba2hW6e8e2r5GQBVBvDDkF85J8RkHLsNYOgRJjkAAkSI+XKspaHdgnfeOvOjt/hNtlRUZkyHEi47IELCz3Q0V7pTe42srAmRK68bnCLEP3l9lCOigi1mBzoXUki5yCkGJ30zDWmML+o33NS8CrXCQqBiN9QPzrbG8MuWSEuqVYqGAMaqdjp+9Kz2Tv93iXZgGAIkdawKGXA4A2sOS2jE/cP2aFYbFIhLHrr+/nTHx3Fq1glVyA7Acuu1JvDlRrjIzRoJPTy+776dvQ0FsYMP2pRIJsvl6qJ/DzpkwvGi1nv0UlZ22+c7UnXOzNoKbgYMY+IZjp8gBTN2a4PbbAgEDeZPMbRO8QSB7UGjojZMwfawsT9XCruZBMczAM/dRf+kFIBBAzbD3H796V8H2Tsq5YCXmQ2VlI9Dt11ozi1tYe07AAkL4tpjnqOg/ClumZxtB4ZSMvX961VHanhtm3ea1ctyN01+yf0II9qdezXFjfQ3CdVaDHPXQ+Rit+0nBTiWV1RjAyypUefP3ppbWjlS3sROz/AALu71u/KqgB33HTSs2+H3X4kLjW27trsq+omPw2pr4fwU2LozC54lYDPGh8iOdaql1LgJJIUM2oIj7I3333rK6VmcVsSONXLlu61xbFwk3M2qmCJmD1ovgMc+LxaK9h7du2omRplTxMSY1k0bxwYLmfVZnrtrW2CxiMrFmADL3fxQdYJiflWjt7HnFKNpinx8uVbEPAD94B1HiB26AED2pSBzByqkgRDCYHWdKs1TOJ7oR3apmAgHVt/X4RXfHTaQnNaC85GWfLpRkmTRUlxvCNNmH3GscZxhbLrrIg/v1pwxnaMEEKogeQ/So9vjcKBkU+w/SkM5IVFx1+RmY89KkcEwhVmbqjKJ8xE0zYPiAuGGAHn50H4vi9TBJg6Uyr0blaIP8ACsCY61itkx56E16tQoztxpDp4f8AMK74btDkBCuFncLcifWDrTuOx+EH+wt/5R+lbjsjhY/sLf8AlH6UOQ9CUnaCQFznKNVXvDAjoNhW97jys0tcGb+Yvr8yZ0pvu9lcMBpZQaj7I6+ld17P2F2tJ/lH6VnJmSQr4XEXb5DqLtzowzNz5MOlFEsGRcezcN0H+0KXMw5DxjXanTs5bVAyhQo0iAAP+tFcFfW4hYciRz3G4+dH7mrBorhVAzMFuqXILMvfKWI1BYggsQZMmsNbtkQ3fQRlg3L8EfykFoK+W1OXGuJNYCQyKCNM3NpgAVnD4y9H1hST8Khdz6z08htQ2b8iVcwtpyC1y9KEFD393wnUSstoY09DWtzhlhwUa/eykyR3xgtvJB3PmasbFXxbA+HUtE8zyFCRx3LdUXVREcqq5lYM1wxoNIy67jnRphQlf93sOxE3braQDnBgAaCSNh0rrguyFm2SVa8c28qCPYgVOxq/XXoAH1j7etGsFx4W7aoU2n7UULMK3GuGFbQyyVG8gjSkOxhzavNm2b4T15n02FXO/ae2QQUkHSC0z7RSZ2us4TJ3pRrWXXRpJPIAHSttjRdCle4pcuZbQJCzr0gU3dkbWIKBGxDhA4YEFSTvKtmBBU9N/OlHh5t4hBlgzJE/ePupo7PcG1ANm2B6tB/3ZiaX0dcXbDD4i5h75tatbbW2dT6rPUfhXTi2Nt2kJf7UACJk9I6VPuYRbUGIEGR58jHuar/tdxV7fEMOh+AIpKn+8xGv+UDTakq3QW3x1sYOylnKmW3mMmSYiT6VZGCsZLYU78/WgeD4ultRlsgCNwf9KkN2lUGMh9ZqhxN2Y7QIc9sg6qGb8BQ7j2LYXHyCSLar8yS2n+EipOL4it5pCkBUM+YkfpQ1Ltu4t25cBJuMxt66LplGg8hTehV2Q+MP/VwvMax7aUO4xfRVtrZCwEGeRMsd59+dFcG2a7atnxAw2o+yuv4gUdv4K2xJNtAZP2RU3KlY6Wyslv8A1rO1sgZE+AkREzGWg/H+LFvAGuFJmH11HnvTx2wQWzaFsKhac3SBQi9wW/dthxbtXVI3GU/pTKVoEoeiv8Vd8JK61i1fJnkfLpR69gUBINuPLUfnWtvhSTItmD0NNQnBg/hr+IMScs66Gt+NPbN58jDKQDsRTdwvhfd6Km5MydI21+VB+N4JHbW0RBglQfFz0oJoPBoVVI/mA9a9U8cHD6ppyOaf3tXqcFH0O4FaBx1FL+B49F021AcC2DMRofFJI8iAdOYoxhbh7wFgFPwgeX7YitwQHJo633XQEwSdAecbxQixxcXMVcwyrBtKCzHbWCAB6MKLY9fEp1Yx4V00Ous9TMe1J3ZoueK40uoVslvQNmjROcDXas4q6MpBfidru7+Fuh2zd+qQDCwwMgj/AHR99HcHx+yLtvCD+0cO7ZTIBkyCepMmlXjMstqFLn+OMKOcB9B99E8Nhbz47DumDexatqQzEoB8JA0BneOVZtIMV8nLt1ZF27hbMx3mk68iDoeVQ+O8Qe3xKxaRjAFsEephmj0ot2u4LiMRdwzWllbYJJzAQQQQNd9q5WeEY04m3ea2ggrnlhqBInTXSZA8qFqmUT6GzFg5SyLnZVchSYzeU8vWk/tHh4PDxoGGIykTOUZswUeYygT+tNPFv4gBP4dbbnMQ4uMVGXqIBkyNqB8T4VicRdw7P3CC1eFxoZiSByEiJrWqYkdME3lBu3v/AFbn/NUbEmIAEzyqaR47n+Nz82NQ8TiQhk9NqWKb0jN0tkG7eCeNkiPXekTttxdrrLbJgbwOQ/PpTbjXa8CTtyAqu+I+PE3PLwj86u4cF+S3iY3mzKJI7Nz3bQYh5Hlp/pTJw7jGItAsDKiPafyoJ2ftZUYf3tfy/flTLw7hxawYRmlmBI8gCPxrklpnW4OMmmOeGtOcju2ZiBHQeg96UfpOsA37EDxZGGb1ggexE+5px4TfmxbuPocmo6EaH8Kr/tRxL+IxGcfCiwP386XHFtnZ4OL6nkRjWr3/AA9jzwbFk4e3c/ugnTTb/rRZcVMEW1YdYEj2pW7I3v6nbDfyqPu3pgw7eCNuc13SxqSPAcuMnQKvYo3sTeW2+RUXKCgGpiSDoecj2rGCOS3bD3iCRoCiEem0/fU8WVlrip9ZGsaFgPuzR19KW8RF+7b7tgbYBBBkEGeY+zHTeo5ISSpDwkm7DOFZxcFwvbESElCNPZt624jj8QAPFbbxSGVyNPQjalnjfHEkpLLlaBAmR5Go+Ee2bDvmZmgx4ufodqltv8DOkGcdjBjgC1okWiRKFdyATz1FE+DtZwlombq228XjRoHnI2pY7P3ilt2tPMv4Qeegn9+VGsZfvNhriMQxIBH5jyFCbUdGjbOdy3gGYuLsljJiY15eVSb+Iw6CUVW9BvRjE4dHSGRCwQxyMxprVb4jhmJ7rO1seEeMgwR5+fWgmpaKU1sMNx5rki0AoGm3SumJ7SWmsuotWxcRM2aZLZfigREmKVcPdbI0XCrSYzZp9I2qO6tk2Rrg01UQQdxpEU/FejW/gKX7xYK4UIGEjwnX5GvVpb4jdQALaDCBybTy3rFH+YuvgOYEXLdiziLLfWtMTr4QAMpB5aHT0pq7K27rut/EOsKpRVUAakowkDnJYeoNJx4uMqJZtwEV1UdSQIk8yfESfKmzs3wm/YuXmcSGh0E7lDJBHqYqi7El1sZMczG6hywCNfbUe9KvCXy8T4g38ttD8kU0d4JiL123nvsC3ekAARlA0geWnOlkGMbxM/8AlIPmqj86Lfsml6JT4tu5wbg+Lv8ANPmVu/pRG7xrEFZDtQ/BWy9jBKdP6yR7BLv79qZF4Qh0JJj2/wCtTk+h0uwUeJ3f5yPetWxdzQ5jr5mjacKtT8J9zXf+j7f8lLYaFrv3IPiNY74xJYxz8qaFwiDZFoP2yS2MFfzFbcLIaNmB8GgImWy6c6y26MwP/HgzlYExQ3FqSJpS4HxVWAW6AG2EEAjlo2gb0P3024e2W0zz5MIPzGh2ruglFaOd7Mm2EtFiNhpv++lVmCvfXDIChyATA2MflVn8Qtz3dvqfuGv6fOqi4hhyXfpnYx7mp5D1P0qUoZHOKuhu4NdXPrGV9J9Oc9JmnbhlvuVZGIg+IGqdsY65aACwVHIimuxxs4iytucpLKjE8gTGp6efQGuacU0e75EcfkyUo/bL/cv7r+BK4n2uhblq0AVAJBJiTz0nUUs2OLC5aukiGA6zObaPfSpdzC5c6sBIJUwQR7Eb1Es4Je9tWwIlgT7a/lTQVaReWKfiweaDXHi/W38fv6LG7OkpYRWGoA0HPof30oqmPVRDHxH3j5Vo6W0tK7nKqiZJiOWvWelV9x3tb4yuGBaTuRCz5Dc+5HpXV0fEt27LIt4kAZhI9R+VK3FeL4db+axcHeXAwuBQShMavm2DjyPMyOqY2MxF+Vu3SVEgqNBPLQbjTnWos5btkD7KEn/ej9KPG+xbobL1hTp3YAA6nXz8pqOuAB+FYJ6HT5ERTJ2MuYe99RiEBY/A0kEjmsg76SKZcT2OssxKMy+Wb9RXFNcJcWdMWpKytcHhnKlVOWHJ206bit8RjL1okMQddY/Q08YbsoUSBdUMHczBMgmRJnp5VC4n2PvvGRrLTGpBB+eulTlTYy0gdhOPByJPKJr3He0tpLV2z3gzMAIA2HOehiu+K7D37dkk3wBbVmgW9BGpg5vypW7IdmxiLTYh8jE3raQ8mcxBMeeu/Sa0MSTs0sjqiPZxlkwS6n1n9KmLi7XIr8xTxiuwWCVZfDJ62y09NlihqfR3gnHhF1D5O34NNWWSK9A2/YDslCJBHz/Q16ij/RXZJ8N++B/un/21mpNRbu2a2TMZwS1ax7KJVIW8ANAB8LCf5dGMctKg8Q7Wxju+suxs+FWWIzL9rQ6jr6ii/bS6q4u0W1DWLikDdtQYH31W9y6CTAgEac/ma6JaeicNq2XVwti1slI7p2LK2xOYyNCNN5pW4dh1XiGOXXKThwZJJMlJksSTRbspjD3WHs6aW5MHaI0I6+IGhcRj8cR/9uflkoNgqmGMaMjYVP5cU49fBco8jzQrjgHeYU9cST/+q5RRW8qWfY0OjozQK8h8ya4XrSsIZQR0NbrA0FIMdC9VV9KnG+8urhlbwWtbnm5Gn+VT82PSrKxmKW2j3GPhRSx9FEmvnrH32uM9xjLOzM3qdTV8Md2Tm/RkKJzDb8RTZ2b4wUK23Ia0SACd0nmp6bSPKq9GJKvK7TqvXz8qY+H4lLiynLccx611RaeiTTRYzQ2MjlbtD2J1/AVWNsh9Tz1+dPvDcdns4vEnmhgf4UCx/mB+dV7b0ioZO6Pov0JU5yfWkb3sFXuHIVcwNCIPqZj7xU62JAmo6kZ01+0NPPb8z86lR9HlwKDjOGnaJpNR+EXB/FBmMKqkk9AIrvdMCgd2/AuRuyx7Tr+nvRitkf16deO0GeJ8YbHFiSRaUwludOerdW/DagrW8htjlmX5GiHZmyO6EiZO0xJ5CfWinHuzrW8KMSxXKXA0bxDUwSpA8IiJrotKvk+FjilKLl6A3Drk3GU76n76655uO/8ALC/LX8zUBXy30PWZjzNTLT+B2/mZjTp2SaphfD4kgBlMEQVPQjUGrf4JxT+IspdBALaMOjAaj98oqkrLfVj0/GmXs3xW5ZYItwW1cgEkBgOQJB/cVPyMXONrtDY5cWWmcMT0idDNZsoY10jz3oba4yiDu7rkEaOSpUMeokQB6VmxxUtdZAB3WSVuE7tPwx6RrXnxx3su5ejr2sxjW8DiD/5LwfUED8aUfo6xtvD4INdfIHuNlJ5wFFFfpF4kv9H3hG4VRGu7Ab1F7D8TtWcDbDIzHxHRZ5nT5Uabia6Y0cN43bvMRbuB8okxyqbfZiCRHkf3tQD+n7Zj6tlG05eftyoZxPtSyjJbEEEwSNNJ0PnSUPdjlbxEiQfvr1VYcfdCgnIcxY/2rKdT0IMCZisUa/Jh5xWES5i+8uLJsICDyBbN+Sj50gdsLCi+lxVAtlF2AEmJGg6yPYVYnaa6LVgld2dEJ5nMcgM8yJ59KX/pB4SrW2uKsd0ixpEyyr7wo++u2SOaDogdgsW1zEyx1FqPZcij7lFEsEZ4jjQQVk4feNR4NfL8aCfRwv8AWteVpo9cyD8zRq+Y4hjz0tKw9RbEfeR8qkUl2GeM3JbBkf8AiD91u4KJlpGhjzoRxS6AMHAnNeJ8wDbfxH3Kj3oiX8ppZPZorR3UHmZ+VZjnOntUcHmB61tn+dKOKv0k8S7vDi0mj3jB/wACwW+Zyj0Jqo2IMimX6Scab2LdVOloKm/ufvYj2pIs3DJBmuvH9sUQltmjp4/Y/hW2DuNbcMvXUdRzH76VtaXxe1M3Yvss2Pvm0rrby22bMwJGhUHb/EKP5MMGKxHdcGZl3uMoHoWn/lBpTwvjgkRVscW+ji9cwlrDJfsfVsCcxYAwCOSnr91B1+izGD/aYY+lx/zt1OUrdn0H6NmxYov6k0t9CfOlaFFJmNfanNvo0x3LuT6XP1FcX+jniA2tK3pcT8yKSz6X/MPEnp5I/wDYq3xIigFxdX9Pzqw7nYPiP/hj/wDktfk9CMd2B4jLRhHMxsUP/upo9nlfr3kYcuD/AE5pu/TTIHZ4qtg5lJJjIQYymfiIjxCARHn5UcxeJLWDbf4WABlQZk66heQH/DWOH9lcdbSGwl6egWdOe3lNSLvBsZlKmxfE6H6q5t5qF1Og+6myx5ONHzPjZHGElf8AIQrZQtaQKcylszyfEBoIWPDtvzmu8ZbAHQR99evYR7WLK3Lb2/CSqujKY2DQwmCZ19axiPgYf3yPvn86tHo45KnSCFhgEUkwIBP7+dTbN5WGhBFLN/EaBSdAIrgmOKGVNNzoXiXb2bK4ywUzEXrYggkwy/ZaOo2PoOtBMR2fu2r97MHtoQmRkJjNzIAOlLXYPjl4YuydApbK56qRt6zB9qu431YawR51w5moS17LwVrZUXbNLqYYBrrOrXFEEDlrvE8qK8C4tdtWLad2GULprBPPYiOfWs/SzhkVLBQnx3TK8hCnbpqamX1v4O0he0cgVfGhkbc42PrWUtWZqjt/3jQaXLbp/iQx81kV5+I2bhhWDHmoM/cRNYw3aVH+0p8nAmt772bgJayhjpE+xprBoE4niLI5VcE7CB4gIB9uVepd4hjrq4m6li5cS2oSFmYJEnea9TpR+BW6LH7RcUtMyYZmGZ2BOvwqvjLHpopgc6341aV8PcZmYs1h1AJ0lVJ0HXQknyoV3FvEtYuLaVSUttcP2swzEgxvPhM9BFY4tfz4i1YWJCXASZgd4p/BVPzrNhUQZ9G7f1o/+k3/ADJTEAox/EWfRRatz6FVB+e1LX0bA/xJIBIFognkJZYn5GiPEcG78SvJbJl2tSSSRooMnyG8bVPoZ7ZOw9+491rjaLlCqOS7HKOpAifM0a7+ApZgM2g13PT1qPi7IQi2o0QRPUnUk+Z396lYZrZUB8srrDRI8/L1pZdBj2dUfoa4cSxgtWrl1traM59FBP5Vi6mmawVYT4hv7gg7+VReK2DdsXrWmZ7brtzIIj76WO+xmUJjuJFrrXCZZiWJ6k6n8ajPcV9R4W+4+h5VOItAkssR168xHWtLqq40Ux6R+ldiRCyFgpDwelWv9CLTjbw/lwxn1e5b/IVVNsZXA/GrX+gPXE4tv7lsexf/APmklqNDIvKa9WtZqVhPFfKtDbHQfKlAcRuvjMguEKcUFg2Lw8Fu1J8eYL8ZynTeG20ra9xAnDWrTX2tNeu35u5yGS2lxzIbcf7NB0DeVajDZ3Y6D5Vg2x0oHg+OXLqYbukRnvW3ZszkKrW8iuJVTPiYj2rfhPHHvNZzWQi37TXLZD5iMuSQwygCe8BBBO2sUKMFig8/ma9Hr8z+tbGtSaBiifpkf/5kD0wdv/nf9aQsTfIdxPhkH3yinv6ZR/XmPTDWh97H86rjG3AbrA7aH7hXVHUUJ2zmoLmFEnrRSxw9LYzXW16f6V1wdoBAUIkjeRp+ld8NbVNSyk85I/OqKIrZ37P45P4q0JgZwB5T5VeNjEgsTlYqNIIHzEGqe4VYtPetOo+G4hJEHZgeRq5cPZEap77VyeUmmi2JrYh/ShcV7+DtrOpcmeUlR+tWIzBUnMpUwOo9DVadsgG4rhresKqb8pc/kKfbEAiB4dtIy/KovpD+wNj+zuHZiUlYPiCeIf5SDHtQxeyZbNkFtgPhyuykjlKxANO922PsiJ3jn6io+GwdtiwJOumxU6dDuaycjOivL3Z25bY5rbSeYVmmOpUma9Vp2sLlUKrkxzJk/OvU1sXigDbwnd2SAPEqAfdFJePvlcS9y45VFLAH+8Q6gKOci3v5imHtN2nt2psWx3l9oUKNlJ2zHr5b+lJl7APeYq5a9imAyqkZUWZJboI9Pi1q0hIML/Rte/rDKCdbRLDloyx5kiT5eu9WZiLdu0XvlRmIAJjU8gPuFLvZLskmETvXOa8wAJ+yoJBgDnsNT05VM4pixeaF+BTp5nr6dKm9jNkQMWJJOrGazaxtlbio6+NpCsV0/wAObl6VpcfIs8+VZwF36wiWOm3Iec8zS5NIMFsMKiKNAqjygVxxCAjMrAEfIjoazexltIDsFkwJ5noPOoHaHHhMPfCPFwWrhAO8hTrB6UiTbGeim3woxF17+UKHdmRDsoYk/wCbWfKa14hbKLuD5REe9cbvEygAgZY8Lfvn5VO4RwIXxnu6zqB/pXo2kqRzMWMRqQ3U1bX/AGf0h8aei4cfNrn6VW/HuDtZfwiU02Mkeo3FWh/2f08OMfq1gf5e8P51HJ0UiXFWRULGhzAUN18J38j41PyNc7S3c0ww0SQWDLt4tzmn0iTvNQHUddktMIgYMFAYFiD5vBY+8D5Vzw3D7ds5kWCFyjU6KWLkCTpLEk9dOgrhYtXFtAliXgH7R1iIIk9Z0HKt75uMtvJmBLeKYBjK2/hYDUDkK1m477PWOF2kcXFWGBuEamJusr3NJjVkB+fU1rhuFW7fc5AR3Ns27epMK2SZnc/Vrr69ax/FXATKFgDEBTOgPMwDJA1gABhWP45p1ttl0kgNuVDaCNpkEnbTzjWbgyaa53DofSh6Y951A1bSdBlCqdAdSSSY6xOnKYrlreYjLImOmnPzoGcWijvpjuxjbmsQlsf8M/nVY3WzPJ20k+lWJ9MOI/ruJHNRaHsba6/P8qQsBcCmchc+Wse1dS2kiYS4f3REKqMw2DncdAeRqWz4e79Vct9y/LQfcRvXLh96zeJt3ECtPh0j79wa6YzgTr4c/eJyB+Jf8Lfv0q260J7NeEYVsNircfCzCR1E/s1cmL7ShAJB323n01EVS/DcVcW6LVyGNtxBO+h5GeY69aa8bxMsQ3dnLqdwfnGwri8j0kXxLuySuOXE8YRzooCjU7ZVJ39TVi2LtpWkPAPxLuD56bGqZ4DjAcS1x5yy3nGkU+4HGDK5QhoGoPz9tqjN1Q6VjliSqjffbznpUGzbbdgZ1g+XSKRMFxfEPmLXD4YK7aehj0orhO0l7QMVbzI/Slc/QeI33L9wgZREbj/WsUuWuO2w9xdVIIJk6EtqY8pr1NaF2J3ZHh+JvM4seEHR7pHw8zlPNjP/AE3q2OzvZ+zhbeS2NT8Tn4mPUn8tq3wOESzbyooRFGgGgH760N4pxfvJS2YTmw3byHRfx9N622Idsfj5UWrZBRQAzEzmjkPLz51AmNQYI2HI+RFcEE8oFcMTe1AHUUapA7O1+4WbXrRPhmoPQMR/wqfblQkbjrRDg+LVnNsGSmp8swXT7p96nJjpBW5h0f4lVvUA/jUDi+Dt9xe8C/2VzYCfhPOp7IZ+IjygfpWMRaDKVOxBB9DoaRMLR844q4ckDY7xJ18+lOXAcXnW2qajKGYDciYA+YM+lCu0nYvE4e4VS2122TFt1gkjeCg8QYekaTUbsziMRhMQF7l1fKRkdH1HxTlgGNTr5zXVKdrQkIrkrLQu2MNdtd2IR9DBECekfyn0o79HnCFwvfKFVM7q0KZBhSJHTU7aUl2eM2MWotX81lh8FxCJU+pGo9Ryo3w/B4yyul21fXNoRKEiJ8WpUNPttUOTOuUYyLNI9fma2Cjz+ZoF2cxV64p7xSoG0lSZ9VJ0o0poo5Zx4ujrl8zWMvmfu/SvBqzNEU1K+Z+79K1g9fwrY1yxF9UUs5AA3JrGNtev3f61h5gz0NALna6z4sgzZdDJj/Wod/tmIghFkbk0LRVYpv0Vx9IXZ+/iuJ4jIsL4BOmo7tNhOkEc4rjwPs5bshhmbvFPjVgAQfMCfYgxT5hMZbuvccN9Y0EkD4jt8o/ChPa3JbFu/EOjIj66lHMQw2MFgwPketUhl3sM/H+20IvargykG7b8LKJ05+RFacBx/e2oueJhsQNx0PnRrtLjbdlXznUghV5segFJvZKw9y+iW1OZtDG0cywmQB1iulSpnJWhj4ZwcXcbYKiYP1g6ousn5R7inl+ydhlP1fdk7hHaD7aA+kV24Zw4YdlFq0QSfrLjQSwiIBG2sGNNqOGubJJTZeCcUKX/AHKQHMj923VFA+Y1U/Ktv6Ka0dVzmRLLoSvQqu/+tNleAqfEexNtcCYBiqZQSYUkgx56GhGKwhS5lZWEayDMTy5VYuIuZVJ/c8qEWsMGPi1nVj+P75U0cUXtiSm10KONtC60pMgANOnLSf3zr1Zs4wh7rZZzuW0105beVeqTfwhw/j+P98YnLb5L1826+m1a2cWm5YUtWJJAAJYmAAJJPQAb1MfDXQGLW3AUwxKMAp6NI8J1Gh6iuiqJBt+IqW+IRXC7iE18QoZcwl0EA2rgLfCCjS3+ER4uW3WtL1tlJV1KtGoYEEc9QdRSMKGGziEOuYbCpPZrDWrId84z3PE0nUZpYD2BUe1BMMghQTGaBvGnP5CT7UTsYVWXOASubflPIT6CpyHQfvcVsJo91R61p/TOH275PnQLEcLS6ykhiwPhgmZ5RHOtsTwXviC4uORqJJ6HX0hT8jWpAsPG7ZYgkqSNj09DypP+kHj4s4e8qN47p7tY3AyjO3lA09SKMG0U8JEEcjVWdvsTmxRUkQg09zqfeB8hRxxtmb0L6cRe2RBzdQ2v37008F7QumWGZZMwCxkDlvHny39qU72AuhmzWri5CqtmRhlZtVDSPCTuAd4o/wATwLYeyZHxsbdpuROmaD5BgfcVaUEwRySiMHDvpXuYdnC2BczHUu7Axy0X186Jp9Nb88Gvtecf+01W2H4HiLqqVsXCSFZCFPiVs+Uj17q7HXI3SodthsanVHdHFGe/kt1Ppr64L5Yg/naqVb+mu39rC3B6XFP4oKp8YWdjXjhmG9Yv/gV/xLm/+NGH54e/7G2f0rS99LOAvgWrljEwxA/2Q38w4iqcNlq4Yi3ArUTyeGoq0i98Pxjh0E2rdvcybniJI+c/OoN/F4LEMrd0HZSYCqAB5wN/foapPB5pOUxz/YPpR7BcQvqCguGDqVIG/wCY9KKxN7Rx/UjF7RZNrjQt3BC20UEg5m1A11gLSh2q7Sd7Fu14lzBidhIMgRzEgEnnEedA3ltWJPvWmmoOxqkcCTtiT8htUgxguxrYwfxH8WuYsQwdWJHM6g6jXQadKsns3wfDYNMqNmc/Fcb4m8vJfL8aXOx+H7vDW5UkkOxYCdJMaDX4QKO276sYB100gzrIGh65W+VLKW2hEvYebGp1rIxSfzCgqqTsJ9KxSDBz+Lt/zCsfxafzCgaYTXMFMnmAdf1rGIzKrEKTHkdPXoBRoxNxuORjlDCB+P8AoPxPSt7N1ApOYaig2EsKLbXrhhF/GYjcakmI6zrU3CIt+1ntkSIzKJ8MzEk6HbltPOo5PKhG4fHbKw8aco/U9EP+i7Q0VsokmB1PPXavVkV6q8ET5MVOC8R7q8l2WGQySoUnYjRW8J32PImm5O0djK/dpcWWuFV0ytnsraOcFiQoKlggkDwidKQLVFbei05MZ34+GxdvEZCEtkaD4j4QuviiZHKNK64LjVsJD2QXJJIVVysZQglmJZcuRoAkHOZpaU+GPOpFjXKo3Zgo8pB1+QpQjZgu0GFZ2y2zlRlkslvbPcZxuQBlcLy2PKieF4naRLaBDCxpAgEIVkayxzHNrB1OvOkS9xI2nChFMnLG3oSQN5n50eAka9NYmp8tjKgviOJAlCihcrljCgScxYcydAdpqTiOMW2EBGgSNY+EI6oN9w1wml9EAECYHmazHr861s1B1+MJJIQ6ydVQ6/VxqZ2yv8x7Vh9IvGMO2Gawlkh7lw3bbFUhAbl0lcwadUdBAXSNyIys+MQor3A7/CYWRlk7GIpG7f4YC3YYcsyn3Aaf+E/OqQdvYJDBb+kPD4i8QcIxBvrdM5Dn7tXUFxPxIgshRJBKHUTULH9u8I2IC3bDXLa3LodVRAGV1sEMA1w5XF7DCRJkOxnlVe4PG9yrOvxMpVT0J3P3Gudj49tW7vpz1nbeqsQfsD28w6OrPauBh3Zc2ktgM6nFh2AzjSMWpE6/VwY0NCu0naLC423h7aWhZa0kHwAa5VBAuBznUsrNqq/EdySaX2tAj3PIVFvYcCneLQ+DyPpyurXwyU9hk31HUV1RjyNDkusnwsR5cvka2biPVB7aVFwaPXxefh/K/r/VfsFFuHmBUDG3i2gFdLmOVYBU6qDprv8AKuF3HLyU+9Kosvn8vFOFKf8A7+xrgRDieelF8ORsTqKBJcJYE9dqOFBEnXeDzHPlXRj6PAzOLl9pvdugb1ys2WusAogSJY9PIcz0ra1ZGjct9aPY233KAoYJaJHmI/AmjNtKyS7Grsj2lXD3Rbe2GRVC28hB0MAg5vtBZnnpRrhHaa0FLXFZbkOM5AglbjvYgiJCi9cB0G+gqrOzWNQXiXDEZHHLSQdvLem234rS3V8OjNcQCVYjcjoTE1xc2nReMbVsbuKdrbGE7tltTcgKqKAu5XMS+uYQr8tc8GJkDV7YYe2yZli0VuBS1tCwfvWKswzeJe7ASJ5mKQ8fipkktEkhdCB0jQEVyxjv3SoSNgwMajMJyz0kmmcmL2WinavDgWVLOzLMZB8CkMu3eQ8d4CJAIAOpqLiO0y3LPdjMzNkXO8guEt5WchHjOSZynMCBz0qq0xuVANfjZAfIjUR5yPlXQY8qbiKT9Wwy6AQZgEfnRUqdmadFgO38RhL2HTKLhAgka+FpEH0LAHbXXc1t2XwC4TDG5f8A7ZlKsDqFt5swB5Mxgaf6ylpjnssMsZspGbz67aisrxK4sPcdrkjVWMgz5HbTkNK454ptOKem7On6uJTTSeqHHDZCM40zmTqRJ+deoPhcUFHhRToPjJOm4A6bn516uyOlRCUo8nXR/9k="
-                                                                             class="img-circle" style="width: 30px"
-                                                                             alt="not found">
-                                                                    </div>
-                                                                    <div class="col-md-9">
-                                                                        <h5>Haassa Jklcsad <br>
-                                                                            <small>dasda@gad.con</small>
-                                                                        </h5>
-                                                                    </div>
-
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-md-3 pt-2 pl-5">
-                                                                        <img src="data:image/jpeg;base64,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"
-                                                                             class="img-circle" style="width: 30px"
-                                                                             alt="not found">
-                                                                    </div>
-                                                                    <div class="col-md-9">
-                                                                        <h5>jakibul Nahid<br>
-                                                                            <small>asdsafa@opo.con</small>
-                                                                        </h5>
-                                                                    </div>
-                                                                </div>
-                                                            </li>
-                                                        </diV>
-                                                        <li class="border-top pl-2" @click="switchEvent($event)">
-                                                            <span style="font-size: 13px;">Assign an external team</span>
-                                                            <switches v-model="id"
-                                                                      style="position:absolute;right: 10px;bottom: -4px"
-                                                                      theme="bootstrap"
-                                                                      color="success">
-                                                            </switches>
-                                                        </li>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <a class="tag-icon ">
-                                                <div v-if="card.tags && card.tags.length !== 0">
-                                                    <div v-for="item in card.tags">
-                                                        <div class="dropdown-toggle-split " data-toggle="dropdown">
-                                                            <span class="badge badge-danger "  v-if='item == "Dont Forget"'>{{item.substring(0,12)}}</span>
-                                                            <span class="badge badge-success " v-else>{{item.substring(0,10)}}..</span>
-                                                        </div>
-
-                                                        <div class="dropdown-menu dropdown-menu1 dropdown-menu-left" :id="'dropdown'+index+key">
-                                                            <diV class="collapse show switchToggle" style="">
-                                                                <li class="assignUser">
-                                                                    <input
-                                                                            type="text"
-                                                                            class="input-group searchUser"
-                                                                            v-model="tag"
-                                                                            @keypress="addTag($event,index,key)"
-
-                                                                    >
-                                                                    <label class="pl-2 pt-3">
-                                                                        <span class="badge badge-success" @click="addExistingTag(index,key,'Tags')">Tags</span>
-                                                                        <span class="badge badge-danger" @click="addExistingTag(index,key,'Dont Forget')">Dont Forget</span>
-                                                                    </label>
-                                                                </li>
-                                                            </diV>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <i v-else
-                                                   class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
-                                                   data-toggle="dropdown"></i>
-                                                <div class="dropdown-menu dropdown-menu1 dropdown-menu-left" >
-                                                    <diV class="collapse show switchToggle" style="">
-                                                        <li class="assignUser">
-                                                            <input
-                                                                    type="text"
-                                                                    class="input-group searchUser"
-                                                                    v-model="tag"
-                                                                    @keypress="addTag($event,index,key)"
-
-                                                            >
-                                                            <label class="pl-2 pt-3">
-                                                                <span class="badge badge-success">Tags</span>
-                                                                <span class="badge badge-danger">Dont Forget</span>
-                                                            </label>
-                                                        </li>
+                                    <Draggable :key="card.id" v-for="(card , key) in column.children" >
+                                        <div :class="card.props.className" 
+                                                :style="card.props.style" 
+                                                class="card-list" 
+                                                @click="selectCard(card)" 
+                                                :id="'card_'+card.cardId" 
+                                                v-on:dblclick="showLog">
+                                                
+                                            <span style="position: absolute; right: 20px; top: 8px; ">
+                                                <span class="dropdown-toggle-split opacity"
+                                                    data-toggle="dropdown">
+                                                    <i class="fa fa-ellipsis-h"></i>
+                                                </span>
+                                                <div class="dropdown-menu">
+                                                    <diV class="collapse show switchToggle">
+                                                        <!-- <a @click="updateColumSow()" class="dropdown-item" href="#"><i
+                                                            class="fa fa-edit opacity"></i> Edit column</a> -->
+                                                        
+                                                        <a @click="showTransferModel(index, key, card.cardId, column.boardId)" class="dropdown-item"
+                                                        href="#"><i
+                                                            class="fa fa-share-square-o opacity"></i> Transfer task to another board</a>
+                                                        
+                                                        <div class="dropdown-divider" v-if="card.types === 'task'"></div>
+                                                        <a @click="deleteTask(index, key, card.cardId)" class="dropdown-item"
+                                                        href="#" v-if="card.types === 'task'">
+                                                            <i class="fa fa-minus-circle opacity"></i> Remove task from <strong>This Board</strong> </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a @click="RemoveNodeAndChildren()" class="dropdown-item"
+                                                        href="#"><i class="fa fa-trash opacity"></i> Delete the task</a>
                                                     </diV>
                                                 </div>
+                                            </span>
+                                            
+                                            <textarea
+                                                :data-text="card.data"
+                                                :id="'id'+index+key" @blur="showItem($event,card,index,key)"
+                                                @click="makeInput($event)"
+                                                @focus="hideItem($event)"
+                                                class="inp input-hide text-area"
+                                                data-grow="auto" style="padding: 10px !important;">{{ card.data }}</textarea>
+                                                
+                                            <br>
+                                            <div>
+                                                <div>
+                                                    <a class="calender li-opacity clickHide" v-if="card.date === '0000-00-00'">
+                                                        <i class="outline-event icon-image-preview" data-toggle
+                                                        title="toggle"></i>
+                                                    </a>
+                                                    <flatPickr
+                                                        :class="{
+                                                                dateCal:true,
+                                                                'flatpickr-input': true,
+                                                                'flatpickr-input1': card.date != '0000-00-00' ? false : true,
+                                                                    active: true,
+                                                                    dateCal1: card.date != '0000-00-00' ? true : false
+                                                                }"
+                                                        :config="date_config"
+                                                        @on-change="updateDate(card)"
+                                                        name="date"
+                                                        v-model="card.date">
+                                                    </flatPickr>
+                                                </div>
+                                                <div style="position: absolute; right: 160px; bottom: 8px; opacity: 0.25">
+                                                    <a @click="deleteCard(index, key, card.cardId)"
+                                                    v-if="card.types == 'card'">
+                                                        <i class="baseline-playlist_delete icon-image-preview"></i>
+                                                    </a>
+                                                    <a @click="deleteTask(index, key, card.cardId)"
+                                                    v-if="card.types == 'task'">
+                                                        <i class="baseline-playlist_delete icon-image-preview"></i>
+                                                    </a>
+                                                </div>
+                                                <div>
+                                                    <a class="user dropdown-hide-with-remove-icon">
+                                                        <template v-if="card.assigned_user.length > 0">
+                                                            <span class="assigned_user dropdown-toggle-split "
+                                                                data-toggle="dropdown" v-for="(assign,keyId) in card.assigned_user">
+                                                                <p :title="assign.name"
+                                                                @click="showAssignedUserRemoveButton(card)"
+                                                                class="assignUser-photo-for-selected text-uppercase"
+                                                                style="top: 7px;"
+                                                                data-placement="bottom" data-toggle="tooltip"
+                                                                v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
+                                                                    <a :id="'remove-assign-user'+card.cardId"
+                                                                    @click="removeAssignedUser(assign, index, key)"
+                                                                    class="remove-assigned" href="javascript:void(0)">
+                                                                        <i class="fa fa-times remove-assign-user-icon"></i>
+                                                                    </a>
+                                                                </p>
 
-                                            </a>
+                                                            </span>
+                                                        </template>
+
+                                                        <i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
+                                                        data-toggle="dropdown"
+                                                        v-else></i>
+                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                            <diV class="collapse show switchToggle">
+                                                                <li class="assignUser">
+                                                                    <input class="input-group searchUser"
+                                                                        placeholder="Assign by name and email"
+                                                                        type="text"
+                                                                        style="width: 90%; padding: 12px 20px; margin: 10px; display: inline-block; border: 1px solid #ccc;
+                                                                                    border-radius: 4px; box-sizing: border-box; ">
+                                                                    <label class="pl-2 label-text">
+                                                                        <span class="assign-user-drop-down-text">
+                                                                            Or invite a new member by email address
+                                                                        </span>
+                                                                    </label>
+                                                                </li>
+                                                                <li class="assignUser">
+                                                                    <template v-for="user in card.users">
+                                                                        <div @click="assignUserToTask(user, index, key, card)"
+                                                                            class="users-select row">
+                                                                            <div class="col-md-3 pt-1 pl-4">
+                                                                                <p class="assignUser-photo">
+                                                                                    {{(user.name !== null) ? user.name.substring(0,2) :
+                                                                                    ''}}</p>
+                                                                            </div>
+                                                                            <div class="col-md-9 assign-user-name-email">
+                                                                                <h5>{{user.name}}<br>
+                                                                                    <small>{{user.email}}</small>
+                                                                                </h5>
+                                                                            </div>
+                                                                        </div>
+                                                                    </template>
+                                                                </li>
+                                                            </diV>
+                                                            <li @click="switchEvent($event)"
+                                                                class="border-top pl-2 assign-user-drop-down-footer">
+
+                                                                    <span
+                                                                        class="assign-user-drop-down-text">Assign an external team</span>
+                                                                <switches class="assign-user-switch-for-dropdown"
+                                                                        color="success"
+                                                                        theme="bootstrap"
+                                                                        v-model="id">
+                                                                </switches>
+                                                            </li>
+                                                        </div>
+                                                    </a>
+                                                </div>
+
+                                                <div>
+                                                    <a :class="{'tag-icon': true, 'tag-icon-free': card.tags == undefined || card.tags.length == 0}">
+                                                        <div v-if="card.tags && card.tags.length !== 0">
+                                                            <div style="float: left;" v-for="(item, tagIndex) in card.tags">
+                                                                <div class="dropdown-toggle-split "
+                                                                    data-toggle="dropdown"
+                                                                    style="padding-right: 0px; padding-left: 1px;" v-if="tagIndex < 2">
+                                                                    <span class="badge badge-danger "
+                                                                        v-if='item == "Dont Forget"'>{{item.text.substring(0,12)}}</span>
+                                                                    <span :title="card.tagTooltip"
+                                                                        class="badge badge-success "
+                                                                        data-placement="bottom"
+                                                                        data-toggle="tooltip"
+                                                                        v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]"
+                                                                        v-else
+                                                                    >{{item.text.substring(0,10)}}
+                                                                        <span v-if="item.text.length > 10">..</span>
+                                                                    </span>
+                                                                </div>
+
+                                                                <div :id="'dropdown1'+card.cardId" class="dropdown-menu dropdown-menu1">
+
+                                                                    <diV class="collapse show switchToggle" style="">
+                                                                        <div class="container-fluid">
+                                                                            <vue-tags-input
+                                                                                :allow-edit-tags="true"
+                                                                                :tags="card.tags"
+                                                                                @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,card,index,key)"
+                                                                                @tags-changed="newTags => (changeTag(newTags,card,index,key))"
+                                                                                v-model="tag"
+                                                                            />
+                                                                            <div class="row">
+                                                                                <div class="col-12">
+                                                                                    <template v-for="(tag, tagIndx) in card.existing_tags">
+                                                                                        <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key, card.cardId, '')"
+                                                                                            v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
+                                                                                            v-if="tag.text !== 'Dont Forget'">
+                                                                                            {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
+                                                                                        </li>
+                                                                                    </template>
+                                                                                    <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')" class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                                                </div>
+                                                                            </div>
+                                                                            <hr>
+                                                                            <div class="col-xs-12"
+                                                                                style="margin-top:10px;width: 100%;">
+                                                                                <button @click="showTagManageModel"
+                                                                                        class="btn btn-small btn-primary pull-right"
+                                                                                        type="submit">
+                                                                                    Manage Tag
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </diV>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <i class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
+                                                            data-toggle="dropdown"
+                                                            v-else></i>
+
+                                                        <div class="dropdown-menu dropdown-menu1 ">
+
+                                                            <diV class="collapse show switchToggle" style="">
+                                                                <div class="container-fluid">
+                                                                    <vue-tags-input
+                                                                        :allow-edit-tags="true"
+                                                                        :tags="tag1"
+                                                                        @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,card,index,key)"
+                                                                        @tags-changed="newTags => (changeTag(newTags,card,index,key))"
+                                                                        v-model="tag"
+                                                                    />
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <template v-for="(tag, tagIndx) in card.existing_tags">
+                                                                                <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key, card.cardId ,'')"
+                                                                                    v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
+                                                                                    v-if="tag.text !== 'Dont Forget'">
+                                                                                    {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
+                                                                                </li>
+                                                                            </template>
+                                                                            <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')"
+                                                                                class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div class="col-xs-12"
+                                                                        style="margin-top:10px;width: 100%;">
+                                                                        <button @click="showTagManageModel"
+                                                                                class="btn btn-small btn-primary pull-right"
+                                                                                type="submit">
+                                                                            Manage Tag
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+
+                                                            </diV>
+                                                        </div>
+
+                                                    </a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </Draggable>
                                 </Container>
                             </div>
                         </Draggable>
                         <div>
-                            <p class="add-column" @click="addColumn"><i class="fa fa-plus"></i> add column</p>
+                            <p @click="addColumn" class="add-column" v-if="board_id">
+                                <i class="fa fa-plus"></i>
+                                add column
+                            </p>
                         </div>
                     </Container>
                 </div>
             </div>
         </div>
 
-        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="addModal" role="dialog"
+             tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header" style="border-radius: 13px;">
                         <h5 class="modal-title">Add column</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>You need to set a progress and color for the new column.</p>
+                        <p>You need to set a name and progress color for the new column.</p>
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Name</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" v-model="addField.name">
+                                <input class="form-control" type="text" v-model="addField.name">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Color</label>
-                            <div class="col-sm-10">
-                                <input type="color" class="form-control" v-model="addField.color">
+                            <label class="col-sm-4 col-form-label">Percent Complete </label>
+                            <div class="col-sm-8">
+                                <select class="form-control" v-model="addField.progress">
+                                    <option style="background-image:url('/images/0.png');" value="0">0% Complete
+                                    </option>
+                                    <option style="background-image:url('/images/125.png');" value="12.5">12.5%
+                                        Complete
+                                    </option>
+                                    <option style="background-image:url('/images/25.png');" value="25">25% Complete
+                                    </option>
+                                    <option style="background-image:url('/images/375.png');" value="37.5">37.5%
+                                        Complete
+                                    </option>
+                                    <option style="background-image:url('/images/50.png');" value="50">50% Complete
+                                    </option>
+                                    <option style="background-image:url('/images/625.png');" value="62.5">62.5%
+                                        Complete
+                                    </option>
+                                    <option style="background-image:url('/images/75.png');" value="75">75% Complete
+                                    </option>
+                                    <option style="background-image:url('/images/875.png');" value="87.5">87.5%
+                                        Complete
+                                    </option>
+                                    <option style="background-image:url('/images/100.png');" value="100">100% Complete
+                                    </option>
+                                </select>
                             </div>
                         </div>
-                        <p v-if="addField.error" class="text-danger">{{addField.error}}</p>
+                        <p class="text-danger" v-if="addField.error">{{addField.error}}</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="setColumn()">Add</button>
-                        <button type="button" class="btn btn-secondary" @click="clearInputFeild()">Cancel</button>
+                        <button @click="setColumn()" class="btn btn-primary" type="button">Add</button>
+                        <button @click="clearInputFeild()" class="btn btn-secondary" type="button">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="EditModal" role="dialog"
+             tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header" style="border-radius: 13px;">
                         <h5 class="modal-title">Update column</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -306,55 +423,419 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">Name</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" v-model="addField.name">
+                                <input class="form-control" type="text" v-model="editField.name">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Color</label>
-                            <div class="col-sm-10">
-                                <input type="color" class="form-control" v-model="addField.color">
+                            <label class="col-sm-4 col-form-label">Percent Complete</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" v-model="editField.progress">
+                                    <option style="background-image:url('/images/0.png');" value="0">0% Complete
+                                    </option>
+                                    <option style="background-image:url('/images/125.png');" value="12.5">12.5%
+                                        Complete
+                                    </option>
+                                    <option style="background-image:url('/images/25.png');" value="25">25% Complete
+                                    </option>
+                                    <option style="background-image:url('/images/375.png');" value="37.5">37.5%
+                                        Complete
+                                    </option>
+                                    <option style="background-image:url('/images/50.png');" value="50">50% Complete
+                                    </option>
+                                    <option style="background-image:url('/images/625.png');" value="62.5">62.5%
+                                        Complete
+                                    </option>
+                                    <option style="background-image:url('/images/75.png');" value="75">75% Complete
+                                    </option>
+                                    <option style="background-image:url('/images/875.png');" value="87.5">87.5%
+                                        Complete
+                                    </option>
+                                    <option style="background-image:url('/images/100.png');" value="100">100% Complete
+                                    </option>
+                                </select>
                             </div>
                         </div>
-                        <p v-if="addField.error" class="text-danger">{{addField.error}}</p>
+                        <p class="text-danger" v-if="editField.error">{{editField.error}}</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="updateColumn">Update</button>
-                        <button type="button" class="btn btn-secondary" @click="clearInputFeild">Cancel</button>
+                        <button @click="updateColumn" class="btn btn-primary" type="button">Update</button>
+                        <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="addExistingTask" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-             aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document" >
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="TagManage" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add Exixting Task</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h3 class="text-center text-uppercase">Manage All Tag</h3>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive" id="table">
+                            <table class="table" data-v-095ab3dc="">
+                                <thead data-v-095ab3dc="">
+                                <tr data-v-095ab3dc="">
+                                    <th>Tag Title</th>
+                                    <th>Color</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <template v-for="tag in manageTag">
+                                    <tr>
+                                        <td class="pt-3-half" v-if="tag.title === 'Dont Forget'">{{tag.title}}</td>
+                                        <td @keydown="newLineoff($event)" @keyup="updateTagName($event,tag)"
+                                            class="pt-3-half"
+                                            contenteditable="true" v-else>
+                                            {{tag.title}}
+                                        </td>
+                                        <td class="pt-3-half">
+                                            <input :value="tag.color" @change="updateTagColor($event,tag)"
+                                                   style="cursor: pointer;background-color: #fff;border: none;"
+                                                   type="color">
+                                        </td>
+                                        <td>
+                                            <a @click="DeleteTagFromModal(tag)" class="compltit-blue-a badge badge-danger"
+                                               href="javascript:void(0)">
+                                                Delete
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </template>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transferCard" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h4 class="text-center ">Transfer Task To Another Board</h4>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Select Board :</label>
+                            <div class="col-sm-8">
+                                <!-- {{ selectedBoard }} -->
+                                <select @change="showSubBoard()" class="form-control" v-model="selectedBoard">
+                                    <option disabled>Select Board</option>
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in board"
+                                            v-if="navs.type === 'board'">{{navs.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="subBoard.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Board List :</label>
+                            <div class="col-sm-8">
+                                <select @change="getColumn()" class="form-control" v-model="selectedSubBoard">
+                                    <option disabled>Select Board List</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in subBoard">
+                                        {{navList.board_title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="boardColumn.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Board Column :</label>
+                            <div class="col-sm-8">
+                                <select @change="getBttn()" class="form-control" v-model="selectedBoardColumn">
+                                    <option disabled>Select Board Column</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in boardColumn">
+                                        {{navList.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button v-if="transferBtn" aria-label="Close" @click="transferCardToOtherBoard" class="btn btn-success" data-dismiss="modal" type="button">Transfer
+                        </button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transferColumn" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h4 class="text-center ">Transfer Column To Another Board </h4>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Select Board :</label>
+                            <div class="col-sm-8">
+                                <!-- {{ selectedBoard }} -->
+                                <select @change="showSubBoard()" class="form-control" v-model="selectedBoard">
+                                    <option disabled>Select Board</option>
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in board"
+                                            v-if="navs.type === 'board'">{{navs.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="subBoard.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Board List :</label>
+                            <div class="col-sm-8">
+                                <select @change="getBttn()" class="form-control" v-model="selectedSubBoard">
+                                    <option disabled>Select Board List</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in subBoard">
+                                        {{navList.board_title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group row" v-if="boardColumn.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Board Column :</label>
+                            <div class="col-sm-8">
+                                <select @change="getBttn()" class="form-control" v-model="selectedBoardColumn">
+                                    <option disabled>Select Board Column</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in boardColumn">
+                                        {{navList.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="modal-footer">
+                        <button v-if="transferBtn" aria-label="Close" @click="transferColumnToOtherBoardSave" class="btn btn-success" data-dismiss="modal" type="button">Transfer
+                        </button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="listLinkColumn" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h4 class="text-center ">Link List To Column  </h4>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Select Nav :</label>
+                            <div class="col-sm-9">
+                                <select @change="showSubNav()" class="form-control" v-model="selectedNav">
+                                    <option disabled>Select Nav</option>
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav"
+                                            v-if="navs.type === 'list'">{{navs.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="subNav.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Nav List :</label>
+                            <div class="col-sm-8">
+                                <select @change="linkToCol()" class="form-control" v-model="selectedSubNav">
+                                    <option disabled>Select Nav List</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in subNav">
+                                        {{navList.list_title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group row" v-if="boardColumn.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Board Column :</label>
+                            <div class="col-sm-8">
+                                <select @change="getBttn()" class="form-control" v-model="selectedBoardColumn">
+                                    <option disabled>Select Board Column</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in boardColumn">
+                                        {{navList.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="modal-footer">
+                        <button v-if="linkBtn" aria-label="Close" @click="listLinkToCol" class="btn btn-success" data-dismiss="modal" type="button">Link
+                        </button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="loader" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div>   
+                </div>
+            </div>
+        </div>
+
+
+        <div aria-hidden="true" aria-labelledby="exampleModalCenterTitle" class="modal fade" id="addExistingTask"
+             role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h5 class="modal-title">Add Existing Task</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body list-model">
-                        <ul class="list-group list-group-flush">
-                            <div  v-for="tree in tree4data">
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Select Nav :</label>
+                            <div class="col-sm-9">
+                                <select @change="showSubNav()" class="form-control" v-model="selectedNav">
+                                    <option disabled>Select Nav</option>
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav"
+                                            v-if="navs.type === 'list'">{{navs.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="subNav.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Nav List :</label>
+                            <div class="col-sm-8">
+                                <select @change="getAllTask()" class="form-control" v-model="selectedSubNav">
+                                    <option disabled>Select Nav List</option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in subNav">
+                                        {{navList.list_title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- <ul class="list-group list-group-flush"> -->
+                            <div v-if="tree4data.length > 0">
+                                <label class="checkbox_cus_mini">
+                                    <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All
+                                    <span class="checkmark"></span>
+                                </label>
+                                <!-- <input type="checkbox" @change="selectAll()" class="checkedAll"> All <br> -->
+                            </div>
+                            <div v-for="tree in tree4data">
                                 <li class="list-group-item">
-                                    <input type="checkbox" :value="tree.text" v-model="selectedExistedTask"  :id="tree.id" > {{tree.text}}
+                                    <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': tree.board_parent_id !== null}" 
+                                            v-if="tree.text !== '' && tree.board_parent_id !== null" >
+                                        <input :id="tree.id" :value="tree.id" type="checkbox"
+                                                v-if="tree.text !== '' && tree.board_parent_id !== null"
+                                                checked disable>
+                                        {{tree.text}}
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="checkbox_cus_mini"  v-if="tree.text !== '' && tree.board_parent_id == null" >
+                                        <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask"
+                                                :class="{'selectAll': true}" @change="selectChild(tree.id)" v-if="tree.text !== '' && tree.board_parent_id === null">{{tree.text}}
+                                        <span class="checkmark"></span>
+                                    </label>
                                     <ul class="list-group list-group-flush" v-if="tree.children">
-                                        <div  v-for="child in tree.children">
-                                            <li class="list-group-item">
-                                                <input type="checkbox" class="tree-child" :value="child.text" v-model="selectedExistedTask"  :id="child.id" > {{child.text}}
+                                        <div v-for="child in tree.children">
+                                            <li class="list-group-item" >
+                                                <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child.board_parent_id !== null}"   v-if="child.text !== '' && child.board_parent_id !== null" >
+                                                    <input :id="child.id" class="tree-child" :value="child.id"
+                                                       type="checkbox" 
+                                                       checked disable> {{child.text}}
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                                <label class="checkbox_cus_mini" v-if="child.text !== '' && child.board_parent_id == null">
+                                                    <input :id="child.id" class="tree-child selectAll" :value="child.id"
+                                                       type="checkbox" v-model="selectedExistedTask" @change="selectChild(child.id)" > {{child.text}}
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                                
                                                 <ul class="list-group list-group-flush" v-if="child.children">
-                                                    <div  v-for="child1 in child.children">
-                                                        <li class="list-group-item">
-                                                            <input type="checkbox" class="tree-child" :value="child1.text" v-model="selectedExistedTask"  :id="child1.id" > {{child1.text}}
+                                                    <div v-for="child1 in child.children">
+                                                        <li class="list-group-item" > 
+                                                            <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child1.board_parent_id !== null}"  
+                                                            v-if="child1.text !== '' && child1.board_parent_id !== null">
+                                                                <input :id="child1.id" :value="child1.id" class="tree-child"
+                                                                    type="checkbox"
+                                                                    checked disable> {{child1.text}}
+                                                                <span class="checkmark"></span>
+                                                            </label>
+
+                                                            <label class="checkbox_cus_mini" v-if="child1.text !== '' && child1.board_parent_id == null">
+                                                                <input :id="child1.id" :value="child1.id" class="tree-child selectAll"
+                                                                    type="checkbox" v-model="selectedExistedTask" @change="selectChild(child1.id)">{{child1.text}}
+                                                                <span class="checkmark"></span>
+                                                            </label>
                                                             <ul class="list-group list-group-flush" v-if="child1.children">
-                                                                <div  v-for="child2 in child1.children">
-                                                                    <li class="list-group-item">
-                                                                        <input type="checkbox" class="tree-child" :value="child2.text" v-model="selectedExistedTask"  :id="child2.id" > {{child2.text}}
+                                                                <div v-for="child2 in child1.children">
+                                                                    <li class="list-group-item" >
+                                                                        <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"  
+                                                                                v-if="child2.text !== '' && child2.board_parent_id !== null">
+                                                                            <input :id="child2.id" :value="child2.id"
+                                                                               class="tree-child"
+                                                                               type="checkbox"
+                                                                               checked disable> {{child2.text}}
+                                                                            <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+                                                                        
+                                                                        <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
+                                                                            <input :id="child2.id" :value="child2.id"
+                                                                               class="tree-child selectAll"
+                                                                               type="checkbox"
+                                                                               v-model="selectedExistedTask"
+                                                                               @change="selectChild(child2.id)"> {{child2.text}}
+                                                                            <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
+                                                                            <span class="checkmark"></span>
+                                                                        </label>
+
                                                                         <ul class="list-group list-group-flush" v-if="child2.children">
-                                                                            <div  v-for="child3 in child2.children">
+                                                                            <div v-for="child3 in child2.children">
                                                                                 <li class="list-group-item">
-                                                                                    <input type="checkbox" class="tree-child" :value="child3.text" v-model="selectedExistedTask"  :id="child3.id" > {{child3.text}}
+                                                                                    <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"   
+                                                                                            v-if="child3.text !== '' && child3.board_parent_id !== null">
+                                                                                        <input :id="child3.id"
+                                                                                                :value="child3.id"
+                                                                                                class="tree-child"
+                                                                                                type="checkbox"
+                                                                                                 checked disable>
+                                                                                            {{child3.text}}
+                                                                                        <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
+                                                                                        <span class="checkmark"></span>
+                                                                                    </label>
+
+                                                                                    <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
+                                                                                        <input :id="child3.id"
+                                                                                                :value="child3.id"
+                                                                                                class="tree-child selectAll"
+                                                                                                type="checkbox"
+                                                                                                v-model="selectedExistedTask"
+                                                                                                @change="selectChild(child3.id)">
+                                                                                            {{child3.text}}
+                                                                                        <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
+                                                                                        <span class="checkmark"></span>
+                                                                                    </label>
                                                                                 </li>
                                                                             </div>
                                                                         </ul>
@@ -372,163 +853,81 @@
                         </ul>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" @click="AddExistingTasks">Add Tasks</button>
-                        <button type="button" class="btn btn-secondary" @click="clearInputFeild">Cancel</button>
+                        <!-- {{ selectedExistedTask }} -->
+                        <button @click="AddExistingTasks" class="btn btn-primary" type="button">Add Tasks</button>
+                        <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="details" id="details">
+            <TaskDetails
+                :selectedData="selectedData"
+                :task_logs="task_logs"
+                @textArea="ShowTextArea">
+            </TaskDetails>
         </div>
 
     </div>
 
 </template>
-<style>
-    .card{
-        padding-top: 0 !important;
-        margin-top: 0 !important;
-    }
-</style>
 <script>
     import flatPickr from 'vue-flatpickr-component';
     import 'flatpickr/dist/flatpickr.css';
     import switches from 'vue-switches';
     import hotkeys from 'hotkeys-js';
     import ClickOutside from 'vue-click-outside';
-
+    import Datepicker from 'vuejs-datepicker';
     import {Container, Draggable} from 'vue-smooth-dnd';
-    // import {applyDrag, generateItems} from '../../../plugins/utils/helpers';
     import {applyDrag, generateItems} from '../../../assets/plugins/utils/helpers';
+    import VueTagsInput from '@johmun/vue-tags-input';
+    import TaskDetails from "./boardCardDetails";
 
     export default {
-        components: {Container, Draggable, flatPickr, switches},
+        props: ['nav_id', 'board_id', 'projectId'],
+        components: {Container, Draggable, flatPickr, switches, VueTagsInput, Datepicker, TaskDetails},
         data() {
             return {
+                baseUrl : window.location.origin,
                 id: 0,
+                tags: [],
                 addField: {
                     name: null,
                     color: null,
-                    error: null
+                    error: null,
+                    progress: null
+                },
+                editField: {
+                    name: null,
+                    color: null,
+                    boardId: null,
+                    error: null,
+                    progress: null
                 },
                 date_config: {
                     enableTime: false,
                     wrap: true,
                     disableMobile: true,
+                    altFormat: 'Y-m-d',
                     dateFormat: 'd M',
                 },
+                nav: [],
+                board: [],
+                subNav: [],
+                subBoard: [],
+                boardColumn: [],
+                selectedBoard: 'Select Board',
+                selectedNav: 'Select Nav',
+                selectedSubNav: 'Select Nav List',
+                selectedSubBoard: 'Select Board List',
+                selectedBoardColumn: 'Select Board Column',
+                transferBtn : false,
+                linkBtn : false,
                 project: null,
-                tree4data: [
-                    {
-                        id: 1,
-                        parent: 0,
-                        text: "Don't Forget Section",
-                        clicked: 0,
-                        date: '',
-                        tags: ["Dont Forget"],
-                        children: [
-                            {
-                                id: 2, parent: 1,
-                                text: 'node 1-1',
-                                html: 'Atik',
-                                tags: ["Dont Forget"],
-                                files: [{file: '/images/logo.png'}],
-                                clicked: 0
-                            },
-                            {
-                                id: 3, parent: 1,
-                                text: 'node 1-2', clicked: 0, tags: ["Dont Forget"], children: [
-                                    {
-                                        id: 4,
-                                        parent: 3,
-                                        text: 'node 1-2-1',
-                                        date: '10 Aug',
-                                        tags: ["Dont Forget"],
-                                        clicked: 0
-                                    },
-                                    {
-                                        id: 5,
-                                        parent: 3,
-                                        text: 'node 1-2-2',
-                                        date: '25 Aug',
-                                        tags: ["Dont Forget"],
-                                        clicked: 0
-                                    },
-                                ]
-                            },
-                        ]
-                    },
-                    {
-                        id: 6, parent: 0,
-                        text: 'node 2',
-                        html: 'Test 1',
-                        date: '05 Aug',
-                        clicked: 0,
-                        tags: ['Important'],
-                        assigned_user: {name: 0, picture: 0}
-                    },
-                    {
-                        id: 7, parent: 0,
-                        text: 'node 3',
-                        html: 'oni',
-                        clicked: 0,
-                        tags: ['Important'],
-                        assigned_user: {name: 0, picture: 0}
-                    },
-                    {id: 8, parent: 3, text: 'node 4', draggable: true, html: 'Test', date: '6 Aug', clicked: 0},
-                    {id: 9, parent: 3, text: 'node 5', date: '15 Aug', html: '251  41', clicked: 0, tags: ['Tags']},
-                    {id: 10, parent: 3, text: 'node 6', droppable: false, date: '19 Aug', clicked: 0},
-                    {
-                        id: 11, parent: 10,
-                        text: 'node 7', clicked: 0, date: '', children: [
-                            {id: 12, parent: 11, text: 'node 7-1', html: 'Atik', clicked: 0},
-                            {
-                                id: 13, parent: 11,
-                                text: 'node 7-2', clicked: 0, children: [
-                                    {id: 14, parent: 13, text: 'node 7-2-1', date: '10 Aug', clicked: 0},
-                                    {id: 15, parent: 13, text: 'node 7-2-2', date: '25 Aug', clicked: 0},
-                                ]
-                            },
-                            {
-                                id: 16, parent: 10,
-                                text: 'node 7-3', children: [
-                                    {id: 17, parent: 16, text: 'node 7-3-1', clicked: 0},
-                                    {id: 18, parent: 16, text: 'node 7-3-2 undroppable', droppable: false, clicked: 0},
-                                ], clicked: 0
-                            },
-                            {id: 19, parent: 10, text: 'node 7-4', clicked: 0},
-                            {id: 20, parent: 10, text: 'node 7-5', clicked: 0},
-                            {id: 21, parent: 10, text: 'node 7-6', clicked: 0},
-                        ]
-                    },
-                ],
-                cards: [
-                    {
-                        column: 'To Do',
-                        task: [
-                            {name: 'node 1-1-1 sdf a srsdfgs df gsdf', date: '10 Aug', tags: ["Nothing"], clicked: 0},
-                            {name: 'node 1-1-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
-                        ],
-                        hidden : 0
-                    },
-                    {
-                        column: 'In Progress',
-                        task: [
-                            {name: 'node 1-2-1', date: '10 Aug', tags: ["Do First"], clicked: 0},
-                            {name: 'node 1-2-2', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
-                            {name: 'node 1-2-3', date: '', tags: ["important"], clicked: 0},
-                            {name: 'node 1-2-4', date: '25 Aug', tags: [], clicked: 0},
-                        ],
-                        hidden : 1
-                    },
-                    {
-                        column: 'Complete',
-                        task: [
-                            {name: 'node 1-3-1', date: '10 Aug', tags: ["new"], clicked: 0},
-                            {name: 'node 1-3-2', date: '25 Aug', tags: ["Dst"], clicked: 0},
-                            {name: 'node 1-3-3', date: '25 Aug', tags: ["Dont Forget"], clicked: 0},
-                        ],
-                        hidden : 0
-                    }
-                ],
+                tree4data: [],
+                currentColumn: null,
+                currentColumnIndex: null,
+                cards: [],
                 scene: {},
                 upperDropPlaceholderOptions: {
                     className: 'cards-drop-preview',
@@ -541,29 +940,110 @@
                     showOnTop: true
                 },
                 updateIndex: null,
-                tag: null,
-                selectedExistedTask : [],
-                projectId : null,
-                multiple_list : null
+                tag: '',
+                tag1: [],
+                selectedExistedTask: [],
+                multiple_list: null,
+                list: {
+                    name: null,
+                    description: null,
+                    nav_id: null
+                },
+                navItem: {
+                    title: null,
+                    type: null,
+                    sort_id: null,
+                    project_id: null,
+                },
+                selectedData : {},
+                task_logs : null,
+                check_uncheck_child : null,
+                manageTag: null,
             }
         },
         mounted() {
-            $('#header-item').text('Project  / Task Board')
-            this.projectId = this.$route.params.projectId;
+            var _this = this;
+            $('#header-item').text('Project  / Task Board');
             $(document).ready(function () {
                 $(function () {
                     $('[data-toggle="popover"]').popover()
-                })
+                });
                 $("#popoverData").popover({trigger: "hover"});
             });
-            this.getData();
-            this.projectId = this.$route.params.projectId;
-            this.getProjects();
+            _this.getBoardTask();
             $(document).ready(function () {
                 $('.searchList').hide();
             });
-        },
 
+        },
+        created() {
+            let _this = this;
+             hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3', function (event, handler) {
+                event.preventDefault();
+                switch (handler.key) {
+                    case "enter" :
+                        // _this.addNode(_this.selectedData);
+                        break;
+                    case "tab" :
+                        // _this.makeChild(_this.selectedData);
+                        break;
+                    case "shift+tab":
+                        // _this.unMakeChild(_this.selectedData);
+                        break;
+                    case "up" :
+                        // if (Object.keys(_this.selectedData).length > 0) {
+                            // _this.moveItemUp(_this.selectedData);
+                        // }
+                        _this.selectedData = {};
+                        break;
+                    case "down" :
+                        // if (Object.keys(_this.selectedData).length > 0) {
+                            // _this.moveItemDown(_this.selectedData);
+                        // }
+                        // _this.selectedData = {};
+                        break;
+                    case "left" :
+                        _this.HideDetails();
+                        break;
+                    case "right" :
+                        _this.showLog();
+                        // _this.task_logs = null;
+                        // _this.ShowDetails(_this.selectedData);
+                        
+                        break;
+                    case "ctrl+c":
+                        // _this.selectedCopy = _this.selectedData;
+                        // _this.selectedCut = null;
+                        break;
+                    case "ctrl+x":
+                        // _this.selectedCut = _this.selectedData;
+                        // _this.selectedCopy = null;
+                        break;
+                    case "ctrl+v":
+                        // _this.pastCopyAndCut(_this.selectedData);
+                        break;
+                    case "delete":
+                        // _this.RemoveNodeAndChildren(_this.selectedData);
+                        break;
+                    case "ctrl+u":
+                        // _this.shwAssignUserDropDown(_this.selectedData);
+                        break;
+                    case "ctrl+b":
+                        // _this.AddDontForgetTagToSelectedIds();//add DON'T FORGET SECTION
+                        break;
+                    case "ctrl+s":
+                        // _this.showSearchInputField();
+                        break;
+                    case "ctrl+i":
+                        // _this.addAttachment(_this.selectedData);
+                        break;
+                    case "shift+3":
+                        // $('#tag-' + _this.selectedData._id).click();
+                        // console.log(_this.selectedData);
+                        break;
+                }
+            });
+        },
         methods: {
             grow: function (text, options) {
                 var height = options.height || '100px';
@@ -602,18 +1082,6 @@
                 }
             },
 
-            getProjects() {
-                axios.get('/api/project/' + this.projectId)
-                    .then(response => response.data)
-                    .then(response => {
-                        this.project = response.project;
-                        this.multiple_list = response.multiple_list;
-                        $('#header-item').text(this.project.name + ' / Task Board')
-                        console.log(this.multiple_list)
-                    })
-                    .catch(error => {
-                    });
-            },
             getData() {
                 this.scene = {
                     type: 'container',
@@ -622,44 +1090,204 @@
                     },
                     children: generateItems(this.cards.length, i => ({
                         id: `column${i}`,
+                        boardId: this.cards[i].id,
                         type: 'container',
                         name: this.cards[i].column,
+                        progress: this.cards[i].progress,
                         props: {
                             orientation: 'vertical',
                             className: 'card-container'
                         },
-                        hidden : this.cards[i].hidden,
+                        hidden: this.cards[i].hidden,
                         children: generateItems(this.cards[i].task.length, j => ({
                             type: 'draggable',
                             id: `${i}${j}`,
+                            cardId: this.cards[i].task[j].id,
+                            types: this.cards[i].task[j].type,
+                            assigned_user: this.cards[i].task[j].assigned_user,
+                            users: this.cards[i].task[j].users,
+                            existing_tags: this.cards[i].task[j].existing_tags,
                             props: {
                                 className: 'card',
                                 style: {backgroundColor: 'white'}
                             },
                             data: this.cards[i].task[j].name,
+                            description: this.cards[i].task[j].name,
                             date: this.cards[i].task[j].date,
-                            tags: this.cards[i].task[j].tags
+                            tags: this.cards[i].task[j].tags,
+                            tagTooltip: this.cards[i].task[j].tagTooltip,
+                            delete: this.cards[i].task[j].name
                         }))
                     })),
+                };
+                $('[data-toggle="tooltip"]').tooltip('dispose');
+                setTimeout(function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                }, 1000)
+            },
+
+            selectChild(id){
+                var _this = this;
+                _this.findChild(id,_this.tree4data)
+                var is_checked = _this.selectedExistedTask.indexOf(id);
+                if (is_checked > -1){
+                   _this.CheckWithChild(id,_this.check_uncheck_child);
+                }else{
+                   _this.UncheckWithChild(id,_this.check_uncheck_child);
+                }
+            },
+            findChild(id,data){
+                if (data.length > 0){
+                    for (let index = 0; index < data.length; index++) {
+                        if(index !== undefined && data[index].id === id){
+                            if(data[index].board_parent_id === null){
+                                this.check_uncheck_child = data[index].children;
+                            }
+                            return true;
+                        }else {
+                            this.findChild(id,data[index].children);
+                        }
+                    }
                 }
 
-                console.log(this.scene);
+            },
+            CheckWithChild(id , child){
+                // console.log(id);
+                var _this = this;
+                if (id !== 0 && _this.selectedExistedTask.indexOf(id) === -1){
+                    _this.selectedExistedTask.push(id);
+                }
+                if (child.length > 0){
+                    for (let index = 0; index < child.length; index++) {
+                        if(child[index].board_parent_id === null){
+                            _this.CheckWithChild(child[index].id,child[index].children);
+                        } else {
+                            _this.CheckWithChild(0,child[index].children);
+                        }
+                    }
+                }
+            },
+            UncheckWithChild(id,child){
+                var _this = this;
+                var key = _this.selectedExistedTask.indexOf(id);
+                if (key !== -1){
+                    _this.selectedExistedTask.splice(key,1);
+                }
+
+                if (child.length > 0){
+                    for (let index = 0; index < child.length; index++) {
+                        _this.UncheckWithChild(child[index].id,child[index].children);
+                    }
+                }
+
+            },
+
+            selectAll(){
+                if($('.checkedAll').prop('checked') === false){
+                    $('.selectAll').prop('checked', false);
+                    this.selectedExistedTask = [];
+                }else{
+                    $('.selectAll').prop('checked', true);
+
+                    // console.log(this.tree4data);
+                    for (let index = 0; index < this.tree4data.length; index++) {
+                        if (this.tree4data[index].board_parent_id === null) {
+                            // console.log(this.tree4data[index].id);
+                            this.selectedExistedTask.push(this.tree4data[index].id);
+                        }
+                            this.recursive(this.tree4data[index].children, this.tree4data[index].id);
+                    }
+                    // console.log(this.selectedExistedTask);
+                }
+
+            },
+            recursive(child, parent_id) {
+                for (let index = 0; index < child.length; index++) {
+                    let key = this.selectedExistedTask.indexOf(child[index].id);
+                    let parentKey = this.selectedExistedTask.indexOf(parent_id);
+                    if(key !== -1 && parentKey === -1){
+                        this.selectedExistedTask.splice(key,1);
+                    } else {
+                        if(key === -1 && child[index].board_parent_id === null){
+                            this.selectedExistedTask.push(child[index].id);
+                        }
+                    }
+                    if(child[index].children.length > 0) {
+                        this.recursive(child[index].children, child[index].id);
+                    }
+                }
             },
 
             onColumnDrop(dropResult) {
-                const scene = Object.assign({}, this.scene)
-                scene.children = applyDrag(scene.children, dropResult)
+                const scene = Object.assign({}, this.scene);
+                scene.children = applyDrag(scene.children, dropResult);
                 this.scene = scene
+                let data = scene;
+                $('#loader').modal('show');
+                axios.post('/api/column-sort',data)
+                .then(response => response.data)
+                .then(response => {
+                    setTimeout(() => {
+                        $('#loader').modal('hide');
+                    }, 500);
+                })
+                .catch(error => {
+                    setTimeout(() => {
+                                $('#loader').modal('hide');
+                            }, 500);
+                    console.log('sorting failed');
+                });
             },
-            onCardDrop(columnId, dropResult) {
+            onCardDrop(columnId, boardId, index, dropResult) {
+                let _this = this;
                 if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
-                    const scene = Object.assign({}, this.scene)
-                    const column = scene.children.filter(p => p.id === columnId)[0]
-                    const columnIndex = scene.children.indexOf(column)
-                    const newColumn = Object.assign({}, column)
-                    newColumn.children = applyDrag(newColumn.children, dropResult)
-                    scene.children.splice(columnIndex, 1, newColumn)
+                    if( dropResult.removedIndex === null && dropResult.addedIndex !== null ) {
+                        console.log("Drag started",columnId, boardId, index, dropResult);
+                        let data = {
+                            'id' : dropResult.payload.cardId,
+                            'board_parent_id' : boardId
+                        }
+                        $('#loader').modal('show');
+                        axios.post('/api/change-board-parent', data)
+                        .then(response => response.data)
+                        .then(response => {
+                            setTimeout(() => {
+                                _this.getBoardTask();
+                                $('#loader').modal('hide');
+                            }, 500);
+                            console.log('shifted');
+                        })
+                        .catch(error => {
+                            setTimeout(() => {
+                                $('#loader').modal('hide');
+                            }, 500);
+                            console.log('shifting failed');
+                        });
+                    }
+
+                    const scene = Object.assign({}, this.scene);
+                    const column = scene.children.filter(p => p.id === columnId)[0];
+                    const columnIndex = scene.children.indexOf(column);
+                    const newColumn = Object.assign({}, column);
+                    newColumn.children = applyDrag(newColumn.children, dropResult);
+                    scene.children.splice(columnIndex, 1, newColumn);
                     this.scene = scene
+                    // console.log(this.scene.children[index]);
+                    let data = this.scene.children[index];
+                    console.log("sort",data);
+                    axios.post('/api/card-sort',data)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log('sorted');
+                    })
+                    .catch(error => {
+                        console.log('sorting failed');
+                    });
+                }
+            },
+            onDragStart(columnId, boardId, index, dropResult) {
+                if(dropResult.addedIndex != null){
+                    console.log("Drag started",columnId, boardId, index, dropResult);
                 }
             },
             getCardPayload(columnId) {
@@ -667,8 +1295,11 @@
                     return this.scene.children.filter(p => p.id === columnId)[0].children[index]
                 }
             },
-            dragStart() {
-                console.log('drag started')
+            dragStart(dragResult) {
+                console.log(dragResult);
+            },
+            dragEnd(dragResult) {
+                // console.log(dragResult);
             },
             log(...params) {
                 console.log(...params)
@@ -677,38 +1308,347 @@
                 $("#addModal").modal('show');
             },
             setColumn() {
+                // console.log(this.nav_id);
                 if (!this.addField.name) {
                     this.addField.error = 'Name is required!';
+                } else if (!this.nav_id || !this.board_id) {
+                    this.addField.error = 'select board';
                 } else {
                     $("#addModal").modal('hide');
-                    this.cards.push({
-                        column: this.addField.name,
+                    let data = {
+                        title: this.addField.name,
+                        color: this.addField.color,
+                        progress: this.addField.progress,
+                        project_id: this.projectId,
+                        nav_id: this.nav_id,
+                        multiple_board_id: this.board_id,
                         task: [{name: '', date: '', tags: [], clicked: 0}]
-                    });
+                    };
+                    this.saveBoard(data);
 
                     this.getData();
                     this.addField = {};
-                    console.log(this.cards)
                 }
+            },
+            saveBoard(data) {
+                let _this = this;
+                axios.post('/api/board-save', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response);
+                        if (response.success == true) {
+                            _this.editField.progress = response.data.progress;
+                            _this.cards.push({
+                                id: response.data.id,
+                                column: response.data.title,
+                                progress: response.data.progress,
+                                hidden: response.data.hidden,
+                                task: []
+                            });
+                            _this.getData();
+                            swal("Successful", "Board successfuly created", "success")
+                        }
+                    })
+                    .catch(error => {
+                    });
             },
             updateColumSow(index) {
                 this.updateIndex = index;
-                this.addField.name = this.cards[this.updateIndex].column;
-                $("#EditModal").modal('show');
+                this.editField.name = this.cards[index].column;
+                this.editField.boardId = this.cards[index].id;
+                this.editField.progress = this.cards[index].progress;
+                this.editField.color = this.cards[index].color;
+                this.editField.error = '';
+                // console.log(this.editField)
+                setTimeout(function () {
+                    $("#EditModal").modal('show');
+                }, 100);
             },
             updateColumn() {
-                if (!this.addField.name) {
-                    this.addField.error = 'Name is required!';
+                let _this = this;
+                if (!this.editField.name || this.editField.name === '') {
+                    this.editField.error = 'Name is required!';
                 } else {
+                    let data = this.editField;//this.cards[this.updateIndex];
                     $("#EditModal").modal('hide');
-                    this.cards[this.updateIndex].column = this.addField.name;
-                    this.getData();
-                    this.addField = {};
+                    axios.post('/api/board-modify', data)
+                        .then(response => response.data)
+                        .then(response => {
+                            if (response.success === true) {
+                                _this.cards[_this.updateIndex].column = _this.editField.name;
+                               _this.cards[_this.updateIndex].progress = _this.editField.progress;
+                            }
+                        })
+                        .catch(error => {
+                        });
+                    setTimeout(function () {
+                        _this.getBoardTask();
+                        // _this.getData();
+                        // _this.editField = {};
+                        // $("#EditModal").modal('show');
+                    }, 300);
                 }
             },
-            addExistingTask(index){
+            addExistingTask(index, id) {
+                this.tree4data = [];
+                this.subNav = [];
+                this.selectedNav= 'Select Nav';
+                this.selectedSubNav= 'Select Nav List';
+                this.selectedExistedTask = [];
+                this.currentColumn = id;
+                this.currentColumnIndex = index;
+                let _this = this;
+                axios.get('/api/nav-item/' + this.projectId)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.nav = response.success;
+                    })
+                    .catch(error => {
+                    });
                 this.updateIndex = index;
+                // this.getAllTask();
                 $("#addExistingTask").modal('show');
+            },
+            showSubNav() {
+                this.tree4data = [];
+                let _this = this;
+                let data = {
+                    'projectId': this.projectId,
+                    'navId': this.selectedNav
+                };
+                axios.post('/api/nav-list', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.subNav = response.success;
+                    })
+                    .catch(error => {
+                    });
+            },
+            showTransferModel(index, key, cardId, id) {
+                this.board = [];
+                this.subBoard = [];
+                this.boardColumn = [];
+                this.selectedBoard= 'Select Board';
+                this.selectedSubBoard= 'Select Board List';
+                this.selectedExistedTask = [];
+                this.transferBtn = false;
+                this.currentColumn = id;
+                this.currentColumnIndex = index;
+                let _this = this;
+                axios.get('/api/nav-item/' + this.projectId)
+                .then(response => response.data)
+                .then(response => {
+                    // console.log(response.success);
+                    _this.board = response.success;
+                    console.log(_this.board);
+                    setTimeout(() => {
+                        $('#transferCard').modal('show');
+                    }, 500);
+                })
+                .catch(error => {
+
+                });
+                this.updateIndex = index;
+                // this.getAllTask();
+            },
+            showLinkModel(index, boardId){
+                this.nav = [];
+                this.subNav = [];
+                this.selectedNav = 'Select Nav';
+                this.selectedSubNav = 'Select Nav List';
+                this.selectedExistedTask = [];
+                this.currentColumn = boardId;
+                this.currentColumnIndex = index;
+                let _this = this;
+                this.linkBtn = false;
+                axios.get('/api/nav-item/' + this.projectId)
+                .then(response => response.data)
+                .then(response => {
+                    // console.log(response.success);
+                    _this.nav = response.success;
+                    console.log(_this.nav);
+                    setTimeout(() => {
+                        $('#listLinkColumn').modal('show');
+                    }, 500);
+                })
+                .catch(error => {
+
+                });
+                this.updateIndex = index;
+                
+            },
+            linkToCol(){
+                this.linkBtn = true;
+            },
+            listLinkToCol(){
+                swal('Warning!!','Work in progress','warning'); 
+            },
+            showSubBoard() {
+                let _this = this;
+                this.subBoard = [];
+                this.boardColumn = [];
+                this.transferBtn = false;
+                this.selectedSubBoard= 'Select Board List';
+                let data = {
+                    'projectId': this.projectId,
+                    'boardId': this.selectedBoard
+                };
+                axios.post('/api/board-list', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.subBoard = response.success;
+                    })
+                    .catch(error => {
+                    });
+            },
+            getColumn(){
+                let _this = this;
+                this.selectedBoardColumn = 'Select Board Column';
+                this.transferBtn = false;
+                let data = {
+                    id: this.projectId,
+                    nav_id: this.selectedBoard,
+                    list_id: this.selectedSubBoard,
+                };
+
+                axios.post('/api/board-column', data)
+                .then(response => response.data)
+                .then(response => {
+                    // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
+                    _this.boardColumn = response.data;
+                })
+                .catch(error => {
+
+                });
+
+            },
+            getBttn() {
+                this.transferBtn = true;
+            },
+            transferCardToOtherBoard() {
+                var _this = this;
+                let data = {
+                    'cardId' : this.selectedData.cardId,
+                    'board_parent_id' : this.selectedBoardColumn,
+                };
+                axios.post('/api/Transfer-to-board', data)
+                .then(response => response.data)
+                .then(response => {
+
+                    if (response.success) {
+                        _this.getBoardTask();
+                        $('#transferCard').modal('hide');
+                    } else {
+                        $('#transferCard').modal('hide');
+                    }
+                    // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
+                    // _this.boardColumn = response.data;
+                })
+                .catch(error => {
+
+                });
+            },
+            transferColumnToOtherBoard(index, id){
+
+                this.board = [];
+                this.subBoard = [];
+                this.boardColumn = [];
+                this.selectedBoard= 'Select Board';
+                this.selectedSubBoard= 'Select Board List';
+                this.selectedExistedTask = [];
+                this.transferBtn = false;
+                this.currentColumn = id;
+                this.currentColumnIndex = index;
+                let _this = this;
+                axios.get('/api/nav-item/' + this.projectId)
+                .then(response => response.data)
+                .then(response => {
+                    // console.log(response.success);
+                    _this.board = response.success;
+                    console.log(_this.board);
+                    setTimeout(() => {
+                        $('#transferColumn').modal('show');
+                    }, 500);
+                })
+                .catch(error => {
+
+                });
+                this.updateIndex = index;
+            },
+            transferColumnToOtherBoardSave(){
+                var _this = this;
+                
+                let data = {
+                    'columnId' : this.currentColumn,
+                    'multiple_board_id' : this.selectedSubBoard,
+                };
+                axios.post('/api/Transfer-column-to-board', data)
+                .then(response => response.data)
+                .then(response => {
+
+                    if (response.success) {
+                        _this.getBoardTask();
+                        $('#transferColumn').modal('hide');
+                    } else {
+                        $('#transferColumn').modal('hide');
+                    }
+                    // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
+                    // _this.boardColumn = response.data;
+                })
+                .catch(error => {
+
+                });
+            },
+            RemoveNodeAndChildren() {
+                var _this = this;
+                var postData = {
+                    id: this.selectedData.cardId,
+                    text: this.selectedData.data
+                };
+                swal({
+                    title: "Are you sure?",
+                    text: "You want to delete this task !!!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger btn",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                },
+                function () {
+                    axios.post('/api/task-list/delete-task', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.getBoardTask()
+                            swal("Deleted!", "Successfully delete task !", "success");
+                        })
+                        .catch(error => {
+                            console.log('Api for delete task not Working !!!')
+                        });
+
+                });
+
+            },
+            getBoardTask() {
+                var _this = this;
+                var datePicker = new Date();
+                datePicker.setDate(datePicker.getDate() - 1);
+                _this.disabledDates = {
+                    to: datePicker, // Disable all dates up to specific date
+                };
+                let data = {
+                    projectId: this.projectId,
+                    board_id: this.board_id,
+                    nav_id: this.nav_id
+                };
+                axios.post('/api/board-task', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.cards = response.success;
+                        _this.getData();
+                        
+                    })
+                    .catch(error => {
+                    });
             },
 
             clearInputFeild() {
@@ -717,13 +1657,39 @@
                 $("#addExistingTask").modal('hide');
                 this.addField = {};
             },
-            AddExistingTasks(){
+            AddExistingTasks() {
+                let _this = this;
                 let total = this.selectedExistedTask.length;
-
-                for (var i =0; i<total; i++) {
-                    this.cards[this.updateIndex].task.push({name: this.selectedExistedTask[i], date: '', tags: [], clicked: 0})
+                if (total <= 0) {
+                    swal('Warning!','No Task To Add','warning');
+                    return false;
                 }
-                this.getData()
+                let data = {
+                    'multiple_board_id': this.selectedSubNav,
+                    'tasks': this.selectedExistedTask,
+                    'id': this.currentColumn
+                };
+                axios.post('/api/add-existing-tasks', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.data);
+                        for (var i = 0; i < response.data.length; i++) {
+                            _this.cards[_this.currentColumnIndex].task.push({
+                                id: response.data[i].id,
+                                name: response.data[i].title,
+                                date: response.data[i].date,
+                                tags: response.data[i].tag,
+                                types: 'task',
+                                clicked: 0
+                            });
+                            // _this.cards[_this.updateIndex].task.push({name: _this.selectedExistedTask[i], date: '', tags: [], clicked: 0})
+                        }
+                        // _this.getData()
+                        _this.getBoardTask();
+                    })
+                    .catch(error => {
+                    });
+
                 this.updateIndex = null;
                 this.selectedExistedTask = [];
                 $("#addExistingTask").modal('hide');
@@ -742,78 +1708,601 @@
                 };
                 _this.growInit(option);
             },
-            addCard(index) {
-                this.cards[index].task.push({name: '', date: '', tags: [], clicked: 0});
-                let key = this.cards[index].task.length-1;
-                this.getData();
-                setTimeout(function () {
-                    $('#id'+index+key).click();
-                    $('#id'+index+key).focus();
-                },100)
+            addCard(index, id) {
+
+                // console.log(index,id)
+                let _this = this;
+                axios.post('/api/card-add',{'id': id})
+                .then(response => response.data)
+                .then(response => {
+                    if(response.success == true){
+                        let data = response.data;
+                        _this.cards[index].task.push({id: data.id, name: data.title, date: data.date, tags: [], assigned_user:[], users:[], clicked: 0});
+                        let keys = _this.cards[index].task.length-1;
+                        _this.getBoardTask();
+                        setTimeout(function () {
+                            $('#id'+index+keys).click();
+                            $('#id'+index+keys).focus();
+                        },100)
+                    }
+                })
+                .catch(error => {
+                });
             },
-            saveData(data,index,child_key) {
-                if (!data) {
-                    // alert('Title is required!');
-                } else {
-                    this.cards[index].task[child_key].name = data;
-                    this.getData();
-                }
+            deleteCard(index,cardIndex,id){
+
+                let _this = this;
+                swal({
+                    title: 'Are you sure to delete the card?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                },function(){
+                    if(_this.cards[index].task[cardIndex].id == id){
+                        axios.get('/api/card-delete/'+id)
+                        .then(response => response.data)
+                        .then(response => {
+                            if (response.success == true) {
+                                // let data = response.data;
+                                // _this.cards[index].task.push({
+                                //     id: data.id,
+                                //     name: data.title,
+                                //     date: data.date,
+                                //     tags: [],
+                                //     clicked: 0
+                                // });
+                                let keys = _this.cards[index].task.length - 1;
+                                _this.getBoardTask();
+                                _this.getData();
+                                setTimeout(function () {
+                                    $('#id' + index + keys).click();
+                                    $('#id' + index + keys).focus();
+                                }, 100)
+                                swal("Deleted!", "The card has been deleted.", "success");
+                            }
+                        })
+                        .catch(error => {
+                            console.log('error => '+error);
+                        });
+                    }
+                });
+
+                
             },
-            addTag(e,index,key){
+            // deleteCard(index, cardIndex, id) {
+            //     let _this = this;
+            //     if (confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id) {
+            //         axios.get('/api/card-delete/' + id)
+            //             .then(response => response.data)
+            //             .then(response => {
+            //                 _this.cards[index].task.splice(cardIndex, 1);
+            //                 _this.getData();
+            //                 if (response.success) {
+            //                 }
+            //             })
+            //             .catch(error => {
+            //             });
+            //     }
+            // },
+            deleteTask(index, cardIndex, id) {
+                let _this = this;
+                swal({
+                    title: 'Are you sure to delete the card?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                },function(){
+                    if ( _this.cards[index].task[cardIndex].id == id ) {
+                        axios.get('/api/board-task-delete/' + id)
+                            .then(response => response.data)
+                            .then(response => {
+                                // if(response.success){
+                                _this.cards[index].task.splice(cardIndex, 1);
+                                // delete _this.cards[index].task[cardIndex];
+                                // _this.cards[index].task.length = _this.cards[index].task.length-1;
+                                _this.getData();
+                                swal("Deleted!", "The card has been deleted.", "success");
+                                // }
+                            })
+                            .catch(error => {
+                            });
+                    } else {
+                        // alert("couden't delete");
+                    }
+                });
+            },
+            addTag(e, index, key) {
                 if (e.which === 13) {
-                    // this.cards[index].task[key].tags.push(this.tag);
-                    this.cards[index].task[key].tags.splice(0,1,this.tag);
+                    this.cards[index].task[key].tags.splice(0, 1, this.tag);
                     this.tag = null;
-                    // $('#dropdown'+index+key).toggle();
                 }
             },
-            addExistingTag(index,key,tag){
-                this.cards[index].task[key].tags.splice(0,1,tag);
-                // $('#dropdown'+index+key).toggle();
-            },
-            deleteColumn(index) {
+            addExistingTag(index, tagIndx, key, cardId, dntfrgt = '') {
                 let _this = this;
-                if (confirm('Are you sure tou want to delete this board?')) {
-                    _this.cards.splice(index, 1)
-                    _this.getData();
+                // let data = {
+                //     'board_id' : this.cards[index].task[key].existing_tags[tagIndx].board_id,
+                //     'classes' : '',
+                //     'color' : this.cards[index].task[key].existing_tags[tagIndx].color,
+                //     'id' : this.cards[index].task[key].existing_tags[tagIndx].id,
+                //     'style' : "background-color: "+this.cards[index].task[key].existing_tags[tagIndx].color,
+                //     'text' : this.cards[index].task[key].existing_tags[tagIndx].title,
+                // };
+
+                // this.getData();
+                if(dntfrgt !== ''){
+                    var postData = {
+                        id: cardId,
+                        tags: "Dont Forget",
+                        color: "#FF0000",
+                        type: 'task',
+                    };
+                }else{
+                    var postData = {
+                        id: cardId,
+                        tags: this.cards[index].task[key].existing_tags[tagIndx].title,
+                        color: this.cards[index].task[key].existing_tags[tagIndx].color,
+                        type: 'task',
+                    };
                 }
+                // if(card.types == "task"){
+                //     postData.id = card.id;
+                // }
+                axios.post('/api/task-list/add-tag', postData)
+                .then(response => response.data)
+                .then(response => {
+                    // _this.cards[index].task[key].tags.push(data);
+                    _this.cards[index].task[key].existing_tags.splice(tagIndx, 1);
+                    // $('#dropdown' + cardId).toggle();
+                    setTimeout(function () {
+                        _this.getBoardTask();
+                    }, 100);
+                })
+                .catch(error => {
+                    console.log("1st error =>"+error)
+                });
             },
-            deleteColumnCards(index) {
+            deleteColumn(index, id) {
                 let _this = this;
-                if (confirm('Are you sure tou want to delete all cards from this board?')) {
-                    _this.cards[index].task = [];
-                    _this.getData();
-                }
+                swal({
+                    title: "Are you sure?",
+                    text: "Your will not be able to recover this",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                },
+                function(){
+                    axios.get('/api/board-delete/' + id)
+                        .then(response => response.data)
+                        .then(response => {
+                            if (response.success) {
+                                _this.cards.splice(index, 1);
+                                _this.getData();
+                                swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                            }
+                        })
+                        .catch(error => {
+                        });
+                });
             },
+            // peekabo option commented. don't remove the code yet
+            // deleteColumnCards(index, id) {
+            //     let _this = this;
+
+            //     swal({
+            //         title: "Are you sure?",
+            //         text: "Your will not be able to recover this",
+            //         type: "warning",
+            //         showCancelButton: true,
+            //         confirmButtonClass: "btn-danger",
+            //         confirmButtonText: "Yes, delete it!",
+            //         closeOnConfirm: false
+            //     },
+            //     function(){
+            //         axios.get("/api/board-deleteAllCards/" + id)
+            //         .then(response => response.data)
+            //         .then(response => {
+            //             if (response.success) {
+            //                 _this.cards[index].task = [];
+            //                 _this.getData();
+            //                 swal("Deleted!", "Your imaginary file has been deleted.", "success");
+            //             }
+            //         })
+            //         .catch(error => {
+                        
+            //         })
+            //     });
+
+            // },
             hideItem(index) {
 
             },
-            hideColumn(index) {
-                this.cards[index].hidden = 1;
-                this.getData();
+            hideColumn(index, id) {
+                let _this = this;
+                let ishide = {
+                    "hide": 1
+                };
+                axios.post('/api/board-hide/' + id, ishide)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.cards[index].hidden = 1;
+                        _this.getData();
+                    })
+                    .catch(error => {
+                    });
             },
-            showColumn(index){
-                this.cards[index].hidden = 0;
-                this.getData();
+            showColumn(index, id) {
+                let _this = this;
+                let ishide = {
+                    "hide": 0
+                };
+                axios.post('/api/board-hide/' + id, ishide)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.cards[index].hidden = 0;
+                        _this.getData();
+                    })
+                    .catch(error => {
+                    });
             },
-            showItem(e,data,index,child_key) {
+            showItem(e, data, index, child_key) {
+                let attData = $(e.target).attr('data-text');
+                let attDataNew = e.target.value;
+                // console.log(attDataNew);
+                if( $.trim(attData) === $.trim(attDataNew)){
+                    // console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
+                    this.getData();
+                    $('.inp').addClass('input-hide');
+                    $('.inp').removeClass('form-control');
+                    return false;
+                }
+                data.data = attDataNew;
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
-                this.saveData(data,index,child_key)
+                this.saveData(data, index, child_key);
+            },
+            saveData(data, index, child_key) {
+                let _this = this;
+                // console.log("data = "+data.data);
+                if (data.data === "") {
+                    _this.getBoardTask();
+                    swal('Blank!','Title is required!','warning');
+                } else {
+                    let title = {
+                        'title': data.data
+                    };
+                    axios.post('/api/card-update/' + data.cardId, title)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.cards[index].task[child_key].name = data.data;
+                        _this.getData();
+                    })
+                    .catch(error => {
+                    });
+                }
+            },
+            saveCardData(e, data) {
+                if (e.which === 13) {
+                    $('.inp').addClass('input-hide');
+                    $('.inp').removeClass('form-control');
+                }
+            },
+            updateDate(card) {
+                setTimeout(function () {
+                    let data = {
+                        'date': card.date
+                    };
+                    axios.post('/api/card-update/' + card.cardId, data)
+                        .then(response => response.data)
+                        .then(response => {
+                        })
+                        .catch(error => {
+                        });
+                }, 300)
+            },
+            generateColor() {
+                var myColor = '#000000';
+                myColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+                return myColor;
+            },
+            changeTag(tags, card, columnIndex, cardIndex) {
+                console.log(card);
+                var _this = this;
+                var old = this.cards[columnIndex].task[cardIndex].tags.length;
+                var newl = tags.length;
+                let cardTags = null;
+                if (newl > old) {
+                    this.tags = tags;
+
+                    var color = (this.tags[newl - 1].text === 'Dont Forget') ? '#ff0000' : _this.generateColor();
+                    var postData = {
+                        id: card.cardId,
+                        tags: _this.tags[newl - 1].text,
+                        color: color,
+                        type: 'task',
+                    };
+                    axios.post('/api/task-list/add-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+
+                        setTimeout(function () {
+                            _this.getBoardTask();
+                           $('.dropdown-menu').removeClass('show');
+                            // _this.getData();
+                        }, 100);
+                    })
+                    .catch(error => {
+                        console.log("2nd error =>"+error)
+                    });
+                }
+            },
+            deleteCardTag(obj, card, columnIndex, cardIndex) {
+                var _this = this;
+                var postData = {
+                    assign_id: obj.tag.assign_id,
+                    // id: obj.tag.id,
+                };
+                // console.log(obj);
+                if (obj.tag.text !== 'Dont Forget') {
+                    axios.post('/api/task-list/delete-tag', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.cards[columnIndex].task[cardIndex].tags.splice(obj.index, 1);
+                            setTimeout(function () {
+                                _this.getBoardTask();
+                            }, 100);
+                            _this.tags = [];
+                        })
+                        .catch(error => {
+                            console.log('Api for delete tag not Working !!!')
+                        });
+                }
+
+            },
+            getAllTask() {
+                this.tree4data = [];
+                let data = {
+                    id: this.projectId,
+                    nav_id: this.selectedNav,
+                    list_id: this.selectedSubNav,
+                };
+                axios.post('/api/all-task-list', data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response.task_list);
+                    this.tree4data = response.task_list;
+                })
+                .catch(error => {
+
+                });
+            },
+            showLog() {
+                var _this = this;
+                axios.get('/api/task-list/get-log/' + _this.selectedData.cardId)
+                    .then(response => response.data)
+                    .then(response => {
+                        // console.log(response);
+                        _this.task_logs = response;
+                        _this.ShowDetails(_this.selectedData);
+                        setTimeout(function () {
+                            $('#_details').click();
+                            $('#_log').click()
+                        }, 300)
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+            },
+            selectCard(card){
+                console.log(card);
+                this.selectedData = card;
+                this.selectedCard = card.cardId;
+                this.task_logs = null;
+                this.HideDetails();
+                $('.card-list').css("background-color", "#ffffff");
+                $('#card_'+this.selectedCard).css("background-color","#ddf3fd");
+                // console.log(this.selectedData);
+            },
+            ShowDetails() {
+                var _this = this;
+                if (_this.selectedData != null && _this.selectedData.sort_id !== -2) {
+                    $('#task_width').removeClass('task_width');
+                    $('#task_width').addClass('task_widthNormal');
+                    $('#details').removeClass('details');
+                    $('#details').addClass('detailsShow');
+                }
+            },
+            HideDetails() {
+                this.getBoardTask();
+                $('#task_width').addClass('task_width');
+                $('#task_width').removeClass('task_widthNormal');
+                $('#details').addClass('details');
+                $('#details').removeClass('detailsShow');
+            },
+            ShowTextArea(data) {
+                var _this = this;
+                $('.SubmitButton').show();
+                var option = {
+                    height: 50,
+                    maxHeight: 200
+                };
+                _this.growInit(option);
+            },
+            showAssignedUserRemoveButton(data) {
+
+                $('[data-toggle="tooltip"]').tooltip('hide');
+
+                setTimeout(function () {
+                    $('#remove-assign-user' + data.cardId).toggleClass('remove-assign-user');
+                    $('#remove-assign-user' + data.cardId).removeClass('remove-assigned');
+                }, 500)
+
+            },
+            removeAssignedUser(user, index, key) {
+
+                // console.log(user.id, user.task_id);
+                var _this = this;
+                var postData = {
+                    user_id: user.cardId,
+                    task_id: user.task_id
+                };
+                axios.post('/api/task-list/assign-user-remove', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        // console.log(response);
+                        if (response === 'success') {
+                            _this.cards[index].task[key].assigned_user.splice(0,1);
+                            setTimeout(function () {
+                                _this.getData();
+                            }, 100);
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Api assign-user-remove is not Working !!!')
+                    });
+            },
+            assignUserToTask(user, index, key, data) {
+                var _this = this;
+                var postData = {
+                    task_id: data.cardId,
+                    user_id: user.id
+                };
+                axios.post('/api/task-list/assign-user', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        if (response.success === 'success') {
+                            _this.cards[index].task[key].assigned_user.push(response.data);
+                             console.log(_this.cards);
+                            setTimeout(function () {
+                                _this.getData();
+                            }, 100);
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Api is not Working !!!')
+                    });
+            },
+            showTagManageModel() {
+                var _this = this;
+                axios.get('/api/task-list/all-tag-for-manage')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.manageTag = response.tags;
+                        $('#TagManage').modal('show');
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
+            },
+            updateTagColor(e, tag) {
+                var color = e.target.value;
+                var _this = this;
+                var postData = {
+                    id: tag.id,
+                    color: color,
+                };
+                axios.post('/api/task-list/update-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.manageTag = response.tags;
+                        // _this.showTagManageModel();
+                        _this.getBoardTask();
+                        // _this.getData();
+                        // $('#dropdown' + data._id).toggle();
+                        // _this.selectedData = data
+                        // _this.tag = null
+                    })
+                    .catch(error => {
+                        console.log('Api for update color of tag not Working !!!')
+                    });
+
+            },
+            DeleteTagFromModal(tag) {
+                var _this = this;
+                swal({
+                    title: 'Are you sure to delete the tag?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                },
+                function(){
+                    var postData = {
+                        id : tag.id,
+                        title: tag.title,
+                    };
+                    axios.post('/api/task-list/delete-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        // _this.manageTag = response.tags;
+                        // _this.showTagManageModel();
+                        _this.getBoardTask();
+                        swal("Deleted!", "The tag has been deleted.", "success");
+                        
+                        // _this.getData();
+                        // _this.tag = null
+                    })
+                    .catch(error => {
+                        console.log('Api for delete tag not Working !!!');
+                    });
+
+                });
+            },
+            updateTagName(e, tag) {
+                var newTag = e.target.innerText;
+                if (e.which == 13) {
+                    var _this = this;
+                    var postData = {
+                        id: tag.id,
+                        tag: newTag,
+                    };
+                    axios.post('/api/task-list/update-tag', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.manageTag = response.tags;
+                            _this.getBoardTask();
+                            // _this.tag = null
+                        })
+                        .catch(error => {
+                            console.log('Api for update tag not Working !!!')
+                        });
+                }
+            },
+            newLineoff(e) {
+                if (e.which == 13) {
+                    e.preventDefault();
+                }
+            },
+            switchEvent(e) {
+                $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
             },
         },
         directives: {
             ClickOutside
         },
         watch: {
-            filterProjectForm: {
-                handler(val) {
-                    this.getProjects();
-                },
-                deep: true
-            }
+            projectId: function (val) {
+                this.projectId = val;
+                this.getBoardTask()
+            },
+            board_id: function (val) {
+                this.board_id = val;
+                this.getBoardTask()
+            },
+            nav_id: function (val) {
+                this.nav_id = val;
+                this.getBoardTask()
+            },
         }
     }
-
-
 </script>

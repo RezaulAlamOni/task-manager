@@ -21,23 +21,34 @@ Created by: Jyostna Designs
 /*****  2.RESET STYLES  *****/
 
 html {
-  background             : none repeat scroll 0 0 #FCFCFC;
-  overflow-x             : hidden;
+  background             : none repeat scroll 0 0 #f9f9f9;
   -webkit-font-smoothing : antialiased;
   -webkit-transition     : all .25s ease-out;
   -moz-transition        : all .25s ease-out;
   transition             : all .25s ease-out;
   font-size              : small;
+  height: 100%;
 }
 body {
-  background             : none repeat scroll 0 0 #FCFCFC;
-  -webkit-font-smoothing : antialiased;
-  -webkit-transition     : all .25s ease-out;
-  -moz-transition        : all .25s ease-out;
-  transition             : all .25s ease-out;
-  font-size              : small;
-  letter-spacing         : 0.5px;
-  color                  : #333;
+  //background             : none repeat scroll 0 0 #FCFCFC;
+  //-webkit-font-smoothing : antialiased;
+  //-webkit-transition     : all .25s ease-out;
+  //-moz-transition        : all .25s ease-out;
+  //transition             : all .25s ease-out;
+  //font-size              : small;
+  //letter-spacing         : 0.5px;
+  //color                  : #666666;
+
+    background: none repeat scroll 0 0 #FCFCFC;
+    -webkit-font-smoothing: antialiased;
+    -webkit-transition: all .25s ease-out;
+    transition: all .25s ease-out;
+    font-size: small;
+    letter-spacing: 0.5px;
+    color: #666666;
+    display: inline-block;
+    width: 100%;
+    height: 99vh;
 }
 [v-cloak] {
     display: none;
@@ -114,8 +125,7 @@ body  .header .logo .icon {
 /****** 3.1 HEADER RIGHT SIDE BAR *******/
 
 .right-side {
-  margin-left : 250px;
-  padding     : 0 10px 10px 10px;
+  padding     : 0;
 }
 .right-side > .content-header > h1 {
   margin       : 2px;
@@ -154,7 +164,6 @@ body  .header .logo .icon {
   position           : fixed;
   top                : 0;
   bottom             : 0;
-  overflow-y         : auto;
   right              : -270px;
   box-shadow         : 0 0 15px #CCC;
   background         : #FAFAFA;
@@ -889,11 +898,7 @@ a {
   font-size   : 22px;
   line-height : 1.5;
 }
-.badge {
-  background-color : #66CC99;
-  font-weight      : 400;
-  float            : right;
-}
+
 .sub-menu {
   list-style : none;
   padding    : 0;
@@ -901,14 +906,14 @@ a {
 }
 #menu li.active > a {
   background : #EEEEEE;
-  border-right : 3px solid #68DEB7;
-  color      : #33CC99;
+  border-right : 3px solid #174991;
+  color      : #174991;
 }
 #menu .profile-left li > a:hover {
-  color : #0A1414;
+  color : #174991;
 }
 #menu li > a:hover {
-  color : #33CC99;
+  color : #174991;
 }
 #menu .menu-dropdown > ul > li > a {
   padding-left : 37px;
@@ -1117,9 +1122,7 @@ div.uploader {
 .dataTables_length {
   margin-top : 10px;
 }
-.table-responsive {
-  overflow-y : hidden;
-}
+
 //dimple chart
 .chartWindow {
   border-radius : 5px;
@@ -1445,9 +1448,7 @@ body.fixed-top  .header {
   height:40px;
   width:40px;
 }
-#spark-app{
-  overflow-x:hidden;
-}
+
 
 @media (max-width: 767px){
 .navbar-nav .open .dropdown-menu {
@@ -1508,7 +1509,7 @@ li.dropdown-header {
 
 @media(min-width:992px){
   .navbar-brand{
-    width: 22%;
+    width: 160PX;
   }
 }
 @media(min-width:1200px){
@@ -1617,9 +1618,9 @@ li.dropdown-header {
 //left menu
 
 .dropdown-item.active{
-  background: #EEEEEE;
-  color: #33CC99;
-  border-right: 3px solid #68DEB7;
+  background-color: #e6e6e6;
+  color: #174991;
+  border-right: 3px solid #174991;
 }
 @media(min-width: 320px) and (max-width: 575px) {
 
@@ -1635,6 +1636,7 @@ aside.right-side {
 {
     left: 0;
     transition: all 1s;
+  z-index: 900;
 }
 .right-align
 {
@@ -1645,4 +1647,208 @@ aside.right-side {
 {
     left: -250px !important;
     transition: all 1s;
+}
+
+/******  Bryan Updates  ******/
+
+#modal-notifications .modal-content {
+  background: #ffffff;
+}
+
+.modal-header,
+.modal-footer {
+  border-radius: 0px;
+}
+
+.img-responsive {
+  width: 100%;
+  height: auto;
+}
+
+.compltit-blue,
+.navbar-spark .nav-link:hover,
+.spark-settings-tabs .nav-link:hover,
+.navbar-spark .nav-link.active,
+.spark-settings-tabs .nav-link.active,
+.navbar-spark .nav-link.active svg,
+.spark-settings-tabs .nav-link.active svg,
+.navbar-spark .nav-link:hover svg,
+.spark-settings-tabs .nav-link:hover svg {
+  color: #174991;
+  fill: #174991;
+}
+
+.compltit-blue-a {
+    margin-right: 10px;
+    color: #edf5ff;
+    line-height: 12px;
+}
+
+.compltit-blue-link {
+  text-decoration: underline !important;
+  margin-right: 10px;
+  color: #174991;
+  cursor: pointer;
+}
+
+.compltit-blue-link:hover {
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+a {
+  color: #174991;
+}
+
+.border-primary,
+.btn-primary {
+  border-color: #174991 !important;
+}
+
+.bg-primary,
+.btn-primary {
+  background-color: #174991 !important;
+}
+
+.navbar-spark i {
+  opacity: 1;
+}
+
+.container-header {
+  color: #333;
+  margin: 15px 0;
+}
+
+.compltit-p {
+  color: #7d7d7d;
+  font-size: 18px;
+  margin: 22px 13px;
+}
+
+.card .card-header {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.badge-pill {
+  color: #fff;
+}
+
+.badge-pill {
+  padding: 3px 8px;
+  border-radius: 5px;
+}
+
+.table thead th{
+  border: none;
+}
+
+.btn, a.btn {
+  border-radius: 4px;
+  font-size: 16px;
+  text-decoration: none;
+  text-align: center;
+  line-height: 35px;
+  padding: 0 20px;
+  margin: 0;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  box-sizing: border-box;
+  transition-property: all;
+  transition-duration: .3s;
+}
+
+.btn-small, a.btn-small {
+  border-radius: 4px;
+  font-size: 14px;
+  text-decoration: none;
+  text-align: center;
+  line-height: 30px;
+  padding: 0 10px;
+  margin: 0;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  box-sizing: border-box;
+  transition-property: all;
+  transition-duration: .3s;
+}
+
+.btn-default, .badge-default{
+  color: #333333;
+  background-color: #DCDCDC;
+  border-color: #DCDCDC;
+}
+
+.btn-default:hover {
+  color: #666;
+}
+
+.list-group-item{
+  border: none;
+}
+
+.multi-list-group .list-group-item {
+  margin-right: 20px;
+}
+
+.multi-list-group{
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+  margin: 10px 0 10px 0;
+}
+
+.tags{
+  width: fit-content;
+  masrgin-left: 1px;
+  float: left;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.vdp-datepicker{
+  width: 70px;
+  float: left;
+}
+
+.due-details {
+  width: 70px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: inherit;
+  cursor: pointer;
+}
+.due-details :focus{
+  outline: none;
+}
+
+
+.details-title{
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: inherit;
+}
+
+//Margins//
+
+.m-t-10{
+  margin-top:10px;
+}
+
+.m-t-20{
+  margin-top:20px;
+}
+
+//padding//
+
+.p-t-10{
+  margin-top:10px;
+}
+
+.p-t-20{
+  margin-top:20px;
 }

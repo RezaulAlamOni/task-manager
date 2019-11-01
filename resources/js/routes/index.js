@@ -19,10 +19,11 @@ let routes = [
         component: addProject,
         name : 'project-create'
     },
-    // {
-    //     path: '/project/:uuid/edit',
-    //     component: require('./views/project/edit')
-    // },
+    {
+        path: '/project/:uuid/edit',
+        component: addProject,
+        name : 'project-create'
+    },
     // {
     //     path: '/project/:uuid',
     //     component: require('./views/project/show')

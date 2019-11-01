@@ -6,7 +6,6 @@
 #board_view_list {
     background: #ffffff;
     padding: 0px;
-    overflow: auto;
     .draggable-item {
         height: 50px;
         line-height: 50px;
@@ -46,7 +45,9 @@
 
     .card-container {
         width: 320px;
-        height: 650px;
+        // height: 650px;
+        // max-height: 700px;
+        // min-height: 700px;
         margin: 5px;
         margin-right: 10px;
         background-color: #F8F8F8;
@@ -73,7 +74,7 @@
     .smooth-dnd-container {
         padding: 5px;
         max-height: 600px;
-        min-height: 600px;
+        min-height: 600px; //card-container
         height: auto;
         overflow: auto;
     }
@@ -203,7 +204,8 @@
 
 }
 .list-group-item {
-    padding: 2px !important;
+    border-top: solid 0.5px lightgray;
+    padding: 5px !important;
 }
 .list-group{
     margin-left: 35px !important;
@@ -244,6 +246,7 @@
         margin-top: 10px;
     }
 
+    
     .dropdown-menu {
         width: 300px;
         border-radius: 4px 4px;
@@ -256,7 +259,7 @@
             border-left: 10px solid transparent;
             position: absolute;
             top: -5px;
-            left: 0px;
+            left: 10px;
             z-index: 10;
         }
         &:after {
@@ -266,7 +269,7 @@
             border-left: 7px solid transparent;
             position: absolute;
             top: -7px;
-            left: 3px;
+            left: 23px;
             z-index: 9;
         }
     }
@@ -282,7 +285,7 @@
             border-left: 10px solid transparent;
             position: absolute;
             top: -5px;
-            left: 50%;
+            left: 45%;
             z-index: 10;
         }
         &:after {
@@ -292,7 +295,7 @@
             border-left: 7px solid transparent;
             position: absolute;
             top: -7px;
-            left: 50%;
+            left: 49.5%;
             z-index: 9;
         }
     }
@@ -304,8 +307,12 @@
     }
     .tag-icon{
         position: absolute;
-        bottom: 10px;
-        left: 137px;
+        // top: 69%;
+        bottom: 14px;
+        left: 145px;
+    }
+    .tag-icon-free{
+        bottom: 7px;    
     }
 
 
@@ -384,3 +391,72 @@
         }
     }
 }
+
+
+
+.checkbox_cus_mini {
+    display: inherit;
+    position: relative;
+    padding: 5px 0 5px 20px;
+    cursor: pointer;
+    margin: 0;
+   &._pen_disable{
+       pointer-events: none;
+   }
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+  
+    .checkmark {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      height: 15px;
+      width: 15px;
+      border-radius: 4px;
+      background-color: #eee;
+      @include transition(all 0.2s linear);
+    }
+  
+    input ~ .checkmark {
+      background-color: #FFF;
+      border: 1px solid #c8c8c8;
+      @include transition(all 0.2s linear);
+    }
+  
+    input:checked ~ .checkmark {
+      background-color: #0099ff;
+      border: 1px solid #0099ff;
+      @include transition(all 0.2s linear);
+    }
+  
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+  
+    input:checked ~ .checkmark:after {
+      display: block;
+    }
+  
+    .checkmark:after {
+      left: 4px;
+      top: 2px;
+      width: 4px;
+      height: 8px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+      @include transition(all 0.2s linear);
+    }
+  }
+
+  .disabledTask {
+    opacity: 0.3;
+  }
+  

@@ -23,6 +23,7 @@ var nodes = 'node_modules/'
 var dest = 'public/';
 var destFonts = dest + 'fonts/';
 var destCss = dest + 'css/';
+var destJs = dest + 'js/';
 var destVendors = dest + 'vendors/';
 
 
@@ -38,10 +39,17 @@ mix.copy(resourcesAssets + 'img', 'public/img');
 
 
 // ========copy fonts=====
-mix.copy(resourcesAssets + 'fonts', 'public/fonts');
+mix.copy(resourcesAssets + 'fonts', destFonts);
 
 // ========copy css=====
-mix.copy(resourcesAssets + 'css', "public/css");
+mix.copy(resourcesAssets + 'css', destCss);
+
+// ========copy js=====
+mix.copy(resourcesAssets + 'js/page.min.js', destJs);
+mix.copy(resourcesAssets + 'js/icheck.js', destJs);
+mix.copy(resourcesAssets + 'js/form_elements.js', destJs);
+mix.copy(resourcesAssets + 'js/script.js', destJs);
+mix.copy(resourcesAssets + 'js/jquery.tagsinput.js', destJs);
 
 
 //select2
@@ -53,19 +61,12 @@ mix.copy(paths.select2BootstrapTheme + 'select2-bootstrap.css', destVendors + 's
 mix.sass('resources/sass/bootstrap/bootstrap.scss', 'public/css');
 mix.sass(resourcesAssets + 'sass/custom.scss', 'public/css');
 mix.sass(resourcesAssets + 'sass/light_custom.scss', 'public/css');
-
+mix.sass(resourcesAssets + 'sass/board_view.scss', 'public/css');
+mix.sass(resourcesAssets + 'sass/tree_view.scss', 'public/css');
 
 mix.sass('resources/sass/app.scss', 'public/css')
-    .sass('resources/sass/board_view.scss', 'public/css')
-    .sass('resources/sass/tree_view.scss', 'public/css')
     .js('resources/js/app.js', 'public/js')
     .copy('node_modules/sweetalert/dist/sweetalert.min.js', 'public/js/sweetalert.min.js')
-    .sass('resources/sass/app-rtl.scss', 'public/css')
-
-    .then(() => {
-        exec('node_modules/rtlcss/bin/rtlcss.js public/css/app-rtl.css ./public/css/app-rtl.css');
-    })
-    .version(['public/css/app-rtl.css'])
     .webpackConfig({
         resolve: {
             modules: [

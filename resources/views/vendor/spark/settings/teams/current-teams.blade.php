@@ -1,7 +1,7 @@
 <spark-current-teams :user="user" :teams="teams" inline-template>
     <div>
         <div class="card card-default border-info">
-            <div class="card-header bg-info text-white">{{__('teams.current_teams')}}</div>
+            <div class="card-header bg-primary text-white">{{__('teams.current_teams')}}</div>
 
             <div class="table-responsive">
                 <table class="table table-valign-middle mb-0">

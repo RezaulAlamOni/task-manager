@@ -1,0 +1,747 @@
+<template>
+    <div class="container" v-if="Object.keys(selectedData).length > 0">
+        <!-- {{selectedData}} -->
+        <div class="row">
+            <div class="col-2">
+                <h4 class="compltit-blue">#ID12</h4>
+            </div>
+            <div class="col-2">
+                <i class="fa fa-calendar details-title"></i>
+                <a class="calender li-opacity clickHide" v-if="!selectedData.date">
+                    <i class="outline-event icon-image-preview" data-toggle title="toggle"></i>
+                </a>
+
+                <datepicker
+                    :disabled-dates="disabledDates"
+                    @selected="updateDate"
+                    calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
+                    format='dd MMM'
+                    input-class="dateCal due-details"
+                    v-model="selectedData.date">
+                </datepicker>
+            </div>
+            <!-- <div class="col-1">
+                <img class="img-responsive" src="/img/12.jpg" style="height:30px;width:30px;">
+            </div> -->
+            <div class="col-4">
+                <!-- Tags -->
+                <div>
+                    <a :class="{'tag-icon': true, 'tag-icon-free': selectedData.tags == undefined || selectedData.tags.length == 0}">
+                        <div v-if="selectedData.tags && selectedData.tags.length !== 0">
+                            <div style="float: left;" v-for="(item, tagIndex) in selectedData.tags">
+                                <div class="dropdown-toggle-split "
+                                    data-toggle="dropdown"
+                                    style="padding-right: 0px; padding-left: 1px;" v-if="tagIndex < 2">
+                                    <span class="badge badge-danger "
+                                        v-if='item == "Dont Forget"'>{{item.text.substring(0,12)}}</span>
+                                    <span :title="selectedData.tagTooltip"
+                                        class="badge badge-success "
+                                        data-placement="bottom"
+                                        data-toggle="tooltip"
+                                        v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]"
+                                        v-else
+                                    >{{item.text.substring(0,10)}}
+                                        <span v-if="item.text.length > 10">..</span>
+                                    </span>
+                                </div>
+
+                                <div :id="'dropdown1'+selectedData.cardId" class="dropdown-menu dropdown-menu1">
+
+                                    <diV class="collapse show switchToggle" style="">
+                                        <div class="container-fluid">
+                                            <vue-tags-input
+                                                :allow-edit-tags="true"
+                                                :tags="selectedData.tags"
+                                                @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,selectedData)"
+                                                @tags-changed="newTags => (changeTag(newTags,selectedData))"
+                                                v-model="tag"
+                                            />
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <template v-for="(tag, tagIndx) in selectedData.existing_tags">
+                                                        <li class="badge-pill tags" @click="addExistingTag( tagIndx, selectedData.cardId, '')"
+                                                            v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
+                                                            v-if="tag.text !== 'Dont Forget'">
+                                                            {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
+                                                        </li>
+                                                    </template>
+                                                    <!-- <template> -->
+                                                        <!-- <li class="badge-pill tags"
+                                                            v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
+                                                        </li> -->
+                                                    <!-- </template> -->
+                                                    <li @click="addExistingTag( 0, selectedData.cardId, 'Dont Forget')" class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                </div>
+                                            </div>
+                                            <!-- <hr> -->
+                                            <!-- <div class="row">
+                                                <div class="col-12">
+                                                    <template>
+                                                        <li class="badge-pill tags"
+                                                            v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
+                                                        </li>
+                                                    </template>
+                                                    <li class="badge-pill tags" style="background: #FB8678" >Dont Forget</li>
+                                                </div>
+                                            </div>
+                                            <hr> -->
+                                            <!-- <div class="col-xs-12"
+                                                style="margin-top:10px;width: 100%;">
+                                                <button @click="showTagManageModel"
+                                                        class="btn btn-small btn-primary pull-right"
+                                                        type="submit">
+                                                    Manage Tag
+                                                </button>
+                                            </div> -->
+                                        </div>
+
+                                    </diV>
+                                </div>
+                            </div>
+                        </div>
+                        <i class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
+                            data-toggle="dropdown"
+                            v-else></i>
+
+                        <div class="dropdown-menu dropdown-menu1 ">
+
+                            <diV class="collapse show switchToggle" style="">
+                                <div class="container-fluid">
+                                    <vue-tags-input
+                                        :allow-edit-tags="true"
+                                        :tags="tag1"
+                                        @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,selectedData)"
+                                        @tags-changed="newTags => (changeTag(newTags,selectedData))"
+                                        v-model="tag"
+                                    />
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <template v-for="(tag, tagIndx) in selectedData.existing_tags">
+                                                <li class="badge-pill tags" @click="addExistingTag( tagIndx, selectedData.cardId ,'')"
+                                                    v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
+                                                    v-if="tag.text !== 'Dont Forget'">
+                                                    {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
+                                                </li>
+                                            </template>
+                                            <li @click="addExistingTag( 0, selectedData.cardId, 'Dont Forget')"
+                                                class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="col-xs-12"
+                                        style="margin-top:10px;width: 100%;">
+                                        <button @click="showTagManageModel"
+                                                class="btn btn-small btn-primary pull-right"
+                                                type="submit">
+                                            Manage Tag
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </diV>
+                        </div>
+
+                    </a>
+                </div>
+            </div>
+            <!-- user assign -->
+            <div class="col-4">
+                <a class="user dropdown-hide-with-remove-icon">
+                    <template v-if="selectedData.assigned_user.length > 0">
+                        <span class="assigned_user dropdown-toggle-split "
+                            data-toggle="dropdown" v-for="(assign,keyId) in selectedData.assigned_user">
+                            <p :title="assign.name"
+                                @click="showAssignedUserRemoveButton(selectedData)"
+                                class="assignUser-photo-for-selected text-uppercase"
+                                style="top: 7px;"
+                                data-placement="bottom" data-toggle="tooltip"
+                                v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
+                                <a :id="'remove-assign-user-modal'+selectedData.cardId"
+                                @click="removeAssignedUser(assign)"
+                                class="remove-assigned" href="javascript:void(0)">
+                                    <i class="fa fa-times remove-assign-user-icon"></i>
+                                </a>
+                            </p>
+
+                        </span>
+                    </template>
+                    <div data-toggle="dropdown" v-else>
+                        <i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"></i><span class="i-text">Add assignee</span>
+                    </div>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <diV class="collapse show switchToggle">
+                            <li class="assignUser">
+                                <input class="input-group searchUser"
+                                    placeholder="Assign by name and email"
+                                    type="text"
+                                    style="width: 90%; padding: 12px 20px; margin: 10px; display: inline-block; border: 1px solid #ccc;
+                                                border-radius: 4px; box-sizing: border-box; ">
+                                <label class="pl-2 label-text">
+                                    <span class="assign-user-drop-down-text">
+                                        Or invite a new member by email address
+                                    </span>
+                                </label>
+                            </li>
+                            <li class="assignUser">
+                                <template v-for="user in selectedData.users">
+                                    <div @click="assignUserToTask(user, selectedData)"
+                                        class="users-select row">
+                                        <div class="col-md-3 pt-1 pl-4">
+                                            <p class="assignUser-photo">
+                                                {{(user.name !== null) ? user.name.substring(0,2) :
+                                                ''}}</p>
+                                        </div>
+                                        <div class="col-md-9 assign-user-name-email">
+                                            <h5>{{user.name}}<br>
+                                                <small>{{user.email}}</small>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </template>
+                            </li>
+                        </diV>
+                        <li @click="switchEvent($event)"
+                            class="border-top pl-2 assign-user-drop-down-footer">
+
+                                <span
+                                    class="assign-user-drop-down-text">Assign an external team</span>
+                            <switches class="assign-user-switch-for-dropdown"
+                                    color="success"
+                                    theme="bootstrap"
+                                    v-model="id">
+                            </switches>
+                        </li>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h5 class="">
+                    {{selectedData.data}}
+                </h5>
+            </div>
+        </div>
+        <!-- Tabs -->
+        <div class="row">
+            <div class="col-12">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a aria-controls="home" aria-selected="true" class="nav-link active" data-toggle="tab" href="#home"
+                           id="_details" role="tab">Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a aria-controls="profile" aria-selected="false" class="nav-link" data-toggle="tab" href="#profile"
+                           id="_log" role="tab">Logs</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div aria-labelledby="home-tab" class="tab-pane active" id="home" role="tabpanel">
+                <hr>
+                <!-- Text Description -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="textAreaExtend" v-click-outside="HideListDetails">
+                            <div class="row">
+                                <div class="col-12">
+                                    <textarea @focus="ShowListDetails(selectedData)" class="form-control detailsInput"
+                                              data-grow="auto"
+                                              placeholder="Task Description" v-model="selectedData.data">
+                                    </textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="submitdetails" id="submitdetails">
+                                        <a @click="updateDescription" class="btn btn-default"
+                                           href="javascript:void(0)"
+                                           style="background: #7BB348;">Post</a>
+                                        <a class="btn btn-default" href="javascript:void(0)"
+                                           style="border: 1px solid #f1efe6" @click="HideTextArea">Cancel</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- files -->
+                <div class="row">
+                    <div class="col-12" v-if="selectedData.files && selectedData.files.length !== 0">
+                        <h3 style="margin-top: 20px;">Files</h3>
+                        <template v-for="fl in selectedData.files">
+                            <div class="row">
+                                <div class="col-12">
+                                    <img :src="'/images/'+fl.file_name" class="task-img-right-pane">
+                                </div>
+                            </div>
+                        </template>
+                        <div style="cursor: pointer; background-color: #F8F8F8; margin:10px 0;">
+                            <input :id="'file'+selectedData._id" :ref="selectedData._id" style="display: none;"
+                                   type="file">
+                            <a @click="addAttachment(selectedData)"><i class="fa fa-paperclip"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Comments -->
+                <div class="row">
+                    <div class="col-12">
+                        <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater">
+                        <div class="textAreaExtend" v-click-outside="HideTextArea">
+                            <textarea @focus="ShowTextArea(selectedData)" class="form-control commentInput" data-grow="auto"
+                                      placeholder="Add comment"></textarea>
+                            <div class="SubmitButton" id="SubmitButton">
+                                <a class="btn btn-default btn-sm" style="background: #7BB348;">Post</a>
+                                <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6" @click="HideTextArea">Cancel</a>
+                                <a @click="addAttachment(selectedData)" class="btn btn-default btn-sm"
+                                   style="border: 1px solid #f1efe6">
+                                    <i class="fa fa-paperclip"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div aria-labelledby="profile-tab" class="tab-pane" id="profile" role="tabpanel">
+                <span>
+                    <div class="log-data">
+                        <h3 class="p-3">Log data for <b>{{selectedData.text}}</b></h3>
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                              <th scope="col">Title</th>
+                              <th scope="col">Log Type</th>
+                              <th scope="col">Action Type</th>
+                              <th scope="col">Action At</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                              <tr v-for="log in task_logs">
+                                  <td>{{log.title}}</td>
+                                  <td>{{log.log_type}}</td>
+                                  <td>{{log.action_type}}</td>
+                                  <td>{{log.action_at}}</td>
+                            </tr>
+
+                          </tbody>
+                        </table>
+                    </div>
+                </span>
+
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import switches from 'vue-switches';
+    import Datepicker from 'vuejs-datepicker';
+    import VueTagsInput from '@johmun/vue-tags-input';
+    import ClickOutside from 'vue-click-outside';
+
+    export default {
+        components: {switches, Datepicker, VueTagsInput},
+        name: "TaskDetails",
+        props: ['selectedData', 'task_logs'],
+        data() {
+            return {
+                disabledDates: {
+                    id: null
+                },
+                id: 0,
+                tag: null,
+                tags: [],
+                tag1: '',
+                cards: [],
+
+
+
+                baseUrl : window.location.origin,
+                id: 0,
+                tags: [],
+                addField: {
+                    name: null,
+                    color: null,
+                    error: null,
+                    progress: null
+                },
+                editField: {
+                    name: null,
+                    color: null,
+                    boardId: null,
+                    error: null,
+                    progress: null
+                },
+                date_config: {
+                    enableTime: false,
+                    wrap: true,
+                    disableMobile: true,
+                    altFormat: 'Y-m-d',
+                    dateFormat: 'd M',
+                },
+                nav: [],
+                board: [],
+                subNav: [],
+                subBoard: [],
+                boardColumn: [],
+                selectedBoard: 'Select Board',
+                selectedNav: 'Select Nav',
+                selectedSubNav: 'Select Nav List',
+                selectedSubBoard: 'Select Board List',
+                selectedBoardColumn: 'Select Board Column',
+                transferBtn : false,
+                project: null,
+                tree4data: [],
+                currentColumn: null,
+                currentColumnIndex: null,
+                cards: [],
+                scene: {},
+                upperDropPlaceholderOptions: {
+                    className: 'cards-drop-preview',
+                    animationDuration: '150',
+                    showOnTop: true
+                },
+                dropPlaceholderOptions: {
+                    className: 'drop-preview',
+                    animationDuration: '150',
+                    showOnTop: true
+                },
+                updateIndex: null,
+                tag: '',
+                tag1: [],
+                selectedExistedTask: [],
+                multiple_list: null,
+                list: {
+                    name: null,
+                    description: null,
+                    nav_id: null
+                },
+                navItem: {
+                    title: null,
+                    type: null,
+                    sort_id: null,
+                    project_id: null,
+                },
+                selectedData : {},
+                // task_logs : null,
+                check_uncheck_child : null,
+                manageTag: null,
+            }
+        },
+        mounted() {
+            
+        },
+        created() {
+
+        },
+        methods: {
+            grow: function (text, options) {
+                var height = options.height || '100px';
+                var maxHeight = options.maxHeight || '500px';
+                text.style.height = 'auto';
+                var curHeight = text.scrollHeight;
+                if (curHeight > maxHeight) {
+                    curHeight = maxHeight;
+                    text.style.overflow = 'auto';
+                } else {
+                    text.style.overflow = 'hidden';
+                }
+                if (curHeight < height) {
+                    curHeight = height;
+                }
+                text.style.height = curHeight + 'px';
+            },
+            growInit: function (options) {
+                let _this = this;
+                var locInputs = document.querySelectorAll('[data-grow="auto"]');
+                for (var i = 0; i < locInputs.length; i++) {
+                    var target = locInputs[i];
+                    var height = options.height || '100px';
+                    var maxHeight = options.maxHeight || '500px';
+                    target.style.overflow = 'hidden';
+                    target.style.resize = 'none';
+                    target.style.height = height + 'px';
+                    target.style.maxHeight = maxHeight + 'px';
+
+                    target.onkeydown = function () {
+                        _this.grow(this, options);
+                    };
+                    target.onkeyup = function () {
+                        _this.grow(this, options);
+                    };
+                }
+            },
+            updateDate(date) {
+                date = new Date(date);
+                var _this = this;
+                var month = (parseFloat(date.getMonth() + 1) > 9) ? parseFloat(date.getMonth() + 1) : '0' + parseFloat(date.getMonth() + 1);
+                var formatedDate = date.getFullYear() + '-' + month + '-' + date.getDate();
+
+                var postData = {
+                    id: _this.selectedData.cardId,
+                    date: date
+                };
+                axios.post('/api/card-update/' + _this.selectedData.cardId, postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        // _this.getTaskList();
+                    })
+                    .catch(error => {
+                        console.log('Api for task date update not Working !!!')
+                    });
+            },
+            HideListDetails() {
+                var _this = this;
+                $('.submitdetails').hide();
+            },
+            updateDescription() {
+                var _this = this;
+                var postData = {
+                    id: _this.selectedData.cardId,
+                    title: _this.selectedData.data
+                };
+                axios.post('/api/card-update/' + _this.selectedData.cardId, postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        $('.submitdetails').hide();
+                        // _this.getTaskList()
+                        // $('#dropdown' + data._id).toggle();
+                        // _this.selectedData.tags = tag
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
+            },
+            HideTextArea() {
+                var _this = this;
+                $('.SubmitButton').hide();
+            },
+            ShowTextArea(data) {
+                this.$emit('textArea', data)
+                // var _this = this;
+                // $('.SubmitButton').show();
+                // var option = {
+                //     height: 50,
+                //     maxHeight: 200
+                // };
+                // _this.growInit(option);
+            },
+            ShowListDetails(data) {
+                var _this = this;
+                $('.submitdetails').show();
+                var option = {
+                    height: 50,
+                    maxHeight: 400
+                };
+                _this.growInit(option);
+            },
+            addAttachment(data) {
+                let refData = data._id;
+                $('#file' + refData).click();
+            },
+            showImage(data, image) {
+                this.modalImg = image;
+                $("#imageModal").modal();
+            },
+            showAssignedUserRemoveButton(data) {
+
+                $('[data-toggle="tooltip"]').tooltip('hide');
+
+                setTimeout(function () {
+                    $('#remove-assign-user-modal' + data.cardId).toggleClass('remove-assign-user');
+                    $('#remove-assign-user-modal' + data.cardId).toggle();
+                    $('#remove-assign-user-modal' + data.cardId).removeClass('remove-assigned');
+                }, 500)
+
+            },
+            removeAssignedUser(user, index, key) {
+
+                // console.log(user.id, user.task_id);
+                var _this = this;
+                var postData = {
+                    user_id: user.cardId,
+                    task_id: user.task_id
+                };
+                axios.post('/api/task-list/assign-user-remove', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        // console.log(response);
+                        if (response === 'success') {
+                            // _this.cards[index].task[key].assigned_user.splice(0,1);
+                            setTimeout(function () {
+                                // _this.getData();
+                                _this.selectedData.assigned_user = [];
+                            }, 100);
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Api assign-user-remove is not Working !!!')
+                    });
+            },
+             assignUserToTask(user, data) {
+                var _this = this;
+                var postData = {
+                    task_id: data.cardId,
+                    user_id: user.id
+                };
+                axios.post('/api/task-list/assign-user', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        if (response.success === 'success') {
+                            // _this.cards[index].task[key].assigned_user.push(response.data);
+                            //  console.log(_this.cards);
+                            setTimeout(function () {
+                                 _this.selectedData.assigned_user.push(response.data);
+                                // _this.getData();
+                            }, 100);
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Api is not Working !!!')
+                    });
+            },
+            switchEvent(e) {
+                $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
+            },
+            deleteCardTag(obj, card) {
+                var _this = this;
+                var postData = {
+                    assign_id: obj.tag.assign_id,
+                    // id: obj.tag.id,
+                };
+                // console.log(obj);
+                if (obj.tag.text !== 'Dont Forget') {
+                    axios.post('/api/task-list/delete-tag', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.selectedData.tags.splice(obj.index, 1);
+                            setTimeout(function () {
+                                // _this.getData();
+                            }, 100);
+                            _this.tags = [];
+                        })
+                        .catch(error => {
+                            console.log('Api for delete tag not Working !!!')
+                        });
+                }
+
+            },
+            changeTag(tags, card, columnIndex, cardIndex) {
+                // console.log(card);
+                var _this = this;
+                var old = this.selectedData.tags.length;
+                var newl = tags.length;
+                let cardTags = null;
+                if (newl > old) {
+                    this.tags = tags;
+
+                    var color = (this.tags[newl - 1].text === 'Dont Forget') ? '#ff0000' : _this.generateColor();
+                    var postData = {
+                        id: card.cardId,
+                        tags: _this.tags[newl - 1].text,
+                        color: color,
+                        type: 'task',
+                    };
+                    axios.post('/api/task-list/add-tag', postData)
+                    .then(response => response.data)
+                    .then(response => {
+
+                        setTimeout(function () {
+                            // _this.getBoardTask();
+                            console.log(response);
+                            _this.selectedData.tags.push({
+                                assign_id: response.data.assign_id,
+                                board_id: response.data.board_id,
+                                classes: "",
+                                color: response.data.color,
+                                id: response.data.id,
+                                style: 'style="background: "'+response.data.color,
+                                text: response.data.title,
+                            });
+                           $('.dropdown-menu').removeClass('show');
+                            // _this.getData();
+                        }, 100);
+                    })
+                    .catch(error => {
+                        console.log("2nd error =>"+error)
+                    });
+                }
+            },
+            addExistingTag(index, cardId, dntfrgt = '') {
+                let _this = this;
+                console.log(this.selectedData.existing_tags[index]);
+                if(dntfrgt !== ''){
+                    var postData = {
+                        id: cardId,
+                        tags: "Dont Forget",
+                        color: "#FF0000",
+                        type: 'task',
+                    };
+                }else{
+                    var postData = {
+                        id: cardId,
+                        tags: this.selectedData.existing_tags[index].title,
+                        color: this.selectedData.existing_tags[index].color,
+                        type: 'task',
+                    };
+                }
+                // if(card.types == "task"){
+                //     postData.id = card.id;
+                // }
+                axios.post('/api/task-list/add-tag', postData)
+                .then(response => response.data)
+                .then(response => {
+                    _this.selectedData.tags.push({
+                        assign_id: response.data.assign_id,
+                        board_id: response.data.board_id,
+                        classes: "",
+                        color: _this.selectedData.existing_tags[index].color,
+                        id: _this.selectedData.existing_tags[index].id,
+                        style: '',
+                        text: _this.selectedData.existing_tags[index].title,
+
+
+                         id : _this.selectedData.existing_tags[index]
+                    });
+                    _this.selectedData.existing_tags.splice(index, 1);
+                    // $('#dropdown' + cardId).toggle();
+                    setTimeout(function () {
+                        // _this.getBoardTask();
+                    }, 100);
+                })
+                .catch(error => {
+                    console.log("1st error =>"+error)
+                });
+            },
+            showTagManageModel() {
+                var _this = this;
+                axios.get('/api/task-list/all-tag-for-manage')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.manageTag = response.tags;
+                        $('#TagManage').modal('show');
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+
+            },
+            generateColor() {
+                var myColor = '#000000';
+                myColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+                return myColor;
+            },
+        },
+        
+        directives: {
+            ClickOutside
+        },
+    }
+</script>
+
+<style scoped>
+</style>

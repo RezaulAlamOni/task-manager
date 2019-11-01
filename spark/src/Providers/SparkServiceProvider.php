@@ -176,6 +176,8 @@ class SparkServiceProvider extends ServiceProvider
             ]);
         }
 
+        Spark::ensureEmailIsVerified();
+
         $this->registerServices();
     }
 

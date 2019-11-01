@@ -16,7 +16,7 @@
             <div class="col-md-6 spark-settings-tabs">
                 <aside>
                     <div class="card border-info">
-                        <div class="card-header bg-info text-white">
+                        <div class="card-header bg-primary text-white">
                     <h3 class="nav-heading text-white mb-0 ">
                         {{__('teams.team_settings')}}
                     </h3>
@@ -74,7 +74,7 @@
                 @if (Spark::canBillTeams() && Auth::user()->ownsTeam($team))
                     <aside>
                         <div class="card border-success">
-                            <div class="card-header bg-success text-white">
+                            <div class="card-header bg-primary text-white">
                         <h3 class="nav-heading text-white mb-0 ">
                             {{__('teams.team_billing')}}
                         </h3>
