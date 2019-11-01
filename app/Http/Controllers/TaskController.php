@@ -595,8 +595,15 @@ class TaskController extends Controller
                 return response()->json('success', 200);
             }
         } elseif (isset($request->text) && $request->text != '') {
+            $check_is_empty = Task::where('id', $request->id)->first();
+            if (empty($check_is_empty->title)){
+                $empty = true;
+            }else{
+                $empty = false;
+            }
+
             if (Task::where('id', $request->id)->update(['title' => $request->text])) {
-                return response()->json('success', 200);
+                return response()->json(['success'=>1, 'empty' => $empty]);
             }
 
         } elseif (isset($request->open)) {

@@ -849,6 +849,7 @@
                 action_T: '',
                 type_T: '',
                 delete_popup: 0,
+                empty_task_delete_flag : 0,
 
             }
         },
@@ -885,10 +886,13 @@
                 switch (handler.key) {
                     case "enter" :
                         if (_this.delete_popup === 1) {
-                            swal.close();
+                            // swal.close();
+                            $('.confirm').click();
                             _this.delete_popup = 0;
                         } else {
-                            _this.addNode(_this.selectedData);
+                            if (_this.selectedIds.length === 1){
+                                _this.addNode(_this.selectedData);
+                            }
                         }
                         break;
                     case "tab" :
@@ -1459,6 +1463,7 @@
                             $("#" + _this.newEmptyTaskID).addClass('form-control');
                             $("#" + _this.newEmptyTaskID).removeClass('input-hide');
                         }, 500)
+                        _this.empty_task_delete_flag = 1;
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -1484,6 +1489,7 @@
                             $("#" + _this.newEmptyTaskID).addClass('form-control');
                             $("#" + _this.newEmptyTaskID).removeClass('input-hide');
                         }, 500)
+                        _this.empty_task_delete_flag = 1;
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -2265,36 +2271,40 @@
                     id: data.id,
                     text: data.text,
                 };
-                axios.post('/api/task-list/update', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        if (response == 'Delete') {
-                            // _this.getTaskList();
-                        } else {
-                            console.log('Save task');
-                        }
+                if (data.text !== ''){
+                    axios.post('/api/task-list/update', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            if (response.empty){
+                                _this.empty_task_delete_flag = 0;
+                            }
+                        })
+                        .catch(error => {
+                            console.log('Api for move down task not Working !!!')
+                        });
+                }
 
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
             },
             DeleteEmptyTask() {
                 var _this = this;
                 var postData = {
                     id: _this.list_id
                 };
-                axios.post('/api/task-list/delete-empty-task', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        if (response.success === 1) {
-                            var id = response.id;
-                            _this.RemoveEmptyTask(id, _this.treeList);
-                        }
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
+                if (_this.empty_task_delete_flag === 1){
+                    axios.post('/api/task-list/delete-empty-task', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            if (response.success === 1) {
+                                _this.empty_task_delete_flag = 0;
+                                var id = response.id;
+                                _this.RemoveEmptyTask(id, _this.treeList);
+                            }
+                        })
+                        .catch(error => {
+                            console.log('Api for move down task not Working !!!')
+                        });
+                }
+
             },
             RemoveEmptyTask(id, data) {
                 if (data.length > 0) {
