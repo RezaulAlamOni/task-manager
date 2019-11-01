@@ -889,9 +889,14 @@
                             // swal.close();
                             $('.confirm').click();
                             _this.delete_popup = 0;
+                            _this.selectedIds = [];
                         } else {
+
                             if (_this.selectedIds.length === 1){
                                 _this.addNode(_this.selectedData);
+                                swal.close();
+                            }else {
+                                swal.close();
                             }
                         }
                         break;
@@ -2269,9 +2274,10 @@
                 var _this = this;
                 var postData = {
                     id: data.id,
-                    text: data.text,
+                    text: (data.text === null) ? '' : data.text,
                 };
-                if (data.text !== ''){
+                // console.log(postData)
+                // if (data.text !== ''){
                     axios.post('/api/task-list/update', postData)
                         .then(response => response.data)
                         .then(response => {
@@ -2282,7 +2288,7 @@
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
                         });
-                }
+                // }
 
             },
             DeleteEmptyTask() {
@@ -2290,7 +2296,7 @@
                 var postData = {
                     id: _this.list_id
                 };
-                if (_this.empty_task_delete_flag === 1){
+                // if (_this.empty_task_delete_flag === 1){
                     axios.post('/api/task-list/delete-empty-task', postData)
                         .then(response => response.data)
                         .then(response => {
@@ -2303,7 +2309,7 @@
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
                         });
-                }
+                // }
 
             },
             RemoveEmptyTask(id, data) {
