@@ -75,6 +75,7 @@ class TaskController extends Controller
             }
             $info['clicked'] = 0;
             $info['date'] = $task->date;
+            $info['progress'] = $task->progress;
             $info['open'] = $task->open;
             $allTags = $task->Assign_tags;
             $infoTags = [];
@@ -594,9 +595,18 @@ class TaskController extends Controller
             if (Task::where('id', $request->id)->update(['date' => $request->date])) {
                 return response()->json('success', 200);
             }
-        } elseif (isset($request->text) && $request->text != '') {
-            if (Task::where('id', $request->id)->update(['title' => $request->text])) {
-                return response()->json('success', 200);
+        } elseif (isset($request->text)) {
+            $check_is_empty = Task::where('id', $request->id)->first();
+            if (empty($check_is_empty->title)){
+                $empty = true;
+            }else{
+                $empty = false;
+            }
+            ($request->text == null ) ? $title = '' : $title = $request->text;
+            if (Task::where('id', $request->id)->update(['title' => $title])) {
+                return response()->json(['success'=>1, 'empty' => $empty]);
+            }else{
+                return response()->json(['success'=>0, 'empty' => $empty]);
             }
 
         } elseif (isset($request->open)) {

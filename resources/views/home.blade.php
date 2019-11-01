@@ -16,7 +16,8 @@
                 </ul>
                 <ul class="navbar-nav ml-4 float-sm-left">
                     <li class="nav-item dropdown">
-                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
+                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
+                           data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">
                                Ideas
@@ -38,7 +39,8 @@
 
                 <ul class="navbar-nav ml-4 float-sm-left">
                     <li class="nav-item dropdown">
-                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
+                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
+                           data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">
                                Scopes
@@ -61,7 +63,8 @@
 
                 <ul class="navbar-nav ml-4 float-sm-left">
                     <li class="nav-item dropdown">
-                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
+                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
+                           data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">
                                Dev Board
@@ -83,7 +86,8 @@
 
                 <ul class="navbar-nav ml-4 float-sm-left">
                     <li class="nav-item dropdown">
-                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
+                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
+                           data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">
                                Testing
@@ -104,7 +108,8 @@
                 </ul>
                 <ul class="navbar-nav ml-4 float-sm-left">
                     <li class="nav-item dropdown">
-                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
+                        <a href="#" class="d-block d-md-flex text-center nav-link dropdown-toggle"
+                           data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">
                                Complete
@@ -148,7 +153,8 @@
                         <a href="#" class="d-block d-md-flex text-center nav-link" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <span class="d-none d-md-block">
-                               <i class="fa fa-fw fa-plus-circle compltit-blue" style="color:#174991;font-size: 26px;"></i>
+                               <i class="fa fa-fw fa-plus-circle compltit-blue"
+                                  style="color:#174991;font-size: 26px;"></i>
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
@@ -175,13 +181,13 @@
     </nav>
 @endsection
 @section('content')
-<home :user="user" inline-template>
-    <div class="container">
-        <!-- Application Dashboard -->
-        <div class="row">
-            <div class="col-md-12">
-                <h2 style="margin: 20px;">This is the list name
-                    <span style="float: right;">
+    <home :user="user" inline-template>
+        <div class="container">
+            <!-- Application Dashboard -->
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 style="margin: 20px;">This is the list name
+                        <span style="float: right;">
                         <span class="dropdown-toggle-split col-md-12 opacity"
                               data-toggle="dropdown">
                             <i class="fa fa-ellipsis-h"></i>
@@ -200,18 +206,18 @@
                             </diV>
                         </div>
                     </span>
-                </h2>
+                    </h2>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <img src="/img/taskimg.png" class="img-responsive"/>
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="/img/taskimg.png" class="img-responsive"/>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h2 style="margin: 20px;">This is the list 2 name
-                    <span style="float: right;">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 style="margin: 20px;">This is the list 2 name
+                        <span style="float: right;">
                         <span class="dropdown-toggle-split col-md-12 opacity"
                               data-toggle="dropdown">
                             <i class="fa fa-ellipsis-h"></i>
@@ -230,18 +236,18 @@
                             </diV>
                         </div>
                     </span>
-                </h2>
+                    </h2>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <img src="/img/taskimg.png" class="img-responsive"/>
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="/img/taskimg.png" class="img-responsive"/>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h2 style="margin: 20px;">This is the list name
-                    <span style="float: right;">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 style="margin: 20px;">This is the list name
+                        <span style="float: right;">
                         <span class="dropdown-toggle-split col-md-12 opacity"
                               data-toggle="dropdown">
                             <i class="fa fa-ellipsis-h"></i>
@@ -260,18 +266,18 @@
                             </diV>
                         </div>
                     </span>
-                </h2>
+                    </h2>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <img src="/img/taskimg.png" class="img-responsive"/>
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="/img/taskimg.png" class="img-responsive"/>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h2 style="margin: 20px;">This is the list 3 name
-                    <span style="float: right;">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 style="margin: 20px;">This is the list 3 name
+                        <span style="float: right;">
                         <span class="dropdown-toggle-split col-md-12 opacity"
                               data-toggle="dropdown">
                             <i class="fa fa-ellipsis-h"></i>
@@ -290,15 +296,28 @@
                             </diV>
                         </div>
                     </span>
-                </h2>
+                    </h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="/img/taskimg.png" class="img-responsive"/>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <img src="/img/taskimg.png" class="img-responsive"/>
-            </div>
-        </div>
-    </div>
-</home>
+
+    </home>
+
 @endsection
 
+@section('custom_scripts')
+    <script>
+        $(document).ready(function () {
+            if(localStorage.browser_last_project !== undefined){
+                var project_id = JSON.parse(localStorage.browser_last_project);
+                // alert(project_id)
+                window.location.href = '/project-dashboard/'+project_id;
+            }
+        })
+    </script>
+@endsection

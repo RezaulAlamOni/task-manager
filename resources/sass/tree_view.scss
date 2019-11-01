@@ -7,7 +7,7 @@
 @mixin leftContent() {
     position: absolute;
     left: 15px;
-    top: 10px;
+    top: 6px;
 }
 
 
@@ -111,72 +111,72 @@
         .left-content1 {
             position: absolute;
             left: 25px;
-            top: 10px;
+            top: 6px;
         }
 
         .tree-node-children {
             .left-content {
                 position: absolute;
                 left: -35px;
-                top: 10px;
+                top: 6px;
             }
 
             .left-content1 {
                 position: absolute;
                 left: -10px;
-                top: 10px;
+                top: 6px;
             }
 
             .tree-node-children {
                 .left-content {
                     position: absolute;
                     left: -85px;
-                    top: 10px;
+                    top: 6px;
                 }
 
                 .left-content1 {
                     position: absolute;
                     left: -65px;
-                    top: 10px;
+                    top: 6px;
                 }
 
                 .tree-node-children {
                     .left-content {
                         position: absolute;
                         left: -135px;
-                        top: 10px;
+                        top: 6px;
                     }
 
                     .left-content1 {
                         position: absolute;
                         left: -110px;
-                        top: 10px;
+                        top: 6px;
                     }
 
                     .tree-node-children {
                         .left-content {
                             position: absolute;
                             left: -185px;
-                            top: 10px;
+                            top: 6px;
                         }
 
                         .left-content1 {
                             position: absolute;
                             left: -175px;
-                            top: 10px;
+                            top: 6px;
                         }
 
                         .tree-node-children {
                             .left-content {
                                 position: absolute;
                                 left: -235px;
-                                top: 10px;
+                                top: 6px;
                             }
                             .tree-node-children {
                                 .left-content {
                                     position: absolute;
                                     left: -285px;
-                                    top: 10px;
+                                    top: 6px;
                                 }
 
                             }
@@ -819,6 +819,25 @@
     position: absolute;
     right: 45px;
     background: #ff0622;
+}
+.task-complete{
+    display: none;
+}
+.empty-progress {
+    height: 22px;
+    width: 22px;
+    border: 1px solid black;
+    border-radius: 50%;
+    margin-left: 3px;
+    margin-top: 3px;
+}
+.progress-bar-custom:hover {
+    .task-complete{
+        display: inherit;
+    }
+    .task-complete-progress {
+        display: none;
+    }
 }
 
 .assignUser-photo {
