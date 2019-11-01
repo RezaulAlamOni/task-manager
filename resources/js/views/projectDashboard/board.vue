@@ -15,7 +15,7 @@
                                 <div class="card-column-header">
                                     <span @click="showColumn(index, column.boardId)"
                                           class="column-drag-handle">&#8667;</span>
-                                          
+
                                 </div>
                             </div>
                             <div :class="column.props.className" v-else>
@@ -26,7 +26,7 @@
                                             <img :src="baseUrl+'/img/'+column.progress+'.png'" height="40" width="40" />
                                         </div>
                                         <div class="col-md-5" style="margin: 0px; padding : 0px;">
-                                            <span class="col_name">{{ column.name }}</span> 
+                                            <span class="col_name">{{ column.name }}</span>
                                         </div>
                                         <div class="col-md-2" style="margin: 0px; padding : 0px;">
                                             <span class="total-task">{{column.children.length}}</span>
@@ -91,13 +91,13 @@
                                     group-name="col"
                                 >
                                     <Draggable :key="card.id" v-for="(card , key) in column.children" >
-                                        <div :class="card.props.className" 
-                                                :style="card.props.style" 
-                                                class="card-list" 
-                                                @click="selectCard(card)" 
-                                                :id="'card_'+card.cardId" 
+                                        <div :class="card.props.className"
+                                                :style="card.props.style"
+                                                class="card-list"
+                                                @click="selectCard(card)"
+                                                :id="'card_'+card.cardId"
                                                 v-on:dblclick="showLog">
-                                                
+
                                             <span style="position: absolute; right: 20px; top: 8px; ">
                                                 <span class="dropdown-toggle-split opacity"
                                                     data-toggle="dropdown">
@@ -107,11 +107,11 @@
                                                     <diV class="collapse show switchToggle">
                                                         <!-- <a @click="updateColumSow()" class="dropdown-item" href="#"><i
                                                             class="fa fa-edit opacity"></i> Edit column</a> -->
-                                                        
+
                                                         <a @click="showTransferModel(index, key, card.cardId, column.boardId)" class="dropdown-item"
                                                         href="#"><i
                                                             class="fa fa-share-square-o opacity"></i> Transfer task to another board</a>
-                                                        
+
                                                         <div class="dropdown-divider" v-if="card.types === 'task'"></div>
                                                         <a @click="deleteTask(index, key, card.cardId)" class="dropdown-item"
                                                         href="#" v-if="card.types === 'task'">
@@ -122,7 +122,7 @@
                                                     </diV>
                                                 </div>
                                             </span>
-                                            
+
                                             <textarea
                                                 :data-text="card.data"
                                                 :id="'id'+index+key" @blur="showItem($event,card,index,key)"
@@ -130,7 +130,7 @@
                                                 @focus="hideItem($event)"
                                                 class="inp input-hide text-area"
                                                 data-grow="auto" style="padding: 10px !important;">{{ card.data }}</textarea>
-                                                
+
                                             <br>
                                             <div>
                                                 <div>
@@ -376,22 +376,22 @@
                                 <select class="form-control" v-model="addField.progress">
                                     <option style="background-image:url('/images/0.png');" value="0">0% Complete
                                     </option>
-                                    <option style="background-image:url('/images/125.png');" value="12.5">12.5%
+                                    <option style="background-image:url('/images/125.png');" value="125">12.5%
                                         Complete
                                     </option>
                                     <option style="background-image:url('/images/25.png');" value="25">25% Complete
                                     </option>
-                                    <option style="background-image:url('/images/375.png');" value="37.5">37.5%
+                                    <option style="background-image:url('/images/375.png');" value="375">37.5%
                                         Complete
                                     </option>
                                     <option style="background-image:url('/images/50.png');" value="50">50% Complete
                                     </option>
-                                    <option style="background-image:url('/images/625.png');" value="62.5">62.5%
+                                    <option style="background-image:url('/images/625.png');" value="625">62.5%
                                         Complete
                                     </option>
                                     <option style="background-image:url('/images/75.png');" value="75">75% Complete
                                     </option>
-                                    <option style="background-image:url('/images/875.png');" value="87.5">87.5%
+                                    <option style="background-image:url('/images/875.png');" value="875">87.5%
                                         Complete
                                     </option>
                                     <option style="background-image:url('/images/100.png');" value="100">100% Complete
@@ -432,22 +432,22 @@
                                 <select class="form-control" v-model="editField.progress">
                                     <option style="background-image:url('/images/0.png');" value="0">0% Complete
                                     </option>
-                                    <option style="background-image:url('/images/125.png');" value="12.5">12.5%
+                                    <option style="background-image:url('/images/125.png');" value="125">12.5%
                                         Complete
                                     </option>
                                     <option style="background-image:url('/images/25.png');" value="25">25% Complete
                                     </option>
-                                    <option style="background-image:url('/images/375.png');" value="37.5">37.5%
+                                    <option style="background-image:url('/images/375.png');" value="375">37.5%
                                         Complete
                                     </option>
                                     <option style="background-image:url('/images/50.png');" value="50">50% Complete
                                     </option>
-                                    <option style="background-image:url('/images/625.png');" value="62.5">62.5%
+                                    <option style="background-image:url('/images/625.png');" value="625">62.5%
                                         Complete
                                     </option>
                                     <option style="background-image:url('/images/75.png');" value="75">75% Complete
                                     </option>
-                                    <option style="background-image:url('/images/875.png');" value="87.5">87.5%
+                                    <option style="background-image:url('/images/875.png');" value="875">87.5%
                                         Complete
                                     </option>
                                     <option style="background-image:url('/images/100.png');" value="100">100% Complete
@@ -693,7 +693,7 @@
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="loader" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
-                <div>   
+                <div>
                 </div>
             </div>
         </div>
@@ -743,7 +743,7 @@
                             </div>
                             <div v-for="tree in tree4data">
                                 <li class="list-group-item">
-                                    <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': tree.board_parent_id !== null}" 
+                                    <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': tree.board_parent_id !== null}"
                                             v-if="tree.text !== '' && tree.board_parent_id !== null" >
                                         <input :id="tree.id" :value="tree.id" type="checkbox"
                                                 v-if="tree.text !== '' && tree.board_parent_id !== null"
@@ -761,7 +761,7 @@
                                             <li class="list-group-item" >
                                                 <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child.board_parent_id !== null}"   v-if="child.text !== '' && child.board_parent_id !== null" >
                                                     <input :id="child.id" class="tree-child" :value="child.id"
-                                                       type="checkbox" 
+                                                       type="checkbox"
                                                        checked disable> {{child.text}}
                                                     <span class="checkmark"></span>
                                                 </label>
@@ -770,11 +770,11 @@
                                                        type="checkbox" v-model="selectedExistedTask" @change="selectChild(child.id)" > {{child.text}}
                                                     <span class="checkmark"></span>
                                                 </label>
-                                                
+
                                                 <ul class="list-group list-group-flush" v-if="child.children">
                                                     <div v-for="child1 in child.children">
-                                                        <li class="list-group-item" > 
-                                                            <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child1.board_parent_id !== null}"  
+                                                        <li class="list-group-item" >
+                                                            <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child1.board_parent_id !== null}"
                                                             v-if="child1.text !== '' && child1.board_parent_id !== null">
                                                                 <input :id="child1.id" :value="child1.id" class="tree-child"
                                                                     type="checkbox"
@@ -790,7 +790,7 @@
                                                             <ul class="list-group list-group-flush" v-if="child1.children">
                                                                 <div v-for="child2 in child1.children">
                                                                     <li class="list-group-item" >
-                                                                        <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"  
+                                                                        <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
                                                                                 v-if="child2.text !== '' && child2.board_parent_id !== null">
                                                                             <input :id="child2.id" :value="child2.id"
                                                                                class="tree-child"
@@ -799,7 +799,7 @@
                                                                             <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
                                                                             <span class="checkmark"></span>
                                                                         </label>
-                                                                        
+
                                                                         <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
                                                                             <input :id="child2.id" :value="child2.id"
                                                                                class="tree-child selectAll"
@@ -813,7 +813,7 @@
                                                                         <ul class="list-group list-group-flush" v-if="child2.children">
                                                                             <div v-for="child3 in child2.children">
                                                                                 <li class="list-group-item">
-                                                                                    <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"   
+                                                                                    <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
                                                                                             v-if="child3.text !== '' && child3.board_parent_id !== null">
                                                                                         <input :id="child3.id"
                                                                                                 :value="child3.id"
@@ -1009,7 +1009,7 @@
                         _this.showLog();
                         // _this.task_logs = null;
                         // _this.ShowDetails(_this.selectedData);
-                        
+
                         break;
                     case "ctrl+c":
                         // _this.selectedCopy = _this.selectedData;
@@ -1475,13 +1475,13 @@
 
                 });
                 this.updateIndex = index;
-                
+
             },
             linkToCol(){
                 this.linkBtn = true;
             },
             listLinkToCol(){
-                swal('Warning!!','Work in progress','warning'); 
+                swal('Warning!!','Work in progress','warning');
             },
             showSubBoard() {
                 let _this = this;
@@ -1577,7 +1577,7 @@
             },
             transferColumnToOtherBoardSave(){
                 var _this = this;
-                
+
                 let data = {
                     'columnId' : this.currentColumn,
                     'multiple_board_id' : this.selectedSubBoard,
@@ -1645,7 +1645,7 @@
                     .then(response => {
                         _this.cards = response.success;
                         _this.getData();
-                        
+
                     })
                     .catch(error => {
                     });
@@ -1770,7 +1770,7 @@
                     }
                 });
 
-                
+
             },
             // deleteCard(index, cardIndex, id) {
             //     let _this = this;
@@ -1916,7 +1916,7 @@
             //             }
             //         })
             //         .catch(error => {
-                        
+
             //         })
             //     });
 
@@ -2248,7 +2248,7 @@
                         // _this.showTagManageModel();
                         _this.getBoardTask();
                         swal("Deleted!", "The tag has been deleted.", "success");
-                        
+
                         // _this.getData();
                         // _this.tag = null
                     })
