@@ -137,13 +137,6 @@
                                          @click="addTaskToComplete(data)" data-toggle="tooltip"
                                          :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
                                          class="task-complete left-content li-opacity ">
-
-<!--                                    <a :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"-->
-<!--                                       style="height: 30px;width: 30px"-->
-<!--                                       @click="addTaskToComplete(data)" data-toggle="tooltip"-->
-<!--                                       class=" left-content li-opacity "-->
-<!--                                    >-->
-<!--                                </a>-->
                                 </span>
 
 
@@ -154,16 +147,7 @@
 <!--                                >-->
 <!--                                    <i class="outline-check_circle_outline icon-image-preview "></i>-->
 <!--                                </a>-->
-                                <!--                                <a :title="'Remove this task'"-->
-                                <!--                                   @click="RemoveNodeAndChildren(data)"-->
-                                <!--                                   class="delete-icon left-content li-opacity"-->
-                                <!--                                   data-toggle="tooltip"-->
-                                <!--                                   href="javascript:void(0)">-->
-                                <!--                                    <i class="baseline-playlist_delete icon-image-preview"></i>-->
-                                <!--                                </a>-->
-                                <!--                                <a class="left-content1 li-opacity ">-->
-                                <!--                                    <i class="outline-arrow_upward icon-image-preview"></i>-->
-                                <!--                                </a>-->
+
                                 <b @click="HideShowChild(store , data)"
                                    v-if="data.children && data.children.length && data.open"><i
                                     class="fa fa-fw fa-minus"></i></b>
