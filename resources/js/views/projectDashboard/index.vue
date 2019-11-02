@@ -928,7 +928,7 @@
                         _this.HideDetails(_this.selectedData);
                         break;
                     case "right" :
-                        if (_this.selectedIds.length === 1){
+                        if (_this.selectedIds.length >= 1){
                             _this.showLog();
                             _this.task_logs = null;
                             _this.ShowDetails(_this.selectedData);
@@ -1780,8 +1780,15 @@
                         axios.post('/api/task-list/update', postData)
                             .then(response => response.data)
                             .then(response => {
-                                _this.getTaskList();
-                                swal("Complete!", "This task is added to complete", "success");
+                                if (response.status === 1){
+                                    _this.getTaskList();
+                                    swal("Complete!", "This task is added to complete", "success");
+                                }else if(response.status === 2) {
+                                    swal("Sorry!", "ThE board dont have any 100% progress column !!", "warning");
+                                }else if(response.status === 0 ) {
+                                    swal("Sorry!", "This task is not Live in any board yet", "warning");
+                                }
+
                             })
                             .catch(error => {
                                 console.log('Api for complete task not Working !!!')
