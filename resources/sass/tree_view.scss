@@ -98,7 +98,12 @@
                 cursor: pointer;
                 color: rgba(0, 0, 0, 0.75);
                 @include transition(all 0.2s linear);
-
+            }
+            .li-opacity-sub {
+                opacity: 0.90;
+                cursor: pointer;
+                color: rgba(0, 0, 0, 0.75);
+                @include transition(all 0.2s linear);
             }
         }
     }
@@ -509,6 +514,12 @@
     @include transition(all 0.4s linear);
     min-height: calc(100vh - 245px);
     display: inline-block;
+    .hide-item-res {
+        display: inherit;
+    }
+    .hide-item-res-user {
+        display: inherit;
+    }
 
 }
 
@@ -518,9 +529,13 @@
     @include transition(all 0.4s linear);
     height: calc(100vh - 130px);
     display: inline-block;
-
+    .hide-item-res {
+        display: none;
+    }
+    .hide-item-res-user {
+        display: none;
+    }
 }
-
 .details {
     position: relative;
     display: none;
@@ -964,7 +979,8 @@
     font-weight: bold;
 }
 .contex-menu-icon{
-    height: 12px !important;
+    height: 18px !important;
+    padding-right: 12px;
 }
 .contex-menu-sortcut{
     position: absolute;

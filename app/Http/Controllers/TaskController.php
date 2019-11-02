@@ -44,7 +44,7 @@ class TaskController extends Controller
         $tasks = Task::where('parent_id', 0)
             ->where('project_id', $request->id)
             ->where('list_id', $list_id)
-            ->where('is_complete', 0)
+//            ->where('is_complete', 0)
             ->orderBy('sort_id', 'ASC')
             ->get();
         $task = [];
@@ -115,7 +115,7 @@ class TaskController extends Controller
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
-                ->where('is_complete', 0)
+//                ->where('is_complete', 0)
                 ->orderBy('sort_id', 'ASC')
                 ->get();
             if (!empty($childrens)) {
@@ -588,8 +588,17 @@ class TaskController extends Controller
                 return response()->json('success', 200);
             }
         } elseif (isset($request->complete)) {
-            if (Task::where('id', $request->id)->update(['is_complete' => 1])) {
-                return response()->json('success', 200);
+            $find = Task::find($request->id);
+            if ($find->board_parent_id != null){
+                $board_parent = Task::where(['board_parent_id'=>0,'progress'=>100,'multiple_board_id'=>$find->multiple_board_id])->first();
+                if ($board_parent){
+                    Task::where('id', $request->id)->update(['progress' => $board_parent->progress,'board_parent_id'=>$board_parent->id]);
+                    return response()->json(['status'=>1]);
+                }else{
+                    return response()->json(['status'=>2]);
+                }
+            } else {
+                return response()->json(['status'=>0]);
             }
         } elseif (isset($request->date)) {
             if (Task::where('id', $request->id)->update(['date' => $request->date])) {

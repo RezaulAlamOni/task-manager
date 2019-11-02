@@ -353,7 +353,7 @@ class MultipleBoardController extends Controller
                                 'board_flag' => 1,
                                 'progress'=>$parent->progress,
                                 'task_flag' => 1,
-                                'multiple_board_id' => $request->multiple_board_id
+                                'multiple_board_id' => $parent->multiple_board_id
                             ]);
             // $insert = ExistingTasksInBoard::create($data);
             $task[$key] = Task::where('id', $value)->first();
