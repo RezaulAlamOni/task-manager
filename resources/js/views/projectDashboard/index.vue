@@ -133,21 +133,18 @@
 
                                     <div v-else class="task-complete-progress empty-progress left-content li-opacity "></div>
 
-                                    <img :src="baseUrl+'/img/check.png'" alt="" height="28" width="28"
+                                    <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28" width="28"
+                                         v-if="data.progress === '100'"
+                                         :title="'This task is complete'" data-toggle="tooltip"
+                                         class="task-complete left-content li-opacity ">
+
+                                    <img :src="baseUrl+'/img/check.png'" alt="" height="28" width="28" v-else
                                          @click="addTaskToComplete(data)" data-toggle="tooltip"
                                          :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
                                          class="task-complete left-content li-opacity ">
+
                                 </span>
-
-
-<!--                                <a :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"-->
-<!--                                   :style="{'background-image':baseUrl+'/img/0.png'}"-->
-<!--                                   @click="addTaskToComplete(data)" data-toggle="tooltip"-->
-<!--                                   class="task-complete left-content li-opacity "-->
-<!--                                >-->
-<!--                                    <i class="outline-check_circle_outline icon-image-preview "></i>-->
-<!--                                </a>-->
-
+                                
                                 <b @click="HideShowChild(store , data)"
                                    v-if="data.children && data.children.length && data.open"><i
                                     class="fa fa-fw fa-minus"></i></b>
@@ -1784,7 +1781,7 @@
                                     _this.getTaskList();
                                     swal("Complete!", "This task is added to complete", "success");
                                 }else if(response.status === 2) {
-                                    swal("Sorry!", "ThE board dont have any 100% progress column !!", "warning");
+                                    swal("Sorry!", "The board dont have any 100% progress column !!", "warning");
                                 }else if(response.status === 0 ) {
                                     swal("Sorry!", "This task is not Live in any board yet", "warning");
                                 }
