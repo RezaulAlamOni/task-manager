@@ -12,6 +12,7 @@ use App\Project;
 use App\User;
 use App\AssignedUser;
 use App\AssignTag;
+use App\LinkListToColumn;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -77,6 +78,14 @@ class MultipleBoardController extends Controller
                     }
 
                     $boards[$key]['task'][$keys]['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id','users.id')->where('task_id', $values['id'])->get()->toArray();
+
+                    $assigned_user_ids = [];
+                    foreach ($boards[$key]['task'][$keys]['assigned_user'] as $id) {
+                        $assigned_user_ids[] = $id['id'];
+                    }
+                    // $info['assigned_user_ids'] = $assigned_user_ids;
+
+                    $boards[$key]['task'][$keys]['assigned_user_ids'] = $assigned_user_ids;
                     $team = DB::table('team_users')->where('user_id', Auth::id())->first();
                     $boards[$key]['task'][$keys]['users'] = User::join('team_users', 'team_users.user_id', 'users.id')
                                                             ->where('team_users.team_id', $team->team_id)->get()->toArray();
@@ -87,6 +96,7 @@ class MultipleBoardController extends Controller
 
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
+                    $boards[$key]['task'][$keys]['progress'] = $values['progress'];
                     if ($values['list_id'] != '') {
                         $boards[$key]['task'][$keys]['type'] = 'task';
                     } else {
@@ -463,6 +473,20 @@ class MultipleBoardController extends Controller
         if ($data) {
             // $this->createLog($id, 'Updated', 'Column Updated', 'Board Column sorting');
             return response()->json(['success' => true, 'data' => $data]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function linkListToColumn(Request $request) {
+        $data = [
+            'multiple_list_id' => $request->multiple_list,
+            'task_list_id' => $request->columnId,
+        ];
+
+        $insert = LinkListToColumn::create($data);
+        if ($insert) {
+            return response()->json(['success' => true, 'data' => $insert]);
         } else {
             return response()->json(['success' => false]);
         }

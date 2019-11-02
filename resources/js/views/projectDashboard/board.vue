@@ -162,38 +162,36 @@
                                                         <i class="baseline-playlist_delete icon-image-preview"></i>
                                                     </a>
                                                 </div>
+                                                
+
                                                 <div>
                                                     <a class="user dropdown-hide-with-remove-icon">
                                                         <template v-if="card.assigned_user.length > 0">
                                                             <span class="assigned_user dropdown-toggle-split "
                                                                 data-toggle="dropdown" v-for="(assign,keyId) in card.assigned_user">
                                                                 <p :title="assign.name"
-                                                                @click="showAssignedUserRemoveButton(card)"
                                                                 class="assignUser-photo-for-selected text-uppercase"
-                                                                style="top: 7px;"
                                                                 data-placement="bottom" data-toggle="tooltip"
+                                                                style="top: 10px;"
                                                                 v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
-                                                                    <a :id="'remove-assign-user'+card.cardId"
-                                                                    @click="removeAssignedUser(assign, index, key)"
-                                                                    class="remove-assigned" href="javascript:void(0)">
-                                                                        <i class="fa fa-times remove-assign-user-icon"></i>
-                                                                    </a>
                                                                 </p>
 
                                                             </span>
                                                         </template>
+                                                        <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
+                                                            <i class="outline-person icon-image-preview li-opacity "
+                                                            data-toggle="tooltip" title="Assignee">
+                                                            </i>
+                                                        </span>
 
-                                                        <i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"
-                                                        data-toggle="dropdown"
-                                                        v-else></i>
-                                                        <div class="dropdown-menu dropdown-menu-right">
+                                                        <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
                                                             <diV class="collapse show switchToggle">
                                                                 <li class="assignUser">
                                                                     <input class="input-group searchUser"
                                                                         placeholder="Assign by name and email"
-                                                                        type="text"
                                                                         style="width: 90%; padding: 12px 20px; margin: 10px; display: inline-block; border: 1px solid #ccc;
-                                                                                    border-radius: 4px; box-sizing: border-box; ">
+                                                                                    border-radius: 4px; box-sizing: border-box; "
+                                                                        type="text">
                                                                     <label class="pl-2 label-text">
                                                                         <span class="assign-user-drop-down-text">
                                                                             Or invite a new member by email address
@@ -202,8 +200,11 @@
                                                                 </li>
                                                                 <li class="assignUser">
                                                                     <template v-for="user in card.users">
-                                                                        <div @click="assignUserToTask(user, index, key, card)"
-                                                                            class="users-select row">
+                                                                        <div
+                                                                            @click="(card.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user, index, key, card) "
+                                                                            :class="(card.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
+                                                                            class="row"
+                                                                            v-bind:disabled="(card.assigned_user_ids.includes(user.id)) ? true : false">
                                                                             <div class="col-md-3 pt-1 pl-4">
                                                                                 <p class="assignUser-photo">
                                                                                     {{(user.name !== null) ? user.name.substring(0,2) :
@@ -214,7 +215,22 @@
                                                                                     <small>{{user.email}}</small>
                                                                                 </h5>
                                                                             </div>
+                                                                            <a :id="'remove-assign-user'+user.id"
+                                                                            v-if="card.assigned_user_ids.includes(user.id)"
+                                                                            @click="removeAssignedUser(user.id, card.cardId)"
+                                                                            data-toggle="tooltip" title="Remove user from assigned !"
+                                                                            class="remove-assign-user badge badge-danger"
+                                                                            href="javascript:void(0)">
+                                                                                <i class="fa fa-user-times remove-assign-user-icon"></i>
+                                                                            </a>
+                                                                            <a :id="'remove-assign-user'+user.id" v-else
+                                                                            data-toggle="tooltip" title="Assign user to task!"
+                                                                            class="remove-assign-user badge badge-success"
+                                                                            href="javascript:void(0)">
+                                                                                <i class="fa fa-user-plus remove-assign-user-icon"></i>
+                                                                            </a>
                                                                         </div>
+
                                                                     </template>
                                                                 </li>
                                                             </diV>
@@ -1105,6 +1121,7 @@
                             cardId: this.cards[i].task[j].id,
                             types: this.cards[i].task[j].type,
                             assigned_user: this.cards[i].task[j].assigned_user,
+                            assigned_user_ids: this.cards[i].task[j].assigned_user_ids,
                             users: this.cards[i].task[j].users,
                             existing_tags: this.cards[i].task[j].existing_tags,
                             props: {
@@ -1114,6 +1131,7 @@
                             data: this.cards[i].task[j].name,
                             description: this.cards[i].task[j].name,
                             date: this.cards[i].task[j].date,
+                            progress: this.cards[i].task[j].progress,
                             tags: this.cards[i].task[j].tags,
                             tagTooltip: this.cards[i].task[j].tagTooltip,
                             delete: this.cards[i].task[j].name
@@ -1481,6 +1499,20 @@
                 this.linkBtn = true;
             },
             listLinkToCol(){
+                // alert(this.currentColumn);
+                // alert(this.selectedSubNav);
+                let data = {
+                    'columnId' : this.currentColumn,
+                    'multiple_list' : this.selectedSubNav
+                }
+                axios.post('/api/link-list-to-column', data)
+                .then(response => response.data)
+                .then(response => {
+
+                })
+                .error(error => {
+
+                });
                 swal('Warning!!','Work in progress','warning');
             },
             showSubBoard() {
@@ -1665,7 +1697,7 @@
                     return false;
                 }
                 let data = {
-                    'multiple_board_id': this.selectedSubNav,
+                    'multiple_board_id': this.selectedSubBoard,
                     'tasks': this.selectedExistedTask,
                     'id': this.currentColumn
                 };
@@ -2145,23 +2177,47 @@
                 }, 500)
 
             },
-            removeAssignedUser(user, index, key) {
+            // removeAssignedUser(user_id, task_id) {
+
+            //     // console.log(user.id, user.task_id);
+            //     var _this = this;
+            //     var postData = {
+            //         user_id: user_id,
+            //         task_id: task_id
+            //     };
+            //     axios.post('/api/task-list/assign-user-remove', postData)
+            //         .then(response => response.data)
+            //         .then(response => {
+            //             // console.log(response);
+            //             if (response === 'success') {
+            //                 _this.cards[index].task[key].assigned_user.splice(0,1);
+            //                 _this.cards[index].task[key].assigned_user_i.splice(0,1);
+            //                 setTimeout(function () {
+            //                     _this.getData();
+            //                 }, 100);
+            //             }
+            //         })
+            //         .catch(error => {
+            //             console.log('Api assign-user-remove is not Working !!!')
+            //         });
+            // },
+            removeAssignedUser(user_id, task_id) {
 
                 // console.log(user.id, user.task_id);
                 var _this = this;
                 var postData = {
-                    user_id: user.cardId,
-                    task_id: user.task_id
+                    user_id: user_id,
+                    task_id: task_id
                 };
+                        // console.log(postData)
                 axios.post('/api/task-list/assign-user-remove', postData)
                     .then(response => response.data)
                     .then(response => {
-                        // console.log(response);
                         if (response === 'success') {
-                            _this.cards[index].task[key].assigned_user.splice(0,1);
-                            setTimeout(function () {
-                                _this.getData();
-                            }, 100);
+                            // _this.cards[index].task[key].assigned_user.splice(0,1);
+                            // _this.cards[index].task[key].assigned_user_ids.splice(0,1);
+                            console.log(response);
+                            _this.getBoardTask();
                         }
                     })
                     .catch(error => {
