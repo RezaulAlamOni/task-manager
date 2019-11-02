@@ -98,7 +98,12 @@
                 cursor: pointer;
                 color: rgba(0, 0, 0, 0.75);
                 @include transition(all 0.2s linear);
-
+            }
+            .li-opacity-sub {
+                opacity: 0.90;
+                cursor: pointer;
+                color: rgba(0, 0, 0, 0.75);
+                @include transition(all 0.2s linear);
             }
         }
     }
@@ -527,14 +532,10 @@
     .hide-item-res {
         display: none;
     }
-
     .hide-item-res-user {
         display: none;
     }
-
-
 }
-
 .details {
     position: relative;
     display: none;
@@ -978,7 +979,8 @@
     font-weight: bold;
 }
 .contex-menu-icon{
-    height: 12px !important;
+    height: 18px !important;
+    padding-right: 12px;
 }
 .contex-menu-sortcut{
     position: absolute;

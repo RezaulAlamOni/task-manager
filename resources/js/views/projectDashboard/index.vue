@@ -144,7 +144,7 @@
                                          class="task-complete left-content li-opacity ">
 
                                 </span>
-                                
+
                                 <b @click="HideShowChild(store , data)"
                                    v-if="data.children && data.children.length && data.open"><i
                                     class="fa fa-fw fa-minus"></i></b>
@@ -171,10 +171,15 @@
                                                      class="task-img">
                                             </template>
                                         </span>
-                                    <i @click="addAttachment(data)"
-                                       class="fa fa-paperclip icon-image-preview dropdown-toggle-split li-opacity"
-                                       title="File"
-                                       data-toggle="tooltip"></i>
+<!--                                    <img src="https://img.icons8.com/color/48/000000/add-folder.png"-->
+                                    <img :src="baseUrl+'/img/task-icon/upload.png'"
+                                         @click="addAttachment(data)"
+                                         title="File" data-toggle="tooltip"
+                                         class="icon-image-preview li-opacity">
+
+<!--                                    <i @click="addAttachment(data)"-->
+<!--                                       class="cloud-image-upload icon-image-preview dropdown-toggle-split li-opacity"-->
+<!--                                       title="File" data-toggle="tooltip"></i>-->
 
                                     <input :id="'file'+data._id" @change="updatePicture($event,data)" ref="file"
                                            style="display: none; "
@@ -203,9 +208,7 @@
                                         </template>
                                     </i>
                                     <span :id="'tag-'+data._id" data-toggle="dropdown" v-else>
-                                        <i class="outline-local_offer icon-image-preview li-opacity"
-                                           data-toggle="tooltip" title="Tag">
-                                        </i>
+                                        <img :src="baseUrl+'/img/task-icon/tag-add.png'" class="icon-image-preview li-opacity"  data-toggle="tooltip" title="Add Tag">
                                     </span>
 
                                     <div :id="'dropdown'+data._id" class="dropdown-menu dropdown-menu-right">
@@ -253,8 +256,10 @@
                                 <div class="hide-item-res" @click="openPicker()">
                                     <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'"
                                        title="Due Date">
-                                        <i class="outline-event icon-image-preview" data-toggle
-                                           title="toggle"></i>
+                                        <img :src="baseUrl+'/img/task-icon/date-plus.png'" class="icon-image-preview">
+<!--                                        <i class="outline-event icon-image-preview" data-toggle-->
+<!--                                           title="toggle"></i>-->
+
                                     </a>
                                     <datepicker
                                         :disabled-dates="disabledDates"
@@ -282,9 +287,11 @@
                                             </span>
                                         </template>
                                         <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
-                                            <i class="outline-person icon-image-preview li-opacity "
-                                               data-toggle="tooltip" title="Assignee">
-                                            </i>
+<!--                                            <i class="outline-person icon-image-preview li-opacity "-->
+<!--                                               data-toggle="tooltip" title="Assignee">-->
+<!--                                            </i>-->
+                                            <img :src="baseUrl+'/img/task-icon/add-user.png'"  class="icon-image-preview li-opacity "
+                                                 data-toggle="tooltip" title="Assignee">
                                         </span>
 
                                         <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
@@ -349,15 +356,16 @@
                                         </div>
                                     </a>
                                 </div>
-                                <a @click="addChild(data)" class="subTask_plus li-opacity clickHide "
+                                <a @click="addChild(data)" class="subTask_plus li-opacity li-opacity-sub clickHide "
                                    data-toggle="tooltip" title="Add Child">
-                                    <i class="baseline-playlist_add icon-image-preview"></i>
+<!--                                    <i class="baseline-playlist_add icon-image-preview"></i>-->
+                                    <img :src="baseUrl+'/img/task-icon/add-Sublist.png'" class="icon-image-preview li-opacity-sub ">
                                 </a>
-                                <a @click="addNode(data)" class="task_plus li-opacity clickHide" data-toggle="tooltip"
+                                <a @click="addNode(data)" class="task_plus li-opacity li-opacity-sub clickHide" data-toggle="tooltip"
                                    title="Add Task Bellow">
-                                    <i class="baseline-add icon-image-preview"></i>
+<!--                                    <i class="baseline-add icon-image-preview"></i>-->
+                                    <img :src="baseUrl+'/img/task-icon/add-list.png'" class="icon-image-preview li-opacity-sub ">
                                 </a>
-
                             </template>
                         </div>
 
@@ -370,12 +378,12 @@
                                    v-if="selectedData.text !== 'Dont Forget Section'"
                                    @click="copyTask"
                                    data-toggle="dropdown">
-                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    <img src="https://img.icons8.com/color/32/000000/copy.png"  class="contex-menu-icon">
                                     Copy </a>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split disabled" v-else
                                    style="color: gray"
                                    data-toggle="dropdown">
-                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    <img src="https://img.icons8.com/color/32/000000/copy.png" class="contex-menu-icon">
                                     Copy </a>
 
                                 <span class="contex-menu-sortcut">
@@ -389,12 +397,13 @@
                                    v-if="selectedData.text !== 'Dont Forget Section'"
                                    @click="cutTask"
                                    data-toggle="dropdown">
-                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+
+                                    <img src="https://img.icons8.com/color/48/000000/cutting-coupon.png" class="contex-menu-icon">
                                     Cut </a>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split disabled"
                                    v-else style="color: gray"
                                    data-toggle="dropdown">
-                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    <img src="https://img.icons8.com/color/48/000000/cutting-coupon.png" class="contex-menu-icon">
                                     Cut </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+<span
@@ -406,26 +415,36 @@
                                    @click="pastCopyAndCut"
                                    data-toggle="dropdown"
                                    v-if="selectedCopy !== null || selectedCut !== null">
-                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    <img src="https://img.icons8.com/color/50/000000/paste-special.png" class="contex-menu-icon">
                                     Paste </a>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split disabled" style="color: gray"
                                    data-toggle="dropdown"
                                    v-else>
-                                    <i class="glyphicon-cog icon-image-preview contex-menu-icon"></i>
+                                    <img src="https://img.icons8.com/color/50/000000/paste-special.png" class="contex-menu-icon">
                                     Paste </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+<span
                                     class="badge-pill badge-default">v</span>
                                 </span>
                             </li>
-                            <li><a @click="deleteSelectedTask" href="javascript:void(0)">
-                                <i class="baseline-playlist_delete icon-image-preview contex-menu-icon" data-toggle
-                                   title="toggle"></i>
+                            <li>
+                                <a @click="deleteSelectedTask" href="javascript:void(0)">
+                                    <img src="https://img.icons8.com/color/48/000000/move.png"class="contex-menu-icon">
+                                Move Selected
+                                </a>
+                                <span class="contex-menu-sortcut">
+                                   <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">M</span>
+                                </span>
+                            </li>
+                            <li>
+                                <a @click="deleteSelectedTask" href="javascript:void(0)">
+                                    <img src="https://img.icons8.com/color/48/000000/delete-forever.png" class="contex-menu-icon">
+
                                 Delete Selected <span class="badge-pill badge-default contex-menu-sortcut">Delete</span></a>
                             </li>
                             <li>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
-                                    <i class="outline-person icon-image-preview contex-menu-icon"></i>
+                                    <img src="https://img.icons8.com/color/48/000000/add-user-male.png" class="contex-menu-icon">
                                     Assign User to Selected </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+<span
@@ -467,7 +486,7 @@
                             </li>
                             <li>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
-                                    <i class="outline-local_offer icon-image-preview contex-menu-icon"></i>
+                                    <img src="https://img.icons8.com/color/48/000000/tags.png" class="contex-menu-icon">
                                     Add Tags to Selected
                                 </a>
                                 <span class="contex-menu-sortcut">
@@ -518,15 +537,15 @@
                                 </datepicker>
 
                                 <a class="calender li-opacity clickHide">
-                                    <i class="outline-event icon-image-preview contex-menu-icon" data-toggle
-                                       title="toggle"></i> Set Due Date
+                                    <img src="https://img.icons8.com/color/48/000000/planner.png" class="contex-menu-icon">
+                                    Set Due Date
                                 </a>
 
 
                             </li>
                             <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">
-                                <i class="baseline-playlist_delete icon-image-preview contex-menu-icon" data-toggle
-                                   title="toggle"></i>
+
+                                <img src="https://img.icons8.com/color/48/000000/add-property.png" class="contex-menu-icon">
                                 Move To Dont Forget Section </a>
                             </li>
 
