@@ -131,17 +131,19 @@
                                     <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28" width="28" v-if="(data.progress !== null)"
                                            class="task-complete-progress left-content">
 
-                                    <div v-else class="task-complete-progress empty-progress left-content li-opacity "></div>
+                                    <img v-else :src="baseUrl+'/img/task-icon/circle.png'" alt="" height="28" width="28"
+                                         class="task-complete-progress left-content li-opacity ">
+<!--                                    <div class="task-complete-progress empty-progress left-content li-opacity "></div>-->
 
                                     <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28" width="28"
                                          v-if="data.progress === '100'"
                                          :title="'This task is complete'" data-toggle="tooltip"
                                          class="task-complete left-content li-opacity ">
 
-                                    <img :src="baseUrl+'/img/check.png'" alt="" height="28" width="28" v-else
+                                    <img :src="baseUrl+'/img/task-icon/circle-check.png'" alt="" height="28" width="28" v-else
                                          @click="addTaskToComplete(data)" data-toggle="tooltip"
                                          :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
-                                         class="task-complete left-content li-opacity ">
+                                         class="task-complete left-content li-opacity">
 
                                 </span>
 
@@ -171,7 +173,7 @@
                                                      class="task-img">
                                             </template>
                                         </span>
-<!--                                    <img src="https://img.icons8.com/color/48/000000/add-folder.png"-->
+
                                     <img :src="baseUrl+'/img/task-icon/upload.png'"
                                          @click="addAttachment(data)"
                                          title="File" data-toggle="tooltip"
