@@ -23,9 +23,13 @@
             <!-- <div class="col-1">
                 <img class="img-responsive" src="/img/12.jpg" style="height:30px;width:30px;">
             </div> -->
-            <div class="col-4">
+            <div class="col-md-1">
+                    <img :src="baseUrl+'/img/'+selectedData.progress+'.png'"  height="40" width="40" style="clear: right;">
+                </div>
+            <div class="col-3">
+                
                 <!-- Tags -->
-                <div>
+                <div class="col-md-8">
                     <a :class="{'tag-icon': true, 'tag-icon-free': selectedData.tags == undefined || selectedData.tags.length == 0}">
                         <div v-if="selectedData.tags && selectedData.tags.length !== 0">
                             <div style="float: left;" v-for="(item, tagIndex) in selectedData.tags">
@@ -145,37 +149,34 @@
                 </div>
             </div>
             <!-- user assign -->
-            <div class="col-4">
+            <div class="col-md-4">
                 <a class="user dropdown-hide-with-remove-icon">
                     <template v-if="selectedData.assigned_user.length > 0">
                         <span class="assigned_user dropdown-toggle-split "
                             data-toggle="dropdown" v-for="(assign,keyId) in selectedData.assigned_user">
                             <p :title="assign.name"
-                                @click="showAssignedUserRemoveButton(selectedData)"
-                                class="assignUser-photo-for-selected text-uppercase"
-                                style="top: 7px;"
-                                data-placement="bottom" data-toggle="tooltip"
-                                v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
-                                <a :id="'remove-assign-user-modal'+selectedData.cardId"
-                                @click="removeAssignedUser(assign)"
-                                class="remove-assigned" href="javascript:void(0)">
-                                    <i class="fa fa-times remove-assign-user-icon"></i>
-                                </a>
+                            class="assignUser-photo-for-selected text-uppercase"
+                            data-placement="bottom" data-toggle="tooltip"
+                            style="top: 10px;"
+                            v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
                             </p>
 
                         </span>
                     </template>
-                    <div data-toggle="dropdown" v-else>
-                        <i class="outline-person icon-image-preview li-opacity dropdown-toggle-split"></i><span class="i-text">Add assignee</span>
-                    </div>
-                    <div class="dropdown-menu dropdown-menu-right">
+                    <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
+                        <i class="outline-person icon-image-preview li-opacity "
+                        data-toggle="tooltip" title="Assignee">
+                        </i>
+                    </span>
+
+                    <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
                         <diV class="collapse show switchToggle">
                             <li class="assignUser">
                                 <input class="input-group searchUser"
                                     placeholder="Assign by name and email"
-                                    type="text"
                                     style="width: 90%; padding: 12px 20px; margin: 10px; display: inline-block; border: 1px solid #ccc;
-                                                border-radius: 4px; box-sizing: border-box; ">
+                                                border-radius: 4px; box-sizing: border-box; "
+                                    type="text">
                                 <label class="pl-2 label-text">
                                     <span class="assign-user-drop-down-text">
                                         Or invite a new member by email address
@@ -184,19 +185,36 @@
                             </li>
                             <li class="assignUser">
                                 <template v-for="user in selectedData.users">
-                                    <div @click="assignUserToTask(user, selectedData)"
-                                        class="users-select row">
+                                    <div
+                                        @click="(selectedData.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user, selectedData) "
+                                        :class="(selectedData.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
+                                        class=" row"
+                                        v-bind:disabled="(selectedData.assigned_user_ids.includes(user.id)) ? true : false">
                                         <div class="col-md-3 pt-1 pl-4">
                                             <p class="assignUser-photo">
-                                                {{(user.name !== null) ? user.name.substring(0,2) :
-                                                ''}}</p>
+                                                {{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
                                         </div>
                                         <div class="col-md-9 assign-user-name-email">
                                             <h5>{{user.name}}<br>
                                                 <small>{{user.email}}</small>
                                             </h5>
                                         </div>
+                                        <a :id="'remove-assign-user'+user.id"
+                                            v-if="selectedData.assigned_user_ids.includes(user.id)"
+                                            @click="removeAssignedUser(user.id, selectedData.cardId)"
+                                            data-toggle="tooltip" title="Remove user from assigned !"
+                                            class="remove-assign-user badge badge-danger"
+                                            href="javascript:void(0)">
+                                                <i class="fa fa-user-times remove-assign-user-icon"></i>
+                                        </a>
+                                        <a :id="'remove-assign-user'+user.id" v-else
+                                        data-toggle="tooltip" title="Assign user to task!"
+                                        class="remove-assign-user badge badge-success"
+                                        href="javascript:void(0)">
+                                            <i class="fa fa-user-plus remove-assign-user-icon"></i>
+                                        </a>
                                     </div>
+
                                 </template>
                             </li>
                         </diV>
@@ -424,7 +442,7 @@
                     sort_id: null,
                     project_id: null,
                 },
-                selectedData : {},
+                // selectedData : {},
                 // task_logs : null,
                 check_uncheck_child : null,
                 manageTag: null,
@@ -558,23 +576,49 @@
                 }, 500)
 
             },
-            removeAssignedUser(user, index, key) {
+            // removeAssignedUser(user, index, key) {
+
+            //     // console.log(user.id, user.task_id);
+            //     var _this = this;
+            //     var postData = {
+            //         user_id: user.cardId,
+            //         task_id: user.task_id
+            //     };
+            //     axios.post('/api/task-list/assign-user-remove', postData)
+            //         .then(response => response.data)
+            //         .then(response => {
+            //             // console.log(response);
+            //             if (response === 'success') {
+            //                 // _this.cards[index].task[key].assigned_user.splice(0,1);
+            //                 setTimeout(function () {
+            //                     // _this.getData();
+            //                     _this.selectedData.assigned_user = [];
+            //                     _this.selectedData.assigned_user_ids = [];
+            //                 }, 100);
+            //             }
+            //         })
+            //         .catch(error => {
+            //             console.log('Api assign-user-remove is not Working !!!')
+            //         });
+            // },
+            removeAssignedUser(user_id, task_id) {
 
                 // console.log(user.id, user.task_id);
                 var _this = this;
                 var postData = {
-                    user_id: user.cardId,
-                    task_id: user.task_id
+                    user_id: user_id,
+                    task_id: task_id
                 };
+                        // console.log(postData)
                 axios.post('/api/task-list/assign-user-remove', postData)
                     .then(response => response.data)
                     .then(response => {
-                        // console.log(response);
                         if (response === 'success') {
                             // _this.cards[index].task[key].assigned_user.splice(0,1);
                             setTimeout(function () {
                                 // _this.getData();
                                 _this.selectedData.assigned_user = [];
+                                _this.selectedData.assigned_user_ids = [];
                             }, 100);
                         }
                     })
@@ -595,7 +639,9 @@
                             // _this.cards[index].task[key].assigned_user.push(response.data);
                             //  console.log(_this.cards);
                             setTimeout(function () {
-                                 _this.selectedData.assigned_user.push(response.data);
+                                // _this.cards[index].task[key].assigned_user.push(response.data);
+                                _this.selectedData.assigned_user.push(response.data);
+                                _this.selectedData.assigned_user_ids.push(response.data.id);
                                 // _this.getData();
                             }, 100);
                         }
