@@ -509,6 +509,12 @@
     @include transition(all 0.4s linear);
     min-height: calc(100vh - 245px);
     display: inline-block;
+    .hide-item-res {
+        display: inherit;
+    }
+    .hide-item-res-user {
+        display: inherit;
+    }
 
 }
 
@@ -518,6 +524,14 @@
     @include transition(all 0.4s linear);
     height: calc(100vh - 130px);
     display: inline-block;
+    .hide-item-res {
+        display: none;
+    }
+
+    .hide-item-res-user {
+        display: none;
+    }
+
 
 }
 

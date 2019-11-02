@@ -271,7 +271,7 @@
 
 
                                 </div>
-                                <div>
+                                <div class="hide-item-res-user">
                                     <a class="user dropdown-hide-with-remove-icon">
                                         <template v-if="data.assigned_user.length > 0">
                                             <span class="assigned_user dropdown-toggle-split "
@@ -928,12 +928,14 @@
                         _this.HideDetails(_this.selectedData);
                         break;
                     case "right" :
-                        _this.showLog();
-                        _this.task_logs = null;
-                        _this.ShowDetails(_this.selectedData);
-                        setTimeout(function () {
-                            $('#_details').click();
-                        }, 500);
+                        if (_this.selectedIds.length === 1){
+                            _this.showLog();
+                            _this.task_logs = null;
+                            _this.ShowDetails(_this.selectedData);
+                            setTimeout(function () {
+                                $('#_details').click();
+                            }, 500);
+                        }
                         break;
                     case "ctrl+c":
                         _this.copyTask();
@@ -978,7 +980,7 @@
                     curHeight = maxHeight;
                 } else {
                 }
-                if (curHeight < height) { 
+                if (curHeight < height) {
                     curHeight = height;
                 }
                 text.style.height = curHeight + 'px';
@@ -1285,6 +1287,7 @@
 
             },
             hideItem(e, data) {
+                data.draggable = false;
                 this.context_menu_flag = 1;
                 // data.draggable = false;
                 // $(e.target).closest('.eachItemRow').find('.task-complete').hide();
@@ -1299,6 +1302,7 @@
 
             },
             showItem(e, data) {
+
                 this.context_menu_flag = 0;
                 this.SaveDataWithoutCreateNewNode(data);
                 setTimeout(function () {
@@ -1311,7 +1315,8 @@
                     $(e.target).closest('.eachItemRow').find('.calender').show();
                     $(e.target).closest('.eachItemRow').find('.user').show();
                     $(e.target).closest('.eachItemRow').find('.dateCal').show();
-
+                    data.draggable = true;
+                    data.droppable = true;
                 }, 500);
 
                 $('.inp').addClass('input-hide');
