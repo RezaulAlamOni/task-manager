@@ -59,6 +59,8 @@ Route::post('/Transfer-to-board','MultipleBoardController@transferToAnotherBoard
 Route::post('/multiple-list','ProjectNavItemsController@multipleList'); //all nav list item
 Route::post('/Transfer-column-to-board','MultipleBoardController@transferColumnToAnotherBoard'); //all nav list item
 Route::post('/link-list-to-column','MultipleBoardController@linkListToColumn'); //all nav list item
+Route::post('/unlink-list-to-column','MultipleBoardController@unlinkListToColumn'); //all nav list item
+Route::post('/is-linked','MultipleBoardController@isLinked'); //all nav list item
 
 //assign  user to task
 Route::post('/task-list/assign-user','AssignedUserController@store'); //Assign user

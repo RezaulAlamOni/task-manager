@@ -82,4 +82,9 @@ class Task extends Model
     {
         return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags')->orderBy('board_sort_id','ASC');
     }
+
+    public function linkToList()
+    {
+        return $this->hasMany(LinkListToColumn::class, 'task_list_id', 'id')->with('linkToListColumn');
+    }
 }
