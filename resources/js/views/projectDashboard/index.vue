@@ -773,7 +773,7 @@
                                     <option disabled value="Select list Nav">Select Board Or List Nav
                                     </option>
                                     <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav_T">
-                                        {{navs.title}} <span :id="'selectedNavType'+navs.id" style="display:none;">{{navs.type}}</span>
+                                        {{navs.title}}
                                     </option>
                                 </select>
                             </div>
@@ -781,18 +781,31 @@
                         <div class="form-group row" v-if="list_T.length > 0">
                             <label class="col-sm-4 col-form-label">Select Board or List:</label>
                             <div class="col-sm-8">
-                                <select class="form-control" v-model="selectedSubList" @change="get_T_Bttn()">
+                                <select class="form-control" v-model="selectedSubList" @change="getColumnAndConfirmButton()">
                                     <option disabled value="Select list">Select
                                         Board or List
                                     </option>
                                     <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T"
                                             :disabled="((navList.id !== list_id) ? false : true)">
-                                        <span v-if="navList.board_title !== undefined">{{navList.board_title}}</span> <span v-else>{{navList.list_title}}</span>
+                                        <span v-if="type_T === 'board'">{{navList.board_title}}</span> <span v-else>{{navList.list_title}}</span>
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="column_T.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Column:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" v-model="selectedColumn" @change="get_T_Bttn()">
+                                    <option disabled value="Select column">Select column
+                                    </option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in column_T">
+                                       {{navList.title}}
                                     </option>
                                 </select>
                             </div>
                         </div>
                     </div>
+
                     <div class="modal-footer">
                         <button v-if="transferBtn" aria-label="Close" @click="MoveTaskToListOrBoard"
                                 class="btn btn-warning" data-dismiss="modal" type="button">Move Selected
@@ -926,8 +939,10 @@
                 context_menu_flag: 0,
                 selectedListNav: 'Select List Nav',
                 selectedSubList: 'Select List',
+                selectedColumn: 'Select column',
                 nav_T: [],
                 list_T: [],
+                column_T : [],
                 boardColumn: [],
                 action_T: '',
                 type_T: '',
@@ -2265,18 +2280,41 @@
                     'type': _this.type_T,
 
                 };
-                console.log(data)
                 axios.post('/api/multiple-list', data)
                     .then(response => response.data)
                     .then(response => {
                         _this.list_T = response.success;
+                        _this.type_T = response.type;
                     })
                     .catch(error => {
                     });
             },
             get_T_Bttn() {
                 this.transferBtn = true;
+                console.log(this.selectedColumn)
             },
+
+            getColumnAndConfirmButton() {
+                var _this = this;
+                if (_this.type_T === 'board'){
+                    let data = {
+                        'list_id': _this.selectedSubList
+                    };
+                    console.log(data)
+                    axios.post('/api/board-column', data)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.column_T = response.data;
+                        })
+                        .catch(error => {
+                        });
+
+                }else {
+                    this.transferBtn = true;
+                }
+
+            },
+
             DeleteAndMoveAllTask() {
                 var _this = this;
                 swal({
@@ -2320,15 +2358,21 @@
                     },
 
                     function () {
+
                         axios.post('/api/selected-task-move', {
                             ids: _this.selectedIds,
                             nav: _this.selectedListNav,
-                            target: _this.selectedSubList
+                            target: _this.selectedSubList,
+                            column_id : _this.selectedColumn
                         })
+
                             .then(response => response.data)
                             .then(response => {
                                 console.log(response)
                                 swal("Complete!", "All Selected task are moved !", "success");
+                                if (_this.type_T === 'list'){
+                                    _this.getTaskList()
+                                }
                                 // window.location.href = '/project-dashboard/' + _this.projectId;
                             })
                             .catch(error => {

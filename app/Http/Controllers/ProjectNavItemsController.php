@@ -25,7 +25,8 @@ class ProjectNavItemsController extends Controller
         $navItem = [];
         $nav = ProjectNavItems::where('project_id', $project_id)->orderBy('sort_id', 'asc')->get();
         foreach ($nav as $item) {
-            $item->lists = $this->getList($project_id, $item->id, $item->type);
+            $nav_ = $this->getList($project_id, $item->id, $item->type);
+            $item->lists = $nav_[0];
             $navItem[] = $item;
         }
         return response()->json(['success' => $navItem]);
@@ -38,11 +39,11 @@ class ProjectNavItemsController extends Controller
         if ($type == 'list') {
             $list = Multiple_list::where(['project_id' => (int)$project_id, 'nav_id' => $nav_id])->get();
             $list->type = $type;
-            return $list;
+            return [$list,$nav->type];
         } else {
             $board = Multiple_board::where(['project_id' => (int)$project_id, 'nav_id' => $nav_id])->get();
             $board->type = $type;
-            return $board;
+            return [$board,$nav->type];
         }
 
     }
@@ -103,7 +104,7 @@ class ProjectNavItemsController extends Controller
     public function multipleList(Request $request)
     {
         $nav = $this->getList($request->projectId,$request->listId,$request->type);
-        return response()->json(['success' => $nav]);
+        return response()->json(['success' => $nav[0],'type'=>$nav[1]]);
     }
 
     public function edit(Request $request)
@@ -161,7 +162,8 @@ class ProjectNavItemsController extends Controller
         $nav = ProjectNavItems::where('id',$target_nav_id)->first();
         if ($nav->type == 'board'){
             foreach ($ids as $id) {
-                Task::where('id',$id)->update(['multiple_board_id'=>$target_listOrBoard]);
+                $task = Task::where(['multiple_board_id'=>$target_listOrBoard,'board_parent_id'=>$request->column_id])->orderBy('board_sort_id','desc')->first();
+                Task::where('id',$id)->update(['multiple_board_id'=>$target_listOrBoard,'board_parent_id'=>$request->column_id,'board_sort_id'=>$task->board_sort_id+1]);
             }
             return response()->json(['status'=>'success','board']);
         }elseif($nav->type == 'list'){
