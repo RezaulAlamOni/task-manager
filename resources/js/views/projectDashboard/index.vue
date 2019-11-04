@@ -1306,6 +1306,10 @@
                     }
 
 
+                } else if (e.shiftKey && e.which === 1) {
+
+                    $('#click' + data.id).addClass('clicked');
+
                 } else if (e.which === 1) {
                     if (data.text !== '') {
                         _this.DeleteEmptyTask();
@@ -2374,9 +2378,9 @@
                             .then(response => {
                                 console.log(response)
                                 swal("Complete!", "All Selected task are moved !", "success");
-                                if (_this.type_T === 'list'){
+
                                     _this.getTaskList()
-                                }
+                                
                             })
                             .catch(error => {
                                 console.log('Add list api not working!!')
