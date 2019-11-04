@@ -979,7 +979,7 @@
         },
         created() {
             let _this = this;
-            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3', function (event, handler) {
+            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3,ctrl+m', function (event, handler) {
                 event.preventDefault();
                 switch (handler.key) {
                     case "enter" :
@@ -1053,6 +1053,11 @@
                         break;
                     case "ctrl+i":
                         _this.addAttachment(_this.selectedData);
+                        break;
+                    case "ctrl+m":
+                        if (_this.selectedIds.length > 0){
+                            _this.MoveSelectedTask()
+                        }
                         break;
                     case "shift+3":
                         $('#tag-' + _this.selectedData._id).click();
@@ -1997,6 +2002,8 @@
                 $('.jquery-accordion-menu').hide();
                 _this.list_T = [];
                 _this.nav_T = [];
+                _this.column_T = [];
+                _this.column = "Select Column";
                 _this.selectedListNav = 'Select list Nav';
                 _this.transferBtn = false;
 
@@ -2356,16 +2363,13 @@
                         confirmButtonText: "Yes, Delete  & Move Task",
                         closeOnConfirm: false
                     },
-
                     function () {
-
                         axios.post('/api/selected-task-move', {
                             ids: _this.selectedIds,
                             nav: _this.selectedListNav,
                             target: _this.selectedSubList,
                             column_id : _this.selectedColumn
                         })
-
                             .then(response => response.data)
                             .then(response => {
                                 console.log(response)
@@ -2373,7 +2377,6 @@
                                 if (_this.type_T === 'list'){
                                     _this.getTaskList()
                                 }
-                                // window.location.href = '/project-dashboard/' + _this.projectId;
                             })
                             .catch(error => {
                                 console.log('Add list api not working!!')
