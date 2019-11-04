@@ -128,19 +128,21 @@
                             <template v-html="data.html" v-if="!data.isDragPlaceHolder">
 
                                 <span class="progress-bar-custom">
-                                    <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28" width="28" v-if="(data.progress !== null)"
-                                           class="task-complete-progress left-content">
+                                    <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28" width="28"
+                                         v-if="(data.progress !== null)"
+                                         class="task-complete-progress left-content">
 
                                     <img v-else :src="baseUrl+'/img/task-icon/circle.png'" alt="" height="28" width="28"
                                          class="task-complete-progress left-content li-opacity ">
-<!--                                    <div class="task-complete-progress empty-progress left-content li-opacity "></div>-->
+                                    <!--                                    <div class="task-complete-progress empty-progress left-content li-opacity "></div>-->
 
                                     <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28" width="28"
                                          v-if="data.progress === '100'"
                                          :title="'This task is complete'" data-toggle="tooltip"
                                          class="task-complete left-content li-opacity ">
 
-                                    <img :src="baseUrl+'/img/task-icon/circle-check.png'" alt="" height="28" width="28" v-else
+                                    <img :src="baseUrl+'/img/task-icon/circle-check.png'" alt="" height="28" width="28"
+                                         v-else
                                          @click="addTaskToComplete(data)" data-toggle="tooltip"
                                          :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
                                          class="task-complete left-content li-opacity">
@@ -179,9 +181,9 @@
                                          title="File" data-toggle="tooltip"
                                          class="icon-image-preview li-opacity">
 
-<!--                                    <i @click="addAttachment(data)"-->
-<!--                                       class="cloud-image-upload icon-image-preview dropdown-toggle-split li-opacity"-->
-<!--                                       title="File" data-toggle="tooltip"></i>-->
+                                    <!--                                    <i @click="addAttachment(data)"-->
+                                    <!--                                       class="cloud-image-upload icon-image-preview dropdown-toggle-split li-opacity"-->
+                                    <!--                                       title="File" data-toggle="tooltip"></i>-->
 
                                     <input :id="'file'+data._id" @change="updatePicture($event,data)" ref="file"
                                            style="display: none; "
@@ -210,7 +212,9 @@
                                         </template>
                                     </i>
                                     <span :id="'tag-'+data._id" data-toggle="dropdown" v-else>
-                                        <img :src="baseUrl+'/img/task-icon/tag-add.png'" class="icon-image-preview li-opacity"  data-toggle="tooltip" title="Add Tag">
+                                        <img :src="baseUrl+'/img/task-icon/tag-add.png'"
+                                             class="icon-image-preview li-opacity" data-toggle="tooltip"
+                                             title="Add Tag">
                                     </span>
 
                                     <div :id="'dropdown'+data._id" class="dropdown-menu dropdown-menu-right">
@@ -259,8 +263,8 @@
                                     <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'"
                                        title="Due Date">
                                         <img :src="baseUrl+'/img/task-icon/date-plus.png'" class="icon-image-preview">
-<!--                                        <i class="outline-event icon-image-preview" data-toggle-->
-<!--                                           title="toggle"></i>-->
+                                        <!--                                        <i class="outline-event icon-image-preview" data-toggle-->
+                                        <!--                                           title="toggle"></i>-->
 
                                     </a>
                                     <datepicker
@@ -290,9 +294,10 @@
                                         </template>
                                         <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
 <!--                                            <i class="outline-person icon-image-preview li-opacity "-->
-<!--                                               data-toggle="tooltip" title="Assignee">-->
-<!--                                            </i>-->
-                                            <img :src="baseUrl+'/img/task-icon/add-user.png'"  class="icon-image-preview li-opacity "
+                                            <!--                                               data-toggle="tooltip" title="Assignee">-->
+                                            <!--                                            </i>-->
+                                            <img :src="baseUrl+'/img/task-icon/add-user.png'"
+                                                 class="icon-image-preview li-opacity "
                                                  data-toggle="tooltip" title="Assignee">
                                         </span>
 
@@ -360,13 +365,16 @@
                                 </div>
                                 <a @click="addChild(data)" class="subTask_plus li-opacity li-opacity-sub clickHide "
                                    data-toggle="tooltip" title="Add Child">
-<!--                                    <i class="baseline-playlist_add icon-image-preview"></i>-->
-                                    <img :src="baseUrl+'/img/task-icon/add-Sublist.png'" class="icon-image-preview li-opacity-sub ">
+                                    <!--                                    <i class="baseline-playlist_add icon-image-preview"></i>-->
+                                    <img :src="baseUrl+'/img/task-icon/add-Sublist.png'"
+                                         class="icon-image-preview li-opacity-sub ">
                                 </a>
-                                <a @click="addNode(data)" class="task_plus li-opacity li-opacity-sub clickHide" data-toggle="tooltip"
+                                <a @click="addNode(data)" class="task_plus li-opacity li-opacity-sub clickHide"
+                                   data-toggle="tooltip"
                                    title="Add Task Bellow">
-<!--                                    <i class="baseline-add icon-image-preview"></i>-->
-                                    <img :src="baseUrl+'/img/task-icon/add-list.png'" class="icon-image-preview li-opacity-sub ">
+                                    <!--                                    <i class="baseline-add icon-image-preview"></i>-->
+                                    <img :src="baseUrl+'/img/task-icon/add-list.png'"
+                                         class="icon-image-preview li-opacity-sub ">
                                 </a>
                             </template>
                         </div>
@@ -380,12 +388,12 @@
                                    v-if="selectedData.text !== 'Dont Forget Section'"
                                    @click="copyTask"
                                    data-toggle="dropdown">
-                                    <img src="https://img.icons8.com/color/32/000000/copy.png"  class="contex-menu-icon">
+                                    <img :src="baseUrl+'/img/task-icon/copy.png'" class="contex-menu-icon">
                                     Copy </a>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split disabled" v-else
                                    style="color: gray"
                                    data-toggle="dropdown">
-                                    <img src="https://img.icons8.com/color/32/000000/copy.png" class="contex-menu-icon">
+                                    <img :src="baseUrl+'/img/task-icon/copy.png'" class="contex-menu-icon">
                                     Copy </a>
 
                                 <span class="contex-menu-sortcut">
@@ -400,12 +408,12 @@
                                    @click="cutTask"
                                    data-toggle="dropdown">
 
-                                    <img src="https://img.icons8.com/color/48/000000/cutting-coupon.png" class="contex-menu-icon">
+                                    <img :src="baseUrl+'/img/task-icon/cut.png'" class="contex-menu-icon">
                                     Cut </a>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split disabled"
                                    v-else style="color: gray"
                                    data-toggle="dropdown">
-                                    <img src="https://img.icons8.com/color/48/000000/cutting-coupon.png" class="contex-menu-icon">
+                                    <img :src="baseUrl+'/img/task-icon/cut.png'" class="contex-menu-icon">
                                     Cut </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+<span
@@ -417,12 +425,12 @@
                                    @click="pastCopyAndCut"
                                    data-toggle="dropdown"
                                    v-if="selectedCopy !== null || selectedCut !== null">
-                                    <img src="https://img.icons8.com/color/50/000000/paste-special.png" class="contex-menu-icon">
+                                    <img :src="baseUrl+'/img/task-icon/past.png'" class="contex-menu-icon">
                                     Paste </a>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split disabled" style="color: gray"
                                    data-toggle="dropdown"
                                    v-else>
-                                    <img src="https://img.icons8.com/color/50/000000/paste-special.png" class="contex-menu-icon">
+                                    <img :src="baseUrl+'/img/task-icon/past.png'" class="contex-menu-icon">
                                     Paste </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+<span
@@ -430,23 +438,25 @@
                                 </span>
                             </li>
                             <li>
-                                <a @click="deleteSelectedTask" href="javascript:void(0)">
-                                    <img src="https://img.icons8.com/color/48/000000/move.png"class="contex-menu-icon">
-                                Move Selected
+                                <a @click="MoveSelectedTask" href="javascript:void(0)">
+                                    <img :src="baseUrl+'/img/task-icon/move.png'" class="contex-menu-icon">
+                                    Move Selected
                                 </a>
                                 <span class="contex-menu-sortcut">
-                                   <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">M</span>
+                                   <span class="badge-pill badge-default">Ctrl</span>+<span
+                                    class="badge-pill badge-default">M</span>
                                 </span>
                             </li>
                             <li>
                                 <a @click="deleteSelectedTask" href="javascript:void(0)">
-                                    <img src="https://img.icons8.com/color/48/000000/delete-forever.png" class="contex-menu-icon">
+                                    <img :src="baseUrl+'/img/task-icon/trash.png'" class="contex-menu-icon">
 
-                                Delete Selected <span class="badge-pill badge-default contex-menu-sortcut">Delete</span></a>
+                                    Delete Selected <span
+                                    class="badge-pill badge-default contex-menu-sortcut">Delete</span></a>
                             </li>
                             <li>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
-                                    <img src="https://img.icons8.com/color/48/000000/add-user-male.png" class="contex-menu-icon">
+                                    <img :src="baseUrl+'/img/task-icon/add-user.png'" class="contex-menu-icon">
                                     Assign User to Selected </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+<span
@@ -488,7 +498,7 @@
                             </li>
                             <li>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
-                                    <img src="https://img.icons8.com/color/48/000000/tags.png" class="contex-menu-icon">
+                                    <img :src="baseUrl+'/img/task-icon/tag-add.png'" class="contex-menu-icon">
                                     Add Tags to Selected
                                 </a>
                                 <span class="contex-menu-sortcut">
@@ -539,7 +549,7 @@
                                 </datepicker>
 
                                 <a class="calender li-opacity clickHide">
-                                    <img src="https://img.icons8.com/color/48/000000/planner.png" class="contex-menu-icon">
+                                    <img :src="baseUrl+'/img/task-icon/date-plus.png'" class="contex-menu-icon">
                                     Set Due Date
                                 </a>
 
@@ -547,7 +557,7 @@
                             </li>
                             <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">
 
-                                <img src="https://img.icons8.com/color/48/000000/add-property.png" class="contex-menu-icon">
+                                <img :src="baseUrl+'/img/task-icon/move-1.png'" class="contex-menu-icon">
                                 Move To Dont Forget Section </a>
                             </li>
 
@@ -708,7 +718,7 @@
                             <label class="col-sm-4 col-form-label">Select <span v-if="type_T === 'board'">Board</span>
                                 <span v-else>List</span> Nav :</label>
                             <div class="col-sm-8">
-                                <select @change="showSubList_T()" class="form-control" v-model="selectedListNav">
+                                <select @change="showSubList_T" class="form-control" v-model="selectedListNav">
                                     <option disabled value="Select list Nav">Select <span v-if="type_T === 'board'">Board</span>
                                         <span v-else>List</span> Nav
                                     </option>
@@ -737,6 +747,55 @@
                         <button v-if="transferBtn" aria-label="Close" @click="DeleteAndMoveAllTask"
                                 class="btn btn-danger" data-dismiss="modal" type="button">Delete & Move All <span
                             v-if="type_T === 'board'">Card</span> <span v-else>Task</span>
+                        </button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="MoveTAsk"
+             role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h4 class="text-center ">Move Task To Board / List </h4>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Select Board Or List Nav </label>
+                            <div class="col-sm-8">
+                                <select @change="showSubList_T" class="form-control" v-model="selectedListNav">
+                                    <option disabled value="Select list Nav">Select Board Or List Nav
+                                    </option>
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav_T">
+                                        {{navs.title}} <span :id="'selectedNavType'+navs.id" style="display:none;">{{navs.type}}</span>
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="list_T.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Board or List:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" v-model="selectedSubList" @change="get_T_Bttn()">
+                                    <option disabled value="Select list">Select
+                                        Board or List
+                                    </option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T"
+                                            :disabled="((navList.id !== list_id) ? false : true)">
+                                        <span v-if="navList.board_title !== undefined">{{navList.board_title}}</span> <span v-else>{{navList.list_title}}</span>
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button v-if="transferBtn" aria-label="Close" @click="MoveTaskToListOrBoard"
+                                class="btn btn-warning" data-dismiss="modal" type="button">Move Selected
                         </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
@@ -817,7 +876,7 @@
         },
         data() {
             return {
-                baseUrl : window.location.origin,
+                baseUrl: window.location.origin,
                 disabledDates: {
                     id: null,
                 },
@@ -873,7 +932,7 @@
                 action_T: '',
                 type_T: '',
                 delete_popup: 0,
-                empty_task_delete_flag : 0,
+                empty_task_delete_flag: 0,
 
             }
         },
@@ -916,10 +975,10 @@
                             _this.selectedIds = [];
                         } else {
 
-                            if (_this.selectedIds.length === 1){
+                            if (_this.selectedIds.length === 1) {
                                 _this.addNode(_this.selectedData);
                                 swal.close();
-                            }else {
+                            } else {
                                 swal.close();
                             }
                         }
@@ -946,7 +1005,7 @@
                         _this.HideDetails(_this.selectedData);
                         break;
                     case "right" :
-                        if (_this.selectedIds.length >= 1){
+                        if (_this.selectedIds.length >= 1) {
                             _this.showLog();
                             _this.task_logs = null;
                             _this.ShowDetails(_this.selectedData);
@@ -1075,7 +1134,6 @@
                     }
                 }
             },
-
             showSearchInputField() {
                 if (this.list.type === 'list') {
                     $('.searchList').toggle();
@@ -1146,7 +1204,6 @@
                 var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
                 target.scrollTo(0, top);
             },
-
             SearchResultClick(task) {
                 var target = document.getElementById('TaskListAndDetails');
                 var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
@@ -1170,7 +1227,6 @@
                     });
 
             },
-
             assignUserToTask(user, data) {
                 var _this = this;
                 var postData = {
@@ -1186,7 +1242,6 @@
                         console.log('Api is not Working !!!')
                     });
             },
-
             removeAssignedUser(user_id, task_id) {
 
                 // console.log(user.id, user.task_id);
@@ -1302,7 +1357,6 @@
                     $(e.target).removeClass('input-hide');
                     $(e.target).addClass('form-control');
                 }
-
             },
             hideItem(e, data) {
                 data.draggable = false;
@@ -1341,7 +1395,6 @@
                 $('.inp').removeClass('form-control');
 
             },
-
             copyTask() {
                 var _this = this;
                 if (_this.selectedData.text !== 'Dont Forget Section') {
@@ -1351,23 +1404,20 @@
                     console.log(_this.selectedData)
                     console.log(_this.selectedIds)
                 } else {
-                    swal('Sorry!!','You can\'t do copy  Dont Forget Section! task', 'warning')
+                    swal('Sorry!!', 'You can\'t do copy  Dont Forget Section! task', 'warning')
                 }
-
-
-
             },
             cutTask() {
                 var _this = this;
                 if (_this.selectedIds.length > 1) {
-                    swal('Sorry!!','You can\'t do Cut  more then 1 task', 'warning')
+                    swal('Sorry!!', 'You can\'t do Cut  more then 1 task', 'warning')
                 } else {
                     if (_this.selectedData.text !== 'Dont Forget Section') {
                         _this.selectedCut = _this.selectedIds;
                         _this.selectedCopy = null;
                         $('.jquery-accordion-menu').hide();
                     } else {
-                        swal('Sorry!!','You can\'t do Cut Dont Forget Section! task', 'warning')
+                        swal('Sorry!!', 'You can\'t do Cut Dont Forget Section! task', 'warning')
                     }
 
                 }
@@ -1400,7 +1450,6 @@
                         console.log('Api is copy and cut not Working !!!')
                     });
             },
-
             addEmptyNode(data) {
                 let _this = this;
                 var children = data.parent.children;
@@ -1472,7 +1521,6 @@
                     $("#" + date).removeClass('input-hide');
                 }, 100)
             },
-
             addNode(data) {
                 let _this = this;
                 var text = data.text;
@@ -1589,7 +1637,6 @@
                 myColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
                 return myColor;
             },
-
             addTag(e, data) {
 
                 var _this = this;
@@ -1635,7 +1682,6 @@
                     });
 
             },
-
             changeTAg(tags) {
                 var _this = this;
                 var old = this.tags.length;
@@ -1757,9 +1803,7 @@
                     .catch(error => {
                         console.log('Api for delete tag not Working !!!')
                     });
-
             },
-
             //task operation/Action
             updateDescription() {
                 var _this = this;
@@ -1798,12 +1842,12 @@
                         axios.post('/api/task-list/update', postData)
                             .then(response => response.data)
                             .then(response => {
-                                if (response.status === 1){
+                                if (response.status === 1) {
                                     _this.getTaskList();
                                     swal("Complete!", "This task is added to complete", "success");
-                                }else if(response.status === 2) {
+                                } else if (response.status === 2) {
                                     swal("Sorry!", "The board dont have any 100% progress column !!", "warning");
-                                }else if(response.status === 0 ) {
+                                } else if (response.status === 0) {
                                     swal("Sorry!", "This task is not Live in any board yet", "warning");
                                 }
 
@@ -1903,7 +1947,6 @@
 
 
             },
-
             ActionToSelectedTask(value, type) {
                 var _this = this;
                 setTimeout(function () {
@@ -1929,6 +1972,31 @@
                             console.log('Api for delete task not Working !!!')
                         });
                 }, 500)
+            },
+            MoveSelectedTask() {
+
+                var _this = this;
+                var postData = {
+                    ids: _this.selectedIds,
+                };
+                $('.jquery-accordion-menu').hide();
+                _this.list_T = [];
+                _this.nav_T = [];
+                _this.selectedListNav = 'Select list Nav';
+                _this.transferBtn = false;
+
+                axios.get('/api/nav-item/' + _this.projectId)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.nav_T = response.success;
+                        console.log(response)
+                        setTimeout(() => {
+                            $('#MoveTAsk').modal('show');
+                        }, 200);
+                    })
+                    .catch(error => {
+
+                    });
 
 
             },
@@ -1982,8 +2050,6 @@
                     .catch(error => {
                         console.log('Api for add tag not Working !!!')
                     });
-
-
             },
 
             showLog() {
@@ -2188,6 +2254,7 @@
 
             },
             showSubList_T() {
+
                 let _this = this;
                 _this.transferBtn = false;
                 _this.list_T = [];
@@ -2198,6 +2265,7 @@
                     'type': _this.type_T,
 
                 };
+                console.log(data)
                 axios.post('/api/multiple-list', data)
                     .then(response => response.data)
                     .then(response => {
@@ -2238,6 +2306,43 @@
 
                     });
             },
+
+            MoveTaskToListOrBoard() {
+                var _this = this;
+                console.log({
+                    type: _this.type_T,
+                    id: _this.list_id,
+                    target: _this.selectedSubList
+                })
+                swal({
+                        title: "Are you sure?",
+                        text: "You want to delete the list and move all task ?!!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, Delete  & Move Task",
+                        closeOnConfirm: false
+                    },
+
+                    function () {
+                        // axios.post('/api/board-list-delete', {
+                        //     type: _this.type_T,
+                        //     id: _this.list_id,
+                        //     action: _this.action_T,
+                        //     target: _this.selectedSubList
+                        // })
+                            // .then(response => response.data)
+                            // .then(response => {
+                            //     swal("Complete!", "This " + _this.type_T + " is deleted and all task are moved !", "success");
+                            //     window.location.href = '/project-dashboard/' + _this.projectId;
+                            // })
+                            // .catch(error => {
+                            //     console.log('Add list api not working!!')
+                            // });
+
+                    });
+            },
+
             MoveAllTask() {
                 var _this = this;
                 swal({
@@ -2317,16 +2422,16 @@
                 };
                 // console.log(postData)
                 // if (data.text !== ''){
-                    axios.post('/api/task-list/update', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            if (response.empty){
-                                _this.empty_task_delete_flag = 0;
-                            }
-                        })
-                        .catch(error => {
-                            console.log('Api for move down task not Working !!!')
-                        });
+                axios.post('/api/task-list/update', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        if (response.empty) {
+                            _this.empty_task_delete_flag = 0;
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
                 // }
 
             },
@@ -2336,18 +2441,18 @@
                     id: _this.list_id
                 };
                 // if (_this.empty_task_delete_flag === 1){
-                    axios.post('/api/task-list/delete-empty-task', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            if (response.success === 1) {
-                                _this.empty_task_delete_flag = 0;
-                                var id = response.id;
-                                _this.RemoveEmptyTask(id, _this.treeList);
-                            }
-                        })
-                        .catch(error => {
-                            console.log('Api for move down task not Working !!!')
-                        });
+                axios.post('/api/task-list/delete-empty-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        if (response.success === 1) {
+                            _this.empty_task_delete_flag = 0;
+                            var id = response.id;
+                            _this.RemoveEmptyTask(id, _this.treeList);
+                        }
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
                 // }
 
             },
