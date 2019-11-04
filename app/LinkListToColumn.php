@@ -12,4 +12,14 @@ class LinkListToColumn extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function linkToList()
+    {
+        return $this->belongsTo(Task::class, 'task_list_id', 'id');
+    }
+
+    public function linkToListColumn()
+    {
+        return $this->belongsTo(Multiple_list::class, 'multiple_list_id', 'id');
+    }
 }
