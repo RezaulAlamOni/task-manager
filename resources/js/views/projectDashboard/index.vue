@@ -2309,11 +2309,6 @@
 
             MoveTaskToListOrBoard() {
                 var _this = this;
-                console.log({
-                    type: _this.type_T,
-                    id: _this.list_id,
-                    target: _this.selectedSubList
-                })
                 swal({
                         title: "Are you sure?",
                         text: "You want to delete the list and move all task ?!!!",
@@ -2325,20 +2320,20 @@
                     },
 
                     function () {
-                        // axios.post('/api/board-list-delete', {
-                        //     type: _this.type_T,
-                        //     id: _this.list_id,
-                        //     action: _this.action_T,
-                        //     target: _this.selectedSubList
-                        // })
-                            // .then(response => response.data)
-                            // .then(response => {
-                            //     swal("Complete!", "This " + _this.type_T + " is deleted and all task are moved !", "success");
-                            //     window.location.href = '/project-dashboard/' + _this.projectId;
-                            // })
-                            // .catch(error => {
-                            //     console.log('Add list api not working!!')
-                            // });
+                        axios.post('/api/selected-task-move', {
+                            ids: _this.selectedIds,
+                            nav: _this.selectedListNav,
+                            target: _this.selectedSubList
+                        })
+                            .then(response => response.data)
+                            .then(response => {
+                                console.log(response)
+                                swal("Complete!", "All Selected task are moved !", "success");
+                                // window.location.href = '/project-dashboard/' + _this.projectId;
+                            })
+                            .catch(error => {
+                                console.log('Add list api not working!!')
+                            });
 
                     });
             },

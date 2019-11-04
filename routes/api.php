@@ -12,6 +12,7 @@ Route::post('/list-add', 'MultipleListController@store');//add list under projec
 Route::post('/board-list-update', 'MultipleListController@update');//Update list board
 Route::post('/board-list-delete', 'MultipleListController@delete');//delete list or board
 Route::post('/board-list-move', 'ProjectNavItemsController@boardListMove');//move list or board
+Route::post('/selected-task-move', 'ProjectNavItemsController@moveSelectedTask');//move list or board
 
 //task listmanagement
 Route::post('/add-task-task', 'TaskController@addNewTask');//add new node
