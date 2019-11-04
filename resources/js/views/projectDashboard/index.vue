@@ -122,9 +122,10 @@
                           draggable="draggable"
                           v-if="list.type === 'list'">
                         <div :class="{eachItemRow: true}" :id="'click'+data.id"
-                             @click="makeItClick($event, data)"
-                             @contextmenu="makeItClick($event, data)"
-                             slot-scope="{data, _id,store}" style="font-size: 12px" v-on:dblclick="showLog">
+                             @contextmenu="makeItClick($event, data,vm)"
+                             slot-scope="{data, _id,store,vm}"
+                             @click="makeItClick($event, data,vm)"
+                             style="font-size: 12px" v-on:dblclick="showLog">
                             <template v-html="data.html" v-if="!data.isDragPlaceHolder">
 
                                 <span class="progress-bar-custom">
@@ -1284,8 +1285,10 @@
                     });
             },
 
-            makeItClick(e, data) {
+            makeItClick(e, data,vm) {
                 var _this = this;
+                console.log(vm)
+                console.log(vm.level)
                 if (e.ctrlKey && e.which === 1) {
                     if (data.text !== '' && _this.selectedIds.length <= 1) {
                         _this.DeleteEmptyTask();
@@ -2376,11 +2379,8 @@
                         })
                             .then(response => response.data)
                             .then(response => {
-                                console.log(response)
                                 swal("Complete!", "All Selected task are moved !", "success");
-
-                                    _this.getTaskList()
-                                
+                                _this.getTaskList()
                             })
                             .catch(error => {
                                 console.log('Add list api not working!!')
