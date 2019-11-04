@@ -167,13 +167,27 @@ class ProjectNavItemsController extends Controller
             }
             return response()->json(['status'=>'success','board']);
         }elseif($nav->type == 'list'){
+            $task = Task::where(['list_id'=>$target_listOrBoard,'parent_id'=>0])->orderBy('sort_id','desc')->first();
+            $sort_id = $task->sort_id +1;
             foreach ($ids as $id) {
-                $task = Task::where(['list_id'=>$target_listOrBoard,'parent_id'=>0])->orderBy('sort_id','desc')->first();
-                Task::where('id',$id)->update(['list_id'=>$target_listOrBoard,'parent_id'=>0,'sort_id' => $task->sort_id + 1 ]);
+                Task::where('id',$id)->update(['list_id'=>$target_listOrBoard,'parent_id'=>0,'sort_id' => $sort_id]);
+                $childs = Task::where('parent_id',$id)->get();
+                $this->moveWithChild($childs,$target_listOrBoard);
+                $sort_id++;
             }
             return response()->json(['status'=>'success','list']);
         }
 
 
+    }
+
+    public function moveWithChild($childs,$list_id){
+        foreach ($childs as $child) {
+            Task::where('id',$child->id)->update(['list_id'=>$list_id]);
+            $childrens = Task::where('parent_id',$child->id)->get();
+            if ($childrens->count() > 0){
+                $this->moveWithChild($childrens,$list_id);
+            }
+        }
     }
 }
