@@ -170,7 +170,7 @@
                                                type="text" v-model="data.text">
                                     </span>
 
-                                <a class="attach-icon hide-item-res">
+                                <a class="attach-icon hide-item-res" style="width: auto !important;">
                                         <span v-if="data.files && data.files.length !== 0">
                                             <template v-for="(fl,file_id ) in data.files">
                                                 <img :src="'/images/'+fl.file_name" v-if="file_id < 2"
@@ -182,7 +182,7 @@
                                     <img :src="baseUrl+'/img/task-icon/upload.png'"
                                          @click="addAttachment(data)"
                                          title="File" data-toggle="tooltip"
-                                         class="icon-image-preview li-opacity">
+                                         class="icon-image-preview li-opacity pull-right">
 
                                     <!--                                    <i @click="addAttachment(data)"-->
                                     <!--                                       class="cloud-image-upload icon-image-preview dropdown-toggle-split li-opacity"-->
@@ -194,7 +194,7 @@
                                 </a>
 
 
-                                <a class="tag-icon hide-item-res">
+                                <a class="tag-icon hide-item-res" style="width: auto !important;">
                                     <i class="dropdown-toggle-split"
                                        data-toggle="dropdown"
                                        v-if="data.tags.length > 0">
@@ -215,12 +215,12 @@
                                         </template>
                                     </i>
                                     <span :id="'tag-'+data._id" data-toggle="dropdown" v-else>
-                                        <img :src="baseUrl+'/img/task-icon/tag-add.png'"
-                                             class="icon-image-preview li-opacity" data-toggle="tooltip"
+                                        <img :src="baseUrl+'/img/task-icon/tag-add.png'" style="margin-right: 19px;"
+                                             class="icon-image-preview li-opacity pull-right" data-toggle="tooltip"
                                              title="Add Tag">
                                     </span>
 
-                                    <div :id="'dropdown'+data._id" class="dropdown-menu dropdown-menu-right">
+                                    <div :id="'dropdown'+data._id" class="dropdown-menu dropdown-menu-tag dropdown-menu-right ">
 
                                         <diV class="collapse show switchToggle" style="">
                                             <div class="container-fluid">
@@ -1344,7 +1344,7 @@
 
 
                 }
-                else if (e.which === 3) {
+                else if (e.which === 3 && data.draggable == true) {
                     e.preventDefault();
                     e.stopPropagation();
                     if (_this.context_menu_flag !== 1) {
