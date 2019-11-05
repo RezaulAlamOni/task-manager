@@ -194,17 +194,14 @@
 
         .calender {
             position: absolute;
-            right: 40px;
+            right: 46px;
             top: 10px;
         }
-        .dropdown-menu-tag {
-            top: 21px !important;
-            left: 22px !important;
-        }
+
         .dateCal {
             position: absolute;
-            right: 18px;
-            top: 11px;
+            right: 25px;
+            top: 9px;
             border: none;
             background: transparent;
             width: 50px;
@@ -229,13 +226,13 @@
 
         .tag-icon {
             position: absolute;
-            right: 102px;
+            right: 115px;
             top: 10px;
         }
 
         .attach-icon {
             position: absolute;
-            right: 175px;
+            right: 200px;
             top: 9px;
             font-size: 15px;
             cursor: pointer;
@@ -310,7 +307,7 @@
             padding-left: 10px;
             font-size: 14px;
             width: 100%;
-            border-radius: 4px;
+            border-radius: 10px;
             background: rgba(255,255,255,.2);
         }
     }
