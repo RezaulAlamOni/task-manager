@@ -1981,7 +1981,8 @@
                             .then(response => {
                                 _this.getTaskList()
                                 _this.delete_popup = 0;
-                                swal("Deleted!", "Successfully delete task !", "success");
+                                swal.close()
+                                // swal("Deleted!", "Successfully delete task !", "success");
                             })
                             .catch(error => {
                                 console.log('Api for delete task not Working !!!')
@@ -2370,7 +2371,7 @@
                         })
                             .then(response => response.data)
                             .then(response => {
-                                swal("Complete!", "This " + _this.type_T + " is deleted and all task are moved !", "success");
+                                // swal("Complete!", "This " + _this.type_T + " is deleted and all task are moved !", "success");
                                 window.location.href = '/project-dashboard/' + _this.projectId;
                             })
                             .catch(error => {
@@ -2384,11 +2385,11 @@
                 var _this = this;
                 swal({
                         title: "Are you sure?",
-                        text: "You want to delete the list and move all task ?!!!",
+                        text: "You want to move selected task ?!!!",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger",
-                        confirmButtonText: "Yes, Delete  & Move Task",
+                        confirmButtonText: "Yes Move",
                         closeOnConfirm: false
                     },
                     function () {
@@ -2400,7 +2401,7 @@
                         })
                             .then(response => response.data)
                             .then(response => {
-                                swal("Complete!", "All Selected task are moved !", "success");
+                                // swal("Complete!", "All Selected task are moved !", "success");
                                 _this.getTaskList()
                             })
                             .catch(error => {
