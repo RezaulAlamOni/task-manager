@@ -49,7 +49,7 @@
                                                 </span>
 
                                                 <span>
-                                                    <span class="dropdown-toggle-split  opacity"
+                                                    <span class="dropdown-toggle-split opacity"
                                                         data-toggle="dropdown">
                                                         <i class="fa fa-ellipsis-h"></i>
                                                     </span>
@@ -67,8 +67,10 @@
                                                             <a @click="transferColumnToOtherBoard(index, column.boardId)" class="dropdown-item"
                                                                 href="#">
                                                                 <i class="fa fa-share-square-o opacity"></i> Transfer Column to another board</a>
-                                                            <a @click="showLinkModel(index, column.boardId)" class="dropdown-item"
+                                                            <a v-if="column.linkToList.length <= 0" @click="showLinkModel(index, column.boardId)" class="dropdown-item"
                                                                 href="#"><i class="fa fa-link opacity"></i> Link to List </a>
+                                                            <a v-else @click="unlinklistToCol(index, column.boardId)" class="dropdown-item"
+                                                                href="#"><i class="fa fa-link opacity"></i> Unlink {{column.linkToList[0].link_to_list_column.list_title}} </a>
                                                             <div class="dropdown-divider"></div>
                                                             <a @click="deleteColumn(index,column.boardId)" class="dropdown-item"
                                                             href="#"><i
@@ -134,9 +136,10 @@
                                             <br>
                                             <div>
                                                 <div>
-                                                    <a class="calender li-opacity clickHide" v-if="card.date === '0000-00-00'">
-                                                        <i class="outline-event icon-image-preview" data-toggle
-                                                        title="toggle"></i>
+                                                    <a class="calender clickHide" v-if="card.date === '0000-00-00'">
+                                                        <!-- <i class="outline-event icon-image-preview" data-toggle
+                                                        title="toggle"></i> -->
+                                                        <img :src="baseUrl+'/img/task-icon/date-plus.png'" data-toggle title="toggle" class="icon-image-preview">
                                                     </a>
                                                     <flatPickr
                                                         :class="{
@@ -152,14 +155,16 @@
                                                         v-model="card.date">
                                                     </flatPickr>
                                                 </div>
-                                                <div style="position: absolute; right: 160px; bottom: 8px; opacity: 0.25">
+                                                <div style="position: absolute; right: 160px; bottom: 12px; opacity: 1">
                                                     <a @click="deleteCard(index, key, card.cardId)"
                                                     v-if="card.types == 'card'">
-                                                        <i class="baseline-playlist_delete icon-image-preview"></i>
+                                                        <!-- <i class="baseline-playlist_delete icon-image-preview"></i> -->
+                                                        <img src="https://img.icons8.com/color/48/000000/delete-forever.png" class="icon-image-preview">
                                                     </a>
                                                     <a @click="deleteTask(index, key, card.cardId)"
                                                     v-if="card.types == 'task'">
-                                                        <i class="baseline-playlist_delete icon-image-preview"></i>
+                                                        <!-- <i class="baseline-playlist_delete icon-image-preview"></i> -->
+                                                        <img src="https://img.icons8.com/color/48/000000/delete-forever.png" class="icon-image-preview">
                                                     </a>
                                                 </div>
                                                 
@@ -179,9 +184,10 @@
                                                             </span>
                                                         </template>
                                                         <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
-                                                            <i class="outline-person icon-image-preview li-opacity "
+                                                            <!-- <i class="outline-person icon-image-preview li-opacity "
                                                             data-toggle="tooltip" title="Assignee">
-                                                            </i>
+                                                            </i> -->
+                                                            <img :src="baseUrl+'/img/task-icon/add-user.png'"  class="icon-image-preview " data-toggle="tooltip" title="Assignee">
                                                         </span>
 
                                                         <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
@@ -307,9 +313,10 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <i class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
+                                                        <img :src="baseUrl+'/img/task-icon/tag-add.png'" class="icon-image-preview"  data-toggle="dropdown" title="Add Tag" v-else>
+                                                        <!-- <i class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
                                                             data-toggle="dropdown"
-                                                            v-else></i>
+                                                            ></i> -->
 
                                                         <div class="dropdown-menu dropdown-menu1 ">
 
@@ -1110,6 +1117,7 @@
                         type: 'container',
                         name: this.cards[i].column,
                         progress: this.cards[i].progress,
+                        linkToList: this.cards[i].linkToList,
                         props: {
                             orientation: 'vertical',
                             className: 'card-container'
@@ -1496,12 +1504,33 @@
 
             },
             linkToCol(){
-                this.linkBtn = true;
+                let _this = this;
+                let data = {
+                    'projectId' : this.projectId,
+                    'columnId' : this.currentColumn,
+                    'multiple_list' : this.selectedSubNav
+                }
+                axios.post('/api/is-linked', data)
+                .then(response => response.data)
+                .then(response => {
+                    if (response.success === false) {
+                        this.linkBtn = true;
+                    } else {
+                        swal('Warning!!','That list is already linked. Need to unlink first','warning');
+                    } 
+                    // _this.getBoardTask();
+                    // console.log('added');
+                })
+                .catch(error => {
+                    console.log('not added');
+                });
             },
             listLinkToCol(){
+                let _this = this;
                 // alert(this.currentColumn);
                 // alert(this.selectedSubNav);
                 let data = {
+                    'projectId' : this.projectId,
                     'columnId' : this.currentColumn,
                     'multiple_list' : this.selectedSubNav
                 }
@@ -1509,11 +1538,43 @@
                 .then(response => response.data)
                 .then(response => {
 
+                    _this.getBoardTask();
+                    console.log('added');
                 })
-                .error(error => {
-
+                .catch(error => {
+                    console.log('not added');
                 });
-                swal('Warning!!','Work in progress','warning');
+                // swal('Warning!!','Work in progress','warning');
+            },
+            unlinklistToCol(index, boardId){
+                let _this = this;
+                // alert(this.currentColumn);
+                // alert(this.selectedSubNav);
+                swal({
+                    title: 'Are you sure to unlink?',
+                    text: "",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, unlink it!'
+                },
+                function(){
+                    let data = {
+                        'projectId' : _this.projectId,
+                        'columnId' : boardId,
+                        'multiple_list' : _this.selectedSubNav
+                    }
+                    axios.post('/api/unlink-list-to-column', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getBoardTask();
+                        swal("Unlinked!", "Successfully Unlinked", "success");
+                    })
+                    .catch(error => {
+                        console.log('not added');
+                    });
+                });
             },
             showSubBoard() {
                 let _this = this;

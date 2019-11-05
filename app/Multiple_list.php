@@ -27,7 +27,11 @@ class Multiple_list extends Model
 
     public function action_log()
     {
-
         return $this->hasMany('App\ActionLog', 'multiple_list_id', 'id');
+    }
+
+    public function linkToListColumn()
+    {
+        return $this->hasOne(LinkListToColumn::class, 'task_list_id', 'id');
     }
 }

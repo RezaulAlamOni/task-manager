@@ -35,6 +35,7 @@ class MultipleBoardController extends Controller
         $boards = [];
         $board = Task::where('board_parent_id', 0)
                 ->with('task')
+                ->with('linkToList')
                 ->where('project_id', $request->projectId)
                 // ->where('nav_id', $request->nav_id)
                 ->where('multiple_board_id', $request->board_id)
@@ -47,6 +48,7 @@ class MultipleBoardController extends Controller
             $boards[$key]['column'] = $value['title'];
             $boards[$key]['hidden'] = $value['hidden'];
             $boards[$key]['progress'] = $value['progress'];
+            $boards[$key]['linkToList'] = $value['linkToList'];
             $boards[$key]['color'] = $value['color'];
             if (!empty($value['task']) && count($value['task']) > 0) {
                 foreach ($value['task'] as $keys => $values) {
@@ -478,7 +480,8 @@ class MultipleBoardController extends Controller
         }
     }
 
-    public function linkListToColumn(Request $request) {
+    public function linkListToColumn(Request $request)
+    {
         $data = [
             'multiple_list_id' => $request->multiple_list,
             'task_list_id' => $request->columnId,
@@ -486,10 +489,44 @@ class MultipleBoardController extends Controller
 
         $insert = LinkListToColumn::create($data);
         if ($insert) {
+            $col = Task::where('id', $request->columnId)->first();
+            $update = Task::where('project_id',$request->projectId)
+                        ->where('list_id',$request->multiple_list)
+                        ->update([
+                            'board_parent_id' => $request->columnId,
+                            'progress' => $col->progress
+                        ]);
             return response()->json(['success' => true, 'data' => $insert]);
         } else {
             return response()->json(['success' => false]);
         }
+    }
+
+    public function unlinkListToColumn(Request $request)
+    {   
+        $delete = LinkListToColumn::where('task_list_id',$request->columnId)->first();
+        if ($delete) {
+            $update = Task::where('project_id',$request->projectId)
+                        ->where('list_id',$delete->multiple_list_id)
+                        ->where('board_parent_id',$request->columnId)
+                        ->update([
+                            'board_parent_id' => null
+                        ]);
+            $delete->delete();
+            return response()->json(['success' => true, 'data' => $delete]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function isLinked(Request $request) 
+    {   
+        $isLink = LinkListToColumn::where('multiple_list_id', $request->multiple_list)->get();
+        
+        if ($isLink->count() > 0) {
+            return response()->json(['success' => true, 'data' => $isLink]);
+        }
+        return response()->json(['success' => false]);
     }
 
     protected function createLog($task_id, $type, $message, $title)
