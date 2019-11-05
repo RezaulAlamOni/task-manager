@@ -25,8 +25,12 @@
                                             <span class="column-drag-handle">&nbsp; &#x2630;</span>
                                             <img :src="baseUrl+'/img/'+column.progress+'.png'" height="40" width="40" />
                                         </div>
-                                        <div class="col-md-5" style="margin: 0px; padding : 0px;">
-                                            <span class="col_name">{{ column.name }}</span>
+                                        <div class="col-md-5 " style="margin: 0px; padding : 0px;" >
+                                            <span class="col_name" style="word-wrap: break-word;" :title="column.name" data-placement="bottom" data-toggle="tooltip">
+                                                
+                                                {{ (column.name && column.name.length > 35)? column.name.substring(0,35)+" ..." : column.name }}
+                                                
+                                                </span>
                                         </div>
                                         <div class="col-md-2" style="margin: 0px; padding : 0px;">
                                             <span class="total-task">{{column.children.length}}</span>
@@ -36,45 +40,47 @@
                                                 <span>
                                                     <span class="dropdown-toggle-split  opacity"
                                                         data-toggle="dropdown">
-                                                        <i class="fa fa-plus"></i>
+                                                        <img :src="baseUrl+'/img/task-icon/plus.png'" height="18" width="18" >
+                                                        <!-- <i class="fa fa-plus"></i> -->
                                                     </span>
                                                     <div class="dropdown-menu">
                                                         <diV class="collapse show switchToggle">
                                                             <a @click="addExistingTask(index,column.boardId)" class="dropdown-item"
-                                                            href="javascript:void(0)">Add existing tasks</a>
+                                                            href="javascript:void(0)">
+                                                                <img :src="baseUrl+'/img/task-icon/plus-o.png'" height="18" width="18" > Add existing tasks</a>
                                                             <a @click="addCard(index,column.boardId)" class="dropdown-item"
-                                                            href="javascript:void(0)">Create new tasks</a>
+                                                            href="javascript:void(0)"><img :src="baseUrl+'/img/task-icon/create.png'" height="18" width="18" > Create new tasks</a>
                                                         </diV>
                                                     </div>
                                                 </span>
 
                                                 <span>
                                                     <span class="dropdown-toggle-split opacity"
-                                                        data-toggle="dropdown">
-                                                        <i class="fa fa-ellipsis-h"></i>
+                                                        data-toggle="dropdown" style="padding: 0px;">
+                                                        <img :src="baseUrl+'/img/task-icon/ellipsis.png'" height="18" width="18" >
+                                                        <!-- <i class="fa fa-ellipsis-h"></i> -->
                                                     </span>
                                                     <div class="dropdown-menu">
                                                         <diV class="collapse show switchToggle">
-                                                            <a @click="updateColumSow(index)" class="dropdown-item" href="#"><i
-                                                                class="fa fa-edit opacity"></i> Edit column</a>
+                                                            <a @click="updateColumSow(index)" class="dropdown-item" href="#">
+                                                                <img :src="baseUrl+'/img/task-icon/edit.png'" height="18" width="18" >  Edit column</a>
                                                             <a @click="hideColumn(index, column.boardId)" class="dropdown-item"
-                                                            href="#"><i
-                                                                class="fa fa-angle-double-left opacity"></i> Hide column</a>
+                                                            href="#"><img :src="baseUrl+'/img/task-icon/hide.png'" height="18" width="18" > Hide column</a>
                                                             <div class="dropdown-divider"></div>
                                                             <!-- <a @click="deleteColumnCards(index, column.boardId)" class="dropdown-item"
                                                             href="#">
                                                                 <i class="fa fa-trash opacity"></i> Peekaboo all tasks in this column</a> -->
                                                             <a @click="transferColumnToOtherBoard(index, column.boardId)" class="dropdown-item"
                                                                 href="#">
-                                                                <i class="fa fa-share-square-o opacity"></i> Transfer Column to another board</a>
+                                                                <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18" width="18" > Transfer Column to another board</a>
                                                             <a v-if="column.linkToList.length <= 0" @click="showLinkModel(index, column.boardId)" class="dropdown-item"
-                                                                href="#"><i class="fa fa-link opacity"></i> Link to List </a>
+                                                                href="#"><img :src="baseUrl+'/img/task-icon/link.png'" height="18" width="18" > Link to List </a>
                                                             <a v-else @click="unlinklistToCol(index, column.boardId)" class="dropdown-item"
-                                                                href="#"><i class="fa fa-link opacity"></i> Unlink {{column.linkToList[0].link_to_list_column.list_title}} </a>
+                                                                href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink {{column.linkToList[0].link_to_list_column.list_title}} </a>
                                                             <div class="dropdown-divider"></div>
                                                             <a @click="deleteColumn(index,column.boardId)" class="dropdown-item"
-                                                            href="#"><i
-                                                                class="fa fa-trash opacity"></i> Delete column</a>
+                                                            href="#">
+                                                                <img :src="baseUrl+'/img/task-icon/trash.png'" height="18" width="18" > Delete column</a>
                                                         </diV>
                                                     </div>
                                                 </span>
