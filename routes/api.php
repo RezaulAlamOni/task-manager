@@ -42,8 +42,6 @@ Route::post('/task-list/assign-user-add-tag', 'TaskController@ActionSelectedTask
 Route::post('/task-list/move-task', 'TaskController@moveTask');//move-task
 Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog'); //lod
 
-
-
 //search task
 Route::post('/task-list/suggest-user','SearchController@suggestUser'); //user suggest for search
 
