@@ -660,15 +660,17 @@
     background-color: #f9f9f9;
     width: 100%;
     display: inline-block;
-    height: calc(100vh - 225px);
-    overflow-y: auto;
-    overflow-x: hidden;
 
     .add-list {
         padding-left: 123px;
         display: inline-block;
         padding-top: 15px;
     }
+}
+.list-task-details {
+    height: calc(100vh - 110px);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .boardView {
