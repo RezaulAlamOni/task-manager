@@ -2,7 +2,7 @@
     <div>
         <div class="page-titles">
             <!-- Navbar Component-->
-            <Navbar :AllNavItems="AllNavItems"
+            <Navbar :AllNavGet="AllNavItems"
                     :projectId="$route.params.projectId"
                     @getList="showTask"
                     @showSearchInputField="showSearchInputField"
@@ -21,7 +21,7 @@
                 <ul class="myUL" id="myUL">
                     <template v-for="task in searchData.tasks" v-if="searchData.tasks.length > 0">
                         <li>
-                            <a @mouseover="selectTaskFromTaskTreeList(task)"
+                            <a @mouseover="selectTaskFromTaskTreeList(task)" style="word-break: break-all"
                                @click="SearchResultClick(task)"
                                href="Javascript:void(0)">
                                 {{task.title}}
@@ -38,7 +38,8 @@
 
                 </ul>
                 <ul class="myUL-user-hide" id="myUL-user">
-                    <template v-for="user in searchData.users" v-if="searchData.users.length > 0">
+                    <template v-for="user in searchData.users"
+                              v-if="searchData.users.length > 0 && searchData.users !== undefined">
                         <li @click="SearchTaskByAssignedUser(user.id,user.name)">
                             <a href="javascript:void(0)">
                                 <span class="assignUser-suggest-photo">
@@ -315,7 +316,8 @@
                                                     </label>
                                                 </li>
                                                 <li class="assignUser">
-                                                    <template v-for="user in data.users">
+                                                    <template v-for="user in data.users"
+                                                              v-if="data.users !== undefined">
                                                         <div
                                                             @click="(data.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user,data) "
                                                             :class="(data.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
@@ -782,7 +784,8 @@
                         <div class="form-group row" v-if="list_T.length > 0">
                             <label class="col-sm-4 col-form-label">Select Board or List:</label>
                             <div class="col-sm-8">
-                                <select class="form-control" v-model="selectedSubList" @change="getColumnAndConfirmButton()">
+                                <select class="form-control" v-model="selectedSubList"
+                                        @change="getColumnAndConfirmButton()">
                                     <option disabled value="Select list">Select
                                         Board or List
                                     </option>
@@ -800,7 +803,7 @@
                                     <option disabled value="Select column">Select column
                                     </option>
                                     <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in column_T">
-                                       {{navList.title}}
+                                        {{navList.title}}
                                     </option>
                                 </select>
                             </div>
@@ -943,7 +946,7 @@
                 selectedColumn: 'Select column',
                 nav_T: [],
                 list_T: [],
-                column_T : [],
+                column_T: [],
                 boardColumn: [],
                 action_T: '',
                 type_T: '',
@@ -1056,7 +1059,7 @@
                         _this.addAttachment(_this.selectedData);
                         break;
                     case "ctrl+m":
-                        if (_this.selectedIds.length > 0){
+                        if (_this.selectedIds.length > 0) {
                             _this.MoveSelectedTask()
                         }
                         break;
@@ -1221,14 +1224,20 @@
             selectTaskFromTaskTreeList(task) {
                 $('.eachItemRow').removeClass('clicked');
                 $('#click' + task.id).addClass('clicked');
-                var target = document.getElementById('TaskListAndDetails');
-                var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
-                target.scrollTo(0, top);
+                    var target = document.getElementById('TaskListAndDetails');
+                    if($('#click' + task.id).length > 0){
+                        var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                        target.scrollTo(0, top);
+                    }
+
+
             },
             SearchResultClick(task) {
-                var target = document.getElementById('TaskListAndDetails');
-                var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
-                target.scrollTo(0, top);
+                if($('#click' + task.id).length > 0){
+                    var target = document.getElementById('TaskListAndDetails');
+                    var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                    target.scrollTo(0, top);
+                 }
                 $('#myUL').addClass('myUL');
                 $('#myUL').removeClass('myUL-show');
             },
@@ -1285,7 +1294,7 @@
                     });
             },
 
-            makeItClick(e, data,vm) {
+            makeItClick(e, data, vm) {
                 var _this = this;
                 console.log(vm)
                 console.log(vm.level)
@@ -2208,7 +2217,10 @@
 
             },
             getNavbar(data) {
-                this.AllNavItems = data.AllNavItems;
+                var _this = this;
+                setTimeout(function () {
+                    _this.AllNavItems = data.AllNavItem;
+                }, 500)
             },
             UpdateListModel() {
                 $("#updateListBoardModel").modal('show');
@@ -2311,7 +2323,7 @@
 
             getColumnAndConfirmButton() {
                 var _this = this;
-                if (_this.type_T === 'board'){
+                if (_this.type_T === 'board') {
                     let data = {
                         'list_id': _this.selectedSubList
                     };
@@ -2324,7 +2336,7 @@
                         .catch(error => {
                         });
 
-                }else {
+                } else {
                     this.transferBtn = true;
                 }
 
@@ -2376,7 +2388,7 @@
                             ids: _this.selectedIds,
                             nav: _this.selectedListNav,
                             target: _this.selectedSubList,
-                            column_id : _this.selectedColumn
+                            column_id: _this.selectedColumn
                         })
                             .then(response => response.data)
                             .then(response => {
@@ -2488,18 +2500,21 @@
                     id: _this.list_id
                 };
                 // if (_this.empty_task_delete_flag === 1){
-                axios.post('/api/task-list/delete-empty-task', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        if (response.success === 1) {
-                            _this.empty_task_delete_flag = 0;
-                            var id = response.id;
-                            _this.RemoveEmptyTask(id, _this.treeList);
-                        }
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
+                setTimeout(function () {
+                    axios.post('/api/task-list/delete-empty-task', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            if (response.success === 1) {
+                                _this.empty_task_delete_flag = 0;
+                                var id = response.id;
+                                _this.RemoveEmptyTask(id, _this.treeList);
+                            }
+                        })
+                        .catch(error => {
+                            console.log('Api for move down task not Working !!!')
+                        }, 1000);
+                })
+
                 // }
 
             },

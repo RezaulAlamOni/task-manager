@@ -22,7 +22,7 @@ let routes = [
     {
         path: '/project/:uuid/edit',
         component: addProject,
-        name : 'project-create'
+        name : 'project-edit'
     },
     // {
     //     path: '/project/:uuid',
