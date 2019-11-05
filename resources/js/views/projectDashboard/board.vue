@@ -27,10 +27,8 @@
                                         </div>
                                         <div class="col-md-5 " style="margin: 0px; padding : 0px;" >
                                             <span class="col_name" style="word-wrap: break-word;" :title="column.name" data-placement="bottom" data-toggle="tooltip">
-                                                
-                                                {{ (column.name && column.name.length > 35)? column.name.substring(0,35)+" ..." : column.name }}
-                                                
-                                                </span>
+                                                {{ (column.name && column.name.length > 35)? column.name.substring(0,35)+" ..." : column.name }} 
+                                            </span>
                                         </div>
                                         <div class="col-md-2" style="margin: 0px; padding : 0px;">
                                             <span class="total-task">{{column.children.length}}</span>
@@ -140,7 +138,7 @@
                                                 data-grow="auto" style="padding: 10px !important;">{{ card.data }}</textarea>
 
                                             <br>
-                                            <div>
+                                            <div class="">
                                                 <div>
                                                     <a class="calender clickHide" v-if="card.date === '0000-00-00'">
                                                         <!-- <i class="outline-event icon-image-preview" data-toggle
@@ -174,8 +172,7 @@
                                                     </a>
                                                 </div>
                                                 
-
-                                                <div>
+                                                <div style="float: left;">
                                                     <a class="user dropdown-hide-with-remove-icon">
                                                         <template v-if="card.assigned_user.length > 0">
                                                             <span class="assigned_user dropdown-toggle-split "
@@ -260,7 +257,7 @@
                                                         </div>
                                                     </a>
                                                 </div>
-
+                                            
                                                 <div>
                                                     <a :class="{'tag-icon': true, 'tag-icon-free': card.tags == undefined || card.tags.length == 0}">
                                                         <div v-if="card.tags && card.tags.length !== 0">
@@ -364,7 +361,14 @@
 
                                                     </a>
                                                 </div>
-                                            </div>
+                                                <div class="total-child" style="bottom: 15px; "> <strong> 
+                                                    <!-- {{ JSON.stringify(card) }} -->
+                                                    <!-- {{  }} -->
+                                                        <!-- console.log(str.match(new RegExp('cardId','gi')).length);     -->
+                                                    <!-- #30 -->
+                                                    {{ card.child }}
+                                                </strong> </div>
+                                            </div> 
                                         </div>
                                     </Draggable>
                                 </Container>
@@ -1142,6 +1146,7 @@
                                 className: 'card',
                                 style: {backgroundColor: 'white'}
                             },
+                            child: this.cards[i].task[j].child,
                             data: this.cards[i].task[j].name,
                             description: this.cards[i].task[j].name,
                             date: this.cards[i].task[j].date,

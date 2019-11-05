@@ -80,7 +80,12 @@ class Task extends Model
 
     public function task()
     {
-        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags')->orderBy('board_sort_id','ASC');
+        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags')->with('childTask')->orderBy('board_sort_id','ASC');
+    }
+
+    public function childTask()
+    {
+        return $this->hasMany(self::class, 'parent_id', 'id');
     }
 
     public function linkToList()

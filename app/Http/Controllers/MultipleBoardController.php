@@ -50,8 +50,10 @@ class MultipleBoardController extends Controller
             $boards[$key]['progress'] = $value['progress'];
             $boards[$key]['linkToList'] = $value['linkToList'];
             $boards[$key]['color'] = $value['color'];
+            
             if (!empty($value['task']) && count($value['task']) > 0) {
                 foreach ($value['task'] as $keys => $values) {
+                                        
                     $tagTooltip = '';
                     $tags = [];
                     if (!empty($values['Assign_tags']) && count($values['Assign_tags']) > 0) {
@@ -96,6 +98,7 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['tags'] = $tags;
                     $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
 
+                    $boards[$key]['task'][$keys]['child'] = ($values['childTask'] !== null)?count($values['childTask']): 0;
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
                     $boards[$key]['task'][$keys]['progress'] = $values['progress'];
@@ -119,6 +122,9 @@ class MultipleBoardController extends Controller
                 $boards[$key]['task'] = [];
             }
         }
+        // $str = json_encode($boards, true);
+        // $total = substr_count($str,"id");
+        // print_r($total); exit;
         // return $boards;
         return response()->json(['success' => $boards]);
     }
