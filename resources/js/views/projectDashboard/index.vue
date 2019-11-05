@@ -1344,7 +1344,7 @@
 
 
                 }
-                else if (e.which === 3) {
+                else if (e.which === 3 && data.draggable == true) {
                     e.preventDefault();
                     e.stopPropagation();
                     if (_this.context_menu_flag !== 1) {
