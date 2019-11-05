@@ -126,6 +126,7 @@
                              @contextmenu="makeItClick($event, data,vm)"
                              slot-scope="{data, _id,store,vm}"
                              @click="makeItClick($event, data,vm)"
+                             @keyup="makeItClick($event, data,vm)"
                              style="font-size: 12px" v-on:dblclick="showLog">
                             <template v-html="data.html" v-if="!data.isDragPlaceHolder">
 
@@ -983,7 +984,7 @@
         },
         created() {
             let _this = this;
-            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3,ctrl+m', function (event, handler) {
+            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+a,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3,ctrl+m', function (event, handler) {
                 event.preventDefault();
                 switch (handler.key) {
                     case "enter" :
@@ -1032,6 +1033,9 @@
                                 $('#_details').click();
                             }, 500);
                         }
+                        break;
+                    case "ctrl+a":
+                        console.log('CLTR+A');
                         break;
                     case "ctrl+c":
                         _this.copyTask();
@@ -1296,8 +1300,6 @@
 
             makeItClick(e, data, vm) {
                 var _this = this;
-                console.log(vm)
-                console.log(vm.level)
                 if (e.ctrlKey && e.which === 1) {
                     if (data.text !== '' && _this.selectedIds.length <= 1) {
                         _this.DeleteEmptyTask();
@@ -1318,11 +1320,13 @@
                     }
 
 
-                } else if (e.shiftKey && e.which === 1) {
+                }
+                else if (e.shiftKey && e.which === 1) {
 
                     $('#click' + data.id).addClass('clicked');
 
-                } else if (e.which === 1) {
+                }
+                else if (e.which === 1) {
                     if (data.text !== '') {
                         _this.DeleteEmptyTask();
                     }
@@ -1339,7 +1343,8 @@
                     $('.jquery-accordion-menu').hide();
 
 
-                } else if (e.which === 3) {
+                }
+                else if (e.which === 3) {
                     e.preventDefault();
                     e.stopPropagation();
                     if (_this.context_menu_flag !== 1) {
@@ -1379,6 +1384,9 @@
                             }
                         }
                     }
+                }
+                else if (e.ctrlKey && e.which === 65){
+                    e.target.setSelectionRange(0, data.text.length);
                 }
             },
             makeInput(e, data) {
