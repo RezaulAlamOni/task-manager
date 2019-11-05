@@ -298,8 +298,8 @@
                                             <!--                                               data-toggle="tooltip" title="Assignee">-->
                                             <!--                                            </i>-->
                                             <img :src="baseUrl+'/img/task-icon/add-user.png'"
-                                                 class="icon-image-preview li-opacity "
-                                                 data-toggle="tooltip" title="Assignee">
+                                                 class="icon-image-preview li-opacity assign-user-"
+                                                 data-toggle="tooltip" title="Assignee user">
                                         </span>
 
                                         <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
@@ -2287,6 +2287,7 @@
                 let _this = this;
                 _this.transferBtn = false;
                 _this.list_T = [];
+                _this.column_T = [];
                 _this.selectedSubList = 'Select list';
                 let data = {
                     'projectId': _this.projectId,
@@ -2601,7 +2602,7 @@
             },
 
             shwAssignUserDropDown(data) {
-                let targets = $('#click' + data.id).find('.outline-person');
+                let targets = $('#click' + data.id).find('.assign-user-');
                 if (targets.length > 0) {
                     $(targets[0]).click();
                 }
