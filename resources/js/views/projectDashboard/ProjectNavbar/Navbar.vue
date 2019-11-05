@@ -475,9 +475,10 @@
 <script>
     export default {
         name: "Navbar",
-        props: ['projectId', 'AllNavItems'],
+        props: ['projectId', 'AllNavGet'],
         data() {
             return {
+                AllNavItems : this.AllNavGet,
                 list: {
                     name: null,
                     description: null,
@@ -547,7 +548,7 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.AllNavItems = response.success;
-                        _this.$emit('getNavBars', {AllNavItems: _this.AllNavItems})
+                        _this.$emit('getNavBars', {AllNavItem : _this.AllNavItems})
 
                     })
                     .catch(error => {

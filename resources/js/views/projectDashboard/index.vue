@@ -2,7 +2,7 @@
     <div>
         <div class="page-titles">
             <!-- Navbar Component-->
-            <Navbar :AllNavItems="AllNavItems"
+            <Navbar :AllNavGet="AllNavItems"
                     :projectId="$route.params.projectId"
                     @getList="showTask"
                     @showSearchInputField="showSearchInputField"
@@ -21,7 +21,7 @@
                 <ul class="myUL" id="myUL">
                     <template v-for="task in searchData.tasks" v-if="searchData.tasks.length > 0">
                         <li>
-                            <a @mouseover="selectTaskFromTaskTreeList(task)"
+                            <a @mouseover="selectTaskFromTaskTreeList(task)" style="word-break: break-all"
                                @click="SearchResultClick(task)"
                                href="Javascript:void(0)">
                                 {{task.title}}
@@ -38,7 +38,8 @@
 
                 </ul>
                 <ul class="myUL-user-hide" id="myUL-user">
-                    <template v-for="user in searchData.users" v-if="searchData.users.length > 0">
+                    <template v-for="user in searchData.users"
+                              v-if="searchData.users.length > 0 && searchData.users !== undefined">
                         <li @click="SearchTaskByAssignedUser(user.id,user.name)">
                             <a href="javascript:void(0)">
                                 <span class="assignUser-suggest-photo">
@@ -122,9 +123,11 @@
                           draggable="draggable"
                           v-if="list.type === 'list'">
                         <div :class="{eachItemRow: true}" :id="'click'+data.id"
-                             @click="makeItClick($event, data)"
-                             @contextmenu="makeItClick($event, data)"
-                             slot-scope="{data, _id,store}" style="font-size: 12px" v-on:dblclick="showLog">
+                             @contextmenu="makeItClick($event, data,vm)"
+                             slot-scope="{data, _id,store,vm}"
+                             @click="makeItClick($event, data,vm)"
+                             @keyup="makeItClick($event, data,vm)"
+                             style="font-size: 12px" v-on:dblclick="showLog">
                             <template v-html="data.html" v-if="!data.isDragPlaceHolder">
 
                                 <span class="progress-bar-custom">
@@ -167,7 +170,7 @@
                                                type="text" v-model="data.text">
                                     </span>
 
-                                <a class="attach-icon hide-item-res">
+                                <a class="attach-icon hide-item-res" style="width: auto !important;">
                                         <span v-if="data.files && data.files.length !== 0">
                                             <template v-for="(fl,file_id ) in data.files">
                                                 <img :src="'/images/'+fl.file_name" v-if="file_id < 2"
@@ -179,7 +182,7 @@
                                     <img :src="baseUrl+'/img/task-icon/upload.png'"
                                          @click="addAttachment(data)"
                                          title="File" data-toggle="tooltip"
-                                         class="icon-image-preview li-opacity">
+                                         class="icon-image-preview li-opacity pull-right">
 
                                     <!--                                    <i @click="addAttachment(data)"-->
                                     <!--                                       class="cloud-image-upload icon-image-preview dropdown-toggle-split li-opacity"-->
@@ -191,7 +194,7 @@
                                 </a>
 
 
-                                <a class="tag-icon hide-item-res">
+                                <a class="tag-icon hide-item-res" style="width: auto !important;">
                                     <i class="dropdown-toggle-split"
                                        data-toggle="dropdown"
                                        v-if="data.tags.length > 0">
@@ -212,12 +215,12 @@
                                         </template>
                                     </i>
                                     <span :id="'tag-'+data._id" data-toggle="dropdown" v-else>
-                                        <img :src="baseUrl+'/img/task-icon/tag-add.png'"
-                                             class="icon-image-preview li-opacity" data-toggle="tooltip"
+                                        <img :src="baseUrl+'/img/task-icon/tag-add.png'" style="margin-right: 19px;"
+                                             class="icon-image-preview li-opacity pull-right" data-toggle="tooltip"
                                              title="Add Tag">
                                     </span>
 
-                                    <div :id="'dropdown'+data._id" class="dropdown-menu dropdown-menu-right">
+                                    <div :id="'dropdown'+data._id" class="dropdown-menu dropdown-menu-tag dropdown-menu-right ">
 
                                         <diV class="collapse show switchToggle" style="">
                                             <div class="container-fluid">
@@ -297,8 +300,8 @@
                                             <!--                                               data-toggle="tooltip" title="Assignee">-->
                                             <!--                                            </i>-->
                                             <img :src="baseUrl+'/img/task-icon/add-user.png'"
-                                                 class="icon-image-preview li-opacity "
-                                                 data-toggle="tooltip" title="Assignee">
+                                                 class="icon-image-preview li-opacity assign-user-"
+                                                 data-toggle="tooltip" title="Assignee user">
                                         </span>
 
                                         <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
@@ -314,7 +317,8 @@
                                                     </label>
                                                 </li>
                                                 <li class="assignUser">
-                                                    <template v-for="user in data.users">
+                                                    <template v-for="user in data.users"
+                                                              v-if="data.users !== undefined">
                                                         <div
                                                             @click="(data.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user,data) "
                                                             :class="(data.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
@@ -781,7 +785,8 @@
                         <div class="form-group row" v-if="list_T.length > 0">
                             <label class="col-sm-4 col-form-label">Select Board or List:</label>
                             <div class="col-sm-8">
-                                <select class="form-control" v-model="selectedSubList" @change="getColumnAndConfirmButton()">
+                                <select class="form-control" v-model="selectedSubList"
+                                        @change="getColumnAndConfirmButton()">
                                     <option disabled value="Select list">Select
                                         Board or List
                                     </option>
@@ -799,7 +804,7 @@
                                     <option disabled value="Select column">Select column
                                     </option>
                                     <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in column_T">
-                                       {{navList.title}}
+                                        {{navList.title}}
                                     </option>
                                 </select>
                             </div>
@@ -942,7 +947,7 @@
                 selectedColumn: 'Select column',
                 nav_T: [],
                 list_T: [],
-                column_T : [],
+                column_T: [],
                 boardColumn: [],
                 action_T: '',
                 type_T: '',
@@ -979,7 +984,7 @@
         },
         created() {
             let _this = this;
-            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3,ctrl+m', function (event, handler) {
+            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+a,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3,ctrl+m', function (event, handler) {
                 event.preventDefault();
                 switch (handler.key) {
                     case "enter" :
@@ -1029,6 +1034,9 @@
                             }, 500);
                         }
                         break;
+                    case "ctrl+a":
+                        console.log('CLTR+A');
+                        break;
                     case "ctrl+c":
                         _this.copyTask();
                         break;
@@ -1055,7 +1063,7 @@
                         _this.addAttachment(_this.selectedData);
                         break;
                     case "ctrl+m":
-                        if (_this.selectedIds.length > 0){
+                        if (_this.selectedIds.length > 0) {
                             _this.MoveSelectedTask()
                         }
                         break;
@@ -1220,14 +1228,20 @@
             selectTaskFromTaskTreeList(task) {
                 $('.eachItemRow').removeClass('clicked');
                 $('#click' + task.id).addClass('clicked');
-                var target = document.getElementById('TaskListAndDetails');
-                var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
-                target.scrollTo(0, top);
+                    var target = document.getElementById('TaskListAndDetails');
+                    if($('#click' + task.id).length > 0){
+                        var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                        target.scrollTo(0, top);
+                    }
+
+
             },
             SearchResultClick(task) {
-                var target = document.getElementById('TaskListAndDetails');
-                var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
-                target.scrollTo(0, top);
+                if($('#click' + task.id).length > 0){
+                    var target = document.getElementById('TaskListAndDetails');
+                    var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                    target.scrollTo(0, top);
+                 }
                 $('#myUL').addClass('myUL');
                 $('#myUL').removeClass('myUL-show');
             },
@@ -1284,7 +1298,7 @@
                     });
             },
 
-            makeItClick(e, data) {
+            makeItClick(e, data, vm) {
                 var _this = this;
                 if (e.ctrlKey && e.which === 1) {
                     if (data.text !== '' && _this.selectedIds.length <= 1) {
@@ -1306,7 +1320,13 @@
                     }
 
 
-                } else if (e.which === 1) {
+                }
+                else if (e.shiftKey && e.which === 1) {
+
+                    $('#click' + data.id).addClass('clicked');
+
+                }
+                else if (e.which === 1) {
                     if (data.text !== '') {
                         _this.DeleteEmptyTask();
                     }
@@ -1323,7 +1343,8 @@
                     $('.jquery-accordion-menu').hide();
 
 
-                } else if (e.which === 3) {
+                }
+                else if (e.which === 3) {
                     e.preventDefault();
                     e.stopPropagation();
                     if (_this.context_menu_flag !== 1) {
@@ -1363,6 +1384,9 @@
                             }
                         }
                     }
+                }
+                else if (e.ctrlKey && e.which === 65){
+                    e.target.setSelectionRange(0, data.text.length);
                 }
             },
             makeInput(e, data) {
@@ -2201,7 +2225,10 @@
 
             },
             getNavbar(data) {
-                this.AllNavItems = data.AllNavItems;
+                var _this = this;
+                setTimeout(function () {
+                    _this.AllNavItems = data.AllNavItem;
+                }, 500)
             },
             UpdateListModel() {
                 $("#updateListBoardModel").modal('show');
@@ -2280,6 +2307,7 @@
                 let _this = this;
                 _this.transferBtn = false;
                 _this.list_T = [];
+                _this.column_T = [];
                 _this.selectedSubList = 'Select list';
                 let data = {
                     'projectId': _this.projectId,
@@ -2303,7 +2331,7 @@
 
             getColumnAndConfirmButton() {
                 var _this = this;
-                if (_this.type_T === 'board'){
+                if (_this.type_T === 'board') {
                     let data = {
                         'list_id': _this.selectedSubList
                     };
@@ -2316,7 +2344,7 @@
                         .catch(error => {
                         });
 
-                }else {
+                } else {
                     this.transferBtn = true;
                 }
 
@@ -2368,15 +2396,12 @@
                             ids: _this.selectedIds,
                             nav: _this.selectedListNav,
                             target: _this.selectedSubList,
-                            column_id : _this.selectedColumn
+                            column_id: _this.selectedColumn
                         })
                             .then(response => response.data)
                             .then(response => {
-                                console.log(response)
                                 swal("Complete!", "All Selected task are moved !", "success");
-                                if (_this.type_T === 'list'){
-                                    _this.getTaskList()
-                                }
+                                _this.getTaskList()
                             })
                             .catch(error => {
                                 console.log('Add list api not working!!')
@@ -2483,18 +2508,21 @@
                     id: _this.list_id
                 };
                 // if (_this.empty_task_delete_flag === 1){
-                axios.post('/api/task-list/delete-empty-task', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        if (response.success === 1) {
-                            _this.empty_task_delete_flag = 0;
-                            var id = response.id;
-                            _this.RemoveEmptyTask(id, _this.treeList);
-                        }
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
+                setTimeout(function () {
+                    axios.post('/api/task-list/delete-empty-task', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            if (response.success === 1) {
+                                _this.empty_task_delete_flag = 0;
+                                var id = response.id;
+                                _this.RemoveEmptyTask(id, _this.treeList);
+                            }
+                        })
+                        .catch(error => {
+                            console.log('Api for move down task not Working !!!')
+                        }, 1000);
+                })
+
                 // }
 
             },
@@ -2597,7 +2625,7 @@
             },
 
             shwAssignUserDropDown(data) {
-                let targets = $('#click' + data.id).find('.outline-person');
+                let targets = $('#click' + data.id).find('.assign-user-');
                 if (targets.length > 0) {
                     $(targets[0]).click();
                 }
