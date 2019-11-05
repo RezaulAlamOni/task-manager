@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Multiple_board;
 use App\Multiple_list;
 use App\ProjectNavItems;
+use App\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,8 @@ class ProjectNavItemsController extends Controller
         $navItem = [];
         $nav = ProjectNavItems::where('project_id', $project_id)->orderBy('sort_id', 'asc')->get();
         foreach ($nav as $item) {
-            $item->lists = $this->getList($project_id, $item->id, $item->type);
+            $nav_ = $this->getList($project_id, $item->id, $item->type);
+            $item->lists = $nav_[0];
             $navItem[] = $item;
         }
         return response()->json(['success' => $navItem]);
@@ -32,14 +34,16 @@ class ProjectNavItemsController extends Controller
 
     public function getList($project_id, $nav_id, $type)
     {
+        $nav = ProjectNavItems::where('id',$nav_id)->first();
+        $type = $nav->type;
         if ($type == 'list') {
             $list = Multiple_list::where(['project_id' => (int)$project_id, 'nav_id' => $nav_id])->get();
             $list->type = $type;
-            return $list;
+            return [$list,$nav->type];
         } else {
             $board = Multiple_board::where(['project_id' => (int)$project_id, 'nav_id' => $nav_id])->get();
             $board->type = $type;
-            return $board;
+            return [$board,$nav->type];
         }
 
     }
@@ -100,7 +104,7 @@ class ProjectNavItemsController extends Controller
     public function multipleList(Request $request)
     {
         $nav = $this->getList($request->projectId,$request->listId,$request->type);
-        return response()->json(['success' => $nav]);
+        return response()->json(['success' => $nav[0],'type'=>$nav[1]]);
     }
 
     public function edit(Request $request)
@@ -149,5 +153,41 @@ class ProjectNavItemsController extends Controller
 
         return response()->json(['success'=>1]);
 
+    }
+
+    public function moveSelectedTask(Request $request){
+        $ids = $request->ids;
+        $target_nav_id = $request->nav;
+        $target_listOrBoard = $request->target;
+        $nav = ProjectNavItems::where('id',$target_nav_id)->first();
+        if ($nav->type == 'board'){
+            foreach ($ids as $id) {
+                $task = Task::where(['multiple_board_id'=>$target_listOrBoard,'board_parent_id'=>$request->column_id])->orderBy('board_sort_id','desc')->first();
+                Task::where('id',$id)->update(['multiple_board_id'=>$target_listOrBoard,'board_parent_id'=>$request->column_id,'board_sort_id'=>$task->board_sort_id+1]);
+            }
+            return response()->json(['status'=>'success','board']);
+        }elseif($nav->type == 'list'){
+            $task = Task::where(['list_id'=>$target_listOrBoard,'parent_id'=>0])->orderBy('sort_id','desc')->first();
+            $sort_id = $task->sort_id +1;
+            foreach ($ids as $id) {
+                Task::where('id',$id)->update(['list_id'=>$target_listOrBoard,'parent_id'=>0,'sort_id' => $sort_id]);
+                $childs = Task::where('parent_id',$id)->get();
+                $this->moveWithChild($childs,$target_listOrBoard);
+                $sort_id++;
+            }
+            return response()->json(['status'=>'success','list']);
+        }
+
+
+    }
+
+    public function moveWithChild($childs,$list_id){
+        foreach ($childs as $child) {
+            Task::where('id',$child->id)->update(['list_id'=>$list_id]);
+            $childrens = Task::where('parent_id',$child->id)->get();
+            if ($childrens->count() > 0){
+                $this->moveWithChild($childrens,$list_id);
+            }
+        }
     }
 }
