@@ -15,6 +15,7 @@
                        type="text" id="myInput"
                        placeholder="Search for names.."
                        title="Type in a name"
+                       autocomplete="off"
                        @keyup="searchDataFormTask($event)"
                 >
 
@@ -68,67 +69,71 @@
         <div class="col-md-8 text-center pt-5" v-else-if="AllNavItems !== null && list.type === null">
             <h2 style="color: #d1a894">Select Task View.</h2>
         </div>
-
-        <div class="container">
-            <div class="col-12 action-task">
-                <h2 class="p-t-20" v-if="list.type !== null">
-                    {{list.name}}
-                    <span class="btn btn-default pull-right dropdown-toggle action-list-board" data-toggle="dropdown">
+        <div class="list-task-details">
+            <div class="container">
+                <div class="col-12 action-task">
+                    <h2 class="p-t-20" v-if="list.type !== null">
+                        {{list.name}}
+                        <span class="btn btn-default pull-right dropdown-toggle action-list-board"
+                              data-toggle="dropdown">
                         Option
                     </span>
 
-                    <div aria-labelledby="dropdownMenuButton"
-                         class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
-                        <h6 class="dropdown-header text-uppercase">Action For <span
-                            v-if="list.type === 'board'">Board</span> <span v-else>List</span></h6>
-                        <div class="dropdown-divider"></div>
-                        <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
+                        <div aria-labelledby="dropdownMenuButton"
+                             class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
+                            <h6 class="dropdown-header text-uppercase">Action For <span
+                                v-if="list.type === 'board'">Board</span> <span v-else>List</span></h6>
+                            <div class="dropdown-divider"></div>
+                            <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
                             <a href="javascript:void(0)"> <i class="fa fa-edit"></i> Edit  <span
                                 v-if="list.type === 'board'">Board</span>  <span v-else>List</span></a>
                         </span>
-                        <span class="dropdown-item custom-dropdown-item">
+                            <span class="dropdown-item custom-dropdown-item">
                             <a href="javascript:void(0)" @click="MoveListTOAnotherNav(list.type)"> <i
                                 class="fa fa-arrows-alt"></i> Move <span
                                 v-if="list.type === 'board'">Board</span>  <span v-else>List</span> to Another Nav </a>
                         </span>
-                        <span class="dropdown-item custom-dropdown-item" @click="DeleteListOrBoard(list.type,'delete')">
+                            <span class="dropdown-item custom-dropdown-item"
+                                  @click="DeleteListOrBoard(list.type,'delete')">
                             <a href="javascript:void(0)"> <i class="fa fa-trash"></i> Delete with all <span
                                 v-if="list.type === 'board'">Card</span>  <span v-else> Task</span></a>
                         </span>
-                        <span class="dropdown-item custom-dropdown-item" @click="DeleteListOrBoard(list.type,'move')">
+                            <span class="dropdown-item custom-dropdown-item"
+                                  @click="DeleteListOrBoard(list.type,'move')">
                             <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move <span
                                 v-if="list.type === 'board'">Card</span>  <span v-else>Task</span> </a>
                         </span>
-                        <span class="dropdown-item custom-dropdown-item" v-if="list.type === 'list'">
+                            <span class="dropdown-item custom-dropdown-item" v-if="list.type === 'list'">
                             <a href="javascript:void(0)" @click="DownloadTaskPDF"> <i class="fa fa-file"></i> Create PDF </a>
                         </span>
 
-                    </div>
+                        </div>
 
-                </h2>
-                <p class="compltit-p" v-if="list.description != null">{{list.description}}</p>
+                    </h2>
+                    <p class="compltit-p" v-if="list.description != null">{{list.description}}</p>
+                </div>
             </div>
-        </div>
-        <!--        //tree view component section-->
-        <div class="TaskListAndDetails container-fluid" v-if="list.type === 'list'" id="TaskListAndDetails">
-            <div class="task_width" id="task_width">
-                <div class="col-11" id="tree_view_list">
+            <!--        //tree view component section-->
+            <div class="TaskListAndDetails container-fluid" v-if="list.type === 'list'" id="TaskListAndDetails">
+                <div class="task_width" id="task_width">
+                    <div class="col-11" id="tree_view_list">
 
-                    <Tree :data="treeList" :indent="2" :space="0" @change="ChangeNode" v-click-outside="DeleteEmptyTask"
-                          @drop="dropNode"
-                          class="tree4"
-                          @drag="dragNode"
-                          @moving="dragNode"
-                          cross-tree="cross-tree"
-                          draggable="draggable"
-                          v-if="list.type === 'list'">
-                        <div :class="{eachItemRow: true}" :id="'click'+data.id"
-                             @contextmenu="makeItClick($event, data,vm)"
-                             slot-scope="{data, _id,store,vm}"
-                             @click="makeItClick($event, data,vm)"
-                             @keyup="makeItClick($event, data,vm)"
-                             style="font-size: 12px" v-on:dblclick="showLog">
-                            <template v-html="data.html" v-if="!data.isDragPlaceHolder">
+                        <Tree :data="treeList" :indent="2" :space="0" @change="ChangeNode"
+                              v-click-outside="DeleteEmptyTask"
+                              @drop="dropNode"
+                              class="tree4"
+                              @drag="dragNode"
+                              @moving="dragNode"
+                              cross-tree="cross-tree"
+                              draggable="draggable"
+                              v-if="list.type === 'list'">
+                            <div :class="{eachItemRow: true}" :id="'click'+data.id"
+                                 @contextmenu="makeItClick($event, data,vm)"
+                                 slot-scope="{data, _id,store,vm}"
+                                 @click="makeItClick($event, data,vm)"
+                                 @keyup="makeItClick($event, data,vm)"
+                                 style="font-size: 12px" v-on:dblclick="showLog">
+                                <template v-html="data.html" v-if="!data.isDragPlaceHolder">
 
                                 <span class="progress-bar-custom">
                                     <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28" width="28"
@@ -152,13 +157,13 @@
 
                                 </span>
 
-                                <b @click="HideShowChild(store , data)"
-                                   v-if="data.children && data.children.length && data.open"><i
-                                    class="fa fa-fw fa-minus"></i></b>
-                                <b @click="HideShowChild(store , data)"
-                                   v-else-if="data.children && data.children.length && !data.open"><i
-                                    class="fa fa-fw fa-plus"></i></b>
-                                <span>
+                                    <b @click="HideShowChild(store , data)"
+                                       v-if="data.children && data.children.length && data.open"><i
+                                        class="fa fa-fw fa-minus"></i></b>
+                                    <b @click="HideShowChild(store , data)"
+                                       v-else-if="data.children && data.children.length && !data.open"><i
+                                        class="fa fa-fw fa-plus"></i></b>
+                                    <span>
                                         <input :id="data.id"
                                                @blur="showItem($event,data)"
                                                @click="makeInput($event,data)"
@@ -170,7 +175,7 @@
                                                type="text" v-model="data.text">
                                     </span>
 
-                                <a class="attach-icon hide-item-res" style="width: auto !important;">
+                                    <a class="attach-icon hide-item-res" style="width: auto !important;">
                                         <span v-if="data.files && data.files.length !== 0">
                                             <template v-for="(fl,file_id ) in data.files">
                                                 <img :src="'/images/'+fl.file_name" v-if="file_id < 2"
@@ -179,112 +184,115 @@
                                             </template>
                                         </span>
 
-                                    <img :src="baseUrl+'/img/task-icon/upload.png'"
-                                         @click="addAttachment(data)"
-                                         title="File" data-toggle="tooltip"
-                                         class="icon-image-preview li-opacity pull-right">
+                                        <img :src="baseUrl+'/img/task-icon/upload.png'"
+                                             @click="addAttachment(data)"
+                                             title="File" data-toggle="tooltip"
+                                             class="icon-image-preview li-opacity pull-right">
 
-                                    <!--                                    <i @click="addAttachment(data)"-->
-                                    <!--                                       class="cloud-image-upload icon-image-preview dropdown-toggle-split li-opacity"-->
-                                    <!--                                       title="File" data-toggle="tooltip"></i>-->
+                                        <!--                                    <i @click="addAttachment(data)"-->
+                                        <!--                                       class="cloud-image-upload icon-image-preview dropdown-toggle-split li-opacity"-->
+                                        <!--                                       title="File" data-toggle="tooltip"></i>-->
 
-                                    <input :id="'file'+data._id" @change="updatePicture($event,data)" ref="file"
-                                           style="display: none; "
-                                           type="file">
-                                </a>
+                                        <input :id="'file'+data._id" @change="updatePicture($event,data)" ref="file"
+                                               style="display: none; "
+                                               type="file">
+                                    </a>
 
 
-                                <a class="tag-icon hide-item-res" style="width: auto !important;">
-                                    <i class="dropdown-toggle-split"
-                                       data-toggle="dropdown"
-                                       v-if="data.tags.length > 0">
-                                        <template v-for="(tag ,index) in data.tags">
-                                            <template v-if="index < 2">
+                                    <a class="tag-icon hide-item-res" style="width: auto !important;">
+                                        <i class="dropdown-toggle-split"
+                                           data-toggle="dropdown"
+                                           v-if="data.tags.length > 0">
+                                            <template v-for="(tag ,index) in data.tags">
+                                                <template v-if="index < 2">
                                                     <span :title="data.tagTooltip" class="badge badge-warning"
                                                           data-placement="bottom" data-toggle="tooltip"
                                                           v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'},{'float' : 'left'}]"
                                                           v-if="tag.text !== null">
                                                         {{(data.tags.length > 2 ) ? tag.text.substring(0,3) : tag.text.substring(0,3) }}
                                                     </span>
-                                                <span class="badge badge-warning"
-                                                      v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]"
-                                                      v-else>
+                                                    <span class="badge badge-warning"
+                                                          v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]"
+                                                          v-else>
                                                         ::
                                                     </span>
+                                                </template>
                                             </template>
-                                        </template>
-                                    </i>
-                                    <span :id="'tag-'+data._id" data-toggle="dropdown" v-else>
+                                        </i>
+                                        <span :id="'tag-'+data._id" data-toggle="dropdown" v-else>
                                         <img :src="baseUrl+'/img/task-icon/tag-add.png'" style="margin-right: 19px;"
                                              class="icon-image-preview li-opacity pull-right" data-toggle="tooltip"
                                              title="Add Tag">
                                     </span>
 
-                                    <div :id="'dropdown'+data._id" class="dropdown-menu dropdown-menu-tag dropdown-menu-right ">
+                                        <div :id="'dropdown'+data._id"
+                                             class="dropdown-menu dropdown-menu-tag dropdown-menu-right ">
 
-                                        <diV class="collapse show switchToggle" style="">
-                                            <div class="container-fluid">
-                                                <vue-tags-input
-                                                    :allow-edit-tags="true"
-                                                    :tags="data.tags"
-                                                    @before-deleting-tag="DeleteTag"
-                                                    @tags-changed="newTags => (changeTAg(newTags))"
-                                                    v-model="tag1"
-                                                />
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <template v-for="tag in data.existing_tags">
-                                                            <li class="badge-pill tags"
-                                                                @click="addExistingTag(data , tag.title,tag.color)"
-                                                                v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
-                                                                v-if="tag.text !== 'Dont Forget'">
-                                                                {{(tag.title !== undefined) ?tag.title.substring(0,12) :
-                                                                ''}}
+                                            <diV class="collapse show switchToggle" style="">
+                                                <div class="container-fluid">
+                                                    <vue-tags-input
+                                                        :allow-edit-tags="true"
+                                                        :tags="data.tags"
+                                                        @before-deleting-tag="DeleteTag"
+                                                        @tags-changed="newTags => (changeTAg(newTags))"
+                                                        v-model="tag1"
+                                                    />
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <template v-for="tag in data.existing_tags">
+                                                                <li class="badge-pill tags"
+                                                                    @click="addExistingTag(data , tag.title,tag.color)"
+                                                                    v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
+                                                                    v-if="tag.text !== 'Dont Forget'">
+                                                                    {{(tag.title !== undefined)
+                                                                    ?tag.title.substring(0,12) :
+                                                                    ''}}
+                                                                </li>
+                                                            </template>
+                                                            <li @click="addExistingTag(data ,'Dont Forget','')"
+                                                                class="badge-pill tags"
+                                                                style="background: #FB8678">
+                                                                Dont Forget
                                                             </li>
-                                                        </template>
-                                                        <li @click="addExistingTag(data ,'Dont Forget','')"
-                                                            class="badge-pill tags"
-                                                            style="background: #FB8678">
-                                                            Dont Forget
-                                                        </li>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="col-xs-12" style="margin-top:10px;width: 100%;">
+                                                        <button @click="showTagManageModel"
+                                                                class="btn btn-small btn-primary pull-right"
+                                                                type="submit">Manage Tag
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <hr>
-                                                <div class="col-xs-12" style="margin-top:10px;width: 100%;">
-                                                    <button @click="showTagManageModel"
-                                                            class="btn btn-small btn-primary pull-right"
-                                                            type="submit">Manage Tag
-                                                    </button>
-                                                </div>
-                                            </div>
 
-                                        </diV>
-                                    </div>
-                                </a>
-
-                                <div class="hide-item-res" @click="openPicker()">
-                                    <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'"
-                                       title="Due Date">
-                                        <img :src="baseUrl+'/img/task-icon/date-plus.png'" class="icon-image-preview">
-                                        <!--                                        <i class="outline-event icon-image-preview" data-toggle-->
-                                        <!--                                           title="toggle"></i>-->
-
+                                            </diV>
+                                        </div>
                                     </a>
-                                    <datepicker
-                                        :disabled-dates="disabledDates"
-                                        @selected="updateDate"
-                                        calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
-                                        format='dd MMM'
-                                        input-class="dateCal"
-                                        title="Due Date" data-toggle="tooltip" data-placement="left"
-                                        v-model="data.date">
-                                    </datepicker>
+
+                                    <div class="hide-item-res" @click="openPicker()">
+                                        <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'"
+                                           title="Due Date">
+                                            <img :src="baseUrl+'/img/task-icon/date-plus.png'"
+                                                 class="icon-image-preview">
+                                            <!--                                        <i class="outline-event icon-image-preview" data-toggle-->
+                                            <!--                                           title="toggle"></i>-->
+
+                                        </a>
+                                        <datepicker
+                                            :disabled-dates="disabledDates"
+                                            @selected="updateDate"
+                                            calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
+                                            format='dd MMM'
+                                            input-class="dateCal"
+                                            title="Due Date" data-toggle="tooltip" data-placement="left"
+                                            v-model="data.date">
+                                        </datepicker>
 
 
-                                </div>
-                                <div class="hide-item-res-user">
-                                    <a class="user dropdown-hide-with-remove-icon">
-                                        <template v-if="data.assigned_user.length > 0">
+                                    </div>
+                                    <div class="hide-item-res-user">
+                                        <a class="user dropdown-hide-with-remove-icon">
+                                            <template v-if="data.assigned_user.length > 0">
                                             <span class="assigned_user dropdown-toggle-split "
                                                   data-toggle="dropdown" v-for="(assign,keyId) in data.assigned_user">
                                                 <p :title="assign.name"
@@ -294,36 +302,198 @@
                                                 </p>
 
                                             </span>
-                                        </template>
-                                        <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
+                                            </template>
+                                            <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
 <!--                                            <i class="outline-person icon-image-preview li-opacity "-->
-                                            <!--                                               data-toggle="tooltip" title="Assignee">-->
-                                            <!--                                            </i>-->
+                                                <!--                                               data-toggle="tooltip" title="Assignee">-->
+                                                <!--                                            </i>-->
                                             <img :src="baseUrl+'/img/task-icon/add-user.png'"
                                                  class="icon-image-preview li-opacity assign-user-"
                                                  data-toggle="tooltip" title="Assignee user">
                                         </span>
 
-                                        <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
-                                            <diV class="collapse show switchToggle">
-                                                <li class="assignUser">
-                                                    <input class="input-group searchUser"
-                                                           placeholder="Assign by name and email"
-                                                           type="text">
-                                                    <label class="pl-2 label-text">
+                                            <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
+                                                <diV class="collapse show switchToggle">
+                                                    <li class="assignUser">
+                                                        <input class="input-group searchUser"
+                                                               placeholder="Assign by name and email"
+                                                               type="text">
+                                                        <label class="pl-2 label-text">
                                                         <span class="assign-user-drop-down-text">
                                                             Or invite a new member by email address
                                                         </span>
+                                                        </label>
+                                                    </li>
+                                                    <li class="assignUser">
+                                                        <template v-for="user in data.users"
+                                                                  v-if="data.users !== undefined">
+                                                            <div
+                                                                @click="(data.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user,data) "
+                                                                :class="(data.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
+                                                                class=" row"
+                                                                v-bind:disabled="(data.assigned_user_ids.includes(user.id)) ? true : false">
+                                                                <div class="col-md-3 pt-1 pl-4">
+                                                                    <p class="assignUser-photo">
+                                                                        {{(user.name !== null) ?
+                                                                        user.name.substring(0,2) :
+                                                                        ''}}</p>
+                                                                </div>
+                                                                <div class="col-md-9 assign-user-name-email">
+                                                                    <h5>{{user.name}}<br>
+                                                                        <small>{{user.email}}</small>
+                                                                    </h5>
+                                                                </div>
+                                                                <a :id="'remove-assign-user'+user.id"
+                                                                   v-if="data.assigned_user_ids.includes(user.id)"
+                                                                   @click="removeAssignedUser(user.id, data.id)"
+                                                                   data-toggle="tooltip"
+                                                                   title="Remove user from assigned !"
+                                                                   class="remove-assign-user badge badge-danger"
+                                                                   href="javascript:void(0)">
+                                                                    <i class="fa fa-user-times remove-assign-user-icon"></i>
+                                                                </a>
+                                                                <a :id="'remove-assign-user'+user.id" v-else
+                                                                   data-toggle="tooltip" title="Assign user to task!"
+                                                                   class="remove-assign-user badge badge-success"
+                                                                   href="javascript:void(0)">
+                                                                    <i class="fa fa-user-plus remove-assign-user-icon"></i>
+                                                                </a>
+                                                            </div>
+
+                                                        </template>
+                                                    </li>
+                                                </diV>
+                                                <li @click="switchEvent($event)"
+                                                    class="border-top pl-2 assign-user-drop-down-footer">
+
+                                                    <span
+                                                        class="assign-user-drop-down-text">Assign an external team</span>
+                                                    <switches class="assign-user-switch-for-dropdown"
+                                                              color="success"
+                                                              theme="bootstrap"
+                                                              v-model="id">
+                                                    </switches>
+                                                </li>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <a @click="addChild(data)" class="subTask_plus li-opacity li-opacity-sub clickHide "
+                                       data-toggle="tooltip" title="Add Child">
+                                        <!--                                    <i class="baseline-playlist_add icon-image-preview"></i>-->
+                                        <img :src="baseUrl+'/img/task-icon/add-Sublist.png'"
+                                             class="icon-image-preview li-opacity-sub ">
+                                    </a>
+                                    <a @click="addNode(data)" class="task_plus li-opacity li-opacity-sub clickHide"
+                                       data-toggle="tooltip"
+                                       title="Add Task Bellow">
+                                        <!--                                    <i class="baseline-add icon-image-preview"></i>-->
+                                        <img :src="baseUrl+'/img/task-icon/add-list.png'"
+                                             class="icon-image-preview li-opacity-sub ">
+                                    </a>
+                                </template>
+                            </div>
+
+                        </Tree>
+
+                        <div class="jquery-accordion-menu" id="jquery-accordion-menu" v-click-outside="HideCustomMenu">
+                            <ul>
+                                <li>
+                                    <a href="javascript:void(0)" class="dropdown-toggle-split "
+                                       v-if="selectedData.text !== 'Dont Forget Section'"
+                                       @click="copyTask"
+                                       data-toggle="dropdown">
+                                        <img :src="baseUrl+'/img/task-icon/copy.png'" class="contex-menu-icon">
+                                        Copy </a>
+                                    <a href="javascript:void(0)" class="dropdown-toggle-split disabled" v-else
+                                       style="color: gray"
+                                       data-toggle="dropdown">
+                                        <img :src="baseUrl+'/img/task-icon/copy.png'" class="contex-menu-icon">
+                                        Copy </a>
+
+                                    <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span
+                                        class="badge-pill badge-default">C</span>
+                                </span>
+
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" class="dropdown-toggle-split "
+                                       v-if="selectedData.text !== 'Dont Forget Section'"
+                                       @click="cutTask"
+                                       data-toggle="dropdown">
+
+                                        <img :src="baseUrl+'/img/task-icon/cut.png'" class="contex-menu-icon">
+                                        Cut </a>
+                                    <a href="javascript:void(0)" class="dropdown-toggle-split disabled"
+                                       v-else style="color: gray"
+                                       data-toggle="dropdown">
+                                        <img :src="baseUrl+'/img/task-icon/cut.png'" class="contex-menu-icon">
+                                        Cut </a>
+                                    <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span
+                                        class="badge-pill badge-default">X</span>
+                                </span>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" class="dropdown-toggle-split "
+                                       @click="pastCopyAndCut"
+                                       data-toggle="dropdown"
+                                       v-if="selectedCopy !== null || selectedCut !== null">
+                                        <img :src="baseUrl+'/img/task-icon/past.png'" class="contex-menu-icon">
+                                        Paste </a>
+                                    <a href="javascript:void(0)" class="dropdown-toggle-split disabled"
+                                       style="color: gray"
+                                       data-toggle="dropdown"
+                                       v-else>
+                                        <img :src="baseUrl+'/img/task-icon/past.png'" class="contex-menu-icon">
+                                        Paste </a>
+                                    <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span
+                                        class="badge-pill badge-default">v</span>
+                                </span>
+                                </li>
+                                <li>
+                                    <a @click="MoveSelectedTask" href="javascript:void(0)">
+                                        <img :src="baseUrl+'/img/task-icon/move.png'" class="contex-menu-icon">
+                                        Move Selected
+                                    </a>
+                                    <span class="contex-menu-sortcut">
+                                   <span class="badge-pill badge-default">Ctrl</span>+<span
+                                        class="badge-pill badge-default">M</span>
+                                </span>
+                                </li>
+                                <li>
+                                    <a @click="deleteSelectedTask" href="javascript:void(0)">
+                                        <img :src="baseUrl+'/img/task-icon/trash.png'" class="contex-menu-icon">
+
+                                        Delete Selected <span
+                                        class="badge-pill badge-default contex-menu-sortcut">Delete</span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
+                                        <img :src="baseUrl+'/img/task-icon/add-user.png'" class="contex-menu-icon">
+                                        Assign User to Selected </a>
+                                    <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span
+                                        class="badge-pill badge-default">U</span>
+                                </span>
+
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <diV class="collapse show switchToggle">
+
+                                            <ul>
+                                                <li class="assignUser">
+                                                    <label class="pl-2 label-text">
+                                                    <span class="assign-user-drop-down-text">
+                                                        Select User For Assign To Selected Task.
+                                                    </span>
                                                     </label>
                                                 </li>
                                                 <li class="assignUser">
-                                                    <template v-for="user in data.users"
-                                                              v-if="data.users !== undefined">
-                                                        <div
-                                                            @click="(data.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user,data) "
-                                                            :class="(data.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
-                                                            class=" row"
-                                                            v-bind:disabled="(data.assigned_user_ids.includes(user.id)) ? true : false">
+                                                    <template v-if="treeList[0].users && treeList[0].users.length > 0"
+                                                              v-for="user in treeList[0].users">
+                                                        <div @click="ActionToSelectedTask(user.id,'user')"
+                                                             class="users-select row">
                                                             <div class="col-md-3 pt-1 pl-4">
                                                                 <p class="assignUser-photo">
                                                                     {{(user.name !== null) ? user.name.substring(0,2) :
@@ -334,263 +504,104 @@
                                                                     <small>{{user.email}}</small>
                                                                 </h5>
                                                             </div>
-                                                            <a :id="'remove-assign-user'+user.id"
-                                                               v-if="data.assigned_user_ids.includes(user.id)"
-                                                               @click="removeAssignedUser(user.id, data.id)"
-                                                               data-toggle="tooltip" title="Remove user from assigned !"
-                                                               class="remove-assign-user badge badge-danger"
-                                                               href="javascript:void(0)">
-                                                                <i class="fa fa-user-times remove-assign-user-icon"></i>
-                                                            </a>
-                                                            <a :id="'remove-assign-user'+user.id" v-else
-                                                               data-toggle="tooltip" title="Assign user to task!"
-                                                               class="remove-assign-user badge badge-success"
-                                                               href="javascript:void(0)">
-                                                                <i class="fa fa-user-plus remove-assign-user-icon"></i>
-                                                            </a>
                                                         </div>
-
                                                     </template>
                                                 </li>
-                                            </diV>
-                                            <li @click="switchEvent($event)"
-                                                class="border-top pl-2 assign-user-drop-down-footer">
-
-                                                    <span
-                                                        class="assign-user-drop-down-text">Assign an external team</span>
-                                                <switches class="assign-user-switch-for-dropdown"
-                                                          color="success"
-                                                          theme="bootstrap"
-                                                          v-model="id">
-                                                </switches>
-                                            </li>
-                                        </div>
+                                            </ul>
+                                        </diV>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
+                                        <img :src="baseUrl+'/img/task-icon/tag-add.png'" class="contex-menu-icon">
+                                        Add Tags to Selected
                                     </a>
-                                </div>
-                                <a @click="addChild(data)" class="subTask_plus li-opacity li-opacity-sub clickHide "
-                                   data-toggle="tooltip" title="Add Child">
-                                    <!--                                    <i class="baseline-playlist_add icon-image-preview"></i>-->
-                                    <img :src="baseUrl+'/img/task-icon/add-Sublist.png'"
-                                         class="icon-image-preview li-opacity-sub ">
-                                </a>
-                                <a @click="addNode(data)" class="task_plus li-opacity li-opacity-sub clickHide"
-                                   data-toggle="tooltip"
-                                   title="Add Task Bellow">
-                                    <!--                                    <i class="baseline-add icon-image-preview"></i>-->
-                                    <img :src="baseUrl+'/img/task-icon/add-list.png'"
-                                         class="icon-image-preview li-opacity-sub ">
-                                </a>
-                            </template>
-                        </div>
-
-                    </Tree>
-
-                    <div class="jquery-accordion-menu" id="jquery-accordion-menu" v-click-outside="HideCustomMenu">
-                        <ul>
-                            <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split "
-                                   v-if="selectedData.text !== 'Dont Forget Section'"
-                                   @click="copyTask"
-                                   data-toggle="dropdown">
-                                    <img :src="baseUrl+'/img/task-icon/copy.png'" class="contex-menu-icon">
-                                    Copy </a>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split disabled" v-else
-                                   style="color: gray"
-                                   data-toggle="dropdown">
-                                    <img :src="baseUrl+'/img/task-icon/copy.png'" class="contex-menu-icon">
-                                    Copy </a>
-
-                                <span class="contex-menu-sortcut">
-                                    <span class="badge-pill badge-default">Ctrl</span>+<span
-                                    class="badge-pill badge-default">C</span>
-                                </span>
-
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split "
-                                   v-if="selectedData.text !== 'Dont Forget Section'"
-                                   @click="cutTask"
-                                   data-toggle="dropdown">
-
-                                    <img :src="baseUrl+'/img/task-icon/cut.png'" class="contex-menu-icon">
-                                    Cut </a>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split disabled"
-                                   v-else style="color: gray"
-                                   data-toggle="dropdown">
-                                    <img :src="baseUrl+'/img/task-icon/cut.png'" class="contex-menu-icon">
-                                    Cut </a>
-                                <span class="contex-menu-sortcut">
-                                    <span class="badge-pill badge-default">Ctrl</span>+<span
-                                    class="badge-pill badge-default">X</span>
-                                </span>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split "
-                                   @click="pastCopyAndCut"
-                                   data-toggle="dropdown"
-                                   v-if="selectedCopy !== null || selectedCut !== null">
-                                    <img :src="baseUrl+'/img/task-icon/past.png'" class="contex-menu-icon">
-                                    Paste </a>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split disabled" style="color: gray"
-                                   data-toggle="dropdown"
-                                   v-else>
-                                    <img :src="baseUrl+'/img/task-icon/past.png'" class="contex-menu-icon">
-                                    Paste </a>
-                                <span class="contex-menu-sortcut">
-                                    <span class="badge-pill badge-default">Ctrl</span>+<span
-                                    class="badge-pill badge-default">v</span>
-                                </span>
-                            </li>
-                            <li>
-                                <a @click="MoveSelectedTask" href="javascript:void(0)">
-                                    <img :src="baseUrl+'/img/task-icon/move.png'" class="contex-menu-icon">
-                                    Move Selected
-                                </a>
-                                <span class="contex-menu-sortcut">
-                                   <span class="badge-pill badge-default">Ctrl</span>+<span
-                                    class="badge-pill badge-default">M</span>
-                                </span>
-                            </li>
-                            <li>
-                                <a @click="deleteSelectedTask" href="javascript:void(0)">
-                                    <img :src="baseUrl+'/img/task-icon/trash.png'" class="contex-menu-icon">
-
-                                    Delete Selected <span
-                                    class="badge-pill badge-default contex-menu-sortcut">Delete</span></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
-                                    <img :src="baseUrl+'/img/task-icon/add-user.png'" class="contex-menu-icon">
-                                    Assign User to Selected </a>
-                                <span class="contex-menu-sortcut">
-                                    <span class="badge-pill badge-default">Ctrl</span>+<span
-                                    class="badge-pill badge-default">U</span>
-                                </span>
-
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <diV class="collapse show switchToggle">
-
-                                        <ul>
-                                            <li class="assignUser">
-                                                <label class="pl-2 label-text">
-                                                    <span class="assign-user-drop-down-text">
-                                                        Select User For Assign To Selected Task.
-                                                    </span>
-                                                </label>
-                                            </li>
-                                            <li class="assignUser">
-                                                <template v-if="treeList[0].users && treeList[0].users.length > 0"
-                                                          v-for="user in treeList[0].users">
-                                                    <div @click="ActionToSelectedTask(user.id,'user')"
-                                                         class="users-select row">
-                                                        <div class="col-md-3 pt-1 pl-4">
-                                                            <p class="assignUser-photo">
-                                                                {{(user.name !== null) ? user.name.substring(0,2) :
-                                                                ''}}</p>
-                                                        </div>
-                                                        <div class="col-md-9 assign-user-name-email">
-                                                            <h5>{{user.name}}<br>
-                                                                <small>{{user.email}}</small>
-                                                            </h5>
-                                                        </div>
-                                                    </div>
-                                                </template>
-                                            </li>
-                                        </ul>
-                                    </diV>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
-                                    <img :src="baseUrl+'/img/task-icon/tag-add.png'" class="contex-menu-icon">
-                                    Add Tags to Selected
-                                </a>
-                                <span class="contex-menu-sortcut">
+                                    <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Shift</span>+<span
-                                    class="badge-pill badge-default">#</span>
+                                        class="badge-pill badge-default">#</span>
                                 </span>
 
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <diV class="collapse show switchToggle">
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <diV class="collapse show switchToggle">
 
-                                        <ul>
-                                            <li class="assignUser">
-                                                <label class="pl-2 label-text">
+                                            <ul>
+                                                <li class="assignUser">
+                                                    <label class="pl-2 label-text">
                                                     <span class="assign-user-drop-down-text">
                                                         Select Tag For Add tag To Selected Task.
                                                     </span>
-                                                </label>
-                                            </li>
-                                            <li class="assignUser">
-                                                <template v-if="treeList[0].existing_tags.length > 0"
-                                                          v-for="user in treeList[0].existing_tags">
-                                                    <div @click="ActionToSelectedTask(user.id,'tag')"
-                                                         class="users-select row">
-                                                        <div class="col-md-9 add-tag-to-selected">
+                                                    </label>
+                                                </li>
+                                                <li class="assignUser">
+                                                    <template v-if="treeList[0].existing_tags.length > 0"
+                                                              v-for="user in treeList[0].existing_tags">
+                                                        <div @click="ActionToSelectedTask(user.id,'tag')"
+                                                             class="users-select row">
+                                                            <div class="col-md-9 add-tag-to-selected">
                                                             <span
                                                                 class="badge badge-default tag-color-custom-contextmenu"
                                                                 :style="{'background' : user.color}"
                                                             >.</span>
-                                                            <h5>{{user.title}}</h5>
+                                                                <h5>{{user.title}}</h5>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </template>
-                                            </li>
-                                        </ul>
-                                    </diV>
-                                </div>
-                            </li>
-                            <li style="position: relative" @click="openPicker()">
+                                                    </template>
+                                                </li>
+                                            </ul>
+                                        </diV>
+                                    </div>
+                                </li>
+                                <li style="position: relative" @click="openPicker()">
 
-                                <datepicker
-                                    :disabled-dates="disabledDates"
-                                    v-model="date_for_selected"
-                                    @selected="ActionToSelectedTask('','date')"
-                                    calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
-                                    format='dd MMM'
-                                    input-class="dateCal-selected">
+                                    <datepicker
+                                        :disabled-dates="disabledDates"
+                                        v-model="date_for_selected"
+                                        @selected="ActionToSelectedTask('','date')"
+                                        calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
+                                        format='dd MMM'
+                                        input-class="dateCal-selected">
 
-                                </datepicker>
+                                    </datepicker>
 
-                                <a class="calender li-opacity clickHide">
-                                    <img :src="baseUrl+'/img/task-icon/date-plus.png'" class="contex-menu-icon">
-                                    Set Due Date
-                                </a>
+                                    <a class="calender li-opacity clickHide">
+                                        <img :src="baseUrl+'/img/task-icon/date-plus.png'" class="contex-menu-icon">
+                                        Set Due Date
+                                    </a>
 
 
-                            </li>
-                            <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">
+                                </li>
+                                <li><a @click="AddDontForgetTagToSelectedIds" href="javascript:void(0)">
 
-                                <img :src="baseUrl+'/img/task-icon/move-1.png'" class="contex-menu-icon">
-                                Move To Dont Forget Section </a>
-                            </li>
+                                    <img :src="baseUrl+'/img/task-icon/move-1.png'" class="contex-menu-icon">
+                                    Move To Dont Forget Section </a>
+                                </li>
 
-                        </ul>
+                            </ul>
+                        </div>
+                    </div>
+                    <div style="height: 50px;">
+
                     </div>
                 </div>
-                <div style="height: 50px;">
-
+                <div class="details" id="details">
+                    <TaskDetails
+                        :selectedData="selectedData"
+                        :task_logs="task_logs"
+                        @textArea="ShowTextArea">
+                    </TaskDetails>
                 </div>
             </div>
-            <div class="details" id="details">
-                <TaskDetails
-                    :selectedData="selectedData"
-                    :task_logs="task_logs"
-                    @textArea="ShowTextArea">
-                </TaskDetails>
+            <div class="boardView" v-if="list.type === 'board'">
+                <!-- Board View Component -->
+                <BoardView
+                    :board_id="list_id"
+                    :nav_id="nav_id"
+                    :projectId="projectId">
+                </BoardView>
+
             </div>
         </div>
-
         <!--        //board component section-->
-        <div class="boardView" v-if="list.type === 'board'">
-            <!-- Board View Component -->
-            <BoardView
-                :board_id="list_id"
-                :nav_id="nav_id"
-                :projectId="projectId">
-            </BoardView>
-
-        </div>
 
 
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="imageModal" role="dialog"
@@ -1165,6 +1176,7 @@
             showSearchInputField() {
                 if (this.list.type === 'list') {
                     $('.searchList').toggle();
+                    $('.searchTaskList').focus();
                 }
             },
             SearchTaskByAssignedUser(id, name) {
@@ -1228,20 +1240,20 @@
             selectTaskFromTaskTreeList(task) {
                 $('.eachItemRow').removeClass('clicked');
                 $('#click' + task.id).addClass('clicked');
-                    var target = document.getElementById('TaskListAndDetails');
-                    if($('#click' + task.id).length > 0){
-                        var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
-                        target.scrollTo(0, top);
-                    }
+                var target = document.getElementById('TaskListAndDetails');
+                if ($('#click' + task.id).length > 0) {
+                    var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                    target.scrollTo(0, top);
+                }
 
 
             },
             SearchResultClick(task) {
-                if($('#click' + task.id).length > 0){
+                if ($('#click' + task.id).length > 0) {
                     var target = document.getElementById('TaskListAndDetails');
                     var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
                     target.scrollTo(0, top);
-                 }
+                }
                 $('#myUL').addClass('myUL');
                 $('#myUL').removeClass('myUL-show');
             },
@@ -1320,13 +1332,11 @@
                     }
 
 
-                }
-                else if (e.shiftKey && e.which === 1) {
+                } else if (e.shiftKey && e.which === 1) {
 
                     $('#click' + data.id).addClass('clicked');
 
-                }
-                else if (e.which === 1) {
+                } else if (e.which === 1) {
                     if (data.text !== '') {
                         _this.DeleteEmptyTask();
                     }
@@ -1343,8 +1353,7 @@
                     $('.jquery-accordion-menu').hide();
 
 
-                }
-                else if (e.which === 3) {
+                } else if (e.which === 3 && data.draggable == true) {
                     e.preventDefault();
                     e.stopPropagation();
                     if (_this.context_menu_flag !== 1) {
@@ -1384,18 +1393,17 @@
                             }
                         }
                     }
-                }
-                else if (e.ctrlKey && e.which === 65){
+                } else if (e.ctrlKey && e.which === 65) {
                     e.target.setSelectionRange(0, data.text.length);
                 }
             },
             makeInput(e, data) {
                 var _this = this;
                 this.selectedData = data;
+                _this.empty_task_delete_flag = data.id;
                 if (data.text === 'Dont Forget Section') {
                     $(e.target).attr('disabled', 'disabled');
                 } else {
-                    _this.context_menu_flag = 1;
                     $('.inp').addClass('input-hide');
                     $('.inp').removeClass('form-control');
                     $(e.target).removeClass('input-hide');
@@ -1404,7 +1412,7 @@
             },
             hideItem(e, data) {
                 data.draggable = false;
-                this.context_menu_flag = 1;
+                this.context_menu_flag = data.id;
                 // data.draggable = false;
                 // $(e.target).closest('.eachItemRow').find('.task-complete').hide();
                 $(e.target).closest('.eachItemRow').find('.tag-icon').hide();
@@ -1419,7 +1427,7 @@
             },
             showItem(e, data) {
 
-                this.context_menu_flag = 0;
+                this.context_menu_flag = data.id;
                 this.SaveDataWithoutCreateNewNode(data);
                 setTimeout(function () {
                     // $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
@@ -1588,9 +1596,10 @@
                             $("#" + _this.newEmptyTaskID).focus();
                             $("#" + _this.newEmptyTaskID).addClass('form-control');
                             $("#" + _this.newEmptyTaskID).removeClass('input-hide');
-                            console.log('input focus')
+                            // alert( $("#" + _this.newEmptyTaskID).val())
                         }, 1000)
-                        _this.empty_task_delete_flag = 1;
+                        _this.empty_task_delete_flag = _this.newEmptyTaskID;
+
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -1615,9 +1624,8 @@
                             $("#" + _this.newEmptyTaskID).focus();
                             $("#" + _this.newEmptyTaskID).addClass('form-control');
                             $("#" + _this.newEmptyTaskID).removeClass('input-hide');
-                            console.log('input focus')
                         }, 1000)
-                        _this.empty_task_delete_flag = 1;
+                        _this.empty_task_delete_flag = _this.newEmptyTaskID
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -1644,8 +1652,8 @@
                         setTimeout(function () {
                             $("#" + _this.newEmptyTaskID).click();
                             $("#" + _this.newEmptyTaskID).focus();
-                            console.log('input focus')
                         }, 1000)
+                        _this.empty_task_delete_flag = _this.newEmptyTaskID
                     })
                     .catch(error => {
                         console.log('Api is task-make-child not Working !!!')
@@ -1671,6 +1679,8 @@
                             $("#" + _this.newEmptyTaskID).click();
                             $("#" + _this.newEmptyTaskID).focus();
                         }, 500)
+                        _this.empty_task_delete_flag = _this.newEmptyTaskID
+
                     })
                     .catch(error => {
                         console.log('Api is task-unmake-child not Working !!!')
@@ -1981,7 +1991,8 @@
                             .then(response => {
                                 _this.getTaskList()
                                 _this.delete_popup = 0;
-                                swal("Deleted!", "Successfully delete task !", "success");
+                                swal.close()
+                                // swal("Deleted!", "Successfully delete task !", "success");
                             })
                             .catch(error => {
                                 console.log('Api for delete task not Working !!!')
@@ -2167,7 +2178,6 @@
 
                     });
             },
-
             getTaskList() {
                 var _this = this;
                 let data = {
@@ -2349,7 +2359,6 @@
                 }
 
             },
-
             DeleteAndMoveAllTask() {
                 var _this = this;
                 swal({
@@ -2370,7 +2379,7 @@
                         })
                             .then(response => response.data)
                             .then(response => {
-                                swal("Complete!", "This " + _this.type_T + " is deleted and all task are moved !", "success");
+                                // swal("Complete!", "This " + _this.type_T + " is deleted and all task are moved !", "success");
                                 window.location.href = '/project-dashboard/' + _this.projectId;
                             })
                             .catch(error => {
@@ -2379,16 +2388,15 @@
 
                     });
             },
-
             MoveTaskToListOrBoard() {
                 var _this = this;
                 swal({
                         title: "Are you sure?",
-                        text: "You want to delete the list and move all task ?!!!",
+                        text: "You want to move selected task ?!!!",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger",
-                        confirmButtonText: "Yes, Delete  & Move Task",
+                        confirmButtonText: "Yes Move",
                         closeOnConfirm: false
                     },
                     function () {
@@ -2400,7 +2408,7 @@
                         })
                             .then(response => response.data)
                             .then(response => {
-                                swal("Complete!", "All Selected task are moved !", "success");
+                                // swal("Complete!", "All Selected task are moved !", "success");
                                 _this.getTaskList()
                             })
                             .catch(error => {
@@ -2409,7 +2417,6 @@
 
                     });
             },
-
             MoveAllTask() {
                 var _this = this;
                 swal({
@@ -2441,7 +2448,6 @@
             DownloadTaskPDF() {
                 swal("Under Process!", "Working under process", "success");
             },
-
             MoveListTOAnotherNav(type) {
                 var _this = this;
                 _this.type_T = type;
@@ -2462,7 +2468,6 @@
 
                     });
             },
-
             RemoveNewEmptyChildren(data) {
                 var children = data.children;
                 var index = 0;
@@ -2488,42 +2493,63 @@
                     text: (data.text === null) ? '' : data.text,
                 };
                 // console.log(postData)
-                // if (data.text !== ''){
-                axios.post('/api/task-list/update', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        if (response.empty) {
-                            _this.empty_task_delete_flag = 0;
-                        }
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
+                if (data.text !== '') {
+                    axios.post('/api/task-list/update', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            if (response.empty) {
+
+                            }
+                        })
+                        .catch(error => {
+                            console.log('Api for move down task not Working !!!')
+                        });
+                }
+                // else if(data.text === ''){
+                    // var postData = {
+                    //     id: data.id
+                    // };
+                    // // if (_this.empty_task_delete_flag === 1){
+                    // setTimeout(function () {
+                    //     axios.post('/api/task-list/delete-empty-task', postData)
+                    //         .then(response => response.data)
+                    //         .then(response => {
+                    //             if (response.success === 1) {
+                    //                 _this.empty_task_delete_flag = 0;
+                    //                 var id = response.id;
+                    //                 _this.RemoveEmptyTask(id, _this.treeList);
+                    //             }
+                    //         })
+                    //         .catch(error => {
+                    //             console.log('Api for move down task not Working !!!')
+                    //         }, 1000);
+                    // })
                 // }
 
             },
             DeleteEmptyTask() {
                 var _this = this;
                 var postData = {
-                    id: _this.list_id
+                    id: _this.empty_task_delete_flag
                 };
-                // if (_this.empty_task_delete_flag === 1){
-                setTimeout(function () {
-                    axios.post('/api/task-list/delete-empty-task', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            if (response.success === 1) {
-                                _this.empty_task_delete_flag = 0;
-                                var id = response.id;
-                                _this.RemoveEmptyTask(id, _this.treeList);
-                            }
-                        })
-                        .catch(error => {
-                            console.log('Api for move down task not Working !!!')
-                        }, 1000);
-                })
+                console.log(postData)
 
-                // }
+                if ($("#" + _this.empty_task_delete_flag).val() !== undefined && $("#" + _this.empty_task_delete_flag).val().length <= 0) {
+                    setTimeout(function () {
+                        axios.post('/api/task-list/delete-empty-task', postData)
+                            .then(response => response.data)
+                            .then(response => {
+                                if (response.success === 1) {
+                                    var id = response.id;
+                                    _this.RemoveEmptyTask(id, _this.treeList);
+                                }
+                            })
+                            .catch(error => {
+                                console.log('Api for move down task not Working !!!')
+                            }, 1000);
+                    })
+
+                }
 
             },
             RemoveEmptyTask(id, data) {

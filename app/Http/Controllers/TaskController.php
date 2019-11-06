@@ -31,30 +31,6 @@ class TaskController extends Controller
         $this->dont_forget_tag = 'Dont Forget';
         $this->middleware('auth');
     }
-
-    public function getAllOld(Request $request)
-    {
-        if ($request->list_id == null) {
-            $list = Multiple_list::where('project_id', $request->id)
-                ->orderBy('id', 'ASC')->first();
-            $list_id = $list->id;
-        } else {
-            $list_id = $request->list_id;
-        }
-        $tasks = Task::where('parent_id', 0)
-            ->where('project_id', $request->id)
-            ->where('list_id', $list_id)
-//            ->where('is_complete', 0)
-            ->orderBy('sort_id', 'ASC')
-            ->get();
-        $task = [];
-
-        $data = $this->decorateData($tasks);
-        $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
-        $multiple_list = $multiple_list->multiple_list;
-        return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list, 'empty_task' => $task]);
-    }
-
     public function decorateData($obj)
     {
         $data = [];
@@ -204,13 +180,14 @@ class TaskController extends Controller
         $list_id = $request->list_id;
         $etask = Task::where(['id' => $request->id])->get();
         if ($request->text == '') {
-            Task::where(['id' => $request->id, 'project_id' => $request->project_id])->delete();
+//            Task::where(['id' => $request->id, 'project_id' => $request->project_id])->delete();
+            $this->deleteTaskWithChild($request->id);
             $this->createLog($request->id, 'deleted', 'Delete task', '');
-            Task::where([
-                'title' => '',
-                'parent_id' => $request->parent_id,
-                'project_id' => $request->project_id
-            ])->delete();
+//            Task::where([
+//                'title' => '',
+//                'parent_id' => $request->parent_id,
+//                'project_id' => $request->project_id
+//            ])->delete();
             return response()->json(['success' => ['id' => $request->id]]);
         } else {
             if ($etask->count() > 0 && $request->text != '') {
@@ -572,12 +549,8 @@ class TaskController extends Controller
     }
 
     public function deleteEmptyTask(Request $request){
-        $total_task = Task::where(['list_id'=>$request->id])->count();
-        $find = Task::where(['list_id'=>$request->id,'title'=> ''])->orderBy('id','desc')->first();
-        if (!empty($find) && $total_task > 1){
-            Task::where(['id'=>$find->id])->delete();
-            return response()->json(['success'=>1,'id'=>$find->id]);
-        }
+        $this->deleteTaskWithChild($request->id);
+        return response()->json(['success'=>1,'id'=>$request->id]);
 
     }
 

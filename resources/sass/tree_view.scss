@@ -194,14 +194,17 @@
 
         .calender {
             position: absolute;
-            right: 46px;
+            right: 40px;
             top: 10px;
         }
-
+        .dropdown-menu-tag {
+            top: 21px !important;
+            left: 22px !important;
+        }
         .dateCal {
             position: absolute;
-            right: 25px;
-            top: 9px;
+            right: 18px;
+            top: 11px;
             border: none;
             background: transparent;
             width: 50px;
@@ -226,13 +229,13 @@
 
         .tag-icon {
             position: absolute;
-            right: 115px;
+            right: 102px;
             top: 10px;
         }
 
         .attach-icon {
             position: absolute;
-            right: 200px;
+            right: 175px;
             top: 9px;
             font-size: 15px;
             cursor: pointer;
@@ -307,7 +310,7 @@
             padding-left: 10px;
             font-size: 14px;
             width: 100%;
-            border-radius: 10px;
+            border-radius: 4px;
             background: rgba(255,255,255,.2);
         }
     }
@@ -657,15 +660,17 @@
     background-color: #f9f9f9;
     width: 100%;
     display: inline-block;
-    height: calc(100vh - 225px);
-    overflow-y: auto;
-    overflow-x: hidden;
 
     .add-list {
         padding-left: 123px;
         display: inline-block;
         padding-top: 15px;
     }
+}
+.list-task-details {
+    height: calc(100vh - 110px);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .boardView {
@@ -703,7 +708,7 @@
     border: 1px solid #ddd;
     margin-bottom: 4px;
     line-height: 29px;
-    background-size: 3%;
+    background-size: 3.5%;
     height: 38px !important;
     @include transition(all 0.2s linear);
 }
