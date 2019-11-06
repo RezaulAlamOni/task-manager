@@ -15,6 +15,7 @@
                        type="text" id="myInput"
                        placeholder="Search for names.."
                        title="Type in a name"
+                       autocomplete="off"
                        @keyup="searchDataFormTask($event)"
                 >
 
