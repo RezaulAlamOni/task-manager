@@ -572,12 +572,18 @@ class TaskController extends Controller
     }
 
     public function deleteEmptyTask(Request $request){
-        $total_task = Task::where(['list_id'=>$request->id])->count();
-        $find = Task::where(['list_id'=>$request->id,'title'=> ''])->orderBy('id','desc')->first();
-        if (!empty($find) && $total_task > 1){
-            Task::where(['id'=>$find->id])->delete();
-            return response()->json(['success'=>1,'id'=>$find->id]);
-        }
+
+//        $total_task = Task::where(['parent_id'=>$request->id])->count();
+        Task::where(['id'=>$request->id])->delete();
+        $this->deleteTaskWithChild($request->id);
+        return response()->json(['success'=>1,'id'=>$request->id]);
+
+//        $total_task = Task::where(['list_id'=>$request->id])->count();
+//        $find = Task::where(['list_id'=>$request->id,'title'=> ''])->orderBy('id','desc')->first();
+//        if (!empty($find) && $total_task > 1){
+//            Task::where(['id'=>$find->id])->delete();
+//            return response()->json(['success'=>1,'id'=>$find->id]);
+//        }
 
     }
 

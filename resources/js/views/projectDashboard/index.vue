@@ -73,7 +73,8 @@
                 <div class="col-12 action-task">
                     <h2 class="p-t-20" v-if="list.type !== null">
                         {{list.name}}
-                        <span class="btn btn-default pull-right dropdown-toggle action-list-board" data-toggle="dropdown">
+                        <span class="btn btn-default pull-right dropdown-toggle action-list-board"
+                              data-toggle="dropdown">
                         Option
                     </span>
 
@@ -91,11 +92,13 @@
                                 class="fa fa-arrows-alt"></i> Move <span
                                 v-if="list.type === 'board'">Board</span>  <span v-else>List</span> to Another Nav </a>
                         </span>
-                            <span class="dropdown-item custom-dropdown-item" @click="DeleteListOrBoard(list.type,'delete')">
+                            <span class="dropdown-item custom-dropdown-item"
+                                  @click="DeleteListOrBoard(list.type,'delete')">
                             <a href="javascript:void(0)"> <i class="fa fa-trash"></i> Delete with all <span
                                 v-if="list.type === 'board'">Card</span>  <span v-else> Task</span></a>
                         </span>
-                            <span class="dropdown-item custom-dropdown-item" @click="DeleteListOrBoard(list.type,'move')">
+                            <span class="dropdown-item custom-dropdown-item"
+                                  @click="DeleteListOrBoard(list.type,'move')">
                             <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move <span
                                 v-if="list.type === 'board'">Card</span>  <span v-else>Task</span> </a>
                         </span>
@@ -114,7 +117,8 @@
                 <div class="task_width" id="task_width">
                     <div class="col-11" id="tree_view_list">
 
-                        <Tree :data="treeList" :indent="2" :space="0" @change="ChangeNode" v-click-outside="DeleteEmptyTask"
+                        <Tree :data="treeList" :indent="2" :space="0" @change="ChangeNode"
+                              v-click-outside="DeleteEmptyTask"
                               @drop="dropNode"
                               class="tree4"
                               @drag="dragNode"
@@ -220,7 +224,8 @@
                                              title="Add Tag">
                                     </span>
 
-                                        <div :id="'dropdown'+data._id" class="dropdown-menu dropdown-menu-tag dropdown-menu-right ">
+                                        <div :id="'dropdown'+data._id"
+                                             class="dropdown-menu dropdown-menu-tag dropdown-menu-right ">
 
                                             <diV class="collapse show switchToggle" style="">
                                                 <div class="container-fluid">
@@ -238,7 +243,8 @@
                                                                     @click="addExistingTag(data , tag.title,tag.color)"
                                                                     v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
                                                                     v-if="tag.text !== 'Dont Forget'">
-                                                                    {{(tag.title !== undefined) ?tag.title.substring(0,12) :
+                                                                    {{(tag.title !== undefined)
+                                                                    ?tag.title.substring(0,12) :
                                                                     ''}}
                                                                 </li>
                                                             </template>
@@ -265,7 +271,8 @@
                                     <div class="hide-item-res" @click="openPicker()">
                                         <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'"
                                            title="Due Date">
-                                            <img :src="baseUrl+'/img/task-icon/date-plus.png'" class="icon-image-preview">
+                                            <img :src="baseUrl+'/img/task-icon/date-plus.png'"
+                                                 class="icon-image-preview">
                                             <!--                                        <i class="outline-event icon-image-preview" data-toggle-->
                                             <!--                                           title="toggle"></i>-->
 
@@ -326,7 +333,8 @@
                                                                 v-bind:disabled="(data.assigned_user_ids.includes(user.id)) ? true : false">
                                                                 <div class="col-md-3 pt-1 pl-4">
                                                                     <p class="assignUser-photo">
-                                                                        {{(user.name !== null) ? user.name.substring(0,2) :
+                                                                        {{(user.name !== null) ?
+                                                                        user.name.substring(0,2) :
                                                                         ''}}</p>
                                                                 </div>
                                                                 <div class="col-md-9 assign-user-name-email">
@@ -337,7 +345,8 @@
                                                                 <a :id="'remove-assign-user'+user.id"
                                                                    v-if="data.assigned_user_ids.includes(user.id)"
                                                                    @click="removeAssignedUser(user.id, data.id)"
-                                                                   data-toggle="tooltip" title="Remove user from assigned !"
+                                                                   data-toggle="tooltip"
+                                                                   title="Remove user from assigned !"
                                                                    class="remove-assign-user badge badge-danger"
                                                                    href="javascript:void(0)">
                                                                     <i class="fa fa-user-times remove-assign-user-icon"></i>
@@ -431,7 +440,8 @@
                                        v-if="selectedCopy !== null || selectedCut !== null">
                                         <img :src="baseUrl+'/img/task-icon/past.png'" class="contex-menu-icon">
                                         Paste </a>
-                                    <a href="javascript:void(0)" class="dropdown-toggle-split disabled" style="color: gray"
+                                    <a href="javascript:void(0)" class="dropdown-toggle-split disabled"
+                                       style="color: gray"
                                        data-toggle="dropdown"
                                        v-else>
                                         <img :src="baseUrl+'/img/task-icon/past.png'" class="contex-menu-icon">
@@ -591,7 +601,6 @@
             </div>
         </div>
         <!--        //board component section-->
-
 
 
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="imageModal" role="dialog"
@@ -1229,20 +1238,20 @@
             selectTaskFromTaskTreeList(task) {
                 $('.eachItemRow').removeClass('clicked');
                 $('#click' + task.id).addClass('clicked');
-                    var target = document.getElementById('TaskListAndDetails');
-                    if($('#click' + task.id).length > 0){
-                        var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
-                        target.scrollTo(0, top);
-                    }
+                var target = document.getElementById('TaskListAndDetails');
+                if ($('#click' + task.id).length > 0) {
+                    var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                    target.scrollTo(0, top);
+                }
 
 
             },
             SearchResultClick(task) {
-                if($('#click' + task.id).length > 0){
+                if ($('#click' + task.id).length > 0) {
                     var target = document.getElementById('TaskListAndDetails');
                     var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
                     target.scrollTo(0, top);
-                 }
+                }
                 $('#myUL').addClass('myUL');
                 $('#myUL').removeClass('myUL-show');
             },
@@ -1321,13 +1330,11 @@
                     }
 
 
-                }
-                else if (e.shiftKey && e.which === 1) {
+                } else if (e.shiftKey && e.which === 1) {
 
                     $('#click' + data.id).addClass('clicked');
 
-                }
-                else if (e.which === 1) {
+                } else if (e.which === 1) {
                     if (data.text !== '') {
                         _this.DeleteEmptyTask();
                     }
@@ -1344,8 +1351,7 @@
                     $('.jquery-accordion-menu').hide();
 
 
-                }
-                else if (e.which === 3 && data.draggable == true) {
+                } else if (e.which === 3 && data.draggable == true) {
                     e.preventDefault();
                     e.stopPropagation();
                     if (_this.context_menu_flag !== 1) {
@@ -1385,18 +1391,17 @@
                             }
                         }
                     }
-                }
-                else if (e.ctrlKey && e.which === 65){
+                } else if (e.ctrlKey && e.which === 65) {
                     e.target.setSelectionRange(0, data.text.length);
                 }
             },
             makeInput(e, data) {
                 var _this = this;
                 this.selectedData = data;
+                _this.empty_task_delete_flag = data.id;
                 if (data.text === 'Dont Forget Section') {
                     $(e.target).attr('disabled', 'disabled');
                 } else {
-                    _this.context_menu_flag = 1;
                     $('.inp').addClass('input-hide');
                     $('.inp').removeClass('form-control');
                     $(e.target).removeClass('input-hide');
@@ -1405,7 +1410,7 @@
             },
             hideItem(e, data) {
                 data.draggable = false;
-                this.context_menu_flag = 1;
+                this.context_menu_flag = data.id;
                 // data.draggable = false;
                 // $(e.target).closest('.eachItemRow').find('.task-complete').hide();
                 $(e.target).closest('.eachItemRow').find('.tag-icon').hide();
@@ -1420,7 +1425,7 @@
             },
             showItem(e, data) {
 
-                this.context_menu_flag = 0;
+                this.context_menu_flag = data.id;
                 this.SaveDataWithoutCreateNewNode(data);
                 setTimeout(function () {
                     // $(e.target).closest('.eachItemRow').find('.delete-icon').hide();
@@ -1589,9 +1594,10 @@
                             $("#" + _this.newEmptyTaskID).focus();
                             $("#" + _this.newEmptyTaskID).addClass('form-control');
                             $("#" + _this.newEmptyTaskID).removeClass('input-hide');
-                            console.log('input focus')
+                            // alert( $("#" + _this.newEmptyTaskID).val())
                         }, 1000)
-                        _this.empty_task_delete_flag = 1;
+                        _this.empty_task_delete_flag = _this.newEmptyTaskID;
+
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -1616,9 +1622,8 @@
                             $("#" + _this.newEmptyTaskID).focus();
                             $("#" + _this.newEmptyTaskID).addClass('form-control');
                             $("#" + _this.newEmptyTaskID).removeClass('input-hide');
-                            console.log('input focus')
                         }, 1000)
-                        _this.empty_task_delete_flag = 1;
+                        _this.empty_task_delete_flag = _this.newEmptyTaskID
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -1645,8 +1650,8 @@
                         setTimeout(function () {
                             $("#" + _this.newEmptyTaskID).click();
                             $("#" + _this.newEmptyTaskID).focus();
-                            console.log('input focus')
                         }, 1000)
+                        _this.empty_task_delete_flag = _this.newEmptyTaskID
                     })
                     .catch(error => {
                         console.log('Api is task-make-child not Working !!!')
@@ -1672,6 +1677,8 @@
                             $("#" + _this.newEmptyTaskID).click();
                             $("#" + _this.newEmptyTaskID).focus();
                         }, 500)
+                        _this.empty_task_delete_flag = _this.newEmptyTaskID
+
                     })
                     .catch(error => {
                         console.log('Api is task-unmake-child not Working !!!')
@@ -2169,7 +2176,6 @@
 
                     });
             },
-
             getTaskList() {
                 var _this = this;
                 let data = {
@@ -2351,7 +2357,6 @@
                 }
 
             },
-
             DeleteAndMoveAllTask() {
                 var _this = this;
                 swal({
@@ -2381,7 +2386,6 @@
 
                     });
             },
-
             MoveTaskToListOrBoard() {
                 var _this = this;
                 swal({
@@ -2411,7 +2415,6 @@
 
                     });
             },
-
             MoveAllTask() {
                 var _this = this;
                 swal({
@@ -2443,7 +2446,6 @@
             DownloadTaskPDF() {
                 swal("Under Process!", "Working under process", "success");
             },
-
             MoveListTOAnotherNav(type) {
                 var _this = this;
                 _this.type_T = type;
@@ -2464,7 +2466,6 @@
 
                     });
             },
-
             RemoveNewEmptyChildren(data) {
                 var children = data.children;
                 var index = 0;
@@ -2490,42 +2491,63 @@
                     text: (data.text === null) ? '' : data.text,
                 };
                 // console.log(postData)
-                // if (data.text !== ''){
-                axios.post('/api/task-list/update', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        if (response.empty) {
-                            _this.empty_task_delete_flag = 0;
-                        }
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
+                if (data.text !== '') {
+                    axios.post('/api/task-list/update', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            if (response.empty) {
+
+                            }
+                        })
+                        .catch(error => {
+                            console.log('Api for move down task not Working !!!')
+                        });
+                }
+                // else if(data.text === ''){
+                    // var postData = {
+                    //     id: data.id
+                    // };
+                    // // if (_this.empty_task_delete_flag === 1){
+                    // setTimeout(function () {
+                    //     axios.post('/api/task-list/delete-empty-task', postData)
+                    //         .then(response => response.data)
+                    //         .then(response => {
+                    //             if (response.success === 1) {
+                    //                 _this.empty_task_delete_flag = 0;
+                    //                 var id = response.id;
+                    //                 _this.RemoveEmptyTask(id, _this.treeList);
+                    //             }
+                    //         })
+                    //         .catch(error => {
+                    //             console.log('Api for move down task not Working !!!')
+                    //         }, 1000);
+                    // })
                 // }
 
             },
             DeleteEmptyTask() {
                 var _this = this;
                 var postData = {
-                    id: _this.list_id
+                    id: _this.empty_task_delete_flag
                 };
-                // if (_this.empty_task_delete_flag === 1){
-                setTimeout(function () {
-                    axios.post('/api/task-list/delete-empty-task', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            if (response.success === 1) {
-                                _this.empty_task_delete_flag = 0;
-                                var id = response.id;
-                                _this.RemoveEmptyTask(id, _this.treeList);
-                            }
-                        })
-                        .catch(error => {
-                            console.log('Api for move down task not Working !!!')
-                        }, 1000);
-                })
+                console.log(postData)
 
-                // }
+                if ($("#" + _this.empty_task_delete_flag).val() !== undefined && $("#" + _this.empty_task_delete_flag).val().length <= 0) {
+                    setTimeout(function () {
+                        axios.post('/api/task-list/delete-empty-task', postData)
+                            .then(response => response.data)
+                            .then(response => {
+                                if (response.success === 1) {
+                                    var id = response.id;
+                                    _this.RemoveEmptyTask(id, _this.treeList);
+                                }
+                            })
+                            .catch(error => {
+                                console.log('Api for move down task not Working !!!')
+                            }, 1000);
+                    })
+
+                }
 
             },
             RemoveEmptyTask(id, data) {
