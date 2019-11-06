@@ -35,12 +35,12 @@
                                         </div>
                                         <div class="col-md-2">
                                             <span class="pull-right" style="display: inline-flex;">
-                                                <span>
+                                                <!-- <span>
                                                     <span class="dropdown-toggle-split  opacity"
                                                         data-toggle="dropdown">
                                                         <img :src="baseUrl+'/img/task-icon/plus.png'" height="18" width="18" >
                                                         <!-- <i class="fa fa-plus"></i> -->
-                                                    </span>
+                                                    <!--</span>
                                                     <div class="dropdown-menu">
                                                         <diV class="collapse show switchToggle">
                                                             <a @click="addExistingTask(index,column.boardId)" class="dropdown-item"
@@ -50,7 +50,7 @@
                                                             href="javascript:void(0)"><img :src="baseUrl+'/img/task-icon/create.png'" height="18" width="18" > Create new tasks</a>
                                                         </diV>
                                                     </div>
-                                                </span>
+                                                </span> -->
 
                                                 <span>
                                                     <span class="dropdown-toggle-split opacity"
@@ -60,6 +60,12 @@
                                                     </span>
                                                     <div class="dropdown-menu">
                                                         <diV class="collapse show switchToggle">
+                                                            <a @click="addExistingTask(index,column.boardId)" class="dropdown-item"
+                                                            href="javascript:void(0)">
+                                                                <img :src="baseUrl+'/img/task-icon/plus-o.png'" height="18" width="18" > Add existing tasks</a>
+                                                            <a @click="addCard(index,column.boardId)" class="dropdown-item"
+                                                            href="javascript:void(0)"><img :src="baseUrl+'/img/task-icon/create.png'" height="18" width="18" > Create new tasks</a>
+                                                            <div class="dropdown-divider"></div>
                                                             <a @click="updateColumSow(index)" class="dropdown-item" href="#">
                                                                 <img :src="baseUrl+'/img/task-icon/edit.png'" height="18" width="18" >  Edit column</a>
                                                             <a @click="hideColumn(index, column.boardId)" class="dropdown-item"
@@ -103,11 +109,11 @@
                                                 @click="selectCard(card)"
                                                 :id="'card_'+card.cardId"
                                                 v-on:dblclick="showLog">
-
+                                                <!-- @click="selectCard(card)" -->
                                             <span style="position: absolute; right: 20px; top: 8px; ">
                                                 <span class="dropdown-toggle-split opacity"
-                                                    data-toggle="dropdown">
-                                                    <i class="fa fa-ellipsis-h"></i>
+                                                    data-toggle="dropdown" >
+                                                    <i class="fa fa-ellipsis-h" v-if="card.textareaShow === true"></i>
                                                 </span>
                                                 <div class="dropdown-menu">
                                                     <diV class="collapse show switchToggle">
@@ -128,15 +134,18 @@
                                                     </diV>
                                                 </div>
                                             </span>
-
+                                            <!-- {{card.textareaShow}} -->
                                             <textarea
                                                 :data-text="card.data"
-                                                :id="'id'+index+key" @blur="showItem($event,card,index,key)"
+                                                :id="'id'+index+key" @blur="showItem($event,card,index,key);card.textareaShow = false"
                                                 @click="makeInput($event)"
                                                 @focus="hideItem($event)"
-                                                class="inp input-hide text-area"
-                                                data-grow="auto" style="padding: 10px !important;">{{ card.data }}</textarea>
-
+                                                class="inp input-hide text-area autoExpand"
+                                                data-grow="auto" style="padding: 10px !important;"
+                                                v-if="card.textareaShow === true" >{{ card.data }}</textarea>
+                                            
+                                            <!-- <div v-if="card.textareaShow === false" @click="showHideTextarea(index, key, card)">{{ card.data }}</div> -->
+                                            <div v-if="card.textareaShow === false" @click="card.textareaShow = true;showHideTextarea('#id'+index+key)">{{ card.data }}</div>
                                             <br>
                                             <div class="">
                                                 <div>
@@ -997,6 +1006,23 @@
         mounted() {
             var _this = this;
             $('#header-item').text('Project  / Task Board');
+            
+            $(document)
+            .one('focus.autoExpand', 'textarea.autoExpand', function(){
+                var savedValue = this.value;
+                this.value = '';
+                this.baseScrollHeight = this.scrollHeight;
+                this.value = savedValue;
+            })
+            .on('input.autoExpand', 'textarea.autoExpand', function(){
+                var minRows = this.getAttribute('data-min-rows')|0, rows;
+                this.rows = minRows;
+                rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
+                this.rows = minRows + rows;
+            });
+
+
+
             $(document).ready(function () {
                 $(function () {
                     $('[data-toggle="popover"]').popover()
@@ -1148,6 +1174,7 @@
                             },
                             child: this.cards[i].task[j].child,
                             data: this.cards[i].task[j].name,
+                            textareaShow: false,
                             description: this.cards[i].task[j].name,
                             date: this.cards[i].task[j].date,
                             progress: this.cards[i].task[j].progress,
@@ -1382,7 +1409,7 @@
                                 hidden: response.data.hidden,
                                 task: []
                             });
-                            _this.getData();
+                            _this.getBoardTask();
                             swal("Successful", "Board successfuly created", "success")
                         }
                     })
@@ -2072,6 +2099,20 @@
                 $('.inp').removeClass('form-control');
                 this.saveData(data, index, child_key);
             },
+            showHideTextarea(id){
+                let _this = this;
+
+                $('.inp').addClass('input-hide');
+                $('.inp').removeClass('form-control');
+                $(id).removeClass('input-hide');
+                $(id).addClass('form-control');
+
+                var option = {
+                    height: 50,
+                    maxHeight: 200
+                };
+                _this.growInit(option);
+            },
             saveData(data, index, child_key) {
                 let _this = this;
                 // console.log("data = "+data.data);
@@ -2205,7 +2246,7 @@
                     });
             },
             selectCard(card){
-                console.log(card);
+                // console.log(card);
                 this.selectedData = card;
                 this.selectedCard = card.cardId;
                 this.task_logs = null;
@@ -2224,7 +2265,7 @@
                 }
             },
             HideDetails() {
-                this.getBoardTask();
+                // this.getBoardTask();
                 $('#task_width').addClass('task_width');
                 $('#task_width').removeClass('task_widthNormal');
                 $('#details').addClass('details');
