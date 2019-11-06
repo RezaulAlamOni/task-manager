@@ -9,6 +9,7 @@ use App\Multiple_list;
 use App\Project;
 use App\Tags;
 use App\Task;
+use App\LinkListToColumn;
 use App\User;
 use Carbon\Carbon;
 //use Http\Env\Response;
@@ -217,6 +218,12 @@ class TaskController extends Controller
                     'date' => '0000-00-00',
                     'created_at' => Carbon::now(),
                 ];
+                $link = LinkListToColumn::where('multiple_list_id', $list_id)->first();
+                if ($link) {
+                    $data['board_parent_id'] = $link->task_list_id;
+                    $progress = Task::where('id',$link->task_list_id)->first();
+                    $data['progress'] = $progress->progress;
+                }
                 $task = Task::create($data);
                 $this->updateTagWithDataMove($task->id, $request->parent_id);
                 $this->createLog($task->id, 'created', 'Create task', $request->text);
