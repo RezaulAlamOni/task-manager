@@ -668,7 +668,7 @@
     }
 }
 .list-task-details {
-    height: calc(100vh - 110px);
+    height: calc(100vh - 103px);
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -676,7 +676,7 @@
 .boardView {
     width: 100%;
     display: inline-block;
-    height: 100%;
+    //height: 100%;
 }
 
 #board_view_list {
@@ -684,7 +684,7 @@
 }
 
 #col10 {
-    height: calc(100vh - 218px)
+    height: calc(100vh - 187px)
 }
 
 .wrapper {
@@ -694,7 +694,7 @@
 .searchList {
     float: right;
     position: absolute;
-    right: 367px;
+    right: 434px;
     top: 7px;
     @include transition(all 0.2s linear);
 }
@@ -1096,7 +1096,7 @@
 .action-list-board {
     display: table;
     border-radius: 50px;
-    background: #99c3ff;
+    background: #d4e6ff;
     box-shadow: 1px 1px grey;
 }
 .action-task {

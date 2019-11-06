@@ -73,9 +73,8 @@
     }
     .smooth-dnd-container {
         padding: 5px;
-        max-height: 600px;
-        min-height: 600px; //card-container
-        height: auto;
+        //max-height: 600px;
+        height: calc(100vh - 272px);
         overflow: auto;
     }
 

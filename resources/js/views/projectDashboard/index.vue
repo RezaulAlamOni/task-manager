@@ -76,7 +76,7 @@
         <div class="list-task-details">
             <div class="container">
                 <div class="col-12 action-task">
-                    <h2 class="p-t-20" v-if="list.type !== null">
+                    <h2 class="p-t-10" v-if="list.type !== null">
                         {{list.name}}
                     </h2>
                     <p class="compltit-p" v-if="list.description != null">{{list.description}}</p>
