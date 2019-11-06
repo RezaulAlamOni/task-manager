@@ -1175,6 +1175,7 @@
             showSearchInputField() {
                 if (this.list.type === 'list') {
                     $('.searchList').toggle();
+                    $('.searchTaskList').focus();
                 }
             },
             SearchTaskByAssignedUser(id, name) {
