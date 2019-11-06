@@ -4,8 +4,12 @@
             <!-- Navbar Component-->
             <Navbar :AllNavGet="AllNavItems"
                     :projectId="$route.params.projectId"
+                    :lists="list"
                     @getList="showTask"
                     @showSearchInputField="showSearchInputField"
+                    @MoveListTOAnotherNav="MoveListTOAnotherNav"
+                    @DeleteListOrBoard="DeleteListOrBoard"
+                    @DownloadTaskPDF="DownloadTaskPDF"
                     @getNavBars="getNavbar">
             </Navbar>
 
@@ -74,41 +78,6 @@
                 <div class="col-12 action-task">
                     <h2 class="p-t-20" v-if="list.type !== null">
                         {{list.name}}
-                        <span class="btn btn-default pull-right dropdown-toggle action-list-board"
-                              data-toggle="dropdown">
-                        Option
-                    </span>
-
-                        <div aria-labelledby="dropdownMenuButton"
-                             class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
-                            <h6 class="dropdown-header text-uppercase">Action For <span
-                                v-if="list.type === 'board'">Board</span> <span v-else>List</span></h6>
-                            <div class="dropdown-divider"></div>
-                            <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
-                            <a href="javascript:void(0)"> <i class="fa fa-edit"></i> Edit  <span
-                                v-if="list.type === 'board'">Board</span>  <span v-else>List</span></a>
-                        </span>
-                            <span class="dropdown-item custom-dropdown-item">
-                            <a href="javascript:void(0)" @click="MoveListTOAnotherNav(list.type)"> <i
-                                class="fa fa-arrows-alt"></i> Move <span
-                                v-if="list.type === 'board'">Board</span>  <span v-else>List</span> to Another Nav </a>
-                        </span>
-                            <span class="dropdown-item custom-dropdown-item"
-                                  @click="DeleteListOrBoard(list.type,'delete')">
-                            <a href="javascript:void(0)"> <i class="fa fa-trash"></i> Delete with all <span
-                                v-if="list.type === 'board'">Card</span>  <span v-else> Task</span></a>
-                        </span>
-                            <span class="dropdown-item custom-dropdown-item"
-                                  @click="DeleteListOrBoard(list.type,'move')">
-                            <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move <span
-                                v-if="list.type === 'board'">Card</span>  <span v-else>Task</span> </a>
-                        </span>
-                            <span class="dropdown-item custom-dropdown-item" v-if="list.type === 'list'">
-                            <a href="javascript:void(0)" @click="DownloadTaskPDF"> <i class="fa fa-file"></i> Create PDF </a>
-                        </span>
-
-                        </div>
-
                     </h2>
                     <p class="compltit-p" v-if="list.description != null">{{list.description}}</p>
                 </div>
@@ -2262,7 +2231,10 @@
                     });
             },
 
-            DeleteListOrBoard(type, action) {
+            DeleteListOrBoard(data) {
+                console.log(data)
+                var type = data.type;
+                var action = data.action;
                 var _this = this;
                 _this.action_T = action;
                 _this.type_T = type;
@@ -2448,7 +2420,8 @@
             DownloadTaskPDF() {
                 swal("Under Process!", "Working under process", "success");
             },
-            MoveListTOAnotherNav(type) {
+            MoveListTOAnotherNav(data) {
+                var type = data.type;
                 var _this = this;
                 _this.type_T = type;
                 _this.list_T = [];
@@ -2505,26 +2478,6 @@
                             console.log('Api for move down task not Working !!!')
                         });
                 }
-                // else if(data.text === ''){
-                    // var postData = {
-                    //     id: data.id
-                    // };
-                    // // if (_this.empty_task_delete_flag === 1){
-                    // setTimeout(function () {
-                    //     axios.post('/api/task-list/delete-empty-task', postData)
-                    //         .then(response => response.data)
-                    //         .then(response => {
-                    //             if (response.success === 1) {
-                    //                 _this.empty_task_delete_flag = 0;
-                    //                 var id = response.id;
-                    //                 _this.RemoveEmptyTask(id, _this.treeList);
-                    //             }
-                    //         })
-                    //         .catch(error => {
-                    //             console.log('Api for move down task not Working !!!')
-                    //         }, 1000);
-                    // })
-                // }
 
             },
             DeleteEmptyTask() {

@@ -39,7 +39,7 @@
     }
 
     .card-scene {
-        padding: 20px;
+        //padding: 20px;
         height: 100%;
     }
 
@@ -246,7 +246,7 @@
         margin-top: 10px;
     }
 
-    
+
     .dropdown-menu {
         width: 300px;
         border-radius: 4px 4px;
@@ -312,7 +312,7 @@
         left: 145px;
     }
     .tag-icon-free{
-        bottom: 10px;    
+        bottom: 10px;
     }
 
 
@@ -423,7 +423,7 @@
       opacity: 0;
       cursor: pointer;
     }
-  
+
     .checkmark {
       position: absolute;
       top: 8px;
@@ -434,29 +434,29 @@
       background-color: #eee;
       @include transition(all 0.2s linear);
     }
-  
+
     input ~ .checkmark {
       background-color: #FFF;
       border: 1px solid #c8c8c8;
       @include transition(all 0.2s linear);
     }
-  
+
     input:checked ~ .checkmark {
       background-color: #0099ff;
       border: 1px solid #0099ff;
       @include transition(all 0.2s linear);
     }
-  
+
     .checkmark:after {
       content: "";
       position: absolute;
       display: none;
     }
-  
+
     input:checked ~ .checkmark:after {
       display: block;
     }
-  
+
     .checkmark:after {
       left: 4px;
       top: 2px;
@@ -474,4 +474,3 @@
   .disabledTask {
     opacity: 0.3;
   }
-  
