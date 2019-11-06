@@ -49,7 +49,6 @@
                     <ul class="navbar-nav ml-4 nav-bar-right">
                         <li class="nav-item search-nav-icon">
                             <button class="btn btn-default" type="submit" @click="showSearchInputField" style="padding-right: 32px; padding-left: 7px;">
-<!--                                <i class="fa fa-search"></i>-->
                                     <img :src="baseUrl+'/img/task-icon/search.png'" height="30" width="30" alt="" title="Find Task" data-toggle="tooltip">
                                 </button>
                         </li>
