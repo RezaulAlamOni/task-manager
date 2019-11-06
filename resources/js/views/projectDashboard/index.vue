@@ -969,12 +969,13 @@
                 switch (handler.key) {
                     case "enter" :
                         if (_this.delete_popup === 1) {
-                            // swal.close();
-                            $('.confirm').click();
+                            setTimeout(function () {
+                                $('.confirm').click();
+                                swal.close()
+                            },100);
                             _this.delete_popup = 0;
                             _this.selectedIds = [];
                         } else {
-
                             if (_this.selectedIds.length === 1) {
                                 _this.addNode(_this.selectedData);
                                 swal.close();
