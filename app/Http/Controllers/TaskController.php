@@ -135,7 +135,7 @@ class TaskController extends Controller
                 'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
-            $this->createLog($task->id, 'created', 'Create  task', 'New');
+            $this->createLog($task->id, 'created', 'Create task', 'New');
             $tasks = Task::where('parent_id', 0)
                 ->where('project_id', $request->id)
                 ->where('list_id', $list_id)

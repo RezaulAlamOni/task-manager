@@ -289,13 +289,13 @@
                 <div class="row">
                     <div class="col-12" v-if="selectedData.files && selectedData.files.length !== 0">
                         <h3 style="margin-top: 20px;">Files</h3>
-                        <template v-for="fl in selectedData.files">
                             <div class="row">
-                                <div class="col-12">
-                                    <img :src="'/images/'+fl.file_name" class="task-img-right-pane">
-                                </div>
+                                <template v-for="fl in selectedData.files">
+                                    <div class="col-6">
+                                        <img :src="'/images/'+fl.file_name" class="task-img-right-pane">
+                                    </div>
+                                </template>
                             </div>
-                        </template>
                         <div style="cursor: pointer; background-color: #F8F8F8; margin:10px 0;">
                             <input :id="'file'+selectedData._id" :ref="selectedData._id" style="display: none;"
                                    type="file">
@@ -304,12 +304,18 @@
                     </div>
                 </div>
                 <!-- Comments -->
-                <div class="row">
+                <div class="row comment-section-in-task-details">
                     <div class="col-12">
-                        <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater">
+                        <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater"> -->
                         <div class="textAreaExtend" v-click-outside="HideTextArea">
-                            <textarea @focus="ShowTextArea(selectedData)" class="form-control commentInput" data-grow="auto"
-                                      placeholder="Add comment"></textarea>
+                            <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                               data-placement="bottom" data-toggle="tooltip"> PI</p>
+                            <textarea @focus="ShowTextArea(selectedData)" 
+                                    class="form-control commentInput" 
+                                    data-grow="auto"
+                                    placeholder="Add comment">
+                            </textarea>
+                            
                             <div class="SubmitButton" id="SubmitButton">
                                 <a class="btn btn-default btn-sm" style="background: #7BB348;">Post</a>
                                 <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6" @click="HideTextArea">Cancel</a>
