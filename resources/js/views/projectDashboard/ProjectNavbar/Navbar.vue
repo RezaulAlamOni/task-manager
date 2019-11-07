@@ -48,9 +48,52 @@
                         </span>
                     <ul class="navbar-nav ml-4 nav-bar-right">
                         <li class="nav-item search-nav-icon">
-                            <button class="btn btn-default" type="submit" @click="showSearchInputField" style="padding-right: 32px; padding-left: 7px;">
+                            <button class="btn btn-default" type="submit" @click="showSearchInputField" style="padding-right: 32px; padding-left: 7px;background: none">
                                     <img :src="baseUrl+'/img/task-icon/search.png'" height="30" width="30" alt="" title="Find Task" data-toggle="tooltip">
                                 </button>
+                        </li>
+                        <li class="nav-item" style="margin-right:20px;">
+                            <a @click="" class="text-center nav-link"
+                               href="Javascript:void(0)">
+                                <span class="btn btn-default pull-right dropdown-toggle action-list-board" data-toggle="dropdown">Option</span>
+                                <div aria-labelledby="dropdownMenuButton"
+                                     class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
+                                    <h6 class="dropdown-header text-uppercase">Action For <span
+                                        v-if="list_selected.type === 'board'">Board</span> <span v-else>List</span></h6>
+                                    <div class="dropdown-divider"></div>
+                                    <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
+                                        <a href="javascript:void(0)">
+                                            <img :src="baseUrl+'/img/task-icon/edit.png'" alt="" height="20px" width="20px" class="mr-2">
+                                            Edit  <span
+                                            v-if="list_selected.type === 'board'">Board</span>  <span v-else>List</span></a>
+                                    </span>
+                                    <span class="dropdown-item custom-dropdown-item">
+                                        <a href="javascript:void(0)" @click="MoveListTOAnotherNav(list_selected.type)">
+                                            <img :src="baseUrl+'/img/task-icon/move.png'" alt="" height="20px" width="20px" class="mr-2">
+                                            Move
+                                            <span v-if="list_selected.type === 'board'">Board</span>  <span v-else>List</span> to Another Nav </a>
+                                    </span>
+                                    <span class="dropdown-item custom-dropdown-item"
+                                                      @click="DeleteListOrBoard(list_selected.type,'delete')">
+                                        <a href="javascript:void(0)">
+                                            <img :src="baseUrl+'/img/task-icon/trash.png'" alt="" height="20px" width="20px" class="mr-2">
+                                            Delete with all <span
+                                            v-if="list_selected.type === 'board'">Card</span>  <span v-else> Task</span></a>
+                                    </span>
+                                    <span class="dropdown-item custom-dropdown-item"
+                                                      @click="DeleteListOrBoard(list_selected.type,'move')">
+                                        <a href="javascript:void(0)">
+                                            <img :src="baseUrl+'/img/task-icon/move-1.png'" alt="" height="20px" width="20px" class="mr-2">
+                                            Delete & move <span
+                                            v-if="list_selected.type === 'board'">Card</span>  <span v-else>Task</span> </a>
+                                    </span>
+                                    <span class="dropdown-item custom-dropdown-item" v-if="list_selected.type === 'list'">
+                                        <a >
+                                            <img :src="baseUrl+'/img/task-icon/pdf.png'" alt="" height="20px" width="20px" class="mr-2">
+                                            Create PDF </a>
+                                    </span>
+                                </div>
+                            </a>
                         </li>
                         <li class="nav-item" style="margin-right:20px;">
                             <a @click="shortcutModel" class="d-block d-md-flex text-center nav-link"
@@ -476,11 +519,12 @@
 <script>
     export default {
         name: "Navbar",
-        props: ['projectId', 'AllNavGet'],
+        props: ['projectId', 'AllNavGet','lists'],
         data() {
             return {
                 baseUrl: window.location.origin,
                 AllNavItems : this.AllNavGet,
+                list_selected : this.lists,
                 list: {
                     name: null,
                     description: null,
@@ -668,7 +712,25 @@
                         console.log('Add list api not working!!')
                     });
             },
+            UpdateListModel(){
+                $("#updateListBoardModel").modal('show');
+            },
+            MoveListTOAnotherNav(type){
+               this.$emit('MoveListTOAnotherNav', {type : type})
+            },
+            DeleteListOrBoard(type, action){
+                this.$emit('DeleteListOrBoard', {type : type,action :action})
+            },
+            DownloadTaskPDF(){
+                this.$emit('DownloadTaskPDF')
+            }
+        },
+        watch: {
+            AllNavGet: function(val){
+                this.AllNavItems = val;
+            }
         }
+
     }
 </script>
 

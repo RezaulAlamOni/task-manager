@@ -4,8 +4,12 @@
             <!-- Navbar Component-->
             <Navbar :AllNavGet="AllNavItems"
                     :projectId="$route.params.projectId"
+                    :lists="list"
                     @getList="showTask"
                     @showSearchInputField="showSearchInputField"
+                    @MoveListTOAnotherNav="MoveListTOAnotherNav"
+                    @DeleteListOrBoard="DeleteListOrBoard"
+                    @DownloadTaskPDF="DownloadTaskPDF"
                     @getNavBars="getNavbar">
             </Navbar>
 
@@ -70,45 +74,10 @@
             <h2 style="color: #d1a894">Select Task View.</h2>
         </div>
         <div class="list-task-details">
-            <div class="container">
+            <div style="padding-left: 5%">
                 <div class="col-12 action-task">
-                    <h2 class="p-t-20" v-if="list.type !== null">
+                    <h2 class="p-t-10" v-if="list.type !== null">
                         {{list.name}}
-                        <span class="btn btn-default pull-right dropdown-toggle action-list-board"
-                              data-toggle="dropdown">
-                        Option
-                    </span>
-
-                        <div aria-labelledby="dropdownMenuButton"
-                             class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
-                            <h6 class="dropdown-header text-uppercase">Action For <span
-                                v-if="list.type === 'board'">Board</span> <span v-else>List</span></h6>
-                            <div class="dropdown-divider"></div>
-                            <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
-                            <a href="javascript:void(0)"> <i class="fa fa-edit"></i> Edit  <span
-                                v-if="list.type === 'board'">Board</span>  <span v-else>List</span></a>
-                        </span>
-                            <span class="dropdown-item custom-dropdown-item">
-                            <a href="javascript:void(0)" @click="MoveListTOAnotherNav(list.type)"> <i
-                                class="fa fa-arrows-alt"></i> Move <span
-                                v-if="list.type === 'board'">Board</span>  <span v-else>List</span> to Another Nav </a>
-                        </span>
-                            <span class="dropdown-item custom-dropdown-item"
-                                  @click="DeleteListOrBoard(list.type,'delete')">
-                            <a href="javascript:void(0)"> <i class="fa fa-trash"></i> Delete with all <span
-                                v-if="list.type === 'board'">Card</span>  <span v-else> Task</span></a>
-                        </span>
-                            <span class="dropdown-item custom-dropdown-item"
-                                  @click="DeleteListOrBoard(list.type,'move')">
-                            <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move <span
-                                v-if="list.type === 'board'">Card</span>  <span v-else>Task</span> </a>
-                        </span>
-                            <span class="dropdown-item custom-dropdown-item" v-if="list.type === 'list'">
-                            <a href="javascript:void(0)" @click="DownloadTaskPDF"> <i class="fa fa-file"></i> Create PDF </a>
-                        </span>
-
-                        </div>
-
                     </h2>
                     <p class="compltit-p" v-if="list.description != null">{{list.description}}</p>
                 </div>
@@ -146,15 +115,14 @@
 
                                     <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28" width="28"
                                          v-if="data.progress === '100'"
-                                         :title="'This task is complete'" data-toggle="tooltip"
+                                         :title="(data.complete_tooltip !== null) ? data.complete_tooltip : 'Complete'" data-toggle="tooltip"
                                          class="task-complete left-content li-opacity ">
 
                                     <img :src="baseUrl+'/img/task-icon/circle-check.png'" alt="" height="28" width="28"
                                          v-else
-                                         @click="addTaskToComplete(data)" data-toggle="tooltip"
-                                         :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
+                                         @click="addTaskToComplete(data)"
+                                         :title="(data.complete_tooltip !== '') ? data.complete_tooltip : 'Complete'" data-toggle="tooltip"
                                          class="task-complete left-content li-opacity">
-
                                 </span>
 
                                     <b @click="HideShowChild(store , data)"
@@ -583,7 +551,7 @@
 
                     </div>
                 </div>
-                <div class="details" id="details">
+                <div class="details" id="details" v-click-outside="HideDetails">
                     <TaskDetails
                         :selectedData="selectedData"
                         :task_logs="task_logs"
@@ -931,6 +899,7 @@
                 newEmptyTaskID: null,
                 multiple_list: null,
                 list: {
+                    id : null,
                     name: null,
                     description: null,
                     nav_id: null,
@@ -1000,12 +969,13 @@
                 switch (handler.key) {
                     case "enter" :
                         if (_this.delete_popup === 1) {
-                            // swal.close();
-                            $('.confirm').click();
+                            setTimeout(function () {
+                                $('.confirm').click();
+                                swal.close()
+                            },100);
                             _this.delete_popup = 0;
                             _this.selectedIds = [];
                         } else {
-
                             if (_this.selectedIds.length === 1) {
                                 _this.addNode(_this.selectedData);
                                 swal.close();
@@ -2082,6 +2052,7 @@
                                 $('.jquery-accordion-menu').hide();
                                 _this.delete_popup = 0;
                                 // swal("Deleted!", "Successfully delete selected task !", "success");
+                                swal.close();
                             })
                             .catch(error => {
                                 console.log('Api for delete task not Working !!!')
@@ -2214,6 +2185,7 @@
                 this.list_id = data.list_id;
                 this.nav_id = data.nav_id;
                 this.list.name = data.title;
+                this.list.id = data.list_id
                 this.list.description = data.description;
                 this.list.type = data.type;
                 if (data.type === 'list') {
@@ -2262,7 +2234,10 @@
                     });
             },
 
-            DeleteListOrBoard(type, action) {
+            DeleteListOrBoard(data) {
+                console.log(data)
+                var type = data.type;
+                var action = data.action;
                 var _this = this;
                 _this.action_T = action;
                 _this.type_T = type;
@@ -2409,6 +2384,7 @@
                             .then(response => response.data)
                             .then(response => {
                                 // swal("Complete!", "All Selected task are moved !", "success");
+                                swal.close();
                                 _this.getTaskList()
                             })
                             .catch(error => {
@@ -2448,7 +2424,8 @@
             DownloadTaskPDF() {
                 swal("Under Process!", "Working under process", "success");
             },
-            MoveListTOAnotherNav(type) {
+            MoveListTOAnotherNav(data) {
+                var type = data.type;
                 var _this = this;
                 _this.type_T = type;
                 _this.list_T = [];
@@ -2505,26 +2482,6 @@
                             console.log('Api for move down task not Working !!!')
                         });
                 }
-                // else if(data.text === ''){
-                    // var postData = {
-                    //     id: data.id
-                    // };
-                    // // if (_this.empty_task_delete_flag === 1){
-                    // setTimeout(function () {
-                    //     axios.post('/api/task-list/delete-empty-task', postData)
-                    //         .then(response => response.data)
-                    //         .then(response => {
-                    //             if (response.success === 1) {
-                    //                 _this.empty_task_delete_flag = 0;
-                    //                 var id = response.id;
-                    //                 _this.RemoveEmptyTask(id, _this.treeList);
-                    //             }
-                    //         })
-                    //         .catch(error => {
-                    //             console.log('Api for move down task not Working !!!')
-                    //         }, 1000);
-                    // })
-                // }
 
             },
             DeleteEmptyTask() {
