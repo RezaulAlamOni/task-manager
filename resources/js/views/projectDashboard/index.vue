@@ -74,7 +74,7 @@
             <h2 style="color: #d1a894">Select Task View.</h2>
         </div>
         <div class="list-task-details">
-            <div class="container">
+            <div style="padding-left: 5%">
                 <div class="col-12 action-task">
                     <h2 class="p-t-10" v-if="list.type !== null">
                         {{list.name}}
@@ -552,7 +552,7 @@
 
                     </div>
                 </div>
-                <div class="details" id="details">
+                <div class="details" id="details" v-click-outside="HideDetails">
                     <TaskDetails
                         :selectedData="selectedData"
                         :task_logs="task_logs"
