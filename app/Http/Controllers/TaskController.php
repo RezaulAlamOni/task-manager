@@ -34,6 +34,7 @@ class TaskController extends Controller
     }
     public function decorateData($obj)
     {
+
         $data = [];
         foreach ($obj as $key => $task) {
             $info = array();
@@ -51,6 +52,7 @@ class TaskController extends Controller
                 $info['droppable'] = true;
             }
             $info['clicked'] = 0;
+            $info['count_child'] = 0;
             $info['date'] = $task->date;
             $info['progress'] = $task->progress;
             $info['open'] = $task->open;
@@ -74,6 +76,7 @@ class TaskController extends Controller
             }
             $info['tags'] = $infoTags;
             $info['tagTooltip'] = $tagTooltip;
+            $info['complete_tooltip'] =($task->column != null) ? '#Board : '.$task->column->MultipleBord->board_title." #Column : ".$task->column->title : '';
             $info['description'] = $task->description;
             $info['files'] = $task->files;
             $info['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id', 'users.id')
@@ -115,7 +118,7 @@ class TaskController extends Controller
         }
         $tasks = Task::where('parent_id', 0)
             ->where('project_id', $request->id)
-            ->where('list_id', $list_id)
+            ->where('list_id', $list_id)->with('column')
             ->orderBy('sort_id', 'ASC')
             ->get();
         $task = [];
@@ -136,9 +139,10 @@ class TaskController extends Controller
             $tasks = Task::where('parent_id', 0)
                 ->where('project_id', $request->id)
                 ->where('list_id', $list_id)
+                ->with('column')
                 ->orderBy('sort_id', 'ASC')->get();
-        }
 
+        }
         $data = $this->decorateData($tasks);
 
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);

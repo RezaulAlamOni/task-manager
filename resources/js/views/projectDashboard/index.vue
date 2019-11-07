@@ -115,15 +115,14 @@
 
                                     <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28" width="28"
                                          v-if="data.progress === '100'"
-                                         :title="'This task is complete'" data-toggle="tooltip"
+                                         :title="(data.complete_tooltip !== null) ? data.complete_tooltip : 'Complete'" data-toggle="tooltip"
                                          class="task-complete left-content li-opacity ">
 
                                     <img :src="baseUrl+'/img/task-icon/circle-check.png'" alt="" height="28" width="28"
                                          v-else
-                                         @click="addTaskToComplete(data)" data-toggle="tooltip"
-                                         :title="(data.children.length)? 'Complete '+data.children.length + ' task': 'Complete'"
+                                         @click="addTaskToComplete(data)"
+                                         :title="(data.complete_tooltip !== null) ? data.complete_tooltip : 'Complete'" data-toggle="tooltip"
                                          class="task-complete left-content li-opacity">
-
                                 </span>
 
                                     <b @click="HideShowChild(store , data)"
