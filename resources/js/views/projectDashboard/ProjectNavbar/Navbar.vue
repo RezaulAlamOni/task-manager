@@ -88,7 +88,7 @@
                                             v-if="list_selected.type === 'board'">Card</span>  <span v-else>Task</span> </a>
                                     </span>
                                     <span class="dropdown-item custom-dropdown-item" v-if="list_selected.type === 'list'">
-                                        <a >
+                                        <a :href="'/list-pdf-create/'+list_selected.id" target="_blank">
                                             <img :src="baseUrl+'/img/task-icon/pdf.png'" alt="" height="20px" width="20px" class="mr-2">
                                             Create PDF </a>
                                     </span>
