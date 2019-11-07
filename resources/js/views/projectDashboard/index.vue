@@ -899,6 +899,7 @@
                 newEmptyTaskID: null,
                 multiple_list: null,
                 list: {
+                    id : null,
                     name: null,
                     description: null,
                     nav_id: null,
@@ -2051,6 +2052,7 @@
                                 $('.jquery-accordion-menu').hide();
                                 _this.delete_popup = 0;
                                 // swal("Deleted!", "Successfully delete selected task !", "success");
+                                swal.close();
                             })
                             .catch(error => {
                                 console.log('Api for delete task not Working !!!')
@@ -2183,6 +2185,7 @@
                 this.list_id = data.list_id;
                 this.nav_id = data.nav_id;
                 this.list.name = data.title;
+                this.list.id = data.list_id
                 this.list.description = data.description;
                 this.list.type = data.type;
                 if (data.type === 'list') {
@@ -2381,6 +2384,7 @@
                             .then(response => response.data)
                             .then(response => {
                                 // swal("Complete!", "All Selected task are moved !", "success");
+                                swal.close();
                                 _this.getTaskList()
                             })
                             .catch(error => {
