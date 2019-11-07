@@ -22,6 +22,7 @@ class MultipleBoardController extends Controller
 {
     protected $actionLog;
     protected $dont_forget_tag;
+    protected $totalChild = 0;
 
     public function __construct()
     {
@@ -71,13 +72,6 @@ class MultipleBoardController extends Controller
                                     $tagTooltip .= '#' . $tag->tag->title . ' ';
                                     $tags[$tagkey] = $infoTags;
                                 }
-                            // $tags[$tagkey]['id'] = $tag->id;
-                            // $tags[$tagkey]['board_id'] = $tag->board_id;
-                            // $tags[$tagkey]['text'] = $tag->title;
-                            // $tags[$tagkey]['classes'] = '';
-                            // $tags[$tagkey]['style'] = 'background-color: ' . $tag->color;
-                            // $tags[$tagkey]['color'] = $tag->color;
-                            // $tagTooltip .= '#' . $tag->title . ' ';
                         }
                     }
 
@@ -87,7 +81,6 @@ class MultipleBoardController extends Controller
                     foreach ($boards[$key]['task'][$keys]['assigned_user'] as $id) {
                         $assigned_user_ids[] = $id['id'];
                     }
-                    // $info['assigned_user_ids'] = $assigned_user_ids;
 
                     $boards[$key]['task'][$keys]['assigned_user_ids'] = $assigned_user_ids;
                     $team = DB::table('team_users')->where('user_id', Auth::id())->first();
@@ -98,10 +91,17 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['tags'] = $tags;
                     $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
 
-                    $boards[$key]['task'][$keys]['child'] = ($values['childTask'] !== null)?count($values['childTask']): 0;
+                    if( $values['childTask'] !== null ){
+                        $this->totalChild = 0;
+                        $boards[$key]['task'][$keys]['child'] = $this->recurChild($values['childTask']);
+                        
+                    } else {
+                        $boards[$key]['task'][$keys]['child'] = 0;
+                    }
+
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
-                    // $boards[$key]['task'][$keys]['textShow'] = false;
+                    $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
                     $boards[$key]['task'][$keys]['progress'] = $values['progress'];
                     if ($values['list_id'] != '') {
                         $boards[$key]['task'][$keys]['type'] = 'task';
@@ -111,23 +111,25 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['date'] = ($values['date'] == '0000-00-00')? $values['date'] : date('d M', strtotime($values['date']));
                     $boards[$key]['task'][$keys]['existing_tags'] = Tags::where('team_id', $team_id)->where('title','!=', $this->dont_forget_tag)->get()->toArray();
 
-                    // Tags::select('tags.*')
-                    // ->join('task_lists', 'tags.task_id', 'task_lists.id')
-                    // ->where('tags.task_id', '!=', $values->id)
-                    // ->where('tags.title', '!=', 'Dont Forget')
-                    // ->where('task_lists.multiple_board_id', $value->multiple_board_id)
-                    // ->groupBy('tags.title')
-                    // ->get()->toArray();
                 }
             } else {
                 $boards[$key]['task'] = [];
             }
         }
-        // $str = json_encode($boards, true);
-        // $total = substr_count($str,"id");
-        // print_r($total); exit;
-        // return $boards;
         return response()->json(['success' => $boards]);
+    }
+
+    public function recurChild($child)
+    {   
+        $this->totalChild += count($child);
+        foreach ($child as $key => $value) {
+            if ($value['childTask'] !== null) {
+                if (count($value['childTask']) > 0) {
+                    $this->recurChild($value['childTask']);
+                }
+            }
+        }
+        return $this->totalChild;
     }
 
     public function create(Request $request)
@@ -214,7 +216,7 @@ class MultipleBoardController extends Controller
 
     public function changeParentId(Request $request)
     {
-         $request->all();
+        //  $request->all();
          $parent = Task::find($request->board_parent_id);
          $update = Task::where('id',$request->id)
                     ->where('board_parent_id',"!=",0)
@@ -536,6 +538,12 @@ class MultipleBoardController extends Controller
             return response()->json(['success' => true, 'data' => $isLink]);
         }
         return response()->json(['success' => false]);
+    }
+
+    public function test(){
+
+        $data = Task::select('id','title')->with('child')->where('id', 78)->get()->toArray();
+        dd($data);
     }
 
     protected function createLog($task_id, $type, $message, $title)

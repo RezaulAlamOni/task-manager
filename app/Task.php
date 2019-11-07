@@ -85,11 +85,16 @@ class Task extends Model
 
     public function childTask()
     {
-        return $this->hasMany(self::class, 'parent_id', 'id');
+        return $this->hasMany(self::class, 'parent_id', 'id')->with('childTask')->orderBy('sort_id');
     }
 
     public function linkToList()
     {
         return $this->hasMany(LinkListToColumn::class, 'task_list_id', 'id')->with('linkToListColumn');
+    }
+
+    public function child()
+    {
+        return $this->hasMany(self::class, 'parent_id', 'id')->with('child');
     }
 }

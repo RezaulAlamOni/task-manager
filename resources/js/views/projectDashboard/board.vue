@@ -143,7 +143,7 @@
                                                 class="inp input-hide text-area autoExpand"
                                                 data-grow="auto" style="padding: 10px !important;"
                                                 v-if="card.textareaShow === true" >{{ card.data }}</textarea>
-                                            
+                                            <!--  -->
                                             <!-- <div v-if="card.textareaShow === false" @click="showHideTextarea(index, key, card)">{{ card.data }}</div> -->
                                             <div v-if="card.textareaShow === false" @click="card.textareaShow = true;showHideTextarea('#id'+index+key)">{{ card.data }}</div>
                                             <br>
@@ -370,7 +370,7 @@
 
                                                     </a>
                                                 </div>
-                                                <div class="total-child" style="bottom: 15px; "> <strong> 
+                                                <div class="total-child" style="bottom: 15px; " v-if="card.child > 0"> <strong> 
                                                     <!-- {{ JSON.stringify(card) }} -->
                                                     <!-- {{  }} -->
                                                         <!-- console.log(str.match(new RegExp('cardId','gi')).length);     -->
@@ -892,7 +892,7 @@
                                     </ul>
                                 </li>
                             </div>
-                        </ul>
+                        <!-- </ul> -->
                     </div>
                     <div class="modal-footer">
                         <!-- {{ selectedExistedTask }} -->
@@ -906,7 +906,8 @@
             <TaskDetails
                 :selectedData="selectedData"
                 :task_logs="task_logs"
-                @textArea="ShowTextArea">
+                @textArea="ShowTextArea"
+                v-click-outside="HideDetails">
             </TaskDetails>
         </div>
 
@@ -1174,7 +1175,7 @@
                             },
                             child: this.cards[i].task[j].child,
                             data: this.cards[i].task[j].name,
-                            textareaShow: false,
+                            textareaShow: this.cards[i].task[j].textareaShow,
                             description: this.cards[i].task[j].name,
                             date: this.cards[i].task[j].date,
                             progress: this.cards[i].task[j].progress,
@@ -1848,7 +1849,7 @@
                 .then(response => {
                     if(response.success == true){
                         let data = response.data;
-                        _this.cards[index].task.push({id: data.id, name: data.title, date: data.date, tags: [], assigned_user:[], users:[], clicked: 0});
+                        _this.cards[index].task.push({id: data.id, name: data.title, date: data.date, tags: [], assigned_user:[], users:[], clicked: 0, textareaShow : true});
                         let keys = _this.cards[index].task.length-1;
                         _this.getBoardTask();
                         setTimeout(function () {
@@ -2106,7 +2107,10 @@
                 $('.inp').removeClass('form-control');
                 $(id).removeClass('input-hide');
                 $(id).addClass('form-control');
-
+                setTimeout(() => {
+                    $(id).click();
+                    $(id).focus();
+                }, 100);
                 var option = {
                     height: 50,
                     maxHeight: 200
