@@ -101,6 +101,7 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['child'] = ($values['childTask'] !== null)?count($values['childTask']): 0;
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
+                    // $boards[$key]['task'][$keys]['textShow'] = false;
                     $boards[$key]['task'][$keys]['progress'] = $values['progress'];
                     if ($values['list_id'] != '') {
                         $boards[$key]['task'][$keys]['type'] = 'task';
@@ -217,9 +218,10 @@ class MultipleBoardController extends Controller
          $parent = Task::find($request->board_parent_id);
          $update = Task::where('id',$request->id)
                     ->where('board_parent_id',"!=",0)
+                    ->orwhere('parent_id', $request->id)
                     ->update([
                         'board_parent_id' => $request->board_parent_id,
-                        'progress'=>$parent->progress
+                        'progress'=> $parent->progress
                     ]);
         if ($update) {
             $this->createLog($request->id, 'Update', 'Parent changed', 'Board Card Parent Changed');
@@ -498,6 +500,7 @@ class MultipleBoardController extends Controller
             $col = Task::where('id', $request->columnId)->first();
             $update = Task::where('project_id',$request->projectId)
                         ->where('list_id',$request->multiple_list)
+                        ->where('board_parent_id',null)
                         ->update([
                             'board_parent_id' => $request->columnId,
                             'progress' => $col->progress
@@ -512,12 +515,12 @@ class MultipleBoardController extends Controller
     {   
         $delete = LinkListToColumn::where('task_list_id',$request->columnId)->first();
         if ($delete) {
-            $update = Task::where('project_id',$request->projectId)
-                        ->where('list_id',$delete->multiple_list_id)
-                        ->where('board_parent_id',$request->columnId)
-                        ->update([
-                            'board_parent_id' => null
-                        ]);
+            // $update = Task::where('project_id',$request->projectId)
+            //             ->where('list_id',$delete->multiple_list_id)
+            //             ->where('board_parent_id',$request->columnId)
+            //             ->update([
+            //                 'board_parent_id' => null
+            //             ]);
             $delete->delete();
             return response()->json(['success' => true, 'data' => $delete]);
         } else {
