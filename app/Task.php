@@ -92,4 +92,13 @@ class Task extends Model
     {
         return $this->hasMany(LinkListToColumn::class, 'task_list_id', 'id')->with('linkToListColumn');
     }
+    public function column()
+    {
+        return $this->hasOne(self::class, 'id', 'board_parent_id')->with('MultipleBord');
+    }
+    public function MultipleBord()
+    {
+        return $this->hasOne(Multiple_board::class, 'id', 'multiple_board_id');
+    }
+
 }
