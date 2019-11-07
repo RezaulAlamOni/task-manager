@@ -92,7 +92,6 @@
                                             <img :src="baseUrl+'/img/task-icon/pdf.png'" alt="" height="20px" width="20px" class="mr-2">
                                             Create PDF </a>
                                     </span>
-
                                 </div>
                             </a>
                         </li>

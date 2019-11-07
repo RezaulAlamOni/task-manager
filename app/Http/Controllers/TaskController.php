@@ -224,9 +224,11 @@ class TaskController extends Controller
                 ];
                 $link = LinkListToColumn::where('multiple_list_id', $list_id)->first();
                 if ($link) {
+
                     $data['board_parent_id'] = $link->task_list_id;
                     $progress = Task::where('id',$link->task_list_id)->first();
                     $data['progress'] = $progress->progress;
+                    $data['multiple_board_id'] = $progress->multiple_board_id;
                 }
                 $task = Task::create($data);
                 $this->updateTagWithDataMove($task->id, $request->parent_id);
