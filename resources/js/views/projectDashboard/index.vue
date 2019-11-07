@@ -121,7 +121,7 @@
                                     <img :src="baseUrl+'/img/task-icon/circle-check.png'" alt="" height="28" width="28"
                                          v-else
                                          @click="addTaskToComplete(data)"
-                                         :title="(data.complete_tooltip !== null) ? data.complete_tooltip : 'Complete'" data-toggle="tooltip"
+                                         :title="(data.complete_tooltip !== '') ? data.complete_tooltip : 'Complete'" data-toggle="tooltip"
                                          class="task-complete left-content li-opacity">
                                 </span>
 
