@@ -775,7 +775,7 @@
                                 </select>
                             </div>
                         </div>
-                         <ul class="    list-group list-group-flush">
+                         <ul class="list-group list-group-flush">
                             <div v-if="tree4data.length > 0">
                                 <label class="checkbox_cus_mini">
                                     <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All
@@ -892,7 +892,7 @@
                                     </ul>
                                 </li>
                             </div>
-                        </ul>   
+                        </ul>
                     </div>
                     <div class="modal-footer">
                         <!-- {{ selectedExistedTask }} -->

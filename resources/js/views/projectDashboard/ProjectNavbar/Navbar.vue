@@ -62,26 +62,35 @@
                                         v-if="list_selected.type === 'board'">Board</span> <span v-else>List</span></h6>
                                     <div class="dropdown-divider"></div>
                                     <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
-                                        <a href="javascript:void(0)"> <i class="fa fa-edit"></i> Edit  <span
+                                        <a href="javascript:void(0)">
+                                            <img :src="baseUrl+'/img/task-icon/edit.png'" alt="" height="20px" width="20px" class="mr-2">
+                                            Edit  <span
                                             v-if="list_selected.type === 'board'">Board</span>  <span v-else>List</span></a>
                                     </span>
-                                                <span class="dropdown-item custom-dropdown-item">
-                                        <a href="javascript:void(0)" @click="MoveListTOAnotherNav(list_selected.type)"> <i
-                                            class="fa fa-arrows-alt"></i> Move <span
-                                            v-if="list_selected.type === 'board'">Board</span>  <span v-else>List</span> to Another Nav </a>
+                                    <span class="dropdown-item custom-dropdown-item">
+                                        <a href="javascript:void(0)" @click="MoveListTOAnotherNav(list_selected.type)">
+                                            <img :src="baseUrl+'/img/task-icon/move.png'" alt="" height="20px" width="20px" class="mr-2">
+                                            Move
+                                            <span v-if="list_selected.type === 'board'">Board</span>  <span v-else>List</span> to Another Nav </a>
                                     </span>
-                                                <span class="dropdown-item custom-dropdown-item"
+                                    <span class="dropdown-item custom-dropdown-item"
                                                       @click="DeleteListOrBoard(list_selected.type,'delete')">
-                                        <a href="javascript:void(0)"> <i class="fa fa-trash"></i> Delete with all <span
+                                        <a href="javascript:void(0)">
+                                            <img :src="baseUrl+'/img/task-icon/trash.png'" alt="" height="20px" width="20px" class="mr-2">
+                                            Delete with all <span
                                             v-if="list_selected.type === 'board'">Card</span>  <span v-else> Task</span></a>
                                     </span>
-                                                <span class="dropdown-item custom-dropdown-item"
+                                    <span class="dropdown-item custom-dropdown-item"
                                                       @click="DeleteListOrBoard(list_selected.type,'move')">
-                                        <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move <span
+                                        <a href="javascript:void(0)">
+                                            <img :src="baseUrl+'/img/task-icon/move-1.png'" alt="" height="20px" width="20px" class="mr-2">
+                                            Delete & move <span
                                             v-if="list_selected.type === 'board'">Card</span>  <span v-else>Task</span> </a>
                                     </span>
-                                                <span class="dropdown-item custom-dropdown-item" v-if="list_selected.type === 'list'">
-                                        <a href="javascript:void(0)" @click="DownloadTaskPDF"> <i class="fa fa-file"></i> Create PDF </a>
+                                    <span class="dropdown-item custom-dropdown-item" v-if="list_selected.type === 'list'">
+                                        <a href="javascript:void(0)" @click="DownloadTaskPDF">
+                                            <img :src="baseUrl+'/img/task-icon/pdf.png'" alt="" height="20px" width="20px" class="mr-2">
+                                            Create PDF </a>
                                     </span>
 
                                 </div>
