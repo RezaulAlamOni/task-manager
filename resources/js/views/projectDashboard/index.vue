@@ -73,15 +73,27 @@
         <div class="col-md-8 text-center pt-5" v-else-if="AllNavItems !== null && list.type === null">
             <h2 style="color: #d1a894">Select Task View.</h2>
         </div>
-        <div class="list-task-details">
-            <div style="padding-left: 5%">
-                <div class="col-12 action-task">
+        <div :class="(list.type === 'list') ? 'list-task-details' : 'board-card-details'" v-if="list.type === 'list' || list.type === 'board'">
+
+            <div style="padding-left: 5%" v-if="list.type === 'list'">
+
+                <div class="col-12 action-task-list">
+                    <h2 class="p-t-10" v-if="list.type === 'list'">
+                        {{list.name}}
+                    </h2>
+                    <p class="compltit-p" v-if="list.type === 'list'">{{list.description}}</p>
+                </div>
+            </div>
+            <div style="padding-left: 2%" v-else-if="list.type === 'board'">
+                <div class="col-12 action-task" id="board_title">
                     <h2 class="p-t-10" v-if="list.type !== null">
                         {{list.name}}
                     </h2>
                     <p class="compltit-p" v-if="list.description != null">{{list.description}}</p>
                 </div>
             </div>
+
+
             <!--        //tree view component section-->
             <div class="TaskListAndDetails container-fluid" v-if="list.type === 'list'" id="TaskListAndDetails">
                 <div class="task_width" id="task_width">
@@ -115,13 +127,15 @@
 
                                     <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28" width="28"
                                          v-if="data.progress === '100'"
-                                         :title="(data.complete_tooltip !== null) ? data.complete_tooltip : 'Complete'" data-toggle="tooltip"
+                                         :title="(data.complete_tooltip !== null) ? data.complete_tooltip : 'Complete'"
+                                         data-toggle="tooltip"
                                          class="task-complete left-content li-opacity ">
 
                                     <img :src="baseUrl+'/img/task-icon/circle-check.png'" alt="" height="28" width="28"
                                          v-else
                                          @click="addTaskToComplete(data)"
-                                         :title="(data.complete_tooltip !== '') ? data.complete_tooltip : 'Complete'" data-toggle="tooltip"
+                                         :title="(data.complete_tooltip !== '') ? data.complete_tooltip : 'Complete'"
+                                         data-toggle="tooltip"
                                          class="task-complete left-content li-opacity">
                                 </span>
 
@@ -370,12 +384,12 @@
                                        v-if="selectedData.text !== 'Dont Forget Section'"
                                        @click="copyTask"
                                        data-toggle="dropdown">
-                                        <img :src="baseUrl+'/img/task-icon/copy.png'" class="contex-menu-icon">
+                                        <img :src="baseUrl+'/img/task-icon/copy-1.png'" class="contex-menu-icon">
                                         Copy </a>
                                     <a href="javascript:void(0)" class="dropdown-toggle-split disabled" v-else
                                        style="color: gray"
                                        data-toggle="dropdown">
-                                        <img :src="baseUrl+'/img/task-icon/copy.png'" class="contex-menu-icon">
+                                        <img :src="baseUrl+'/img/task-icon/copy-1.png'" class="contex-menu-icon">
                                         Copy </a>
 
                                     <span class="contex-menu-sortcut">
@@ -418,6 +432,16 @@
                                     <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+<span
                                         class="badge-pill badge-default">v</span>
+                                </span>
+                                </li>
+                                <li>
+                                    <a @click="CopyToSelectedTask" href="javascript:void(0)">
+                                        <img :src="baseUrl+'/img/task-icon/copy-to.png'" class="contex-menu-icon">
+                                        Copy Selected To
+                                    </a>
+                                    <span class="contex-menu-sortcut">
+                                   <span class="badge-pill badge-default">Ctrl</span>+<span
+                                        class="badge-pill badge-default">T</span>
                                 </span>
                                 </li>
                                 <li>
@@ -899,7 +923,7 @@
                 newEmptyTaskID: null,
                 multiple_list: null,
                 list: {
-                    id : null,
+                    id: null,
                     name: null,
                     description: null,
                     nav_id: null,
@@ -939,28 +963,21 @@
         mounted() {
             let _this = this;
             this.projectId = this.$route.params.projectId;
-            // this.getTaskList();
-
-            $(document).ready(function () {
-                $('.searchList').hide();
-                $('.SubmitButton').hide();
-                $('.submitdetails').hide();
-                // setTimeout(function () {
-                //     $('.delete-icon').hide();
-                // }, 1000);
-                if (localStorage.selected_nav !== undefined) {
-                    var session_data = JSON.parse(localStorage.selected_nav);
-                    if (session_data.type === 'list') {
-                        setTimeout(function () {
-                            $('#list' + session_data.list_id).click();
-                        }, 1000)
-                    } else {
-                        setTimeout(function () {
-                            $('.board' + session_data.list_id).click();
-                        }, 1000)
-                    }
+            $('.searchList').hide();
+            $('.SubmitButton').hide();
+            $('.submitdetails').hide();
+            if (localStorage.selected_nav !== undefined) {
+                var session_data = JSON.parse(localStorage.selected_nav);
+                if (session_data.type === 'list') {
+                    setTimeout(function () {
+                        $('#list' + session_data.list_id).click();
+                    }, 1000)
+                } else {
+                    setTimeout(function () {
+                        $('.board' + session_data.list_id).click();
+                    }, 1000)
                 }
-            });
+            }
         },
         created() {
             let _this = this;
@@ -972,7 +989,7 @@
                             setTimeout(function () {
                                 $('.confirm').click();
                                 swal.close()
-                            },100);
+                            }, 100);
                             _this.delete_popup = 0;
                             _this.selectedIds = [];
                         } else {
@@ -1445,6 +1462,9 @@
                 }
 
             },
+            CopyToSelectedTask : ()=>{
+                swal("Under Process!", "Working under process", "success");
+            },
             pastCopyAndCut() {
                 var _this = this;
                 var data = _this.selectedData;
@@ -1868,7 +1888,8 @@
                             .then(response => {
                                 if (response.status === 1) {
                                     _this.getTaskList();
-                                    swal("Complete!", "This task is added to complete", "success");
+                                    swal.close();
+                                    // swal("Complete!", "This task is added to complete", "success");
                                 } else if (response.status === 2) {
                                     swal("Sorry!", "The board dont have any 100% progress column !!", "warning");
                                 } else if (response.status === 0) {
@@ -2016,7 +2037,7 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.nav_T = response.success;
-                        console.log(response)
+                        // console.log(response)
                         setTimeout(() => {
                             $('#MoveTAsk').modal('show');
                         }, 200);
@@ -2235,7 +2256,6 @@
             },
 
             DeleteListOrBoard(data) {
-                console.log(data)
                 var type = data.type;
                 var action = data.action;
                 var _this = this;
@@ -2311,7 +2331,6 @@
             },
             get_T_Bttn() {
                 this.transferBtn = true;
-                console.log(this.selectedColumn)
             },
 
             getColumnAndConfirmButton() {
@@ -2320,7 +2339,7 @@
                     let data = {
                         'list_id': _this.selectedSubList
                     };
-                    console.log(data)
+
                     axios.post('/api/board-column', data)
                         .then(response => response.data)
                         .then(response => {
@@ -2489,7 +2508,7 @@
                 var postData = {
                     id: _this.empty_task_delete_flag
                 };
-                console.log(postData)
+
 
                 if ($("#" + _this.empty_task_delete_flag).val() !== undefined && $("#" + _this.empty_task_delete_flag).val().length <= 0) {
                     setTimeout(function () {
