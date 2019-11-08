@@ -2037,7 +2037,7 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.nav_T = response.success;
-                        console.log(response)
+                        // console.log(response)
                         setTimeout(() => {
                             $('#MoveTAsk').modal('show');
                         }, 200);
@@ -2256,7 +2256,6 @@
             },
 
             DeleteListOrBoard(data) {
-                console.log(data)
                 var type = data.type;
                 var action = data.action;
                 var _this = this;
@@ -2332,7 +2331,6 @@
             },
             get_T_Bttn() {
                 this.transferBtn = true;
-                console.log(this.selectedColumn)
             },
 
             getColumnAndConfirmButton() {
@@ -2341,7 +2339,7 @@
                     let data = {
                         'list_id': _this.selectedSubList
                     };
-                    console.log(data)
+
                     axios.post('/api/board-column', data)
                         .then(response => response.data)
                         .then(response => {
@@ -2510,7 +2508,7 @@
                 var postData = {
                     id: _this.empty_task_delete_flag
                 };
-                console.log(postData)
+
 
                 if ($("#" + _this.empty_task_delete_flag).val() !== undefined && $("#" + _this.empty_task_delete_flag).val().length <= 0) {
                     setTimeout(function () {

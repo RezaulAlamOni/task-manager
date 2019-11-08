@@ -148,9 +148,10 @@ class MultipleListController extends Controller
             ->orderBy('sort_id', 'ASC')
             ->get();
         $data = $this->Task_Controller->decorateData($tasks);
-
+//        dd($data);
 //        return view('TaskListPdf',['list'=>$multiple_list,'tasks'=>$data]);
         $pdf = PDF::loadView('TaskListPdf',['list'=>$multiple_list,'tasks'=>$data]);
         return $pdf->download($multiple_list->list_title.'.pdf');
+//        return $pdf->save(public_path('pdf/abc.pdf'))->stream('download.pdf');
     }
 }
