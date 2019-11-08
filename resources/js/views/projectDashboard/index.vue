@@ -384,12 +384,12 @@
                                        v-if="selectedData.text !== 'Dont Forget Section'"
                                        @click="copyTask"
                                        data-toggle="dropdown">
-                                        <img :src="baseUrl+'/img/task-icon/copy.png'" class="contex-menu-icon">
+                                        <img :src="baseUrl+'/img/task-icon/copy-1.png'" class="contex-menu-icon">
                                         Copy </a>
                                     <a href="javascript:void(0)" class="dropdown-toggle-split disabled" v-else
                                        style="color: gray"
                                        data-toggle="dropdown">
-                                        <img :src="baseUrl+'/img/task-icon/copy.png'" class="contex-menu-icon">
+                                        <img :src="baseUrl+'/img/task-icon/copy-1.png'" class="contex-menu-icon">
                                         Copy </a>
 
                                     <span class="contex-menu-sortcut">
@@ -432,6 +432,16 @@
                                     <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+<span
                                         class="badge-pill badge-default">v</span>
+                                </span>
+                                </li>
+                                <li>
+                                    <a @click="CopyToSelectedTask" href="javascript:void(0)">
+                                        <img :src="baseUrl+'/img/task-icon/copy-to.png'" class="contex-menu-icon">
+                                        Copy Selected To
+                                    </a>
+                                    <span class="contex-menu-sortcut">
+                                   <span class="badge-pill badge-default">Ctrl</span>+<span
+                                        class="badge-pill badge-default">T</span>
                                 </span>
                                 </li>
                                 <li>
@@ -1452,6 +1462,9 @@
                 }
 
             },
+            CopyToSelectedTask : ()=>{
+                swal("Under Process!", "Working under process", "success");
+            },
             pastCopyAndCut() {
                 var _this = this;
                 var data = _this.selectedData;
@@ -1875,7 +1888,8 @@
                             .then(response => {
                                 if (response.status === 1) {
                                     _this.getTaskList();
-                                    swal("Complete!", "This task is added to complete", "success");
+                                    swal.close();
+                                    // swal("Complete!", "This task is added to complete", "success");
                                 } else if (response.status === 2) {
                                     swal("Sorry!", "The board dont have any 100% progress column !!", "warning");
                                 } else if (response.status === 0) {
