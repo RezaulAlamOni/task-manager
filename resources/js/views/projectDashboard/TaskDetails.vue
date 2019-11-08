@@ -149,7 +149,6 @@
                                       class="form-control commentInput"
                                       data-grow="auto"
                                       placeholder="Add comment">
-
                             </textarea>
 
                             <div class="SubmitButton" id="SubmitButton">
