@@ -97,4 +97,15 @@ class Task extends Model
     {
         return $this->hasMany(self::class, 'parent_id', 'id')->with('child');
     }
+
+    public function column()
+    {
+        return $this->hasOne(self::class, 'id', 'board_parent_id')->with('MultipleBord');
+    }
+  
+    public function MultipleBord()
+    {
+        return $this->hasOne(Multiple_board::class, 'id', 'multiple_board_id');
+    }
+
 }

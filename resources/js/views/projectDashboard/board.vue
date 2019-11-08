@@ -27,7 +27,7 @@
                                         </div>
                                         <div class="col-md-5 " style="margin: 0px; padding : 0px;" >
                                             <span class="col_name" style="word-wrap: break-word;" :title="column.name" data-placement="bottom" data-toggle="tooltip">
-                                                {{ (column.name && column.name.length > 35)? column.name.substring(0,35)+" ..." : column.name }} 
+                                                {{ (column.name && column.name.length > 35)? column.name.substring(0,35)+" ..." : column.name }}
                                             </span>
                                         </div>
                                         <div class="col-md-2" style="margin: 0px; padding : 0px;">
@@ -143,6 +143,7 @@
                                                 class="inp input-hide text-area autoExpand"
                                                 data-grow="auto" style="padding: 10px !important;"
                                                 v-if="card.textareaShow === true" >{{ card.data }}</textarea>
+
                                             <!--  -->
                                             <!-- <div v-if="card.textareaShow === false" @click="showHideTextarea(index, key, card)">{{ card.data }}</div> -->
                                             <div v-if="card.textareaShow === false" @click="card.textareaShow = true;showHideTextarea('#id'+index+key)">{{ card.data }}</div>
@@ -180,7 +181,7 @@
                                                         <img src="https://img.icons8.com/color/48/000000/delete-forever.png" class="icon-image-preview">
                                                     </a>
                                                 </div>
-                                                
+
                                                 <div style="float: left;">
                                                     <a class="user dropdown-hide-with-remove-icon">
                                                         <template v-if="card.assigned_user.length > 0">
@@ -266,7 +267,7 @@
                                                         </div>
                                                     </a>
                                                 </div>
-                                            
+
                                                 <div>
                                                     <a :class="{'tag-icon': true, 'tag-icon-free': card.tags == undefined || card.tags.length == 0}">
                                                         <div v-if="card.tags && card.tags.length !== 0">
@@ -377,7 +378,7 @@
                                                     <!-- #30 -->
                                                     {{ card.child }}
                                                 </strong> </div>
-                                            </div> 
+                                            </div>
                                         </div>
                                     </Draggable>
                                 </Container>
@@ -775,7 +776,7 @@
                                 </select>
                             </div>
                         </div>
-                        <!-- <ul class="list-group list-group-flush"> -->
+                         <ul class="list-group list-group-flush">
                             <div v-if="tree4data.length > 0">
                                 <label class="checkbox_cus_mini">
                                     <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All
@@ -902,7 +903,7 @@
                 </div>
             </div>
         </div>
-        <div class="details" id="details">
+        <div class="details" id="details" v-click-outside="HideDetails">
             <TaskDetails
                 :selectedData="selectedData"
                 :task_logs="task_logs"
@@ -1007,7 +1008,7 @@
         mounted() {
             var _this = this;
             $('#header-item').text('Project  / Task Board');
-            
+
             $(document)
             .one('focus.autoExpand', 'textarea.autoExpand', function(){
                 var savedValue = this.value;
@@ -1556,7 +1557,7 @@
                         this.linkBtn = true;
                     } else {
                         swal('Warning!!','That list is already linked. Need to unlink first','warning');
-                    } 
+                    }
                     // _this.getBoardTask();
                     // console.log('added');
                 })

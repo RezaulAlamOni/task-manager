@@ -6,6 +6,7 @@ use App\Multiple_board;
 use App\Multiple_list;
 use App\Project;
 use App\Task;
+use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -137,14 +138,11 @@ class MultipleListController extends Controller
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param Multiple_list $multiple_list
-     * @return Response
-     */
-    public function destroy(Multiple_list $multiple_list)
+    public function ListPdfCreate($id)
     {
-        //
+        return view('TaskListPdf');
+        $pdf = PDF::loadView('TaskListPdf');
+
+        return $pdf->download('disney.pdf');
     }
 }
