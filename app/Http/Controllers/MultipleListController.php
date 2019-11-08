@@ -138,11 +138,20 @@ class MultipleListController extends Controller
     }
 
 
-    public function ListPdfCreate($id)
+    public function ListPdfCreate($list_id)
     {
-        return view('TaskListPdf');
-        $pdf = PDF::loadView('TaskListPdf');
+        $multiple_list = Multiple_list::findOrFail($list_id);
 
-        return $pdf->download('disney.pdf');
+        $tasks = Task::where('parent_id', 0)
+            ->where('project_id', $multiple_list->project_id)
+            ->where('list_id', $list_id)
+            ->orderBy('sort_id', 'ASC')
+            ->get();
+        $data = $this->Task_Controller->decorateData($tasks);
+//        dd($data);
+//        return view('TaskListPdf',['list'=>$multiple_list,'tasks'=>$data]);
+        $pdf = PDF::loadView('TaskListPdf',['list'=>$multiple_list,'tasks'=>$data]);
+        return $pdf->download($multiple_list->list_title.'.pdf');
+//        return $pdf->save(public_path('pdf/abc.pdf'))->stream('download.pdf');
     }
 }
