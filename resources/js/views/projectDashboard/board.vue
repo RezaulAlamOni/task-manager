@@ -371,7 +371,7 @@
 
                                                     </a>
                                                 </div>
-                                                <div class="total-child" style="bottom: 15px; " v-if="card.child > 0"> <strong> 
+                                                <div class="total-child" style="bottom: 15px; " v-if="card.child > 0"> <strong>
                                                     <!-- {{ JSON.stringify(card) }} -->
                                                     <!-- {{  }} -->
                                                         <!-- console.log(str.match(new RegExp('cardId','gi')).length);     -->
@@ -893,7 +893,7 @@
                                     </ul>
                                 </li>
                             </div>
-                        <!-- </ul> -->
+                         </ul>
                     </div>
                     <div class="modal-footer">
                         <!-- {{ selectedExistedTask }} -->

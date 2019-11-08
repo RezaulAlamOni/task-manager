@@ -672,6 +672,10 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
+.board-card-details {
+    height: calc(100vh - 103px);
+    overflow-y: hidden;
+}
 
 .boardView {
     width: 100%;
@@ -684,7 +688,9 @@
 }
 
 #col10 {
-    height: calc(100vh - 187px)
+    //height: calc(100vh - 187px);
+    height: calc(100vh - 104px);
+    overflow-y: hidden;
 }
 
 .wrapper {
@@ -694,7 +700,7 @@
 .searchList {
     float: right;
     position: absolute;
-    right: 434px;
+    right: 374px;
     top: 7px;
     @include transition(all 0.2s linear);
 }

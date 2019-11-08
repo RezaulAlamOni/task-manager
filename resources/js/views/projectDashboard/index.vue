@@ -73,15 +73,27 @@
         <div class="col-md-8 text-center pt-5" v-else-if="AllNavItems !== null && list.type === null">
             <h2 style="color: #d1a894">Select Task View.</h2>
         </div>
-        <div class="list-task-details">
-            <div style="padding-left: 5%">
-                <div class="col-12 action-task">
+        <div :class="(list.type === 'list') ? 'list-task-details' : 'board-card-details'" v-if="list.type === 'list' || list.type === 'board'">
+
+            <div style="padding-left: 5%" v-if="list.type === 'list'">
+
+                <div class="col-12 action-task-list">
+                    <h2 class="p-t-10" v-if="list.type === 'list'">
+                        {{list.name}}
+                    </h2>
+                    <p class="compltit-p" v-if="list.type === 'list'">{{list.description}}</p>
+                </div>
+            </div>
+            <div style="padding-left: 2%" v-else-if="list.type === 'board'">
+                <div class="col-12 action-task" id="board_title">
                     <h2 class="p-t-10" v-if="list.type !== null">
                         {{list.name}}
                     </h2>
                     <p class="compltit-p" v-if="list.description != null">{{list.description}}</p>
                 </div>
             </div>
+
+
             <!--        //tree view component section-->
             <div class="TaskListAndDetails container-fluid" v-if="list.type === 'list'" id="TaskListAndDetails">
                 <div class="task_width" id="task_width">
@@ -115,13 +127,15 @@
 
                                     <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28" width="28"
                                          v-if="data.progress === '100'"
-                                         :title="(data.complete_tooltip !== null) ? data.complete_tooltip : 'Complete'" data-toggle="tooltip"
+                                         :title="(data.complete_tooltip !== null) ? data.complete_tooltip : 'Complete'"
+                                         data-toggle="tooltip"
                                          class="task-complete left-content li-opacity ">
 
                                     <img :src="baseUrl+'/img/task-icon/circle-check.png'" alt="" height="28" width="28"
                                          v-else
                                          @click="addTaskToComplete(data)"
-                                         :title="(data.complete_tooltip !== '') ? data.complete_tooltip : 'Complete'" data-toggle="tooltip"
+                                         :title="(data.complete_tooltip !== '') ? data.complete_tooltip : 'Complete'"
+                                         data-toggle="tooltip"
                                          class="task-complete left-content li-opacity">
                                 </span>
 
@@ -899,7 +913,7 @@
                 newEmptyTaskID: null,
                 multiple_list: null,
                 list: {
-                    id : null,
+                    id: null,
                     name: null,
                     description: null,
                     nav_id: null,
@@ -939,28 +953,21 @@
         mounted() {
             let _this = this;
             this.projectId = this.$route.params.projectId;
-            // this.getTaskList();
-
-            $(document).ready(function () {
-                $('.searchList').hide();
-                $('.SubmitButton').hide();
-                $('.submitdetails').hide();
-                // setTimeout(function () {
-                //     $('.delete-icon').hide();
-                // }, 1000);
-                if (localStorage.selected_nav !== undefined) {
-                    var session_data = JSON.parse(localStorage.selected_nav);
-                    if (session_data.type === 'list') {
-                        setTimeout(function () {
-                            $('#list' + session_data.list_id).click();
-                        }, 1000)
-                    } else {
-                        setTimeout(function () {
-                            $('.board' + session_data.list_id).click();
-                        }, 1000)
-                    }
+            $('.searchList').hide();
+            $('.SubmitButton').hide();
+            $('.submitdetails').hide();
+            if (localStorage.selected_nav !== undefined) {
+                var session_data = JSON.parse(localStorage.selected_nav);
+                if (session_data.type === 'list') {
+                    setTimeout(function () {
+                        $('#list' + session_data.list_id).click();
+                    }, 1000)
+                } else {
+                    setTimeout(function () {
+                        $('.board' + session_data.list_id).click();
+                    }, 1000)
                 }
-            });
+            }
         },
         created() {
             let _this = this;
@@ -972,7 +979,7 @@
                             setTimeout(function () {
                                 $('.confirm').click();
                                 swal.close()
-                            },100);
+                            }, 100);
                             _this.delete_popup = 0;
                             _this.selectedIds = [];
                         } else {
