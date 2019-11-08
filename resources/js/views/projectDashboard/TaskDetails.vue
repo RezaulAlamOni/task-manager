@@ -166,27 +166,26 @@
             <div aria-labelledby="profile-tab" class="tab-pane" id="profile" role="tabpanel">
                 <span>
                     <div class="log-data">
-                        <h3 class="p-3">Log data for <b>{{selectedData.text}}</b></h3>
+                        <h3 class="p-3"> Log data for <b>{{selectedData.text}}</b></h3>
                         <div class="task-log">
                             <table class="table table-striped table-bordered">
-                            <thead>
-                            <tr>
-                              <th scope="col">Title</th>
-                              <th scope="col">Log Type</th>
-                              <th scope="col">Action Type</th>
-                              <th scope="col">Action At</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                              <tr v-for="log in task_logs">
-                                  <td>{{log.title}}</td>
-                                  <td>{{log.log_type}}</td>
-                                  <td>{{log.action_type}}</td>
-                                  <td>{{log.action_at}}</td>
-                            </tr>
-
-                          </tbody>
-                        </table>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Log Type</th>
+                                        <th scope="col">Action Type</th>
+                                        <th scope="col">Action At</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="log in task_logs">
+                                        <td>{{log.title}}</td>
+                                        <td>{{log.log_type}}</td>
+                                        <td>{{log.action_type}}</td>
+                                        <td>{{log.action_at}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
 
                     </div>

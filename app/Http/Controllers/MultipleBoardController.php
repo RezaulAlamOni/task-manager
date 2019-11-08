@@ -23,6 +23,7 @@ class MultipleBoardController extends Controller
     protected $actionLog;
     protected $dont_forget_tag;
     protected $totalChild = 0;
+    protected $childIds = [];
 
     public function __construct()
     {
@@ -40,6 +41,7 @@ class MultipleBoardController extends Controller
                 ->where('project_id', $request->projectId)
                 // ->where('nav_id', $request->nav_id)
                 ->where('multiple_board_id', $request->board_id)
+                ->orderby('sort_id', 'ASC')
                 ->orderby('board_sort_id', 'ASC')
                 ->get();
         $team_id = Auth::user()->current_team_id;
@@ -217,10 +219,18 @@ class MultipleBoardController extends Controller
     public function changeParentId(Request $request)
     {
         //  $request->all();
-         $parent = Task::find($request->board_parent_id);
-         $update = Task::where('id',$request->id)
-                    ->where('board_parent_id',"!=",0)
-                    ->orwhere('parent_id', $request->id)
+        $parent = Task::find($request->board_parent_id);
+        $data = Task::where('id',$request->id)
+                        ->with('childTask')
+                        ->get();
+        $ids[] = $request->id;
+        foreach ($data as $childs) {
+            if (count($childs['childTask']) > 0) {
+                $ids = $this->recurChildIds($childs);
+            }
+        }
+        $update = Task::where('board_parent_id',"!=",0)
+                    ->whereIn('id', $ids)
                     ->update([
                         'board_parent_id' => $request->board_parent_id,
                         'progress'=> $parent->progress
@@ -230,6 +240,17 @@ class MultipleBoardController extends Controller
             return response()->json(['success' => true, 'data' => $update]);
         }
         return response()->json(['success' => false]);
+    }
+
+    public function recurChildIds($child)
+    {
+        $this->childIds[] = $child['id'];
+        if(count($child['childTask']) > 0){
+            foreach ($child['childTask'] as $key => $value) {
+                $this->recurChildIds($value);
+            }
+        }
+        return $this->childIds;
     }
 
     public function cardEdit($id, Request $request)
