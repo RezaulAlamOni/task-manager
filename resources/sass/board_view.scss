@@ -474,3 +474,9 @@
   .disabledTask {
     opacity: 0.3;
   }
+
+
+.tags-log {
+    max-height: 660px;
+    overflow-y: auto;
+}

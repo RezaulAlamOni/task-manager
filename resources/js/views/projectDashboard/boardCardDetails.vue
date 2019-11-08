@@ -252,6 +252,10 @@
                         <a aria-controls="profile" aria-selected="false" class="nav-link" data-toggle="tab" href="#profile"
                            id="_log" role="tab">Logs</a>
                     </li>
+                    <li class="nav-item">
+                        <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
+                           id="_child" role="tab">Child</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -332,26 +336,35 @@
                 <span>
                     <div class="log-data">
                         <h3 class="p-3">Log data for <b>{{selectedData.text}}</b></h3>
-                        <table class="table table-striped table-bordered">
-                            <thead>
-                            <tr>
-                              <th scope="col">Title</th>
-                              <th scope="col">Log Type</th>
-                              <th scope="col">Action Type</th>
-                              <th scope="col">Action At</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                              <tr v-for="log in task_logs">
-                                  <td>{{log.title}}</td>
-                                  <td>{{log.log_type}}</td>
-                                  <td>{{log.action_type}}</td>
-                                  <td>{{log.action_at}}</td>
-                            </tr>
-
-                          </tbody>
-                        </table>
+                        <div class="tags-log">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Log Type</th>
+                                        <th scope="col">Action Type</th>
+                                        <th scope="col">Action At</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="log in task_logs">
+                                        <td>{{log.title}}</td>
+                                        <td>{{log.log_type}}</td>
+                                        <td>{{log.action_type}}</td>
+                                        <td>{{log.action_at}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                </span>
+
+            </div>
+            <div aria-labelledby="child-tab" class="tab-pane" id="child" role="tabpanel">
+                <span>
+                    <!-- <div class="log-data" style="border: solid gray 1px;">
+                                        
+                    </div> -->
                 </span>
 
             </div>

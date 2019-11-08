@@ -30,11 +30,11 @@
                                                 {{ (column.name && column.name.length > 35)? column.name.substring(0,35)+" ..." : column.name }}
                                             </span>
                                         </div>
-                                        <div class="col-md-2" style="margin: 0px; padding : 0px;">
+                                        <div class="col-md-2">
                                             <span class="total-task">{{column.children.length}}</span>
                                         </div>
                                         <div class="col-md-2">
-                                            <span class="pull-right" style="display: inline-flex;">
+                                            <span  style="display: inline-flex;">
                                                 <!-- <span>
                                                     <span class="dropdown-toggle-split  opacity"
                                                         data-toggle="dropdown">
@@ -371,7 +371,7 @@
 
                                                     </a>
                                                 </div>
-                                                <div class="total-child" style="bottom: 15px; " v-if="card.child > 0"> <strong> 
+                                                <div class="total-child" style="bottom: 12px; position: absolute; right: 11px;" v-if="card.child > 0"> <strong> 
                                                     <!-- {{ JSON.stringify(card) }} -->
                                                     <!-- {{  }} -->
                                                         <!-- console.log(str.match(new RegExp('cardId','gi')).length);     -->
@@ -893,7 +893,7 @@
                                     </ul>
                                 </li>
                             </div>
-                        <!-- </ul> -->
+                        </ul>
                     </div>
                     <div class="modal-footer">
                         <!-- {{ selectedExistedTask }} -->
