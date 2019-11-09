@@ -391,7 +391,7 @@ class TaskController extends Controller
                 'list_id' => $target_list_id,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
-                'title' => $past->title . ' -copy',
+                'title' => $past->title,
                 'date' => $past->date,
                 'created_at' => Carbon::now(),
             ];
