@@ -32,6 +32,7 @@ class TaskController extends Controller
         $this->dont_forget_tag = 'Dont Forget';
         $this->middleware('auth');
     }
+
     public function decorateData($obj)
     {
 
@@ -61,7 +62,7 @@ class TaskController extends Controller
             $tagTooltip = '';
             if (!empty($allTags) && $allTags->count() > 0) {
                 foreach ($allTags as $key => $tag) {
-                    if (!empty($tag->tag)){
+                    if (!empty($tag->tag)) {
                         $infoTags[] = array(
                             'assign_id' => $tag->id,
                             'id' => $tag->tag->id,
@@ -76,11 +77,11 @@ class TaskController extends Controller
             }
             $info['tags'] = $infoTags;
             $info['tagTooltip'] = $tagTooltip;
-            $info['complete_tooltip'] =($task->column != null) ? '#Board : '.$task->column->MultipleBord->board_title." #Column : ".$task->column->title : '';
+            $info['complete_tooltip'] = ($task->column != null) ? '#Board : ' . $task->column->MultipleBord->board_title . " #Column : " . $task->column->title : '';
             $info['description'] = $task->description;
             $info['files'] = $task->files;
             $info['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id', 'users.id')
-                                    ->where('task_id', $task->id)->get()->toArray();
+                ->where('task_id', $task->id)->get()->toArray();
             $assigned_user_ids = [];
             foreach ($info['assigned_user'] as $id) {
                 $assigned_user_ids[] = $id['id'];
@@ -90,7 +91,7 @@ class TaskController extends Controller
             $team_id = Auth::user()->current_team_id;
             $info['users'] = User::join('team_users', 'team_users.user_id', 'users.id')
                 ->where('team_users.team_id', $team_id)->get()->toArray();
-            $info['existing_tags'] = Tags::where('team_id', $team_id)->where('title','!=', $this->dont_forget_tag)
+            $info['existing_tags'] = Tags::where('team_id', $team_id)->where('title', '!=', $this->dont_forget_tag)
                 ->get()->toArray();
 
             $childrens = Task::where('parent_id', $task->id)
@@ -226,7 +227,7 @@ class TaskController extends Controller
                 if ($link) {
 
                     $data['board_parent_id'] = $link->task_list_id;
-                    $progress = Task::where('id',$link->task_list_id)->first();
+                    $progress = Task::where('id', $link->task_list_id)->first();
                     $data['progress'] = $progress->progress;
                     $data['multiple_board_id'] = $progress->multiple_board_id;
                 }
@@ -275,7 +276,7 @@ class TaskController extends Controller
             if ($task) {
                 $taskSortId = Task::where('parent_id', $task->id)->max('sort_id');
                 $sort_id = ($taskSortId > 0) ? $taskSortId + 1 : 1;
-                $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => $sort_id,'title'=>$request->text]);
+                $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => $sort_id, 'title' => $request->text]);
 
                 $this->updateTagWithDataMove($request->id, $task->id);
                 $this->createLog($request->id, 'updated', 'Update parent', $request->text);
@@ -332,7 +333,7 @@ class TaskController extends Controller
                     ->where('sort_id', '>', $task->sort_id)
                     ->increment('sort_id');
                 $sort_id = ($task->sort_id < 0) ? 1 : $task->sort_id + 1;
-                Task::where('id', $request->id)->update(['parent_id' => $task->parent_id, 'sort_id' => $sort_id,'title'=>$request->text]);
+                Task::where('id', $request->id)->update(['parent_id' => $task->parent_id, 'sort_id' => $sort_id, 'title' => $request->text]);
 
                 $this->updateTagWithDataMove($request->id, $task->parent_id);
                 $this->createLog($request->id, 'updated', 'Update parent', $request->text);
@@ -349,7 +350,7 @@ class TaskController extends Controller
             $target_id = $request->target_id;
             $copy_ids = $request->copy_ids;
             foreach ($copy_ids as $copy_id) {
-                $target_id = $this->CopayPast($target_id,$copy_id);
+                $target_id = $this->CopayPast($target_id, $copy_id);
             }
             return response()->json(['success' => $target_id]);
 
@@ -372,7 +373,54 @@ class TaskController extends Controller
         }
     }
 
-    function CopayPast($target_id , $copy_id ){
+    public function CopyPastMultipleTaskToAnotherList(Request $request)
+    {
+        $task_ids = $request->task_ids;
+        $target_nav_id = $request->nav_id;
+        $target_list_id = $request->list_id;
+
+        $target_list_sort_id = Task::where(['list_id' => $target_list_id])->orderBy('sort_id', 'desc')->first();
+        $sort_id = $target_list_sort_id->sort_id;
+        foreach ($task_ids as $id) {
+            $past = Task::where('id', $id)->with('List')->first();
+
+            $data = [
+                'sort_id' => $sort_id + 1,
+                'parent_id' => 0,
+                'project_id' => $past->project_id,
+                'list_id' => $target_list_id,
+                'created_by' => Auth::id(),
+                'updated_by' => Auth::id(),
+                'title' => $past->title,
+                'date' => $past->date,
+                'created_at' => Carbon::now(),
+            ];
+            $task = Task::create($data);
+            $task = Task::where('id', $task->id)->with('List')->first();
+
+            $this->createLog($task->id, 'copy', 'Copy task from '.$past->List->list_title.' to '.$task->List->list_title, $task->title);
+        }
+        return response()->json([$task]);
+
+//        $data = [
+//            'sort_id' => $target->sort_id + 1,
+//            'parent_id' => $target->parent_id,
+//            'project_id' => $past->project_id,
+//            'list_id' => $past->list_id,
+//            'created_by' => Auth::id(),
+//            'updated_by' => Auth::id(),
+//            'title' => $past->title . ' -copy',
+//            'date' => $past->date,
+//            'created_at' => Carbon::now(),
+//        ];
+//        $task = Task::create($data);
+//        $this->updateTagWithDataMove($task->id, $target->parent_id);
+//        $this->createLog($task->id, 'copy', 'Copy', $task->title);
+
+    }
+
+    function CopayPast($target_id, $copy_id)
+    {
 
         $target = Task::where('id', $target_id)->first();
         $past = Task::where('id', $copy_id)->first();
@@ -432,7 +480,7 @@ class TaskController extends Controller
             return response()->json(['success' => 1]);
         } else if (isset($request->type) && $request->type == 'tag') {
             $ids = $request->ids;
-            $tag_id =  $request->value;
+            $tag_id = $request->value;
             foreach ($ids as $id) {
                 $check_assign = AssignTag::where(['task_id' => $id, 'tag_id' => $tag_id])->get();
                 if ($check_assign->count() <= 0) {
@@ -561,9 +609,10 @@ class TaskController extends Controller
         return response()->json(['success' => 1]);
     }
 
-    public function deleteEmptyTask(Request $request){
+    public function deleteEmptyTask(Request $request)
+    {
         $this->deleteTaskWithChild($request->id);
-        return response()->json(['success'=>1,'id'=>$request->id]);
+        return response()->json(['success' => 1, 'id' => $request->id]);
 
     }
 
@@ -575,16 +624,16 @@ class TaskController extends Controller
             }
         } elseif (isset($request->complete)) {
             $find = Task::find($request->id);
-            if ($find->board_parent_id != null){
-                $board_parent = Task::where(['board_parent_id'=>0,'progress'=>100,'multiple_board_id'=>$find->multiple_board_id])->first();
-                if ($board_parent){
-                    Task::where('id', $request->id)->update(['progress' => $board_parent->progress,'board_parent_id'=>$board_parent->id]);
-                    return response()->json(['status'=>1]);
-                }else{
-                    return response()->json(['status'=>2]);
+            if ($find->board_parent_id != null) {
+                $board_parent = Task::where(['board_parent_id' => 0, 'progress' => 100, 'multiple_board_id' => $find->multiple_board_id])->first();
+                if ($board_parent) {
+                    Task::where('id', $request->id)->update(['progress' => $board_parent->progress, 'board_parent_id' => $board_parent->id]);
+                    return response()->json(['status' => 1]);
+                } else {
+                    return response()->json(['status' => 2]);
                 }
             } else {
-                return response()->json(['status'=>0]);
+                return response()->json(['status' => 0]);
             }
         } elseif (isset($request->date)) {
             if (Task::where('id', $request->id)->update(['date' => $request->date])) {
@@ -592,16 +641,16 @@ class TaskController extends Controller
             }
         } elseif (isset($request->text)) {
             $check_is_empty = Task::where('id', $request->id)->first();
-            if (empty($check_is_empty->title)){
+            if (empty($check_is_empty->title)) {
                 $empty = true;
-            }else{
+            } else {
                 $empty = false;
             }
-            ($request->text == null ) ? $title = '' : $title = $request->text;
+            ($request->text == null) ? $title = '' : $title = $request->text;
             if (Task::where('id', $request->id)->update(['title' => $title])) {
-                return response()->json(['success'=>1, 'empty' => $empty]);
-            }else{
-                return response()->json(['success'=>0, 'empty' => $empty]);
+                return response()->json(['success' => 1, 'empty' => $empty]);
+            } else {
+                return response()->json(['success' => 0, 'empty' => $empty]);
             }
 
         } elseif (isset($request->open)) {
@@ -613,7 +662,7 @@ class TaskController extends Controller
             $task_id = $request->id;
             $photo = $_FILES['file']['name'];
 
-            if (move_uploaded_file($_FILES["file"]["tmp_name"], public_path()."/images/" . $_FILES['file']['name'])) {
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], public_path() . "/images/" . $_FILES['file']['name'])) {
                 $file = [
                     'file_name' => $photo,
                     'tasks_id' => $task_id,

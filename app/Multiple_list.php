@@ -34,4 +34,7 @@ class Multiple_list extends Model
     {
         return $this->hasOne(LinkListToColumn::class, 'task_list_id', 'id');
     }
+    public function tasks(){
+        return $this->hasMany('App\Task', 'list_id', 'id');
+    }
 }
