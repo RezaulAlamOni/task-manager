@@ -41,7 +41,7 @@ class Task extends Model
 
     public function List()
     {
-        return $this->belongsTo('App\Multiple_list', 'id', 'list_id');
+        return $this->belongsTo('App\Multiple_list', 'list_id', 'id');
     }
 
     public function existingTaskInBoard()
@@ -102,10 +102,11 @@ class Task extends Model
     {
         return $this->hasOne(self::class, 'id', 'board_parent_id')->with('MultipleBord');
     }
-  
+
     public function MultipleBord()
     {
         return $this->hasOne(Multiple_board::class, 'id', 'multiple_board_id');
     }
+
 
 }

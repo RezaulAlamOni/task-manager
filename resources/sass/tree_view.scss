@@ -675,6 +675,8 @@
 .board-card-details {
     height: calc(100vh - 103px);
     overflow-y: hidden;
+    padding-top: 5px;
+    @include transition(all 0.4s linear);
 }
 
 .boardView {

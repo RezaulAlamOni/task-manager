@@ -761,6 +761,7 @@
                 </div>
             </div>
         </div>
+
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="MoveTAsk"
              role="dialog"
              tabindex="-1">
@@ -817,6 +818,58 @@
                     <div class="modal-footer">
                         <button v-if="transferBtn" aria-label="Close" @click="MoveTaskToListOrBoard"
                                 class="btn btn-warning" data-dismiss="modal" type="button">Move Selected
+                        </button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="CopyTaskTo"
+             role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h4 class="text-center ">Select List To Past Selected Task</h4>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Select List Nav </label>
+                            <div class="col-sm-8">
+                                <select @change="showSubList_T" class="form-control" v-model="selectedListNav">
+                                    <option disabled value="Select list Nav">
+                                        Select List Nav
+                                    </option>
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav_T" v-if="navs.type === 'list'">
+                                        {{navs.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" v-if="list_T.length > 0">
+                            <label class="col-sm-4 col-form-label">Select Board or List:</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" v-model="selectedSubList"
+                                        @change="get_T_Bttn()">
+                                    <option disabled value="Select list">Select
+                                        Board or List
+                                    </option>
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T"
+                                            :disabled="((navList.id !== list_id) ? false : true)">
+                                        <span>{{navList.list_title}}</span>
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button v-if="transferBtn" aria-label="Close" @click="PastTaskToList"
+                                class="btn btn-warning" data-dismiss="modal" type="button">Past Selected
                         </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
@@ -1033,7 +1086,6 @@
                         }
                         break;
                     case "ctrl+a":
-                        console.log('CLTR+A');
                         break;
                     case "ctrl+c":
                         _this.copyTask();
@@ -1462,8 +1514,35 @@
                 }
 
             },
-            CopyToSelectedTask : ()=>{
-                swal("Under Process!", "Working under process", "success");
+
+            CopyToSelectedTask(){
+
+                var _this = this;
+                var postData = {
+                    ids: _this.selectedIds,
+                };
+                $('.jquery-accordion-menu').hide();
+                _this.list_T = [];
+                _this.nav_T = [];
+                _this.column_T = [];
+                _this.column = "Select Column";
+                _this.selectedListNav = 'Select list Nav';
+                _this.transferBtn = false;
+
+                axios.get('/api/nav-item/' + _this.projectId)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.nav_T = response.success;
+                        console.log(response)
+                        setTimeout(() => {
+                            $('#CopyTaskTo').modal('show');
+                        }, 200);
+                    })
+                    .catch(error => {
+
+                    });
+
+                // swal("Under Process!", "Working under process", "success");
             },
             pastCopyAndCut() {
                 var _this = this;
@@ -2020,7 +2099,6 @@
                 }, 500)
             },
             MoveSelectedTask() {
-
                 var _this = this;
                 var postData = {
                     ids: _this.selectedIds,
@@ -2399,6 +2477,40 @@
                             nav: _this.selectedListNav,
                             target: _this.selectedSubList,
                             column_id: _this.selectedColumn
+                        })
+                            .then(response => response.data)
+                            .then(response => {
+                                // swal("Complete!", "All Selected task are moved !", "success");
+                                swal.close();
+                                _this.getTaskList()
+                            })
+                            .catch(error => {
+                                console.log('Add list api not working!!')
+                            });
+
+                    });
+            },
+            PastTaskToList() {
+                var _this = this;
+                console.log({
+                    task_ids: _this.selectedIds,
+                    nav_id: _this.selectedListNav,
+                    list_id: _this.selectedSubList
+                });
+                swal({
+                        title: "Are you sure?",
+                        text: "You want to past selected task ?!!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes Past",
+                        closeOnConfirm: false
+                    },
+                    function () {
+                        axios.post('/api/selected-multiple-task-past-to-another-list', {
+                            task_ids: _this.selectedIds,
+                            nav_id: _this.selectedListNav,
+                            list_id: _this.selectedSubList
                         })
                             .then(response => response.data)
                             .then(response => {
