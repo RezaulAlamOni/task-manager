@@ -10,6 +10,9 @@ touch ./storage/logs/laravel.log
 
 cp /root/configs/compltit.net/spark.env /var/www/html/spark/.env
 
+cd /var/www/html/spark/public/
+ln -s /var/www/html/storage/uploads/ storage
+cd ..
 chmod -R ug+rwx ./storage ./bootstrap/cache
 
 cd vendor/laravel
