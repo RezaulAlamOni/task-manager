@@ -312,9 +312,9 @@ class TaskController extends Controller
                     AssignTag::create(['task_id' => $task_id, 'tag_id' => $tag_ids->id]);
                 }
             }
-            $childrens = Task::where('parent_id', $task_id)->get();
-            foreach ($childrens as $children) {
-                $this->updateTagWithDataMove($children->id, $task_id);
+            $children = Task::where('parent_id', $task_id)->get();
+            foreach ($children as $child) {
+                $this->updateTagWithDataMove($child->id, $task_id);
             }
         }
     }
