@@ -10,7 +10,7 @@
                         users.</p>
                 </div>
             </section>
-            <div class="row">
+            <div class="row" >
                 <div class="col-md-12">
                     <div class="card card-default border-primary">
                         <div class="card-header bg-primary text-white">
@@ -85,7 +85,7 @@
                 </div>
             </div>
         </div>
-        <div class="container rules-create">
+        <div class="container rules-create" v-if="rules_action === 'updated'">
             <section>
                 <div class="container-header">
                     <h2><i class="fa fa-fw fa-magic"></i> Rules For [[Project Name Here]]
