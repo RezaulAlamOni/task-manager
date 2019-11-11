@@ -111,7 +111,7 @@
                                     </span>
                                     <div class="dropdown-divider"></div>
                                     <h6 class="dropdown-header text-uppercase">Manage Rules</h6>
-                                    <a class="dropdown-item" href="javascript:void(0)">
+                                    <a class="dropdown-item" href="javascript:void(0)" @click="CreateRule">
                                         <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
                                         Create Rules
                                     </a>
@@ -708,8 +708,18 @@
                     description: description,
                     type: type
                 })
-
             },
+            CreateRule() {
+                console.log('rules')
+                this.$emit('getList', {
+                    list_id: 0,
+                    nav_id: 0,
+                    title: 0,
+                    description: '',
+                    type: 'rules'
+                })
+            },
+
 
             AddNewList() {
                 this.list.project_id = this.projectId;
