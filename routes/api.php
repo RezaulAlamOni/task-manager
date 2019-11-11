@@ -83,4 +83,4 @@ Route::post('/column-sort', 'MultipleBoardController@columnSort');
 Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');
 Route::get('/card-delete/{id}','MultipleBoardController@cardDelete'); //delete card
 Route::get('/board-task-delete/{id}','MultipleBoardController@existingTaskDelete'); //delete card
-//Route::get('/testGet','MultipleBoardController@test'); //delete card
+Route::get('/testGet','MultipleBoardController@test'); //delete card

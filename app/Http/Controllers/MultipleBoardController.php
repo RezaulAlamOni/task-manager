@@ -41,13 +41,15 @@ class MultipleBoardController extends Controller
                 ->where('project_id', $request->projectId)
                 // ->where('nav_id', $request->nav_id)
                 ->where('multiple_board_id', $request->board_id)
-                ->orderby('sort_id', 'ASC')
                 ->orderby('board_sort_id', 'ASC')
+                ->orderby('parent_id', 'ASC')
+                // ->orderby('sort_id', 'ASC')
                 ->get();
         $team_id = Auth::user()->current_team_id;
         foreach ($board as $key => $value) {
             $keys = -1;
             $boards[$key]['id'] = $value['id'];
+            $boards[$key]['parent_id'] = $value['parent_id'];
             $boards[$key]['column'] = $value['title'];
             $boards[$key]['hidden'] = $value['hidden'];
             $boards[$key]['progress'] = $value['progress'];
@@ -101,7 +103,9 @@ class MultipleBoardController extends Controller
                         $boards[$key]['task'][$keys]['child'] = 0;
                     }
 
+                    $boards[$key]['task'][$keys]['children'] = $values['childTask'];
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
+                    $boards[$key]['task'][$keys]['parent_id'] = $values['parent_id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
                     $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
                     $boards[$key]['task'][$keys]['progress'] = $values['progress'];
@@ -220,6 +224,7 @@ class MultipleBoardController extends Controller
     {
         //  $request->all();
         $parent = Task::find($request->board_parent_id);
+        $parent_task = Task::find($request->id);
         $data = Task::where('id',$request->id)
                         ->with('childTask')
                         ->get();
@@ -228,10 +233,12 @@ class MultipleBoardController extends Controller
             if (count($childs['childTask']) > 0) {
                 $ids = $this->recurChildIds($childs);
             }
-        }
+        } 
+        // dd($data);
         $update = Task::where('board_parent_id',"!=",0)
                     ->whereIn('id', $ids)
                     ->update([
+                        'board_sort_id' => $parent_task->board_sort_id,
                         'board_parent_id' => $request->board_parent_id,
                         'progress'=> $parent->progress
                     ]);
@@ -424,18 +431,119 @@ class MultipleBoardController extends Controller
         return response()->json(['success' => true, 'data' => $task]);
     }
 
+    // public function cardSort(Request $request)
+    // {   
+    //     return $request->children;
+    //     if(!empty($request->children) && count($request->children) > 0){
+    //         $ids = ''; //recurChildIds
+    //         $chids = [];
+    //         $caseString = '';
+    //         $myArray = [];
+    //         $myArrays = $request->children;
+    //         foreach ($request->children as $key => $item) {
+    //             // return $item;
+    //             // echo count($myArrays); exit;
+    //         // for($key = 0; $key < count($myArrays); $key++ ){
+    //             $myArray[] = $item;//$item;
+    //             // echo count($myArray); exit;
+    //             // $this->childIds[] = $item['cardId'];
+    //             $child = Task::where('id',$item['cardId'])
+    //                         ->with('childTask')
+    //                         ->first();
+    //             if (count($child['childTask']) > 0) {
+    //                 $datas = $this->recurChildIds($child);
+    //                 // return $this->childIds;
+    //                 // $array = $request->children;
+    //                 // $x = count($request->children);
+    //                 // foreach ($child['childTask'] as $keys => $values) {
+    //                 //     $chids[] = $values['id'];
+    //                 //     $myArray[] = [
+    //                 //         // 'childTask' => $values['childTask'],
+    //                 //         'cardId' => $values['id'],
+    //                 //         'types' => 'type',
+    //                 //     ];
+    //                 // }
+    //             }
+
+    //             if ($request->children[$key]['types'] == 'card' || $request->children[$key]['types'] == 'task') {
+    //                 $id = $request->children[$key]['cardId'];
+    //                 $caseString .= " when id = '".$id."' then '".$key."'";
+    //                 $ids .= " $id,";
+    //             }
+    //             // return $myArray;
+    //             if (count($myArray) > 1) {
+    //                 echo $key;
+    //                 return  $myArrays = $myArray;
+    //             }else {
+    //                 break;
+    //             }
+    //         }
+    //         // return $chids;
+    //         return $myArrays;
+    //         $ids = trim($ids, ',');
+    //         $update = DB::update("update task_lists set board_sort_id = CASE $caseString END where id in ($ids) and board_parent_id = $request->boardId");
+    //         if ($update) {
+    //             $this->createLog($request->boardId, 'Updated', 'Card Updated', 'Board Card sorting');
+    //             return response()->json(['success' => true, 'data' => $update]);
+    //         } else {
+    //             return response()->json(['success' => false, 'data' => $update]);
+    //         }
+    //     }
+    // }
+
+
+    function findTopParent($data, $d, $parents){
+        $key = array_search($d['cardId'], array_column($data, 'cardId'));
+        $keyP = array_search($d['parent_id'], array_column($data, 'cardId'));
+        $keySP = array_search($d['parent_id'], $parents);
+        if($d['parent_id'] !== 0){
+            if((string)$keySP == '' && (string)$keyP !== '' && $d['sort_id'] > 0){
+                $data[$key]['sort_id'] = $data[$keyP]['sort_id'];
+            }
+            elseif((string)$keySP !== '' && (string)$keyP !== '' && $d['sort_id'] > 0){
+                $keyDP = array_search($parents[$keySP], array_column($data, 'cardId'));
+                $data[$key]['sort_id'] = $data[$keyDP]['sort_id'];
+            } else {
+                $keySP = array_search($data[$key]['cardId'], $parents);
+                $data[$key]['sort_id'] = $keySP;
+            }
+        }
+        return $data;    
+    }
     public function cardSort(Request $request)
-    {
+    {   
+        // return $request->children;
         if(!empty($request->children) && count($request->children) > 0){
             $ids = '';
             $caseString = '';
-            foreach ($request->children as $key => $item) {
+
+            $allIds = array_column($request->children, 'cardId');
+            $parents = [];
+            $allData = $request->children;
+            foreach ($request->children as $key=>$item) {
+                if($item['parent_id'] == 0){
+                    $parents[] = $item['cardId'];
+                } else {
+                    $ind = (string)array_search($item['parent_id'], $allIds);
+                    if($ind == ""){
+                        $parents[] = $item['cardId'];
+                    }
+                }
+                $allData[$key]['sort_id'] = $key;
+            }
+
+            foreach ($allData as $d) {
+                $allData = $this->findTopParent($allData, $d, $parents);
+            }
+            // return $allData;
+            foreach ($allData as $key => $item) {
                 if ($item['types'] == 'card' || $item['types'] == 'task') {
                     $id = $item['cardId'];
-                    $caseString .= " when id = '".$id."' then '".$key."'";
+                    $caseString .= " when id = '".$id."' then '".$item['sort_id']."'";
                     $ids .= " $id,";
                 }
             }
+
             $ids = trim($ids, ',');
             $update = DB::update("update task_lists set board_sort_id = CASE $caseString END where id in ($ids) and board_parent_id = $request->boardId");
             if ($update) {
@@ -561,11 +669,164 @@ class MultipleBoardController extends Controller
         return response()->json(['success' => false]);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function test(){
 
-        $data = Task::select('id','title')->with('child')->where('id', 78)->get()->toArray();
-        dd($data);
+        $data = array(
+            [
+                'id' => 100,
+                'title' => '100',
+                'parent_id' => 0
+            ],
+            
+            [
+                'id' => 101,
+                'title' => '100',
+                'parent_id' => 100
+            ],
+            
+            [
+                'id' => 102,
+                'title' => '100',
+                'parent_id' => 200
+            ],
+            
+            [
+                'id' => 103,
+                'title' => '100',
+                'parent_id' => 101
+            ],
+            
+            [
+                'id' => 104,
+                'title' => '100',
+                'parent_id' => 103
+            ]
+          );
+          $allIds = array_column($data, 'id');
+          $parents = [];
+          
+          
+          
+          foreach ($data as $item) {
+            if($item['parent_id'] == 0){
+                $parents[] = $item['id'];
+              } else {
+                $ind = (string)array_search($item['parent_id'], $allIds);
+                if($ind == ""){
+                    $parents[] = $item['id'];
+                }
+              }
+          }
+        //   print_r('<pre>');
+        //   print_r($parents);
+          
+          
+          
+          foreach ($data as $item) {
+            $parent_id = $this->findTopParents($data, $item, $parents);
+            print_r($parent_id.'<br>');
+            
+          }
     }
+
+    function findTopParents($allData, $item, $parents){
+        if($item['parent_id'] == 0){
+            return $item['id'];
+        }
+        foreach($allData as $d){
+            if($d['id'] == $item['parent_id']){
+                $ind = (string)array_search($d['parent_id'], $parents);
+                echo $ind.' ';
+                if ($ind == "") {
+                }
+                return $d['id'];
+
+                // echo $d['id'].' ';
+                // $ind = (string)array_search($item['id'], $parents);
+                // if($ind !== ""){
+                //     return $item['id'];
+                // } else {
+                //     $this->findTopParents($allData, $d['parent_id'],$parents);
+                // }
+                                                                              
+                          
+                // $ddId = findTopParents($allData, $d['parent_id']);
+                //           if($ddId = 
+            } else {
+
+            }
+        }
+        return $item['parent_id'].' 55555';
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     protected function createLog($task_id, $type, $message, $title)
     {

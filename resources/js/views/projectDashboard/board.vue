@@ -95,13 +95,14 @@
                                 <Container
                                     :drop-placeholder="dropPlaceholderOptions"
                                     :get-child-payload="getCardPayload(column.id)"
-                                    @drag-start="(e) => onDragStart(column.id,column.boardId, index,  e)"
-                                    @drag-end="(e) => log('', e)"
+                                    
                                     @drop="(e) => onCardDrop(column.id, column.boardId, index, e)"
                                     drag-class="card-ghost"
                                     drop-class="card-ghost-drop"
                                     group-name="col"
                                 >
+                                <!-- @drag-start="(e) => onDragStart(column.id,column.boardId, index,  e)"
+                                    @drag-end="(e) => log('', e)" -->
                                     <Draggable :key="card.id" v-for="(card , key) in column.children" >
                                         <div :class="card.props.className"
                                                 :style="card.props.style"
@@ -926,6 +927,7 @@
     import {applyDrag, generateItems} from '../../../assets/plugins/utils/helpers';
     import VueTagsInput from '@johmun/vue-tags-input';
     import TaskDetails from "./boardCardDetails";
+    // import Folder from './recurLi.vue';
 
     export default {
         props: ['nav_id', 'board_id', 'projectId'],
@@ -1175,10 +1177,12 @@
                                 style: {backgroundColor: 'white'}
                             },
                             child: this.cards[i].task[j].child,
+                            childrens: this.cards[i].task[j].children,
                             data: this.cards[i].task[j].name,
                             textareaShow: this.cards[i].task[j].textareaShow,
                             description: this.cards[i].task[j].name,
                             date: this.cards[i].task[j].date,
+                            parent_id: this.cards[i].task[j].parent_id,
                             progress: this.cards[i].task[j].progress,
                             tags: this.cards[i].task[j].tags,
                             tagTooltip: this.cards[i].task[j].tagTooltip,
@@ -1305,31 +1309,9 @@
                 });
             },
             onCardDrop(columnId, boardId, index, dropResult) {
+                console.log('drops => ',dropResult);
                 let _this = this;
                 if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
-                    if( dropResult.removedIndex === null && dropResult.addedIndex !== null ) {
-                        console.log("Drag started",columnId, boardId, index, dropResult);
-                        let data = {
-                            'id' : dropResult.payload.cardId,
-                            'board_parent_id' : boardId
-                        }
-                        $('#loader').modal('show');
-                        axios.post('/api/change-board-parent', data)
-                        .then(response => response.data)
-                        .then(response => {
-                            setTimeout(() => {
-                                _this.getBoardTask();
-                                $('#loader').modal('hide');
-                            }, 500);
-                            console.log('shifted');
-                        })
-                        .catch(error => {
-                            setTimeout(() => {
-                                $('#loader').modal('hide');
-                            }, 500);
-                            console.log('shifting failed');
-                        });
-                    }
 
                     const scene = Object.assign({}, this.scene);
                     const column = scene.children.filter(p => p.id === columnId)[0];
@@ -1344,16 +1326,45 @@
                     axios.post('/api/card-sort',data)
                     .then(response => response.data)
                     .then(response => {
+                        // _this.getBoardTask();                            
+                         setTimeout(() => {
+                        }, 500);
                         console.log('sorted');
                     })
                     .catch(error => {
                         console.log('sorting failed');
                     });
+
+                    if( dropResult.removedIndex === null && dropResult.addedIndex !== null ) {
+                        // console.log("Drag started",columnId, boardId, index, dropResult);
+                        let data = {
+                            'id' : dropResult.payload.cardId,
+                            'board_parent_id' : boardId
+                        }
+                        $('#loader').modal('show');
+                        axios.post('/api/change-board-parent', data)
+                        .then(response => response.data)
+                        .then(response => {
+                            setTimeout(() => {
+                                _this.getBoardTask();
+                                $('#loader').modal('hide');
+                                
+                            }, 500);
+                            console.log('shifted');
+                        })
+                        .catch(error => {
+                            setTimeout(() => {
+                                $('#loader').modal('hide');
+                            }, 500);
+                            console.log('shifting failed');
+                        });
+                    }                    
+
                 }
             },
             onDragStart(columnId, boardId, index, dropResult) {
                 if(dropResult.addedIndex != null){
-                    console.log("Drag started",columnId, boardId, index, dropResult);
+                    //console.log("Drag started",columnId, boardId, index, dropResult);
                 }
             },
             getCardPayload(columnId) {
@@ -1362,10 +1373,10 @@
                 }
             },
             dragStart(dragResult) {
-                console.log(dragResult);
+                //console.log(dragResult);
             },
             dragEnd(dragResult) {
-                // console.log(dragResult);
+                console.log(dragResult);
             },
             log(...params) {
                 console.log(...params)
@@ -1401,7 +1412,7 @@
                 axios.post('/api/board-save', data)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
+                        // console.log(response);
                         if (response.success == true) {
                             _this.editField.progress = response.data.progress;
                             _this.cards.push({
@@ -1506,7 +1517,7 @@
                 .then(response => {
                     // console.log(response.success);
                     _this.board = response.success;
-                    console.log(_this.board);
+                    // console.log(_this.board);
                     setTimeout(() => {
                         $('#transferCard').modal('show');
                     }, 500);
@@ -1532,7 +1543,7 @@
                 .then(response => {
                     // console.log(response.success);
                     _this.nav = response.success;
-                    console.log(_this.nav);
+                    // console.log(_this.nav);
                     setTimeout(() => {
                         $('#listLinkColumn').modal('show');
                     }, 500);
@@ -2243,7 +2254,7 @@
                         _this.ShowDetails(_this.selectedData);
                         setTimeout(function () {
                             $('#_details').click();
-                            $('#_log').click()
+                            // $('#_log').click()
                         }, 300)
                     })
                     .catch(error => {
@@ -2251,8 +2262,8 @@
                     });
             },
             selectCard(card){
-                // console.log(card);
                 this.selectedData = card;
+                console.log(this.selectedData);
                 this.selectedCard = card.cardId;
                 this.task_logs = null;
                 this.HideDetails();
