@@ -160,8 +160,8 @@
                                     <a class="attach-icon hide-item-res" style="width: auto !important;">
                                         <span v-if="data.files && data.files.length !== 0">
                                             <template v-for="(fl,file_id ) in data.files">
-                                                <img :src="'/images/'+fl.file_name" v-if="file_id < 2"
-                                                     @click="showImage(data.files, fl.file_name)"
+                                                <img :src="'/storage/'+data.id+'/'+fl.file_name" v-if="file_id < 2"
+                                                     @click="showImage(data.files, fl.file_name,data.id)"
                                                      class="task-img">
                                             </template>
                                         </span>
@@ -602,13 +602,13 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Image Show</h5>
-                        <span @click="deletePhoto(modalImg)" class="badge badge-warning file-delete">Delete Photo</span>
+                        <span @click="deletePhoto(modalImg[0],modalImg[1])" class="badge badge-warning file-delete">Delete Photo</span>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <img :src="'/images/'+modalImg" class="image-auto">
+                        <img :src="'/storage/'+modalImg[1]+'/'+modalImg[0]" class="image-auto">
                     </div>
                 </div>
             </div>
@@ -2722,9 +2722,9 @@
                         console.log('Api for task date update not Working !!!')
                     });
             },
-            deletePhoto(img) {
+            deletePhoto(img,id) {
                 var _this = this;
-                axios.post('/api/task-list/delete-img', {'img': img})
+                axios.post('/api/task-list/delete-img', {'img': img,id: id})
                     .then(response => response.data)
                     .then(response => {
                         _this.getTaskList();
@@ -2827,8 +2827,8 @@
                 })
             },
 
-            showImage(data, image) {
-                this.modalImg = image;
+            showImage(data, image,task_id) {
+                this.modalImg = [image,task_id];
                 $("#imageModal").modal();
             },
 
