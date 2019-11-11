@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\AssignedUser;
@@ -46,11 +45,10 @@ class TaskController extends Controller
             $info['text'] = $task->title;
             if ($task->title == 'Dont Forget Section') {
                 $info['draggable'] = false;
-                $info['droppable'] = true;
             } else {
                 $info['draggable'] = true;
-                $info['droppable'] = true;
             }
+            $info['droppable'] = true;
             $info['clicked'] = 0;
             $info['count_child'] = 0;
             $info['date'] = $task->date;
@@ -95,7 +93,6 @@ class TaskController extends Controller
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
-//                ->where('is_complete', 0)
                 ->orderBy('sort_id', 'ASC')
                 ->get();
             if (!empty($childrens)) {
@@ -483,8 +480,6 @@ class TaskController extends Controller
                     $assign = AssignTag::create(['task_id' => $id, 'tag_id' => $tag_id]);
                 }
             }
-
-
             return response()->json(['success' => 1]);
         } else if (isset($request->type) && $request->type == 'date') {
             $ids = $request->ids;
@@ -504,7 +499,6 @@ class TaskController extends Controller
         AssignedUser::where('task_id', $id)->delete();
         AssignTag::where('task_id', $id)->delete();
         Files::where('tasks_id', $id)->delete();
-
         Task::findOrFail($id)->delete();
 
         if ($check_dontForgetSection) {
@@ -531,8 +525,7 @@ class TaskController extends Controller
 
     public function deleteImg(Request $request)
     {
-        $task_id = $request->id;
-        //we need a check to make sure this is set.
+        $task_id = $request->id;//we need a check to make sure this is set.
         $delete = Files::where('file_name', $request->img)->delete();
         if ($delete) {
             $image_path = public_path() . "/storage/" . $task_id . "/" . $request->img;  // Value is not URL but directory file path
@@ -645,9 +638,7 @@ class TaskController extends Controller
             } else {
                 return response()->json(['success' => 0, 'empty' => $empty]);
             }
-
         } elseif (isset($request->open)) {
-
             if (Task::where('id', $request->id)->update(['open' => $request->open])) {
                 return response()->json('success', 200);
             }
@@ -670,5 +661,4 @@ class TaskController extends Controller
             }
         }
     }
-
 }
