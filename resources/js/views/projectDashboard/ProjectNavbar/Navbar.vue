@@ -109,6 +109,19 @@
                                                  width="20px" class="mr-2">
                                             Create PDF </a>
                                     </span>
+                                    <div class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header text-uppercase">Manage Rules</h6>
+                                    <a class="dropdown-item" href="javascript:void(0)">
+                                        <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
+                                        Create Rules
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header text-uppercase"> Update Rules</h6>
+                                    <span>
+                                         <a class="dropdown-item"
+                                            href="javascript:void(0)"><span>All Rules Here</span>
+                                         </a>
+                                    </span>
                                 </div>
                             </a>
                         </li>
