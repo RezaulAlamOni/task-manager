@@ -2413,6 +2413,7 @@
 
             getColumnAndConfirmButton() {
                 var _this = this;
+                _this.selectedColumn = "Select column";
                 if (_this.type_T === 'board') {
                     let data = {
                         'list_id': _this.selectedSubList
