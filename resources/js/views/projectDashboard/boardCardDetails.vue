@@ -3,7 +3,7 @@
         <!-- {{selectedData}} -->
         <div class="row">
             <div class="col-2">
-                <h4 class="compltit-blue">#ID12</h4>
+                <h4 class="compltit-blue">#ID{{ selectedData.cardId }}</h4>
             </div>
             <div class="col-2">
                 <i class="fa fa-calendar details-title"></i>
@@ -249,12 +249,16 @@
                            id="_details" role="tab">Details</a>
                     </li>
                     <li class="nav-item">
-                        <a aria-controls="profile" aria-selected="false" class="nav-link" data-toggle="tab" href="#profile"
-                           id="_log" role="tab">Logs</a>
+                        <a aria-controls="comment" aria-selected="false" class="nav-link" data-toggle="tab" href="#comment"
+                           id="_comment" role="tab">Comments</a>
                     </li>
                     <li class="nav-item">
+                        <a aria-controls="log" aria-selected="false" class="nav-link" data-toggle="tab" href="#log"
+                           id="_log" role="tab">Logs</a>
+                    </li>
+                    <li class="nav-item" v-if="selectedData.childrens.length  > 0">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
-                           id="_child" role="tab">Child</a>
+                           id="_child" role="tab">Childs</a>
                     </li>
                 </ul>
             </div>
@@ -332,7 +336,10 @@
                     </div>
                 </div>
             </div>
-            <div aria-labelledby="profile-tab" class="tab-pane" id="profile" role="tabpanel">
+            <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel">
+                <span></span>
+            </div>
+            <div aria-labelledby="log-tab" class="tab-pane" id="log" role="tabpanel">
                 <span>
                     <div class="log-data">
                         <h3 class="p-3">Log data for <b>{{selectedData.text}}</b></h3>
@@ -362,9 +369,58 @@
             </div>
             <div aria-labelledby="child-tab" class="tab-pane" id="child" role="tabpanel">
                 <span>
-                    <!-- <div class="log-data" style="border: solid gray 1px;">
-                                        
-                    </div> -->
+                    <!-- <template>
+                        <ul class="list-group-item">
+                            <li class="list-group-item ">
+                            dsfa
+                            <folder v-bind:folder="folder"></folder>
+                            </li>
+                        </ul>
+                    </template> -->
+                                <!-- {{ selectedData.childrens }} -->
+                    <div v-if="selectedData.childrens.length  > 0" v-for="child in selectedData.childrens">
+                        <li class="list-group-item" >
+                            <label class="checkbox_cus_mini ">
+                                <!-- <input id="109" type="checkbox" checked="checked" disable="" value="109">  -->
+                                {{ child.title }}
+                                <!-- <span class="checkmark"></span> -->
+                                </label>
+                            <!---->
+                            <ul v-if="child.child_task.length  > 0" class="list-group list-group-flush" >
+                                <div v-for="child1 in child.child_task">
+                                    <li class="list-group-item">
+                                        <label class="checkbox_cus_mini ">
+                                            <!-- <input id="111" type="checkbox" checked="checked" disable="" class="tree-child" value="111">  -->
+                                            {{ child1.title }}
+                                            <!-- <span class="checkmark"></span> -->
+                                            </label>
+                                        <!---->
+                                        <ul v-if="child1.child_task.length  > 0" class="list-group list-group-flush">
+                                            <div v-for="child2 in child1.child_task">
+                                                <li class="list-group-item">
+                                                    <label class="checkbox_cus_mini ">
+                                                        <!-- <input id="120" type="checkbox" checked="checked" disable="" class="tree-child" value="120">  -->
+                                                        {{ child2.title }}
+                                                        <!-- <span class="checkmark"></span> -->
+                                                        </label>
+                                                    <!---->
+                                                    <ul v-if="child2.child_task.length  > 0" class="list-group list-group-flush">
+                                                        <div v-for="child3 in child2.child_task">
+                                                            <li class="list-group-item">
+                                                                {{ child3.title }}
+                                                            </li>
+                                                        </div>
+                                                    </ul>
+                                                </li>
+                                            </div>
+                                        </ul>
+                                    </li>
+                                </div>
+                            </ul>
+                        </li>
+                    </div>
+
+
                 </span>
 
             </div>
@@ -468,7 +524,7 @@
             }
         },
         mounted() {
-            
+            console.log(selectedData);
         },
         created() {
 
