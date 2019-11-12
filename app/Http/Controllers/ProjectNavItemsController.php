@@ -7,6 +7,7 @@ use App\Multiple_list;
 use App\ProjectNavItems;
 use App\Task;
 use Carbon\Carbon;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,6 +32,29 @@ class ProjectNavItemsController extends Controller
         }
         return response()->json(['success' => $navItem]);
     }
+    public function GetBoardsAndColumn($project_id)
+    {
+        $boards = [];
+        $navs = ProjectNavItems::where(['project_id'=> $project_id,'type'=>'board'])->orderBy('sort_id', 'asc')->get();
+        if ($navs->count() > 0){
+            foreach ($navs as $item) {
+                $nav  = Multiple_board::where(['project_id' => (int)$project_id, 'nav_id' => $item->id])->get()->toArray();
+                foreach ($nav as $item1) {
+                    $boards[] = $item1;
+                }
+            }
+            foreach ($boards as $key => $board) {
+                $boards[$key]['columns'] = Task::where('board_parent_id',0)->where('multiple_board_id',$board['id'])->get();
+            }
+            $team_id = Auth::user()->current_team_id;
+            $user = User::join('team_users', 'team_users.user_id', 'users.id')
+                ->where('team_users.team_id', $team_id)->get()->toArray();
+        }
+
+        return response()->json(['status' => 'success', 'data' => $boards,'users'=>$user]);
+    }
+
+
 
     public function getList($project_id, $nav_id, $type)
     {

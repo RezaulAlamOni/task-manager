@@ -36,16 +36,13 @@
                                         <select class="form-control select2" v-model="rule.move_from"
                                                 style="width: 100%; margin-top: 10px; border-top: none; border-left: none; border-right: none; box-shadow: none; border-radius: 0px;">
                                             <option value="select column">Select a Board and Column</option>
-                                            <optgroup label="Dev Board Columns">
-                                                <option value="ToDo">ToDo</option>
-                                                <option value="InProgress">In Progress</option>
-                                                <option value="Complete">Complete</option>
-                                            </optgroup>
-                                            <optgroup label="Testing Board Columns">
-                                                <option value="ToDo">ToDo</option>
-                                                <option value="InProgress">In Progress</option>
-                                                <option value="Complete">Complete</option>
-                                            </optgroup>
+                                            <template v-for="Board in BoardColumn">
+                                                <optgroup :label="Board.board_title" v-if="Board.columns.length > 0">
+                                                    <template v-for="column in Board.columns">
+                                                        <option :value="column.id" :disabled="(rule.move_to === column.id) ? true : false">{{column.title}}</option>
+                                                    </template>
+                                                </optgroup>
+                                            </template>
                                         </select></div>
                                 </div>
                             </div>
@@ -59,16 +56,15 @@
                                         <select class="form-control select2" v-model="rule.move_to"
                                                 style="width: 100%; margin-top: 10px; border-top: none; border-left: none; border-right: none; box-shadow: none; border-radius: 0px;">
                                             <option value="select column" disabled>Select a Board and Column</option>
-                                            <optgroup label="Dev Board Columns">
-                                                <option value="ToDo">ToDo</option>
-                                                <option value="InProgress">In Progress</option>
-                                                <option value="Complete">Complete</option>
-                                            </optgroup>
-                                            <optgroup label="Testing Board Columns">
-                                                <option value="ToDo">ToDo</option>
-                                                <option value="InProgress">In Progress</option>
-                                                <option value="Complete">Complete</option>
-                                            </optgroup>
+                                            <template v-for="Board in BoardColumn">
+                                                <optgroup :label="Board.board_title" v-if="Board.columns.length > 0">
+                                                    <template v-for="column in Board.columns">
+                                                        <option :value="column.id" :disabled="(rule.move_from === column.id) ? true : false">{{column.title}}</option>
+                                                    </template>
+                                                </optgroup>
+                                            </template>
+
+
                                         </select></div>
                                 </div>
                             </div>
@@ -84,10 +80,12 @@
                                             <option value="Assign To" disabled>Assign to</option>
                                             <option value="NoOne">No One</option>
                                             <optgroup label="Users">
-                                                <option value="Bryan">Bryan</option>
-                                                <option value="Ian">Ian</option>
+                                                <template v-for="user1 in user">
+                                                    <option :value="user1.id">{{user1.name}}</option>
+                                                </template>
                                             </optgroup>
-                                        </select></div>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row rules-create-bottom">
@@ -153,10 +151,11 @@
             },
             getBoardColumn() {
                 var _this = this;
-                axios.get('/api/nav-item/' + _this.projectId)
+                axios.get('/api/board-item-and-column/' + _this.projectId)
                     .then(response => response.data)
                     .then(response => {
-                        _this.BoardColumn = response.success;
+                        _this.BoardColumn = response.data;
+                        _this.user = response.users;
                         console.log(_this.BoardColumn)
                         setTimeout(() => {
 
@@ -172,7 +171,26 @@
             },
             AddNewRules() {
                 var _this = this;
-                console.log(_this.rule)
+
+                if (_this.rule.move_from !== 'select column' &&  _this.rule.move_to !== 'select column' && _this.rule.name !== '') {
+                    _this.rule.project_id = _this.projectId;
+                    axios.post('/api/add-rules', _this.rule)
+                        .then(response => response.data)
+                        .then(response => {
+                                _this.rule.id = null;
+                                _this.rule.name='';
+                                _this.rule.status= 1;
+                                _this.rule.move_from= 'select column';
+                                _this.rule.move_to= 'select column';
+                                _this.rule.assign_to='Assign To';
+                            swal('Rules Created','Required Field Can\'t be empty','success');
+                        })
+                        .catch(error => {
+                            //
+                        });
+                } else {
+                    swal('Sorry','Required Field Can\'t be empty','warning');
+                }
             },
             LiveRule() {
                 this.rule.status = 1;

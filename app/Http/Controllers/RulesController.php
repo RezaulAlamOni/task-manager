@@ -4,80 +4,59 @@ namespace App\Http\Controllers;
 
 use App\Rules;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RulesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $data = [
+            'name' => $request->name,
+            'status' => $request->status,
+            'project_id' => (int)$request->project_id,
+            'move_from' => $request->move_from,
+            'move_to' => $request->move_to,
+            'created_by' => Auth::id(),
+            'assigned_users' => ($request->assign_to != 'Assign To') ? $request->assign_to : 0,
+        ];
+        if (Rules::create($data)) {
+            return response()->json(['status' => 'success']);
+        } else {
+            return response()->json(['status'=>'failed']);
+        }
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Rules  $rules
-     * @return \Illuminate\Http\Response
-     */
     public function show(Rules $rules)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Rules  $rules
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Rules $rules)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Rules  $rules
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Rules $rules)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Rules  $rules
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Rules $rules)
     {
         //

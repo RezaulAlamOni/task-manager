@@ -18,7 +18,6 @@ class CreateRulesTable extends Migration
             $table->string('name');
             $table->tinyInteger('status')->default(0);
             $table->integer('project_id');
-            $table->integer('board_id');
             $table->bigInteger('move_from');//column id (from task)
             $table->bigInteger('move_to');//column id (from task)
             $table->bigInteger('created_by');//user id (from task)
