@@ -596,7 +596,9 @@
         </div>
 
         <div class="boardView" v-if="list.type === 'rules'">
-            <Rules></Rules>
+            <Rules
+            :project_id="projectId">
+            </Rules>
         </div>
 
 
@@ -2288,7 +2290,7 @@
                         type: 'board'
                     });
                 } else if (data.type === 'rules') {
-                    console.log(data)
+                    // console.log(data)
                 }
 
             },

@@ -710,7 +710,6 @@
                 })
             },
             CreateRule() {
-                console.log('rules')
                 this.$emit('getList', {
                     list_id: 0,
                     nav_id: 0,
@@ -782,6 +781,9 @@
             DownloadTaskPDF() {
                 this.$emit('DownloadTaskPDF')
             }
+        },
+        directives: {
+
         },
         watch: {
             AllNavGet: function (val) {
