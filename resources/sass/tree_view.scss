@@ -787,6 +787,10 @@
     background-color: #eee;
 }
 
+.spark-screen {
+    height: calc(100vh - 160px);
+    overflow: auto;
+}
 
 .dateCal {
     border: none;

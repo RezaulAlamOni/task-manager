@@ -160,8 +160,8 @@
                                     <a class="attach-icon hide-item-res" style="width: auto !important;">
                                         <span v-if="data.files && data.files.length !== 0">
                                             <template v-for="(fl,file_id ) in data.files">
-                                                <img :src="'/images/'+fl.file_name" v-if="file_id < 2"
-                                                     @click="showImage(data.files, fl.file_name)"
+                                                <img :src="'/storage/'+data.id+'/'+fl.file_name" v-if="file_id < 2"
+                                                     @click="showImage(data.files, fl.file_name,data.id)"
                                                      class="task-img">
                                             </template>
                                         </span>
@@ -592,8 +592,12 @@
                 </BoardView>
 
             </div>
+
         </div>
-        <!--        //board component section-->
+
+        <div class="boardView" v-if="list.type === 'rules'">
+            <Rules></Rules>
+        </div>
 
 
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="imageModal" role="dialog"
@@ -602,13 +606,13 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Image Show</h5>
-                        <span @click="deletePhoto(modalImg)" class="badge badge-warning file-delete">Delete Photo</span>
+                        <span @click="deletePhoto(modalImg[0],modalImg[1])" class="badge badge-warning file-delete">Delete Photo</span>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <img :src="'/images/'+modalImg" class="image-auto">
+                        <img :src="'/storage/'+modalImg[1]+'/'+modalImg[0]" class="image-auto">
                     </div>
                 </div>
             </div>
@@ -935,6 +939,7 @@
     import TaskDetails from "./TaskDetails";
     import Navbar from "./ProjectNavbar/Navbar";
     import BoardView from "./board";
+    import Rules from "../Rules/Rules";
     import * as Ladda from 'ladda';
 
     export default {
@@ -946,7 +951,8 @@
             VueTagsInput,
             TaskDetails,
             Navbar, BoardView,
-            Ladda
+            Ladda,
+            Rules
         },
         data() {
             return {
@@ -1162,7 +1168,6 @@
             dropNode(node, targetTree, oldTree) {
                 let THIS = this;
                 clearInterval(THIS.dNodeInterval);
-
             },
             dragNode(node) {
                 let THIS = this;
@@ -1193,7 +1198,6 @@
                     .catch(error => {
                         console.log('Api is drag and drop not Working !!!')
                     });
-
             },
             FindDopedTask(parent, data, tasks) {
                 for (var i = 0; i < tasks.length; i++) {
@@ -1284,8 +1288,6 @@
                     var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
                     target.scrollTo(0, top);
                 }
-
-
             },
             SearchResultClick(task) {
                 if ($('#click' + task.id).length > 0) {
@@ -1310,7 +1312,6 @@
                     .catch(error => {
                         console.log('Api for complete task not Working !!!')
                     });
-
             },
             assignUserToTask(user, data) {
                 var _this = this;
@@ -1348,7 +1349,6 @@
                         console.log('Api assign-user-remove is not Working !!!')
                     });
             },
-
             makeItClick(e, data, vm) {
                 var _this = this;
                 if (e.ctrlKey && e.which === 1) {
@@ -1462,7 +1462,6 @@
                 $(e.target).closest('.eachItemRow').find('.user').hide();
                 $(e.target).closest('.eachItemRow').find('.dateCal').hide();
                 // $(e.target).closest('.eachItemRow').find('.delete-icon').show();
-
             },
             showItem(e, data) {
 
@@ -1510,11 +1509,8 @@
                     } else {
                         swal('Sorry!!', 'You can\'t do Cut Dont Forget Section! task', 'warning')
                     }
-
                 }
-
             },
-
             CopyToSelectedTask(){
 
                 var _this = this;
@@ -1539,9 +1535,7 @@
                         }, 200);
                     })
                     .catch(error => {
-
                     });
-
                 // swal("Under Process!", "Working under process", "success");
             },
             pastCopyAndCut() {
@@ -1606,10 +1600,8 @@
                             $("#" + date).addClass('form-control');
                             $("#" + date).removeClass('input-hide');
                         }, 100)
-
                     }
                 }
-
             },
             addEmptyChild(data) {
                 let _this = this;
@@ -1803,7 +1795,6 @@
                     .catch(error => {
                         console.log('Api for add tag not Working !!!')
                     });
-
             },
             changeTAg(tags) {
                 var _this = this;
@@ -1829,7 +1820,6 @@
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
                         });
-
                 }
             },
             DeleteTag(obj) {
@@ -1848,8 +1838,6 @@
                             console.log('Api for move down task not Working !!!')
                         });
                 }
-
-
             },
             showTagManageModel() {
                 var _this = this;
@@ -1862,7 +1850,6 @@
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
                     });
-
             },
             updateTagColor(e, tag) {
                 var color = e.target.value;
@@ -1883,7 +1870,6 @@
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
                     });
-
             },
             updateTagName(e, tag) {
                 var newTag = e.target.innerText;
@@ -1944,7 +1930,6 @@
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
                     });
-
             },
             addTaskToComplete(data) {
                 var _this = this;
@@ -2295,13 +2280,15 @@
                         type: 'list'
                     });
                     this.getTaskList()
-                } else {
+                } else if (data.type === 'board') {
                     localStorage.selected_nav = JSON.stringify({
                         list_id: data.list_id,
                         nav_id: data.nav_id,
                         project_id: this.projectId,
                         type: 'board'
                     });
+                } else if (data.type === 'rules') {
+                    console.log(data)
                 }
 
             },
@@ -2413,6 +2400,7 @@
 
             getColumnAndConfirmButton() {
                 var _this = this;
+                _this.selectedColumn = "Select column";
                 if (_this.type_T === 'board') {
                     let data = {
                         'list_id': _this.selectedSubList
@@ -2721,9 +2709,9 @@
                         console.log('Api for task date update not Working !!!')
                     });
             },
-            deletePhoto(img) {
+            deletePhoto(img,id) {
                 var _this = this;
-                axios.post('/api/task-list/delete-img', {'img': img})
+                axios.post('/api/task-list/delete-img', {'img': img,id: id})
                     .then(response => response.data)
                     .then(response => {
                         _this.getTaskList();
@@ -2826,8 +2814,8 @@
                 })
             },
 
-            showImage(data, image) {
-                this.modalImg = image;
+            showImage(data, image,task_id) {
+                this.modalImg = [image,task_id];
                 $("#imageModal").modal();
             },
 

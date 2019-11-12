@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\AssignedUser;
@@ -392,7 +393,7 @@ class TaskController extends Controller
             $task = Task::create($data);
             $task = Task::where('id', $task->id)->with('List')->first();
 
-            $this->createLog($task->id, 'copy', 'Copy task from '.$past->List->list_title.' to '.$task->List->list_title, $task->title);
+            $this->createLog($task->id, 'copy', 'Copy task from ' . $past->List->list_title . ' to ' . $task->List->list_title, $task->title);
         }
         return response()->json([$task]);
 
@@ -525,23 +526,22 @@ class TaskController extends Controller
 
     public function deleteImg(Request $request)
     {
-        $task_id = $request->id;//we need a check to make sure this is set.
-        $delete = Files::where('file_name', $request->img)->delete();
-        if ($delete) {
-            $image_path = public_path() . "/storage/" . $task_id . "/" . $request->img;  // Value is not URL but directory file path
-            if (file_exists($image_path)) {
-                $del = unlink($image_path);
-                return response()->json(['success' => $del]);
+        if (isset($request->img) && isset($request->id)) {
+            $task_id = $request->id;//we need a check to make sure this is set.
+            $delete = Files::where('file_name', $request->img)->delete();
+            if ($delete) {
+                $image_path = public_path() . "/storage/" . $task_id . "/" . $request->img;  // Value is not URL but directory file path
+                if (file_exists($image_path)) {
+                    $del = unlink($image_path);
+                    return response()->json(['success' => $del]);
+                }
+//                return response()->json(['success' => 1]);
             }
+        } else {
+            return response()->json(['success' => 0]);
         }
-        return response()->json(['success' => 1]);
     }
 
-    public function addTag(Request $request)
-    {
-//        Task::where('id', $request->id)->update(['tag' => $request->tags]);
-//        return response()->json(['success' => 1]);
-    }
 
     public function moveTask(Request $request)
     {
@@ -645,8 +645,11 @@ class TaskController extends Controller
         } elseif (isset($request->file)) {
             $task_id = $request->id;
             $photo = $_FILES['file']['name'];
-
-            if (move_uploaded_file($_FILES["file"]["tmp_name"], public_path() . "/storage/" . $task_id . "/" . $_FILES['file']['name'])) {
+            $path = public_path() . "/storage/" . $task_id ;
+            if (!is_dir($path)) {
+                mkdir($path);
+            }
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], $path."/" . $_FILES['file']['name'])) {
                 $file = [
                     'file_name' => $photo,
                     'tasks_id' => $task_id,
