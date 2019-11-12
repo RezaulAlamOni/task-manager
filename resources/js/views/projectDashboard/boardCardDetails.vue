@@ -270,12 +270,17 @@
                 <!-- Text Description -->
                 <div class="row">
                     <div class="col-12">
-                        <div class="textAreaExtend" v-click-outside="HideListDetails">
+                        <div class="textAreaExtend">
                             <div class="row">
                                 <div class="col-12">
-                                    <textarea @focus="ShowListDetails(selectedData)" class="form-control detailsInput"
-                                              data-grow="auto"
-                                              placeholder="Task Description" v-model="selectedData.data">
+                                    <!-- <div v-if="showDetails == false" @click="showDetails = true">{{ selectedData.data }}</div>  v-if="showDetails == true"  -->
+                                    <textarea
+                                            @focus="ShowListDetails(selectedData)" 
+                                            @blur="showDetails = false"
+                                            class="form-control detailsInput"
+                                            data-grow="auto"
+                                            placeholder="Task Description" 
+                                            v-model="selectedData.data">
                                     </textarea>
                                 </div>
                             </div>
@@ -440,6 +445,7 @@
         props: ['selectedData', 'task_logs'],
         data() {
             return {
+                showDetails : false,
                 disabledDates: {
                     id: null
                 },
@@ -587,7 +593,7 @@
             },
             HideListDetails() {
                 var _this = this;
-                $('.submitdetails').hide();
+                // $('.submitdetails').hide();
             },
             updateDescription() {
                 var _this = this;
@@ -599,7 +605,7 @@
                     .then(response => response.data)
                     .then(response => {
                         console.log(response)
-                        $('.submitdetails').hide();
+                        // $('.submitdetails').hide();
                         // _this.getTaskList()
                         // $('#dropdown' + data._id).toggle();
                         // _this.selectedData.tags = tag

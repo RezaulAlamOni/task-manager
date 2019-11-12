@@ -27,7 +27,7 @@
                                         </div>
                                         <div class="col-md-5 " style="margin: 0px; padding : 0px;" >
                                             <span class="col_name" style="word-wrap: break-word;" :title="column.name" data-placement="bottom" data-toggle="tooltip">
-                                                {{ (column.name && column.name.length > 35)? column.name.substring(0,35)+" ..." : column.name }}
+                                                {{ (column.name && column.name.length > 30)? column.name.substring(0,30)+" ..." : column.name }}
                                             </span>
                                         </div>
                                         <div class="col-md-2" style="margin: 0px; padding : 0px;">
@@ -51,7 +51,7 @@
                                                         </diV>
                                                     </div>
                                                 </span> -->
-
+                                                
                                                 <span>
                                                     <span class="dropdown-toggle-split opacity"
                                                         data-toggle="dropdown" style="padding: 0px;">
@@ -80,8 +80,23 @@
                                                             <a @click="showLinkModel(index, column.boardId)" class="dropdown-item"
                                                                 href="#"><img :src="baseUrl+'/img/task-icon/link.png'" height="18" width="18" > Link to List </a>
                                                                 <!-- v-if="column.linkToList.length <= 0"  -->
-                                                            <!-- <a v-else @click="unlinklistToCol(index, column.boardId)" class="dropdown-item"
-                                                                href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink {{column.linkToList[0].link_to_list_column.list_title}} </a> -->
+                                                            <li class="dropdown-submenu" v-if="column.linkToList.length > 0">
+                                                                <a class="dropdown-item" href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink Lists</a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li v-for="unlinks in column.linkToList" class="dropdown-item"  @click="unlinklistToCol(index, column.boardId, unlinks.id)">
+                                                                        <a href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > 
+                                                                            {{unlinks.link_to_list_column.list_title}}
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+
+
+                                                            <!-- <a v-if="column.linkToList.length > 0" @click="unlinklistToCol(index, column.boardId)" class="dropdown-item"
+                                                                href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink Lists
+                                                                
+                                                                 </a> -->
+
                                                             <div class="dropdown-divider"></div>
                                                             <a @click="deleteColumn(index,column.boardId)" class="dropdown-item"
                                                             href="#">
@@ -1610,7 +1625,7 @@
                 });
                 // swal('Warning!!','Work in progress','warning');
             },
-            unlinklistToCol(index, boardId){
+            unlinklistToCol(index, boardId, linkListId){
                 let _this = this;
                 // alert(this.currentColumn);
                 // alert(this.selectedSubNav);
@@ -1625,6 +1640,7 @@
                 },
                 function(){
                     let data = {
+                        'linkListId' : linkListId,
                         'projectId' : _this.projectId,
                         'columnId' : boardId,
                         'multiple_list' : _this.selectedSubNav

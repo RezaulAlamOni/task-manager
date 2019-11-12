@@ -645,7 +645,8 @@ class MultipleBoardController extends Controller
 
     public function unlinkListToColumn(Request $request)
     {   
-        $delete = LinkListToColumn::where('task_list_id',$request->columnId)->first();
+        // $delete = LinkListToColumn::where('task_list_id',$request->columnId)->first();
+        $delete = LinkListToColumn::where('id',$request->linkListId)->first();
         if ($delete) {
             // $update = Task::where('project_id',$request->projectId)
             //             ->where('list_id',$delete->multiple_list_id)
