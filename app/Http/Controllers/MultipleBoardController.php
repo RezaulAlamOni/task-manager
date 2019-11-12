@@ -104,6 +104,7 @@ class MultipleBoardController extends Controller
                     }
 
                     $boards[$key]['task'][$keys]['children'] = $values['childTask'];
+                    $boards[$key]['task'][$keys]['parents'] = $values['parents'];
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
                     $boards[$key]['task'][$keys]['parent_id'] = $values['parent_id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
@@ -137,7 +138,7 @@ class MultipleBoardController extends Controller
         }
         return $this->totalChild;
     }
-
+  
     public function create(Request $request)
     {
         // return $request->all();

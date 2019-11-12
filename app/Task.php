@@ -80,7 +80,7 @@ class Task extends Model
 
     public function task()
     {
-        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags')->with('childTask')->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
+        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags')->with('childTask')->with('parents')->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
     }
 
     public function childTask()
@@ -96,6 +96,12 @@ class Task extends Model
     public function child()
     {
         return $this->hasMany(self::class, 'parent_id', 'id')->with('child');
+    }
+
+
+    public function parents()
+    {
+        return $this->hasMany(self::class, 'id', 'parent_id')->with('parents');
     }
 
     public function column()

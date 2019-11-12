@@ -77,10 +77,11 @@
                                                             <a @click="transferColumnToOtherBoard(index, column.boardId)" class="dropdown-item"
                                                                 href="#">
                                                                 <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18" width="18" > Transfer Column to another board</a>
-                                                            <a v-if="column.linkToList.length <= 0" @click="showLinkModel(index, column.boardId)" class="dropdown-item"
+                                                            <a @click="showLinkModel(index, column.boardId)" class="dropdown-item"
                                                                 href="#"><img :src="baseUrl+'/img/task-icon/link.png'" height="18" width="18" > Link to List </a>
-                                                            <a v-else @click="unlinklistToCol(index, column.boardId)" class="dropdown-item"
-                                                                href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink {{column.linkToList[0].link_to_list_column.list_title}} </a>
+                                                                <!-- v-if="column.linkToList.length <= 0"  -->
+                                                            <!-- <a v-else @click="unlinklistToCol(index, column.boardId)" class="dropdown-item"
+                                                                href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink {{column.linkToList[0].link_to_list_column.list_title}} </a> -->
                                                             <div class="dropdown-divider"></div>
                                                             <a @click="deleteColumn(index,column.boardId)" class="dropdown-item"
                                                             href="#">
@@ -111,10 +112,10 @@
                                                 :id="'card_'+card.cardId"
                                                 v-on:dblclick="showLog">
                                                 <!-- @click="selectCard(card)" -->
-                                            <span style="position: absolute; right: 20px; top: 8px; ">
+                                            <span style="position: absolute; right: 10px; top: 8px; " > <!-- v-if="card.textareaShow === true" -->
                                                 <span class="dropdown-toggle-split opacity"
                                                     data-toggle="dropdown" >
-                                                    <i class="fa fa-ellipsis-h" v-if="card.textareaShow === true"></i>
+                                                    <i class="fa fa-ellipsis-h" ></i>
                                                 </span>
                                                 <div class="dropdown-menu">
                                                     <diV class="collapse show switchToggle">
@@ -136,9 +137,21 @@
                                                 </div>
                                             </span>
                                             <!-- {{card.textareaShow}} -->
+                                            <!-- <froala 
+                                                :id="'id'+index+key" 
+                                                :tag="'textarea'" 
+                                                :data-text="card.data"
+                                                @blur="showItem($event,card,index,key);card.textareaShow = false"
+                                                @click="makeInput($event)"
+                                                @focus="hideItem($event)"
+                                                class="inp input-hide text-area autoExpand"
+                                                data-grow="auto" style="padding: 10px !important;"
+                                                v-model="card.data"
+                                                v-if="card.textareaShow === true"></froala> -->
                                             <textarea
                                                 :data-text="card.data"
-                                                :id="'id'+index+key" @blur="showItem($event,card,index,key);card.textareaShow = false"
+                                                :id="'id'+index+key" 
+                                                @blur="showItem($event,card,index,key);card.textareaShow = false"
                                                 @click="makeInput($event)"
                                                 @focus="hideItem($event)"
                                                 class="inp input-hide text-area autoExpand"
@@ -908,8 +921,7 @@
             <TaskDetails
                 :selectedData="selectedData"
                 :task_logs="task_logs"
-                @textArea="ShowTextArea"
-                v-click-outside="HideDetails">
+                @textArea="ShowTextArea">
             </TaskDetails>
         </div>
 
@@ -927,6 +939,7 @@
     import {applyDrag, generateItems} from '../../../assets/plugins/utils/helpers';
     import VueTagsInput from '@johmun/vue-tags-input';
     import TaskDetails from "./boardCardDetails";
+    // import VueFroala from 'vue-froala-wysiwyg';
     // import Folder from './recurLi.vue';
 
     export default {
