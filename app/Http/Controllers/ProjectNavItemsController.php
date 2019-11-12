@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Multiple_board;
 use App\Multiple_list;
 use App\ProjectNavItems;
+use App\Rules;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User;
@@ -30,7 +31,10 @@ class ProjectNavItemsController extends Controller
             $item->lists = $nav_[0];
             $navItem[] = $item;
         }
-        return response()->json(['success' => $navItem]);
+        $rules = Rules::where('project_id',$project_id)->get();
+        return response()->json(['success' => $navItem,'rules'=>$rules]);
+
+
     }
     public function GetBoardsAndColumn($project_id)
     {

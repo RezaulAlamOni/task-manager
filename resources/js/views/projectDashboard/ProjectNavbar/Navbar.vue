@@ -117,9 +117,9 @@
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <h6 class="dropdown-header text-uppercase"> Update Rules</h6>
-                                    <span>
+                                    <span v-for="rule in rules">
                                          <a class="dropdown-item"
-                                            href="javascript:void(0)"><span>All Rules Here</span>
+                                            href="javascript:void(0)"><span>{{rule.name}}</span>
                                          </a>
                                     </span>
                                 </div>
@@ -133,8 +133,7 @@
                         </li>
 
                         <li class="nav-item dropdown">
-                            <a aria-expanded="false" aria-haspopup="true" class="d-block d-md-flex text-center nav-link"
-                               data-toggle="dropdown" href="#">
+                            <a aria-expanded="false" aria-haspopup="true" class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown" href="#">
                                 <span class="d-none d-md-block"><i class="fa fa-fw fa-filter"
                                                                    style="font-size: 26px;"></i></span>
                             </a>
@@ -571,6 +570,7 @@
                     sort_id: null,
                     project_id: null,
                 },
+                rules : null,
                 update_navItem: {
                     title: null,
                     type: null,
@@ -629,6 +629,7 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.AllNavItems = response.success;
+                        _this.rules = response.rules;
                         _this.$emit('getNavBars', {AllNavItem: _this.AllNavItems})
 
                     })
