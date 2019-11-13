@@ -172,7 +172,7 @@
             AddNewRules() {
                 var _this = this;
 
-                if (_this.rule.move_from !== 'select column' &&  _this.rule.move_to !== 'select column' && _this.rule.name !== '') {
+                if (_this.rule.move_from !== 'select column' && _this.rule.name !== '') {
                     _this.rule.project_id = _this.projectId;
                     axios.post('/api/add-rules', _this.rule)
                         .then(response => response.data)
