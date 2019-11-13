@@ -26,8 +26,10 @@
                                             <img :src="baseUrl+'/img/'+column.progress+'.png'" height="40" width="40" />
                                         </div>
                                         <div class="col-md-6 " style="margin: 0px; padding : 0px;word-break: break-all" >
-                                            <span class="col_name" style="word-wrap: break-word; word-break: break-all;" :title="column.name" data-placement="bottom" data-toggle="tooltip">
-                                                {{ (column.name && column.name.length > 28)? column.name.substring(0,28)+ " .." : column.name }}
+                                            <span class="col_name"
+                                                  style="word-break: break-all; max-height: 71px; display: block; height: 42px; overflow: hidden;"
+                                                  :title="column.name" data-placement="bottom" data-toggle="tooltip">
+                                                {{ (column.name && column.name.length > 38)? column.name.substring(0,38)+ " .." : column.name }}
                                             </span>
                                         </div>
                                         <div style="margin: 0px; padding : 0px;">
