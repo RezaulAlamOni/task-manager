@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Rules;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Sabberworm\CSS\Rule\Rule;
 
 class RulesController extends Controller
 {
@@ -29,7 +30,7 @@ class RulesController extends Controller
             'move_from' => $request->move_from,
             'move_to' => $request->move_to,
             'created_by' => Auth::id(),
-            'assigned_users' => ($request->assign_to != 'Assign To') ? $request->assign_to : 0,
+            'assigned_users' => ($request->assign_to != 'NoOne') ? $request->assign_to : 0,
         ];
         if (Rules::create($data)) {
             return response()->json(['status' => 'success']);
@@ -39,9 +40,10 @@ class RulesController extends Controller
 
     }
 
-    public function show(Rules $rules)
+    public function show($id)
     {
-        //
+        $rule = Rules::findOrFail($id);
+        return response()->json(['rule'=>$rule]);
     }
 
 
@@ -51,9 +53,20 @@ class RulesController extends Controller
     }
 
 
-    public function update(Request $request, Rules $rules)
+    public function update(Request $request)
     {
-        //
+        $data = [
+            'name' => $request->name,
+            'status' => $request->status,
+            'move_from' => $request->move_from,
+            'move_to' => $request->move_to,
+            'created_by' => Auth::id(),
+            'assigned_users' => ($request->assign_to != 'NoOne') ? $request->assign_to : 0,
+            'updated_at' => now(),
+        ];
+        $update = Rules::where('id', $request->id)->update($data);
+
+        return response()->json(['status'=>'success','data'=>$update]);
     }
 
 

@@ -1,6 +1,6 @@
 <template>
     <div class="Rules">
-        <div class="container rules-create" v-if="rules_action === 'create'">
+        <div class="container rules-create">
             <section>
                 <div class="container-header">
                     <h2><i class="fa fa-fw fa-magic"></i> Rules For <b>{{Project.name}}</b>
@@ -35,7 +35,7 @@
                                     <div class="form-group">
                                         <select class="form-control select2" v-model="rule.move_from"
                                                 style="width: 100%; margin-top: 10px; border-top: none; border-left: none; border-right: none; box-shadow: none; border-radius: 0px;">
-                                            <option value="select column">Select a Board and Column</option>
+                                            <option value="select column" disabled>Select a Board and Column</option>
                                             <template v-for="Board in BoardColumn">
                                                 <optgroup :label="Board.board_title" v-if="Board.columns.length > 0">
                                                     <template v-for="column in Board.columns">
@@ -55,7 +55,7 @@
                                     <div class="form-group">
                                         <select class="form-control select2" v-model="rule.move_to"
                                                 style="width: 100%; margin-top: 10px; border-top: none; border-left: none; border-right: none; box-shadow: none; border-radius: 0px;">
-                                            <option value="select column" disabled>Select a Board and Column</option>
+                                            <option value="select column" >Select a Board and Column</option>
                                             <template v-for="Board in BoardColumn">
                                                 <optgroup :label="Board.board_title" v-if="Board.columns.length > 0">
                                                     <template v-for="column in Board.columns">
@@ -92,8 +92,8 @@
                                 <button type="submit" class="btn btn-danger pull-left" v-if="rules_action === 'update'">
                                     Delete
                                 </button>
-                                <button type="submit" class="btn btn-default pull-left"
-                                        v-if="rules_action === 'update'"> Update
+                                <button type="submit" class="btn btn-info pull-left ml-2 "
+                                        v-if="rules_action === 'update'" @click="UpdateRule"> Update
                                 </button>
                                 <button type="submit" class="btn btn-primary pull-right"
                                         v-if="rules_action === 'create'"
@@ -133,6 +133,9 @@
         mounted() {
             this.getProject();
             this.getBoardColumn();
+            if (this.rules_action === 'update'){
+                this.getRule()
+            }
         },
         methods: {
             getProject() {
@@ -158,13 +161,24 @@
 
                     });
             },
-            getUser() {
+            getRule() {
                 var _this = this;
-
+                axios.get('/api/rules/'+ _this.rule.id)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.rule.id = response.rule.id;
+                        _this.rule.name= response.rule.name;
+                        _this.rule.status= response.rule.status;
+                        _this.rule.move_from= response.rule.move_from;
+                        _this.rule.move_to= response.rule.move_to;
+                        _this.rule.assign_to= response.rule.assigned_users;
+                    })
+                    .catch(error => {
+                        //
+                    });
             },
             AddNewRules() {
                 var _this = this;
-
                 if (_this.rule.move_from !== 'select column' && _this.rule.name !== '') {
                     _this.rule.project_id = _this.projectId;
                     axios.post('/api/add-rules', _this.rule)
@@ -186,13 +200,45 @@
                     swal('Sorry','Required Field Can\'t be empty','warning');
                 }
             },
+            UpdateRule(){
+                var _this = this;
+                swal({
+                        title: "Are you sure?",
+                        text: "You want to update this Rule !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, Update it!",
+                        closeOnConfirm: false
+                    },
+                    function () {
+                        axios.post('/api/rules-update', _this.rule)
+                            .then(response => response.data)
+                            .then(response => {
+                                swal.close();
+                            })
+                            .catch(error => {
+                                console.log('Api for complete task not Working !!!')
+                            });
+
+                    });
+            },
+
             LiveRule() {
                 this.rule.status = 1;
             },
             PauseRule() {
                 this.rule.status = 0;
             }
-
+        },
+        watch: {
+            action_type: function (val) {
+                this.rules_action = val;
+            },
+            id: function (val) {
+                this.rule.id = val;
+                this.getRule();
+            }
         }
     };
 </script>

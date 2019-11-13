@@ -89,3 +89,5 @@ Route::get('/testGet','MultipleBoardController@test'); //delete card
 //rules
 Route::post('/add-rules', 'RulesController@store');
 Route::get('/all-rules/{project_id}', 'RulesController@index');
+Route::get('/rules/{id}', 'RulesController@show');
+Route::post('/rules-update', 'RulesController@update');
