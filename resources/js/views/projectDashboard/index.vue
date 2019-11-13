@@ -2118,8 +2118,6 @@
                     .catch(error => {
 
                     });
-
-
             },
             deleteSelectedTask() {
 

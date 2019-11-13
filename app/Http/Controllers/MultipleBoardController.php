@@ -104,9 +104,11 @@ class MultipleBoardController extends Controller
                     }
 
                     $boards[$key]['task'][$keys]['children'] = $values['childTask'];
+                    $boards[$key]['task'][$keys]['parents'] = $values['parents'];
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
                     $boards[$key]['task'][$keys]['parent_id'] = $values['parent_id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
+                    $boards[$key]['task'][$keys]['description'] = $values['description'];
                     $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
                     $boards[$key]['task'][$keys]['progress'] = $values['progress'];
                     if ($values['list_id'] != '') {
@@ -269,6 +271,7 @@ class MultipleBoardController extends Controller
             }
             $data[$key] = $value;
         }
+
         $child = Task::where('id', $id)->update($data);
         if ($child) {
             $datas = Task::find($id);
@@ -643,7 +646,9 @@ class MultipleBoardController extends Controller
 
     public function unlinkListToColumn(Request $request)
     {
-        $delete = LinkListToColumn::where('task_list_id',$request->columnId)->first();
+        // $delete = LinkListToColumn::where('task_list_id',$request->columnId)->first();
+        $delete = LinkListToColumn::where('id',$request->linkListId)->first();
+
         if ($delete) {
             // $update = Task::where('project_id',$request->projectId)
             //             ->where('list_id',$delete->multiple_list_id)
@@ -667,30 +672,6 @@ class MultipleBoardController extends Controller
         }
         return response()->json(['success' => false]);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -745,8 +726,6 @@ class MultipleBoardController extends Controller
         //   print_r('<pre>');
         //   print_r($parents);
 
-
-
           foreach ($data as $item) {
             $parent_id = $this->findTopParents($data, $item, $parents);
             print_r($parent_id.'<br>');
@@ -783,47 +762,6 @@ class MultipleBoardController extends Controller
         }
         return $item['parent_id'].' 55555';
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -20,20 +20,22 @@
                             </div>
                             <div :class="column.props.className" v-else>
                                 <div class="card-column-header">
-                                    <div class="row">
+                                    <div class="row" style="position: relative;">
                                         <div class="col-md-3" style="margin: 0px;  padding : 0px;">
                                             <span class="column-drag-handle">&nbsp; &#x2630;</span>
                                             <img :src="baseUrl+'/img/'+column.progress+'.png'" height="40" width="40" />
                                         </div>
-                                        <div class="col-md-5 " style="margin: 0px; padding : 0px;" >
-                                            <span class="col_name" style="word-wrap: break-word;" :title="column.name" data-placement="bottom" data-toggle="tooltip">
-                                                {{ (column.name && column.name.length > 35)? column.name.substring(0,35)+" ..." : column.name }}
+                                        <div class="col-md-6 " style="margin: 0px; padding : 0px;word-break: break-all" >
+                                            <span class="col_name"
+                                                  style="word-break: break-all; max-height: 71px; display: block; height: 42px; overflow: hidden;"
+                                                  :title="column.name" data-placement="bottom" data-toggle="tooltip">
+                                                {{ (column.name && column.name.length > 38)? column.name.substring(0,38)+ " .." : column.name }}
                                             </span>
                                         </div>
-                                        <div class="col-md-2" style="margin: 0px; padding : 0px;">
+                                        <div style="margin: 0px; padding : 0px;">
                                             <span class="total-task">{{column.children.length}}</span>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-1" style="position: absolute; display: inline; right: 0px; top: 9px">
                                             <span class="pull-right" style="display: inline-flex;">
                                                 <!-- <span>
                                                     <span class="dropdown-toggle-split  opacity"
@@ -77,10 +79,26 @@
                                                             <a @click="transferColumnToOtherBoard(index, column.boardId)" class="dropdown-item"
                                                                 href="#">
                                                                 <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18" width="18" > Transfer Column to another board</a>
-                                                            <a v-if="column.linkToList.length <= 0" @click="showLinkModel(index, column.boardId)" class="dropdown-item"
+                                                            <a @click="showLinkModel(index, column.boardId)" class="dropdown-item"
                                                                 href="#"><img :src="baseUrl+'/img/task-icon/link.png'" height="18" width="18" > Link to List </a>
-                                                            <a v-else @click="unlinklistToCol(index, column.boardId)" class="dropdown-item"
-                                                                href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink {{column.linkToList[0].link_to_list_column.list_title}} </a>
+                                                                <!-- v-if="column.linkToList.length <= 0"  -->
+                                                            <li class="dropdown-submenu" v-if="column.linkToList.length > 0">
+                                                                <a class="dropdown-item" href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink Lists</a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li v-for="unlinks in column.linkToList" class="dropdown-item"  @click="unlinklistToCol(index, column.boardId, unlinks.id)">
+                                                                        <a href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" >
+                                                                            {{unlinks.link_to_list_column.list_title}}
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+
+
+                                                            <!-- <a v-if="column.linkToList.length > 0" @click="unlinklistToCol(index, column.boardId)" class="dropdown-item"
+                                                                href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink Lists
+
+                                                                 </a> -->
+
                                                             <div class="dropdown-divider"></div>
                                                             <a @click="deleteColumn(index,column.boardId)" class="dropdown-item"
                                                             href="#">
@@ -107,14 +125,14 @@
                                         <div :class="card.props.className"
                                                 :style="card.props.style"
                                                 class="card-list"
-                                                @click="selectCard(card)"
+                                                @click="selectCard(card,column.children)"
                                                 :id="'card_'+card.cardId"
                                                 v-on:dblclick="showLog">
                                                 <!-- @click="selectCard(card)" -->
-                                            <span style="position: absolute; right: 20px; top: 8px; ">
+                                            <span style="position: absolute; right: 10px; top: 8px; " > <!-- v-if="card.textareaShow === true" -->
                                                 <span class="dropdown-toggle-split opacity"
                                                     data-toggle="dropdown" >
-                                                    <i class="fa fa-ellipsis-h" v-if="card.textareaShow === true"></i>
+                                                    <i class="fa fa-ellipsis-h" ></i>
                                                 </span>
                                                 <div class="dropdown-menu">
                                                     <diV class="collapse show switchToggle">
@@ -136,18 +154,37 @@
                                                 </div>
                                             </span>
                                             <!-- {{card.textareaShow}} -->
-                                            <textarea
+                                            <!-- <froala
+                                                :id="'id'+index+key"
+                                                :tag="'textarea'"
                                                 :data-text="card.data"
-                                                :id="'id'+index+key" @blur="showItem($event,card,index,key);card.textareaShow = false"
+                                                @blur="showItem($event,card,index,key);card.textareaShow = false"
                                                 @click="makeInput($event)"
                                                 @focus="hideItem($event)"
                                                 class="inp input-hide text-area autoExpand"
                                                 data-grow="auto" style="padding: 10px !important;"
-                                                v-if="card.textareaShow === true" >{{ card.data }}</textarea>
+                                                v-model="card.data"
+                                                v-if="card.textareaShow === true"></froala> -->
+<!--                                            <textarea-->
+<!--                                                :data-text="card.data"-->
+<!--                                                :id="'id'+index+key"-->
+<!--                                                @blur="showItem($event,card,index,key);card.textareaShow = false"-->
+<!--                                                @click="makeInput($event)"-->
+<!--                                                @focus="hideItem($event)"-->
+<!--                                                class="inp input-hide text-area autoExpand"-->
+<!--                                                data-grow="auto" style="padding: 10px !important;"-->
+<!--                                                v-if="card.textareaShow === true" >{{ card.data }}-->
+<!--                                            </textarea>-->
+
+                                            <div :id="'title'+card.cardId" contenteditable="true" style="padding: 10px;" class="card-title-blur"
+                                                 @click="makeInput($event,card.cardId)"
+                                                 @blur="showItem($event,card,index,key)"
+                                                 v-html="card.data">
+                                            </div>
 
                                             <!--  -->
                                             <!-- <div v-if="card.textareaShow === false" @click="showHideTextarea(index, key, card)">{{ card.data }}</div> -->
-                                            <div v-if="card.textareaShow === false" @click="card.textareaShow = true;showHideTextarea('#id'+index+key)">{{ card.data }}</div>
+<!--                                            <div v-if="card.textareaShow === false" @click="card.textareaShow = true;showHideTextarea('#id'+index+key)">{{ card.data }}</div>-->
                                             <br>
                                             <div class="">
                                                 <div>
@@ -908,8 +945,7 @@
             <TaskDetails
                 :selectedData="selectedData"
                 :task_logs="task_logs"
-                @textArea="ShowTextArea"
-                v-click-outside="HideDetails">
+                @textArea="ShowTextArea">
             </TaskDetails>
         </div>
 
@@ -927,6 +963,7 @@
     import {applyDrag, generateItems} from '../../../assets/plugins/utils/helpers';
     import VueTagsInput from '@johmun/vue-tags-input';
     import TaskDetails from "./boardCardDetails";
+    // import VueFroala from 'vue-froala-wysiwyg';
     // import Folder from './recurLi.vue';
 
     export default {
@@ -1180,7 +1217,7 @@
                             childrens: this.cards[i].task[j].children,
                             data: this.cards[i].task[j].name,
                             textareaShow: this.cards[i].task[j].textareaShow,
-                            description: this.cards[i].task[j].name,
+                            description: this.cards[i].task[j].description,
                             date: this.cards[i].task[j].date,
                             parent_id: this.cards[i].task[j].parent_id,
                             progress: this.cards[i].task[j].progress,
@@ -1322,7 +1359,7 @@
                     this.scene = scene
                     // console.log(this.scene.children[index]);
                     let data = this.scene.children[index];
-                    console.log("sort",data);
+                    // console.log("sort",data);
                     axios.post('/api/card-sort',data)
                     .then(response => response.data)
                     .then(response => {
@@ -1597,7 +1634,7 @@
                 });
                 // swal('Warning!!','Work in progress','warning');
             },
-            unlinklistToCol(index, boardId){
+            unlinklistToCol(index, boardId, linkListId){
                 let _this = this;
                 // alert(this.currentColumn);
                 // alert(this.selectedSubNav);
@@ -1612,6 +1649,7 @@
                 },
                 function(){
                     let data = {
+                        'linkListId' : linkListId,
                         'projectId' : _this.projectId,
                         'columnId' : boardId,
                         'multiple_list' : _this.selectedSubNav
@@ -1838,19 +1876,22 @@
                 this.selectedExistedTask = [];
                 $("#addExistingTask").modal('hide');
             },
-            makeInput(e) {
+            makeInput(e,id) {
                 let _this = this;
+                $('#title'+id).removeClass('card-title-blur');
+                $('#title'+id).addClass('card-title-focus');
 
-                $('.inp').addClass('input-hide');
-                $('.inp').removeClass('form-control');
-                $(e.target).removeClass('input-hide');
-                $(e.target).addClass('form-control');
 
-                var option = {
-                    height: 50,
-                    maxHeight: 200
-                };
-                _this.growInit(option);
+                // $('.inp').addClass('input-hide');
+                // $('.inp').removeClass('form-control');
+                // $(e.target).removeClass('input-hide');
+                // $(e.target).addClass('form-control');
+                //
+                // var option = {
+                //     height: 50,
+                //     maxHeight: 200
+                // };
+                // _this.growInit(option);
             },
             addCard(index, id) {
 
@@ -2097,19 +2138,23 @@
                     });
             },
             showItem(e, data, index, child_key) {
-                let attData = $(e.target).attr('data-text');
-                let attDataNew = e.target.value;
-                // console.log(attDataNew);
-                if( $.trim(attData) === $.trim(attDataNew)){
-                    // console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
-                    this.getData();
-                    $('.inp').addClass('input-hide');
-                    $('.inp').removeClass('form-control');
-                    return false;
-                }
+
+                $('#title'+data.cardId).addClass('card-title-blur');
+                $('#title'+data.cardId).removeClass('card-title-focus');
+                // let attData = $(e.target).attr('data-text');
+                // let attDataNew = e.target.value;
+
+                let attDataNew = $('#title'+data.cardId).html();
+                // if( $.trim(attData) === $.trim(attDataNew)){
+                //     // console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
+                //     this.getData();
+                //     $('.inp').addClass('input-hide');
+                //     $('.inp').removeClass('form-control');
+                //     return false;
+                // }
                 data.data = attDataNew;
-                $('.inp').addClass('input-hide');
-                $('.inp').removeClass('form-control');
+                // $('.inp').addClass('input-hide');
+                // $('.inp').removeClass('form-control');
                 this.saveData(data, index, child_key);
             },
             showHideTextarea(id){
@@ -2174,7 +2219,7 @@
                 return myColor;
             },
             changeTag(tags, card, columnIndex, cardIndex) {
-                console.log(card);
+                // console.log(card);
                 var _this = this;
                 var old = this.cards[columnIndex].task[cardIndex].tags.length;
                 var newl = tags.length;
@@ -2261,7 +2306,7 @@
                         console.log('Api for move down task not Working !!!')
                     });
             },
-            selectCard(card){
+            selectCard(card,child){
                 this.selectedData = card;
                 console.log(this.selectedData);
                 this.selectedCard = card.cardId;
