@@ -1,0 +1,60 @@
+@mixin transition($transition) {
+    -moz-transition: $transition;
+    -webkit-transition: $transition;
+    transition: $transition;
+}
+
+@mixin leftContent() {
+    position: absolute;
+    left: 15px;
+    top: 6px;
+}
+
+.rules-create-bottom {
+    float: right;
+    margin-top: 30px;
+    padding-right: 70px;
+}
+
+.rules-title {
+    width: 60%;
+    border-radius: 10px;
+    padding-left: 10px;
+    height: 35px;
+}
+
+.radio-for {
+    position: relative;
+    height: 17px;
+    width: 30px;
+    background: white;
+    border-radius: 8px;
+    margin: 0px -2px -3px 8px;
+    display: inline-block;
+}
+
+.rule-header-btn {
+    cursor: pointer;
+}
+
+.rule-header-btn-red {
+    cursor: pointer;
+}
+
+.rule-header-btn:hover {
+    cursor: pointer;
+    background: #aeffd1;
+    color: black;
+}
+
+.rule-header-btn-red:hover {
+    cursor: pointer;
+    background: #ffaca7;
+    color: black;
+}
+
+.check-radio {
+    color: #0a773a;
+    position: absolute;
+    right: 5px;
+}
