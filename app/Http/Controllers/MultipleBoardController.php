@@ -55,10 +55,10 @@ class MultipleBoardController extends Controller
             $boards[$key]['progress'] = $value['progress'];
             $boards[$key]['linkToList'] = $value['linkToList'];
             $boards[$key]['color'] = $value['color'];
-            
+
             if (!empty($value['task']) && count($value['task']) > 0) {
                 foreach ($value['task'] as $keys => $values) {
-                                        
+
                     $tagTooltip = '';
                     $tags = [];
                     if (!empty($values['Assign_tags']) && count($values['Assign_tags']) > 0) {
@@ -98,7 +98,7 @@ class MultipleBoardController extends Controller
                     if( $values['childTask'] !== null ){
                         $this->totalChild = 0;
                         $boards[$key]['task'][$keys]['child'] = $this->recurChild($values['childTask']);
-                        
+
                     } else {
                         $boards[$key]['task'][$keys]['child'] = 0;
                     }
@@ -108,6 +108,7 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
                     $boards[$key]['task'][$keys]['parent_id'] = $values['parent_id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
+                    $boards[$key]['task'][$keys]['description'] = $values['description'];
                     $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
                     $boards[$key]['task'][$keys]['progress'] = $values['progress'];
                     if ($values['list_id'] != '') {
@@ -127,7 +128,7 @@ class MultipleBoardController extends Controller
     }
 
     public function recurChild($child)
-    {   
+    {
         $this->totalChild += count($child);
         foreach ($child as $key => $value) {
             if ($value['childTask'] !== null) {
@@ -138,7 +139,7 @@ class MultipleBoardController extends Controller
         }
         return $this->totalChild;
     }
-  
+
     public function create(Request $request)
     {
         // return $request->all();
@@ -234,7 +235,7 @@ class MultipleBoardController extends Controller
             if (count($childs['childTask']) > 0) {
                 $ids = $this->recurChildIds($childs);
             }
-        } 
+        }
         // dd($data);
         $update = Task::where('board_parent_id',"!=",0)
                     ->whereIn('id', $ids)
@@ -270,6 +271,7 @@ class MultipleBoardController extends Controller
             }
             $data[$key] = $value;
         }
+
         $child = Task::where('id', $id)->update($data);
         if ($child) {
             $datas = Task::find($id);
@@ -433,7 +435,7 @@ class MultipleBoardController extends Controller
     }
 
     // public function cardSort(Request $request)
-    // {   
+    // {
     //     return $request->children;
     //     if(!empty($request->children) && count($request->children) > 0){
     //         $ids = ''; //recurChildIds
@@ -509,10 +511,10 @@ class MultipleBoardController extends Controller
                 $data[$key]['sort_id'] = $keySP;
             }
         }
-        return $data;    
+        return $data;
     }
     public function cardSort(Request $request)
-    {   
+    {
         // return $request->children;
         if(!empty($request->children) && count($request->children) > 0){
             $ids = '';
@@ -644,7 +646,7 @@ class MultipleBoardController extends Controller
     }
 
     public function unlinkListToColumn(Request $request)
-    {   
+    {
         // $delete = LinkListToColumn::where('task_list_id',$request->columnId)->first();
         $delete = LinkListToColumn::where('id',$request->linkListId)->first();
         if ($delete) {
@@ -661,10 +663,10 @@ class MultipleBoardController extends Controller
         }
     }
 
-    public function isLinked(Request $request) 
-    {   
+    public function isLinked(Request $request)
+    {
         $isLink = LinkListToColumn::where('multiple_list_id', $request->multiple_list)->get();
-        
+
         if ($isLink->count() > 0) {
             return response()->json(['success' => true, 'data' => $isLink]);
         }
@@ -705,25 +707,25 @@ class MultipleBoardController extends Controller
                 'title' => '100',
                 'parent_id' => 0
             ],
-            
+
             [
                 'id' => 101,
                 'title' => '100',
                 'parent_id' => 100
             ],
-            
+
             [
                 'id' => 102,
                 'title' => '100',
                 'parent_id' => 200
             ],
-            
+
             [
                 'id' => 103,
                 'title' => '100',
                 'parent_id' => 101
             ],
-            
+
             [
                 'id' => 104,
                 'title' => '100',
@@ -732,9 +734,9 @@ class MultipleBoardController extends Controller
           );
           $allIds = array_column($data, 'id');
           $parents = [];
-          
-          
-          
+
+
+
           foreach ($data as $item) {
             if($item['parent_id'] == 0){
                 $parents[] = $item['id'];
@@ -747,13 +749,13 @@ class MultipleBoardController extends Controller
           }
         //   print_r('<pre>');
         //   print_r($parents);
-          
-          
-          
+
+
+
           foreach ($data as $item) {
             $parent_id = $this->findTopParents($data, $item, $parents);
             print_r($parent_id.'<br>');
-            
+
           }
     }
 
@@ -776,10 +778,10 @@ class MultipleBoardController extends Controller
                 // } else {
                 //     $this->findTopParents($allData, $d['parent_id'],$parents);
                 // }
-                                                                              
-                          
+
+
                 // $ddId = findTopParents($allData, $d['parent_id']);
-                //           if($ddId = 
+                //           if($ddId =
             } else {
 
             }

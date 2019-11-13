@@ -24,26 +24,26 @@
                 <img class="img-responsive" src="/img/12.jpg" style="height:30px;width:30px;">
             </div> -->
             <div class="col-md-1">
-                    <img :src="baseUrl+'/img/'+selectedData.progress+'.png'"  height="40" width="40" style="clear: right;">
-                </div>
+                <img :src="baseUrl+'/img/'+selectedData.progress+'.png'" height="40" width="40" style="clear: right;">
+            </div>
             <div class="col-3">
-                
+
                 <!-- Tags -->
                 <div class="col-md-8">
                     <a :class="{'tag-icon': true, 'tag-icon-free': selectedData.tags == undefined || selectedData.tags.length == 0}">
                         <div v-if="selectedData.tags && selectedData.tags.length !== 0">
                             <div style="float: left;" v-for="(item, tagIndex) in selectedData.tags">
                                 <div class="dropdown-toggle-split "
-                                    data-toggle="dropdown"
-                                    style="padding-right: 0px; padding-left: 1px;" v-if="tagIndex < 2">
+                                     data-toggle="dropdown"
+                                     style="padding-right: 0px; padding-left: 1px;" v-if="tagIndex < 2">
                                     <span class="badge badge-danger "
-                                        v-if='item == "Dont Forget"'>{{item.text.substring(0,12)}}</span>
+                                          v-if='item == "Dont Forget"'>{{item.text.substring(0,12)}}</span>
                                     <span :title="selectedData.tagTooltip"
-                                        class="badge badge-success "
-                                        data-placement="bottom"
-                                        data-toggle="tooltip"
-                                        v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]"
-                                        v-else
+                                          class="badge badge-success "
+                                          data-placement="bottom"
+                                          data-toggle="tooltip"
+                                          v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]"
+                                          v-else
                                     >{{item.text.substring(0,10)}}
                                         <span v-if="item.text.length > 10">..</span>
                                     </span>
@@ -63,18 +63,22 @@
                                             <div class="row">
                                                 <div class="col-12">
                                                     <template v-for="(tag, tagIndx) in selectedData.existing_tags">
-                                                        <li class="badge-pill tags" @click="addExistingTag( tagIndx, selectedData.cardId, '')"
+                                                        <li class="badge-pill tags"
+                                                            @click="addExistingTag( tagIndx, selectedData.cardId, '')"
                                                             v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
                                                             v-if="tag.text !== 'Dont Forget'">
-                                                            {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
+                                                            {{(tag.title !== undefined) ?tag.title.substring(0,12) :
+                                                            ''}}
                                                         </li>
                                                     </template>
                                                     <!-- <template> -->
-                                                        <!-- <li class="badge-pill tags"
-                                                            v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
-                                                        </li> -->
+                                                    <!-- <li class="badge-pill tags"
+                                                        v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
+                                                    </li> -->
                                                     <!-- </template> -->
-                                                    <li @click="addExistingTag( 0, selectedData.cardId, 'Dont Forget')" class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                    <li @click="addExistingTag( 0, selectedData.cardId, 'Dont Forget')"
+                                                        class="badge-pill tags" style="background: #FB8678"> Dont Forget
+                                                    </li>
                                                 </div>
                                             </div>
                                             <!-- <hr> -->
@@ -104,8 +108,8 @@
                             </div>
                         </div>
                         <i class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
-                            data-toggle="dropdown"
-                            v-else></i>
+                           data-toggle="dropdown"
+                           v-else></i>
 
                         <div class="dropdown-menu dropdown-menu1 ">
 
@@ -121,19 +125,21 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <template v-for="(tag, tagIndx) in selectedData.existing_tags">
-                                                <li class="badge-pill tags" @click="addExistingTag( tagIndx, selectedData.cardId ,'')"
+                                                <li class="badge-pill tags"
+                                                    @click="addExistingTag( tagIndx, selectedData.cardId ,'')"
                                                     v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
                                                     v-if="tag.text !== 'Dont Forget'">
                                                     {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
                                                 </li>
                                             </template>
                                             <li @click="addExistingTag( 0, selectedData.cardId, 'Dont Forget')"
-                                                class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                class="badge-pill tags" style="background: #FB8678"> Dont Forget
+                                            </li>
                                         </div>
                                     </div>
                                     <hr>
                                     <div class="col-xs-12"
-                                        style="margin-top:10px;width: 100%;">
+                                         style="margin-top:10px;width: 100%;">
                                         <button @click="showTagManageModel"
                                                 class="btn btn-small btn-primary pull-right"
                                                 type="submit">
@@ -153,19 +159,19 @@
                 <a class="user dropdown-hide-with-remove-icon">
                     <template v-if="selectedData.assigned_user.length > 0">
                         <span class="assigned_user dropdown-toggle-split "
-                            data-toggle="dropdown" v-for="(assign,keyId) in selectedData.assigned_user">
+                              data-toggle="dropdown" v-for="(assign,keyId) in selectedData.assigned_user">
                             <p :title="assign.name"
-                            class="assignUser-photo-for-selected text-uppercase"
-                            data-placement="bottom" data-toggle="tooltip"
-                            style="top: 10px;"
-                            v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
+                               class="assignUser-photo-for-selected text-uppercase"
+                               data-placement="bottom" data-toggle="tooltip"
+                               style="top: 10px;"
+                               v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
                             </p>
 
                         </span>
                     </template>
                     <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
                         <i class="outline-person icon-image-preview li-opacity "
-                        data-toggle="tooltip" title="Assignee">
+                           data-toggle="tooltip" title="Assignee">
                         </i>
                     </span>
 
@@ -173,10 +179,10 @@
                         <diV class="collapse show switchToggle">
                             <li class="assignUser">
                                 <input class="input-group searchUser"
-                                    placeholder="Assign by name and email"
-                                    style="width: 90%; padding: 12px 20px; margin: 10px; display: inline-block; border: 1px solid #ccc;
+                                       placeholder="Assign by name and email"
+                                       style="width: 90%; padding: 12px 20px; margin: 10px; display: inline-block; border: 1px solid #ccc;
                                                 border-radius: 4px; box-sizing: border-box; "
-                                    type="text">
+                                       type="text">
                                 <label class="pl-2 label-text">
                                     <span class="assign-user-drop-down-text">
                                         Or invite a new member by email address
@@ -200,17 +206,17 @@
                                             </h5>
                                         </div>
                                         <a :id="'remove-assign-user'+user.id"
-                                            v-if="selectedData.assigned_user_ids.includes(user.id)"
-                                            @click="removeAssignedUser(user.id, selectedData.cardId)"
-                                            data-toggle="tooltip" title="Remove user from assigned !"
-                                            class="remove-assign-user badge badge-danger"
-                                            href="javascript:void(0)">
-                                                <i class="fa fa-user-times remove-assign-user-icon"></i>
+                                           v-if="selectedData.assigned_user_ids.includes(user.id)"
+                                           @click="removeAssignedUser(user.id, selectedData.cardId)"
+                                           data-toggle="tooltip" title="Remove user from assigned !"
+                                           class="remove-assign-user badge badge-danger"
+                                           href="javascript:void(0)">
+                                            <i class="fa fa-user-times remove-assign-user-icon"></i>
                                         </a>
                                         <a :id="'remove-assign-user'+user.id" v-else
-                                        data-toggle="tooltip" title="Assign user to task!"
-                                        class="remove-assign-user badge badge-success"
-                                        href="javascript:void(0)">
+                                           data-toggle="tooltip" title="Assign user to task!"
+                                           class="remove-assign-user badge badge-success"
+                                           href="javascript:void(0)">
                                             <i class="fa fa-user-plus remove-assign-user-icon"></i>
                                         </a>
                                     </div>
@@ -224,9 +230,9 @@
                                 <span
                                     class="assign-user-drop-down-text">Assign an external team</span>
                             <switches class="assign-user-switch-for-dropdown"
-                                    color="success"
-                                    theme="bootstrap"
-                                    v-model="id">
+                                      color="success"
+                                      theme="bootstrap"
+                                      v-model="id">
                             </switches>
                         </li>
                     </div>
@@ -235,8 +241,8 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <h5 class="">
-                    {{selectedData.data}}
+                <h5 class="" v-html="selectedData.data">
+<!--                    {{selectedData.data}}-->
                 </h5>
             </div>
         </div>
@@ -245,11 +251,13 @@
             <div class="col-12">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a aria-controls="home" aria-selected="true" class="nav-link active" data-toggle="tab" href="#home"
+                        <a aria-controls="home" aria-selected="true" class="nav-link active" data-toggle="tab"
+                           href="#home"
                            id="_details" role="tab">Details</a>
                     </li>
                     <li class="nav-item">
-                        <a aria-controls="comment" aria-selected="false" class="nav-link" data-toggle="tab" href="#comment"
+                        <a aria-controls="comment" aria-selected="false" class="nav-link" data-toggle="tab"
+                           href="#comment"
                            id="_comment" role="tab">Comments</a>
                     </li>
                     <li class="nav-item">
@@ -259,6 +267,10 @@
                     <li class="nav-item" v-if="selectedData.childrens.length  > 0">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_child" role="tab">Childs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
+                           id="_requirement" role="tab">Requirement</a>
                     </li>
                 </ul>
             </div>
@@ -273,21 +285,28 @@
                         <div class="textAreaExtend">
                             <div class="row">
                                 <div class="col-12">
+                                    <h3>Details</h3>
+                                </div>
+                                <div class="col-12">
                                     <!-- <div v-if="showDetails == false" @click="showDetails = true">{{ selectedData.data }}</div>  v-if="showDetails == true"  -->
-                                    <textarea
-                                            @focus="ShowListDetails(selectedData)" 
+                                    <!-- <textarea
+                                            @focus="ShowListDetails(selectedData)"
                                             @blur="showDetails = false"
                                             class="form-control detailsInput"
                                             data-grow="auto"
-                                            placeholder="Task Description" 
+                                            placeholder="Task Description"
                                             v-model="selectedData.data">
-                                    </textarea>
+                                    </textarea> -->
+                                    <div :id="'bx'+selectedData.cardId" contenteditable="true"
+                                         style="max-height: 560px;padding: 5px; display: inline-block;overflow: auto;width: 100%; border: 1px solid #e6e6e6;"
+                                         v-html="selectedData.description">
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="submitdetails" id="submitdetails">
-                                        <a @click="updateDescription" class="btn btn-default"
+                                        <a @click="updateDescription('#bx'+selectedData.cardId)" class="btn btn-default"
                                            href="javascript:void(0)"
                                            style="background: #7BB348;">Post</a>
                                         <a class="btn btn-default" href="javascript:void(0)"
@@ -302,13 +321,13 @@
                 <div class="row">
                     <div class="col-12" v-if="selectedData.files && selectedData.files.length !== 0">
                         <h3 style="margin-top: 20px;">Files</h3>
-                            <div class="row">
-                                <template v-for="fl in selectedData.files">
-                                    <div class="col-6">
-                                        <img :src="'/images/'+fl.file_name" class="task-img-right-pane">
-                                    </div>
-                                </template>
-                            </div>
+                        <div class="row">
+                            <template v-for="fl in selectedData.files">
+                                <div class="col-6">
+                                    <img :src="'/images/'+fl.file_name" class="task-img-right-pane">
+                                </div>
+                            </template>
+                        </div>
                         <div style="cursor: pointer; background-color: #F8F8F8; margin:10px 0;">
                             <input :id="'file'+selectedData._id" :ref="selectedData._id" style="display: none;"
                                    type="file">
@@ -323,15 +342,16 @@
                         <div class="textAreaExtend" v-click-outside="HideTextArea">
                             <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
                                data-placement="bottom" data-toggle="tooltip"> PI</p>
-                            <textarea @focus="ShowTextArea(selectedData)" 
-                                    class="form-control commentInput" 
-                                    data-grow="auto"
-                                    placeholder="Add comment">
+                            <textarea @focus="ShowTextArea(selectedData)"
+                                      class="form-control commentInput"
+                                      data-grow="auto"
+                                      placeholder="Add comment">
                             </textarea>
-                            
+
                             <div class="SubmitButton" id="SubmitButton">
                                 <a class="btn btn-default btn-sm" style="background: #7BB348;">Post</a>
-                                <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6" @click="HideTextArea">Cancel</a>
+                                <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6"
+                                   @click="HideTextArea">Cancel</a>
                                 <a @click="addAttachment(selectedData)" class="btn btn-default btn-sm"
                                    style="border: 1px solid #f1efe6">
                                     <i class="fa fa-paperclip"></i>
@@ -382,16 +402,16 @@
                             </li>
                         </ul>
                     </template> -->
-                                <!-- {{ selectedData.childrens }} -->
+                    <!-- {{ selectedData.childrens }} -->
                     <div v-if="selectedData.childrens.length  > 0" v-for="child in selectedData.childrens">
-                        <li class="list-group-item" >
+                        <li class="list-group-item">
                             <label class="checkbox_cus_mini ">
                                 <!-- <input id="109" type="checkbox" checked="checked" disable="" value="109">  -->
                                 {{ child.title }}
                                 <!-- <span class="checkmark"></span> -->
                                 </label>
                             <!---->
-                            <ul v-if="child.child_task.length  > 0" class="list-group list-group-flush" >
+                            <ul v-if="child.child_task.length  > 0" class="list-group list-group-flush">
                                 <div v-for="child1 in child.child_task">
                                     <li class="list-group-item">
                                         <label class="checkbox_cus_mini ">
@@ -409,7 +429,8 @@
                                                         <!-- <span class="checkmark"></span> -->
                                                         </label>
                                                     <!---->
-                                                    <ul v-if="child2.child_task.length  > 0" class="list-group list-group-flush">
+                                                    <ul v-if="child2.child_task.length  > 0"
+                                                        class="list-group list-group-flush">
                                                         <div v-for="child3 in child2.child_task">
                                                             <li class="list-group-item">
                                                                 {{ child3.title }}
@@ -445,7 +466,7 @@
         props: ['selectedData', 'task_logs'],
         data() {
             return {
-                showDetails : false,
+                showDetails: false,
                 disabledDates: {
                     id: null
                 },
@@ -456,8 +477,7 @@
                 cards: [],
 
 
-
-                baseUrl : window.location.origin,
+                baseUrl: window.location.origin,
                 id: 0,
                 tags: [],
                 addField: {
@@ -490,7 +510,7 @@
                 selectedSubNav: 'Select Nav List',
                 selectedSubBoard: 'Select Board List',
                 selectedBoardColumn: 'Select Board Column',
-                transferBtn : false,
+                transferBtn: false,
                 project: null,
                 tree4data: [],
                 currentColumn: null,
@@ -525,7 +545,7 @@
                 },
                 // selectedData : {},
                 // task_logs : null,
-                check_uncheck_child : null,
+                check_uncheck_child: null,
                 manageTag: null,
             }
         },
@@ -595,11 +615,12 @@
                 var _this = this;
                 // $('.submitdetails').hide();
             },
-            updateDescription() {
+            updateDescription(id) {
                 var _this = this;
+                this.selectedData.description = $(id).html();
                 var postData = {
                     id: _this.selectedData.cardId,
-                    title: _this.selectedData.data
+                    description: _this.selectedData.description
                 };
                 axios.post('/api/card-update/' + _this.selectedData.cardId, postData)
                     .then(response => response.data)
@@ -690,7 +711,7 @@
                     user_id: user_id,
                     task_id: task_id
                 };
-                        // console.log(postData)
+                // console.log(postData)
                 axios.post('/api/task-list/assign-user-remove', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -707,7 +728,7 @@
                         console.log('Api assign-user-remove is not Working !!!')
                     });
             },
-             assignUserToTask(user, data) {
+            assignUserToTask(user, data) {
                 var _this = this;
                 var postData = {
                     task_id: data.cardId,
@@ -774,41 +795,41 @@
                         type: 'task',
                     };
                     axios.post('/api/task-list/add-tag', postData)
-                    .then(response => response.data)
-                    .then(response => {
+                        .then(response => response.data)
+                        .then(response => {
 
-                        setTimeout(function () {
-                            // _this.getBoardTask();
-                            console.log(response);
-                            _this.selectedData.tags.push({
-                                assign_id: response.data.assign_id,
-                                board_id: response.data.board_id,
-                                classes: "",
-                                color: response.data.color,
-                                id: response.data.id,
-                                style: 'style="background: "'+response.data.color,
-                                text: response.data.title,
-                            });
-                           $('.dropdown-menu').removeClass('show');
-                            // _this.getData();
-                        }, 100);
-                    })
-                    .catch(error => {
-                        console.log("2nd error =>"+error)
-                    });
+                            setTimeout(function () {
+                                // _this.getBoardTask();
+                                console.log(response);
+                                _this.selectedData.tags.push({
+                                    assign_id: response.data.assign_id,
+                                    board_id: response.data.board_id,
+                                    classes: "",
+                                    color: response.data.color,
+                                    id: response.data.id,
+                                    style: 'style="background: "' + response.data.color,
+                                    text: response.data.title,
+                                });
+                                $('.dropdown-menu').removeClass('show');
+                                // _this.getData();
+                            }, 100);
+                        })
+                        .catch(error => {
+                            console.log("2nd error =>" + error)
+                        });
                 }
             },
             addExistingTag(index, cardId, dntfrgt = '') {
                 let _this = this;
                 console.log(this.selectedData.existing_tags[index]);
-                if(dntfrgt !== ''){
+                if (dntfrgt !== '') {
                     var postData = {
                         id: cardId,
                         tags: "Dont Forget",
                         color: "#FF0000",
                         type: 'task',
                     };
-                }else{
+                } else {
                     var postData = {
                         id: cardId,
                         tags: this.selectedData.existing_tags[index].title,
@@ -820,29 +841,29 @@
                 //     postData.id = card.id;
                 // }
                 axios.post('/api/task-list/add-tag', postData)
-                .then(response => response.data)
-                .then(response => {
-                    _this.selectedData.tags.push({
-                        assign_id: response.data.assign_id,
-                        board_id: response.data.board_id,
-                        classes: "",
-                        color: _this.selectedData.existing_tags[index].color,
-                        id: _this.selectedData.existing_tags[index].id,
-                        style: '',
-                        text: _this.selectedData.existing_tags[index].title,
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.selectedData.tags.push({
+                            assign_id: response.data.assign_id,
+                            board_id: response.data.board_id,
+                            classes: "",
+                            color: _this.selectedData.existing_tags[index].color,
+                            id: _this.selectedData.existing_tags[index].id,
+                            style: '',
+                            text: _this.selectedData.existing_tags[index].title,
 
 
-                         id : _this.selectedData.existing_tags[index]
+                            id: _this.selectedData.existing_tags[index]
+                        });
+                        _this.selectedData.existing_tags.splice(index, 1);
+                        // $('#dropdown' + cardId).toggle();
+                        setTimeout(function () {
+                            // _this.getBoardTask();
+                        }, 100);
+                    })
+                    .catch(error => {
+                        console.log("1st error =>" + error)
                     });
-                    _this.selectedData.existing_tags.splice(index, 1);
-                    // $('#dropdown' + cardId).toggle();
-                    setTimeout(function () {
-                        // _this.getBoardTask();
-                    }, 100);
-                })
-                .catch(error => {
-                    console.log("1st error =>"+error)
-                });
             },
             showTagManageModel() {
                 var _this = this;
@@ -863,7 +884,7 @@
                 return myColor;
             },
         },
-        
+
         directives: {
             ClickOutside
         },

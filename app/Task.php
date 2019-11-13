@@ -20,6 +20,7 @@ class Task extends Model
         'updated_by',
         'title',
         'tag',
+        'description',
         'color',
         'hidden',
         'progress',
