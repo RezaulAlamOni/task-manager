@@ -95,7 +95,7 @@
                                 <Container
                                     :drop-placeholder="dropPlaceholderOptions"
                                     :get-child-payload="getCardPayload(column.id)"
-                                    
+
                                     @drop="(e) => onCardDrop(column.id, column.boardId, index, e)"
                                     drag-class="card-ghost"
                                     drop-class="card-ghost-drop"
@@ -1326,7 +1326,7 @@
                     axios.post('/api/card-sort',data)
                     .then(response => response.data)
                     .then(response => {
-                        // _this.getBoardTask();                            
+                        // _this.getBoardTask();
                          setTimeout(() => {
                         }, 500);
                         console.log('sorted');
@@ -1348,7 +1348,7 @@
                             setTimeout(() => {
                                 _this.getBoardTask();
                                 $('#loader').modal('hide');
-                                
+
                             }, 500);
                             console.log('shifted');
                         })
@@ -1358,7 +1358,7 @@
                             }, 500);
                             console.log('shifting failed');
                         });
-                    }                    
+                    }
 
                 }
             },

@@ -50,7 +50,7 @@ Route::post('/task-list/suggest-user','SearchController@suggestUser'); //user su
 Route::post('/allNavs','ProjectNavItemsController@store'); //add new nav item
 Route::post('/nav-item/add-new','ProjectNavItemsController@store'); //add new nav item
 Route::get('/nav-item/{project_id}','ProjectNavItemsController@index'); //all nav item
-// Route::get('/board-item/{project_id}','ProjectNavItemsController@allBoard'); //all nav item
+Route::get('/board-item-and-column/{project_id}','ProjectNavItemsController@GetBoardsAndColumn'); //all nav item
 Route::post('/nav-item/update','ProjectNavItemsController@edit'); //all nav item
 Route::post('/nav-list','ProjectNavItemsController@navList'); //all nav list item
 Route::post('/board-list','ProjectNavItemsController@boardList'); //all nav list item
@@ -85,3 +85,9 @@ Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');
 Route::get('/card-delete/{id}','MultipleBoardController@cardDelete'); //delete card
 Route::get('/board-task-delete/{id}','MultipleBoardController@existingTaskDelete'); //delete card
 Route::get('/testGet','MultipleBoardController@test'); //delete card
+
+//rules
+Route::post('/add-rules', 'RulesController@store');
+Route::get('/all-rules/{project_id}', 'RulesController@index');
+Route::get('/rules/{id}', 'RulesController@show');
+Route::post('/rules-update', 'RulesController@update');

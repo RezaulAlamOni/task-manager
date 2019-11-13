@@ -596,7 +596,12 @@
         </div>
 
         <div class="boardView" v-if="list.type === 'rules'">
-            <Rules></Rules>
+            <Rules
+            :project_id="projectId"
+            :id="rule.id"
+            :action_type="rule.action_type"
+            @ruleUpdate="RuleUpdate">
+            </Rules>
         </div>
 
 
@@ -1016,6 +1021,11 @@
                 type_T: '',
                 delete_popup: 0,
                 empty_task_delete_flag: 0,
+                rule : {
+                    id : null,
+                    action_type : null,
+                    update : null
+                }
 
             }
         },
@@ -2288,9 +2298,12 @@
                         type: 'board'
                     });
                 } else if (data.type === 'rules') {
-                    console.log(data)
+                    var  _this = this;
+                    _this.rule = {
+                        id : (data.rules_id) ? data.rules_id : null,
+                        action_type : data.action_type,
+                    }
                 }
-
             },
             getNavbar(data) {
                 var _this = this;
@@ -2818,6 +2831,9 @@
                 this.modalImg = [image,task_id];
                 $("#imageModal").modal();
             },
+            RuleUpdate(){
+                this.AllNavItems = 'update';
+            }
 
         },
         directives: {
