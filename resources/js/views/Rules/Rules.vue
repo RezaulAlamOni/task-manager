@@ -112,16 +112,16 @@
 
 <script>
     export default {
-        props: ['project_id'],
+        props: ['project_id','id','action_type'],
         data() {
             return {
-                rules_action: 'create',
+                rules_action: this.action_type,
                 projectId: this.project_id,
                 Project: {},
                 BoardColumn: null,
                 user: null,
                 rule: {
-                    id: null,
+                    id: this.id,
                     name: '',
                     status: 1,
                     move_from: 'select column',
@@ -141,9 +141,6 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.Project = response.project;
-                        setTimeout(() => {
-
-                        }, 200);
                     })
                     .catch(error => {
 
@@ -156,10 +153,6 @@
                     .then(response => {
                         _this.BoardColumn = response.data;
                         _this.user = response.users;
-                        console.log(_this.BoardColumn)
-                        setTimeout(() => {
-
-                        }, 200);
                     })
                     .catch(error => {
 
@@ -184,6 +177,7 @@
                                 _this.rule.move_to= 'select column';
                                 _this.rule.assign_to='Assign To';
                             swal('Rules Created','Required Field Can\'t be empty','success');
+                            _this.$emit('ruleUpdate')
                         })
                         .catch(error => {
                             //
