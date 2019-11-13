@@ -131,11 +131,10 @@
             }
         },
         mounted() {
+            var _this = this;
             this.getProject();
             this.getBoardColumn();
-            if (this.rules_action === 'update'){
-                this.getRule()
-            }
+
         },
         methods: {
             getProject() {
@@ -216,6 +215,7 @@
                             .then(response => response.data)
                             .then(response => {
                                 swal.close();
+                                _this.$emit('ruleUpdate')
                             })
                             .catch(error => {
                                 console.log('Api for complete task not Working !!!')
@@ -234,10 +234,19 @@
         watch: {
             action_type: function (val) {
                 this.rules_action = val;
+                if (this.rules_action === 'create'){
+                    this.rule.name = '';
+                    this.rule.status = 1;
+                    this.rule.move_from = 'select column' ;
+                    this.rule.move_to = 'select column';
+                    this.rule.assign_to = 'Assign To';
+                }
             },
             id: function (val) {
                 this.rule.id = val;
-                this.getRule();
+                if (this.rules_action === 'update'){
+                    this.getRule()
+                }
             }
         }
     };
