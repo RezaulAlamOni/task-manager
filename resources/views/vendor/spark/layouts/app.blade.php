@@ -20,6 +20,7 @@
     <link href="{{asset('css/themify-icons.css')}}" rel="stylesheet">
     <link href="{{asset('css/light_custom.css')}}" rel="stylesheet">
     <link href="{{asset('css/tree_view.css')}}" rel="stylesheet">
+    <link href="{{asset('css/rules.css')}}" rel="stylesheet">
     <link href="{{asset('css/board_view.css')}}" rel="stylesheet">
     <link href="{{asset('css/icon.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/all.css')}}">

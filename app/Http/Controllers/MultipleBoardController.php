@@ -583,7 +583,6 @@ class MultipleBoardController extends Controller
 
         $column = Task::where('board_parent_id',0)->where('multiple_board_id',$request->list_id)->get();
         if ($column) {
-            // $this->createLog($id, 'Updated', 'Column Updated', 'Board Column sorting');
             return response()->json(['success' => true, 'data' => $column]);
         } else {
             return response()->json(['success' => false]);
@@ -649,6 +648,7 @@ class MultipleBoardController extends Controller
     {
         // $delete = LinkListToColumn::where('task_list_id',$request->columnId)->first();
         $delete = LinkListToColumn::where('id',$request->linkListId)->first();
+
         if ($delete) {
             // $update = Task::where('project_id',$request->projectId)
             //             ->where('list_id',$delete->multiple_list_id)
@@ -672,30 +672,6 @@ class MultipleBoardController extends Controller
         }
         return response()->json(['success' => false]);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -750,8 +726,6 @@ class MultipleBoardController extends Controller
         //   print_r('<pre>');
         //   print_r($parents);
 
-
-
           foreach ($data as $item) {
             $parent_id = $this->findTopParents($data, $item, $parents);
             print_r($parent_id.'<br>');
@@ -788,47 +762,6 @@ class MultipleBoardController extends Controller
         }
         return $item['parent_id'].' 55555';
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
