@@ -262,6 +262,12 @@
                            href="#comment"
                            id="_comment" role="tab">Comments</a>
                     </li>
+
+                    <li class="nav-item">
+                        <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
+                           id="_requirement" role="tab">Requirement</a>
+                    </li>
+
                     <li class="nav-item">
                         <a aria-controls="log" aria-selected="false" class="nav-link" data-toggle="tab" href="#log"
                            id="_log" role="tab">Logs</a>
@@ -269,10 +275,6 @@
                     <li class="nav-item" v-if="selectedData.childrens.length  > 0">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_child" role="tab">Childs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
-                           id="_requirement" role="tab">Requirement</a>
                     </li>
                 </ul>
             </div>
