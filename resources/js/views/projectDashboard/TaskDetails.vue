@@ -3,7 +3,7 @@
         <!-- Title -->
         <div class="row">
             <div class="col-2">
-                <h4 class="compltit-blue details-header">#ID12</h4>
+                <h4 class="compltit-blue details-header">#ID</h4>
             </div>
             <div class="col-2">
                 <i class="fa fa-calendar details-title calender-for-details details-header"

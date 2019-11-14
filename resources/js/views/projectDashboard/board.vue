@@ -830,7 +830,7 @@
                                                 v-if="tree.text !== '' && tree.board_parent_id !== null"
                                                 checked disable>
                                         {{tree.text}}
-                                        <span class="checkmark"></span>
+<!--                                        <span class="checkmark"></span>-->
                                     </label>
                                     <label class="checkbox_cus_mini"  v-if="tree.text !== '' && tree.board_parent_id == null" >
                                         <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask"
@@ -844,7 +844,7 @@
                                                     <input :id="child.id" class="tree-child" :value="child.id"
                                                        type="checkbox"
                                                        checked disable> {{child.text}}
-                                                    <span class="checkmark"></span>
+<!--                                                    <span class="checkmark"></span>-->
                                                 </label>
                                                 <label class="checkbox_cus_mini" v-if="child.text !== '' && child.board_parent_id == null">
                                                     <input :id="child.id" class="tree-child selectAll" :value="child.id"
@@ -860,7 +860,7 @@
                                                                 <input :id="child1.id" :value="child1.id" class="tree-child"
                                                                     type="checkbox"
                                                                     checked disable> {{child1.text}}
-                                                                <span class="checkmark"></span>
+<!--                                                                <span class="checkmark"></span>-->
                                                             </label>
 
                                                             <label class="checkbox_cus_mini" v-if="child1.text !== '' && child1.board_parent_id == null">
@@ -878,7 +878,7 @@
                                                                                type="checkbox"
                                                                                checked disable> {{child2.text}}
                                                                             <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
-                                                                            <span class="checkmark"></span>
+<!--                                                                            <span class="checkmark"></span>-->
                                                                         </label>
 
                                                                         <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
@@ -903,7 +903,7 @@
                                                                                                  checked disable>
                                                                                             {{child3.text}}
                                                                                         <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
-                                                                                        <span class="checkmark"></span>
+<!--                                                                                        <span class="checkmark"></span>-->
                                                                                     </label>
 
                                                                                     <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
@@ -942,8 +942,8 @@
             </div>
         </div>
         <div class="details" id="details" v-click-outside="HideDetails">
-            <TaskDetails
-                :selectedData="selectedData"
+            <TaskDetails v-if="Object.keys(selectedData).length > 0"
+                :selectedDataa="selectedData"
                 :task_logs="task_logs"
                 @textArea="ShowTextArea">
             </TaskDetails>
@@ -2308,7 +2308,7 @@
             },
             selectCard(card,child){
                 this.selectedData = card;
-                console.log(this.selectedData);
+                // console.log(this.selectedData);
                 this.selectedCard = card.cardId;
                 this.task_logs = null;
                 this.HideDetails();
