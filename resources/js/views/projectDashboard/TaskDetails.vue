@@ -81,12 +81,12 @@
                            id="_details" role="tab">Details</a>
                     </li>
                     <li class="nav-item">
-                        <a aria-controls="home" aria-selected="true" class="nav-link active" data-toggle="tab"
+                        <a aria-controls="home" aria-selected="true" class="nav-link " data-toggle="tab"
                            href="#home"
                            id="_comment" role="tab">Comments</a>
                     </li>
                     <li class="nav-item">
-                        <a aria-controls="home" aria-selected="true" class="nav-link active" data-toggle="tab"
+                        <a aria-controls="home" aria-selected="true" class="nav-link " data-toggle="tab"
                            href="#home"
                            id="_requirement" role="tab">Requirement</a>
                     </li>

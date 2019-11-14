@@ -265,7 +265,7 @@
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger",
-                        confirmButtonText: "Yes, Update it!",
+                        confirmButtonText: "Yes, Delete it!",
                         closeOnConfirm: false
                     },
                     function () {
