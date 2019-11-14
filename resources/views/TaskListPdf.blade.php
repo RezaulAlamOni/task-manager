@@ -34,7 +34,7 @@
         }
 
         .pdf-task-title {
-            background: #f1eded;
+            background: #fffbfb;
             width: 100%;
             display: block;
             padding: 10px 20px;
@@ -67,12 +67,12 @@
                 @endif
                 <span>{{$task['text']}}</span>
 
-                @if($task['date'] !== '0000-00-00')
-                    <span class="tag" style="background: #fefffd">{{date('d-M',strtotime($task['date']))}}</span>
-                @endif
-                @foreach($task['tags'] as $tag)
-                    <span class="tag" style="background: {{$tag['color']}}">{{$tag['text']}}</span>
-                @endforeach
+{{--                @if($task['date'] !== '0000-00-00')--}}
+{{--                    <span class="tag" style="background: #fefffd">{{date('d-M',strtotime($task['date']))}}</span>--}}
+{{--                @endif--}}
+{{--                @foreach($task['tags'] as $tag)--}}
+{{--                    <span class="tag" style="background: {{$tag['color']}}">{{$tag['text']}}</span>--}}
+{{--                @endforeach--}}
 
             </div>
             @if(count($task['children']) > 0)
@@ -87,13 +87,13 @@
                                 @endif
                                 <span>{{$task1['text']}}</span>
 
-                                @if($task1['date'] !== '0000-00-00')
-                                    <span class="tag"
-                                          style="background: #fefffd">{{date('d-M',strtotime($task['date']))}}</span>
-                                @endif
-                                @foreach($task1['tags'] as $tag)
-                                    <span class="tag" style="background: {{$tag['color']}}">{{$tag['text']}}</span>
-                                @endforeach
+{{--                                @if($task1['date'] !== '0000-00-00')--}}
+{{--                                    <span class="tag"--}}
+{{--                                          style="background: #fefffd">{{date('d-M',strtotime($task['date']))}}</span>--}}
+{{--                                @endif--}}
+{{--                                @foreach($task1['tags'] as $tag)--}}
+{{--                                    <span class="tag" style="background: {{$tag['color']}}">{{$tag['text']}}</span>--}}
+{{--                                @endforeach--}}
 
                             </div>
                             @if(count($task['children']) > 0)
@@ -108,15 +108,15 @@
                                                 @endif
                                                 <span>{{$task2['text']}}</span>
 
-                                                @if($task2['date'] !== '0000-00-00')
-                                                    <span class="tag"
-                                                          style="background: #fefffd">{{date('d-M',strtotime($task['date']))}}</span>
-                                                @endif
+{{--                                                @if($task2['date'] !== '0000-00-00')--}}
+{{--                                                    <span class="tag"--}}
+{{--                                                          style="background: #fefffd">{{date('d-M',strtotime($task['date']))}}</span>--}}
+{{--                                                @endif--}}
 
-                                                @foreach($task2['tags'] as $tag)
-                                                    <span class="tag"
-                                                          style="background: {{$tag['color']}}">{{$tag['text']}}</span>
-                                                @endforeach
+{{--                                                @foreach($task2['tags'] as $tag)--}}
+{{--                                                    <span class="tag"--}}
+{{--                                                          style="background: {{$tag['color']}}">{{$tag['text']}}</span>--}}
+{{--                                                @endforeach--}}
 
                                             </div>
 
@@ -134,14 +134,14 @@
                                                                 <span>{{$task3['text']}}</span>
 
 
-                                                                @if($task3['date'] !== '0000-00-00')
-                                                                    <span class="tag"
-                                                                          style="background: #fefffd">{{date('d-M',strtotime($task['date']))}}</span>
-                                                                @endif
-                                                                @foreach($task3['tags'] as $tag)
-                                                                    <span class="tag"
-                                                                          style="background: {{$tag['color']}}">{{$tag['text']}}</span>
-                                                                @endforeach
+{{--                                                                @if($task3['date'] !== '0000-00-00')--}}
+{{--                                                                    <span class="tag"--}}
+{{--                                                                          style="background: #fefffd">{{date('d-M',strtotime($task['date']))}}</span>--}}
+{{--                                                                @endif--}}
+{{--                                                                @foreach($task3['tags'] as $tag)--}}
+{{--                                                                    <span class="tag"--}}
+{{--                                                                          style="background: {{$tag['color']}}">{{$tag['text']}}</span>--}}
+{{--                                                                @endforeach--}}
 
                                                             </div>
                                                             @if(count($task3['children']) > 0)
@@ -158,15 +158,15 @@
                                                                                 @endif
                                                                                 <span>{{$task5['text']}}</span>
 
-                                                                                @if($task5['date'] !== '0000-00-00')
-                                                                                    <span class="tag"
-                                                                                          style="background: #fefffd">{{date('d-M',strtotime($task['date']))}}</span>
-                                                                                @endif
+{{--                                                                                @if($task5['date'] !== '0000-00-00')--}}
+{{--                                                                                    <span class="tag"--}}
+{{--                                                                                          style="background: #fefffd">{{date('d-M',strtotime($task['date']))}}</span>--}}
+{{--                                                                                @endif--}}
 
-                                                                                @foreach($task5['tags'] as $tag)
-                                                                                    <span class="tag"
-                                                                                          style="background: {{$tag['color']}}">{{$tag['text']}}</span>
-                                                                                @endforeach
+{{--                                                                                @foreach($task5['tags'] as $tag)--}}
+{{--                                                                                    <span class="tag"--}}
+{{--                                                                                          style="background: {{$tag['color']}}">{{$tag['text']}}</span>--}}
+{{--                                                                                @endforeach--}}
 
                                                                             </div>
                                                                         </li>
