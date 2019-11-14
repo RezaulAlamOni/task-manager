@@ -91,3 +91,4 @@ Route::post('/add-rules', 'RulesController@store');
 Route::get('/all-rules/{project_id}', 'RulesController@index');
 Route::get('/rules/{id}', 'RulesController@show');
 Route::post('/rules-update', 'RulesController@update');
+Route::post('/rules-delete', 'RulesController@delete');

@@ -30,7 +30,7 @@ class RulesController extends Controller
             'move_from' => $request->move_from,
             'move_to' => $request->move_to,
             'created_by' => Auth::id(),
-            'assigned_users' => ($request->assign_to != 'NoOne') ? $request->assign_to : 0,
+            'assigned_users' => $request->assign_to
         ];
         if (Rules::create($data)) {
             return response()->json(['status' => 'success']);
@@ -70,8 +70,10 @@ class RulesController extends Controller
     }
 
 
-    public function destroy(Rules $rules)
+    public function delete(Request $request)
     {
-        //
+        if(Rules::find($request->id)->delete()){
+            return response()->json(['status'=>'success']);
+        }
     }
 }
