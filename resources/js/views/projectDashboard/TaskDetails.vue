@@ -3,7 +3,7 @@
         <!-- Title -->
         <div class="row">
             <div class="col-2">
-                <h4 class="compltit-blue details-header">#ID12</h4>
+                <h4 class="compltit-blue details-header" >#ID{{selectedData.id}}</h4>
             </div>
             <div class="col-2">
                 <i class="fa fa-calendar details-title calender-for-details details-header"
@@ -79,6 +79,16 @@
                         <a aria-controls="home" aria-selected="true" class="nav-link active" data-toggle="tab"
                            href="#home"
                            id="_details" role="tab">Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a aria-controls="home" aria-selected="true" class="nav-link active" data-toggle="tab"
+                           href="#home"
+                           id="_comment" role="tab">Comments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a aria-controls="home" aria-selected="true" class="nav-link active" data-toggle="tab"
+                           href="#home"
+                           id="_requirement" role="tab">Requirement</a>
                     </li>
                     <li class="nav-item">
                         <a aria-controls="profile" aria-selected="false" class="nav-link" data-toggle="tab"

@@ -34,11 +34,19 @@
         }
 
         .pdf-task-title {
+            position: relative;
             background: #fffbfb;
             width: 100%;
             display: block;
-            padding: 10px 20px;
+            padding: 10px 20px 10px 35px;
             border-radius: 11px;
+        }
+        img {
+            height: 20px;
+            padding-right: 6px;
+            position: absolute;
+            left: 0px;
+            top: 9px;
         }
 
         .tag {
@@ -62,8 +70,8 @@
                 @if($task['progress'] !== null && $task['progress'] !== '')
                     <img src="{{public_path().'/img/'.$task['progress'].'.png'}}" alt=""
                          style="height: 20px;padding-right: 6px">
-{{--                    <img src="{{asset('img/'.$task['progress'].'.png')}}" alt=""--}}
-{{--                         style="height: 20px;padding-right: 6px">--}}
+                    <img src="{{asset('img/'.$task['progress'].'.png')}}" alt=""
+                         style="height: 20px;padding-right: 6px">
                 @endif
                 <span>{{$task['text']}}</span>
 
