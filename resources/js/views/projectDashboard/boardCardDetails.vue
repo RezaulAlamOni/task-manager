@@ -3,7 +3,9 @@
         <!-- {{selectedData}} -->
         <div class="row">
             <div class="col-2">
-                <h4 class="compltit-blue">#ID{{ selectedData.cardId }}</h4>
+                <h4 class="compltit-blue" @click="showOriginalList(selectedData)" style="cursor:pointer;" data-toggle="tooltip"
+                    :title="(selectedData.list_id === null) ? 'This Card Is Only show In Board' : 'Click For Go List'">
+                    #ID{{ selectedData.cardId }}</h4>
             </div>
             <div class="col-2">
                 <i class="fa fa-calendar details-title"></i>
@@ -260,6 +262,12 @@
                            href="#comment"
                            id="_comment" role="tab">Comments</a>
                     </li>
+
+                    <li class="nav-item">
+                        <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
+                           id="_requirement" role="tab">Requirement</a>
+                    </li>
+
                     <li class="nav-item">
                         <a aria-controls="log" aria-selected="false" class="nav-link" data-toggle="tab" href="#log"
                            id="_log" role="tab">Logs</a>
@@ -267,10 +275,6 @@
                     <li class="nav-item" v-if="selectedData.childrens.length  > 0">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_child" role="tab">Childs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
-                           id="_requirement" role="tab">Requirement</a>
                     </li>
                 </ul>
             </div>
@@ -550,7 +554,10 @@
             }
         },
         mounted() {
-            console.log(selectedData);
+            // console.log(selectedData);
+            setTimeout(function () {
+                $('[data-toggle="tooltip"]').tooltip();
+            }, 1000);
         },
         created() {
 
@@ -864,6 +871,21 @@
                     .catch(error => {
                         console.log("1st error =>" + error)
                     });
+            },
+            showOriginalList(task){
+                if (task.list_id !== null){
+                    $('#list'+ task.list_id).click();
+                    setTimeout(function () {
+                        $('#click'+ task.cardId).click();
+                    },400)
+                    $('[data-toggle="tooltip"]').tooltip('dispose');
+                    setTimeout(function () {
+                        $('[data-toggle="tooltip"]').tooltip('enable');
+                    }, 500);
+                }
+
+
+
             },
             showTagManageModel() {
                 var _this = this;

@@ -108,6 +108,8 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
                     $boards[$key]['task'][$keys]['parent_id'] = $values['parent_id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
+                    $boards[$key]['task'][$keys]['list_id'] = $values['list_id'];
+                    $boards[$key]['task'][$keys]['multiple_board_id'] = $values['multiple_board_id'];
                     $boards[$key]['task'][$keys]['description'] = $values['description'];
                     $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
                     $boards[$key]['task'][$keys]['progress'] = $values['progress'];

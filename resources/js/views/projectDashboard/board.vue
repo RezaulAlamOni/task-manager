@@ -823,14 +823,14 @@
                                 <!-- <input type="checkbox" @change="selectAll()" class="checkedAll"> All <br> -->
                             </div>
                             <div v-for="tree in tree4data">
-                                <li class="list-group-item">
+                                <li class="list-group-item" :class="(tree.board_parent_id !== null && tree.children.length <= 0) ? 'list-group-item-hide' : ''">
                                     <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': tree.board_parent_id !== null}"
-                                            v-if="tree.text !== '' && tree.board_parent_id !== null" >
+                                            v-if="tree.text !== '' && tree.board_parent_id !== null && tree.children.length > 0" >
                                         <input :id="tree.id" :value="tree.id" type="checkbox"
                                                 v-if="tree.text !== '' && tree.board_parent_id !== null"
                                                 checked disable>
-                                        {{tree.text}}
-                                        <span class="checkmark"></span>
+                                        {{tree.text}} / {{tree.children.length}}
+<!--                                        <span class="checkmark"></span>-->
                                     </label>
                                     <label class="checkbox_cus_mini"  v-if="tree.text !== '' && tree.board_parent_id == null" >
                                         <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask"
@@ -839,12 +839,13 @@
                                     </label>
                                     <ul class="list-group list-group-flush" v-if="tree.children">
                                         <div v-for="child in tree.children">
-                                            <li class="list-group-item" >
-                                                <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child.board_parent_id !== null}"   v-if="child.text !== '' && child.board_parent_id !== null" >
+                                            <li class="list-group-item" :class="(child.board_parent_id !== null && child.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                                <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child.board_parent_id !== null}"
+                                                       v-if="child.text !== '' && child.board_parent_id !== null && child.children.length > 0" >
                                                     <input :id="child.id" class="tree-child" :value="child.id"
                                                        type="checkbox"
-                                                       checked disable> {{child.text}}
-                                                    <span class="checkmark"></span>
+                                                       checked disable> {{child.text}} / {{child.children.length}}
+<!--                                                    <span class="checkmark"></span>-->
                                                 </label>
                                                 <label class="checkbox_cus_mini" v-if="child.text !== '' && child.board_parent_id == null">
                                                     <input :id="child.id" class="tree-child selectAll" :value="child.id"
@@ -854,13 +855,13 @@
 
                                                 <ul class="list-group list-group-flush" v-if="child.children">
                                                     <div v-for="child1 in child.children">
-                                                        <li class="list-group-item" >
+                                                        <li class="list-group-item" :class="(child1.board_parent_id !== null && child1.children.length <= 0) ? 'list-group-item-hide' : ''">
                                                             <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child1.board_parent_id !== null}"
-                                                            v-if="child1.text !== '' && child1.board_parent_id !== null">
+                                                            v-if="child1.text !== '' && child1.board_parent_id !== null  && child1.children.length > 0">
                                                                 <input :id="child1.id" :value="child1.id" class="tree-child"
                                                                     type="checkbox"
                                                                     checked disable> {{child1.text}}
-                                                                <span class="checkmark"></span>
+<!--                                                                <span class="checkmark"></span>-->
                                                             </label>
 
                                                             <label class="checkbox_cus_mini" v-if="child1.text !== '' && child1.board_parent_id == null">
@@ -870,15 +871,15 @@
                                                             </label>
                                                             <ul class="list-group list-group-flush" v-if="child1.children">
                                                                 <div v-for="child2 in child1.children">
-                                                                    <li class="list-group-item" >
+                                                                    <li class="list-group-item" :class="(child2.board_parent_id !== null && child2.children.length <= 0) ? 'list-group-item-hide' : ''">
                                                                         <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
-                                                                                v-if="child2.text !== '' && child2.board_parent_id !== null">
+                                                                                v-if="child2.text !== '' && child2.board_parent_id !== null  && child2.children.length > 0">
                                                                             <input :id="child2.id" :value="child2.id"
                                                                                class="tree-child"
                                                                                type="checkbox"
                                                                                checked disable> {{child2.text}}
                                                                             <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
-                                                                            <span class="checkmark"></span>
+<!--                                                                            <span class="checkmark"></span>-->
                                                                         </label>
 
                                                                         <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
@@ -893,9 +894,9 @@
 
                                                                         <ul class="list-group list-group-flush" v-if="child2.children">
                                                                             <div v-for="child3 in child2.children">
-                                                                                <li class="list-group-item">
+                                                                                <li class="list-group-item" :class="(child3.board_parent_id !== null && child3.children.length <= 0) ? 'list-group-item-hide' : ''">
                                                                                     <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
-                                                                                            v-if="child3.text !== '' && child3.board_parent_id !== null">
+                                                                                            v-if="child3.text !== '' && child3.board_parent_id !== null && child3.children.length > 0">
                                                                                         <input :id="child3.id"
                                                                                                 :value="child3.id"
                                                                                                 class="tree-child"
@@ -903,7 +904,7 @@
                                                                                                  checked disable>
                                                                                             {{child3.text}}
                                                                                         <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
-                                                                                        <span class="checkmark"></span>
+<!--                                                                                        <span class="checkmark"></span>-->
                                                                                     </label>
 
                                                                                     <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
@@ -942,7 +943,7 @@
             </div>
         </div>
         <div class="details" id="details" v-click-outside="HideDetails">
-            <TaskDetails
+            <TaskDetails v-if="Object.keys(selectedData).length > 0"
                 :selectedData="selectedData"
                 :task_logs="task_logs"
                 @textArea="ShowTextArea">
@@ -1218,6 +1219,8 @@
                             data: this.cards[i].task[j].name,
                             textareaShow: this.cards[i].task[j].textareaShow,
                             description: this.cards[i].task[j].description,
+                            list_id: this.cards[i].task[j].list_id,
+                            board_id: this.cards[i].task[j].multiple_board_id,
                             date: this.cards[i].task[j].date,
                             parent_id: this.cards[i].task[j].parent_id,
                             progress: this.cards[i].task[j].progress,
@@ -2308,7 +2311,6 @@
             },
             selectCard(card,child){
                 this.selectedData = card;
-                console.log(this.selectedData);
                 this.selectedCard = card.cardId;
                 this.task_logs = null;
                 this.HideDetails();
