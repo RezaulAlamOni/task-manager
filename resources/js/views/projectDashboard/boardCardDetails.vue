@@ -3,7 +3,9 @@
         <!-- {{selectedData}} -->
         <div class="row">
             <div class="col-2">
-                <h4 class="compltit-blue">#ID{{ selectedData.cardId }}</h4>
+                <h4 class="compltit-blue" @click="showOriginalList(selectedData)" style="cursor:pointer;" data-toggle="tooltip"
+                    :title="(selectedData.list_id === null) ? 'This Card Is Only show In Board' : 'Click For Go List'">
+                    #ID{{ selectedData.cardId }}</h4>
             </div>
             <div class="col-2">
                 <i class="fa fa-calendar details-title"></i>
@@ -552,6 +554,9 @@
         },
         mounted() {
             // console.log(selectedData);
+            setTimeout(function () {
+                $('[data-toggle="tooltip"]').tooltip();
+            }, 1000);
         },
         created() {
 
@@ -865,6 +870,21 @@
                     .catch(error => {
                         console.log("1st error =>" + error)
                     });
+            },
+            showOriginalList(task){
+                if (task.list_id !== null){
+                    $('#list'+ task.list_id).click();
+                    setTimeout(function () {
+                        $('#click'+ task.cardId).click();
+                    },400)
+                    $('[data-toggle="tooltip"]').tooltip('dispose');
+                    setTimeout(function () {
+                        $('[data-toggle="tooltip"]').tooltip('enable');
+                    }, 500);
+                }
+
+
+
             },
             showTagManageModel() {
                 var _this = this;

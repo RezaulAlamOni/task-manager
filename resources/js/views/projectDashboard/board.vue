@@ -1219,6 +1219,8 @@
                             data: this.cards[i].task[j].name,
                             textareaShow: this.cards[i].task[j].textareaShow,
                             description: this.cards[i].task[j].description,
+                            list_id: this.cards[i].task[j].list_id,
+                            board_id: this.cards[i].task[j].multiple_board_id,
                             date: this.cards[i].task[j].date,
                             parent_id: this.cards[i].task[j].parent_id,
                             progress: this.cards[i].task[j].progress,
