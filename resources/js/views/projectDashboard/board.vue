@@ -944,7 +944,7 @@
         </div>
         <div class="details" id="details" v-click-outside="HideDetails">
             <TaskDetails v-if="Object.keys(selectedData).length > 0"
-                :selectedDataa="selectedData"
+                :selectedData="selectedData"
                 :task_logs="task_logs"
                 @textArea="ShowTextArea">
             </TaskDetails>
@@ -2311,7 +2311,6 @@
             },
             selectCard(card,child){
                 this.selectedData = card;
-                // console.log(this.selectedData);
                 this.selectedCard = card.cardId;
                 this.task_logs = null;
                 this.HideDetails();

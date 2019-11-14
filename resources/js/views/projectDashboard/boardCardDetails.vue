@@ -467,10 +467,9 @@
     export default {
         components: {switches, Datepicker, VueTagsInput},
         name: "TaskDetails",
-        props: ['selectedDataa', 'task_logs'],
+        props: ['selectedData', 'task_logs'],
         data() {
             return {
-                selectedData : this.selectedDataa,
                 showDetails: false,
                 disabledDates: {
                     id: null
