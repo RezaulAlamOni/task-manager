@@ -729,7 +729,7 @@
                     title: 0,
                     description: '',
                     type: 'rules',
-                    action_type: 'create',
+                    action_type: 'rules',
                 })
             },
             UpdateRule(id) {

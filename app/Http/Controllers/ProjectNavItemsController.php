@@ -54,7 +54,10 @@ class ProjectNavItemsController extends Controller
             $user = User::join('team_users', 'team_users.user_id', 'users.id')
                 ->where('team_users.team_id', $team_id)->get()->toArray();
         }
-        $rules = Rules::where('project_id',(int)$project_id)->get();
+        foreach ($user as $item) {
+            
+        }
+        $rules = Rules::where('project_id',(int)$project_id)->with('move_from')->with('move_to')->get();
 
         return response()->json(['status' => 'success', 'data' => $boards,'users'=>$user,'rules'=>$rules]);
     }

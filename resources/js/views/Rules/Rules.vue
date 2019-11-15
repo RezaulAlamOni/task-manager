@@ -4,12 +4,19 @@
             <section>
                 <div class="container-header">
                     <h2><i class="fa fa-fw fa-magic"></i> Rules For <b>{{Project.name}}</b>
-                        <!--                        <button type="submit" class="btn btn-primary pull-right"> Create Rule</button>-->
+                        <button v-if="rules_action ===  'rules'" type="submit" class="btn btn-primary pull-right"
+                                @click="ShowAddRulesPanel">
+                            Create Rule
+                        </button>
+                        <button v-else-if="rules_action === 'update' || rules_action === 'create'" type="submit"
+                                @click="AllRules" class="btn btn-primary pull-right">
+                            All Rules
+                        </button>
                     </h2>
                     <p class="compltit-p">{{Project.description}}</p>
                 </div>
             </section>
-            <section>
+            <section v-if="rules_action ===  'rules'">
                 <div class="row">
                     <table class="table">
                         <thead class="thead-light" style="background: #bad6ff;">
@@ -19,20 +26,30 @@
                             <th>Move Card To</th>
                             <th>Status</th>
                             <th>Assigned user</th>
-                            <th>Created At</th>
+                            <!--                            <th>Created At</th>-->
                             <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>John</td>
-                            <td>Doe</td>
-                            <td>john@example.com</td>
-                            <td>john@example.com</td>
-                            <td>john@example.com</td>
-                            <td>john@example.com</td>
-                            <td><img data-v-0ca4b43b="" src="http://taskspark/img/task-icon/trash.png" alt="" height="20px" width="20px" class="mr-2"></td>
-                        </tr>
+                        <template v-for="rl in all_rules">
+                            <tr>
+                                <td>{{rl.name}}</td>
+                                <td>{{rl.move_from.title}}</td>
+                                <td>{{(rl.move_to !== null) ? rl.move_to.title : 0}}</td>
+                                <td>{{(rl.status) ? 'Active' : 'Pauesed'}}</td>
+                                <td>{{rl.assigned_users}}</td>
+                                <!--                                <td>{{rl.created_at}}</td>-->
+                                <td>
+                                    <img src="/img/task-icon/trash.png" style="cursor: pointer" alt="" height="20px"
+                                         width="20px" class="mr-2"
+                                         @click="DeleteRule(rl.id)">
+                                    <img src="/img/task-icon/edit.png" style="cursor: pointer" alt="" height="20px"
+                                         width="20px" class="mr-2"
+                                         @click="ShowUpdateRulesPanel(rl.id)">
+                                </td>
+                            </tr>
+                        </template>
+
 
                         </tbody>
                     </table>
@@ -46,16 +63,27 @@
                                 <input class="rules-title" type="text" placeholder="Enter Here Rules Name"
                                        v-model="rule.name">
                                 <span class="badge-pill badge-danger pull-right rule-header-btn-red" @click="PauseRule">Paused
-                                <div class="radio-for">
-                                     <i class="fa fa-check check-radio" v-if="rule.status===0"></i>
-                                </div>
-                            </span>
+                                    <div class="radio-for">
+                                         <i class="fa fa-check check-radio" v-if="rule.status===0"></i>
+                                    </div>
+                                </span>
+                                <span>
+
+                                    <label class="btn-for-switch" :class="(rule.btn_actve === 1) ? 'btn-active' : ''"
+                                           @click="updateAddRuleType(1)"
+                                           style="border-radius: 21px 0 0 22px;">Move Card To</label>
+                                    <label class="btn-for-switch " :class="(rule.btn_actve === 0) ? 'btn-active' : ''"
+                                           @click="updateAddRuleType(0)"
+                                           style="border-radius:  0 21px 22px 0;">Assign User Only</label>
+                                 </span>
+
                                 <span class="badge-pill badge-success pull-right mr-2 rule-header-btn"
-                                      @click="LiveRule">Live
-                                <div class="radio-for">
-                                    <i class="fa fa-check check-radio" v-if="rule.status===1"></i>
-                                </div>
-                            </span>
+                                      @click="LiveRule">
+                                    Live
+                                    <div class="radio-for">
+                                        <i class="fa fa-check check-radio" v-if="rule.status===1"></i>
+                                    </div>
+                                </span>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -82,8 +110,8 @@
                                             </select></div>
                                     </div>
                                 </div>
-                                <hr>
-                                <div class="row">
+                                <hr v-if="rule.btn_actve === 1">
+                                <div class="row" v-if="rule.btn_actve === 1">
                                     <div class="col-xs-12 col-md-5 text-right">
                                         <img src="/img/to-arrow.png" class="img-responsive" style="max-width: 200px;">
                                     </div>
@@ -120,7 +148,6 @@
                                                     <template v-for="user1 in user">
                                                         <option :value="user1.id">{{user1.name}}</option>
                                                     </template>
-                                                    <option :value="32">UUUUUU</option>
                                                 </optgroup>
                                             </select>
                                         </div>
@@ -168,6 +195,7 @@
                     move_from: 'select column',
                     move_to: 'select column',
                     assign_to: null,
+                    btn_actve : 1
                 },
                 all_rules: null
             }
@@ -179,10 +207,6 @@
             if (this.rules_action === 'update') {
                 this.getRule();
             }
-
-            $("#select22").select2({
-                placeholder: "Select User For Assign"
-            });
 
 
         },
@@ -221,13 +245,14 @@
                         _this.rule.status = response.rule.status;
                         _this.rule.move_from = response.rule.move_from;
                         _this.rule.move_to = response.rule.move_to;
+                        _this.rule.btn_actve = (response.rule.move_to === 0) ? 0 : 1;
                         _this.rule.assign_to = JSON.parse(response.rule.assigned_users);
                         $("#select22").val(_this.rule.assign_to);
                         setTimeout(function () {
                             $("#select22").select2({
                                 placeholder: "Select User For Assign"
                             });
-                        }, 200)
+                        }, 100)
 
                     })
                     .catch(error => {
@@ -251,7 +276,8 @@
                             _this.rule.move_to = 'select column';
                             _this.rule.assign_to = 'Assign To';
                             swal('Rules Created', 'Rules Create Success', 'success');
-                            _this.$emit('ruleUpdate')
+                            _this.rules_action = 'rules';
+                            _this.getBoardColumn();
                             $("#select22").val([])
                             setTimeout(function () {
                                 $("#select22").select2({
@@ -285,7 +311,8 @@
                                 .then(response => response.data)
                                 .then(response => {
                                     swal.close();
-                                    _this.$emit('ruleUpdate')
+                                    _this.rules_action = 'rules';
+                                    _this.getBoardColumn();
                                 })
                                 .catch(error => {
                                     console.log('Api for complete task not Working !!!')
@@ -329,7 +356,9 @@
                                         $("#select22").select2({
                                             placeholder: "Select User For Assign"
                                         });
-                                        _this.rules_action = 'create';
+                                        _this.rules_action = 'rules';
+                                        _this.getBoardColumn();
+
                                     }, 200)
                                 }
                             })
@@ -340,6 +369,25 @@
                     });
 
 
+            },
+            ShowAddRulesPanel() {
+                this.rules_action = 'create'
+                setTimeout(function () {
+                    $("#select22").select2({
+                        placeholder: "Select User For Assign"
+                    });
+                }, 300)
+            },
+            AllRules() {
+                this.rules_action = 'rules';
+            },
+            ShowUpdateRulesPanel(id) {
+                this.rules_action = 'update';
+                this.rule.id = id;
+                this.getRule();
+            },
+            updateAddRuleType(id){
+                this.rule.btn_actve = id;
             },
 
             LiveRule() {
