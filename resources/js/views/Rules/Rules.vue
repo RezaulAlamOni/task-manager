@@ -9,105 +9,143 @@
                     <p class="compltit-p">{{Project.description}}</p>
                 </div>
             </section>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-default border-primary">
-                        <div class="card-header bg-primary text-white">
-                            <input class="rules-title" type="text" placeholder="Enter Here Rules Name"
-                                   v-model="rule.name">
-                            <span class="badge-pill badge-danger pull-right rule-header-btn-red" @click="PauseRule">Paused
+            <section>
+                <div class="row">
+                    <table class="table">
+                        <thead class="thead-light" style="background: #bad6ff;">
+                        <tr>
+                            <th>Name</th>
+                            <th>Move Card From</th>
+                            <th>Move Card To</th>
+                            <th>Status</th>
+                            <th>Assigned user</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>John</td>
+                            <td>Doe</td>
+                            <td>john@example.com</td>
+                            <td>john@example.com</td>
+                            <td>john@example.com</td>
+                            <td>john@example.com</td>
+                            <td><img data-v-0ca4b43b="" src="http://taskspark/img/task-icon/trash.png" alt="" height="20px" width="20px" class="mr-2"></td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section v-if="rules_action === 'update' || rules_action === 'create'">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-default border-primary">
+                            <div class="card-header bg-primary text-white">
+                                <input class="rules-title" type="text" placeholder="Enter Here Rules Name"
+                                       v-model="rule.name">
+                                <span class="badge-pill badge-danger pull-right rule-header-btn-red" @click="PauseRule">Paused
                                 <div class="radio-for">
                                      <i class="fa fa-check check-radio" v-if="rule.status===0"></i>
                                 </div>
                             </span>
-                            <span class="badge-pill badge-success pull-right mr-2 rule-header-btn" @click="LiveRule">Live
+                                <span class="badge-pill badge-success pull-right mr-2 rule-header-btn"
+                                      @click="LiveRule">Live
                                 <div class="radio-for">
                                     <i class="fa fa-check check-radio" v-if="rule.status===1"></i>
                                 </div>
                             </span>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-xs-12 col-md-5 text-right">
-                                    <img src="/img/from-arrow.png" class="img-responsive" style="max-width: 200px;">
-                                </div>
-                                <div class="col-xs-12 col-md-4">
-                                    <div class="form-group">
-                                        <select class="form-control select2" v-model="rule.move_from"
-                                                style="width: 100%; margin-top: 10px; border-top: none; border-left: none; border-right: none; box-shadow: none; border-radius: 0px;">
-                                            <option value="select column" disabled>Select a Board and Column</option>
-                                            <template v-for="Board in BoardColumn">
-                                                <optgroup :label="Board.board_title" v-if="Board.columns.length > 0">
-                                                    <template v-for="column in Board.columns">
-                                                        <option :value="column.id"
-                                                                :disabled="(rule.move_to === column.id) ? true : false">
-                                                            {{column.title}}
-                                                        </option>
-                                                    </template>
-                                                </optgroup>
-                                            </template>
-                                        </select></div>
-                                </div>
                             </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-xs-12 col-md-5 text-right">
-                                    <img src="/img/to-arrow.png" class="img-responsive" style="max-width: 200px;">
-                                </div>
-                                <div class="col-xs-12 col-md-4">
-                                    <div class="form-group">
-                                        <select class="form-control select2" v-model="rule.move_to"
-                                                style="width: 100%; margin-top: 10px; border-top: none; border-left: none; border-right: none; box-shadow: none; border-radius: 0px;">
-                                            <option value="select column">Select a Board and Column</option>
-                                            <template v-for="Board in BoardColumn">
-                                                <optgroup :label="Board.board_title" v-if="Board.columns.length > 0">
-                                                    <template v-for="column in Board.columns">
-                                                        <option :value="column.id"
-                                                                :disabled="(rule.move_from === column.id) ? true : false">
-                                                            {{column.title}}
-                                                        </option>
-                                                    </template>
-                                                </optgroup>
-                                            </template>
-                                        </select>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-5 text-right">
+                                        <img src="/img/from-arrow.png" class="img-responsive" style="max-width: 200px;">
                                     </div>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-xs-12 col-md-5 text-right">
-                                    <img src="/img/than-arrow.png" class="img-responsive" style="max-width: 200px;">
-                                </div>
-                                <div class="col-xs-12 col-md-4 mt-3">
-                                    <div class="form-group">
-                                        <select id="select22" class="form-control select2" multiple style="width:100%">
-                                            <optgroup label="Users">
-                                                <template v-for="user1 in user">
-                                                    <option :value="user1.id">{{user1.name}}</option>
+                                    <div class="col-xs-12 col-md-4">
+                                        <div class="form-group">
+                                            <select class="form-control select2" v-model="rule.move_from"
+                                                    style="width: 100%; margin-top: 10px; border-top: none; border-left: none; border-right: none; box-shadow: none; border-radius: 0px;">
+                                                <option value="select column" disabled>Select a Board and Column
+                                                </option>
+                                                <template v-for="Board in BoardColumn">
+                                                    <optgroup :label="Board.board_title"
+                                                              v-if="Board.columns.length > 0">
+                                                        <template v-for="column in Board.columns">
+                                                            <option :value="column.id"
+                                                                    :disabled="(rule.move_to === column.id) ? true : false">
+                                                                {{column.title}}
+                                                            </option>
+                                                        </template>
+                                                    </optgroup>
                                                 </template>
-                                                <option :value="32">UUUUUU</option>
-                                            </optgroup>
-                                        </select>
+                                            </select></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row rules-create-bottom">
-                                <button type="submit" class="btn btn-danger pull-left" v-if="rules_action === 'update'" @click="DeleteRule(rule.id)">
-                                    Delete
-                                </button>
-                                <button type="submit" class="btn btn-info pull-left ml-2 "
-                                        v-if="rules_action === 'update'" @click="UpdateRule"> Update
-                                </button>
-                                <button type="submit" class="btn btn-primary pull-right"
-                                        v-if="rules_action === 'create'"
-                                        @click="AddNewRules">
-                                    Save
-                                </button>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-5 text-right">
+                                        <img src="/img/to-arrow.png" class="img-responsive" style="max-width: 200px;">
+                                    </div>
+                                    <div class="col-xs-12 col-md-4">
+                                        <div class="form-group">
+                                            <select class="form-control select2" v-model="rule.move_to"
+                                                    style="width: 100%; margin-top: 10px; border-top: none; border-left: none; border-right: none; box-shadow: none; border-radius: 0px;">
+                                                <option value="select column">Select a Board and Column</option>
+                                                <template v-for="Board in BoardColumn">
+                                                    <optgroup :label="Board.board_title"
+                                                              v-if="Board.columns.length > 0">
+                                                        <template v-for="column in Board.columns">
+                                                            <option :value="column.id"
+                                                                    :disabled="(rule.move_from === column.id) ? true : false">
+                                                                {{column.title}}
+                                                            </option>
+                                                        </template>
+                                                    </optgroup>
+                                                </template>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-5 text-right">
+                                        <img src="/img/than-arrow.png" class="img-responsive" style="max-width: 200px;">
+                                    </div>
+                                    <div class="col-xs-12 col-md-4 mt-3">
+                                        <div class="form-group">
+                                            <select id="select22" class="form-control select2" multiple
+                                                    style="width:100%">
+                                                <optgroup label="Users">
+                                                    <template v-for="user1 in user">
+                                                        <option :value="user1.id">{{user1.name}}</option>
+                                                    </template>
+                                                    <option :value="32">UUUUUU</option>
+                                                </optgroup>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row rules-create-bottom">
+                                    <button type="submit" class="btn btn-danger pull-left"
+                                            v-if="rules_action === 'update'" @click="DeleteRule(rule.id)">
+                                        Delete
+                                    </button>
+                                    <button type="submit" class="btn btn-info pull-left ml-2 "
+                                            v-if="rules_action === 'update'" @click="UpdateRule"> Update
+                                    </button>
+                                    <button type="submit" class="btn btn-primary pull-right"
+                                            v-if="rules_action === 'create'"
+                                            @click="AddNewRules">
+                                        Save
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
         </div>
 
     </div>
@@ -130,7 +168,8 @@
                     move_from: 'select column',
                     move_to: 'select column',
                     assign_to: null,
-                }
+                },
+                all_rules: null
             }
         },
         mounted() {
@@ -166,6 +205,7 @@
                     .then(response => {
                         _this.BoardColumn = response.data;
                         _this.user = response.users;
+                        _this.all_rules = response.rules;
                     })
                     .catch(error => {
 
@@ -269,12 +309,12 @@
                         closeOnConfirm: false
                     },
                     function () {
-                        axios.post('/api/rules-delete' ,{'id': id})
+                        axios.post('/api/rules-delete', {'id': id})
 
                             .then(response => response.data)
                             .then(response => {
                                 swal.close();
-                                if (response.status === 'success'){
+                                if (response.status === 'success') {
                                     _this.$emit('ruleUpdate');
                                     _this.rules_action = 'create';
                                     _this.rule.id = null;

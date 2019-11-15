@@ -31,8 +31,8 @@ class ProjectNavItemsController extends Controller
             $item->lists = $nav_[0];
             $navItem[] = $item;
         }
-        $rules = Rules::where('project_id',$project_id)->get();
-        return response()->json(['success' => $navItem,'rules'=>$rules]);
+//        $rules = Rules::where('project_id',$project_id)->get();
+        return response()->json(['success' => $navItem,'rules'=>[]]);
 
 
     }
@@ -54,8 +54,9 @@ class ProjectNavItemsController extends Controller
             $user = User::join('team_users', 'team_users.user_id', 'users.id')
                 ->where('team_users.team_id', $team_id)->get()->toArray();
         }
+        $rules = Rules::where('project_id',(int)$project_id)->get();
 
-        return response()->json(['status' => 'success', 'data' => $boards,'users'=>$user]);
+        return response()->json(['status' => 'success', 'data' => $boards,'users'=>$user,'rules'=>$rules]);
     }
 
 
