@@ -24,8 +24,8 @@
                             <th>Name</th>
                             <th>Move Card From</th>
                             <th>Move Card To</th>
-                            <th>Status</th>
                             <th>Assigned user</th>
+                            <th>Status</th>
                             <!--                            <th>Created At</th>-->
                             <th>Action</th>
                         </tr>
@@ -36,8 +36,15 @@
                                 <td>{{rl.name}}</td>
                                 <td>{{rl.move_from.title}}</td>
                                 <td>{{(rl.move_to !== null) ? rl.move_to.title : 0}}</td>
-                                <td>{{(rl.status) ? 'Active' : 'Pauesed'}}</td>
-                                <td>{{rl.assigned_users}}</td>
+                                <td>
+                                    <template v-for="(user,index) in rl.assigned_users">
+                                        <span><span v-if="index!==0">,</span>{{user.name}} </span>
+                                    </template>
+                                </td>
+                                <td>
+                                    <span v-if="rl.status === 1" class="badge badge-success">Active</span>
+                                    <span  v-else class="badge badge-warning">Pauesed</span>
+                                </td>
                                 <!--                                <td>{{rl.created_at}}</td>-->
                                 <td>
                                     <img src="/img/task-icon/trash.png" style="cursor: pointer" alt="" height="20px"
