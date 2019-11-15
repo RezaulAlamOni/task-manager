@@ -1,6 +1,6 @@
 <template>
 
-    <div class="align-self-center">
+    <div class="align-self-center"  @click="HideDetails">
         <nav class="navbar-expand-md navbar-spark">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse show">
@@ -795,6 +795,13 @@
             },
             DownloadTaskPDF() {
                 this.$emit('DownloadTaskPDF')
+            }, 
+            HideDetails() {
+                // this.getBoardTask();
+                $('#task_width').addClass('task_width');
+                $('#task_width').removeClass('task_widthNormal');
+                $('#details').addClass('details');
+                $('#details').removeClass('detailsShow');
             }
         },
         directives: {},

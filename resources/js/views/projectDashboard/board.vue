@@ -1,6 +1,6 @@
-<template>
+<template >
     <div>
-        <div id="board_view_list">
+        <div id="board_view_list"  @click="HideDetails">
             <div class="col-12" id="col10" style="border: none">
                 <div class="card-scene">
                     <Container
@@ -942,7 +942,7 @@
                 </div>
             </div>
         </div>
-        <div class="details" id="details" v-click-outside="HideDetails">
+        <div class="details" id="details" >
             <TaskDetails v-if="Object.keys(selectedData).length > 0"
                 :selectedData="selectedData"
                 :task_logs="task_logs"
