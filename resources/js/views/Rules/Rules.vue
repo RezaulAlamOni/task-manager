@@ -379,6 +379,11 @@
             },
             ShowAddRulesPanel() {
                 this.rules_action = 'create'
+                this.rule.name = '';
+                this.rule.status = 1;
+                this.rule.move_from = 'select column';
+                this.rule.move_to = 'select column';
+                this.rule.assign_to = [];
                 setTimeout(function () {
                     $("#select22").select2({
                         placeholder: "Select User For Assign"
