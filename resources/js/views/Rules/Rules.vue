@@ -44,7 +44,7 @@
                                 </td>
                                 <td class="text-center" style="width: 7%;">
                                     <span v-if="rl.status === 1" class="badge badge-success">Active</span>
-                                    <span v-else class="badge badge-warning">Pauesed</span>
+                                    <span v-else class="badge badge-warning">Paused</span>
                                 </td>
                                 <!--                                <td>{{rl.created_at}}</td>-->
                                 <td style="width: 7%;">
