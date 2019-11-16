@@ -56,8 +56,6 @@
                                 </td>
                             </tr>
                         </template>
-
-
                         </tbody>
                     </table>
                 </div>
@@ -179,9 +177,7 @@
                     </div>
                 </div>
             </section>
-
         </div>
-
     </div>
 </template>
 
@@ -214,8 +210,6 @@
             if (this.rules_action === 'update') {
                 this.getRule();
             }
-
-
         },
         methods: {
             getProject() {
@@ -226,7 +220,6 @@
                         _this.Project = response.project;
                     })
                     .catch(error => {
-
                     });
             },
             getBoardColumn() {
@@ -239,7 +232,6 @@
                         _this.all_rules = response.rules;
                     })
                     .catch(error => {
-
                     });
             },
             getRule() {
@@ -260,7 +252,6 @@
                                 placeholder: "Select User For Assign"
                             });
                         }, 100)
-
                     })
                     .catch(error => {
                         //
@@ -324,9 +315,7 @@
                                 .catch(error => {
                                     console.log('Api for complete task not Working !!!')
                                 });
-
                         });
-
                 } else {
                     swal('Sorry', 'Required Field Can\'t be empty', 'warning');
                 }
@@ -372,10 +361,7 @@
                             .catch(error => {
                                 console.log('Api for Delete Rule not Working !!!')
                             });
-
                     });
-
-
             },
             ShowAddRulesPanel() {
                 this.rules_action = 'create'
@@ -401,7 +387,6 @@
             updateAddRuleType(id){
                 this.rule.btn_actve = id;
             },
-
             LiveRule() {
                 this.rule.status = 1;
             },
