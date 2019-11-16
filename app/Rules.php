@@ -25,5 +25,14 @@ class Rules extends Model
         return $this->hasOne(Task::class, 'id', 'move_to');
     }
 
+    public function moveFrom()
+    {
+        return $this->hasOne(Task::class, 'id', 'move_from');
+    }
+    public function moveTo()
+    {
+        return $this->hasOne(Task::class, 'id', 'move_to')->with('MultipleBord');
+    }
+
 
 }

@@ -8,6 +8,7 @@ use App\Multiple_list;
 use App\TaskBoard;
 use App\Tags;
 use App\Task;
+use App\Rules;
 use App\Project;
 use App\User;
 use App\AssignedUser;
@@ -35,9 +36,8 @@ class MultipleBoardController extends Controller
     public function index(Request $request)
     {
         $boards = [];
-        $board = Task::where('board_parent_id', 0)
-                ->with('task')
-                ->with('linkToList')
+         $board = Task::where('board_parent_id', 0)
+                ->with('moveToCol','task','linkToList')
                 ->where('project_id', $request->projectId)
                 // ->where('nav_id', $request->nav_id)
                 ->where('multiple_board_id', $request->board_id)
@@ -45,6 +45,7 @@ class MultipleBoardController extends Controller
                 ->orderby('parent_id', 'ASC')
                 // ->orderby('sort_id', 'ASC')
                 ->get();
+        // return $board[0]->moveToCol->moveTo->multipleBord->board_title;
         $team_id = Auth::user()->current_team_id;
         foreach ($board as $key => $value) {
             $keys = -1;
@@ -55,7 +56,17 @@ class MultipleBoardController extends Controller
             $boards[$key]['progress'] = $value['progress'];
             $boards[$key]['linkToList'] = $value['linkToList'];
             $boards[$key]['color'] = $value['color'];
-
+            if ($value['moveToCol'] != null) {
+                $boards[$key]['moveToCol'] = true;
+                $boards[$key]['ruleName'] = $value['moveToCol']['name'];
+                $boards[$key]['boardName'] = $value['moveToCol']['moveTo']['multipleBord']['board_title'];
+                $boards[$key]['colName'] = $value['moveToCol']['moveTo']['title'];
+            }else{
+                $boards[$key]['moveToCol'] = false;
+                $boards[$key]['ruleName'] = '';
+                $boards[$key]['boardName'] = '';
+                $boards[$key]['colName']  = '';
+            }
             if (!empty($value['task']) && count($value['task']) > 0) {
                 foreach ($value['task'] as $keys => $values) {
 
@@ -126,6 +137,7 @@ class MultipleBoardController extends Controller
                 $boards[$key]['task'] = [];
             }
         }
+        // return  $boards;
         return response()->json(['success' => $boards]);
     }
 
@@ -226,7 +238,8 @@ class MultipleBoardController extends Controller
 
     public function changeParentId(Request $request)
     {
-        //  $request->all();
+        //  $request->all();        
+        // $taskModal = Task::where('board_parent_id','move_from_id')->;
         $parent = Task::find($request->board_parent_id);
         $parent_task = Task::find($request->id);
         $data = Task::where('id',$request->id)
@@ -239,13 +252,41 @@ class MultipleBoardController extends Controller
             }
         }
         // dd($data);
-        $update = Task::where('board_parent_id',"!=",0)
-                    ->whereIn('id', $ids)
-                    ->update([
-                        'board_sort_id' => $parent_task->board_sort_id,
-                        'board_parent_id' => $request->board_parent_id,
-                        'progress'=> $parent->progress
+        $moveToData = Rules::where('move_from',$request->board_parent_id)->where('status',1)->with('moveTo')->first();
+        if ($moveToData) {
+            $assiagnUser = json_decode($moveToData->assigned_users);
+            // return $assiagnUser[0];
+            $delete = AssignedUser::whereIn('task_id',$ids)->delete();
+            foreach ($ids as $key => $value) {
+                foreach ($assiagnUser as $keys => $values) {
+                    AssignedUser::create([
+                        'user_id' => $values,
+                        'task_id' => $value,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                        'created_by' => Auth::id(),
+                        'updated_by' => Auth::id()
                     ]);
+                }
+            }
+            $update = Task::where('board_parent_id',"!=",0)
+            ->whereIn('id', $ids)
+            ->update([
+                'board_sort_id' => $parent_task->board_sort_id,
+                'board_parent_id' => $moveToData->moveTo->id,
+                'multiple_board_id' => $moveToData->moveTo->multiple_board_id,
+                'progress' => $parent->progress
+            ]);
+        } else {
+            $update = Task::where('board_parent_id',"!=",0)
+            ->whereIn('id', $ids)
+            ->update([
+                'board_sort_id' => $parent_task->board_sort_id,
+                'board_parent_id' => $request->board_parent_id,
+                'progress'=> $parent->progress
+            ]);
+        }
+       
         if ($update) {
             $this->createLog($request->id, 'Update', 'Parent changed', 'Board Card Parent Changed');
             return response()->json(['success' => true, 'data' => $update]);
@@ -254,8 +295,10 @@ class MultipleBoardController extends Controller
     }
 
     public function recurChildIds($child)
-    {
-        $this->childIds[] = $child['id'];
+    {   
+        if ($child['board_parent_id'] != null) {
+            $this->childIds[] = $child['id'];
+        }
         if(count($child['childTask']) > 0){
             foreach ($child['childTask'] as $key => $value) {
                 $this->recurChildIds($value);

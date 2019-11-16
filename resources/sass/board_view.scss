@@ -223,6 +223,7 @@
 }
 
 .list-group-item-hide {
+    display: none;
     border:none;
 }
 
@@ -646,7 +647,7 @@
 
 
 .ck .ck-content{
-    height: 520px !important;
+    min-height: 220px !important;
 }
 .detailsTitle{
     height: 64px;
@@ -654,4 +655,8 @@
     border: 0.5px solid #e6e6e6;
     padding-left: 8px;
     padding-top: 4px;
+}
+
+.ck-file-dialog-button {
+    display: none;
 }

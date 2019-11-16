@@ -292,7 +292,7 @@
                                 </div>
                                 <div class="col-12">
                                     <!-- <div v-if="showDetails == false" @click="showDetails = true">{{ selectedData.data }}</div>  v-if="showDetails == true"  
-                                            @focus="ShowListDetails(selectedData)"
+                                            @focus="ShowListDetails(selectedData)" npm install --save @ckeditor/ckeditor5-vue @ckeditor/ckeditor5-build-classic
                                             @blur="showDetails = false"-->
                                     <!-- <textarea
                                             :id="'bx'+selectedData.cardId"
@@ -347,9 +347,9 @@
             <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel">
                 <span>
                     <div class="row comment-section-in-task-details">
-                        <div class="col-12">
+                        <div class="col-12" >
                             <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater"> -->
-                            <div class="textAreaExtend" v-click-outside="HideTextArea">
+                            <div class="" v-click-outside="HideTextArea">
                                 <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
                                 data-placement="bottom" data-toggle="tooltip"> PI</p>
                                 <textarea @focus="ShowTextArea(selectedData)"
@@ -358,7 +358,7 @@
                                         placeholder="Add comment">
                                 </textarea>
 
-                                <div class="SubmitButton" id="SubmitButton" style="margin-bottom: 15px; margin-top: 15px;">
+                                <div class="SubmitButton" id="SubmitButton" style="margin-bottom: 10px; margin-top: 10px;">
                                     <a class="btn btn-default btn-sm" style="background: #7BB348;">Post</a>
                                     <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6"
                                     @click="HideTextArea">Cancel</a>

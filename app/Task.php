@@ -115,5 +115,18 @@ class Task extends Model
         return $this->hasOne(Multiple_board::class, 'id', 'multiple_board_id');
     }
 
+    public function moveTo()
+    {  
+        return $this->belongsTo(Rules::class, 'move_to', 'id');
+    }
 
-}
+    public function moveFrom()
+    {  
+        return $this->belongsTo(Rules::class, 'move_from', 'id');
+    }
+
+    public function moveToCol()
+    {  
+        return $this->hasOne(Rules::class, 'move_from', 'id')->with('moveTo');
+    }
+}   
