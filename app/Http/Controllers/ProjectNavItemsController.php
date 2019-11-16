@@ -60,7 +60,7 @@ class ProjectNavItemsController extends Controller
         foreach ($rules as $rule) {
             $us = [];
             foreach (json_decode($rule->assigned_users)  as $item) {
-                if ((int)$item !== 0){
+                if ((int)$item !== 0 && !empty($user)){
                     foreach ($user as $item1) {
                         if ((int)$item == $item1['id']){
                             $uin['id'] = $item1['id'];
