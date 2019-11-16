@@ -37,10 +37,11 @@
                                 <td style="width: 21%;">{{rl.move_from.title}}</td>
                                 <td style="width: 20%;">{{(rl.move_to !== null) ? rl.move_to.title : 0}}</td>
                                 <td style="width: 20%;">
-                                    <template v-for="(user,index) in rl.assigned_users" >
+                                    <template v-for="(user,index) in rl.assigned_users">
                                         <span><span v-if="index!==0">,</span>{{user.name}} </span>
                                     </template>
-                                    <span v-if="rl.assigned_users.length === 0" class="badge badge-warning">Not Assigned</span>
+                                    <span v-if="rl.assigned_users.length === 0"
+                                          class="badge badge-warning">Not Assigned</span>
                                 </td>
                                 <td class="text-center" style="width: 7%;">
                                     <span v-if="rl.status === 1" class="badge badge-success">Active</span>
@@ -267,22 +268,26 @@
                     axios.post('/api/add-rules', _this.rule)
                         .then(response => response.data)
                         .then(response => {
+                            if (response.status === 'exist') {
+                                swal('sorry', 'Already Exist', 'warning');
+                            } else {
+                                // swal('Rules Created', 'Rules Create Success', 'success');
 
-                            _this.rule.id = null;
-                            _this.rule.name = '';
-                            _this.rule.status = 1;
-                            _this.rule.move_from = 0;
-                            _this.rule.move_to = 0;
-                            _this.rule.assign_to = 0;
-                            swal('Rules Created', 'Rules Create Success', 'success');
-                            _this.rules_action = 'rules';
-                            _this.getBoardColumn();
-                            $("#select22").val([])
-                            setTimeout(function () {
-                                $("#select22").select2({
-                                    placeholder: "Select User For Assign"
-                                });
-                            }, 200)
+                                _this.rule.id = null;
+                                _this.rule.name = '';
+                                _this.rule.status = 1;
+                                _this.rule.move_from = 0;
+                                _this.rule.move_to = 0;
+                                _this.rule.assign_to = 0;
+                                _this.rules_action = 'rules';
+                                _this.getBoardColumn();
+                                $("#select22").val([])
+                                setTimeout(function () {
+                                    $("#select22").select2({
+                                        placeholder: "Select User For Assign"
+                                    });
+                                }, 200)
+                            }
                         })
                         .catch(error => {
                             //
@@ -310,9 +315,14 @@
 
                                 .then(response => response.data)
                                 .then(response => {
-                                    swal.close();
-                                    _this.rules_action = 'rules';
-                                    _this.getBoardColumn();
+                                    if (response.status === 'exist') {
+                                        swal('sorry', 'Already Exist', 'warning');
+                                    } else {
+                                        // swal('Rules Created', 'Rules Create Success', 'success');
+                                        swal.close();
+                                        _this.rules_action = 'rules';
+                                        _this.getBoardColumn();
+                                    }
                                 })
                                 .catch(error => {
                                     console.log('Api for complete task not Working !!!')
@@ -412,7 +422,7 @@
                     this.rule.status = 1;
                     this.rule.move_from = 0;
                     this.rule.move_to = 0;
-                    this.rule.assign_to =0;
+                    this.rule.assign_to = 0;
                 }
             },
             id: function (val) {

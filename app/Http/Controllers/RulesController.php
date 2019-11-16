@@ -26,6 +26,12 @@ class RulesController extends Controller
 
     public function store(Request $request)
     {
+        $check_move_from = Rules::where('move_from',$request->move_from)->OrWhere('move_to',$request->move_from)->count();
+        $check_move_to = Rules::where('move_from',$request->move_to)->count();
+        if ($check_move_from > 0 || $check_move_to > 0){
+            return response()->json(['status' => 'exist']);
+        }
+
         $data = [
             'name' => $request->name,
             'status' => $request->status,
@@ -61,6 +67,11 @@ class RulesController extends Controller
 
     public function update(Request $request)
     {
+        $check_move_from = Rules::where('move_from',$request->move_from)->OrWhere('move_to',$request->move_from)->count();
+        $check_move_to = Rules::where('move_from',$request->move_to)->count();
+        if ($check_move_from > 1 || $check_move_to > 1){
+            return response()->json(['status' => 'exist']);
+        }
         $data = [
             'name' => $request->name,
             'status' => $request->status,
@@ -119,7 +130,7 @@ class RulesController extends Controller
             }
         }
 
-        if ($check) {
+        if ($all_task_for_rule_update) {
             return true;
         } else {
             return false;
