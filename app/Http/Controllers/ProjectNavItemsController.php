@@ -31,8 +31,8 @@ class ProjectNavItemsController extends Controller
             $item->lists = $nav_[0];
             $navItem[] = $item;
         }
-        $rules = Rules::where('project_id',$project_id)->get();
-        return response()->json(['success' => $navItem,'rules'=>$rules]);
+//        $rules = Rules::where('project_id',$project_id)->get();
+        return response()->json(['success' => $navItem,'rules'=>[]]);
 
 
     }
@@ -50,12 +50,32 @@ class ProjectNavItemsController extends Controller
             foreach ($boards as $key => $board) {
                 $boards[$key]['columns'] = Task::where('board_parent_id',0)->where('multiple_board_id',$board['id'])->get();
             }
-            $team_id = Auth::user()->current_team_id;
-            $user = User::join('team_users', 'team_users.user_id', 'users.id')
-                ->where('team_users.team_id', $team_id)->get()->toArray();
+
+
+        }
+        $team_id = Auth::user()->current_team_id;
+        $user = User::join('team_users', 'team_users.user_id', 'users.id')
+            ->where('team_users.team_id', $team_id)->get()->toArray();
+        $rules = Rules::where('project_id',(int)$project_id)->with('move_from')->with('move_to')->get();
+        foreach ($rules as $rule) {
+            $us = [];
+            foreach (json_decode($rule->assigned_users)  as $item) {
+                if ((int)$item !== 0){
+                    foreach ($user as $item1) {
+                        if ((int)$item == $item1['id']){
+                            $uin['id'] = $item1['id'];
+                            $uin['name'] = $item1['name'];
+                        }
+                        $us[] = $uin;
+                    }
+                }
+
+            }
+            $rule->assigned_users = $us;
         }
 
-        return response()->json(['status' => 'success', 'data' => $boards,'users'=>$user]);
+
+        return response()->json(['status' => 'success', 'data' => $boards,'users'=>$user,'rules'=>$rules]);
     }
 
 

@@ -1,6 +1,6 @@
 <template>
 
-    <div class="align-self-center">
+    <div class="align-self-center"  @click="HideDetails">
         <nav class="navbar-expand-md navbar-spark">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse show">
@@ -109,6 +109,22 @@
                                                  width="20px" class="mr-2">
                                             Create PDF </a>
                                     </span>
+                                </div>
+                            </a>
+                        </li>
+
+                        <li class="nav-item" style="margin-right:10px;">
+                            <a @click="shortcutModel" class="d-block d-md-flex text-center nav-link"
+                               href="Javascript:void(0)">
+                                <span class="d-none d-md-block dropdown-toggle">Shortcuts</span>
+                            </a>
+                        </li>
+                        <li class="nav-item" style="margin-right:10px;">
+                            <a @click="" class="text-center nav-link"
+                               href="Javascript:void(0)">
+                                <span class="pull-right" @click="CreateRule">Rules</span>
+                                <div aria-labelledby="dropdownMenuButton"
+                                     class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
                                     <div class="dropdown-divider"></div>
                                     <h6 class="dropdown-header text-uppercase">Manage Rules</h6>
                                     <a class="dropdown-item" href="javascript:void(0)" id="create-rule" @click="CreateRule">
@@ -123,12 +139,6 @@
                                          </a>
                                     </span>
                                 </div>
-                            </a>
-                        </li>
-                        <li class="nav-item" style="margin-right:10px;">
-                            <a @click="shortcutModel" class="d-block d-md-flex text-center nav-link"
-                               href="Javascript:void(0)">
-                                <span class="d-none d-md-block dropdown-toggle">Shortcuts</span>
                             </a>
                         </li>
 
@@ -719,7 +729,7 @@
                     title: 0,
                     description: '',
                     type: 'rules',
-                    action_type: 'create',
+                    action_type: 'rules',
                 })
             },
             UpdateRule(id) {
@@ -795,6 +805,13 @@
             },
             DownloadTaskPDF() {
                 this.$emit('DownloadTaskPDF')
+            }, 
+            HideDetails() {
+                // this.getBoardTask();
+                $('#task_width').addClass('task_width');
+                $('#task_width').removeClass('task_widthNormal');
+                $('#details').addClass('details');
+                $('#details').removeClass('detailsShow');
             }
         },
         directives: {},

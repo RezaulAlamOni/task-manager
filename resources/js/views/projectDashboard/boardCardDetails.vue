@@ -229,8 +229,7 @@
                         <li @click="switchEvent($event)"
                             class="border-top pl-2 assign-user-drop-down-footer">
 
-                                <span
-                                    class="assign-user-drop-down-text">Assign an external team</span>
+                                <span class="assign-user-drop-down-text">Assign an external team</span>
                             <switches class="assign-user-switch-for-dropdown"
                                       color="success"
                                       theme="bootstrap"
@@ -243,7 +242,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <h5 class="" v-html="selectedData.data">
+                <h5 class="detailsTitle" v-html="selectedData.data">
 <!--                    {{selectedData.data}}-->
                 </h5>
             </div>
@@ -292,29 +291,32 @@
                                     <h3>Details</h3>
                                 </div>
                                 <div class="col-12">
-                                    <!-- <div v-if="showDetails == false" @click="showDetails = true">{{ selectedData.data }}</div>  v-if="showDetails == true"  -->
+                                    <!-- <div v-if="showDetails == false" @click="showDetails = true">{{ selectedData.data }}</div>  v-if="showDetails == true"  
+                                            @focus="ShowListDetails(selectedData)" npm install --save @ckeditor/ckeditor5-vue @ckeditor/ckeditor5-build-classic
+                                            @blur="showDetails = false"-->
                                     <!-- <textarea
-                                            @focus="ShowListDetails(selectedData)"
-                                            @blur="showDetails = false"
+                                            :id="'bx'+selectedData.cardId"
+                                            name="description"
                                             class="form-control detailsInput"
                                             data-grow="auto"
                                             placeholder="Task Description"
-                                            v-model="selectedData.data">
+                                            v-model="selectedData.description">
                                     </textarea> -->
-                                    <div :id="'bx'+selectedData.cardId" contenteditable="true"
-                                         style="max-height: 560px;padding: 5px; display: inline-block;overflow: auto;width: 100%; border: 1px solid #e6e6e6;"
-                                         v-html="selectedData.description">
-                                    </div>
+                                    <ckeditor :editor="editor" v-model="selectedData.description" :config="editorConfig"></ckeditor>
+                                    <!-- <div :id="'bx'+selectedData.cardId" contenteditable="true" name="description"
+                                        style="max-height: 560px;padding: 5px; display: inline-block;overflow: auto;width: 100%; border: 1px solid #e6e6e6;"
+                                        v-html="selectedData.description"> 
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="submitdetails" id="submitdetails">
+                                    <div class="submitdetails" id="submitdetails" style="margin-top: 20px">
                                         <a @click="updateDescription('#bx'+selectedData.cardId)" class="btn btn-default"
                                            href="javascript:void(0)"
                                            style="background: #7BB348;">Post</a>
                                         <a class="btn btn-default" href="javascript:void(0)"
-                                           style="border: 1px solid #f1efe6" @click="HideTextArea">Cancel</a>
+                                           style="border: 1px solid #f1efe6" @click="HideDetails">Cancel</a>
                                     </div>
                                 </div>
                             </div>
@@ -340,33 +342,35 @@
                     </div>
                 </div>
                 <!-- Comments -->
-                <div class="row comment-section-in-task-details">
-                    <div class="col-12">
-                        <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater"> -->
-                        <div class="textAreaExtend" v-click-outside="HideTextArea">
-                            <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
-                               data-placement="bottom" data-toggle="tooltip"> PI</p>
-                            <textarea @focus="ShowTextArea(selectedData)"
-                                      class="form-control commentInput"
-                                      data-grow="auto"
-                                      placeholder="Add comment">
-                            </textarea>
+                
+            </div>
+            <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel">
+                <span>
+                    <div class="row comment-section-in-task-details">
+                        <div class="col-12" >
+                            <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater"> -->
+                            <div class="" v-click-outside="HideTextArea">
+                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                                data-placement="bottom" data-toggle="tooltip"> PI</p>
+                                <textarea @focus="ShowTextArea(selectedData)"
+                                        class="form-control commentInput"
+                                        data-grow="auto"
+                                        placeholder="Add comment">
+                                </textarea>
 
-                            <div class="SubmitButton" id="SubmitButton">
-                                <a class="btn btn-default btn-sm" style="background: #7BB348;">Post</a>
-                                <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6"
-                                   @click="HideTextArea">Cancel</a>
-                                <a @click="addAttachment(selectedData)" class="btn btn-default btn-sm"
-                                   style="border: 1px solid #f1efe6">
-                                    <i class="fa fa-paperclip"></i>
-                                </a>
+                                <div class="SubmitButton" id="SubmitButton" style="margin-bottom: 10px; margin-top: 10px;">
+                                    <a class="btn btn-default btn-sm" style="background: #7BB348;">Post</a>
+                                    <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6"
+                                    @click="HideTextArea">Cancel</a>
+                                    <a @click="addAttachment(selectedData)" class="btn btn-default btn-sm"
+                                    style="border: 1px solid #f1efe6">
+                                        <i class="fa fa-paperclip"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel">
-                <span></span>
+                </span>
             </div>
             <div aria-labelledby="log-tab" class="tab-pane" id="log" role="tabpanel">
                 <span>
@@ -449,10 +453,7 @@
                             </ul>
                         </li>
                     </div>
-
-
                 </span>
-
             </div>
         </div>
     </div>
@@ -463,13 +464,21 @@
     import Datepicker from 'vuejs-datepicker';
     import VueTagsInput from '@johmun/vue-tags-input';
     import ClickOutside from 'vue-click-outside';
+    import CKEditor from '@ckeditor/ckeditor5-vue';
+    import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
     export default {
-        components: {switches, Datepicker, VueTagsInput},
+        components: {switches, Datepicker, VueTagsInput, ckeditor: CKEditor.component},
         name: "TaskDetails",
         props: ['selectedData', 'task_logs'],
         data() {
             return {
+
+                editor: ClassicEditor,
+                editorData: '<p>Content of the editor.</p>',
+                editorConfig: {
+                    // The configuration of the editor.
+                },
                 showDetails: false,
                 disabledDates: {
                     id: null
@@ -554,6 +563,7 @@
             }
         },
         mounted() {
+            CKEDITOR.replace( "description" );
             // console.log(selectedData);
             setTimeout(function () {
                 $('[data-toggle="tooltip"]').tooltip();
@@ -622,9 +632,17 @@
                 var _this = this;
                 // $('.submitdetails').hide();
             },
+            HideDetails() {
+                // this.getBoardTask();
+                $('#task_width').addClass('task_width');
+                $('#task_width').removeClass('task_widthNormal');
+                $('#details').addClass('details');
+                $('#details').removeClass('detailsShow');
+            },
             updateDescription(id) {
+
                 var _this = this;
-                this.selectedData.description = $(id).html();
+                // console.log(this.selectedData.description);
                 var postData = {
                     id: _this.selectedData.cardId,
                     description: _this.selectedData.description
@@ -633,6 +651,7 @@
                     .then(response => response.data)
                     .then(response => {
                         console.log(response)
+                        _this.HideDetails();
                         // $('.submitdetails').hide();
                         // _this.getTaskList()
                         // $('#dropdown' + data._id).toggle();

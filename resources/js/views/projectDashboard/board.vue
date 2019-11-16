@@ -1,6 +1,6 @@
-<template>
+<template >
     <div>
-        <div id="board_view_list">
+        <div id="board_view_list"  @click="HideDetails">
             <div class="col-12" id="col10" style="border: none">
                 <div class="card-scene">
                     <Container
@@ -63,11 +63,11 @@
                                                     <div class="dropdown-menu">
                                                         <diV class="collapse show switchToggle">
                                                             <a @click="addExistingTask(index,column.boardId)" class="dropdown-item"
-                                                            href="javascript:void(0)">
-                                                                <img :src="baseUrl+'/img/task-icon/plus-o.png'" height="18" width="18" > Add existing tasks</a>
+                                                            href="javascript:void(0)" v-if="column.moveToCol == false">
+                                                                <img :src="baseUrl+'/img/task-icon/plus-o.png'" height="18" width="18"> Add existing tasks</a>
                                                             <a @click="addCard(index,column.boardId)" class="dropdown-item"
-                                                            href="javascript:void(0)"><img :src="baseUrl+'/img/task-icon/create.png'" height="18" width="18" > Create new tasks</a>
-                                                            <div class="dropdown-divider"></div>
+                                                            href="javascript:void(0)" v-if="column.moveToCol == false"><img :src="baseUrl+'/img/task-icon/create.png'" height="18" width="18" > Create new tasks</a>
+                                                            <div class="dropdown-divider" v-if="column.moveToCol == false"></div>
                                                             <a @click="updateColumSow(index)" class="dropdown-item" href="#">
                                                                 <img :src="baseUrl+'/img/task-icon/edit.png'" height="18" width="18" >  Edit column</a>
                                                             <a @click="hideColumn(index, column.boardId)" class="dropdown-item"
@@ -80,7 +80,7 @@
                                                                 href="#">
                                                                 <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18" width="18" > Transfer Column to another board</a>
                                                             <a @click="showLinkModel(index, column.boardId)" class="dropdown-item"
-                                                                href="#"><img :src="baseUrl+'/img/task-icon/link.png'" height="18" width="18" > Link to List </a>
+                                                                href="#" v-if="column.moveToCol == false"><img :src="baseUrl+'/img/task-icon/link.png'" height="18" width="18" > Link to List </a>
                                                                 <!-- v-if="column.linkToList.length <= 0"  -->
                                                             <li class="dropdown-submenu" v-if="column.linkToList.length > 0">
                                                                 <a class="dropdown-item" href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink Lists</a>
@@ -121,13 +121,21 @@
                                 >
                                 <!-- @drag-start="(e) => onDragStart(column.id,column.boardId, index,  e)"
                                     @drag-end="(e) => log('', e)" -->
-                                    <Draggable :key="card.id" v-for="(card , key) in column.children" >
+                                    <div v-if="column.moveToCol == true">
+                                        <Draggable >
+                                            <div class="card-list card">
+                                                <span v-html="'This column has rule <strong>'+column.ruleName+'</strong> and moves cards to <strong>'+column.boardName+'</strong> Board in Column <strong>'+column.moveToColName+'</strong>'"></span>
+                                                <!-- This column has rule [Rule Name] and moves cards to [Board Name] Board in Column [Column Name] -->
+                                            </div>
+                                        </Draggable>
+                                    </div>
+                                    <Draggable :key="card.id" v-for="(card , key) in column.children">
                                         <div :class="card.props.className"
-                                                :style="card.props.style"
-                                                class="card-list"
-                                                @click="selectCard(card,column.children)"
-                                                :id="'card_'+card.cardId"
-                                                v-on:dblclick="showLog">
+                                            :style="card.props.style"
+                                            class="card-list"
+                                            @click="selectCard(card,column.children)"
+                                            :id="'card_'+card.cardId"
+                                            v-on:dblclick="showLog" >
                                                 <!-- @click="selectCard(card)" -->
                                             <span style="position: absolute; right: 10px; top: 8px; " > <!-- v-if="card.textareaShow === true" -->
                                                 <span class="dropdown-toggle-split opacity"
@@ -825,59 +833,60 @@
                             <div v-for="tree in tree4data">
                                 <li class="list-group-item" :class="(tree.board_parent_id !== null && tree.children.length <= 0) ? 'list-group-item-hide' : ''">
                                     <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': tree.board_parent_id !== null}"
-                                            v-if="tree.text !== '' && tree.board_parent_id !== null && tree.children.length > 0" >
-                                        <input :id="tree.id" :value="tree.id" type="checkbox"
+                                            v-if="tree.text !== '' && tree.board_parent_id !== null && tree.children.length > 0"  v-html="tree.text">
+                                        <!-- <input :id="tree.id" :value="tree.id" type="checkbox"
                                                 v-if="tree.text !== '' && tree.board_parent_id !== null"
-                                                checked disable>
-                                        {{tree.text}} / {{tree.children.length}}
+                                                checked disable> -->
+                                         
 <!--                                        <span class="checkmark"></span>-->
                                     </label>
                                     <label class="checkbox_cus_mini"  v-if="tree.text !== '' && tree.board_parent_id == null" >
                                         <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask"
-                                                :class="{'selectAll': true}" @change="selectChild(tree.id)" v-if="tree.text !== '' && tree.board_parent_id === null">{{tree.text}}
+                                                :class="{'selectAll': true}" @change="selectChild(tree.id)" v-if="tree.text !== '' && tree.board_parent_id === null">
+                                                <span v-html="tree.text"></span> 
                                         <span class="checkmark"></span>
                                     </label>
                                     <ul class="list-group list-group-flush" v-if="tree.children">
-                                        <div v-for="child in tree.children">
-                                            <li class="list-group-item" :class="(child.board_parent_id !== null && child.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                        <div v-for="child in tree.children" :class="(child.board_parent_id !== null && child.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                            <li class="list-group-item" >
                                                 <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child.board_parent_id !== null}"
                                                        v-if="child.text !== '' && child.board_parent_id !== null && child.children.length > 0" >
                                                     <input :id="child.id" class="tree-child" :value="child.id"
                                                        type="checkbox"
-                                                       checked disable> {{child.text}} / {{child.children.length}}
+                                                       checked disable> <span v-html="child.text"></span>  
 <!--                                                    <span class="checkmark"></span>-->
                                                 </label>
                                                 <label class="checkbox_cus_mini" v-if="child.text !== '' && child.board_parent_id == null">
                                                     <input :id="child.id" class="tree-child selectAll" :value="child.id"
-                                                       type="checkbox" v-model="selectedExistedTask" @change="selectChild(child.id)" > {{child.text}}
+                                                       type="checkbox" v-model="selectedExistedTask" @change="selectChild(child.id)" > <span v-html="child.text"></span> 
                                                     <span class="checkmark"></span>
                                                 </label>
 
                                                 <ul class="list-group list-group-flush" v-if="child.children">
-                                                    <div v-for="child1 in child.children">
-                                                        <li class="list-group-item" :class="(child1.board_parent_id !== null && child1.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                                    <div v-for="child1 in child.children" :class="(child1.board_parent_id !== null && child1.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                                        <li class="list-group-item" >
                                                             <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child1.board_parent_id !== null}"
                                                             v-if="child1.text !== '' && child1.board_parent_id !== null  && child1.children.length > 0">
                                                                 <input :id="child1.id" :value="child1.id" class="tree-child"
                                                                     type="checkbox"
-                                                                    checked disable> {{child1.text}}
-<!--                                                                <span class="checkmark"></span>-->
+                                                                    checked disable> <span v-html="child1.text"></span> 
+                                                                <!-- <span class="checkmark"></span>-->
                                                             </label>
 
                                                             <label class="checkbox_cus_mini" v-if="child1.text !== '' && child1.board_parent_id == null">
                                                                 <input :id="child1.id" :value="child1.id" class="tree-child selectAll"
-                                                                    type="checkbox" v-model="selectedExistedTask" @change="selectChild(child1.id)">{{child1.text}}
+                                                                    type="checkbox" v-model="selectedExistedTask" @change="selectChild(child1.id)"><span v-html="child1.text"></span> 
                                                                 <span class="checkmark"></span>
                                                             </label>
                                                             <ul class="list-group list-group-flush" v-if="child1.children">
-                                                                <div v-for="child2 in child1.children">
-                                                                    <li class="list-group-item" :class="(child2.board_parent_id !== null && child2.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                                                <div v-for="child2 in child1.children" :class="(child2.board_parent_id !== null && child2.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                                                    <li class="list-group-item" >
                                                                         <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
                                                                                 v-if="child2.text !== '' && child2.board_parent_id !== null  && child2.children.length > 0">
                                                                             <input :id="child2.id" :value="child2.id"
                                                                                class="tree-child"
                                                                                type="checkbox"
-                                                                               checked disable> {{child2.text}}
+                                                                               checked disable> <span v-html="child2.text"></span> 
                                                                             <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
 <!--                                                                            <span class="checkmark"></span>-->
                                                                         </label>
@@ -887,14 +896,14 @@
                                                                                class="tree-child selectAll"
                                                                                type="checkbox"
                                                                                v-model="selectedExistedTask"
-                                                                               @change="selectChild(child2.id)"> {{child2.text}}
+                                                                               @change="selectChild(child2.id)"> <span v-html="child2.text"></span> 
                                                                             <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
                                                                             <span class="checkmark"></span>
                                                                         </label>
 
                                                                         <ul class="list-group list-group-flush" v-if="child2.children">
-                                                                            <div v-for="child3 in child2.children">
-                                                                                <li class="list-group-item" :class="(child3.board_parent_id !== null && child3.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                                                            <div v-for="child3 in child2.children" :class="(child3.board_parent_id !== null && child3.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                                                                <li class="list-group-item" >
                                                                                     <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
                                                                                             v-if="child3.text !== '' && child3.board_parent_id !== null && child3.children.length > 0">
                                                                                         <input :id="child3.id"
@@ -902,7 +911,7 @@
                                                                                                 class="tree-child"
                                                                                                 type="checkbox"
                                                                                                  checked disable>
-                                                                                            {{child3.text}}
+                                                                                            <span v-html="child3.text"></span> 
                                                                                         <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
 <!--                                                                                        <span class="checkmark"></span>-->
                                                                                     </label>
@@ -914,7 +923,7 @@
                                                                                                 type="checkbox"
                                                                                                 v-model="selectedExistedTask"
                                                                                                 @change="selectChild(child3.id)">
-                                                                                            {{child3.text}}
+                                                                                            <span v-html="child3.text"></span>
                                                                                         <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
                                                                                         <span class="checkmark"></span>
                                                                                     </label>
@@ -942,7 +951,7 @@
                 </div>
             </div>
         </div>
-        <div class="details" id="details" v-click-outside="HideDetails">
+        <div class="details" id="details" >
             <TaskDetails v-if="Object.keys(selectedData).length > 0"
                 :selectedData="selectedData"
                 :task_logs="task_logs"
@@ -1194,6 +1203,10 @@
                         boardId: this.cards[i].id,
                         type: 'container',
                         name: this.cards[i].column,
+                        moveToCol: this.cards[i].moveToCol,
+                        ruleName: this.cards[i].ruleName,
+                        boardName: this.cards[i].boardName,
+                        moveToColName: this.cards[i].colName,
                         progress: this.cards[i].progress,
                         linkToList: this.cards[i].linkToList,
                         props: {
