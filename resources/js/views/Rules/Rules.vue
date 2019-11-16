@@ -33,20 +33,21 @@
                         <tbody>
                         <template v-for="rl in all_rules">
                             <tr>
-                                <td>{{rl.name}}</td>
-                                <td>{{rl.move_from.title}}</td>
-                                <td>{{(rl.move_to !== null) ? rl.move_to.title : 0}}</td>
-                                <td>
-                                    <template v-for="(user,index) in rl.assigned_users">
+                                <td style="width: 25%;">{{rl.name}}</td>
+                                <td style="width: 21%;">{{rl.move_from.title}}</td>
+                                <td style="width: 20%;">{{(rl.move_to !== null) ? rl.move_to.title : 0}}</td>
+                                <td style="width: 20%;">
+                                    <template v-for="(user,index) in rl.assigned_users" >
                                         <span><span v-if="index!==0">,</span>{{user.name}} </span>
                                     </template>
+                                    <span v-if="rl.assigned_users.length === 0" class="badge badge-warning">Not Assigned</span>
                                 </td>
-                                <td>
+                                <td class="text-center" style="width: 7%;">
                                     <span v-if="rl.status === 1" class="badge badge-success">Active</span>
-                                    <span  v-else class="badge badge-warning">Pauesed</span>
+                                    <span v-else class="badge badge-warning">Pauesed</span>
                                 </td>
                                 <!--                                <td>{{rl.created_at}}</td>-->
-                                <td>
+                                <td style="width: 7%;">
                                     <img src="/img/task-icon/trash.png" style="cursor: pointer" alt="" height="20px"
                                          width="20px" class="mr-2"
                                          @click="DeleteRule(rl.id)">
@@ -99,7 +100,7 @@
                                         <div class="form-group">
                                             <select class="form-control select2" v-model="rule.move_from"
                                                     style="width: 100%; margin-top: 10px; border-top: none; border-left: none; border-right: none; box-shadow: none; border-radius: 0px;">
-                                                <option value="select column" disabled>Select a Board and Column
+                                                <option value="0" disabled>Select a Board and Column
                                                 </option>
                                                 <template v-for="Board in BoardColumn">
                                                     <optgroup :label="Board.board_title"
@@ -124,7 +125,7 @@
                                         <div class="form-group">
                                             <select class="form-control select2" v-model="rule.move_to"
                                                     style="width: 100%; margin-top: 10px; border-top: none; border-left: none; border-right: none; box-shadow: none; border-radius: 0px;">
-                                                <option value="select column">Select a Board and Column</option>
+                                                <option value="0">Select a Board and Column</option>
                                                 <template v-for="Board in BoardColumn">
                                                     <optgroup :label="Board.board_title"
                                                               v-if="Board.columns.length > 0">
@@ -195,10 +196,10 @@
                     id: this.id,
                     name: '',
                     status: 1,
-                    move_from: 'select column',
-                    move_to: 'select column',
+                    move_from: 0,
+                    move_to: 0,
                     assign_to: null,
-                    btn_actve : 1
+                    btn_actve: 1
                 },
                 all_rules: null
             }
@@ -261,7 +262,7 @@
                 var _this = this;
                 _this.rule.assign_to = JSON.stringify($("#select22").val())
                 // console.log(_this.rule.assign_to)
-                if (_this.rule.move_from !== 'select column' && _this.rule.name !== '') {
+                if (_this.rule.move_from !== 0 && _this.rule.name !== '') {
                     _this.rule.project_id = _this.projectId;
                     axios.post('/api/add-rules', _this.rule)
                         .then(response => response.data)
@@ -270,9 +271,9 @@
                             _this.rule.id = null;
                             _this.rule.name = '';
                             _this.rule.status = 1;
-                            _this.rule.move_from = 'select column';
-                            _this.rule.move_to = 'select column';
-                            _this.rule.assign_to = 'Assign To';
+                            _this.rule.move_from = 0;
+                            _this.rule.move_to = 0;
+                            _this.rule.assign_to = 0;
                             swal('Rules Created', 'Rules Create Success', 'success');
                             _this.rules_action = 'rules';
                             _this.getBoardColumn();
@@ -292,7 +293,7 @@
             },
             UpdateRule() {
                 var _this = this;
-                if (_this.rule.move_from !== 'select column' && _this.rule.name !== '') {
+                if (_this.rule.move_from !== 0 && _this.rule.name !== '') {
                     swal({
                             title: "Are you sure?",
                             text: "You want to update this Rule !!!",
@@ -303,6 +304,7 @@
                             closeOnConfirm: false
                         },
                         function () {
+                            console.log(_this.rule);
                             _this.rule.assign_to = JSON.stringify($("#select22").val())
                             axios.post('/api/rules-update', _this.rule)
 
@@ -343,9 +345,9 @@
                                     _this.rule.id = null;
                                     _this.rule.name = '';
                                     _this.rule.status = 1;
-                                    _this.rule.move_from = 'select column';
-                                    _this.rule.move_to = 'select column';
-                                    _this.rule.assign_to = 'Assign To';
+                                    _this.rule.move_from = 0;
+                                    _this.rule.move_to = 0;
+                                    _this.rule.assign_to = 0
 
                                     setTimeout(function () {
                                         $("#select22").val([]);
@@ -367,8 +369,8 @@
                 this.rules_action = 'create'
                 this.rule.name = '';
                 this.rule.status = 1;
-                this.rule.move_from = 'select column';
-                this.rule.move_to = 'select column';
+                this.rule.move_from = 0;
+                this.rule.move_to = 0;
                 this.rule.assign_to = [];
                 setTimeout(function () {
                     $("#select22").select2({
@@ -384,8 +386,16 @@
                 this.rule.id = id;
                 this.getRule();
             },
-            updateAddRuleType(id){
+            updateAddRuleType(id) {
+                var _this = this;
                 this.rule.btn_actve = id;
+                if (id === 0) {
+                    _this.rule.move_to = 0;
+                } else {
+                    console.log(_this.rule);
+                }
+
+
             },
             LiveRule() {
                 this.rule.status = 1;
@@ -400,9 +410,9 @@
                 if (this.rules_action === 'create') {
                     this.rule.name = '';
                     this.rule.status = 1;
-                    this.rule.move_from = 'select column';
-                    this.rule.move_to = 'select column';
-                    this.rule.assign_to = 'Assign To';
+                    this.rule.move_from = 0;
+                    this.rule.move_to = 0;
+                    this.rule.assign_to =0;
                 }
             },
             id: function (val) {
