@@ -63,11 +63,11 @@
                                                     <div class="dropdown-menu">
                                                         <diV class="collapse show switchToggle">
                                                             <a @click="addExistingTask(index,column.boardId)" class="dropdown-item"
-                                                            href="javascript:void(0)" v-if="column.moveToCol == false">
+                                                            href="javascript:void(0)" v-if="column.moveToCol == false || column.ruleType === 'asnUser'">
                                                                 <img :src="baseUrl+'/img/task-icon/plus-o.png'" height="18" width="18"> Add existing tasks</a>
                                                             <a @click="addCard(index,column.boardId)" class="dropdown-item"
-                                                            href="javascript:void(0)" v-if="column.moveToCol == false"><img :src="baseUrl+'/img/task-icon/create.png'" height="18" width="18" > Create new tasks</a>
-                                                            <div class="dropdown-divider" v-if="column.moveToCol == false"></div>
+                                                            href="javascript:void(0)" v-if="column.moveToCol == false || column.ruleType === 'asnUser'"><img :src="baseUrl+'/img/task-icon/create.png'" height="18" width="18" > Create new tasks</a>
+                                                            <div class="dropdown-divider" v-if="column.moveToCol == false || column.ruleType === 'asnUser'"></div>
                                                             <a @click="updateColumSow(index)" class="dropdown-item" href="#">
                                                                 <img :src="baseUrl+'/img/task-icon/edit.png'" height="18" width="18" >  Edit column</a>
                                                             <a @click="hideColumn(index, column.boardId)" class="dropdown-item"
@@ -80,7 +80,7 @@
                                                                 href="#">
                                                                 <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18" width="18" > Transfer Column to another board</a>
                                                             <a @click="showLinkModel(index, column.boardId)" class="dropdown-item"
-                                                                href="#" v-if="column.moveToCol == false"><img :src="baseUrl+'/img/task-icon/link.png'" height="18" width="18" > Link to List </a>
+                                                                href="#" v-if="column.moveToCol == false || column.ruleType === 'asnUser'"><img :src="baseUrl+'/img/task-icon/link.png'" height="18" width="18" > Link to List </a>
                                                                 <!-- v-if="column.linkToList.length <= 0"  -->
                                                             <li class="dropdown-submenu" v-if="column.linkToList.length > 0">
                                                                 <a class="dropdown-item" href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink Lists</a>
@@ -108,27 +108,42 @@
                                                 </span>
                                             </span>
                                         </div>
+                                        <div v-if="column.moveToCol === true || column.ruleType === 'asnUser'" :id="column.boardId+'rulesCard'" style="float: left; position: absolute; top: 55px; padding: 0px 9px;">
+                                            <div class="card-list card">
+                                                <span v-if="column.ruleStatus === 0" v-html="'<strong>Rule is paused</strong>'" class="text-warning"></span>
+                                                <span v-if="column.ruleType === 'mvCard'" v-html="'This column has rule <strong>'+column.ruleName+'</strong> and moves cards to <strong>'+column.boardName+'</strong> Board in Column <strong>'+column.moveToColName+'</strong>'"></span>
+                                                <span v-if="column.ruleType === 'asnUser'" v-html="'This column has rule <strong>'+column.ruleName+',</strong> assign to <strong>'+ column.usersName +'</strong>'"></span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                
                                 <Container
+                                    :style="{'padding-top': ruleAlertHeight(column.boardId+'rulesCard', 'coll'+column.boardId)}"
                                     :drop-placeholder="dropPlaceholderOptions"
                                     :get-child-payload="getCardPayload(column.id)"
+                                    :id="'coll'+column.boardId"
 
                                     @drop="(e) => onCardDrop(column.id, column.boardId, index, e)"
                                     drag-class="card-ghost"
                                     drop-class="card-ghost-drop"
                                     group-name="col"
+                                    
                                 >
+                                <!-- <div class="card-list card" style="background-color: white;"> 
+                                    <div class="card-title-blur" style="padding: 10px;">
+                                        task1 ch1 ch2
+                                    </div> 
+                                </div> -->
                                 <!-- @drag-start="(e) => onDragStart(column.id,column.boardId, index,  e)"
                                     @drag-end="(e) => log('', e)" -->
-                                    <div v-if="column.moveToCol == true">
-                                        <Draggable >
+                                    <!-- <div v-if="column.moveToCol == true">
+                                        <Draggable>
                                             <div class="card-list card">
                                                 <span v-html="'This column has rule <strong>'+column.ruleName+'</strong> and moves cards to <strong>'+column.boardName+'</strong> Board in Column <strong>'+column.moveToColName+'</strong>'"></span>
-                                                <!-- This column has rule [Rule Name] and moves cards to [Board Name] Board in Column [Column Name] -->
                                             </div>
                                         </Draggable>
-                                    </div>
+                                    </div> -->
                                     <Draggable :key="card.id" v-for="(card , key) in column.children">
                                         <div :class="card.props.className"
                                             :style="card.props.style"
@@ -187,6 +202,7 @@
                                             <div :id="'title'+card.cardId" contenteditable="true" style="padding: 10px;" class="card-title-blur"
                                                  @click="makeInput($event,card.cardId)"
                                                  @blur="showItem($event,card,index,key)"
+                                                 @keypress="preventEnter($event)"
                                                  v-html="card.data">
                                             </div>
 
@@ -1203,6 +1219,9 @@
                         boardId: this.cards[i].id,
                         type: 'container',
                         name: this.cards[i].column,
+                        ruleType: this.cards[i].type,
+                        ruleStatus: this.cards[i].status,
+                        usersName: this.cards[i].users,
                         moveToCol: this.cards[i].moveToCol,
                         ruleName: this.cards[i].ruleName,
                         boardName: this.cards[i].boardName,
@@ -1362,18 +1381,23 @@
                 });
             },
             onCardDrop(columnId, boardId, index, dropResult) {
-                console.log('drops => ',dropResult);
+                // index = index+1;
+                // console.log('drops => ',dropResult);
                 let _this = this;
                 if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
+                    
+                    // console.log(this.scene.children[index]);
 
+// console.log(this.scene, dropResult);
                     const scene = Object.assign({}, this.scene);
                     const column = scene.children.filter(p => p.id === columnId)[0];
                     const columnIndex = scene.children.indexOf(column);
                     const newColumn = Object.assign({}, column);
+                    // console.log('col',column);
                     newColumn.children = applyDrag(newColumn.children, dropResult);
                     scene.children.splice(columnIndex, 1, newColumn);
-                    this.scene = scene
                     // console.log(this.scene.children[index]);
+                    this.scene = scene
                     let data = this.scene.children[index];
                     // console.log("sort",data);
                     axios.post('/api/card-sort',data)
@@ -1382,10 +1406,10 @@
                         // _this.getBoardTask();
                          setTimeout(() => {
                         }, 500);
-                        console.log('sorted');
+                        // console.log('sorted');
                     })
                     .catch(error => {
-                        console.log('sorting failed');
+                        // console.log('sorting failed');
                     });
 
                     if( dropResult.removedIndex === null && dropResult.addedIndex !== null ) {
@@ -1403,13 +1427,13 @@
                                 $('#loader').modal('hide');
 
                             }, 500);
-                            console.log('shifted');
+                            // console.log('shifted');
                         })
                         .catch(error => {
                             setTimeout(() => {
                                 $('#loader').modal('hide');
                             }, 500);
-                            console.log('shifting failed');
+                            // console.log('shifting failed');
                         });
                     }
 
@@ -2153,6 +2177,12 @@
                     .catch(error => {
                     });
             },
+            preventEnter(e){
+                if (e.which == 13) {
+                    e.preventDefault();
+                    // alert('Enter pressed');
+                }
+            },
             showItem(e, data, index, child_key) {
 
                 $('#title'+data.cardId).addClass('card-title-blur');
@@ -2160,7 +2190,7 @@
                 // let attData = $(e.target).attr('data-text');
                 // let attDataNew = e.target.value;
 
-                let attDataNew = $('#title'+data.cardId).html();
+                let attDataNew = $('#title'+data.cardId).text();
                 // if( $.trim(attData) === $.trim(attDataNew)){
                 //     // console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
                 //     this.getData();
@@ -2502,6 +2532,16 @@
                     });
 
                 });
+            },
+            ruleAlertHeight: function(obj, trigger){
+                setTimeout(function(){
+                    let target = $('#'+obj);
+                    let h = 0;
+                    if(target.length > 0){
+                        h = $('#'+obj).height();
+                    }
+                    $('#'+trigger).css({top: h+'px'});
+                }, 400)
             },
             updateTagName(e, tag) {
                 var newTag = e.target.innerText;
