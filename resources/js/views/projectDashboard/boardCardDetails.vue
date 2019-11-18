@@ -2,12 +2,12 @@
     <div class="container" v-if="Object.keys(selectedData).length > 0">
         <!-- {{selectedData}} -->
         <div class="row">
-            <div class="col-2">
+            <div class="col-md-2" style="padding: 0px;">
                 <h4 class="compltit-blue" @click="showOriginalList(selectedData)" style="cursor:pointer;" data-toggle="tooltip"
                     :title="(selectedData.list_id === null) ? 'This Card Is Only show In Board' : 'Click For Go List'">
                     #ID{{ selectedData.cardId }}</h4>
             </div>
-            <div class="col-2">
+            <div class="col-md-2" style="padding: 0px;">
                 <i class="fa fa-calendar details-title"></i>
                 <a class="calender li-opacity clickHide" v-if="!selectedData.date">
                     <i class="outline-event icon-image-preview" data-toggle title="toggle"></i>
@@ -25,10 +25,10 @@
             <!-- <div class="col-1">
                 <img class="img-responsive" src="/img/12.jpg" style="height:30px;width:30px;">
             </div> -->
-            <div class="col-md-1">
+            <div class="col-md-1" style="padding: 0px;">
                 <img :src="baseUrl+'/img/'+selectedData.progress+'.png'" height="40" width="40" style="clear: right;">
             </div>
-            <div class="col-3">
+            <div class="col-md-3" style="padding: 0px;">
 
                 <!-- Tags -->
                 <div class="col-md-8">
@@ -53,7 +53,7 @@
 
                                 <div :id="'dropdown1'+selectedData.cardId" class="dropdown-menu dropdown-menu1">
 
-                                    <diV class="collapse show switchToggle" style="">
+                                    <diV class="collapse show switchToggle">
                                         <div class="container-fluid">
                                             <vue-tags-input
                                                 :allow-edit-tags="true"
@@ -115,7 +115,7 @@
 
                         <div class="dropdown-menu dropdown-menu1 ">
 
-                            <diV class="collapse show switchToggle" style="">
+                            <diV class="collapse show switchToggle">
                                 <div class="container-fluid">
                                     <vue-tags-input
                                         :allow-edit-tags="true"
@@ -157,7 +157,7 @@
                 </div>
             </div>
             <!-- user assign -->
-            <div class="col-md-4">
+            <div class="col-md-4" style="padding: 0px;">
                 <a class="user dropdown-hide-with-remove-icon">
                     <template v-if="selectedData.assigned_user.length > 0">
                         <span class="assigned_user dropdown-toggle-split "
@@ -243,7 +243,6 @@
         <div class="row">
             <div class="col-12">
                 <h5 class="detailsTitle" v-html="selectedData.data">
-<!--                    {{selectedData.data}}-->
                 </h5>
             </div>
         </div>
@@ -344,10 +343,115 @@
                 <!-- Comments -->
                 
             </div>
-            <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel">
+            <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel" style="overflow: hidden;">
                 <span>
                     <div class="row comment-section-in-task-details">
+                        <div id='cmntSection' style="margin:0px auto; height: 590px; width: 90%; margin-bottom: 20px; overflow: auto;" >
+                            <div class="col-md-12">
+                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                                    data-placement="bottom" data-toggle="tooltip"> PI</p>
+                                <div class="card-list card" style="width: 80%; margin:0px auto" >
+                                    <span >
+                                        This is a comment in cards <br>
+                                        This is a comment in cards
+                                    </span>
+                                </div> 
+                            </div>
+                            <div class="col-md-12" style="margin-top: 15px;">
+                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                                    data-placement="bottom" data-toggle="tooltip"> PA
+                                    </p>
+                                <div class="card-list card" style="width: 80%; margin:0px auto ">
+                                    <span >
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                    </span>
+                                </div> 
+                            </div>
+
+                            <div class="col-md-12" style="margin-top: 15px;">
+                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                                    data-placement="bottom" data-toggle="tooltip"> PA
+                                    </p>
+                                <div class="card-list card" style="width: 80%; margin:0px auto ">
+                                    <span >
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                    </span>
+                                </div> 
+                            </div>
+                            <div class="col-md-12" style="margin-top: 15px;">
+                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                                    data-placement="bottom" data-toggle="tooltip"> PA
+                                    </p>
+                                <div class="card-list card" style="width: 80%; margin:0px auto ">
+                                    <span >
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                    </span>
+                                </div> 
+                            </div>
+                            <div class="col-md-12" style="margin-top: 15px;">
+                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                                    data-placement="bottom" data-toggle="tooltip"> PA
+                                    </p>
+                                <div class="card-list card" style="width: 80%; margin:0px auto ">
+                                    <span >
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                    </span>
+                                </div> 
+                            </div>
+                            <div class="col-md-12" style="margin-top: 15px;">
+                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                                    data-placement="bottom" data-toggle="tooltip"> PA
+                                    </p>
+                                <div class="card-list card" style="width: 80%; margin:0px auto ">
+                                    <span >
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                        This is a comment in cards <br>
+                                    </span>
+                                </div> 
+                            </div>
+                            
+                        </div>
                         <div class="col-12" >
+                            
                             <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater"> -->
                             <div class="" v-click-outside="HideTextArea">
                                 <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
@@ -375,7 +479,7 @@
             <div aria-labelledby="log-tab" class="tab-pane" id="log" role="tabpanel">
                 <span>
                     <div class="log-data">
-                        <h3 class="p-3">Log data for <b>{{selectedData.text}}</b></h3>
+                        <h3 class="p-3">Log data for <b>{{selectedData.data}}</b></h3>
                         <div class="tags-log">
                             <table class="table table-striped table-bordered">
                                 <thead>
@@ -402,6 +506,7 @@
             </div>
             <div aria-labelledby="child-tab" class="tab-pane" id="child" role="tabpanel">
                 <span>
+                    <div class="tags-log">
                     <!-- <template>
                         <ul class="list-group-item">
                             <li class="list-group-item ">
@@ -411,47 +516,48 @@
                         </ul>
                     </template> -->
                     <!-- {{ selectedData.childrens }} -->
-                    <div v-if="selectedData.childrens.length  > 0" v-for="child in selectedData.childrens">
-                        <li class="list-group-item">
-                            <label class="checkbox_cus_mini ">
-                                <!-- <input id="109" type="checkbox" checked="checked" disable="" value="109">  -->
-                                {{ child.title }}
-                                <!-- <span class="checkmark"></span> -->
-                                </label>
-                            <!---->
-                            <ul v-if="child.child_task.length  > 0" class="list-group list-group-flush">
-                                <div v-for="child1 in child.child_task">
-                                    <li class="list-group-item">
-                                        <label class="checkbox_cus_mini ">
-                                            <!-- <input id="111" type="checkbox" checked="checked" disable="" class="tree-child" value="111">  -->
-                                            {{ child1.title }}
-                                            <!-- <span class="checkmark"></span> -->
-                                            </label>
-                                        <!---->
-                                        <ul v-if="child1.child_task.length  > 0" class="list-group list-group-flush">
-                                            <div v-for="child2 in child1.child_task">
-                                                <li class="list-group-item">
-                                                    <label class="checkbox_cus_mini ">
-                                                        <!-- <input id="120" type="checkbox" checked="checked" disable="" class="tree-child" value="120">  -->
-                                                        {{ child2.title }}
-                                                        <!-- <span class="checkmark"></span> -->
-                                                        </label>
-                                                    <!---->
-                                                    <ul v-if="child2.child_task.length  > 0"
-                                                        class="list-group list-group-flush">
-                                                        <div v-for="child3 in child2.child_task">
-                                                            <li class="list-group-item">
-                                                                {{ child3.title }}
-                                                            </li>
-                                                        </div>
-                                                    </ul>
-                                                </li>
-                                            </div>
-                                        </ul>
-                                    </li>
-                                </div>
-                            </ul>
-                        </li>
+                        <div v-if="selectedData.childrens.length  > 0" v-for="child in selectedData.childrens">
+                            <li class="list-group-item">
+                                <label class="checkbox_cus_mini ">
+                                    <!-- <input id="109" type="checkbox" checked="checked" disable="" value="109">  -->
+                                    {{ child.title }}
+                                    <!-- <span class="checkmark"></span> -->
+                                    </label>
+                                <!---->
+                                <ul v-if="child.child_task.length  > 0" class="list-group list-group-flush">
+                                    <div v-for="child1 in child.child_task">
+                                        <li class="list-group-item">
+                                            <label class="checkbox_cus_mini ">
+                                                <!-- <input id="111" type="checkbox" checked="checked" disable="" class="tree-child" value="111">  -->
+                                                {{ child1.title }}
+                                                <!-- <span class="checkmark"></span> -->
+                                                </label>
+                                            <!---->
+                                            <ul v-if="child1.child_task.length  > 0" class="list-group list-group-flush">
+                                                <div v-for="child2 in child1.child_task">
+                                                    <li class="list-group-item">
+                                                        <label class="checkbox_cus_mini ">
+                                                            <!-- <input id="120" type="checkbox" checked="checked" disable="" class="tree-child" value="120">  -->
+                                                            {{ child2.title }}
+                                                            <!-- <span class="checkmark"></span> -->
+                                                            </label>
+                                                        <!---->
+                                                        <ul v-if="child2.child_task.length  > 0"
+                                                            class="list-group list-group-flush">
+                                                            <div v-for="child3 in child2.child_task">
+                                                                <li class="list-group-item">
+                                                                    {{ child3.title }}
+                                                                </li>
+                                                            </div>
+                                                        </ul>
+                                                    </li>
+                                                </div>
+                                            </ul>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </li>
+                        </div>
                     </div>
                 </span>
             </div>
@@ -563,7 +669,7 @@
             }
         },
         mounted() {
-            CKEDITOR.replace( "description" );
+            // CKEDITOR.replace( "description" );
             // console.log(selectedData);
             setTimeout(function () {
                 $('[data-toggle="tooltip"]').tooltip();
@@ -664,9 +770,11 @@
             },
             HideTextArea() {
                 var _this = this;
+                $('#cmntSection').css({height:' 590px'});
                 $('.SubmitButton').hide();
             },
             ShowTextArea(data) {
+                $('#cmntSection').css({height:' 540px'});
                 this.$emit('textArea', data)
                 // var _this = this;
                 // $('.SubmitButton').show();

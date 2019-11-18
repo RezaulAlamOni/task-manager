@@ -36,7 +36,7 @@ class MultipleBoardController extends Controller
     public function index(Request $request)
     {
         $boards = [];
-         $board = Task::where('board_parent_id', 0)
+        $board = Task::where('board_parent_id', 0)
                 ->with('moveToCol','task','linkToList')
                 ->where('project_id', $request->projectId)
                 // ->where('nav_id', $request->nav_id)
@@ -57,10 +57,30 @@ class MultipleBoardController extends Controller
             $boards[$key]['linkToList'] = $value['linkToList'];
             $boards[$key]['color'] = $value['color'];
             if ($value['moveToCol'] != null) {
+                // echo $value['moveToCol']['assigned_users'];
+                $users = json_decode($value['moveToCol']['assigned_users']);
+                if (count($users) > 0) {
+                    $user_name = '';
+                    foreach ($users as  $user) {
+                        $user = User::where('id', $user)->first();
+                        $user_name .= $user->name.', ';
+                    }
+                }
+                $boards[$key]['users'] = '';
                 $boards[$key]['moveToCol'] = true;
                 $boards[$key]['ruleName'] = $value['moveToCol']['name'];
-                $boards[$key]['boardName'] = $value['moveToCol']['moveTo']['multipleBord']['board_title'];
-                $boards[$key]['colName'] = $value['moveToCol']['moveTo']['title'];
+                $boards[$key]['status'] = $value['moveToCol']['status'];
+                if ($value['moveToCol']['move_to'] != 0) {
+                    $boards[$key]['type'] = 'mvCard';
+                    $boards[$key]['boardName'] = $value['moveToCol']['moveTo']['multipleBord']['board_title'];
+                    $boards[$key]['colName'] = $value['moveToCol']['moveTo']['title'];
+                } else {
+                    $boards[$key]['moveToCol'] = true;
+                    $boards[$key]['type'] = 'asnUser';
+                    $boards[$key]['boardName'] = '';
+                    $boards[$key]['colName'] = '';
+                    $boards[$key]['users'] = $user_name;
+                }
             }else{
                 $boards[$key]['moveToCol'] = false;
                 $boards[$key]['ruleName'] = '';
@@ -269,14 +289,18 @@ class MultipleBoardController extends Controller
                     ]);
                 }
             }
+            $updata = [
+                'board_sort_id' => $parent_task->board_sort_id,
+                'board_parent_id' => $request->board_parent_id,
+                'progress' => $parent->progress
+            ];
+            if ($moveToData->move_to != 0) {
+                $updata['board_parent_id'] = $moveToData->moveTo->id;
+                $updata['multiple_board_id'] = $moveToData->moveTo->multiple_board_id;
+            }
             $update = Task::where('board_parent_id',"!=",0)
             ->whereIn('id', $ids)
-            ->update([
-                'board_sort_id' => $parent_task->board_sort_id,
-                'board_parent_id' => $moveToData->moveTo->id,
-                'multiple_board_id' => $moveToData->moveTo->multiple_board_id,
-                'progress' => $parent->progress
-            ]);
+            ->update($updata);
         } else {
             $update = Task::where('board_parent_id',"!=",0)
             ->whereIn('id', $ids)

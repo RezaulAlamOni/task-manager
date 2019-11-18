@@ -33,6 +33,4 @@ class Rules extends Model
     {
         return $this->hasOne(Task::class, 'id', 'move_to')->with('MultipleBord');
     }
-
-
 }
