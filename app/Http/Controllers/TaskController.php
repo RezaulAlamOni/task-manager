@@ -42,6 +42,7 @@ class TaskController extends Controller
             $info['parent_id'] = $task->parent_id;
             $info['sort_id'] = $task->sort_id;
             $info['board_parent_id'] = $task->board_parent_id;
+            $info['multiple_board_id'] = $task->multiple_board_id;
             $info['list_id'] = $task->list_id;//list_id
             $info['text'] = $task->title;
             if ($task->title == 'Dont Forget Section') {
