@@ -290,7 +290,7 @@
                                     <h3>Details</h3>
                                 </div>
                                 <div class="col-12">
-                                    <!-- <div v-if="showDetails == false" @click="showDetails = true">{{ selectedData.data }}</div>  v-if="showDetails == true"  
+                                    <!-- <div v-if="showDetails == false" @click="showDetails = true">{{ selectedData.data }}</div>  v-if="showDetails == true"
                                             @focus="ShowListDetails(selectedData)" npm install --save @ckeditor/ckeditor5-vue @ckeditor/ckeditor5-build-classic
                                             @blur="showDetails = false"-->
                                     <!-- <textarea
@@ -304,7 +304,7 @@
                                     <ckeditor :editor="editor" v-model="selectedData.description" :config="editorConfig"></ckeditor>
                                     <!-- <div :id="'bx'+selectedData.cardId" contenteditable="true" name="description"
                                         style="max-height: 560px;padding: 5px; display: inline-block;overflow: auto;width: 100%; border: 1px solid #e6e6e6;"
-                                        v-html="selectedData.description"> 
+                                        v-html="selectedData.description">
                                     </div> -->
                                 </div>
                             </div>
@@ -341,7 +341,7 @@
                     </div>
                 </div>
                 <!-- Comments -->
-                
+
             </div>
             <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel" style="overflow: hidden;">
                 <span>
@@ -594,7 +594,6 @@
                 tags: [],
                 tag1: '',
                 cards: [],
-
 
                 baseUrl: window.location.origin,
                 id: 0,
@@ -1010,8 +1009,6 @@
                         $('[data-toggle="tooltip"]').tooltip('enable');
                     }, 500);
                 }
-
-
 
             },
             showTagManageModel() {
