@@ -355,7 +355,7 @@
                                         This is a comment in cards <br>
                                         This is a comment in cards
                                     </span>
-                                </div> 
+                                </div>
                             </div>
                             <div class="col-md-12" style="margin-top: 15px;">
                                 <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
@@ -373,7 +373,7 @@
                                         This is a comment in cards <br>
                                         This is a comment in cards <br>
                                     </span>
-                                </div> 
+                                </div>
                             </div>
 
                             <div class="col-md-12" style="margin-top: 15px;">
@@ -392,7 +392,7 @@
                                         This is a comment in cards <br>
                                         This is a comment in cards <br>
                                     </span>
-                                </div> 
+                                </div>
                             </div>
                             <div class="col-md-12" style="margin-top: 15px;">
                                 <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
@@ -410,7 +410,7 @@
                                         This is a comment in cards <br>
                                         This is a comment in cards <br>
                                     </span>
-                                </div> 
+                                </div>
                             </div>
                             <div class="col-md-12" style="margin-top: 15px;">
                                 <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
@@ -428,7 +428,7 @@
                                         This is a comment in cards <br>
                                         This is a comment in cards <br>
                                     </span>
-                                </div> 
+                                </div>
                             </div>
                             <div class="col-md-12" style="margin-top: 15px;">
                                 <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
@@ -446,12 +446,12 @@
                                         This is a comment in cards <br>
                                         This is a comment in cards <br>
                                     </span>
-                                </div> 
+                                </div>
                             </div>
-                            
+
                         </div>
                         <div class="col-12" >
-                            
+
                             <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater"> -->
                             <div class="" v-click-outside="HideTextArea">
                                 <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
@@ -1003,7 +1003,7 @@
                     $('#list'+ task.list_id).click();
                     setTimeout(function () {
                         $('#click'+ task.cardId).click();
-                    },400)
+                    },600)
                     $('[data-toggle="tooltip"]').tooltip('dispose');
                     setTimeout(function () {
                         $('[data-toggle="tooltip"]').tooltip('enable');
