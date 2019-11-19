@@ -81,7 +81,7 @@ class Task extends Model
 
     public function task()
     {
-        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags')->with('childTask')->with('parents')->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
+        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags','parents','childTask','comment')->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
     }
 
     public function childTask()
@@ -128,5 +128,10 @@ class Task extends Model
     public function moveToCol()
     {  
         return $this->hasOne(Rules::class, 'move_from', 'id')->with('moveTo');
+    }
+
+    public function comment()
+    {
+        return $this->hasMany(Comment::class, 'task_id', 'id')->with('user');
     }
 }   

@@ -347,123 +347,32 @@
                 <span>
                     <div class="row comment-section-in-task-details">
                         <div id='cmntSection' style="margin:0px auto; height: 590px; width: 90%; margin-bottom: 20px; overflow: auto;" >
-                            <div class="col-md-12">
+                            <div class="col-md-12" v-for="comments in selectedData.comment" style="margin-top: 15px;">
                                 <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
-                                    data-placement="bottom" data-toggle="tooltip"> PI</p>
+                                    data-placement="bottom" data-toggle="tooltip"> {{ comments.user.name.substring(0,2) }}</p>
                                 <div class="card-list card" style="width: 80%; margin:0px auto" >
-                                    <span >
-                                        This is a comment in cards <br>
-                                        This is a comment in cards
+                                    <span style="padding: 10px;">
+                                        {{ comments.comment  }}
+                                        <span style="position: relative; float: right;">&emsp;&emsp;{{ dateFormate(comments.created_at) }}</span>
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-12" style="margin-top: 15px;">
-                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
-                                    data-placement="bottom" data-toggle="tooltip"> PA
-                                    </p>
-                                <div class="card-list card" style="width: 80%; margin:0px auto ">
-                                    <span >
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12" style="margin-top: 15px;">
-                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
-                                    data-placement="bottom" data-toggle="tooltip"> PA
-                                    </p>
-                                <div class="card-list card" style="width: 80%; margin:0px auto ">
-                                    <span >
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-12" style="margin-top: 15px;">
-                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
-                                    data-placement="bottom" data-toggle="tooltip"> PA
-                                    </p>
-                                <div class="card-list card" style="width: 80%; margin:0px auto ">
-                                    <span >
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-12" style="margin-top: 15px;">
-                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
-                                    data-placement="bottom" data-toggle="tooltip"> PA
-                                    </p>
-                                <div class="card-list card" style="width: 80%; margin:0px auto ">
-                                    <span >
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-12" style="margin-top: 15px;">
-                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
-                                    data-placement="bottom" data-toggle="tooltip"> PA
-                                    </p>
-                                <div class="card-list card" style="width: 80%; margin:0px auto ">
-                                    <span >
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                        This is a comment in cards <br>
-                                    </span>
-                                </div>
-                            </div>
-
                         </div>
                         <div class="col-12" >
 
                             <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater"> -->
                             <div class="" v-click-outside="HideTextArea">
                                 <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
-                                data-placement="bottom" data-toggle="tooltip"> PI</p>
+                                data-placement="bottom" data-toggle="tooltip"> {{ selectedData.userName.substring(0,2) }}</p>
                                 <textarea @focus="ShowTextArea(selectedData)"
+                                        :id="'comment'+selectedData.cardId"
                                         class="form-control commentInput"
                                         data-grow="auto"
                                         placeholder="Add comment">
                                 </textarea>
 
                                 <div class="SubmitButton" id="SubmitButton" style="margin-bottom: 10px; margin-top: 10px;">
-                                    <a class="btn btn-default btn-sm" style="background: #7BB348;">Post</a>
+                                    <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="saveComment(selectedData.cardId)">Post</a>
                                     <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6"
                                     @click="HideTextArea">Cancel</a>
                                     <a @click="addAttachment(selectedData)" class="btn btn-default btn-sm"
@@ -796,6 +705,28 @@
                 let refData = data._id;
                 $('#file' + refData).click();
             },
+            saveComment(id){
+                let _this = this;
+                let comment = $('#comment'+id).val();
+                var commentData = {
+                    'comment' : comment,
+                    'task_id' : id
+                };
+                axios.post('/api/add-comment', commentData)
+                .then(response => response.data)
+                .then(response => {
+                    console.log(_this.selectedData.comment);
+                    $('#comment'+id).val('');
+                    setTimeout(() => {
+                        _this.selectedData.comment.push(response.Data);
+                        console.log(_this.selectedData.comment);
+                    }, 500);
+                })
+                .catch(error =>{
+
+                });
+
+            },
             showImage(data, image) {
                 this.modalImg = image;
                 $("#imageModal").modal();
@@ -1029,6 +960,15 @@
                 myColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
                 return myColor;
             },
+            dateFormate(date)
+            {
+                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                ];
+                var formatedate = new Date(date);
+                var moment =  formatedate.getDate()+' '+monthNames[formatedate.getMonth()]+' '+formatedate.getFullYear();
+                return moment;
+            }
         },
 
         directives: {
