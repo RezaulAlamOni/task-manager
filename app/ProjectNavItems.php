@@ -14,4 +14,8 @@ class ProjectNavItems extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function ALL_list(){
+        return $this->hasMany('App\Multiple_list', 'nav_id', 'id')->with('listItem');
+    }
 }

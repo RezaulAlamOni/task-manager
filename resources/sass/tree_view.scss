@@ -690,6 +690,12 @@
     display: inline-block;
     //height: 100%;
 }
+.project-overview {
+    width: 100%;
+    display: inline-block;
+    overflow: auto;
+    height: calc(100vh - 114px);
+}
 
 #board_view_list {
     overflow: auto;

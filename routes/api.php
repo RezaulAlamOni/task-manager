@@ -92,3 +92,6 @@ Route::get('/all-rules/{project_id}', 'RulesController@index');
 Route::get('/rules/{id}', 'RulesController@show');
 Route::post('/rules-update', 'RulesController@update');
 Route::post('/rules-delete', 'RulesController@delete');
+
+//overview
+Route::get('/project-overview/{project_id}', 'OverviewController@index');
