@@ -1,9 +1,15 @@
 <template>
 
-    <div class="align-self-center"  @click="HideDetails">
+    <div class="align-self-center" @click="HideDetails">
         <nav class="navbar-expand-md navbar-spark">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse show">
+                    <li class="nav-item ml-4" style="list-style: none;">
+                        <a @click="ShowOverView" class="d-block d-md-flex text-center nav-link"
+                           href="Javascript:void(0)">
+                            <span class="d-none d-md-block">Overview</span>
+                        </a>
+                    </li>
                         <span v-for="nav in AllNavItems">
                             <ul class="navbar-nav ml-4 float-sm-left">
                                 <li class="nav-item dropdown">
@@ -19,13 +25,13 @@
                                         <h6 class="dropdown-header" v-else-if="nav.type === 'board'"> Board</h6>
 
                                         <span v-for="nav_list in nav.lists">
-                                            <span :id="'list'+nav_list.id" :class="(nav.type === 'board') ? 'board'+nav_list.id : '' "
+                                            <span :id="'list'+nav_list.id"
+                                                  :class="(nav.type === 'board') ? 'board'+nav_list.id : '' "
                                                   @click="setListId(nav_list,nav.id,nav_list.description,nav.type)"
                                                   class="dropdown-item">
                                                 <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>
                                                  <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>
                                              </span>
-
                                         </span>
                                         <div class="dropdown-divider"></div>
 
@@ -127,7 +133,8 @@
                                      class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
                                     <div class="dropdown-divider"></div>
                                     <h6 class="dropdown-header text-uppercase">Manage Rules</h6>
-                                    <a class="dropdown-item" href="javascript:void(0)" id="create-rule" @click="CreateRule">
+                                    <a class="dropdown-item" href="javascript:void(0)" id="create-rule"
+                                       @click="CreateRule">
                                         <i class="fa fa-fw text-left fa-btn fa-plus-circle compltit-blue"></i>
                                         Create Rules
                                     </a>
@@ -720,6 +727,17 @@
                     title: title,
                     description: description,
                     type: type
+                })
+            },
+
+            ShowOverView() {
+
+                this.$emit('getList', {
+                    list_id: 0,
+                    nav_id: 0,
+                    title: 0,
+                    description: '',
+                    type: 'overview'
                 })
             },
             CreateRule() {

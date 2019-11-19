@@ -359,7 +359,7 @@
                             </div>
                         </div>
                         <div class="col-12" >
-                            
+
                             <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater"> -->
                             <div class="" v-click-outside="HideTextArea">
                                 <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
@@ -581,12 +581,7 @@
             // console.log(selectedData);
             setTimeout(function () {
                 $('[data-toggle="tooltip"]').tooltip();
-                // $("#cmntSection")[0].scrollTop = $("#cmntSection")[0].scrollHeight;
             }, 1000);
-
-            // $(document).ready(function(){
-            //     // $("#cmntSection").scrollTop(55);
-            // });
         },
         created() {
 
@@ -730,7 +725,7 @@
                 .catch(error =>{
 
                 });
-                
+
             },
             showImage(data, image) {
                 this.modalImg = image;
@@ -939,7 +934,7 @@
                     $('#list'+ task.list_id).click();
                     setTimeout(function () {
                         $('#click'+ task.cardId).click();
-                    },400)
+                    },600)
                     $('[data-toggle="tooltip"]').tooltip('dispose');
                     setTimeout(function () {
                         $('[data-toggle="tooltip"]').tooltip('enable');
@@ -966,7 +961,7 @@
                 return myColor;
             },
             dateFormate(date)
-            {   
+            {
                 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
                 ];

@@ -353,7 +353,7 @@
                     $('.board'+ task.multiple_board_id).click();
                     setTimeout(function () {
                         $('#card_'+ task.id).click();
-                    },400)
+                    },600)
                     $('[data-toggle="tooltip"]').tooltip('dispose');
                     setTimeout(function () {
                         $('[data-toggle="tooltip"]').tooltip('enable');

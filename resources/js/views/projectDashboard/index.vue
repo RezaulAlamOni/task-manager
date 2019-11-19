@@ -603,6 +603,11 @@
             @ruleUpdate="RuleUpdate">
             </Rules>
         </div>
+        <div class="project-overview" v-if="list.type === 'overview'">
+            <Overview
+            :projectID="projectId">
+            </Overview>
+        </div>
 
 
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="imageModal" role="dialog"
@@ -945,6 +950,7 @@
     import Navbar from "./ProjectNavbar/Navbar";
     import BoardView from "./board";
     import Rules from "../Rules/Rules";
+    import Overview from "../OverView/OverView";
     import * as Ladda from 'ladda';
 
     export default {
@@ -957,7 +963,8 @@
             TaskDetails,
             Navbar, BoardView,
             Ladda,
-            Rules
+            Rules,
+            Overview
         },
         data() {
             return {
@@ -1025,7 +1032,8 @@
                     id : null,
                     action_type : null,
                     update : null
-                }
+                },
+                overview : ''
 
             }
         },
@@ -2301,6 +2309,9 @@
                         id : (data.rules_id) ? data.rules_id : null,
                         action_type : data.action_type,
                     }
+                } else if (data.type === 'overview') {
+                    var  _this = this;
+
                 }
             },
             getNavbar(data) {
