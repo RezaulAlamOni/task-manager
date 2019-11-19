@@ -34,7 +34,7 @@ class MultipleBoardController extends Controller
     }
 
     public function index(Request $request)
-    {
+    {   
         $boards = [];
         $board = Task::where('board_parent_id', 0)
                 ->with('moveToCol','task','linkToList')
@@ -134,6 +134,8 @@ class MultipleBoardController extends Controller
                         $boards[$key]['task'][$keys]['child'] = 0;
                     }
 
+                    $boards[$key]['task'][$keys]['userName'] = Auth::user()->name;
+                    $boards[$key]['task'][$keys]['comment'] = $values['comment'];
                     $boards[$key]['task'][$keys]['children'] = $values['childTask'];
                     $boards[$key]['task'][$keys]['parents'] = $values['parents'];
                     $boards[$key]['task'][$keys]['id'] = $values['id'];

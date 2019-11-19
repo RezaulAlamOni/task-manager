@@ -1248,6 +1248,8 @@
                             },
                             child: this.cards[i].task[j].child,
                             childrens: this.cards[i].task[j].children,
+                            comment: this.cards[i].task[j].comment,
+                            userName: this.cards[i].task[j].userName,
                             data: this.cards[i].task[j].name,
                             textareaShow: this.cards[i].task[j].textareaShow,
                             description: this.cards[i].task[j].description,
