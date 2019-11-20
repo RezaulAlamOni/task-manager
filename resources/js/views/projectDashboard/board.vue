@@ -433,7 +433,7 @@
 
                                                     </a>
                                                 </div>
-                                                <div class="total-child" style="bottom: 15px; " v-if="card.child > 0"> <strong>
+                                                <div class="total-child" style="margin-top: 8px; " v-if="card.child > 0" @click="hideChilds(card.cardId)"> <strong>
                                                     <!-- {{ JSON.stringify(card) }} -->
                                                     <!-- {{  }} -->
                                                         <!-- console.log(str.match(new RegExp('cardId','gi')).length);     -->
@@ -1325,7 +1325,21 @@
                 }
 
             },
+            hideChilds(cardId){
+                let _this = this;
+                let data = {
+                    'parent_id' : cardId
+                };
+                axios.post('/api/hideChildes', data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response);
+                    _this.getBoardTask();
+                })
+                .catch(error => {
 
+                })
+            },
             selectAll(){
                 if($('.checkedAll').prop('checked') === false){
                     $('.selectAll').prop('checked', false);
