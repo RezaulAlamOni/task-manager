@@ -13,8 +13,16 @@ class OverviewController extends Controller
     }
 
     public function index($project_id){
-        $all_list_nav = ProjectNavItems::where('type','list')->with('ALL_list')->get();
 
-        return response()->json(['data'=>$all_list_nav]);
+        $all_list_nav = ProjectNavItems::where('type','list')->with('All_list')->get();
+
+//        $total_nav_list = $all_list_nav->count();
+//        $list = array();
+//        for ($i = 0;$i < $total_nav_list ; $i++ ){
+//            foreach ($all_list_nav[$i]->All_list as $item) {
+//
+//            }
+//        }
+        return response()->json(['data'=>$all_list_nav[0]->All_list]);
     }
 }
