@@ -346,14 +346,14 @@
             <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel" style="overflow: hidden;">
                 <span>
                     <div class="row comment-section-in-task-details">
-                        <div id='cmntSection' style="margin:0px auto; height: 590px; width: 90%; margin-bottom: 20px; overflow: auto;" >
+                        <div id='cmntSection' style="margin:0px auto; max-height: 610px; width: 90%; margin-bottom: 20px; overflow: auto;" >
                             <div class="col-md-12" v-for="comments in selectedData.comment" style="margin-top: 15px;">
                                 <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
                                     data-placement="bottom" data-toggle="tooltip"> {{ comments.user.name.substring(0,2) }}</p>
-                                <div class="card-list card" style="width: 80%; margin:0px auto" >
+                                <div class="card-list card" style="width: 80%; margin:0px 60px;" >
                                     <span style="padding: 10px;">
                                         {{ comments.comment  }}
-                                        <span style="position: relative; float: right;">&emsp;&emsp;{{ dateFormate(comments.created_at) }}</span>
+                                        <span style="position: relative; float: right;" v-html="dateFormate(comments.created_at)"></span>
                                     </span>
                                 </div>
                             </div>
@@ -370,6 +370,7 @@
                                         data-grow="auto"
                                         placeholder="Add comment">
                                 </textarea>
+                                <!--  -->
 
                                 <div class="SubmitButton" id="SubmitButton" style="margin-bottom: 10px; margin-top: 10px;">
                                     <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="saveComment(selectedData.cardId)">Post</a>
@@ -581,6 +582,8 @@
             // console.log(selectedData);
             setTimeout(function () {
                 $('[data-toggle="tooltip"]').tooltip();
+                var hei = $("#cmntSection").height();
+                $("#cmntSection").animate({ scrollTop: hei }, 2000);
             }, 1000);
         },
         created() {
@@ -678,12 +681,15 @@
             },
             HideTextArea() {
                 var _this = this;
-                $('#cmntSection').css({height:' 590px'});
+                $('#cmntSection').css({maxHeight:' 610px'});
                 $('.SubmitButton').hide();
             },
             ShowTextArea(data) {
-                $('#cmntSection').css({height:' 540px'});
+                $('#cmntSection').css({maxHeight:' 555px'});
                 this.$emit('textArea', data)
+                $('#comment'+data.cardId).css({height : '50px', maxHeight : '100px'});
+                 var hei = $("#cmntSection").height();
+                $("#cmntSection").animate({ scrollTop: hei }, 1000);
                 // var _this = this;
                 // $('.SubmitButton').show();
                 // var option = {
@@ -719,7 +725,10 @@
                     $('#comment'+id).val('');
                     setTimeout(() => {
                         _this.selectedData.comment.push(response.Data);
-                        console.log(_this.selectedData.comment);
+                        _this.HideTextArea();
+                        var hei = $("#cmntSection").height();
+                        $("#cmntSection").animate({ scrollTop: hei }, 1000);
+                        // console.log(_this.selectedData.comment);
                     }, 500);
                 })
                 .catch(error =>{
@@ -966,7 +975,16 @@
                     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
                 ];
                 var formatedate = new Date(date);
-                var moment =  formatedate.getDate()+' '+monthNames[formatedate.getMonth()]+' '+formatedate.getFullYear();
+
+                var hours = formatedate.getHours();
+                var minutes = formatedate.getMinutes();
+                var ampm = hours >= 12 ? 'pm' : 'am';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // the hour '0' should be '12'
+                minutes = minutes < 10 ? '0'+minutes : minutes;
+                var strTime = hours + ':' + minutes + ' ' + ampm;
+
+                var moment =  '&emsp;&emsp;'+formatedate.getDate()+' '+monthNames[formatedate.getMonth()]+' '+formatedate.getFullYear()+'<br>&emsp;&emsp;'+strTime;
                 return moment;
             }
         },

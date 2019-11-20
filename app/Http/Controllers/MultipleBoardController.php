@@ -37,7 +37,10 @@ class MultipleBoardController extends Controller
     {   
         $boards = [];
         $board = Task::where('board_parent_id', 0)
-                ->with('moveToCol','task','linkToList')
+                ->with(['moveToCol','task' => function($q){
+                    $q->where('hidden', '!=', 1);
+                    $q->orWhereNull('hidden');
+                },'linkToList'])
                 ->where('project_id', $request->projectId)
                 // ->where('nav_id', $request->nav_id)
                 ->where('multiple_board_id', $request->board_id)
@@ -834,7 +837,36 @@ class MultipleBoardController extends Controller
         return $item['parent_id'].' 55555';
     }
 
-
+    public function childHide(Request $request){
+        $data = Task::where('id',$request->parent_id)
+                    ->with('childTask')
+                    ->get();
+        $ids[] = $request->id;
+        foreach ($data as $childs) {
+            if (count($childs['childTask']) > 0) {
+                $ids = $this->recurChildIds($childs);
+            }
+        }
+        $delKey = array_search($request->parent_id, $ids);
+        unset($ids[$delKey]);
+        $tasks = Task::whereIn('id',$ids)
+            ->get();
+        foreach ($tasks as $key => $value) {
+            if($value->hidden === 1){
+                $hidden = 0;
+            } else {
+                $hidden = 1;
+            }
+            break;
+        }
+        $hide = Task::whereIn('id',$ids)
+            ->update([
+                'hidden' => $hidden
+            ]);
+        if($hide){
+            return response()->json(['success' => true]);
+        }
+    }
 
     protected function createLog($task_id, $type, $message, $title)
     {
