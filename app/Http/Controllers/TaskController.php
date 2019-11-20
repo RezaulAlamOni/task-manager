@@ -33,7 +33,7 @@ class TaskController extends Controller
         $this->middleware('auth');
     }
 
-    public function decorateData($obj)
+    public function decorateData($obj,$drag = null)
     {
         $data = [];
         foreach ($obj as $key => $task) {
@@ -45,10 +45,12 @@ class TaskController extends Controller
             $info['multiple_board_id'] = $task->multiple_board_id;
             $info['list_id'] = $task->list_id;//list_id
             $info['text'] = $task->title;
-            if ($task->title == 'Dont Forget Section') {
+            if ($task->title == 'Dont Forget Section' || $drag != null) {
                 $info['draggable'] = false;
+                $info['droppable'] = false;
             } else {
                 $info['draggable'] = true;
+                $info['droppable'] = true;
             }
             $info['droppable'] = true;
             $info['clicked'] = 0;
@@ -98,7 +100,7 @@ class TaskController extends Controller
                 ->orderBy('sort_id', 'ASC')
                 ->get();
             if (!empty($childrens)) {
-                $info['children'] = $this->decorateData($childrens);
+                $info['children'] = $this->decorateData($childrens,$drag);
             } else {
                 $info['children'] = [];
             }
@@ -142,7 +144,7 @@ class TaskController extends Controller
                 ->orderBy('sort_id', 'ASC')->get();
 
         }
-        $data = $this->decorateData($tasks);
+        $data = $this->decorateData($tasks,null);
 
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
@@ -175,7 +177,7 @@ class TaskController extends Controller
             ->where('list_id', $list_id)
             ->orderBy('sort_id', 'ASC')
             ->get();
-        $data = $this->decorateData($tasks);
+        $data = $this->decorateData($tasks,null);
         return response()->json(['task_list' => $data]);
     }
 

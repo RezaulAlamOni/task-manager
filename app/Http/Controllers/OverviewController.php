@@ -21,7 +21,7 @@ class OverviewController extends Controller
 
         foreach ($all_list_navs as $all_list_nav) {
             foreach ($all_list_nav->all_list as $item) {
-                $item->tasks = $this->TaskController->decorateData($item->tasks_list);
+                $item->tasks = $this->TaskController->decorateData($item->tasks_list,'drag');
             }
         }
         return response()->json(['data'=>$all_list_navs]);
