@@ -1,14 +1,56 @@
-.OverView {
-    // Vars
+.overview-list {
+    border-left: none !important;
+    border-top: none !important;
+    border-right: none !important;
+    box-shadow: 0 0 0.6px !important;
+    margin: 5px 0px ;
 
-    // Support
-
-    // Module
-    & {
-        //
-    }
-
-    // Facets
-
-    // States
 }
+
+.overview-dropdown {
+    position: absolute;
+    will-change: transform;
+    top: 0px;
+    left: 5px  !important;
+    transform: translate3d(1038px, 67px, 0px);
+}
+
+.overview-dropdown:before {
+    content: "";
+    border-bottom: 10px solid #fff;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    z-index: 10;
+}
+.overview-dropdown:after {
+    content: "";
+    border-bottom: 12px solid #ccc;
+    border-right: 12px solid transparent;
+    border-left: 12px solid transparent;
+    position: absolute;
+    top: -12px;
+    right: 8px;
+    z-index: 9;
+}
+
+.overview-list-header {
+    padding: 2px 10px !important;
+}
+.option-btn {
+    position: absolute;
+    right: -5px;
+    font-size: 17px;
+    cursor: pointer;
+    top: -8px;
+}
+.sort-trigger {
+    position: absolute;
+    left: 0px;
+    top: 6px;
+    cursor: pointer;
+}
+
+

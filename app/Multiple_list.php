@@ -37,4 +37,7 @@ class Multiple_list extends Model
     public function tasks(){
         return $this->hasMany('App\Task', 'list_id', 'id');
     }
+    public function tasks_list(){
+        return $this->hasMany('App\Task', 'list_id', 'id')->where('parent_id',0);
+    }
 }
