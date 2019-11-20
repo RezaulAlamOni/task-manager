@@ -26,44 +26,52 @@
 <!--            </div>-->
 
             <div class="accordion" id="listWithHandle">
-                <div class="card overview-list">
-                    <div class="card-header overview-list-header" id="headingOne" data-toggle="collapse"
-                         data-target="" aria-expanded="false"
-                         aria-controls="collapseOne">
-                        <div class="col-md-12">
-                            <img src="/img/task-icon/move.png" alt="" height="20px" width="20px" class="mr-2 sort-trigger" data-toggle="tooltip"
-                                 title="Change sort-order lists">
-                            <h2 style="margin: 10px 15px;cursor: pointer" data-placement="bottom" @click="dataCollapse('#collapseOne')" data-toggle="tooltip"
+                <template v-for="list in All_list">
+                    <div class="card overview-list">
+                        <div class="card-header overview-list-header" id="headingOne" data-toggle="collapse"
+                             data-target="" aria-expanded="false"
+                             aria-controls="collapseOne">
+                            <div class="col-md-12">
+                                <img src="/img/task-icon/move.png" alt="" height="20px" width="20px" class="mr-2 sort-trigger" data-toggle="tooltip"
+                                     title="Change sort-order lists">
+                                <h2 style="margin: 10px 15px;cursor: pointer" data-placement="bottom" @click="dataCollapse('#collapse'+list.id)" data-toggle="tooltip"
                                 >
-                                This is the list name
-                            </h2>
-                            <span class="option-btn">
+                                    {{list.list_title}}
+                                </h2>
+                                <span class="option-btn">
                                     <span data-toggle="dropdown" class="dropdown-toggle-split col-md-12 opacity" >
                                         <i class="fa fa-ellipsis-h"></i>
                                     </span>
-                                    <div class="dropdown-menu overview-dropdown">
+                                    <div class="dropdown-menu overview-dropdown dropdown-menu-right">
                                         <div class="collapse show switchToggle">
-                                            <a href="#" class="dropdown-item"><i class="fa fa-edit opacity"></i> Add to list/board</a>
-                                            <a href="#" class="dropdown-item"><i class="fa fa-angle-double-left opacity"></i> Delete</a>
+                                            <a href="#" class="dropdown-item">
+                                                <img data-v-0ca4b43b="" src="/img/task-icon/edit.png" alt="" height="17px" width="17px" class="mr-2">
+                                                Add to list/board
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                <img data-v-0ca4b43b="" src="http://taskspark/img/task-icon/trash.png" alt="" height="20px" width="20px" class="mr-2">
+                                                Delete
+                                            </a>
                                         </div>
                                     </div>
                                 </span>
+                            </div>
+                            <div class="col-md-12">
+<!--                                <span>Description :</span>-->
+                                <p>
+                                    {{list.description}}
+                                </p>
+                            </div>
                         </div>
-                        <div class="col-md-12">
-                            <p>
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-                                squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa
-                            </p>
+                        <div :id="'collapse'+list.id" class="collapse show multi-collapse" aria-labelledby="headingOne"
+                             data-parent="#listWithHandle">
+                            <div class="card-body">
+                                <img src="/img/taskimg.png" class="img-responsive">
+                            </div>
                         </div>
                     </div>
+                </template>
 
-                    <div id="collapseOne" class="collapse show multi-collapse" aria-labelledby="headingOne"
-                         data-parent="#listWithHandle">
-                        <div class="card-body">
-                            <img src="/img/taskimg.png" class="img-responsive">
-                        </div>
-                    </div>
-                </div>
             </div>
 
 
@@ -107,8 +115,13 @@
                 axios.get('/api/project-overview/' + _this.project_id)
                     .then(response => response.data)
                     .then(response => {
-                        _this.All_list = response.data;
-                        console.log(_this.All_list)
+                        var lists =  response.data;
+                        var new_list = [];
+                        for (var i = 0; i < lists.length; i++){
+                            new_list = [...new_list, ...lists[i].all_list];
+                        }
+                        _this.All_list = new_list;
+                        console.log(new_list)
                     })
                     .catch(error => {
                         console.log('Api is drag and drop not Working !!!')

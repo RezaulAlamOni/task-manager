@@ -16,6 +16,7 @@ class ProjectNavItems extends Model
     ];
 
     public function All_list(){
-        return $this->hasMany('App\Multiple_list', 'nav_id', 'id')->with('listItem');
+        return $this->hasMany('App\Multiple_list', 'nav_id', 'id')->with('tasks_list');
     }
+
 }
