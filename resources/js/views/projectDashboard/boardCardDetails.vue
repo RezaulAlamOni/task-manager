@@ -270,7 +270,11 @@
                         <a aria-controls="log" aria-selected="false" class="nav-link" data-toggle="tab" href="#log"
                            id="_log" role="tab">Logs</a>
                     </li>
-                    <li class="nav-item" v-if="selectedData.childrens.length  > 0">
+                    <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.childrens.length  > 0">
+                        <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
+                           id="_child" role="tab">Parents & Childs</a>
+                    </li>
+                    <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.parents.length  > 0">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_child" role="tab">Childs</a>
                     </li>
@@ -348,7 +352,7 @@
                     <div class="row comment-section-in-task-details">
                         <div id='cmntSection' style="margin:0px auto; max-height: 610px; width: 90%; margin-bottom: 20px; overflow: auto;" >
                             <div class="col-md-12" v-for="comments in selectedData.comment" style="margin-top: 15px;">
-                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                                <p :title="comments.user.name" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
                                     data-placement="bottom" data-toggle="tooltip"> {{ comments.user.name.substring(0,2) }}</p>
                                 <div class="card-list card" style="width: 80%; margin:0px 60px;" >
                                     <span style="padding: 10px;">
@@ -362,7 +366,7 @@
 
                             <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater"> -->
                             <div class="" v-click-outside="HideTextArea">
-                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                                <p :title="selectedData.userName" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
                                 data-placement="bottom" data-toggle="tooltip"> {{ selectedData.userName.substring(0,2) }}</p>
                                 <textarea @focus="ShowTextArea(selectedData)"
                                         :id="'comment'+selectedData.cardId"
@@ -417,56 +421,66 @@
             <div aria-labelledby="child-tab" class="tab-pane" id="child" role="tabpanel">
                 <span>
                     <div class="tags-log">
-                    <!-- <template>
-                        <ul class="list-group-item">
-                            <li class="list-group-item ">
-                            dsfa
-                            <folder v-bind:folder="folder"></folder>
-                            </li>
-                        </ul>
-                    </template> -->
-                    <!-- {{ selectedData.childrens }} -->
-                        <div v-if="selectedData.childrens.length  > 0" v-for="child in selectedData.childrens">
-                            <li class="list-group-item">
+                        <div v-if="selectedData.parents.length  > 0">
+                        <label class="label"> <h5>Parents:</h5></label>
+                            <li class="list-group-item" v-for="(parent, index) in selectedData.parents" :key="index">
                                 <label class="checkbox_cus_mini ">
-                                    <!-- <input id="109" type="checkbox" checked="checked" disable="" value="109">  -->
-                                    {{ child.title }}
-                                    <!-- <span class="checkmark"></span> -->
-                                    </label>
-                                <!---->
-                                <ul v-if="child.child_task.length  > 0" class="list-group list-group-flush">
-                                    <div v-for="child1 in child.child_task">
-                                        <li class="list-group-item">
-                                            <label class="checkbox_cus_mini ">
-                                                <!-- <input id="111" type="checkbox" checked="checked" disable="" class="tree-child" value="111">  -->
-                                                {{ child1.title }}
-                                                <!-- <span class="checkmark"></span> -->
-                                                </label>
-                                            <!---->
-                                            <ul v-if="child1.child_task.length  > 0" class="list-group list-group-flush">
-                                                <div v-for="child2 in child1.child_task">
-                                                    <li class="list-group-item">
-                                                        <label class="checkbox_cus_mini ">
-                                                            <!-- <input id="120" type="checkbox" checked="checked" disable="" class="tree-child" value="120">  -->
-                                                            {{ child2.title }}
-                                                            <!-- <span class="checkmark"></span> -->
-                                                            </label>
-                                                        <!---->
-                                                        <ul v-if="child2.child_task.length  > 0"
-                                                            class="list-group list-group-flush">
-                                                            <div v-for="child3 in child2.child_task">
-                                                                <li class="list-group-item">
-                                                                    {{ child3.title }}
-                                                                </li>
-                                                            </div>
-                                                        </ul>
-                                                    </li>
-                                                </div>
-                                            </ul>
-                                        </li>
-                                    </div>
-                                </ul>
+                                    <span v-for="(tab,iid) in index" :key="iid"> &emsp;</span>
+                                    {{ parent.title }}
+                                </label>
                             </li>
+                            <!-- <li class="list-group-item">
+                                <label class="checkbox_cus_mini">
+                                    <span v-for="(tab,iid) in (selectedData.parents.length+1)" :key="iid"> &emsp;</span>
+                                    {{ selectedData.data }}
+                                </label>
+                            </li> -->
+                            <Br/>
+                        </div>
+                        <div  v-if="selectedData.childrens.length  > 0">
+                            <label class="label"> <h5>Childrens:</h5></label>
+                            <div v-for="(child,index) in selectedData.childrens">
+                                <li class="list-group-item">
+                                    <label class="checkbox_cus_mini ">
+                                        <!-- <input id="109" type="checkbox" checked="checked" disable="" value="109">  -->
+                                        {{ child.title }}
+                                        <!-- <span class="checkmark"></span> -->
+                                    </label>
+                                    <!---->
+                                    <ul v-if="child.child_task.length  > 0" class="list-group list-group-flush">
+                                        <div v-for="child1 in child.child_task">
+                                            <li class="list-group-item">
+                                                <label class="checkbox_cus_mini ">
+                                                    <!-- <input id="111" type="checkbox" checked="checked" disable="" class="tree-child" value="111">  -->
+                                                    {{ child1.title }}
+                                                    <!-- <span class="checkmark"></span> -->
+                                                    </label>
+                                                <!---->
+                                                <ul v-if="child1.child_task.length  > 0" class="list-group list-group-flush">
+                                                    <div v-for="child2 in child1.child_task">
+                                                        <li class="list-group-item">
+                                                            <label class="checkbox_cus_mini ">
+                                                                <!-- <input id="120" type="checkbox" checked="checked" disable="" class="tree-child" value="120">  -->
+                                                                {{ child2.title }}
+                                                                <!-- <span class="checkmark"></span> -->
+                                                                </label>
+                                                            <!---->
+                                                            <ul v-if="child2.child_task.length  > 0"
+                                                                class="list-group list-group-flush">
+                                                                <div v-for="child3 in child2.child_task">
+                                                                    <li class="list-group-item">
+                                                                        {{ child3.title }}
+                                                                    </li>
+                                                                </div>
+                                                            </ul>
+                                                        </li>
+                                                    </div>
+                                                </ul>
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </li>
+                            </div>
                         </div>
                     </div>
                 </span>
@@ -986,6 +1000,22 @@
 
                 var moment =  '&emsp;&emsp;'+formatedate.getDate()+' '+monthNames[formatedate.getMonth()]+' '+formatedate.getFullYear()+'<br>&emsp;&emsp;'+strTime;
                 return moment;
+            },
+            showChild(cardId){
+                let _this = this;
+                let data = {
+                    'task_id' : cardId
+                };
+                axios.post('/api/show-child-parent',data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response.parents);
+                    _this.selectedData.childrens = response.childs.child_task;
+                    _this.selectedData.parents = response.parents;
+                })
+                .catch(error => {
+
+                })
             }
         },
 

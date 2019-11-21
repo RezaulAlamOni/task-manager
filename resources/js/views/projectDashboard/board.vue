@@ -1248,6 +1248,7 @@
                             },
                             child: this.cards[i].task[j].child,
                             childrens: this.cards[i].task[j].children,
+                            parents: this.cards[i].task[j].parents,
                             comment: this.cards[i].task[j].comment,
                             userName: this.cards[i].task[j].userName,
                             data: this.cards[i].task[j].name,
@@ -2358,7 +2359,7 @@
                     .then(response => {
                         // console.log(response);
                         _this.task_logs = response;
-                        _this.ShowDetails(_this.selectedData);
+                        _this.ShowDetails();
                         setTimeout(function () {
                             $('#_details').click();
                             // $('#_log').click()
