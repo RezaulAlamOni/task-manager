@@ -868,6 +868,36 @@ class MultipleBoardController extends Controller
         }
     }
 
+    public function childrenAndParent(Request $request)
+    {
+        $childs = Task::where('id',$request->task_id)
+                    ->with('childTask')
+                    ->first();
+        $parents = Task::where('id',$request->task_id)
+                    ->with('parents')
+                    ->get();
+
+        foreach ($parents as $key => $value) {
+            if(count($value['parents']) > 0){
+                $this->recurParent($value['parents']);
+            }
+        }
+        if ($this->parents) {
+            $this->parents = array_reverse($this->parents);
+        }
+        return response()->json(['success' => true, 'childs' => $childs, 'parents' => $this->parents]);
+    }
+
+    public function recurParent($parent)
+    {   
+        foreach ($parent as $key => $value) {
+            $this->parents[] = $value;
+            if (count($value['parents']) > 0) {
+                $this->recurParent($value['parents']);
+            }
+        }
+    }
+
     protected function createLog($task_id, $type, $message, $title)
     {
         $log_data = [
