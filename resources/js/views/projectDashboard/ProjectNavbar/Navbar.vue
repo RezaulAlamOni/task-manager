@@ -600,6 +600,7 @@
         },
         mounted() {
             this.AllNavItem();
+            this.ShowOverView();
         },
         methods: {
 

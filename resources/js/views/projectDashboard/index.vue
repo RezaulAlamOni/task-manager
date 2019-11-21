@@ -67,12 +67,12 @@
             </div>
         </div>
 
-        <div class="col-md-8 text-center pt-5" v-if="AllNavItems === null">
-            <h2 style="color: #d1a894">Create Task View.</h2>
-        </div>
-        <div class="col-md-8 text-center pt-5" v-else-if="AllNavItems !== null && list.type === null">
-            <h2 style="color: #d1a894">Select Task View.</h2>
-        </div>
+<!--        <div class="col-md-8 text-center pt-5" v-if="AllNavItems === null">-->
+<!--            <h2 style="color: #d1a894">Create Task View.</h2>-->
+<!--        </div>-->
+<!--        <div class="col-md-8 text-center pt-5" v-else-if="AllNavItems !== null && list.type === null">-->
+<!--            <h2 style="color: #d1a894">Select Task View.</h2>-->
+<!--        </div>-->
         <div :class="(list.type === 'list') ? 'list-task-details' : 'board-card-details'" v-if="list.type === 'list' || list.type === 'board'">
 
             <div style="padding-left: 5%" v-if="list.type === 'list'">
