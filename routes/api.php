@@ -98,3 +98,4 @@ Route::post('/rules-delete', 'RulesController@delete');
 
 //overview
 Route::get('/project-overview/{project_id}', 'OverviewController@index');
+Route::post('/project-overview/list-sort', 'OverviewController@ListSort');

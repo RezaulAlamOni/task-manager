@@ -12,7 +12,9 @@ class Multiple_list extends Model
         'nav_id',
         'description',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'sort_id',
+        'is_delete',
     ];
 
     public function listItem()
