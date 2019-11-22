@@ -2390,8 +2390,8 @@
                                 var data = null;
                                 if (isConfirm) {
                                     swal({
-                                        title: "Keep this list on Overview !?",
-                                        text: "You will not be able to recover this imaginary file!",
+                                        title: "Are you sure!?",
+                                        text: "You want to delete this list with all task !",
                                         type: "warning",
                                         showCancelButton: true,
                                         confirmButtonClass: "btn-danger",
@@ -2415,8 +2415,8 @@
 
                                 } else {
                                     swal({
-                                        title: "Keep this list on Overview !?",
-                                        text: "You will not be able to recover this imaginary file!",
+                                        title: "Are you sure!?",
+                                        text: "You want to delete this list with all task !",
                                         type: "warning",
                                         showCancelButton: true,
                                         confirmButtonClass: "btn-danger",
