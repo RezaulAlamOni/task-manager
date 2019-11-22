@@ -1,30 +1,6 @@
 <template>
     <main>
         <div class="container">
-            <!--            <div class="row">-->
-            <!--                <div class="col-md-12">-->
-            <!--                    <h2 style="margin: 20px;">This is the list name-->
-            <!--                        <span style="float: right;">-->
-            <!--                            <span data-toggle="dropdown" class="dropdown-toggle-split col-md-12 opacity">-->
-            <!--                                <i class="fa fa-ellipsis-h"></i>-->
-            <!--                            </span>-->
-            <!--                            <div class="dropdown-menu">-->
-            <!--                                <div class="collapse show switchToggle">-->
-            <!--                                    <a href="#" class="dropdown-item"><i class="fa fa-edit opacity"></i> Add to list/board</a>-->
-            <!--                                    <a href="#" class="dropdown-item"><i class="fa fa-edit opacity"></i> Create List</a>-->
-            <!--                                    <a href="#" class="dropdown-item"><i class="fa fa-angle-double-left opacity"></i> Delete</a>-->
-            <!--                                </div>-->
-            <!--                            </div>-->
-            <!--                        </span>-->
-            <!--                    </h2>-->
-            <!--                </div>-->
-            <!--            </div>-->
-            <!--            <div class="row">-->
-            <!--                <div class="col-md-12">-->
-            <!--                    <img src="/img/taskimg.png" class="img-responsive">-->
-            <!--                </div>-->
-            <!--            </div>-->
-
             <div class="accordion" id="listWithHandle">
                 <template v-for="list in All_list">
                     <div class="card overview-list" :data-id="list.id">
@@ -36,7 +12,7 @@
                                      class="mr-2 sort-trigger" data-toggle="tooltip"
                                      title="Change sort-order lists">
                                 <h2 style="margin: 10px 15px;cursor: pointer" data-placement="bottom"
-                                    @click="dataCollapse('#collapse'+list.id)" data-toggle="tooltip">
+                                    @click="dataCollapse('#collapse'+list.id,list.id)" data-toggle="tooltip">
                                     {{list.list_title}}
                                 </h2>
                                 <span class="option-btn">
@@ -76,7 +52,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div :id="'collapse'+list.id" class="collapse show multi-collapse " :class="(1 === 1) ? 'hide-overview-list-task' : 'show-overview-list-task'"
+                        <div :id="'collapse'+list.id" class="collapse show multi-collapse " :class="(list.open === 0) ? 'hide-overview-list-task' : 'show-overview-list-task'"
                              aria-labelledby="headingOne"
                              data-parent="#listWithHandle">
                             <div class="card-body p-0">
@@ -252,8 +228,15 @@
                         console.log('Api is drag and drop not Working !!!')
                     });
             },
-            dataCollapse(id) {
-                $(id).slideToggle();
+            dataCollapse(id,list_id) {
+                axios.post('/api/project-overview/list-open-close', {list_id: list_id})
+                    .then(response => response.data)
+                    .then(response => {
+                        $(id).slideToggle();
+                    })
+                    .catch(error => {
+                        console.log('Api is drag , drop and sort not Working !!!')
+                    });
             },
             DragDropAndSort(e) {
                 var data = [];

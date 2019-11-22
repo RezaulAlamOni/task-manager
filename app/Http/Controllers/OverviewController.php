@@ -33,13 +33,28 @@ class OverviewController extends Controller
 
     public function ListSort(Request $request)
     {
-
+        if (!isset($request->data)){
+            return \response()->json(['status'=>'failed']);
+        }
         $data = $request->data;
         foreach ($data as $key => $item) {
             Multiple_list::where('id', (int)$item)->update(['sort_id' => $key]);
         }
         return response()->json(['status' => 'success']);
 
+    }
+    public function ListToggle(Request $request){
+        if (!isset($request->list_id)){
+            return \response()->json(['status'=>'failed']);
+        }
+        $list_check = Multiple_list::where('id', $request->list_id)->first();
+        $open = ($list_check->open) ? 0 : 1;
+        $update_toggle = Multiple_list::where('id', $request->list_id)->update(['open' => $open]);
+        if ($update_toggle){
+            return \response()->json(['status'=>'success']);
+        } else {
+            return \response()->json(['status'=>'failed']);
+        }
 
     }
 }
