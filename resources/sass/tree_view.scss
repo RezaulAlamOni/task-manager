@@ -1159,6 +1159,12 @@
         min-width: 250px;
     }
 }
+.sweet-alert button.cancel {
+    background-color: #2d804e;
+}
+.sweet-alert button.cancel:hover {
+    background-color: #518066;
+}
 @media only screen and (max-width: 880px) {
     .hide-item-res {
         display: none;

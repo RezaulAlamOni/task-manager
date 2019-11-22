@@ -632,7 +632,7 @@
                             _this.navItem.type = null;
                             _this.navItem.sort_id = null;
                             _this.navItem.project_id = null;
-                            swal("Created", "Nav Create Successful", "success")
+                            // swal("Created", "Nav Create Successful", "success")
                         }
 
                     })
@@ -782,7 +782,7 @@
                             $("#addListModel").modal('hide');
                             this.list.name = null;
                             this.list.description = null;
-                            swal("Created", "Board Create Successful", "success")
+                            // swal("Created", "Board Create Successful", "success")
                         }
                     })
                     .catch(error => {
@@ -803,7 +803,7 @@
                             this.AllNavItem();
                             this.list.name = null;
                             this.list.description = null;
-                            swal("Created", "Board Create Successful", "success")
+                            // swal("Created", "Board Create Successful", "success")
                             setTimeout(function () {
                                 $('.board' + response.id.id).click();
                             }, 300);
@@ -820,6 +820,7 @@
                 this.$emit('MoveListTOAnotherNav', {type: type})
             },
             DeleteListOrBoard(type, action) {
+
                 this.$emit('DeleteListOrBoard', {type: type, action: action})
             },
             DownloadTaskPDF() {

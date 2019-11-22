@@ -67,13 +67,14 @@
             </div>
         </div>
 
-<!--        <div class="col-md-8 text-center pt-5" v-if="AllNavItems === null">-->
-<!--            <h2 style="color: #d1a894">Create Task View.</h2>-->
-<!--        </div>-->
-<!--        <div class="col-md-8 text-center pt-5" v-else-if="AllNavItems !== null && list.type === null">-->
-<!--            <h2 style="color: #d1a894">Select Task View.</h2>-->
-<!--        </div>-->
-        <div :class="(list.type === 'list') ? 'list-task-details' : 'board-card-details'" v-if="list.type === 'list' || list.type === 'board'">
+        <!--        <div class="col-md-8 text-center pt-5" v-if="AllNavItems === null">-->
+        <!--            <h2 style="color: #d1a894">Create Task View.</h2>-->
+        <!--        </div>-->
+        <!--        <div class="col-md-8 text-center pt-5" v-else-if="AllNavItems !== null && list.type === null">-->
+        <!--            <h2 style="color: #d1a894">Select Task View.</h2>-->
+        <!--        </div>-->
+        <div :class="(list.type === 'list') ? 'list-task-details' : 'board-card-details'"
+             v-if="list.type === 'list' || list.type === 'board'">
 
             <div style="padding-left: 5%" v-if="list.type === 'list'">
 
@@ -597,15 +598,15 @@
 
         <div class="boardView" v-if="list.type === 'rules'">
             <Rules
-            :project_id="projectId"
-            :id="rule.id"
-            :action_type="rule.action_type"
-            @ruleUpdate="RuleUpdate">
+                :project_id="projectId"
+                :id="rule.id"
+                :action_type="rule.action_type"
+                @ruleUpdate="RuleUpdate">
             </Rules>
         </div>
         <div class="project-overview" v-if="list.type === 'overview'">
             <Overview
-            :projectID="projectId">
+                :projectID="projectId">
             </Overview>
         </div>
 
@@ -858,7 +859,8 @@
                                     <option disabled value="Select list Nav">
                                         Select List Nav
                                     </option>
-                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav_T" v-if="navs.type === 'list'">
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in nav_T"
+                                            v-if="navs.type === 'list'">
                                         {{navs.title}}
                                     </option>
                                 </select>
@@ -1028,12 +1030,12 @@
                 type_T: '',
                 delete_popup: 0,
                 empty_task_delete_flag: 0,
-                rule : {
-                    id : null,
-                    action_type : null,
-                    update : null
+                rule: {
+                    id: null,
+                    action_type: null,
+                    update: null
                 },
-                overview : ''
+                overview: ''
 
             }
         },
@@ -1529,7 +1531,7 @@
                     }
                 }
             },
-            CopyToSelectedTask(){
+            CopyToSelectedTask() {
 
                 var _this = this;
                 var postData = {
@@ -2304,13 +2306,13 @@
                         type: 'board'
                     });
                 } else if (data.type === 'rules') {
-                    var  _this = this;
+                    var _this = this;
                     _this.rule = {
-                        id : (data.rules_id) ? data.rules_id : null,
-                        action_type : data.action_type,
+                        id: (data.rules_id) ? data.rules_id : null,
+                        action_type: data.action_type,
                     }
                 } else if (data.type === 'overview') {
-                    var  _this = this;
+                    var _this = this;
 
                 }
             },
@@ -2368,29 +2370,98 @@
 
 
                 } else {
-                    swal({
-                            title: "Are you sure?",
-                            text: "If you delete this " + type + " then all task will delete !!!",
+
+                    if (type === 'list') {
+                        swal({
+                            title: "Keep this list on Overview !?",
+                            text: "You will not be able to recover this imaginary file!",
                             type: "warning",
                             showCancelButton: true,
                             confirmButtonClass: "btn-danger",
-                            confirmButtonText: "Yes, Complete it!",
-                            closeOnConfirm: false
-                        },
-                        function () {
-                            axios.post('/api/board-list-delete', {type: type, id: _this.list_id, action: action})
-                                .then(response => response.data)
-                                .then(response => {
-                                    swal("Complete!", "This List is deleted successfully !", "success");
-                                    window.location.href = '/project-dashboard/' + _this.projectId;
-                                })
-                                .catch(error => {
-                                    console.log('Add list api not working!!')
-                                });
+                            confirmButtonText: "No Delete it !",
+                            confirmButtonColor: '#f56065',
+                            cancelButtonText: "Yes Keep on Overview",
+                            cancelButtonColor: "#c3dda3",
+                            closeOnConfirm: false,
+                            closeOnCancel: false,
+                            dangerMode: true,
+                            },
+                            function (isConfirm) {
+                                var data = null;
+                                if (isConfirm) {
+                                    swal({
+                                        title: "Keep this list on Overview !?",
+                                        text: "You will not be able to recover this imaginary file!",
+                                        type: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonClass: "btn-danger",
+                                        confirmButtonText: "Yes Delete it !",
+                                        confirmButtonColor: '#f56065',
+                                        cancelButtonText: "Cancel",
+                                        closeOnConfirm: true,
+                                        closeOnCancel: true,
+                                    }, function () {
+                                        data = {type: type, id: _this.list_id, action: action, overview: 0};
+                                        axios.post('/api/board-list-delete', data)
+                                            .then(response => response.data)
+                                            .then(response => {
+                                                swal("Complete!", "This List is deleted successfully !", "success");
+                                                window.location.href = '/project-dashboard/' + _this.projectId;
+                                            })
+                                            .catch(error => {
+                                                console.log('Add list api not working!!')
+                                            });
+                                    })
 
-                        });
+                                } else {
+                                    swal({
+                                        title: "Keep this list on Overview !?",
+                                        text: "You will not be able to recover this imaginary file!",
+                                        type: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonClass: "btn-danger",
+                                        confirmButtonText: "Yes Delete it !",
+                                        confirmButtonColor: '#f56065',
+                                        cancelButtonText: "Cancel",
+                                        closeOnConfirm: true,
+                                        closeOnCancel: true,
+                                    }, function () {
+                                        data = {type: type, id: _this.list_id, action: action, overview: 1};
+                                        axios.post('/api/board-list-delete', data)
+                                            .then(response => response.data)
+                                            .then(response => {
+                                                swal("Complete!", "This List is deleted successfully !", "success");
+                                                window.location.href = '/project-dashboard/' + _this.projectId;
+                                            })
+                                            .catch(error => {
+                                                console.log('Add list api not working!!')
+                                            });
+                                    })
+                                }
+                            });
 
-
+                    } else {
+                        swal({
+                                title: "Are you sure?",
+                                text: "If you delete this " + type + " then all task will delete !!!",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "Yes, Delete it!",
+                                closeOnConfirm: false
+                            },
+                            function () {
+                                axios.post('/api/board-list-delete', {type: type, id: _this.list_id, action: action})
+                                    .then(response => response.data)
+                                    .then(response => {
+                                        swal("Complete!", "This List is deleted successfully !", "success");
+                                        window.location.href = '/project-dashboard/' + _this.projectId;
+                                    })
+                                    .catch(error => {
+                                        console.log('Add list api not working!!')
+                                    });
+                            });
+                    }
                 }
 
             },
@@ -2731,9 +2802,9 @@
                         console.log('Api for task date update not Working !!!')
                     });
             },
-            deletePhoto(img,id) {
+            deletePhoto(img, id) {
                 var _this = this;
-                axios.post('/api/task-list/delete-img', {'img': img,id: id})
+                axios.post('/api/task-list/delete-img', {'img': img, id: id})
                     .then(response => response.data)
                     .then(response => {
                         _this.getTaskList();
@@ -2836,11 +2907,11 @@
                 })
             },
 
-            showImage(data, image,task_id) {
-                this.modalImg = [image,task_id];
+            showImage(data, image, task_id) {
+                this.modalImg = [image, task_id];
                 $("#imageModal").modal();
             },
-            RuleUpdate(){
+            RuleUpdate() {
                 this.AllNavItems = 'update';
             }
 

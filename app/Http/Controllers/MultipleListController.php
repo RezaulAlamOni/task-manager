@@ -108,18 +108,24 @@ class MultipleListController extends Controller
         $id = $request->id;
         if ($request->type == 'list') {
             if ($request->action == 'delete') {
-                $tasks = Task::where(['list_id'=>$id,'parent_id'=>0])->get();
-                foreach ($tasks as $task) {
-                    $this->Task_Controller->deleteTaskWithChild($task->id);
+                if ($request->overview == 0) {
+                    $tasks = Task::where(['list_id' => $id, 'parent_id' => 0])->get();
+                    foreach ($tasks as $task) {
+                        $this->Task_Controller->deleteTaskWithChild($task->id);
+                    }
+                    Multiple_list::where('id', $id)->delete();
+                } else {
+                    Multiple_list::where('id', $id)->update(['is_delete'=>1]);
                 }
-                Multiple_list::where('id', $id)->delete();
+
+
             } elseif ($request->action == 'move') {
-                (Task::where(['list_id'=>$id])->update(['list_id'=>$request->target])) ? Multiple_list::where('id', $id)->delete() : '';
+                (Task::where(['list_id' => $id])->update(['list_id' => $request->target])) ? Multiple_list::where('id', $id)->delete() : '';
             }
 
         } else {
             if ($request->action == 'delete') {
-                $tasks = Task::where(['multiple_board_id'=>$id,'board_parent_id'=>0])->get();
+                $tasks = Task::where(['multiple_board_id' => $id, 'board_parent_id' => 0])->get();
                 foreach ($tasks as $task) {
                     $this->MultipleBoardController->destroy($task->id);
                 }
@@ -127,7 +133,7 @@ class MultipleListController extends Controller
 
             } elseif ($request->action == 'move') {
 
-                (Task::where(['multiple_board_id'=>$id])->update(['multiple_board_id'=>$request->target])) ? Multiple_board::where('id', $id)->delete() : '';
+                (Task::where(['multiple_board_id' => $id])->update(['multiple_board_id' => $request->target])) ? Multiple_board::where('id', $id)->delete() : '';
 
             }
         }
@@ -150,8 +156,8 @@ class MultipleListController extends Controller
         $data = $this->Task_Controller->decorateData($tasks);
 //        dd($data);
 //        return view('TaskListPdf',['list'=>$multiple_list,'tasks'=>$data]);
-        $pdf = PDF::loadView('TaskListPdf',['list'=>$multiple_list,'tasks'=>$data]);
-        return $pdf->download($multiple_list->list_title.'.pdf');
+        $pdf = PDF::loadView('TaskListPdf', ['list' => $multiple_list, 'tasks' => $data]);
+        return $pdf->download($multiple_list->list_title . '.pdf');
 //        return $pdf->save(public_path('pdf/abc.pdf'))->stream('download.pdf');
     }
 }
