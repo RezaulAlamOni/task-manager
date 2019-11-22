@@ -52,7 +52,8 @@
                                 </p>
                             </div>
                         </div>
-                        <div :id="'collapse'+list.id" class="collapse show multi-collapse " :class="(list.open === 0) ? 'hide-overview-list-task' : 'show-overview-list-task'"
+                        <div :id="'collapse'+list.id" class="collapse show multi-collapse "
+                             :class="(list.open === 0) ? 'hide-overview-list-task' : 'show-overview-list-task'"
                              aria-labelledby="headingOne"
                              data-parent="#listWithHandle">
                             <div class="card-body p-0">
@@ -228,7 +229,7 @@
                         console.log('Api is drag and drop not Working !!!')
                     });
             },
-            dataCollapse(id,list_id) {
+            dataCollapse(id, list_id) {
                 axios.post('/api/project-overview/list-open-close', {list_id: list_id})
                     .then(response => response.data)
                     .then(response => {
@@ -271,6 +272,7 @@
                         l.stop();
                         _this.getAllList();
                         $("#updateListBoardModelO").modal('hide');
+                        this.$emit('updateLatestNav')
                     })
                     .catch(error => {
                         console.log('Add list api not working!!')
@@ -295,6 +297,7 @@
                             .then(response => {
                                 swal("Complete!", "This List is deleted successfully !", "success");
                                 _this.getAllList()
+                                _this.$emit('updateLatestNav')
                                 swal.close();
                             })
                             .catch(error => {

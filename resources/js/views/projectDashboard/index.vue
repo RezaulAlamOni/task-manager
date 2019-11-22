@@ -606,7 +606,8 @@
         </div>
         <div class="project-overview" v-if="list.type === 'overview'">
             <Overview
-                :projectID="projectId">
+                :projectID="projectId"
+                @updateLatestNav="RuleUpdate">
             </Overview>
         </div>
 
@@ -2912,7 +2913,8 @@
                 $("#imageModal").modal();
             },
             RuleUpdate() {
-                this.AllNavItems = 'update';
+                alert('ddd')
+                this.AllNavItems = [];
             }
 
         },

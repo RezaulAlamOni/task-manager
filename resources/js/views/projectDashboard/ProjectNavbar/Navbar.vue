@@ -837,12 +837,7 @@
         directives: {},
         watch: {
             AllNavGet: function (val) {
-                if (val === 'update') {
-                    this.AllNavItem()
-                } else {
-                    this.AllNavItems = val;
-                }
-
+                this.AllNavItem()
             }
         }
 
