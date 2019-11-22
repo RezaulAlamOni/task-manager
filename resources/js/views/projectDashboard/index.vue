@@ -171,9 +171,9 @@
                                              title="File" data-toggle="tooltip"
                                              class="icon-image-preview li-opacity pull-right">
 
-                                        <!--                                    <i @click="addAttachment(data)"-->
-                                        <!--                                       class="cloud-image-upload icon-image-preview dropdown-toggle-split li-opacity"-->
-                                        <!--                                       title="File" data-toggle="tooltip"></i>-->
+                                        <!-- <i @click="addAttachment(data)"-->
+                                        <!-- class="cloud-image-upload icon-image-preview dropdown-toggle-split li-opacity"-->
+                                        <!-- title="File" data-toggle="tooltip"></i>-->
 
                                         <input :id="'file'+data._id" @change="updatePicture($event,data)" ref="file"
                                                style="display: none; "
