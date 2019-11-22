@@ -2913,8 +2913,7 @@
                 $("#imageModal").modal();
             },
             RuleUpdate() {
-                alert('ddd')
-                this.AllNavItems = [];
+                this.AllNavItems = null;
             }
 
         },

@@ -110,11 +110,19 @@
                                     </span>
                                     <span class="dropdown-item custom-dropdown-item"
                                           v-if="list_selected.type === 'list'">
-                                        <a :href="'/list-pdf-create/'+list_selected.id" target="_blank">
+                                        <a :href="'/list-pdf-create/list/'+list_selected.id" target="_blank">
                                             <img :src="baseUrl+'/img/task-icon/pdf.png'" alt="" height="20px"
                                                  width="20px" class="mr-2">
                                             Create PDF </a>
                                     </span>
+                                    <span class="dropdown-item custom-dropdown-item"
+                                          v-if="overview === 'overview' && list_selected.type !== 'list'">
+                                        <a :href="'/list-pdf-create/overview/'+ projectId" target="_blank">
+                                            <img :src="baseUrl+'/img/task-icon/pdf.png'" alt="" height="20px"
+                                                 width="20px" class="mr-2">
+                                            Create Overview PDF </a>
+                                    </span>
+
                                 </div>
                             </a>
                         </li>
@@ -590,6 +598,7 @@
                     project_id: null,
                 },
                 rules: null,
+                overview: null,
                 update_navItem: {
                     title: null,
                     type: null,
@@ -732,7 +741,7 @@
             },
 
             ShowOverView() {
-
+                this.overview = 'overview';
                 this.$emit('getList', {
                     list_id: 0,
                     nav_id: 0,
@@ -837,7 +846,12 @@
         directives: {},
         watch: {
             AllNavGet: function (val) {
-                this.AllNavItem()
+                if(val === null){
+                    this.AllNavItem()
+                }else {
+                    this.AllNavItems = val;
+                }
+
             }
         }
 
