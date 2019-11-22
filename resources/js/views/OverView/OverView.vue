@@ -1,30 +1,6 @@
 <template>
     <main>
         <div class="container">
-            <!--            <div class="row">-->
-            <!--                <div class="col-md-12">-->
-            <!--                    <h2 style="margin: 20px;">This is the list name-->
-            <!--                        <span style="float: right;">-->
-            <!--                            <span data-toggle="dropdown" class="dropdown-toggle-split col-md-12 opacity">-->
-            <!--                                <i class="fa fa-ellipsis-h"></i>-->
-            <!--                            </span>-->
-            <!--                            <div class="dropdown-menu">-->
-            <!--                                <div class="collapse show switchToggle">-->
-            <!--                                    <a href="#" class="dropdown-item"><i class="fa fa-edit opacity"></i> Add to list/board</a>-->
-            <!--                                    <a href="#" class="dropdown-item"><i class="fa fa-edit opacity"></i> Create List</a>-->
-            <!--                                    <a href="#" class="dropdown-item"><i class="fa fa-angle-double-left opacity"></i> Delete</a>-->
-            <!--                                </div>-->
-            <!--                            </div>-->
-            <!--                        </span>-->
-            <!--                    </h2>-->
-            <!--                </div>-->
-            <!--            </div>-->
-            <!--            <div class="row">-->
-            <!--                <div class="col-md-12">-->
-            <!--                    <img src="/img/taskimg.png" class="img-responsive">-->
-            <!--                </div>-->
-            <!--            </div>-->
-
             <div class="accordion" id="listWithHandle">
                 <template v-for="list in All_list">
                     <div class="card overview-list" :data-id="list.id">
@@ -36,8 +12,7 @@
                                      class="mr-2 sort-trigger" data-toggle="tooltip"
                                      title="Change sort-order lists">
                                 <h2 style="margin: 10px 15px;cursor: pointer" data-placement="bottom"
-                                    @click="dataCollapse('#collapse'+list.id)" data-toggle="tooltip"
-                                >
+                                    @click="dataCollapse('#collapse'+list.id,list.id)" data-toggle="tooltip">
                                     {{list.list_title}}
                                 </h2>
                                 <span class="option-btn">
@@ -46,33 +21,39 @@
                                     </span>
                                     <div class="dropdown-menu overview-dropdown dropdown-menu-right">
                                         <div class="collapse show switchToggle">
-                                            <a href="#" class="dropdown-item">
-                                                <img data-v-0ca4b43b="" src="/img/task-icon/edit.png" alt=""
-                                                     height="17px" width="17px" class="mr-2">
-                                                Add to list/board
-                                            </a>
+
                                             <a href="#" class="dropdown-item" @click="EditList(list)">
                                                 <img data-v-0ca4b43b="" src="/img/task-icon/edit.png" alt=""
                                                      height="17px" width="17px" class="mr-2">
-                                                Edit
+                                                Edit List
+                                            </a>
+                                            <a href="#" class="dropdown-item" @click="DeleteList(list)">
+                                                <img data-v-0ca4b43b="" src="/img/task-icon/trash.png"
+                                                     alt="" height="20px" width="20px" class="mr-2">
+                                                Delete List
+                                            </a>
+                                            <a :href="'/list-pdf-create/'+list.id" class="dropdown-item">
+                                                <img data-v-0ca4b43b="" src="/img/task-icon/pdf.png"
+                                                     alt="" height="20px" width="20px" class="mr-2">
+                                                Download PDF
                                             </a>
                                             <a href="#" class="dropdown-item">
-                                                <img data-v-0ca4b43b="" src="http://taskspark/img/task-icon/trash.png"
-                                                     alt="" height="20px" width="20px" class="mr-2">
-                                                Delete
+                                                <img data-v-0ca4b43b="" src="/img/task-icon/link.png" alt=""
+                                                     height="17px" width="17px" class="mr-2">
+                                                Add to board column
                                             </a>
                                         </div>
                                     </div>
                                 </span>
                             </div>
                             <div class="col-md-12">
-                                <!--                                <span>Description :</span>-->
                                 <p>
                                     {{list.description}}
                                 </p>
                             </div>
                         </div>
-                        <div :id="'collapse'+list.id" class="collapse show multi-collapse " aria-labelledby="headingOne"
+                        <div :id="'collapse'+list.id" class="collapse show multi-collapse " :class="(list.open === 0) ? 'hide-overview-list-task' : 'show-overview-list-task'"
+                             aria-labelledby="headingOne"
                              data-parent="#listWithHandle">
                             <div class="card-body p-0">
                                 <div class="TaskListAndDetails">
@@ -157,11 +138,13 @@
                         </div>
                         <div class="modal-footer">
                             <!--                        <button @click="UpdateListOrBoard" class="btn btn-primary" type="button">Update</button>-->
-                            <button @click="UpdateListOrBoard" class="btn btn-primary ladda-button ladda_update_list_board"
+                            <button @click="UpdateListOrBoard"
+                                    class="btn btn-primary ladda-button ladda_update_list_board"
                                     data-style="expand-right">
                                 Update
                             </button>
-                            <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                            <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">
+                                Cancel
                             </button>
                         </div>
                     </div>
@@ -189,7 +172,7 @@
             return {
                 baseUrl: window.location.origin,
                 project_id: this.projectID,
-                All_list : null,
+                All_list: null,
                 list: {
                     id: null,
                     name: null,
@@ -232,12 +215,12 @@
                         var lists = response.data;
                         var new_list = [];
                         // setTimeout(function () {
-                            for (var i = 0; i < lists.length; i++) {
-                                new_list = [...new_list, ...lists[i].all_list];
-                            }
-                            _this.All_list = new_list;
-                            _this.All_list.sort((a, b) => (a.sort_id > b.sort_id) ? 1 : -1)
-                            console.log(_this.All_list)
+                        for (var i = 0; i < lists.length; i++) {
+                            new_list = [...new_list, ...lists[i].all_list];
+                        }
+                        _this.All_list = new_list;
+                        _this.All_list.sort((a, b) => (a.sort_id > b.sort_id) ? 1 : -1)
+                        console.log(_this.All_list)
                         // },100)
 
                     })
@@ -245,16 +228,23 @@
                         console.log('Api is drag and drop not Working !!!')
                     });
             },
-            dataCollapse(id) {
-                $(id).slideToggle();
+            dataCollapse(id,list_id) {
+                axios.post('/api/project-overview/list-open-close', {list_id: list_id})
+                    .then(response => response.data)
+                    .then(response => {
+                        $(id).slideToggle();
+                    })
+                    .catch(error => {
+                        console.log('Api is drag , drop and sort not Working !!!')
+                    });
             },
             DragDropAndSort(e) {
                 var data = [];
                 var a = $('.overview-list');
-                $.each(a, function(i,v){
+                $.each(a, function (i, v) {
                     data[i] = $(v).attr('data-id')
                 });
-                axios.post('/api/project-overview/list-sort' , {data : data})
+                axios.post('/api/project-overview/list-sort', {data: data})
                     .then(response => response.data)
                     .then(response => {
                     })
@@ -262,7 +252,7 @@
                         console.log('Api is drag , drop and sort not Working !!!')
                     });
             },
-            EditList(list){
+            EditList(list) {
                 // this.$emit('EditListFromOverview', { list : list})
                 this.list.id = list.id;
                 this.list.name = list.list_title;
@@ -286,7 +276,32 @@
                         console.log('Add list api not working!!')
                     });
             },
-
+            DeleteList(list) {
+                var _this = this;
+                swal({
+                        title: "Are you sure?",
+                        text: "If you delete this this then all task will delete !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonColor: "#e66983",
+                        confirmButtonText: "Yes, Delete it!",
+                        closeOnConfirm: false,
+                        showLoaderOnConfirm: true
+                    },
+                    function () {
+                        axios.post('/api/board-list-delete', {type: 'list', id: list.id, action: 'delete', overview: 0})
+                            .then(response => response.data)
+                            .then(response => {
+                                swal("Complete!", "This List is deleted successfully !", "success");
+                                _this.getAllList()
+                                swal.close();
+                            })
+                            .catch(error => {
+                                console.log('Add list api not working!!')
+                            });
+                    });
+            },
         }
-    };  
+    };
 </script>

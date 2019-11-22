@@ -15,6 +15,7 @@ class Multiple_list extends Model
         'updated_at',
         'sort_id',
         'is_delete',
+        'open'
     ];
 
     public function listItem()

@@ -714,7 +714,7 @@
 .searchList {
     float: right;
     position: absolute;
-    right: 374px;
+    right: 445px;
     top: 7px;
     @include transition(all 0.2s linear);
 }
@@ -1158,6 +1158,12 @@
         margin-top:10px;
         min-width: 250px;
     }
+}
+.sweet-alert button.cancel {
+    background-color: #2d804e;
+}
+.sweet-alert button.cancel:hover {
+    background-color: #518066;
 }
 @media only screen and (max-width: 880px) {
     .hide-item-res {
