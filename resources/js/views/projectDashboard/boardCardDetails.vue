@@ -255,7 +255,7 @@
                            href="#home"
                            id="_details" role="tab">Details</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" @click="getComments(selectedData.cardId)">
                         <a aria-controls="comment" aria-selected="false" class="nav-link" data-toggle="tab"
                            href="#comment"
                            id="_comment" role="tab">Comments</a>
@@ -338,14 +338,13 @@
                             </template>
                         </div>
                         <div style="cursor: pointer; background-color: #F8F8F8; margin:10px 0;">
-                            <input :id="'file'+selectedData._id" :ref="selectedData._id" style="display: none;"
+                            <input :id="'file'+selectedData.cardId" :ref="selectedData.cardId"
                                    type="file">
                             <a @click="addAttachment(selectedData)"><i class="fa fa-paperclip"></i></a>
                         </div>
                     </div>
                 </div>
                 <!-- Comments -->
-
             </div>
             <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel" style="overflow: hidden;">
                 <span>
@@ -355,9 +354,15 @@
                                 <p :title="comments.user.name" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
                                     data-placement="bottom" data-toggle="tooltip"> {{ comments.user.name.substring(0,2) }}</p>
                                 <div class="card-list card" style="width: 80%; margin:0px 60px;" >
-                                    <span style="padding: 10px;">
+                                    <span style="padding: 10px;" v-if="comments.comment != '' && comments.comment != null">
                                         {{ comments.comment  }}
                                         <span style="position: relative; float: right;" v-html="dateFormate(comments.created_at)"></span>
+                                    </span>
+                                    <span style="padding: 10px;" v-if="comments.attatchment != '' && comments.attatchment != null">
+                                        <a title="Click To Download" data-toggle="tooltip" 
+                                            target="_blank" :href="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" 
+                                            style="cursor: pointer;">{{ comments.attatchment }}</a>
+                                            <span style="position: relative; float: right;" v-html="dateFormate(comments.created_at)"></span>
                                     </span>
                                 </div>
                             </div>
@@ -380,6 +385,8 @@
                                     <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="saveComment(selectedData.cardId)">Post</a>
                                     <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6"
                                     @click="HideTextArea">Cancel</a>
+                                    <input :id="'file'+selectedData.cardId" :ref="selectedData.cardId" style="display: none;" @change="updatePicture($event,selectedData)"
+                                        type="file">
                                     <a @click="addAttachment(selectedData)" class="btn btn-default btn-sm"
                                     style="border: 1px solid #f1efe6">
                                         <i class="fa fa-paperclip"></i>
@@ -722,8 +729,31 @@
                 _this.growInit(option);
             },
             addAttachment(data) {
-                let refData = data._id;
+                // console.log(data);
+                let refData = data.cardId;
+                // alert(refData);
                 $('#file' + refData).click();
+            },
+            updatePicture(e, data) {
+                var _this = this;
+                this.file = e.target.files[0];
+                let formData = new FormData();
+                formData.append('file', this.file);
+                formData.append('id', data.cardId);
+                formData.append('files', 'sdsds');
+
+                axios.post('/api/comment-file-upload', formData, {headers: {'Content-Type': 'multipart/form-data'}})
+                .then(response => response.data)
+                .then(response => {
+                    _this.selectedData.comment.push(response.Data);
+                    setTimeout(() => {
+                        $('[data-toggle="tooltip"]').tooltip();
+                    }, 100);
+                    // _this.getTaskList()
+                })
+                .catch(error => {
+                    console.log('Api for task date update not Working !!!')
+                });
             },
             saveComment(id){
                 let _this = this;
@@ -1012,6 +1042,21 @@
                     console.log(response.parents);
                     _this.selectedData.childrens = response.childs.child_task;
                     _this.selectedData.parents = response.parents;
+                })
+                .catch(error => {
+
+                })
+            },
+            getComments(cardId){
+                let _this = this;
+                let data = {
+                    'task_id' : cardId
+                };
+                axios.post('/api/get-card-comment',data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response.comment.comment);
+                    _this.selectedData.comment = response.comment.comment;
                 })
                 .catch(error => {
 

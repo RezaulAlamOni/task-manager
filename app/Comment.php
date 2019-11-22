@@ -11,6 +11,7 @@ class Comment extends Model
         'user_id',
         'parent_id',
         'comment',
+        'attatchment',
         'created_at',
         'updated_at'
     ];
