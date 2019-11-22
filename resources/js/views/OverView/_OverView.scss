@@ -4,7 +4,7 @@
     border-right: none !important;
     box-shadow: 0 0 0.6px !important;
     margin: 5px 0px ;
-
+    overflow: initial !important;
 }
 
 .overview-dropdown {
@@ -51,6 +51,14 @@
     left: 0px;
     top: 6px;
     cursor: pointer;
+}
+
+.hide-overview-list-task {
+    display: none;
+}
+
+.show-overview-list-task {
+    display: block;
 }
 
 

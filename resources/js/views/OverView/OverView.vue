@@ -36,8 +36,7 @@
                                      class="mr-2 sort-trigger" data-toggle="tooltip"
                                      title="Change sort-order lists">
                                 <h2 style="margin: 10px 15px;cursor: pointer" data-placement="bottom"
-                                    @click="dataCollapse('#collapse'+list.id)" data-toggle="tooltip"
-                                >
+                                    @click="dataCollapse('#collapse'+list.id)" data-toggle="tooltip">
                                     {{list.list_title}}
                                 </h2>
                                 <span class="option-btn">
@@ -46,33 +45,39 @@
                                     </span>
                                     <div class="dropdown-menu overview-dropdown dropdown-menu-right">
                                         <div class="collapse show switchToggle">
-                                            <a href="#" class="dropdown-item">
-                                                <img data-v-0ca4b43b="" src="/img/task-icon/edit.png" alt=""
-                                                     height="17px" width="17px" class="mr-2">
-                                                Add to list/board
-                                            </a>
+
                                             <a href="#" class="dropdown-item" @click="EditList(list)">
                                                 <img data-v-0ca4b43b="" src="/img/task-icon/edit.png" alt=""
                                                      height="17px" width="17px" class="mr-2">
-                                                Edit
+                                                Edit List
                                             </a>
                                             <a href="#" class="dropdown-item" @click="DeleteList(list)">
-                                                <img data-v-0ca4b43b="" src="http://taskspark/img/task-icon/trash.png"
+                                                <img data-v-0ca4b43b="" src="/img/task-icon/trash.png"
                                                      alt="" height="20px" width="20px" class="mr-2">
-                                                Delete
+                                                Delete List
+                                            </a>
+                                            <a :href="'/list-pdf-create/'+list.id" class="dropdown-item">
+                                                <img data-v-0ca4b43b="" src="/img/task-icon/pdf.png"
+                                                     alt="" height="20px" width="20px" class="mr-2">
+                                                Download PDF
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                <img data-v-0ca4b43b="" src="/img/task-icon/link.png" alt=""
+                                                     height="17px" width="17px" class="mr-2">
+                                                Add to board column
                                             </a>
                                         </div>
                                     </div>
                                 </span>
                             </div>
                             <div class="col-md-12">
-                                <!--                                <span>Description :</span>-->
                                 <p>
                                     {{list.description}}
                                 </p>
                             </div>
                         </div>
-                        <div :id="'collapse'+list.id" class="collapse show multi-collapse " aria-labelledby="headingOne"
+                        <div :id="'collapse'+list.id" class="collapse show multi-collapse " :class="(1 === 1) ? 'hide-overview-list-task' : 'show-overview-list-task'"
+                             aria-labelledby="headingOne"
                              data-parent="#listWithHandle">
                             <div class="card-body p-0">
                                 <div class="TaskListAndDetails">
