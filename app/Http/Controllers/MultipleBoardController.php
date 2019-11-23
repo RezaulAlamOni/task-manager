@@ -302,6 +302,7 @@ class MultipleBoardController extends Controller
             if ($moveToData->move_to != 0) {
                 $updata['board_parent_id'] = $moveToData->moveTo->id;
                 $updata['multiple_board_id'] = $moveToData->moveTo->multiple_board_id;
+                $updata['progress'] = $moveToData->moveTo->progress;
             }
             $update = Task::where('board_parent_id',"!=",0)
             ->whereIn('id', $ids)
@@ -860,9 +861,10 @@ class MultipleBoardController extends Controller
             break;
         }
         $hide = Task::whereIn('id',$ids)
-            ->update([
-                'hidden' => $hidden
-            ]);
+                ->where('board_parent_id', $data[0]->board_parent_id)
+                ->update([
+                    'hidden' => $hidden
+                ]);
         if($hide){
             return response()->json(['success' => true]);
         }
