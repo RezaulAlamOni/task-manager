@@ -37,10 +37,10 @@
                                                      alt="" height="20px" width="20px" class="mr-2">
                                                 Download PDF
                                             </a>
-                                            <a href="#" class="dropdown-item">
-                                                <img data-v-0ca4b43b="" src="/img/task-icon/link.png" alt=""
+                                            <a href="#" class="dropdown-item" v-if="list.is_delete === 1">
+                                                <img data-v-0ca4b43b="" src="/img/task-icon/restore.png" alt=""
                                                      height="17px" width="17px" class="mr-2">
-                                                Add to board column
+                                                Restore this list
                                             </a>
                                         </div>
                                     </div>

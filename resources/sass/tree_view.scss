@@ -718,6 +718,14 @@
     top: 7px;
     @include transition(all 0.2s linear);
 }
+.searchList-board {
+    float: right;
+    position: absolute;
+    right: 498px;
+    top: 7px;
+    display: block;
+    @include transition(all 0.2s linear);
+}
 #myInput {
     background-image: url('../img/icons8-search-26.png');
     background-position: 9px 10px;
@@ -751,6 +759,8 @@
     margin: 0;
     width: 100%;
     z-index: 999;
+    height: calc(100vh - 116px);
+    overflow: auto;
 }
 
 .myUL-show li a {

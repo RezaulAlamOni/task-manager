@@ -13,7 +13,7 @@
                     @getNavBars="getNavbar">
             </Navbar>
 
-            <div class="input-group col-sm-4 searchList">
+            <div class="input-group col-sm-4 searchList" :class="((list.type === 'board') ? 'searchList-board' : 'searchList')">
 
                 <input class="form-control searchTaskList"
                        type="text" id="myInput"
@@ -1052,7 +1052,7 @@
                     setTimeout(function () {
                         $('#list' + session_data.list_id).click();
                     }, 1000)
-                } else {
+                } else if (session_data.type === 'board') {
                     setTimeout(function () {
                         $('.board' + session_data.list_id).click();
                     }, 1000)
@@ -1238,10 +1238,10 @@
                 }
             },
             showSearchInputField() {
-                if (this.list.type === 'list') {
+                // if (this.list.type === 'list') {
                     $('.searchList').toggle();
                     $('.searchTaskList').focus();
-                }
+                // }
             },
             SearchTaskByAssignedUser(id, name) {
                 $('.searchTaskList').val('@' + name);
