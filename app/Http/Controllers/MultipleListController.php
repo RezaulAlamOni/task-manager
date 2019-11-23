@@ -117,8 +117,10 @@ class MultipleListController extends Controller
                         $this->Task_Controller->deleteTaskWithChild($task->id);
                     }
                     Multiple_list::where('id', $id)->delete();
-                } else {
+                } else if ($request->overview == 1){
                     Multiple_list::where('id', $id)->update(['is_delete'=>1]);
+                }else if ($request->overview == 2){
+                    Multiple_list::where('id', $id)->update(['is_delete'=>0]);
                 }
 
 

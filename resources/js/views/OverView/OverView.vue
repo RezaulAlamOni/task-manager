@@ -37,7 +37,7 @@
                                                      alt="" height="20px" width="20px" class="mr-2">
                                                 Download PDF
                                             </a>
-                                            <a href="#" class="dropdown-item" v-if="list.is_delete === 1">
+                                            <a href="#" class="dropdown-item" v-if="list.is_delete === 1" @click="RestoreList(list.id)">
                                                 <img data-v-0ca4b43b="" src="/img/task-icon/restore.png" alt=""
                                                      height="17px" width="17px" class="mr-2">
                                                 Restore this list
@@ -296,6 +296,33 @@
                             .then(response => response.data)
                             .then(response => {
                                 swal("Complete!", "This List is deleted successfully !", "success");
+                                _this.getAllList()
+                                _this.$emit('updateLatestNav')
+                                swal.close();
+                            })
+                            .catch(error => {
+                                console.log('Add list api not working!!')
+                            });
+                    });
+            },
+            RestoreList(list_id) {
+                var _this = this;
+                swal({
+                        title: "Are you sure?",
+                        text: "If you want to restore this list !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonColor: "#e6c28e",
+                        confirmButtonText: "Yes, Restore it!",
+                        closeOnConfirm: false,
+                        showLoaderOnConfirm: true
+                    },
+                    function () {
+                        axios.post('/api/board-list-delete', {type: 'list', id : list_id, action: 'delete', overview: 2})
+                            .then(response => response.data)
+                            .then(response => {
+                                swal("Complete!", "This List is restore successfully !", "success");
                                 _this.getAllList()
                                 _this.$emit('updateLatestNav')
                                 swal.close();
