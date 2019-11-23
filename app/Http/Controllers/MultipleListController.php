@@ -163,7 +163,8 @@ class MultipleListController extends Controller
                     $data[] = $item;
                 }
             }
-            $title = "Overview";
+            $project = Project::where('id',$list_id)->first();
+            $title = "Overview-".$project->name;
         }else {
             $multiple_list = Multiple_list::findOrFail($list_id);
             $tasks = Task::where('parent_id', 0)
@@ -171,12 +172,15 @@ class MultipleListController extends Controller
                 ->where('list_id', $list_id)
                 ->orderBy('sort_id', 'ASC')
                 ->get();
+
+            $project = Project::where('id',$multiple_list->project_id)->first();
+
             $multiple_list->tasks = $this->Task_Controller->decorateData($tasks);
             $data[] = $multiple_list;
             $title= $multiple_list->list_title;
         }
-//        return view('TaskListPdf',['list'=>$multiple_list,'tasks'=>$data]);
-            $pdf = PDF::loadView('TaskListPdf', ['lists'=>$data]);
+//        return view('TaskListPdf',['lists'=>$data,'project' => $project]);
+            $pdf = PDF::loadView('TaskListPdf', ['lists'=>$data,'project' => $project]);
             return $pdf->download($title. '.pdf');
 //        return $pdf->save(public_path('pdf/abc.pdf'))->stream('download.pdf');
     }

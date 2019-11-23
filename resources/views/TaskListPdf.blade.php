@@ -20,6 +20,11 @@
             text-align: center;
 
         }
+        .header-pdf-list {
+            padding: 0px 50px;
+            /*text-align: center;*/
+
+        }
 
         #myUL {
             padding: 20px 50px;
@@ -56,13 +61,22 @@
             padding: 1px 6px;
             margin-left: 2px;
         }
+        .page-break {
+            page-break-after: always;
+        }
     </style>
 </head>
 <body>
+<div>
+    <div class="header-pdf">
+        <h1>{{$project->name}}</h1>
+    </div>
+</div>
+
 @foreach($lists as $list)
     <div>
-        <div class="header-pdf">
-            <h1>{{$list->list_title}}</h1>
+        <div class="header-pdf-list">
+            <h2>{{$list->list_title}}</h2>
             <p style="border-bottom: 1px solid;">{{$list->description}}</p>
         </div>
 
@@ -158,6 +172,7 @@
             </ul>
         </div>
     </div>
+    <div class="page-break"></div>
 @endforeach
 
 
