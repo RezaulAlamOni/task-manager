@@ -76,6 +76,14 @@
         <!--        </div>-->
         <div :class="(list.type === 'list') ? 'list-task-details' : 'board-card-details'"
              v-if="list.type === 'list' || list.type === 'board'">
+            <div class="loder" id="loder-hide">
+                <div class="foo foo1">
+                    <div class="circle"></div>
+                </div>
+                <div class="foo foo2">
+                    <div class="circle"></div>
+                </div>
+            </div>
 
             <div style="padding-left: 5%" v-if="list.type === 'list'">
 
@@ -1058,6 +1066,7 @@
             $('.searchList').hide();
             $('.SubmitButton').hide();
             $('.submitdetails').hide();
+            $('#loder-hide').removeClass('loder-hide')
             if (localStorage.selected_nav !== undefined) {
                 var session_data = JSON.parse(localStorage.selected_nav);
                 if (session_data.type === 'list') {
@@ -2268,6 +2277,8 @@
             },
             getTaskList() {
                 var _this = this;
+                // $('#loder-hide').removeClass('loder-hide')
+                $('#loder-hide').fadeIn();
                 let data = {
                     id: this.projectId,
                     list_id: this.list_id,
@@ -2276,12 +2287,18 @@
                 axios.post('/api/task-list', data)
                     .then(response => response.data)
                     .then(response => {
+
                         this.treeList = response.task_list;
                         this.multiple_list = response.multiple_list;
                         $('[data-toggle="tooltip"]').tooltip('dispose');
                         setTimeout(function () {
+                            // $('#loder-hide').addClass('loder-hide')
                             $('[data-toggle="tooltip"]').tooltip('enable');
                         }, 500);
+                        setTimeout(function () {
+                            $('#loder-hide').fadeOut()
+                            // $('#loder-hide').addClass('loder-hide')
+                        }, 100);
                         if (this.treeList.length === 1 && this.treeList[0].text === '') {
                             let id = this.treeList[0].id;
                             setTimeout(function () {

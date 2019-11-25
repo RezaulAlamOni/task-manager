@@ -725,6 +725,7 @@
     top: 7px;
     display: block;
     @include transition(all 0.2s linear);
+    z-index: 999;
 }
 #myInput {
     background-image: url('../img/icons8-search-26.png');

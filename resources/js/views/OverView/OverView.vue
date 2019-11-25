@@ -1,6 +1,14 @@
 <template>
     <main>
         <div class="container">
+            <div class="loder" id="loder-hide">
+                <div class="foo foo1">
+                    <div class="circle"></div>
+                </div>
+                <div class="foo foo2">
+                    <div class="circle"></div>
+                </div>
+            </div>
             <div class="accordion" id="listWithHandle">
                 <template v-for="list in All_list">
                     <div class="card overview-list" :data-id="list.id">
@@ -37,7 +45,8 @@
                                                      alt="" height="20px" width="20px" class="mr-2">
                                                 Download PDF
                                             </a>
-                                            <a href="#" class="dropdown-item" v-if="list.is_delete === 1" @click="RestoreList(list.id)">
+                                            <a href="#" class="dropdown-item" v-if="list.is_delete === 1"
+                                               @click="RestoreList(list.id)">
                                                 <img data-v-0ca4b43b="" src="/img/task-icon/restore.png" alt=""
                                                      height="17px" width="17px" class="mr-2">
                                                 Restore this list
@@ -154,7 +163,7 @@
         </div>
     </main>
 </template>
-
+<style></style>
 <script>
     import Sortable from 'sortablejs';
     import draggableHelper from 'draggable-helper';
@@ -215,14 +224,16 @@
                     .then(response => {
                         var lists = response.data;
                         var new_list = [];
-                        // setTimeout(function () {
+
                         for (var i = 0; i < lists.length; i++) {
                             new_list = [...new_list, ...lists[i].all_list];
                         }
                         _this.All_list = new_list;
                         _this.All_list.sort((a, b) => (a.sort_id > b.sort_id) ? 1 : -1)
-                        console.log(_this.All_list)
-                        // },100)
+                        // setTimeout(function () {
+                            $('#loder-hide').addClass('loder-hide')
+                            // console.log(_this.All_list)
+                        // }, 10)
 
                     })
                     .catch(error => {
@@ -319,7 +330,7 @@
                         showLoaderOnConfirm: true
                     },
                     function () {
-                        axios.post('/api/board-list-delete', {type: 'list', id : list_id, action: 'delete', overview: 2})
+                        axios.post('/api/board-list-delete', {type: 'list', id: list_id, action: 'delete', overview: 2})
                             .then(response => response.data)
                             .then(response => {
                                 swal("Complete!", "This List is restore successfully !", "success");

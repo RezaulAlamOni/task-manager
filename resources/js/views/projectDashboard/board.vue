@@ -117,7 +117,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <Container
                                     :style="{'padding-top': ruleAlertHeight(column.boardId+'rulesCard', 'coll'+column.boardId)}"
                                     :drop-placeholder="dropPlaceholderOptions"
@@ -128,12 +128,12 @@
                                     drag-class="card-ghost"
                                     drop-class="card-ghost-drop"
                                     group-name="col"
-                                    
+
                                 >
-                                <!-- <div class="card-list card" style="background-color: white;"> 
+                                <!-- <div class="card-list card" style="background-color: white;">
                                     <div class="card-title-blur" style="padding: 10px;">
                                         task1 ch1 ch2
-                                    </div> 
+                                    </div>
                                 </div> -->
                                 <!-- @drag-start="(e) => onDragStart(column.id,column.boardId, index,  e)"
                                     @drag-end="(e) => log('', e)" -->
@@ -853,13 +853,13 @@
                                         <!-- <input :id="tree.id" :value="tree.id" type="checkbox"
                                                 v-if="tree.text !== '' && tree.board_parent_id !== null"
                                                 checked disable> -->
-                                         
+
 <!--                                        <span class="checkmark"></span>-->
                                     </label>
                                     <label class="checkbox_cus_mini"  v-if="tree.text !== '' && tree.board_parent_id == null" >
                                         <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask"
                                                 :class="{'selectAll': true}" @change="selectChild(tree.id)" v-if="tree.text !== '' && tree.board_parent_id === null">
-                                                <span v-html="tree.text"></span> 
+                                                <span v-html="tree.text"></span>
                                         <span class="checkmark"></span>
                                     </label>
                                     <ul class="list-group list-group-flush" v-if="tree.children">
@@ -869,12 +869,12 @@
                                                        v-if="child.text !== '' && child.board_parent_id !== null && child.children.length > 0" >
                                                     <input :id="child.id" class="tree-child" :value="child.id"
                                                        type="checkbox"
-                                                       checked disable> <span v-html="child.text"></span>  
+                                                       checked disable> <span v-html="child.text"></span>
 <!--                                                    <span class="checkmark"></span>-->
                                                 </label>
                                                 <label class="checkbox_cus_mini" v-if="child.text !== '' && child.board_parent_id == null">
                                                     <input :id="child.id" class="tree-child selectAll" :value="child.id"
-                                                       type="checkbox" v-model="selectedExistedTask" @change="selectChild(child.id)" > <span v-html="child.text"></span> 
+                                                       type="checkbox" v-model="selectedExistedTask" @change="selectChild(child.id)" > <span v-html="child.text"></span>
                                                     <span class="checkmark"></span>
                                                 </label>
 
@@ -885,13 +885,13 @@
                                                             v-if="child1.text !== '' && child1.board_parent_id !== null  && child1.children.length > 0">
                                                                 <input :id="child1.id" :value="child1.id" class="tree-child"
                                                                     type="checkbox"
-                                                                    checked disable> <span v-html="child1.text"></span> 
+                                                                    checked disable> <span v-html="child1.text"></span>
                                                                 <!-- <span class="checkmark"></span>-->
                                                             </label>
 
                                                             <label class="checkbox_cus_mini" v-if="child1.text !== '' && child1.board_parent_id == null">
                                                                 <input :id="child1.id" :value="child1.id" class="tree-child selectAll"
-                                                                    type="checkbox" v-model="selectedExistedTask" @change="selectChild(child1.id)"><span v-html="child1.text"></span> 
+                                                                    type="checkbox" v-model="selectedExistedTask" @change="selectChild(child1.id)"><span v-html="child1.text"></span>
                                                                 <span class="checkmark"></span>
                                                             </label>
                                                             <ul class="list-group list-group-flush" v-if="child1.children">
@@ -902,7 +902,7 @@
                                                                             <input :id="child2.id" :value="child2.id"
                                                                                class="tree-child"
                                                                                type="checkbox"
-                                                                               checked disable> <span v-html="child2.text"></span> 
+                                                                               checked disable> <span v-html="child2.text"></span>
                                                                             <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
 <!--                                                                            <span class="checkmark"></span>-->
                                                                         </label>
@@ -912,7 +912,7 @@
                                                                                class="tree-child selectAll"
                                                                                type="checkbox"
                                                                                v-model="selectedExistedTask"
-                                                                               @change="selectChild(child2.id)"> <span v-html="child2.text"></span> 
+                                                                               @change="selectChild(child2.id)"> <span v-html="child2.text"></span>
                                                                             <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
                                                                             <span class="checkmark"></span>
                                                                         </label>
@@ -927,7 +927,7 @@
                                                                                                 class="tree-child"
                                                                                                 type="checkbox"
                                                                                                  checked disable>
-                                                                                            <span v-html="child3.text"></span> 
+                                                                                            <span v-html="child3.text"></span>
                                                                                         <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
 <!--                                                                                        <span class="checkmark"></span>-->
                                                                                     </label>
@@ -1266,6 +1266,7 @@
                     })),
                 };
                 $('[data-toggle="tooltip"]').tooltip('dispose');
+                $('#loder-hide').fadeOut()
                 setTimeout(function () {
                     $('[data-toggle="tooltip"]').tooltip();
                 }, 1000)
@@ -1402,7 +1403,7 @@
                 // console.log('drops => ',dropResult);
                 let _this = this;
                 if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
-                    
+
                     // console.log(this.scene.children[index]);
 
 // console.log(this.scene, dropResult);
@@ -1869,6 +1870,7 @@
             },
             getBoardTask() {
                 var _this = this;
+                $('#loder-hide').fadeIn()
                 var datePicker = new Date();
                 datePicker.setDate(datePicker.getDate() - 1);
                 _this.disabledDates = {
