@@ -171,7 +171,7 @@
     import * as Ladda from 'ladda';
 
     export default {
-        props: ['projectID'],
+        props: ['projectID','update_overview'],
         components: {
             Tree: DraggableTree,
             thy: draggableHelper,
@@ -218,6 +218,7 @@
         },
         methods: {
             getAllList() {
+                $('#loder-hide').fadeIn();
                 var _this = this;
                 axios.get('/api/project-overview/' + _this.project_id)
                     .then(response => response.data)
@@ -231,7 +232,8 @@
                         _this.All_list = new_list;
                         _this.All_list.sort((a, b) => (a.sort_id > b.sort_id) ? 1 : -1)
                         // setTimeout(function () {
-                            $('#loder-hide').addClass('loder-hide')
+                        $('#loder-hide').fadeOut();
+                            // $('#loder-hide').addClass('loder-hide')
                             // console.log(_this.All_list)
                         // }, 10)
 
@@ -343,6 +345,12 @@
                             });
                     });
             },
+        },
+        watch: {
+            update_overview: function (val) {
+                this.getAllList();
+                // this.update_overview = '';
+            }
         }
     };
 </script>

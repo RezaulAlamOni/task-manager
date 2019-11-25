@@ -6,13 +6,14 @@
                     :projectId="$route.params.projectId"
                     :lists="list"
                     @getList="showTask"
+                    @update_overview="update_overview"
                     @showSearchInputField="showSearchInputField"
                     @MoveListTOAnotherNav="MoveListTOAnotherNav"
                     @DeleteListOrBoard="DeleteListOrBoard"
                     @DownloadTaskPDF="DownloadTaskPDF"
                     @getNavBars="getNavbar">
             </Navbar>
-
+<!--            @update_overview="update_overview"-->
             <div class="input-group col-sm-4 searchList"
                  :class="((list.type === 'board') ? 'searchList-board' : 'searchList')">
 
@@ -627,6 +628,7 @@
         <div class="project-overview" v-if="list.type === 'overview'">
             <Overview
                 :projectID="projectId"
+                :update_overview="AllNavItems"
                 @updateLatestNav="RuleUpdate">
             </Overview>
         </div>
@@ -2356,6 +2358,9 @@
             },
             UpdateListModel() {
                 $("#updateListBoardModel").modal('show');
+            },
+            update_overview(){
+                this.AllNavItems = null;
             },
             UpdateListOrBoard() {
                 var _this = this;

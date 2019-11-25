@@ -93,7 +93,7 @@
                                                     Create Overview PDF </a>
                                            </span>
                                         <span class="dropdown-item custom-dropdown-item">
-                                            <a @click="AddNewList">
+                                            <a @click="addListFromOverview">
                                                 <img :src="baseUrl+'/img/task-icon/addList.png'" alt="" height="20px"
                                                      width="20px" class="mr-2">
                                                 Add New List</a>
@@ -593,6 +593,53 @@
                 </div>
             </div>
         </div>
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="addListFromOverviewModel" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add List</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add your new list here !</p>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Select List Nav </label>
+                            <div class="col-sm-8">
+                                <select class="form-control" v-model="list.nav_id">
+                                    <option disabled value="0">Select List Nav
+                                    </option>
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in AllNavItems" v-if="navs.type === 'list'">
+                                        {{navs.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">List Title</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" v-model="list.name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">List Description</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" cols="40" name="" rows="3"
+                                          v-model="list.description"></textarea>
+                            </div>
+                        </div>
+                        <!--                        <p v-if="addField.error" class="text-danger"></p>-->
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="AddNewListOverview" class="btn btn-primary" type="button">Add</button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -610,7 +657,7 @@
                 list: {
                     name: null,
                     description: null,
-                    nav_id: null
+                    nav_id: 0,
                 },
                 navItem: {
                     title: null,
@@ -644,6 +691,11 @@
             },
             shortcutModel() {
                 $("#shortcutModel").modal('show');
+            },
+            addListFromOverview() {
+
+
+                $("#addListFromOverviewModel").modal('show');
             },
             AddNavItem() {
                 var _this = this;
@@ -834,6 +886,34 @@
                         console.log('Add list api not working!!')
                     });
             },
+            AddNewListOverview() {
+                var _this = this;
+                this.list.project_id = this.projectId;
+                if(_this.list.name !== null && _this.list.description !== null && _this.list.nav_id !== 0){
+                    axios.post('/api/list-add', this.list)
+                        .then(response => response.data)
+                        .then(response => {
+
+                            if (response.status == 'exists') {
+                                swal("Already Exist! ", "Enter Another Board Name !", "warning")
+                            } else {
+                                _this.multiple_list = response.multiple_list;
+                                _this.AllNavItem();
+                                $("#addListFromOverviewModel").modal('hide');
+                                _this.list.name = null;
+                                _this.list.nav_id = 'Select list Nav';
+                                _this.list.description = null;
+                                _this.$emit('update_overview');
+                                // swal("Created", "Board Create Successful", "success")
+                            }
+                        })
+                        .catch(error => {
+                            console.log('Add list api not working!!')
+                        });
+                }
+
+            },
+
             AddNewBoard() {
                 this.list.project_id = this.projectId;
                 this.list.nav_id = this.nav_id;
