@@ -7,6 +7,7 @@ use App\Multiple_board;
 use App\Multiple_list;
 use App\TaskBoard;
 use App\Tags;
+use App\Files;
 use App\Task;
 use App\Rules;
 use App\Project;
@@ -302,6 +303,7 @@ class MultipleBoardController extends Controller
             if ($moveToData->move_to != 0) {
                 $updata['board_parent_id'] = $moveToData->moveTo->id;
                 $updata['multiple_board_id'] = $moveToData->moveTo->multiple_board_id;
+                $updata['progress'] = $moveToData->moveTo->progress;
             }
             $update = Task::where('board_parent_id',"!=",0)
             ->whereIn('id', $ids)
@@ -860,9 +862,10 @@ class MultipleBoardController extends Controller
             break;
         }
         $hide = Task::whereIn('id',$ids)
-            ->update([
-                'hidden' => $hidden
-            ]);
+                ->where('board_parent_id', $data[0]->board_parent_id)
+                ->update([
+                    'hidden' => $hidden
+                ]);
         if($hide){
             return response()->json(['success' => true]);
         }
@@ -896,6 +899,44 @@ class MultipleBoardController extends Controller
                 $this->recurParent($value['parents']);
             }
         }
+    }
+
+    public function fileUpload(Request $request)
+    {
+        if (isset($request->file)) {
+            $task_id = $request->id;
+            $photo = $_FILES['file']['name'];
+            $path = public_path() . "/storage/" . $task_id ;
+            if (!is_dir($path)) {
+                if (!is_dir(public_path() . "/storage/")) {
+                    mkdir(public_path() . "/storage/");
+                }
+                mkdir($path);
+            }
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], $path."/" . $_FILES['file']['name'])) {
+                $data = [
+                    'tasks_id' => $task_id,
+                    'created_by' => Auth::id(),
+                    'updated_by' => Auth::id(),
+                    'file_name' => $photo,
+                    'created_at' => Carbon::now()
+                ]; 
+        
+                $insert = Files::create($data);
+                if ($insert) {
+                    $insert = Files::where('id',$insert->id)->with('user')->first();
+                }
+                return response()->json(['success' => true, 'files' => $insert]);
+            } else {
+                return response()->json('failed', 500);
+            }
+        }
+    }
+
+    public function getCardFiles(Request $request)
+    {
+        $files = Files::where('tasks_id',$request->task_id)->with('user')->get();
+        return response()->json(['success' => true, 'files' => $files]);
     }
 
     protected function createLog($task_id, $type, $message, $title)

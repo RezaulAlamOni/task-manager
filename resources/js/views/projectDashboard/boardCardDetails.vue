@@ -255,6 +255,11 @@
                            href="#home"
                            id="_details" role="tab">Details</a>
                     </li>
+                    <li class="nav-item" @click="getFiles(selectedData.cardId)">
+                       <a aria-controls="file" aria-selected="true" class="nav-link" data-toggle="tab"
+                          href="#file"
+                          id="_file" role="tab">Files</a>
+                   </li>
                     <li class="nav-item" @click="getComments(selectedData.cardId)">
                         <a aria-controls="comment" aria-selected="false" class="nav-link" data-toggle="tab"
                            href="#comment"
@@ -270,14 +275,14 @@
                         <a aria-controls="log" aria-selected="false" class="nav-link" data-toggle="tab" href="#log"
                            id="_log" role="tab">Logs</a>
                     </li>
-                    <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.childrens.length  > 0">
+                    <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.childrens.length  > 0 || selectedData.parents.length  > 0">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_child" role="tab">Parents & Childs</a>
                     </li>
-                    <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.parents.length  > 0">
+                    <!-- <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.parents.length  > 0">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_child" role="tab">Childs</a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>
@@ -294,22 +299,7 @@
                                     <h3>Details</h3>
                                 </div>
                                 <div class="col-12">
-                                    <!-- <div v-if="showDetails == false" @click="showDetails = true">{{ selectedData.data }}</div>  v-if="showDetails == true"
-                                            @focus="ShowListDetails(selectedData)" npm install --save @ckeditor/ckeditor5-vue @ckeditor/ckeditor5-build-classic
-                                            @blur="showDetails = false"-->
-                                    <!-- <textarea
-                                            :id="'bx'+selectedData.cardId"
-                                            name="description"
-                                            class="form-control detailsInput"
-                                            data-grow="auto"
-                                            placeholder="Task Description"
-                                            v-model="selectedData.description">
-                                    </textarea> -->
                                     <ckeditor :editor="editor" v-model="selectedData.description" :config="editorConfig"></ckeditor>
-                                    <!-- <div :id="'bx'+selectedData.cardId" contenteditable="true" name="description"
-                                        style="max-height: 560px;padding: 5px; display: inline-block;overflow: auto;width: 100%; border: 1px solid #e6e6e6;"
-                                        v-html="selectedData.description">
-                                    </div> -->
                                 </div>
                             </div>
                             <div class="row">
@@ -346,10 +336,64 @@
                 </div>
                 <!-- Comments -->
             </div>
+            <div aria-labelledby="log-tab" class="tab-pane" id="file" role="tabpanel">
+               <span>
+                   <h3 class="p-3">Files of this card </h3>
+                   <div class=" comment-section-in-task-details" style="max-height: calc(100vh - 315px);">
+                       <div class="row" v-if="selectedData.files !== ''" id='fileSection' style="margin:0px auto; max-height: calc(100vh - 390px); width: 90%; margin-bottom: 20px; overflow: auto;" >
+                            <div class="col-md-4" v-for="files in selectedData.files" >
+                                <!-- <p :title="comments.user.name" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                                    data-placement="bottom" data-toggle="tooltip"> {{ comments.user.name.substring(0,2) }}</p> -->
+                                <div class="card-list card" >
+                                    <span style="padding: 10px;" >
+                                        <a target="_blank" :href="'/storage/'+selectedData.cardId+'/'+files.file_name"
+                                            style="cursor: pointer;position: absolute;">
+                                            <div style="float: left;" v-if="files.file_name.endsWith('.png') || files.file_name.endsWith('.jpg') || files.file_name.endsWith('.jpeg') || files.file_name.endsWith('.gif')">
+                                                <img title="Click To Download" data-toggle="tooltip"
+                                                        :src="'/storage/'+selectedData.cardId+'/'+files.file_name" height="50" width="50">
+                                            </div>
+                                            <div style="float: left;" v-else-if="files.file_name.endsWith('.txt') ">
+                                                <img title="Click To Download" data-toggle="tooltip"
+                                                    :src="'/img/txt.png'" height="50" width="50">
+                                            </div>
+                                            <div style="float: left;" v-else-if="files.file_name.endsWith('.pdf') ">
+                                                <img title="Click To Download" data-toggle="tooltip"
+                                                    :src="'/img/pdf.png'" height="50" width="50">
+                                            </div>
+                                            <div style="float: left;" v-else-if="files.file_name.endsWith('.doc') || files.file_name.endsWith('.docx') || files.file_name.endsWith('.xls') || files.file_name.endsWith('.xlsx')">
+                                                <img title="Click To Download" data-toggle="tooltip"
+                                                    :src="'/img/file.png'" height="50" width="50">
+                                            </div>
+                                            <div style="float: left;" v-else>
+                                                <img title="Click To Download" data-toggle="tooltip"
+                                                    :src="'/img/attachment.png'" height="50" width="50">
+                                            </div> 
+                                        </a>
+                                        <span style="position: relative; float: right;" v-html="dateFormate(files.created_at)+'<br>&emsp;&emsp;'+files.user.name.split(' ')[0].substring(0,9)"></span>
+                                        <span>
+                                            <img @click="deleteFile(files.id)" style="position: absolute; right: 5px; bottom: 5px;" :src="'https://img.icons8.com/color/48/000000/delete-forever.png'" height="20" width="20">
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                       </div>
+                       <div class="col-12" >
+                           <div class="">
+                               <input :id="'files'+selectedData.cardId" :ref="selectedData.cardId" style="display: none;" @change="updateCardPicture($event,selectedData)"
+                                        type="file">
+                               <span>Upload File : </span><a @click="addCardAttachment(selectedData)" class="btn btn-default btn-sm"
+                                   style="border: 1px solid #f1efe6">
+                                       <i class="fa fa-paperclip"></i>
+                               </a>
+                           </div>
+                       </div>
+                   </div>
+               </span>	
+           </div>
             <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel" style="overflow: hidden;">
                 <span>
-                    <div class="row comment-section-in-task-details">
-                        <div id='cmntSection' style="margin:0px auto; max-height: 610px; width: 90%; margin-bottom: 20px; overflow: auto;" >
+                    <div class="row comment-section-in-task-details" style="max-height: calc(100vh - 285px);">
+                        <div id='cmntSection' style="margin:0px auto; max-height: calc(100vh - 350px); width: 90%; margin-bottom: 20px; overflow: auto;" >
                             <div class="col-md-12" v-for="comments in selectedData.comment" style="margin-top: 15px;">
                                 <p :title="comments.user.name" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
                                     data-placement="bottom" data-toggle="tooltip"> {{ comments.user.name.substring(0,2) }}</p>
@@ -359,9 +403,27 @@
                                         <span style="position: relative; float: right;" v-html="dateFormate(comments.created_at)"></span>
                                     </span>
                                     <span style="padding: 10px;" v-if="comments.attatchment != '' && comments.attatchment != null">
-                                        <a title="Click To Download" data-toggle="tooltip" 
-                                            target="_blank" :href="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" 
-                                            style="cursor: pointer;">{{ comments.attatchment }}</a>
+                                        
+                                        <a target="_blank" :href="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" 
+                                            style="cursor: pointer;">
+                                            <div v-if="comments.attatchment.endsWith('.png') || comments.attatchment.endsWith('.jpg') || comments.attatchment.endsWith('.gif')">
+                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                     :src="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" height="80" width="80">
+                                            </div>
+                                            <div v-if="comments.attatchment.endsWith('.txt') ">
+                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                    :src="'/img/txt.png'" height="50" width="50">
+                                            </div>
+                                            <div v-if="comments.attatchment.endsWith('.pdf') ">
+                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                    :src="'/img/pdf.png'" height="50" width="50">
+                                            </div>
+                                            <div v-if="comments.attatchment.endsWith('.doc') || comments.attatchment.endsWith('.docx') || comments.attatchment.endsWith('.xls') || comments.attatchment.endsWith('.xlsx')">
+                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                    :src="'/img/file.png'" height="50" width="50">
+                                            </div>
+                                        </a>
+                                        
                                             <span style="position: relative; float: right;" v-html="dateFormate(comments.created_at)"></span>
                                     </span>
                                 </div>
@@ -377,6 +439,7 @@
                                         :id="'comment'+selectedData.cardId"
                                         class="form-control commentInput"
                                         data-grow="auto"
+                                        @keyup="commentPress(selectedData)"
                                         placeholder="Add comment">
                                 </textarea>
                                 <!--  -->
@@ -702,11 +765,11 @@
             },
             HideTextArea() {
                 var _this = this;
-                $('#cmntSection').css({maxHeight:' 610px'});
+                $('#cmntSection').css({maxHeight:' calc(100vh - 350px)'});
                 $('.SubmitButton').hide();
             },
             ShowTextArea(data) {
-                $('#cmntSection').css({maxHeight:' 555px'});
+                $('#cmntSection').css({maxHeight:' calc(100vh - 400px)'});
                 this.$emit('textArea', data)
                 $('#comment'+data.cardId).css({height : '50px', maxHeight : '100px'});
                  var hei = $("#cmntSection").height();
@@ -734,6 +797,12 @@
                 // alert(refData);
                 $('#file' + refData).click();
             },
+            addCardAttachment(data) {
+                // console.log(data);
+                let refData = data.cardId;
+                // alert(refData);
+                $('#files' + refData).click();
+            },
             updatePicture(e, data) {
                 var _this = this;
                 this.file = e.target.files[0];
@@ -754,6 +823,52 @@
                 .catch(error => {
                     console.log('Api for task date update not Working !!!')
                 });
+            },
+            updateCardPicture(e, data) {
+                var _this = this;
+                this.file = e.target.files[0];
+                let formData = new FormData();
+                formData.append('file', this.file);
+                formData.append('id', data.cardId);
+                formData.append('files', 'sdsds');
+
+                axios.post('/api/card-file-upload', formData, {headers: {'Content-Type': 'multipart/form-data'}})
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response.files);
+                    console.log(_this.selectedData.files);
+                    _this.selectedData.files.push(response.files);
+                    console.log(_this.selectedData.files);
+                    setTimeout(() => {
+                        $('[data-toggle="tooltip"]').tooltip();
+                    }, 100);
+                    // _this.getTaskList()
+                })
+                .catch(error => {
+                    console.log('Api for task date update not Working !!!')
+                });
+            },
+            deleteFile(id){
+                var data = {
+                    'id' : id
+                };
+                swal('Warning!!','Working on progress','warning');
+                // axios.post('/api/add-comment', commentData)
+                // .then(response => response.data)
+                // .then(response => {
+                //     console.log(_this.selectedData.comment);
+                //     $('#comment'+id).val('');
+                //     setTimeout(() => {
+                //         _this.selectedData.comment.push(response.Data);
+                //         _this.HideTextArea();
+                //         var hei = $("#cmntSection").height();
+                //         $("#cmntSection").animate({ scrollTop: hei }, 1000);
+                //         // console.log(_this.selectedData.comment);
+                //     }, 500);
+                // })
+                // .catch(error =>{
+
+                // });
             },
             saveComment(id){
                 let _this = this;
@@ -794,6 +909,11 @@
                     $('#remove-assign-user-modal' + data.cardId).removeClass('remove-assigned');
                 }, 500)
 
+            },
+            commentPress(data){
+                let cmHe = $('#comment'+data.cardId).height();
+                $('#cmntSection').css({maxHeight: ' calc(100vh - 400px - '+cmHe+'px + 30px)'});
+                console.log(cmHe);
             },
             // removeAssignedUser(user, index, key) {
 
@@ -1042,6 +1162,21 @@
                     console.log(response.parents);
                     _this.selectedData.childrens = response.childs.child_task;
                     _this.selectedData.parents = response.parents;
+                })
+                .catch(error => {
+
+                })
+            },
+            getFiles(cardId){
+                let _this = this;
+                let data = {
+                    'task_id' : cardId
+                };
+                axios.post('/api/get-card-file',data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response.files);
+                    _this.selectedData.files = response.files ;
                 })
                 .catch(error => {
 
