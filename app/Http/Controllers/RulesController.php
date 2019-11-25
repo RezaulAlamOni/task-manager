@@ -105,6 +105,7 @@ class RulesController extends Controller
             $move_to_column = Task::where('id', $move_to)->first();
             $check = Task::where('board_parent_id', $move_from)
                 ->Update([
+                        'progress'=>$move_to_column->progress,
                         'board_parent_id' => $move_to,
                         'multiple_board_id' => $move_to_column->multiple_board_id
                     ]

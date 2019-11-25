@@ -1,6 +1,14 @@
 <template>
     <main>
         <div class="container">
+            <div class="loder" id="loder-hide">
+                <div class="foo foo1">
+                    <div class="circle"></div>
+                </div>
+                <div class="foo foo2">
+                    <div class="circle"></div>
+                </div>
+            </div>
             <div class="accordion" id="listWithHandle">
                 <template v-for="list in All_list">
                     <div class="card overview-list" :data-id="list.id">
@@ -37,10 +45,11 @@
                                                      alt="" height="20px" width="20px" class="mr-2">
                                                 Download PDF
                                             </a>
-                                            <a href="#" class="dropdown-item">
-                                                <img data-v-0ca4b43b="" src="/img/task-icon/link.png" alt=""
+                                            <a href="#" class="dropdown-item" v-if="list.is_delete === 1"
+                                               @click="RestoreList(list.id)">
+                                                <img data-v-0ca4b43b="" src="/img/task-icon/restore.png" alt=""
                                                      height="17px" width="17px" class="mr-2">
-                                                Add to board column
+                                                Restore this list
                                             </a>
                                         </div>
                                     </div>
@@ -52,7 +61,8 @@
                                 </p>
                             </div>
                         </div>
-                        <div :id="'collapse'+list.id" class="collapse show multi-collapse " :class="(list.open === 0) ? 'hide-overview-list-task' : 'show-overview-list-task'"
+                        <div :id="'collapse'+list.id" class="collapse show multi-collapse "
+                             :class="(list.open === 0) ? 'hide-overview-list-task' : 'show-overview-list-task'"
                              aria-labelledby="headingOne"
                              data-parent="#listWithHandle">
                             <div class="card-body p-0">
@@ -153,7 +163,7 @@
         </div>
     </main>
 </template>
-
+<style></style>
 <script>
     import Sortable from 'sortablejs';
     import draggableHelper from 'draggable-helper';
@@ -161,7 +171,7 @@
     import * as Ladda from 'ladda';
 
     export default {
-        props: ['projectID'],
+        props: ['projectID','update_overview'],
         components: {
             Tree: DraggableTree,
             thy: draggableHelper,
@@ -208,27 +218,31 @@
         },
         methods: {
             getAllList() {
+                $('#loder-hide').fadeIn();
                 var _this = this;
                 axios.get('/api/project-overview/' + _this.project_id)
                     .then(response => response.data)
                     .then(response => {
                         var lists = response.data;
                         var new_list = [];
-                        // setTimeout(function () {
+
                         for (var i = 0; i < lists.length; i++) {
                             new_list = [...new_list, ...lists[i].all_list];
                         }
                         _this.All_list = new_list;
                         _this.All_list.sort((a, b) => (a.sort_id > b.sort_id) ? 1 : -1)
-                        console.log(_this.All_list)
-                        // },100)
+                        // setTimeout(function () {
+                        $('#loder-hide').fadeOut();
+                            // $('#loder-hide').addClass('loder-hide')
+                            // console.log(_this.All_list)
+                        // }, 10)
 
                     })
                     .catch(error => {
                         console.log('Api is drag and drop not Working !!!')
                     });
             },
-            dataCollapse(id,list_id) {
+            dataCollapse(id, list_id) {
                 axios.post('/api/project-overview/list-open-close', {list_id: list_id})
                     .then(response => response.data)
                     .then(response => {
@@ -271,6 +285,7 @@
                         l.stop();
                         _this.getAllList();
                         $("#updateListBoardModelO").modal('hide');
+                        this.$emit('updateLatestNav')
                     })
                     .catch(error => {
                         console.log('Add list api not working!!')
@@ -295,6 +310,7 @@
                             .then(response => {
                                 swal("Complete!", "This List is deleted successfully !", "success");
                                 _this.getAllList()
+                                _this.$emit('updateLatestNav')
                                 swal.close();
                             })
                             .catch(error => {
@@ -302,6 +318,39 @@
                             });
                     });
             },
+            RestoreList(list_id) {
+                var _this = this;
+                swal({
+                        title: "Are you sure?",
+                        text: "If you want to restore this list !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonColor: "#e6c28e",
+                        confirmButtonText: "Yes, Restore it!",
+                        closeOnConfirm: false,
+                        showLoaderOnConfirm: true
+                    },
+                    function () {
+                        axios.post('/api/board-list-delete', {type: 'list', id: list_id, action: 'delete', overview: 2})
+                            .then(response => response.data)
+                            .then(response => {
+                                swal("Complete!", "This List is restore successfully !", "success");
+                                _this.getAllList()
+                                _this.$emit('updateLatestNav')
+                                swal.close();
+                            })
+                            .catch(error => {
+                                console.log('Add list api not working!!')
+                            });
+                    });
+            },
+        },
+        watch: {
+            update_overview: function (val) {
+                this.getAllList();
+                // this.update_overview = '';
+            }
         }
     };
 </script>

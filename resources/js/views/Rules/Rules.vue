@@ -305,6 +305,7 @@
                             type: "warning",
                             showCancelButton: true,
                             confirmButtonClass: "btn-danger",
+                            confirmButtonColor: "#d0c6e6",
                             confirmButtonText: "Yes, Update it!",
                             closeOnConfirm: false
                         },
@@ -340,6 +341,7 @@
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger",
+                        confirmButtonColor: "#e66983",
                         confirmButtonText: "Yes, Delete it!",
                         closeOnConfirm: false
                     },

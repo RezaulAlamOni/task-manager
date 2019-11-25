@@ -5,7 +5,7 @@
             <div class="container-fluid">
                 <div class="collapse navbar-collapse show">
                     <li class="nav-item ml-4" style="list-style: none;">
-                        <a @click="ShowOverView" class="d-block d-md-flex text-center nav-link"
+                        <a @click="setOverview" class="d-block d-md-flex text-center nav-link"
                            href="Javascript:void(0)">
                             <span class="d-none d-md-block">Overview</span>
                         </a>
@@ -19,34 +19,41 @@
                                         <span class="d-none d-md-block">{{nav.title}}</span>
                                     </a>
                                     <div aria-labelledby="dropdownMenuButton"
-                                         class="dropdown-menu dropdown-menu-left">
+                                         class="dropdown-menu dropdown-menu-left"
+                                         style="max-height: calc(100vh - 130px);transform: translate3d(0px, 50px, 0px);overflow-y: auto;overflow-x: hidden;min-width: 145px;">
 
                                         <h6 class="dropdown-header" v-if="nav.type === 'list'"> Lists</h6>
                                         <h6 class="dropdown-header" v-else-if="nav.type === 'board'"> Board</h6>
 
-                                        <span v-for="nav_list in nav.lists">
-                                            <span :id="'list'+nav_list.id"
-                                                  :class="(nav.type === 'board') ? 'board'+nav_list.id : '' "
-                                                  @click="setListId(nav_list,nav.id,nav_list.description,nav.type)"
-                                                  class="dropdown-item">
-                                                <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>
-                                                 <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>
-                                             </span>
-                                        </span>
+<!--                                        <a style="max-height: calc(100vh - 190px);transform: translate3d(0px, 50px, 0px);overflow: auto;">-->
+                                            <span v-for="nav_list in nav.lists">
+                                                <span :id="'list'+nav_list.id"
+                                                      :class="(nav.type === 'board') ? 'board'+nav_list.id : '' "
+                                                      @click="setListId(nav_list,nav.id,nav_list.description,nav.type)"
+                                                      class="dropdown-item">
+                                                    <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>
+                                                     <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>
+                                                 </span>
+                                            </span>
+<!--                                        </a>-->
+
+
                                         <div class="dropdown-divider"></div>
 
                                         <a @click="addListModel(nav.id)" class="dropdown-item"
                                            href="Javascript:void(0)"
                                            v-if="nav.type === 'list'">
-                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                           Create  <b>{{nav.title}}</b> List
+<!--                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>-->
+                                            <img src="/img/task-icon/add-list.png" class="icon-image-preview li-opacity-sub ">
+                                           Create  <!--<b>{{nav.title}}</b>--> List
                                         </a>
 
                                         <a @click="addBoardModel(nav.id)" class="dropdown-item"
                                            href="Javascript:void(0)"
                                            v-else-if="nav.type === 'board'">
-                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>
-                                            Create <b>{{nav.title}}</b> Board
+<!--                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>-->
+                                            <img src="/img/task-icon/add-list.png" class="icon-image-preview li-opacity-sub ">
+                                            Create <!--<b>{{nav.title}}</b>--> Board
                                         </a>
                                     </div>
                                 </li>
@@ -54,7 +61,8 @@
                         </span>
                     <ul class="navbar-nav ml-4 nav-bar-right">
                         <li class="nav-item search-nav-icon">
-                            <button class="btn btn-default" v-if="list_selected.type === 'list'" type="submit"
+<!--                            v-if="list_selected.type === 'list'"-->
+                            <button class="btn btn-default"  type="submit"
                                     @click="showSearchInputField"
                                     style="padding-right: 32px; padding-left: 7px;background: none">
                                 <img :src="baseUrl+'/img/task-icon/search.png'" height="30" width="30" alt=""
@@ -74,17 +82,35 @@
                                 <span class="pull-right dropdown-toggle" data-toggle="dropdown">Option</span>
                                 <div aria-labelledby="dropdownMenuButton"
                                      class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
-                                    <h6 class="dropdown-header text-uppercase">Action For <span
-                                        v-if="list_selected.type === 'board'">Board</span> <span v-else>List</span></h6>
-                                    <div class="dropdown-divider"></div>
-                                    <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
+
+
+                                    <template v-if="overview === 'overview' && list_selected.type !== 'list'">
+                                        <h6 class="dropdown-header text-uppercase">Action For Overview</h6>
+                                           <span class="dropdown-item custom-dropdown-item">
+                                                <a :href="'/list-pdf-create/overview/'+ projectId" target="_blank">
+                                                    <img :src="baseUrl+'/img/task-icon/pdf.png'" alt="" height="20px"
+                                                         width="20px" class="mr-2">
+                                                    Create Overview PDF </a>
+                                           </span>
+                                        <span class="dropdown-item custom-dropdown-item">
+                                            <a @click="addListFromOverview">
+                                                <img :src="baseUrl+'/img/task-icon/addList.png'" alt="" height="20px"
+                                                     width="20px" class="mr-2">
+                                                Add New List</a>
+                                        </span>
+                                    </template>
+                                    <template v-else>
+                                        <h6 class="dropdown-header text-uppercase">Action For <span
+                                            v-if="list_selected.type === 'board'">Board</span> <span v-else>List</span></h6>
+                                        <div class="dropdown-divider"></div>
+                                        <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
                                         <a href="javascript:void(0)">
                                             <img :src="baseUrl+'/img/task-icon/edit.png'" alt="" height="20px"
                                                  width="20px" class="mr-2">
                                             Edit  <span
                                             v-if="list_selected.type === 'board'">Board</span>  <span v-else>List</span></a>
                                     </span>
-                                    <span class="dropdown-item custom-dropdown-item">
+                                        <span class="dropdown-item custom-dropdown-item">
                                         <a href="javascript:void(0)" @click="MoveListTOAnotherNav(list_selected.type)">
                                             <img :src="baseUrl+'/img/task-icon/move.png'" alt="" height="20px"
                                                  width="20px" class="mr-2">
@@ -92,29 +118,32 @@
                                             <span v-if="list_selected.type === 'board'">Board</span>  <span
                                             v-else>List</span> to Another Nav </a>
                                     </span>
-                                    <span class="dropdown-item custom-dropdown-item"
-                                          @click="DeleteListOrBoard(list_selected.type,'delete')">
+                                        <span class="dropdown-item custom-dropdown-item"
+                                              @click="DeleteListOrBoard(list_selected.type,'delete')">
                                         <a href="javascript:void(0)">
                                             <img :src="baseUrl+'/img/task-icon/trash.png'" alt="" height="20px"
                                                  width="20px" class="mr-2">
                                             Delete with all <span
                                             v-if="list_selected.type === 'board'">Card</span>  <span v-else> Task</span></a>
                                     </span>
-                                    <span class="dropdown-item custom-dropdown-item"
-                                          @click="DeleteListOrBoard(list_selected.type,'move')">
+                                        <span class="dropdown-item custom-dropdown-item"
+                                              @click="DeleteListOrBoard(list_selected.type,'move')">
                                         <a href="javascript:void(0)">
                                             <img :src="baseUrl+'/img/task-icon/move-1.png'" alt="" height="20px"
                                                  width="20px" class="mr-2">
                                             Delete & move <span
                                             v-if="list_selected.type === 'board'">Card</span>  <span v-else>Task</span> </a>
                                     </span>
-                                    <span class="dropdown-item custom-dropdown-item"
-                                          v-if="list_selected.type === 'list'">
-                                        <a :href="'/list-pdf-create/'+list_selected.id" target="_blank">
+                                        <span class="dropdown-item custom-dropdown-item"
+                                              v-if="list_selected.type === 'list'">
+                                        <a :href="'/list-pdf-create/list/'+list_selected.id" target="_blank">
                                             <img :src="baseUrl+'/img/task-icon/pdf.png'" alt="" height="20px"
                                                  width="20px" class="mr-2">
                                             Create PDF </a>
                                     </span>
+                                    </template>
+
+
                                 </div>
                             </a>
                         </li>
@@ -564,6 +593,53 @@
                 </div>
             </div>
         </div>
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="addListFromOverviewModel" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Add List</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add your new list here !</p>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Select List Nav </label>
+                            <div class="col-sm-8">
+                                <select class="form-control" v-model="list.nav_id">
+                                    <option disabled value="0">Select List Nav
+                                    </option>
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in AllNavItems" v-if="navs.type === 'list'">
+                                        {{navs.title}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">List Title</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" v-model="list.name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">List Description</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" cols="40" name="" rows="3"
+                                          v-model="list.description"></textarea>
+                            </div>
+                        </div>
+                        <!--                        <p v-if="addField.error" class="text-danger"></p>-->
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="AddNewListOverview" class="btn btn-primary" type="button">Add</button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -581,7 +657,7 @@
                 list: {
                     name: null,
                     description: null,
-                    nav_id: null
+                    nav_id: 0,
                 },
                 navItem: {
                     title: null,
@@ -590,6 +666,7 @@
                     project_id: null,
                 },
                 rules: null,
+                overview: null,
                 update_navItem: {
                     title: null,
                     type: null,
@@ -614,6 +691,11 @@
             },
             shortcutModel() {
                 $("#shortcutModel").modal('show');
+            },
+            addListFromOverview() {
+
+
+                $("#addListFromOverviewModel").modal('show');
             },
             AddNavItem() {
                 var _this = this;
@@ -732,7 +814,13 @@
             },
 
             ShowOverView() {
-
+                // localStorage.selected_nav = JSON.stringify({
+                //     list_id: null,
+                //     nav_id: null,
+                //     project_id: this.projectId,
+                //     type: 'overview'
+                // });
+                this.overview = 'overview';
                 this.$emit('getList', {
                     list_id: 0,
                     nav_id: 0,
@@ -740,6 +828,15 @@
                     description: '',
                     type: 'overview'
                 })
+            },
+            setOverview(){
+                localStorage.selected_nav = JSON.stringify({
+                    list_id: null,
+                    nav_id: null,
+                    project_id: this.projectId,
+                    type: 'overview'
+                });
+                this.ShowOverView();
             },
             CreateRule() {
                 this.$emit('getList', {
@@ -789,6 +886,34 @@
                         console.log('Add list api not working!!')
                     });
             },
+            AddNewListOverview() {
+                var _this = this;
+                this.list.project_id = this.projectId;
+                if(_this.list.name !== null && _this.list.description !== null && _this.list.nav_id !== 0){
+                    axios.post('/api/list-add', this.list)
+                        .then(response => response.data)
+                        .then(response => {
+
+                            if (response.status == 'exists') {
+                                swal("Already Exist! ", "Enter Another Board Name !", "warning")
+                            } else {
+                                _this.multiple_list = response.multiple_list;
+                                _this.AllNavItem();
+                                $("#addListFromOverviewModel").modal('hide');
+                                _this.list.name = null;
+                                _this.list.nav_id = 'Select list Nav';
+                                _this.list.description = null;
+                                _this.$emit('update_overview');
+                                // swal("Created", "Board Create Successful", "success")
+                            }
+                        })
+                        .catch(error => {
+                            console.log('Add list api not working!!')
+                        });
+                }
+
+            },
+
             AddNewBoard() {
                 this.list.project_id = this.projectId;
                 this.list.nav_id = this.nav_id;
@@ -837,9 +962,9 @@
         directives: {},
         watch: {
             AllNavGet: function (val) {
-                if (val === 'update') {
+                if(val === null){
                     this.AllNavItem()
-                } else {
+                }else {
                     this.AllNavItems = val;
                 }
 

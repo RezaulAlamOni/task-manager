@@ -24,7 +24,7 @@ Route::get('/blank','ClearController@show_blank');
 Route::get('/blank','BlankController@show');
 
 
-Route::get('/list-pdf-create/{list_id}','MultipleListController@ListPdfCreate');
+Route::get('/list-pdf-create/{type}/{list_id}','MultipleListController@ListPdfCreate');
 
 //Route::get('/projects','ProjectController@index');
 

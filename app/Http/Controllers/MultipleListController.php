@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\LinkListToColumn;
 use App\Multiple_board;
 use App\Multiple_list;
 use App\Project;
+use App\ProjectNavItems;
 use App\Task;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MultipleListController extends Controller
 {
@@ -18,6 +21,7 @@ class MultipleListController extends Controller
     protected $NavBar;
     protected $Task_Controller;
     protected $MultipleBoardController;
+    protected $OverviewController;
 
     public function __construct()
     {
@@ -26,6 +30,7 @@ class MultipleListController extends Controller
         $this->NavBar = new ProjectNavItemsController();
         $this->Task_Controller = new TaskController();
         $this->MultipleBoardController = new MultipleBoardController();
+        $this->OverviewController = new OverviewController();
         $this->middleware('auth');
     }
 
@@ -113,9 +118,19 @@ class MultipleListController extends Controller
                     foreach ($tasks as $task) {
                         $this->Task_Controller->deleteTaskWithChild($task->id);
                     }
-                    Multiple_list::where('id', $id)->delete();
-                } else {
+                    DB::beginTransaction();
+                    try {
+                        Multiple_list::where('id', $id)->delete();
+                        LinkListToColumn::where('multiple_list_id', $id)->delete();
+                        DB::commit();
+                    } catch (\Exception $e) {
+                        DB::rollback();
+                    }
+
+                } else if ($request->overview == 1){
                     Multiple_list::where('id', $id)->update(['is_delete'=>1]);
+                }else if ($request->overview == 2){
+                    Multiple_list::where('id', $id)->update(['is_delete'=>0]);
                 }
 
 
@@ -144,20 +159,41 @@ class MultipleListController extends Controller
     }
 
 
-    public function ListPdfCreate($list_id)
+    public function ListPdfCreate($type ,$list_id)
     {
-        $multiple_list = Multiple_list::findOrFail($list_id);
+        if (!isset($type) || !isset($list_id)){
+            return view('404');
+        }
 
-        $tasks = Task::where('parent_id', 0)
-            ->where('project_id', $multiple_list->project_id)
-            ->where('list_id', $list_id)
-            ->orderBy('sort_id', 'ASC')
-            ->get();
-        $data = $this->Task_Controller->decorateData($tasks);
-//        dd($data);
-//        return view('TaskListPdf',['list'=>$multiple_list,'tasks'=>$data]);
-        $pdf = PDF::loadView('TaskListPdf', ['list' => $multiple_list, 'tasks' => $data]);
-        return $pdf->download($multiple_list->list_title . '.pdf');
+        if ($type == 'overview'){
+            $all_list_navs = ProjectNavItems::where(['type' => 'list', 'project_id' => $list_id])->with('All_list')->get();
+
+            $data = [];
+            foreach ($all_list_navs as $all_list_nav) {
+                foreach ($all_list_nav->all_list as $item) {
+                    $item->tasks = $this->Task_Controller->decorateData($item->tasks_list);
+                    $data[] = $item;
+                }
+            }
+            $project = Project::where('id',$list_id)->first();
+            $title = "Overview-".$project->name;
+        }else {
+            $multiple_list = Multiple_list::findOrFail($list_id);
+            $tasks = Task::where('parent_id', 0)
+                ->where('project_id', $multiple_list->project_id)
+                ->where('list_id', $list_id)
+                ->orderBy('sort_id', 'ASC')
+                ->get();
+
+            $project = Project::where('id',$multiple_list->project_id)->first();
+
+            $multiple_list->tasks = $this->Task_Controller->decorateData($tasks);
+            $data[] = $multiple_list;
+            $title= $multiple_list->list_title;
+        }
+//        return view('TaskListPdf',['lists'=>$data,'project' => $project]);
+            $pdf = PDF::loadView('TaskListPdf', ['lists'=>$data,'project' => $project]);
+            return $pdf->download($title. '.pdf');
 //        return $pdf->save(public_path('pdf/abc.pdf'))->stream('download.pdf');
     }
 }

@@ -6,14 +6,16 @@
                     :projectId="$route.params.projectId"
                     :lists="list"
                     @getList="showTask"
+                    @update_overview="update_overview"
                     @showSearchInputField="showSearchInputField"
                     @MoveListTOAnotherNav="MoveListTOAnotherNav"
                     @DeleteListOrBoard="DeleteListOrBoard"
                     @DownloadTaskPDF="DownloadTaskPDF"
                     @getNavBars="getNavbar">
             </Navbar>
-
-            <div class="input-group col-sm-4 searchList">
+<!--            @update_overview="update_overview"-->
+            <div class="input-group col-sm-4 searchList"
+                 :class="((list.type === 'board') ? 'searchList-board' : 'searchList')">
 
                 <input class="form-control searchTaskList"
                        type="text" id="myInput"
@@ -75,6 +77,14 @@
         <!--        </div>-->
         <div :class="(list.type === 'list') ? 'list-task-details' : 'board-card-details'"
              v-if="list.type === 'list' || list.type === 'board'">
+            <div class="loder" id="loder-hide">
+                <div class="foo foo1">
+                    <div class="circle"></div>
+                </div>
+                <div class="foo foo2">
+                    <div class="circle"></div>
+                </div>
+            </div>
 
             <div style="padding-left: 5%" v-if="list.type === 'list'">
 
@@ -161,9 +171,20 @@
                                     <a class="attach-icon hide-item-res" style="width: auto !important;">
                                         <span v-if="data.files && data.files.length !== 0">
                                             <template v-for="(fl,file_id ) in data.files">
-                                                <img :src="'/storage/'+data.id+'/'+fl.file_name" v-if="file_id < 2"
+
+                                                <img :src="baseUrl+'/storage/'+data.id+'/'+fl.file_name"
+                                                     v-if="file_id < 2 && ( fl.file_name.endsWith('.png') || fl.file_name.endsWith('.jpg'))"
                                                      @click="showImage(data.files, fl.file_name,data.id)"
+                                                     title="Click For View File" data-toggle="tooltip"
                                                      class="task-img">
+                                                <a :href="baseUrl+'/storage/'+data.id+'/'+fl.file_name" target="_blank"
+                                                   v-else>
+                                                    <template v-if="file_id < 2">
+                                                    <img src="/img/pdf.png" alt="" class="task-img"
+                                                         title="Click For View File" data-toggle="tooltip">
+                                                    </template>
+                                                </a>
+
                                             </template>
                                         </span>
 
@@ -606,7 +627,9 @@
         </div>
         <div class="project-overview" v-if="list.type === 'overview'">
             <Overview
-                :projectID="projectId">
+                :projectID="projectId"
+                :update_overview="AllNavItems"
+                @updateLatestNav="RuleUpdate">
             </Overview>
         </div>
 
@@ -1045,13 +1068,14 @@
             $('.searchList').hide();
             $('.SubmitButton').hide();
             $('.submitdetails').hide();
+            $('#loder-hide').removeClass('loder-hide')
             if (localStorage.selected_nav !== undefined) {
                 var session_data = JSON.parse(localStorage.selected_nav);
                 if (session_data.type === 'list') {
                     setTimeout(function () {
                         $('#list' + session_data.list_id).click();
                     }, 1000)
-                } else {
+                } else if (session_data.type === 'board') {
                     setTimeout(function () {
                         $('.board' + session_data.list_id).click();
                     }, 1000)
@@ -1237,10 +1261,10 @@
                 }
             },
             showSearchInputField() {
-                if (this.list.type === 'list') {
-                    $('.searchList').toggle();
-                    $('.searchTaskList').focus();
-                }
+                // if (this.list.type === 'list') {
+                $('.searchList').toggle();
+                $('.searchTaskList').focus();
+                // }
             },
             SearchTaskByAssignedUser(id, name) {
                 $('.searchTaskList').val('@' + name);
@@ -1511,8 +1535,8 @@
                     _this.selectedCopy = _this.selectedIds;
                     _this.selectedCut = null;
                     $('.jquery-accordion-menu').hide();
-                    console.log(_this.selectedData)
-                    console.log(_this.selectedIds)
+                    // console.log(_this.selectedData)
+                    // console.log(_this.selectedIds)
                 } else {
                     swal('Sorry!!', 'You can\'t do copy  Dont Forget Section! task', 'warning')
                 }
@@ -2097,6 +2121,7 @@
                         .then(response => {
                             _this.getTaskList();
                             $('.jquery-accordion-menu').hide();
+                            _this.selectedIds = [];
                         })
                         .catch(error => {
                             console.log('Api for delete task not Working !!!')
@@ -2123,6 +2148,7 @@
                         // console.log(response)
                         setTimeout(() => {
                             $('#MoveTAsk').modal('show');
+                            _this.selectedIds = [];
                         }, 200);
                     })
                     .catch(error => {
@@ -2253,6 +2279,8 @@
             },
             getTaskList() {
                 var _this = this;
+                // $('#loder-hide').removeClass('loder-hide')
+                $('#loder-hide').fadeIn();
                 let data = {
                     id: this.projectId,
                     list_id: this.list_id,
@@ -2261,12 +2289,18 @@
                 axios.post('/api/task-list', data)
                     .then(response => response.data)
                     .then(response => {
+
                         this.treeList = response.task_list;
                         this.multiple_list = response.multiple_list;
                         $('[data-toggle="tooltip"]').tooltip('dispose');
                         setTimeout(function () {
+                            // $('#loder-hide').addClass('loder-hide')
                             $('[data-toggle="tooltip"]').tooltip('enable');
                         }, 500);
+                        setTimeout(function () {
+                            $('#loder-hide').fadeOut()
+                            // $('#loder-hide').addClass('loder-hide')
+                        }, 100);
                         if (this.treeList.length === 1 && this.treeList[0].text === '') {
                             let id = this.treeList[0].id;
                             setTimeout(function () {
@@ -2325,6 +2359,9 @@
             UpdateListModel() {
                 $("#updateListBoardModel").modal('show');
             },
+            update_overview(){
+                this.AllNavItems = null;
+            },
             UpdateListOrBoard() {
                 var _this = this;
                 var l = Ladda.create(document.querySelector('.ladda_update_list_board'));
@@ -2373,18 +2410,18 @@
 
                     if (type === 'list') {
                         swal({
-                            title: "Keep this list on Overview !?",
-                            text: "You will not be able to recover this imaginary file!",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonClass: "btn-danger",
-                            confirmButtonText: "No Delete it !",
-                            confirmButtonColor: '#f56065',
-                            cancelButtonText: "Yes Keep on Overview",
-                            cancelButtonColor: "#c3dda3",
-                            closeOnConfirm: false,
-                            closeOnCancel: false,
-                            dangerMode: true,
+                                title: "Keep this list on Overview !?",
+                                text: "You will not be able to recover this imaginary file!",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "No Delete it !",
+                                confirmButtonColor: '#f56065',
+                                cancelButtonText: "Yes Keep on Overview",
+                                cancelButtonColor: "#c3dda3",
+                                closeOnConfirm: false,
+                                closeOnCancel: false,
+                                dangerMode: true,
                             },
                             function (isConfirm) {
                                 var data = null;
@@ -2912,7 +2949,7 @@
                 $("#imageModal").modal();
             },
             RuleUpdate() {
-                this.AllNavItems = 'update';
+                this.AllNavItems = null;
             }
 
         },
