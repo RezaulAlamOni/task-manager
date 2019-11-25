@@ -87,7 +87,7 @@
                                                                 <ul class="dropdown-menu">
                                                                     <li v-for="unlinks in column.linkToList" class="dropdown-item"  @click="unlinklistToCol(index, column.boardId, unlinks.id)">
                                                                         <a href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" >
-                                                                            {{unlinks.link_to_list_column.list_title}}
+                                                                             {{(unlinks.link_to_list_column !== null && unlinks.link_to_list_column !== undefined) ? unlinks.link_to_list_column.list_title : ''}}
                                                                         </a>
                                                                     </li>
                                                                 </ul>
@@ -1250,6 +1250,7 @@
                             childrens: this.cards[i].task[j].children,
                             parents: this.cards[i].task[j].parents,
                             comment: this.cards[i].task[j].comment,
+                            files: '',
                             userName: this.cards[i].task[j].userName,
                             data: this.cards[i].task[j].name,
                             textareaShow: this.cards[i].task[j].textareaShow,

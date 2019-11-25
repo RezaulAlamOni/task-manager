@@ -78,6 +78,8 @@ Route::post('/all-board', 'MultipleBoardController@getAllColumnBylist');
 Route::post('/add-existing-tasks', 'MultipleBoardController@addExistingTasks');
 
 Route::post('/card-add', 'MultipleBoardController@cardAdd');
+Route::post('/card-file-upload', 'MultipleBoardController@fileUpload');
+Route::post('/get-card-file', 'MultipleBoardController@getCardFiles');
 Route::post('/hideChildes', 'MultipleBoardController@childHide');
 Route::post('/show-child-parent', 'MultipleBoardController@childrenAndParent');
 Route::post('/card-sort', 'MultipleBoardController@cardSort');

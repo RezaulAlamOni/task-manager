@@ -20,4 +20,9 @@ class Files extends Model
     {
         return $this->belongsTo('App\Task', 'id', 'tasks_id');
     }
+
+    public function user()
+    {
+        return $this->hasOne('App\User', 'id', 'created_by');
+    }
 }
