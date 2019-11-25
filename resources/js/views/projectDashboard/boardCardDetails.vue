@@ -367,9 +367,9 @@
                                             <div style="float: left;" v-else>
                                                 <img title="Click To Download" data-toggle="tooltip"
                                                     :src="'/img/attachment.png'" height="50" width="50">
-                                            </div>
+                                            </div> 
                                         </a>
-                                        <span style="position: relative; float: right;" v-html="dateFormate(files.created_at)+'<br>&emsp;&emsp;'+files.user.name"></span>
+                                        <span style="position: relative; float: right;" v-html="dateFormate(files.created_at)+'<br>&emsp;&emsp;'+files.user.name.split(' ')[0].substring(0,9)"></span>
                                         <span>
                                             <img @click="deleteFile(files.id)" style="position: absolute; right: 5px; bottom: 5px;" :src="'https://img.icons8.com/color/48/000000/delete-forever.png'" height="20" width="20">
                                         </span>
