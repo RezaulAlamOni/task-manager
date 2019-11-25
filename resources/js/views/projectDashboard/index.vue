@@ -13,7 +13,8 @@
                     @getNavBars="getNavbar">
             </Navbar>
 
-            <div class="input-group col-sm-4 searchList" :class="((list.type === 'board') ? 'searchList-board' : 'searchList')">
+            <div class="input-group col-sm-4 searchList"
+                 :class="((list.type === 'board') ? 'searchList-board' : 'searchList')">
 
                 <input class="form-control searchTaskList"
                        type="text" id="myInput"
@@ -161,9 +162,20 @@
                                     <a class="attach-icon hide-item-res" style="width: auto !important;">
                                         <span v-if="data.files && data.files.length !== 0">
                                             <template v-for="(fl,file_id ) in data.files">
-                                                <img :src="'/storage/'+data.id+'/'+fl.file_name" v-if="file_id < 2"
+
+                                                <img :src="baseUrl+'/storage/'+data.id+'/'+fl.file_name"
+                                                     v-if="file_id < 2 && ( fl.file_name.endsWith('.png') || fl.file_name.endsWith('.jpg'))"
                                                      @click="showImage(data.files, fl.file_name,data.id)"
+                                                     title="Click For View File" data-toggle="tooltip"
                                                      class="task-img">
+                                                <a :href="baseUrl+'/storage/'+data.id+'/'+fl.file_name" target="_blank"
+                                                   v-else>
+                                                    <template v-if="file_id < 2">
+                                                    <img src="/img/pdf.png" alt="" class="task-img"
+                                                         title="Click For View File" data-toggle="tooltip">
+                                                    </template>
+                                                </a>
+
                                             </template>
                                         </span>
 
@@ -1239,8 +1251,8 @@
             },
             showSearchInputField() {
                 // if (this.list.type === 'list') {
-                    $('.searchList').toggle();
-                    $('.searchTaskList').focus();
+                $('.searchList').toggle();
+                $('.searchTaskList').focus();
                 // }
             },
             SearchTaskByAssignedUser(id, name) {
@@ -1512,8 +1524,8 @@
                     _this.selectedCopy = _this.selectedIds;
                     _this.selectedCut = null;
                     $('.jquery-accordion-menu').hide();
-                    console.log(_this.selectedData)
-                    console.log(_this.selectedIds)
+                    // console.log(_this.selectedData)
+                    // console.log(_this.selectedIds)
                 } else {
                     swal('Sorry!!', 'You can\'t do copy  Dont Forget Section! task', 'warning')
                 }
@@ -2098,6 +2110,7 @@
                         .then(response => {
                             _this.getTaskList();
                             $('.jquery-accordion-menu').hide();
+                            _this.selectedIds = [];
                         })
                         .catch(error => {
                             console.log('Api for delete task not Working !!!')
@@ -2124,6 +2137,7 @@
                         // console.log(response)
                         setTimeout(() => {
                             $('#MoveTAsk').modal('show');
+                            _this.selectedIds = [];
                         }, 200);
                     })
                     .catch(error => {
@@ -2374,18 +2388,18 @@
 
                     if (type === 'list') {
                         swal({
-                            title: "Keep this list on Overview !?",
-                            text: "You will not be able to recover this imaginary file!",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonClass: "btn-danger",
-                            confirmButtonText: "No Delete it !",
-                            confirmButtonColor: '#f56065',
-                            cancelButtonText: "Yes Keep on Overview",
-                            cancelButtonColor: "#c3dda3",
-                            closeOnConfirm: false,
-                            closeOnCancel: false,
-                            dangerMode: true,
+                                title: "Keep this list on Overview !?",
+                                text: "You will not be able to recover this imaginary file!",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "No Delete it !",
+                                confirmButtonColor: '#f56065',
+                                cancelButtonText: "Yes Keep on Overview",
+                                cancelButtonColor: "#c3dda3",
+                                closeOnConfirm: false,
+                                closeOnCancel: false,
+                                dangerMode: true,
                             },
                             function (isConfirm) {
                                 var data = null;

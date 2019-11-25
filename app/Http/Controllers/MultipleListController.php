@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\LinkListToColumn;
 use App\Multiple_board;
 use App\Multiple_list;
 use App\Project;
@@ -12,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MultipleListController extends Controller
 {
@@ -116,7 +118,15 @@ class MultipleListController extends Controller
                     foreach ($tasks as $task) {
                         $this->Task_Controller->deleteTaskWithChild($task->id);
                     }
-                    Multiple_list::where('id', $id)->delete();
+                    DB::beginTransaction();
+                    try {
+                        Multiple_list::where('id', $id)->delete();
+                        LinkListToColumn::where('multiple_list_id', $id)->delete();
+                        DB::commit();
+                    } catch (\Exception $e) {
+                        DB::rollback();
+                    }
+
                 } else if ($request->overview == 1){
                     Multiple_list::where('id', $id)->update(['is_delete'=>1]);
                 }else if ($request->overview == 2){
