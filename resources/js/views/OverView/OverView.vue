@@ -9,21 +9,34 @@
                     <div class="circle"></div>
                 </div>
             </div>
-            <div class="accordion" id="listWithHandle">
-                <template v-for="list in All_list">
-                    <div class="card overview-list" :data-id="list.id">
-                        <div class="card-header overview-list-header" id="headingOne" data-toggle="collapse"
-                             data-target="" aria-expanded="false"
-                             aria-controls="collapseOne">
-                            <div class="col-md-12">
-                                <img src="/img/task-icon/move.png" alt="" height="20px" width="20px"
-                                     class="mr-2 sort-trigger" data-toggle="tooltip"
-                                     title="Change sort-order lists">
-                                <h2 style="margin: 10px 15px;cursor: pointer" data-placement="bottom"
-                                    @click="dataCollapse('#collapse'+list.id,list.id)" data-toggle="tooltip">
-                                    {{list.list_title}}
-                                </h2>
-                                <span class="option-btn">
+            <ul class="nav nav-tabs" id="myTab" role="tablist" style="background: #e4e4e4;padding: 4px 0px 0 0px">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">All List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Files</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Comments</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="accordion" id="listWithHandle">
+                        <template v-for="list in All_list">
+                            <div class="card overview-list" :data-id="list.id">
+                                <div class="card-header overview-list-header" id="headingOne" data-toggle="collapse"
+                                     data-target="" aria-expanded="false"
+                                     aria-controls="collapseOne">
+                                    <div class="col-md-12">
+                                        <img src="/img/task-icon/move.png" alt="" height="20px" width="20px"
+                                             class="mr-2 sort-trigger" data-toggle="tooltip"
+                                             title="Change sort-order lists">
+                                        <h2 style="margin: 10px 15px;cursor: pointer" data-placement="bottom"
+                                            @click="dataCollapse('#collapse'+list.id,list.id)" data-toggle="tooltip">
+                                            {{list.list_title}}
+                                        </h2>
+                                        <span class="option-btn">
                                     <span data-toggle="dropdown" class="dropdown-toggle-split col-md-12 opacity">
                                         <i class="fa fa-ellipsis-h"></i>
                                     </span>
@@ -54,28 +67,28 @@
                                         </div>
                                     </div>
                                 </span>
-                            </div>
-                            <div class="col-md-12">
-                                <p>
-                                    {{list.description}}
-                                </p>
-                            </div>
-                        </div>
-                        <div :id="'collapse'+list.id" class="collapse show multi-collapse "
-                             :class="(list.open === 0) ? 'hide-overview-list-task' : 'show-overview-list-task'"
-                             aria-labelledby="headingOne"
-                             data-parent="#listWithHandle">
-                            <div class="card-body p-0">
-                                <div class="TaskListAndDetails">
-                                    <div class="col-11" id="tree_view_list">
-                                        <Tree :data="list.tasks" :indent="2"
-                                              :space="0" class="tree4"
-                                              draggable="false"
-                                              cross-tree="cross-tree">
-                                            <div :class="{eachItemRow: true}"
-                                                 slot-scope="{data, _id,store,vm}"
-                                                 style="font-size: 12px">
-                                                <template v-html="data.html">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <p>
+                                            {{list.description}}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div :id="'collapse'+list.id" class="collapse show multi-collapse "
+                                     :class="(list.open === 0) ? 'hide-overview-list-task' : 'show-overview-list-task'"
+                                     aria-labelledby="headingOne"
+                                     data-parent="#listWithHandle">
+                                    <div class="card-body p-0">
+                                        <div class="TaskListAndDetails">
+                                            <div class="col-11" id="tree_view_list">
+                                                <Tree :data="list.tasks" :indent="2"
+                                                      :space="0" class="tree4"
+                                                      draggable="false"
+                                                      cross-tree="cross-tree">
+                                                    <div :class="{eachItemRow: true}"
+                                                         slot-scope="{data, _id,store,vm}"
+                                                         style="font-size: 12px">
+                                                        <template v-html="data.html">
                                                 <span class="progress-bar-custom">
                                                     <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28"
                                                          width="28"
@@ -96,27 +109,41 @@
                                                          data-toggle="tooltip"
                                                          class="task-complete left-content li-opacity">
                                                 </span>
-                                                    <!--                                                    <b v-if="data.children && data.children.length && data.open">-->
-                                                    <!--                                                        <i class="fa fa-fw fa-minus"></i></b>-->
-                                                    <!--                                                    <b v-else-if="data.children && data.children.length && !data.open">-->
-                                                    <!--                                                        <i class="fa fa-fw fa-plus"></i></b>-->
-                                                    <span>
+                                                            <!--                                                    <b v-if="data.children && data.children.length && data.open">-->
+                                                            <!--                                                        <i class="fa fa-fw fa-minus"></i></b>-->
+                                                            <!--                                                    <b v-else-if="data.children && data.children.length && !data.open">-->
+                                                            <!--                                                        <i class="fa fa-fw fa-plus"></i></b>-->
+                                                            <span>
                                                         <span class="inp input-hide input-title"
                                                               style="width: 95%;">
                                                             {{data.text}}
                                                         </span>
                                                     </span>
-                                                </template>
+                                                        </template>
+                                                    </div>
+                                                </Tree>
                                             </div>
-                                        </Tree>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </template>
                     </div>
-                </template>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <h1>All Files Here</h1>
 
+                </div>
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                    <h1>All Comments Here !!</h1>
+                </div>
             </div>
+
+
+
+
+
+
 
             <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="updateListBoardModelO"
                  role="dialog"
