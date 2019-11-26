@@ -832,7 +832,7 @@
                                     <option disabled value="Select list">Select
                                         Board or List
                                     </option>
-                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T"
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T" v-if="navList.is_delete !== 1"
                                             :disabled="((navList.id !== list_id) ? false : true)">
                                         <span v-if="type_T === 'board'">{{navList.board_title}}</span> <span v-else>{{navList.list_title}}</span>
                                     </option>
@@ -897,7 +897,7 @@
                                     <option disabled value="Select list">Select
                                         Board or List
                                     </option>
-                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T"
+                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T" v-if="navList.is_delete !== 1"
                                             :disabled="((navList.id !== list_id) ? false : true)">
                                         <span>{{navList.list_title}}</span>
                                     </option>
