@@ -1871,6 +1871,7 @@
             },
             getBoardTask() {
                 var _this = this;
+                this.scene = {};
                 $('#loder-hide').fadeIn()
                 var datePicker = new Date();
                 datePicker.setDate(datePicker.getDate() - 1);
