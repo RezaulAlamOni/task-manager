@@ -25,7 +25,8 @@ class SearchController extends Controller
             return response()->json(['search_user'=>$search_user]);
         }else if (isset($request->text) && trim($request->text) != '') {
             $task = Task::where('project_id',$request->project_id)
-                ->where('title', 'like', '%' . $request->text . '%')->get();
+                ->where('title', 'like', '%' . $request->text . '%')
+                ->orWhere('id',$request->text)->get();
             return response()->json(['search_tasks'=>$task]);
         } else if (isset($request->user_id) && trim($request->user_id) != '') {
             $task = Task::join('task_assigned_users','task_lists.id','task_assigned_users.task_id')
@@ -35,6 +36,13 @@ class SearchController extends Controller
                 ->get();
             return response()->json(['search_tasks' => $task]);
         }
+    }
 
+    public function getAllUser(){
+        $team_id = DB::table('team_users')->where('user_id', Auth::id())->first();
+        $search_user= User::join('team_users', 'team_users.user_id', 'users.id')
+            ->where('team_users.team_id', $team_id->team_id)
+            ->get();
+        return response()->json(['search_user'=>$search_user]);
     }
 }

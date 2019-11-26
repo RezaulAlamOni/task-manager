@@ -1273,7 +1273,7 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.searchData.tasks = response.search_tasks;
-                        console.log(_this.searchData.tasks)
+                        // console.log(_this.searchData.tasks)
                         $('#myUL-user').removeClass('myUL-user');
                         $('#myUL').removeClass('myUL');
                         $('#myUL').addClass('myUL-show');
@@ -1288,7 +1288,16 @@
                 var _this = this;
                 if (value.charAt(0) === '@') {
                     value = value.substr(1)
-                    _this.searchData.users = (_this.treeList[0].users.length > 0) ? _this.treeList[0].users : [];
+
+                    axios.get('/api/task-list/all-suggest-user')
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.searchData.users = response.search_user;
+                        })
+                        .catch(error => {
+                            console.log('All suggest user api not working')
+                        })
+
                     if (value.length > 0) {
                         axios.post('/api/task-list/suggest-user', {'user_name': value})
                             .then(response => response.data)
@@ -1308,7 +1317,7 @@
                     $('#myUL').removeClass('myUL-show');
                     $('#myUL').addClass('myUL');
                 } else {
-                    if (value.length >= 2) {
+                    // if (value.length >= 2) {
                         axios.post('/api/task-list/suggest-user', {'text': value, 'project_id': _this.projectId})
                             .then(response => response.data)
                             .then(response => {
@@ -1321,7 +1330,7 @@
 
                         $('#myUL').removeClass('myUL');
                         $('#myUL').addClass('myUL-show');
-                    }
+                    // }
                 }
             },
             selectTaskFromTaskTreeList(task) {
