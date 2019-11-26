@@ -2195,7 +2195,6 @@
                         // console.log(response)
                         setTimeout(() => {
                             $('#MoveTAsk').modal('show');
-                            _this.selectedIds = [];
                         }, 200);
                     })
                     .catch(error => {
@@ -2627,6 +2626,7 @@
             },
             MoveTaskToListOrBoard() {
                 var _this = this;
+                console.log(_this.selectedIds)
                 swal({
                         title: "Are you sure?",
                         text: "You want to move selected task ?!!!",
@@ -2657,11 +2657,7 @@
             },
             PastTaskToList() {
                 var _this = this;
-                console.log({
-                    task_ids: _this.selectedIds,
-                    nav_id: _this.selectedListNav,
-                    list_id: _this.selectedSubList
-                });
+
                 swal({
                         title: "Are you sure?",
                         text: "You want to past selected task ?!!!",
