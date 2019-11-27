@@ -139,7 +139,7 @@ class MultipleBoardController extends Controller
                     }
 
                     $boards[$key]['task'][$keys]['userName'] = Auth::user()->name;
-                    $boards[$key]['task'][$keys]['comment'] = $values['comment'];
+                    $boards[$key]['task'][$keys]['comment'] = [];
                     $boards[$key]['task'][$keys]['children'] = $values['childTask'];
                     $boards[$key]['task'][$keys]['parents'] = $values['parents'];
                     $boards[$key]['task'][$keys]['id'] = $values['id'];

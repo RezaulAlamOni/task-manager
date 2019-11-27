@@ -1702,7 +1702,7 @@
                     text: "",
                     type: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
+                    confirmButtonColor: 'red',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, unlink it!'
                 },
@@ -1983,7 +1983,7 @@
                     text: "You won't be able to revert this!",
                     type: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
+                    confirmButtonColor: 'Red',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, delete it!'
                 },function(){
@@ -1992,14 +1992,6 @@
                         .then(response => response.data)
                         .then(response => {
                             if (response.success == true) {
-                                // let data = response.data;
-                                // _this.cards[index].task.push({
-                                //     id: data.id,
-                                //     name: data.title,
-                                //     date: data.date,
-                                //     tags: [],
-                                //     clicked: 0
-                                // });
                                 let keys = _this.cards[index].task.length - 1;
                                 _this.getBoardTask();
                                 _this.getData();
@@ -2008,6 +2000,9 @@
                                     $('#id' + index + keys).focus();
                                 }, 100)
                                 swal("Deleted!", "The card has been deleted.", "success");
+                                setTimeout(() => {
+                                    swal.close();
+                                }, 1000);
                             }
                         })
                         .catch(error => {
@@ -2040,7 +2035,7 @@
                     text: "You won't be able to revert this!",
                     type: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
+                    confirmButtonColor: 'Red',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, delete it!'
                 },function(){
@@ -2054,9 +2049,13 @@
                                 // _this.cards[index].task.length = _this.cards[index].task.length-1;
                                 _this.getData();
                                 swal("Deleted!", "The card has been deleted.", "success");
+                                setTimeout(() => {
+                                    swal.close();
+                                }, 1000);
                                 // }
                             })
                             .catch(error => {
+
                             });
                     } else {
                         // alert("couden't delete");
@@ -2380,7 +2379,7 @@
                 this.HideDetails();
                 $('.card-list').css("background-color", "#ffffff");
                 $('#card_'+this.selectedCard).css("background-color","#ddf3fd");
-                // console.log(this.selectedData);
+                console.log(this.selectedData);
             },
             ShowDetails() {
                 var _this = this;
@@ -2528,7 +2527,7 @@
                     text: "You won't be able to revert this!",
                     type: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
+                    confirmButtonColor: 'red',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, delete it!'
                 },

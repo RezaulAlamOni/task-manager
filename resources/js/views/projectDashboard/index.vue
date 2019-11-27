@@ -611,6 +611,8 @@
                         :task_logs="task_logs"
                         @textArea="ShowTextArea">
                     </TaskDetails>
+
+                    
                 </div>
             </div>
             <div class="boardView" v-if="list.type === 'board'">
@@ -981,7 +983,7 @@
     import ClickOutside from 'vue-click-outside';
     import Datepicker from 'vuejs-datepicker';
     import VueTagsInput from '@johmun/vue-tags-input';
-    import TaskDetails from "./TaskDetails";
+    import TaskDetails from "./boardCardDetails";
     import Navbar from "./ProjectNavbar/Navbar";
     import BoardView from "./board";
     import Rules from "../Rules/Rules";
@@ -1003,6 +1005,7 @@
         },
         data() {
             return {
+                authUser : null, 
                 baseUrl: window.location.origin,
                 disabledDates: {
                     id: null,
@@ -2271,7 +2274,8 @@
                         _this.task_logs = response;
                         _this.ShowDetails(_this.selectedData);
                         setTimeout(function () {
-                            $('#_log').click()
+                            $('#_details').click();
+                            // $('#_log').click()
                         }, 300)
                     })
                     .catch(error => {
@@ -2347,6 +2351,7 @@
 
                         this.treeList = response.task_list;
                         this.multiple_list = response.multiple_list;
+                        this.authUser = response.userName
                         $('[data-toggle="tooltip"]').tooltip('dispose');
                         setTimeout(function () {
                             // $('#loder-hide').addClass('loder-hide')
@@ -2961,6 +2966,18 @@
                 var _this = this;
 
                 if (_this.selectedData != null && _this.selectedData.sort_id !== -2) {
+
+                    // console.log(_this.selectedData);
+                    _this.selectedData.childrens = []
+                    _this.selectedData.files = []
+                    _this.selectedData.child = []
+                    _this.selectedData.comment = []
+                    _this.selectedData.files = []
+                    _this.selectedData.parents = []
+                    _this.selectedData.userName = _this.authUser.name,
+                    _this.selectedData.cardId = _this.selectedData.id
+                    _this.selectedData.data = _this.selectedData.text
+                    console.log(_this.selectedData);
                     $('#task_width').removeClass('task_width');
                     $('#task_width').addClass('task_widthNormal');
                     $('#details').removeClass('details');
