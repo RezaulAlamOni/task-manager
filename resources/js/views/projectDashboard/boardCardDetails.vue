@@ -340,7 +340,7 @@
                <span>
                    <h3 class="p-3">Files of this card </h3>
                    <div class=" comment-section-in-task-details" style="max-height: calc(100vh - 315px);">
-                       <div class="row" v-if="selectedData.files !== ''" id='fileSection' style="margin:0px auto; max-height: calc(100vh - 390px); width: 90%; margin-bottom: 20px; overflow: auto;" >
+                       <div class="row" v-if="selectedData.files !== ''" id='fileSection' style=" max-height: calc(100vh - 390px); width: 100%; overflow: auto;" >
                             <div class="col-md-4" v-for="files in selectedData.files" >
                                 <!-- <p :title="comments.user.name" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
                                     data-placement="bottom" data-toggle="tooltip"> {{ comments.user.name.substring(0,2) }}</p> -->
@@ -369,9 +369,9 @@
                                                     :src="'/img/attachment.png'" height="50" width="50">
                                             </div> 
                                         </a>
-                                        <span style="position: relative; float: right;" v-html="dateFormate(files.created_at)+'<br>&emsp;&emsp;'+files.user.name.split(' ')[0].substring(0,9)"></span>
+                                        <span :title="files.user.name" data-toggle="tooltip" style="position: relative; float: right;" v-html="dateFormate(files.created_at)+'<br>&emsp;&emsp;'+files.user.name.split(' ')[0].substring(0,9)"></span>
                                         <span>
-                                            <img @click="deleteFile(files.id)" style="position: absolute; right: 5px; bottom: 5px;" :src="'https://img.icons8.com/color/48/000000/delete-forever.png'" height="20" width="20">
+                                            <img @click="deleteFile(files.id)" style="position: absolute; right: 5px; bottom: 10px;" :src="'https://img.icons8.com/color/48/000000/delete-forever.png'" height="20" width="20">
                                         </span>
                                     </span>
                                 </div>
@@ -662,18 +662,25 @@
             }
         },
         mounted() {
+            let _this = this;
             // CKEDITOR.replace( "description" );
             // console.log(selectedData);
             setTimeout(function () {
                 $('[data-toggle="tooltip"]').tooltip();
                 var hei = $("#cmntSection").height();
                 $("#cmntSection").animate({ scrollTop: hei }, 2000);
+                // $('#comment'+selectedData.cardId);
+                document.getElementById('comment'+_this.selectedData.cardId).
+                addEventListener("paste", _this.handlePaste);
             }, 1000);
         },
         created() {
 
         },
         methods: {
+            handlePaste(){
+                console.log('paste');
+            },
             grow: function (text, options) {
                 var height = options.height || '100px';
                 var maxHeight = options.maxHeight || '500px';
@@ -841,6 +848,9 @@
                     console.log(_this.selectedData.files);
                     setTimeout(() => {
                         $('[data-toggle="tooltip"]').tooltip();
+                        e.target.type = 'text';
+                        e.target.value = '';
+                        e.target.type = 'file';
                     }, 100);
                     // _this.getTaskList()
                 })
@@ -849,26 +859,33 @@
                 });
             },
             deleteFile(id){
-                var data = {
-                    'id' : id
-                };
-                swal('Warning!!','Working on progress','warning');
-                // axios.post('/api/add-comment', commentData)
-                // .then(response => response.data)
-                // .then(response => {
-                //     console.log(_this.selectedData.comment);
-                //     $('#comment'+id).val('');
-                //     setTimeout(() => {
-                //         _this.selectedData.comment.push(response.Data);
-                //         _this.HideTextArea();
-                //         var hei = $("#cmntSection").height();
-                //         $("#cmntSection").animate({ scrollTop: hei }, 1000);
-                //         // console.log(_this.selectedData.comment);
-                //     }, 500);
-                // })
-                // .catch(error =>{
+                let _this = this;
+                
+                swal({
+                    title: 'Are you sure to delete this file?',
+                    text: "",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Delete It!'
+                },
+                function(){
+                    var data = {
+                         'id' : id
+                    };
+                    axios.post('/api/delete-card-file', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getFiles(_this.selectedData.cardId);
+                        swal("Deleted!", "Successfully Deleted", "success");
+                        
+                    })
+                    .catch(error =>{
 
-                // });
+                    });
+                });
+                
             },
             saveComment(id){
                 let _this = this;

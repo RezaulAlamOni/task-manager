@@ -26,6 +26,11 @@
                                         <i class="fa fa-fw ti-settings"></i>
                                     </a>
                                 </li>
+                                <li class="text-center nav-item" onclick="getComment">
+                                    <a href="#r_tab4" role="tab" data-toggle="tab" class="nav-link">
+                                        <i class="fa fa-comments"></i>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         <!-- <div class="btn-group">
@@ -92,7 +97,7 @@
 
                                     <div class="notification-container" v-if=" ! loadingNotifications && activeNotifications.length == 0"  style="width:100%;float: left;">
                                         <div class="alert alert-warning m-b-none">
-                                            {{__('We don\'t have anything to show you right now! But when we do, we\'ll be sure to let you know. Talk to you soon!')}}
+                                            {{__('We don\'t have anything to show you right now! But when we do, we\'ll be sure to let you know. Talk to you soon!')}} 
                                         </div>
                                     </div>
 
@@ -176,6 +181,69 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="tab-pane fade" id="r_tab4">
+                                <div id="slim_t2">
+                                    <!-- Informational Messages -->
+                                    <h5 class="rightsidebar-right-heading text-uppercase text-xs" style="width: 100%;float: left;margin-top: 70px;clear: both;">
+                                        <i class="menu-icon fa fa-comments"></i>
+                                        Comments
+                                    </h5>
+                                    <div class="notification-container" v-if="loadingNotifications"  style="width:100%;float: left;">
+                                        <i class="fa fa-btn fa-spinner fa-spin"></i> {{__('Loading Notifications')}}
+                                    </div>
+
+                                    <div class="notification-container" v-if=" ! loadingNotifications && activeNotifications.length == 0"  style="width:100%;float: left;">
+                                        <div class="alert alert-warning m-b-none" v-for="cn in 10" >
+                                            {{__('We don\'t have anything to show you right now! But when we do, we\'ll be sure to let you know. Talk to you soon!')}}
+                                            {{-- @{{ comments }} --}}
+                                        </div>
+                                    </div>
+
+                                    <!-- List Of Notifications -->
+                                    <div class="notification-container" v-if="showingNotifications && hasNotifications">
+                                        <div class="notification" v-for="notification in notifications.notifications">  style="width:100%;float: left;"
+
+                                            <!-- Notification Icon -->
+                                            <figure>
+                                                <img v-if="notification.creator" :src="notification.creator.photo_url" class="spark-profile-photo">
+
+                                                <span v-else class="fa-stack fa-2x">
+                                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                                    <i :class="['fa', 'fa-stack-1x', 'fa-inverse', notification.icon]"></i>
+                                                </span>
+                                            </figure>
+
+                                            <!-- Notification -->
+                                            <div class="notification-content">
+                                                <div class="meta">
+                                                    <p class="title">
+                                                        <span v-if="notification.creator">
+                                                            @{{ notification.creator.name }}
+                                                        </span>
+
+                                                        <span v-else>
+                                                            {{ Spark::product() }}
+                                                        </span>
+                                                    </p>
+
+                                                    <div class="date">
+                                                        @{{ notification.created_at | relative }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="notification-body" v-html="notification.parsed_body"></div>
+
+                                                <!-- Notification Action -->
+                                                <a :href="notification.action_url" class="btn btn-primary" v-if="notification.action_text">
+                                                    @{{ notification.action_text }}
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
 
 
@@ -190,3 +258,8 @@
         </div>
     </div>
 </spark-notifications>
+<script>
+
+
+
+</script>
