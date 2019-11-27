@@ -11,13 +11,18 @@
             </div>
             <ul class="nav nav-pills" id="myTab" role="tablist" style="background: #e4e4e4;padding: 4px 0px 0 0px">
                 <li class="nav-item">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">All List</a>
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                       aria-controls="home" aria-selected="true">All List</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Files</a>
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                       aria-controls="profile"
+                       @click="GetAllFiles" aria-selected="false">Files</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Comments</a>
+                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                       aria-controls="contact"
+                       @click="GetAllComments" aria-selected="false">Comments</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -130,58 +135,139 @@
                         </template>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                    <h1>All Files Here</h1>
+                <div class="tab-pane fade row" id="profile" role="tabpanel" aria-labelledby="profile-tab"
+                     style="margin: 0px 15px;">
+                    <div class="row">
+                        <template v-for="file in All_files" v-if="All_files.length > 0">
+                            <div class="">
+                                <div class="card" style="width: 13rem;margin: 10px 15px 0 0;">
+                                    <a :href="baseUrl+'/storage/'+file.tasks_id+'/'+file.file_name" target="_blank">
+                                        <img :src="baseUrl+'/storage/'+file.tasks_id+'/'+file.file_name"
+                                             v-if="file.file_name.endsWith('.png') || file.file_name.endsWith('.jpg') || file.file_name.endsWith('.jpeg')  "
+                                             class="card-img-top" alt="..." height="120">
+                                        <img :src="baseUrl+'/img/text.png'"
+                                             v-else-if="file.file_name.endsWith('.txt')"
+                                             class="card-img-top" alt="..." height="120">
+                                        <img :src="baseUrl+'/img/pdf.png'"
+                                             v-else-if="file.file_name.endsWith('.pdf')"
+                                             class="card-img-top" alt="..." height="120">
+                                        <img :src="baseUrl+'/img/file.png'"
+                                             v-else-if="file.file_name.endsWith('.docx')"
+                                             class="card-img-top" alt="..." height="120">
+                                        <img :src="baseUrl+'/img/txt.png'"
+                                             v-else class="card-img-top" alt="..." height="120">
+                                    </a>
+                                    <div class="card-body" style="padding: 5px 0px 6px 10px;">
+                                        <h3 data-toggle="tooltip" :title="file.title" style="cursor: pointer"
+                                            @click="ShowList(file.list_id)">
+                                            #TID{{file.tasks_id}}
+                                        </h3>
+                                        <div class="comment_details">
+                                            <ul style="margin: 0px !important;">
+                                                <li data-toggle="tooltip" :title="file.user.name">
+                                                    <i class="fa fa-pencil"></i>
+                                                    <span class="user">{{file.user.name}}</span>
+                                                </li>
+                                                <li><i class="fa fa-calendar"></i> {{file.created_at.substring(0,10)}}</li>
+                                                <li><i class="fa fa-clock-o"></i> {{file.created_at.substring(11,16)}}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                    </div>
+
 
                 </div>
                 <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                    <h1>All Comments Here !!</h1>
+
+                    <!-- comments container -->
+                    <div class="comment_block">
+                        <h2>All Comments Here</h2>
+<!--                        <div class="new_comment">-->
+<!--                            <template v-for="comment in All_comments">-->
+<!--                                <ul class="user_comment" >-->
+<!--                                    <div class="user_avatar">-->
+<!--                                        <img :src="comment.user.photo_url"-->
+<!--                                        v-if="comment.user.photo_url !== null">-->
+<!--                                        <p class="comment-avature user_avatar" v-else>{{comment.user.name.substring(0,2)}}</p>-->
+<!--                                    </div>-->
+<!--                                    <div class="comment_body">-->
+<!--                                        <p>-->
+<!--                                            <span class="user">{{comment.user.name}} :</span>-->
+<!--                                            {{comment.comment}}-->
+<!--                                        </p>-->
+<!--                                    </div>-->
+
+<!--                                    <div class="comment_toolbar">-->
+<!--                                        <div class="comment_details">-->
+<!--                                            <ul>-->
+<!--                                                <li><i class="fa fa-clock-o"></i> {{comment.created_at.substring(11,16)}}</li>-->
+<!--                                                <li><i class="fa fa-calendar"></i>{{comment.created_at.substring(0,10)}}</li>-->
+<!--                                                <li><i class="fa fa-pencil"></i> <span class="user">{{comment.user.name}}</span></li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                        &lt;!&ndash;                                    <div class="comment_tools">&ndash;&gt;-->
+<!--                                        &lt;!&ndash;                                        <ul>&ndash;&gt;-->
+<!--                                        &lt;!&ndash;                                            <li><i class="fa fa-share-alt"></i></li>&ndash;&gt;-->
+<!--                                        &lt;!&ndash;                                            <li><i class="fa fa-reply"></i></li>&ndash;&gt;-->
+<!--                                        &lt;!&ndash;                                            <li><i class="fa fa-heart love"></i></li>&ndash;&gt;-->
+<!--                                        &lt;!&ndash;                                        </ul>&ndash;&gt;-->
+<!--                                        &lt;!&ndash;                                    </div>&ndash;&gt;-->
+
+<!--                                    </div>-->
+<!--                                </ul>-->
+<!--                            </template>-->
+
+<!--                        </div>-->
+                    </div>
                 </div>
-            </div>
+        </div>
 
-
-            <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="updateListBoardModelO"
-                 role="dialog"
-                 tabindex="-1">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title pl-3"> Update {{list.name}} <span
-                                class="text-uppercase">[{{list.type}}]</span></h5>
-                            <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Add your new list here !</p>
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Title</label>
-                                <div class="col-sm-8">
-                                    <input class="form-control" type="text" v-model="list.name">
-                                </div>
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="updateListBoardModelO"
+             role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title pl-3"> Update {{list.name}} <span
+                            class="text-uppercase">[{{list.type}}]</span></h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add your new list here !</p>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Title</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" v-model="list.name">
                             </div>
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Description</label>
-                                <div class="col-sm-8">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Description</label>
+                            <div class="col-sm-8">
                                 <textarea class="form-control" cols="40" id="" name="" rows="3"
                                           v-model="list.description"></textarea>
-                                </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <!--                        <button @click="UpdateListOrBoard" class="btn btn-primary" type="button">Update</button>-->
-                            <button @click="UpdateListOrBoard"
-                                    class="btn btn-primary ladda-button ladda_update_list_board"
-                                    data-style="expand-right">
-                                Update
-                            </button>
-                            <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">
-                                Cancel
-                            </button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!--                        <button @click="UpdateListOrBoard" class="btn btn-primary" type="button">Update</button>-->
+                        <button @click="UpdateListOrBoard"
+                                class="btn btn-primary ladda-button ladda_update_list_board"
+                                data-style="expand-right">
+                            Update
+                        </button>
+                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </main>
 </template>
@@ -193,7 +279,7 @@
     import * as Ladda from 'ladda';
 
     export default {
-        props: ['projectID','update_overview'],
+        props: ['projectID', 'update_overview'],
         components: {
             Tree: DraggableTree,
             thy: draggableHelper,
@@ -205,6 +291,8 @@
                 baseUrl: window.location.origin,
                 project_id: this.projectID,
                 All_list: null,
+                All_files: null,
+                All_comments: null,
                 list: {
                     id: null,
                     name: null,
@@ -232,6 +320,7 @@
                 $('[data-toggle="tooltip"]').tooltip();
             }, 500)
 
+
         },
         created() {
             // var data = [];
@@ -255,8 +344,8 @@
                         _this.All_list.sort((a, b) => (a.sort_id > b.sort_id) ? 1 : -1)
                         // setTimeout(function () {
                         $('#loder-hide').fadeOut();
-                            // $('#loder-hide').addClass('loder-hide')
-                            // console.log(_this.All_list)
+                        // $('#loder-hide').addClass('loder-hide')
+                        // console.log(_this.All_list)
                         // }, 10)
 
                     })
@@ -367,6 +456,38 @@
                             });
                     });
             },
+            GetAllFiles() {
+                var _this = this;
+                axios.get('/api/overview-all-files/' + _this.project_id)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.All_files = response.files;
+                        setTimeout(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Add files api not working!!')
+                    });
+            },
+            ShowList(id) {
+                alert('#list' + id)
+                $('#list' + id).click();
+            },
+            GetAllComments() {
+                var _this = this;
+                axios.get('/api/overview-all-comments/' + _this.project_id)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.All_comments = response.comments;
+                        setTimeout(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Add files api not working!!')
+                    });
+            }
         },
         watch: {
             update_overview: function (val) {

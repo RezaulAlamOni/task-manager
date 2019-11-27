@@ -104,5 +104,7 @@ Route::post('/rules-delete', 'RulesController@delete');
 
 //overview
 Route::get('/project-overview/{project_id}', 'OverviewController@index');
+Route::get('/overview-all-files/{project_id}', 'OverviewController@All_files');
+Route::get('/overview-all-comments/{project_id}', 'OverviewController@AllComments');
 Route::post('/project-overview/list-sort', 'OverviewController@ListSort');
 Route::post('/project-overview/list-open-close', 'OverviewController@ListToggle');

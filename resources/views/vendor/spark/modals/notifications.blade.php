@@ -97,7 +97,7 @@
 
                                     <div class="notification-container" v-if=" ! loadingNotifications && activeNotifications.length == 0"  style="width:100%;float: left;">
                                         <div class="alert alert-warning m-b-none">
-                                            {{__('We don\'t have anything to show you right now! But when we do, we\'ll be sure to let you know. Talk to you soon!')}} 
+                                            {{__('We don\'t have anything to show you right now! But when we do, we\'ll be sure to let you know. Talk to you soon!')}}
                                         </div>
                                     </div>
 
@@ -258,8 +258,3 @@
         </div>
     </div>
 </spark-notifications>
-<script>
-
-
-
-</script>
