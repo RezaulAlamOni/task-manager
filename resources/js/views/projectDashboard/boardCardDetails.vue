@@ -25,8 +25,8 @@
             <!-- <div class="col-1">
                 <img class="img-responsive" src="/img/12.jpg" style="height:30px;width:30px;">
             </div> -->
-            <div class="col-md-1" style="padding: 0px;">
-                <img :src="baseUrl+'/img/'+selectedData.progress+'.png'" height="40" width="40" style="clear: right;">
+            <div class="col-md-1" style="padding: 0px;" v-if="selectedData.progress != null && selectedData.progress != ''">
+                <img :title="''" :src="baseUrl+'/img/'+selectedData.progress+'.png'" height="40" width="40" style="clear: right;">
             </div>
             <div class="col-md-3" style="padding: 0px;">
 
@@ -256,7 +256,7 @@
                            id="_details" role="tab">Details</a>
                     </li>
                     <li class="nav-item" @click="getFiles(selectedData.cardId)">
-                       <a aria-controls="file" aria-selected="true" class="nav-link" data-toggle="tab"
+                       <a aria-controls="file" aria-selected="false" class="nav-link" data-toggle="tab"
                           href="#file"
                           id="_file" role="tab">Files</a>
                    </li>
@@ -275,10 +275,10 @@
                         <a aria-controls="log" aria-selected="false" class="nav-link" data-toggle="tab" href="#log"
                            id="_log" role="tab">Logs</a>
                     </li>
-                    <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.childrens.length  > 0 || selectedData.parents.length  > 0">
+                    <!-- <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.childrens.length  > 0 || selectedData.parents.length  > 0">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_child" role="tab">Parents & Childs</a>
-                    </li>
+                    </li> -->
                     <!-- <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.parents.length  > 0">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_child" role="tab">Childs</a>
@@ -336,6 +336,7 @@
                 </div>
                 <!-- Comments -->
             </div>
+
             <div aria-labelledby="log-tab" class="tab-pane" id="file" role="tabpanel">
                <span>
                    <h3 class="p-3">Files of this card </h3>
@@ -369,7 +370,8 @@
                                                     :src="'/img/attachment.png'" height="50" width="50">
                                             </div> 
                                         </a>
-                                        <span :title="files.user.name" data-toggle="tooltip" style="position: relative; float: right;" v-html="dateFormate(files.created_at)+'<br>&emsp;&emsp;'+files.user.name.split(' ')[0].substring(0,9)"></span>
+                                        <span :title="(files != undefined ) ? files.user.name : ''" data-toggle="tooltip" style="position: relative; float: right;" v-html="dateFormate(files.created_at)+'<br>&emsp;&emsp;'+files.user.name.split(' ')[0].substring(0,9)"></span> 
+                                        
                                         <span>
                                             <img @click="deleteFile(files.id)" style="position: absolute; right: 5px; bottom: 10px;" :src="'https://img.icons8.com/color/48/000000/delete-forever.png'" height="20" width="20">
                                         </span>
@@ -381,7 +383,7 @@
                            <div class="">
                                <input :id="'files'+selectedData.cardId" :ref="selectedData.cardId" style="display: none;" @change="updateCardPicture($event,selectedData)"
                                         type="file">
-                               <span>Upload File : </span><a @click="addCardAttachment(selectedData)" class="btn btn-default btn-sm"
+                               <span> Upload File : </span><a @click="addCardAttachment(selectedData)" class="btn btn-default btn-sm"
                                    style="border: 1px solid #f1efe6">
                                        <i class="fa fa-paperclip"></i>
                                </a>
@@ -390,11 +392,12 @@
                    </div>
                </span>	
            </div>
+           
             <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel" style="overflow: hidden;">
                 <span>
                     <div class="row comment-section-in-task-details" style="max-height: calc(100vh - 285px);">
                         <div id='cmntSection' style="margin:0px auto; max-height: calc(100vh - 350px); width: 90%; margin-bottom: 20px; overflow: auto;" >
-                            <div class="col-md-12" v-for="comments in selectedData.comment" style="margin-top: 15px;">
+                            <div class="col-md-12" v-for="comments in comment" style="margin-top: 15px;">
                                 <p :title="comments.user.name" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
                                     data-placement="bottom" data-toggle="tooltip"> {{ comments.user.name.substring(0,2) }}</p>
                                 <div class="card-list card" style="width: 80%; margin:0px 60px;" >
@@ -434,7 +437,7 @@
                             <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater"> -->
                             <div class="" v-click-outside="HideTextArea">
                                 <p :title="selectedData.userName" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
-                                data-placement="bottom" data-toggle="tooltip"> {{ selectedData.userName.substring(0,2) }}</p>
+                                data-placement="bottom" data-toggle="tooltip" style="overflow:hidden;"> {{ selectedData.userName.substring(0,2) }}</p>
                                 <textarea @focus="ShowTextArea(selectedData)"
                                         :id="'comment'+selectedData.cardId"
                                         class="form-control commentInput"
@@ -573,7 +576,7 @@
         props: ['selectedData', 'task_logs'],
         data() {
             return {
-
+                comment: null,
                 editor: ClassicEditor,
                 editorData: '<p>Content of the editor.</p>',
                 editorConfig: {
@@ -662,6 +665,7 @@
             }
         },
         mounted() {
+            console.log(_this.selectedData);
             let _this = this;
             // CKEDITOR.replace( "description" );
             // console.log(selectedData);
@@ -670,8 +674,7 @@
                 var hei = $("#cmntSection").height();
                 $("#cmntSection").animate({ scrollTop: hei }, 2000);
                 // $('#comment'+selectedData.cardId);
-                document.getElementById('comment'+_this.selectedData.cardId).
-                addEventListener("paste", _this.handlePaste);
+                //  .getElementById('comment'+_this.selectedData.cardId).addEventListener("paste", _this.handlePaste);
             }, 1000);
         },
         created() {
@@ -756,19 +759,18 @@
                     description: _this.selectedData.description
                 };
                 axios.post('/api/card-update/' + _this.selectedData.cardId, postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        console.log(response)
-                        _this.HideDetails();
-                        // $('.submitdetails').hide();
-                        // _this.getTaskList()
-                        // $('#dropdown' + data._id).toggle();
-                        // _this.selectedData.tags = tag
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
-
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response)
+                    _this.HideDetails();
+                    // $('.submitdetails').hide();
+                    // _this.getTaskList()
+                    // $('#dropdown' + data._id).toggle();
+                    // _this.selectedData.tags = tag
+                })
+                .catch(error => {
+                    console.log('Api for move down task not Working !!!');
+                });
             },
             HideTextArea() {
                 var _this = this;
@@ -821,7 +823,7 @@
                 axios.post('/api/comment-file-upload', formData, {headers: {'Content-Type': 'multipart/form-data'}})
                 .then(response => response.data)
                 .then(response => {
-                    _this.selectedData.comment.push(response.Data);
+                    _this.comment.push(response.Data);
                     setTimeout(() => {
                         $('[data-toggle="tooltip"]').tooltip();
                     }, 100);
@@ -897,10 +899,10 @@
                 axios.post('/api/add-comment', commentData)
                 .then(response => response.data)
                 .then(response => {
-                    console.log(_this.selectedData.comment);
+                    console.log(_this.comment);
                     $('#comment'+id).val('');
                     setTimeout(() => {
-                        _this.selectedData.comment.push(response.Data);
+                        _this.comment.push(response.Data);
                         _this.HideTextArea();
                         var hei = $("#cmntSection").height();
                         $("#cmntSection").animate({ scrollTop: hei }, 1000);
@@ -930,7 +932,7 @@
             commentPress(data){
                 let cmHe = $('#comment'+data.cardId).height();
                 $('#cmntSection').css({maxHeight: ' calc(100vh - 400px - '+cmHe+'px + 30px)'});
-                console.log(cmHe);
+                console.log(this.selectedData.comment);
             },
             // removeAssignedUser(user, index, key) {
 
@@ -1192,8 +1194,8 @@
                 axios.post('/api/get-card-file',data)
                 .then(response => response.data)
                 .then(response => {
-                    console.log(response.files);
                     _this.selectedData.files = response.files ;
+                    console.log(_this.selectedData);
                 })
                 .catch(error => {
 
@@ -1207,8 +1209,9 @@
                 axios.post('/api/get-card-comment',data)
                 .then(response => response.data)
                 .then(response => {
-                    console.log(response.comment.comment);
-                    _this.selectedData.comment = response.comment.comment;
+                    _this.comment = response.comment.comment;
+                    _this.selectedData.comment = _this.comment;
+                    console.log(_this.selectedData);
                 })
                 .catch(error => {
 

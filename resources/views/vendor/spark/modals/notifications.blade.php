@@ -258,8 +258,4 @@
         </div>
     </div>
 </spark-notifications>
-<script>
 
-
-
-</script>

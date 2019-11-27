@@ -145,10 +145,10 @@ class TaskController extends Controller
 
         }
         $data = $this->decorateData($tasks,null);
-
+        $userName = Auth::user();
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
-        return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list, 'empty_task' => $task]);
+        return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list, 'empty_task' => $task, 'userName' => $userName]);
     }
 
     protected function createLog($task_id, $type, $message, $title)

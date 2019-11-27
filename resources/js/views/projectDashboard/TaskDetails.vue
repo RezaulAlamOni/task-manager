@@ -155,22 +155,75 @@
                     </div>
                 </div>
                 <!-- Comments -->
-
+                <!-- @focus="ShowTextArea(selectedData)" -->
             </div>
+
             <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel">
                 <span>
-                    <div class="row comment-section-in-task-details">
+                    <div class="row comment-section-in-task-details" style="max-height: calc(100vh - 225px);">
+                        <div id='cmntSection' style="margin:0px auto; max-height: calc(100vh - 350px); width: 90%; margin-bottom: 20px; overflow: auto;" >
+                            <div class="col-md-12" v-for="comments in 10" style="margin-top: 15px;">
+                                <p :title="comments" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                                    data-placement="bottom" data-toggle="tooltip"> {{ comments }}</p>
+                                <div class="card-list card" style="width: 80%; margin:0px 60px;" >
+                                    <span style="padding: 10px;" v-if="comments != '' && comments != null">
+                                        {{ comments  }}
+                                        <span style="position: relative; float: right;" v-html="/*dateFormate(comments.created_at)*/"></span>
+                                    </span>
+                                    <span style="padding: 10px;" v-if="comments != '' && comments != null">
+                                        
+                                        <a target="_blank" :href="'#'" 
+                                            style="cursor: pointer;">
+                                            <div v-if="comments.attatchment.endsWith('.png') || comments.attatchment.endsWith('.jpg') || comments.attatchment.endsWith('.gif')">
+                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                        :src="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" height="80" width="80">
+                                            </div>
+                                            <div v-if="comments.attatchment.endsWith('.txt') ">
+                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                    :src="'/img/txt.png'" height="50" width="50">
+                                            </div>
+                                            <div v-if="comments.attatchment.endsWith('.pdf') ">
+                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                    :src="'/img/pdf.png'" height="50" width="50">
+                                            </div>
+                                            <div v-if="comments.attatchment.endsWith('.doc') || comments.attatchment.endsWith('.docx') || comments.attatchment.endsWith('.xls') || comments.attatchment.endsWith('.xlsx')">
+                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                    :src="'/img/file.png'" height="50" width="50">
+                                            </div>
+                                        </a>
+                                        
+                                            <span style="position: relative; float: right;" v-html="/*dateFormate(comments.created_at)*/"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-12" >
+
                             <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater"> -->
                             <div class="" v-click-outside="HideTextArea">
-                                <p class="assignUser-photo-for-selected text-uppercase details-comments-pic"
-                                   data-placement="bottom" data-toggle="tooltip"> PI</p>
+                                <p :title="'selectedData.userName'" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                                data-placement="bottom" data-toggle="tooltip" style="overflow: hidden;"> {{ 'selectedData.userName.substring(0,2)' }}</p>
                                 <textarea @focus="ShowTextArea(selectedData)"
-                                          class="form-control commentInput"
-                                          data-grow="auto"
-                                          placeholder="Add comment">
+                                        :id="'comment'"
+                                        class="form-control commentInput"
+                                        data-grow="auto"
+                                        @keyup="''"
+                                        placeholder="Add comment">
                                 </textarea>
+                                <!--  -->
 
+                                <!-- <div class="SubmitButton" id="SubmitButton" style="margin-bottom: 10px; margin-top: 10px;">
+                                    <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="'saveComment(selectedData.cardId)'">Post</a>
+                                    <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6"
+                                    @click="'HideTextArea'">Cancel</a>
+                                    <input :id="'file'+'selectedData.cardId'" :ref="'selectedData.cardId'" style="display: none;" 
+                                            @change="'updatePicture($event,selectedData)'"
+                                            type="file">
+                                    <a @click="'addAttachment(selectedData)'" class="btn btn-default btn-sm"
+                                        style="border: 1px solid #f1efe6">
+                                        <i class="fa fa-paperclip"></i>
+                                    </a>
+                                </div> -->
                                 <div class="SubmitButton" id="SubmitButton" style="margin-bottom: 10px; margin-top: 10px;">
                                     <a class="btn btn-default btn-sm" style="background: #7BB348;">Post</a>
                                     <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6"
@@ -185,6 +238,7 @@
                     </div>
                 </span>
             </div>
+
             <div aria-labelledby="log-tab" class="tab-pane" id="log" role="tabpanel">
                 <span>
                     <div class="log-data">
