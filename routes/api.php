@@ -44,6 +44,7 @@ Route::post('/task-list/move-task', 'TaskController@moveTask');//move-task
 Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog'); //lod
 
 //search task
+Route::get('/task-list/all-suggest-user','SearchController@getAllUser'); //user for search
 Route::post('/task-list/suggest-user','SearchController@suggestUser'); //user suggest for search
 
 //navigation management

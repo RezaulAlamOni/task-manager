@@ -13,7 +13,7 @@
                     @DownloadTaskPDF="DownloadTaskPDF"
                     @getNavBars="getNavbar">
             </Navbar>
-<!--            @update_overview="update_overview"-->
+            <!--            @update_overview="update_overview"-->
             <div class="input-group col-sm-4 searchList"
                  :class="((list.type === 'board') ? 'searchList-board' : 'searchList')">
 
@@ -75,7 +75,7 @@
         <!--        <div class="col-md-8 text-center pt-5" v-else-if="AllNavItems !== null && list.type === null">-->
         <!--            <h2 style="color: #d1a894">Select Task View.</h2>-->
         <!--        </div>-->
-        <div :class="(list.type === 'list') ? 'list-task-details' : 'board-card-details'"
+        <div :class="(list.type === 'list') ? 'list-task-details' : 'board-card-details'" id="TaskListAndDetail"
              v-if="list.type === 'list' || list.type === 'board'">
             <div class="loder" id="loder-hide">
                 <div class="foo foo1">
@@ -833,6 +833,7 @@
                                         Board or List
                                     </option>
                                     <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T"
+                                            v-if="navList.is_delete !== 1"
                                             :disabled="((navList.id !== list_id) ? false : true)">
                                         <span v-if="type_T === 'board'">{{navList.board_title}}</span> <span v-else>{{navList.list_title}}</span>
                                     </option>
@@ -898,6 +899,7 @@
                                         Board or List
                                     </option>
                                     <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T"
+                                            v-if="navList.is_delete !== 1"
                                             :disabled="((navList.id !== list_id) ? false : true)">
                                         <span>{{navList.list_title}}</span>
                                     </option>
@@ -1218,7 +1220,7 @@
                 this.dNode = node;
                 this.dNodeHeght = $('#' + node._id)[0].getBoundingClientRect().top + window.scrollY;
                 this.dNodeInterval = setInterval(function () {
-                    var target = document.getElementById('TaskListAndDetails');
+                    var target = document.getElementById('TaskListAndDetail');
                     var top = $('#' + node._id)[0].getBoundingClientRect().top + target.scrollTop - 241;
                     // var cssTop = top+241+THIS.dNodeHeght;
                     // $('#' + node._id).css({top: cssTop+'px'});
@@ -1269,11 +1271,17 @@
             SearchTaskByAssignedUser(id, name) {
                 $('.searchTaskList').val('@' + name);
                 var _this = this;
-                axios.post('/api/task-list/suggest-user', {'user_id': id, p_id: _this.projectId})
+                var nav_type = JSON.parse(localStorage.selected_nav);
+                axios.post('/api/task-list/suggest-user', {
+                    'user_id': id,
+                    p_id: _this.projectId,
+                    list_id: nav_type.list_id,
+                    type: nav_type.type
+                })
                     .then(response => response.data)
                     .then(response => {
                         _this.searchData.tasks = response.search_tasks;
-                        console.log(_this.searchData.tasks)
+                        // console.log(_this.searchData.tasks)
                         $('#myUL-user').removeClass('myUL-user');
                         $('#myUL').removeClass('myUL');
                         $('#myUL').addClass('myUL-show');
@@ -1288,7 +1296,16 @@
                 var _this = this;
                 if (value.charAt(0) === '@') {
                     value = value.substr(1)
-                    _this.searchData.users = (_this.treeList[0].users.length > 0) ? _this.treeList[0].users : [];
+
+                    axios.get('/api/task-list/all-suggest-user')
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.searchData.users = response.search_user;
+                        })
+                        .catch(error => {
+                            console.log('All suggest user api not working')
+                        })
+
                     if (value.length > 0) {
                         axios.post('/api/task-list/suggest-user', {'user_name': value})
                             .then(response => response.data)
@@ -1308,36 +1325,66 @@
                     $('#myUL').removeClass('myUL-show');
                     $('#myUL').addClass('myUL');
                 } else {
-                    if (value.length >= 2) {
-                        axios.post('/api/task-list/suggest-user', {'text': value, 'project_id': _this.projectId})
-                            .then(response => response.data)
-                            .then(response => {
-                                _this.searchData.tasks = response.search_tasks;
-                                // console.log(response.search_tasks);
-                            })
-                            .catch(error => {
-                                console.log('Api is drag and drop not Working !!!')
-                            });
+                    // if (value.length >= 2) {
+                    var nav_type = JSON.parse(localStorage.selected_nav);
+                    axios.post('/api/task-list/suggest-user', {
+                        'text': value,
+                        'project_id': _this.projectId,
+                        list_id: nav_type.list_id,
+                        type: nav_type.type
+                    })
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.searchData.tasks = response.search_tasks;
+                            // console.log(response.search_tasks);
+                        })
+                        .catch(error => {
+                            console.log('Api is drag and drop not Working !!!')
+                        });
 
-                        $('#myUL').removeClass('myUL');
-                        $('#myUL').addClass('myUL-show');
-                    }
+                    $('#myUL').removeClass('myUL');
+                    $('#myUL').addClass('myUL-show');
+                    // }
                 }
             },
             selectTaskFromTaskTreeList(task) {
-                $('.eachItemRow').removeClass('clicked');
-                $('#click' + task.id).addClass('clicked');
-                var target = document.getElementById('TaskListAndDetails');
-                if ($('#click' + task.id).length > 0) {
-                    var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
-                    target.scrollTo(0, top);
+                var nav = JSON.parse(localStorage.selected_nav)
+                if (nav.type === 'list') {
+                    $('.eachItemRow').removeClass('clicked');
+                    $('#click' + task.id).addClass('clicked');
+                    var target = document.getElementById('TaskListAndDetail');
+                    if ($('#click' + task.id).length > 0) {
+                        var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                        target.scrollTo(0, top);
+                    }
+                } else if (nav.type === 'board') {
+                    $('#card_' + task.id).click();
+                    var target = document.getElementById('coll'+task.board_parent_id);
+                    if ($('#card_' + task.id).length > 0) {
+                        var top = $('#card_' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                        target.scrollTo(0, top);
+                    }
+                } else {
+
                 }
             },
             SearchResultClick(task) {
-                if ($('#click' + task.id).length > 0) {
-                    var target = document.getElementById('TaskListAndDetails');
-                    var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
-                    target.scrollTo(0, top);
+                var nav = JSON.parse(localStorage.selected_nav)
+                if (nav.type === 'list') {
+                    if ($('#click' + task.id).length > 0) {
+                        var target = document.getElementById('TaskListAndDetail');
+                        var top = $('#click' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
+                        target.scrollTo(0, top);
+                    }
+                } else if (nav.type === 'board') {
+                    $('#card_' + task.id).click();
+
+                } else {
+                    if (task.list_id !== null){
+                        $('#list'+task.list_id).click();
+                    } else {
+                        $('.board'+task.multiple_board_id).click();
+                    }
                 }
                 $('#myUL').addClass('myUL');
                 $('#myUL').removeClass('myUL-show');
@@ -2148,7 +2195,6 @@
                         // console.log(response)
                         setTimeout(() => {
                             $('#MoveTAsk').modal('show');
-                            _this.selectedIds = [];
                         }, 200);
                     })
                     .catch(error => {
@@ -2359,7 +2405,7 @@
             UpdateListModel() {
                 $("#updateListBoardModel").modal('show');
             },
-            update_overview(){
+            update_overview() {
                 this.AllNavItems = null;
             },
             UpdateListOrBoard() {
@@ -2580,6 +2626,7 @@
             },
             MoveTaskToListOrBoard() {
                 var _this = this;
+                console.log(_this.selectedIds)
                 swal({
                         title: "Are you sure?",
                         text: "You want to move selected task ?!!!",
@@ -2610,11 +2657,7 @@
             },
             PastTaskToList() {
                 var _this = this;
-                console.log({
-                    task_ids: _this.selectedIds,
-                    nav_id: _this.selectedListNav,
-                    list_id: _this.selectedSubList
-                });
+
                 swal({
                         title: "Are you sure?",
                         text: "You want to past selected task ?!!!",
