@@ -471,7 +471,6 @@
                     });
             },
             ShowList(id) {
-                alert('#list' + id)
                 $('#list' + id).click();
             },
             GetAllComments() {
