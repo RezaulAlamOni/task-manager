@@ -11,6 +11,7 @@
     width: 200px;
     height: 200px;
     box-sizing: border-box;
+    z-index: 9999;
     /*background: #fff;*/
 }
 
