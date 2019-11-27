@@ -3,7 +3,7 @@
     border-top: none !important;
     border-right: none !important;
     box-shadow: 0 0 0.6px !important;
-    margin: 5px 0px ;
+    margin: 5px 0px;
     overflow: initial !important;
 }
 
@@ -11,7 +11,7 @@
     position: absolute;
     will-change: transform;
     top: 0px;
-    left: 5px  !important;
+    left: 5px !important;
     transform: translate3d(1038px, 67px, 0px);
 }
 
@@ -25,6 +25,7 @@
     right: 10px;
     z-index: 10;
 }
+
 .overview-dropdown:after {
     content: "";
     border-bottom: 12px solid #ccc;
@@ -39,6 +40,7 @@
 .overview-list-header {
     padding: 2px 10px !important;
 }
+
 .option-btn {
     position: absolute;
     right: -5px;
@@ -46,6 +48,7 @@
     cursor: pointer;
     top: -8px;
 }
+
 .sort-trigger {
     position: absolute;
     left: 0px;
@@ -181,9 +184,11 @@ body {
                 background-color: lighten($GREY, 18%);
                 border-bottom: 2px solid lighten($GREY, 15%);
                 border-radius: 5px;
+
                 p {
                     padding: 5px;
                 }
+
                 span {
                     color: $BLUE;
                     margin-right: 2px;
@@ -204,6 +209,7 @@ body {
                     padding: 5px;
                     font-size: .7rem;
                     color: lighten(#5e9f64, 0%);
+
                     &:hover {
                         cursor: pointer;
                     }
@@ -222,6 +228,7 @@ body {
                 vertical-align: middle;
                 width: 29%;
                 text-align: right;
+
                 li {
                     &:hover {
                         color: $GREY;
@@ -246,8 +253,10 @@ body {
             }
         }
     }
+
     .user {
         color: $BLUE;
+
         &:hover {
             color: $BLUE;
             text-decoration: underline;

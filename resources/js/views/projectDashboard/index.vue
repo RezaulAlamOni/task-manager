@@ -16,7 +16,6 @@
             <!--            @update_overview="update_overview"-->
             <div class="input-group col-sm-4 searchList"
                  :class="((list.type === 'board') ? 'searchList-board' : 'searchList')">
-
                 <input class="form-control searchTaskList"
                        type="text" id="myInput"
                        placeholder="Search for names.."
@@ -24,6 +23,15 @@
                        autocomplete="off"
                        @keyup="searchDataFormTask($event)"
                 >
+
+                <select class="form-control " v-model="search_type"
+                        style="display: inline;position: absolute; right: 0; top: 0; height: 38px !important;width: 78px;z-index : 9999;border-radius: 0 5px 5px 0;">
+                    <option disabled value="0">
+                        Select Search Area
+                    </option>
+                    <option value="all"> All</option>
+                    <option value="this"> This</option>
+                </select>
 
                 <ul class="myUL" id="myUL">
                     <template v-for="task in searchData.tasks" v-if="searchData.tasks.length > 0">
@@ -1060,8 +1068,8 @@
                     action_type: null,
                     update: null
                 },
-                overview: ''
-
+                overview: '',
+                search_type : 0
             }
         },
         mounted() {
@@ -1359,7 +1367,7 @@
                     }
                 } else if (nav.type === 'board') {
                     $('#card_' + task.id).click();
-                    var target = document.getElementById('coll'+task.board_parent_id);
+                    var target = document.getElementById('coll' + task.board_parent_id);
                     if ($('#card_' + task.id).length > 0) {
                         var top = $('#card_' + task.id)[0].getBoundingClientRect().top + target.scrollTop - 241;
                         target.scrollTo(0, top);
@@ -1380,10 +1388,10 @@
                     $('#card_' + task.id).click();
 
                 } else {
-                    if (task.list_id !== null){
-                        $('#list'+task.list_id).click();
+                    if (task.list_id !== null) {
+                        $('#list' + task.list_id).click();
                     } else {
-                        $('.board'+task.multiple_board_id).click();
+                        $('.board' + task.multiple_board_id).click();
                     }
                 }
                 $('#myUL').addClass('myUL');
@@ -2215,7 +2223,7 @@
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger btn",
-                        confirmButtonColor : '#e65174',
+                        confirmButtonColor: '#e65174',
                         confirmButtonText: "Yes, delete it!",
                         closeOnConfirm: true
                     },
