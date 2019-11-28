@@ -71,4 +71,14 @@ class CommentController extends Controller
             }
         }
     }
+
+    public function cardCommentDelete(Request $request)
+    {
+       $delete = Comment::where('id', $request->id)->delete();
+       if ($delete) {
+           return response()->json(['success' => true]);
+        }else{
+            return response()->json(['success' => false]);
+       }
+    }
 }

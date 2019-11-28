@@ -396,46 +396,80 @@
             <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel" style="overflow: hidden;">
                 <span>
                     <div class="row comment-section-in-task-details" style="max-height: calc(100vh - 285px);">
-                        <div id='cmntSection' style="margin:0px auto; max-height: calc(100vh - 350px); width: 90%; margin-bottom: 20px; overflow: auto;" >
-                            <div class="col-md-12" v-for="comments in comment" style="margin-top: 15px;">
-                                <p :title="comments.user.name" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
-                                    data-placement="bottom" data-toggle="tooltip"> {{ comments.user.name.substring(0,2) }}</p>
-                                <div class="card-list card" style="width: 80%; margin:0px 60px;" >
-                                    <span style="padding: 10px;" v-if="comments.comment != '' && comments.comment != null">
-                                        {{ comments.comment  }}
-                                        <span style="position: relative; float: right;" v-html="dateFormate(comments.created_at)"></span>
-                                    </span>
-                                    <span style="padding: 10px;" v-if="comments.attatchment != '' && comments.attatchment != null">
-                                        
-                                        <a target="_blank" :href="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" 
-                                            style="cursor: pointer;">
-                                            <div v-if="comments.attatchment.endsWith('.png') || comments.attatchment.endsWith('.jpg') || comments.attatchment.endsWith('.gif')">
-                                                <img title="Click To Download" data-toggle="tooltip" 
-                                                     :src="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" height="80" width="80">
+                        <div id='cmntSection' style="margin:0px auto; max-height: calc(100vh - 350px); width: 90%; height: 1000px; margin-bottom: 20px; overflow: auto;" >
+                            
+                            <div class="comment_block">
+                                <div class="new_comment">
+                                    <template v-for="comments in comment" style="margin-top: 15px;" >
+                                        <ul class="user_comment">
+                                            <div class="user_avatar" :title="comments.user.name" data-placement="bottom" data-toggle="tooltip" >
+                                                <img :src="comments.user.photo_url" v-if="comments.user.photo_url !== null && comments.user.photo_url !== ''">
+                                                <p :title="comments.user.name" 
+                                                 data-placement="bottom" data-toggle="tooltip"
+                                                class="comment-avature user_avatar" 
+                                                v-else>
+                                                    {{ comments.user.name.substring(0,2) }}</p>
                                             </div>
-                                            <div v-if="comments.attatchment.endsWith('.txt') ">
-                                                <img title="Click To Download" data-toggle="tooltip" 
-                                                    :src="'/img/txt.png'" height="50" width="50">
+                                            <div class="comment_body">
+                                                <span style="padding: 10px;" v-if="comments.comment != '' && comments.comment != null">
+                                                    <p>
+                                                        <span class="user">{{comments.user.name}} :</span>
+                                                        <span v-html="comments.comment"></span>
+                                                    </p>
+                                                </span>
+                                                <span style="padding: 10px;" v-if="comments.attatchment != '' && comments.attatchment != null">
+                                                    <span class="user">{{comments.user.name}} :</span>
+                                                    <a target="_blank" :href="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" 
+                                                        style="cursor: pointer;">
+                                                        <div v-if="comments.attatchment.endsWith('.png') || comments.attatchment.endsWith('.jpg') || comments.attatchment.endsWith('.gif')">
+                                                            <img title="Click To Download" data-toggle="tooltip" 
+                                                                :src="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" height="80" width="80">
+                                                        </div>
+                                                        <div v-if="comments.attatchment.endsWith('.txt') ">
+                                                            <img title="Click To Download" data-toggle="tooltip" 
+                                                                :src="'/img/txt.png'" height="50" width="50">
+                                                        </div>
+                                                        <div v-if="comments.attatchment.endsWith('.pdf') ">
+                                                            <img title="Click To Download" data-toggle="tooltip" 
+                                                                :src="'/img/pdf.png'" height="50" width="50">
+                                                        </div>
+                                                        <div v-if="comments.attatchment.endsWith('.doc') || comments.attatchment.endsWith('.docx') || comments.attatchment.endsWith('.xls') || comments.attatchment.endsWith('.xlsx')">
+                                                            <img title="Click To Download" data-toggle="tooltip" 
+                                                                :src="'/img/file.png'" height="50" width="50">
+                                                        </div>
+                                                    </a>
+                                                </span>
                                             </div>
-                                            <div v-if="comments.attatchment.endsWith('.pdf') ">
-                                                <img title="Click To Download" data-toggle="tooltip" 
-                                                    :src="'/img/pdf.png'" height="50" width="50">
+
+                                            <div class="comment_toolbar">
+                                                <div class="comment_details">
+                                                    <ul>
+                                                        <li><i class="fa fa-clock-o"></i> {{comments.created_at.substring(11,16)}}</li>
+                                                        <li><i class="fa fa-calendar"></i>{{comments.created_at.substring(0,10)}}</li>
+                                                        <li><i class="fa fa-pencil"></i> <span class="user">{{comments.user.name}}</span></li>
+                                                        <li @click="deleteDetailComment(comments.id)"><i class="fa fa-trash"></i> <span class="user"> Delete</span></li>
+                                                    </ul>
+                                                </div>
+                                                <!-- <div class="comment_tools">-->
+                                                <!--     <ul>-->
+                                                <!--         <li><i class="fa fa-share-alt"></i></li>-->
+                                                <!--         <li><i class="fa fa-reply"></i></li>-->
+                                                <!--         <li><i class="fa fa-heart love"></i></li>-->
+                                                <!--     </ul>-->
+                                                <!-- </div>-->
+
                                             </div>
-                                            <div v-if="comments.attatchment.endsWith('.doc') || comments.attatchment.endsWith('.docx') || comments.attatchment.endsWith('.xls') || comments.attatchment.endsWith('.xlsx')">
-                                                <img title="Click To Download" data-toggle="tooltip" 
-                                                    :src="'/img/file.png'" height="50" width="50">
-                                            </div>
-                                        </a>
-                                        
-                                            <span style="position: relative; float: right;" v-html="dateFormate(comments.created_at)"></span>
-                                    </span>
+                                        </ul>
+                                    </template>
+
                                 </div>
                             </div>
                         </div>
                         <div class="col-12" >
-
-                            <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater"> -->
-                            <div class="" v-click-outside="HideTextArea">
+                            <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater">
+                            position: fixed; bottom: 0px; width: 54%; right: 15px; background: white; width: 100%; max-width: 634px;
+                             -->
+                            <div  v-click-outside="HideTextArea" >
                                 <p :title="selectedData.userName" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
                                 data-placement="bottom" data-toggle="tooltip" style="overflow:hidden;"> {{ selectedData.userName.substring(0,2) }}</p>
                                 <textarea @focus="ShowTextArea(selectedData)"
@@ -665,8 +699,8 @@
             }
         },
         mounted() {
-            console.log(_this.selectedData);
             let _this = this;
+            console.log(this.selectedData);
             // CKEDITOR.replace( "description" );
             // console.log(selectedData);
             setTimeout(function () {
@@ -868,7 +902,7 @@
                     text: "",
                     type: 'warning',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
+                    confirmButtonColor: 'red',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, Delete It!'
                 },
@@ -1216,6 +1250,37 @@
                 .catch(error => {
 
                 })
+            },
+
+            deleteDetailComment(id)
+            {   
+                let _this = this;
+                swal({
+                    title: 'Are you sure to delete this comment?',
+                    text: "",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'red',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, Delete It!'
+                },
+                function(){
+                    var data = {
+                         'id' : id
+                    };
+                    axios.post('/api/delete-card-comment', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getComments(_this.selectedData.cardId);
+                        swal("Deleted!", "Successfully Deleted", "success");
+                        setTimeout(() => {
+                            swal.close();
+                        }, 1000);
+                    })
+                    .catch(error =>{
+
+                    });
+                });
             }
         },
 
@@ -1225,5 +1290,3 @@
     }
 </script>
 
-<style scoped>
-</style>
