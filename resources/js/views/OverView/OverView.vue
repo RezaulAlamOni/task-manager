@@ -141,7 +141,8 @@
                         <template v-for="file in All_files.data" v-if="All_files.data.length > 0">
                             <div class="">
                                 <div class="card" style="width: 13rem;margin: 10px 15px 0 0;">
-                                    <a :href="baseUrl+'/storage/'+file.tasks_id+'/'+file.file_name" target="_blank">
+                                    <a :href="baseUrl+'/storage/'+file.tasks_id+'/'+file.file_name"
+                                       style="height: 120px;" target="_blank">
                                         <img :src="baseUrl+'/storage/'+file.tasks_id+'/'+file.file_name"
                                              v-if="file.file_name.endsWith('.png') || file.file_name.endsWith('.jpg') || file.file_name.endsWith('.jpeg')  "
                                              class="card-img-top" alt="..." height="120">
