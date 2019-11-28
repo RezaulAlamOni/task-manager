@@ -145,7 +145,7 @@
                                         <img :src="baseUrl+'/storage/'+file.tasks_id+'/'+file.file_name"
                                              v-if="file.file_name.endsWith('.png') || file.file_name.endsWith('.jpg') || file.file_name.endsWith('.jpeg')  "
                                              class="card-img-top" alt="..." height="120">
-                                        <img :src="baseUrl+'/img/text.png'"
+                                        <img :src="baseUrl+'/img/txt.png'"
                                              v-else-if="file.file_name.endsWith('.txt')"
                                              class="card-img-top" alt="..." height="120">
                                         <img :src="baseUrl+'/img/pdf.png'"
@@ -186,42 +186,48 @@
                     <!-- comments container -->
                     <div class="comment_block">
                         <h2>All Comments Here</h2>
-<!--                        <div class="new_comment">-->
-<!--                            <template v-for="comment in All_comments">-->
-<!--                                <ul class="user_comment" >-->
-<!--                                    <div class="user_avatar">-->
-<!--                                        <img :src="comment.user.photo_url"-->
-<!--                                        v-if="comment.user.photo_url !== null">-->
-<!--                                        <p class="comment-avature user_avatar" v-else>{{comment.user.name.substring(0,2)}}</p>-->
-<!--                                    </div>-->
-<!--                                    <div class="comment_body">-->
-<!--                                        <p>-->
-<!--                                            <span class="user">{{comment.user.name}} :</span>-->
-<!--                                            {{comment.comment}}-->
-<!--                                        </p>-->
-<!--                                    </div>-->
+                        <div class="new_comment">
+                            <template v-for="comment in All_comments">
+                                <ul class="user_comment" >
+                                    <div class="user_avatar">
+                                        <img :src="comment.user.photo_url"
+                                        v-if="comment.user.photo_url !== null">
+                                        <p class="comment-avature user_avatar" v-else>{{comment.user.name.substring(0,2)}}</p>
+                                    </div>
+                                    <div class="comment_body">
+                                        <p>
+                                            <span class="user">{{comment.user.name}} :</span>
+                                            {{comment.comment}}
+                                        </p>
+                                        <p>
+                                            <span style="cursor : pointer;color: #6495ED" @click="ShowList(comment.list_id)">
+                                                #TID-{{comment.task_id}}
+                                            </span><br>
+                                            Task : {{comment.title}}
+                                        </p>
+                                    </div>
 
-<!--                                    <div class="comment_toolbar">-->
-<!--                                        <div class="comment_details">-->
-<!--                                            <ul>-->
-<!--                                                <li><i class="fa fa-clock-o"></i> {{comment.created_at.substring(11,16)}}</li>-->
-<!--                                                <li><i class="fa fa-calendar"></i>{{comment.created_at.substring(0,10)}}</li>-->
-<!--                                                <li><i class="fa fa-pencil"></i> <span class="user">{{comment.user.name}}</span></li>-->
-<!--                                            </ul>-->
-<!--                                        </div>-->
-<!--                                        &lt;!&ndash;                                    <div class="comment_tools">&ndash;&gt;-->
-<!--                                        &lt;!&ndash;                                        <ul>&ndash;&gt;-->
-<!--                                        &lt;!&ndash;                                            <li><i class="fa fa-share-alt"></i></li>&ndash;&gt;-->
-<!--                                        &lt;!&ndash;                                            <li><i class="fa fa-reply"></i></li>&ndash;&gt;-->
-<!--                                        &lt;!&ndash;                                            <li><i class="fa fa-heart love"></i></li>&ndash;&gt;-->
-<!--                                        &lt;!&ndash;                                        </ul>&ndash;&gt;-->
-<!--                                        &lt;!&ndash;                                    </div>&ndash;&gt;-->
+                                    <div class="comment_toolbar">
+                                        <div class="comment_details">
+                                            <ul>
+                                                <li><i class="fa fa-clock-o"></i> {{comment.created_at.substring(11,16)}}</li>
+                                                <li><i class="fa fa-calendar"></i> {{comment.created_at.substring(0,10)}}</li>
+                                                <li><i class="fa fa-pencil"></i> <span class="user">{{comment.user.name}}</span></li>
+                                            </ul>
+                                        </div>
+                                        <!--                                    <div class="comment_tools">-->
+                                        <!--                                        <ul>-->
+                                        <!--                                            <li><i class="fa fa-share-alt"></i></li>-->
+                                        <!--                                            <li><i class="fa fa-reply"></i></li>-->
+                                        <!--                                            <li><i class="fa fa-heart love"></i></li>-->
+                                        <!--                                        </ul>-->
+                                        <!--                                    </div>-->
 
-<!--                                    </div>-->
-<!--                                </ul>-->
-<!--                            </template>-->
+                                    </div>
+                                </ul>
+                            </template>
 
-<!--                        </div>-->
+                        </div>
                     </div>
                 </div>
         </div>
