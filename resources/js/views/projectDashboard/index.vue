@@ -25,7 +25,7 @@
                 >
 
                 <select class="form-control " v-model="search_type" @change="searchBYType"
-                        style="display: inline;padding: 0;position: absolute; right: 0; top: 0; height: 38px !important;width: 78px;z-index : 9999;border-radius: 0 5px 5px 0;">
+                        style="display: inline;padding: 0;position: absolute; right: 0; top: 0; height: 38px !important;width: 78px;z-index : 999;border-radius: 0 5px 5px 0;">
 
                     <option value="all"> All </option>
                     <option value="this"> This {{list.type}}</option>
