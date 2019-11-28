@@ -176,8 +176,9 @@ body {
             padding: 5px 10px;
             font-size: .9rem;
             color: #555;
-            background-color: $WHITE;
-            border-bottom: 2px solid lighten($GREY, 15%);
+            background-color: #f1f0f0;
+            border-bottom: 2px solid #f2f2f2;
+            border-radius: 5px;
 
             .replied_to {
                 margin: 5px 0px;
