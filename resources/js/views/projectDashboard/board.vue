@@ -967,7 +967,7 @@
                 </div>
             </div>
         </div>
-        <div class="details" id="details" >
+        <div class="detailsShow " id="details" >
             <TaskDetails v-if="Object.keys(selectedData).length > 0"
                 :selectedData="selectedData"
                 :task_logs="task_logs"
@@ -2386,16 +2386,18 @@
                 if (_this.selectedData != null && _this.selectedData.sort_id !== -2) {
                     $('#task_width').removeClass('task_width');
                     $('#task_width').addClass('task_widthNormal');
-                    $('#details').removeClass('details');
-                    $('#details').addClass('detailsShow');
+                    // $('#details').removeClass('details');
+                    // $('#details').addClass('detailsShow');
+                    $('#details').addClass('details');
                 }
             },
             HideDetails() {
                 // this.getBoardTask();
                 $('#task_width').addClass('task_width');
                 $('#task_width').removeClass('task_widthNormal');
-                $('#details').addClass('details');
-                $('#details').removeClass('detailsShow');
+                // $('#details').addClass('details');
+                // $('#details').removeClass('detailsShow');
+                $('#details').removeClass('details');
             },
             ShowTextArea(data) {
                 var _this = this;

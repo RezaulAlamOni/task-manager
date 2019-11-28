@@ -138,7 +138,7 @@
                 <div class="tab-pane fade row" id="profile" role="tabpanel" aria-labelledby="profile-tab"
                      style="margin: 0px 15px;">
                     <div class="row">
-                        <template v-for="file in All_files" v-if="All_files.length > 0">
+                        <template v-for="file in All_files.data" v-if="All_files.data.length > 0">
                             <div class="">
                                 <div class="card" style="width: 13rem;margin: 10px 15px 0 0;">
                                     <a :href="baseUrl+'/storage/'+file.tasks_id+'/'+file.file_name" target="_blank">
@@ -168,8 +168,10 @@
                                                     <i class="fa fa-pencil"></i>
                                                     <span class="user">{{file.user.name}}</span>
                                                 </li>
-                                                <li><i class="fa fa-calendar"></i> {{file.created_at.substring(0,10)}}</li>
-                                                <li><i class="fa fa-clock-o"></i> {{file.created_at.substring(11,16)}}</li>
+                                                <li><i class="fa fa-calendar"></i> {{file.created_at.substring(0,10)}}
+                                                </li>
+                                                <li><i class="fa fa-clock-o"></i> {{file.created_at.substring(11,16)}}
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -179,28 +181,59 @@
 
                     </div>
 
+                    <template v-if="All_files.last_page > 1">
+                        <nav aria-label="Page navigation example" style="padding-top: 39px;">
+                            <ul class="pagination justify-content-end">
+                                <li class="page-item " :class="(All_files.prev_page_url === null) ? 'disabled' : ''">
+                                    <a class="page-link" href="javascript:void(0)" @click="FilePagination(All_files.current_page-1)" tabindex="-1">Previous</a>
+                                </li>
+                                <template v-for="i in All_files.last_page">
+                                    <li class="page-item" :class="(All_files.current_page === i) ? 'active' : ''">
+                                        <a class="page-link" @click="FilePagination(i)" href="javascript:void(0)">{{i}}</a>
+                                    </li>
+                                </template>
 
+                                <li class="page-item" :class="(All_files.last_page === All_files.current_page) ? 'disabled' : ''">
+                                    <a class="page-link" @click="FilePagination(All_files.current_page+1)" href="javascript:void(0)">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </template>
                 </div>
                 <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 
                     <!-- comments container -->
                     <div class="comment_block">
-                        <h2>All Comments Here</h2>
+<!--                        <h2>All Comments Here</h2>-->
                         <div class="new_comment">
                             <template v-for="comment in All_comments">
-                                <ul class="user_comment" >
+                                <ul class="user_comment">
                                     <div class="user_avatar">
                                         <img :src="comment.user.photo_url"
-                                        v-if="comment.user.photo_url !== null">
-                                        <p class="comment-avature user_avatar" v-else>{{comment.user.name.substring(0,2)}}</p>
+                                             v-if="comment.user.photo_url !== null">
+                                        <p class="comment-avature user_avatar" v-else>
+                                            {{comment.user.name.substring(0,2)}}</p>
                                     </div>
                                     <div class="comment_body">
                                         <p>
                                             <span class="user">{{comment.user.name}} :</span>
-                                            {{comment.comment}}
+                                            <span v-if="comment.attatchment === null">{{comment.comment}}</span>
+                                            <template v-else>
+                                                <a :href="baseUrl+'/storage/'+comment.task_id+'/comment/'+comment.attatchment"
+                                                    data-toggle="tooltip" title="Click For View Attachment" target="_blank">
+                                                    <img
+                                                        v-if="comment.attatchment.endsWith('.png') || comment.attatchment.endsWith('.jpg')|| comment.attatchment.endsWith('.jpeg')"
+                                                        :src="baseUrl+'/storage/'+comment.task_id+'/comment/'+comment.attatchment"
+                                                        height="100" alt="">
+                                                    <span v-else>{{comment.attatchment}}</span>
+                                                </a>
+                                            </template>
+
+
                                         </p>
                                         <p>
-                                            <span style="cursor : pointer;color: #6495ED" @click="ShowList(comment.list_id)">
+                                            <span style="cursor : pointer;color: #6495ED"
+                                                  @click="ShowList(comment.list_id)">
                                                 #TID-{{comment.task_id}}
                                             </span><br>
                                             Task : {{comment.title}}
@@ -210,9 +243,14 @@
                                     <div class="comment_toolbar">
                                         <div class="comment_details">
                                             <ul>
-                                                <li><i class="fa fa-clock-o"></i> {{comment.created_at.substring(11,16)}}</li>
-                                                <li><i class="fa fa-calendar"></i> {{comment.created_at.substring(0,10)}}</li>
-                                                <li><i class="fa fa-pencil"></i> <span class="user">{{comment.user.name}}</span></li>
+                                                <li><i class="fa fa-clock-o"></i>
+                                                    {{comment.created_at.substring(11,16)}}
+                                                </li>
+                                                <li><i class="fa fa-calendar"></i>
+                                                    {{comment.created_at.substring(0,10)}}
+                                                </li>
+                                                <li><i class="fa fa-pencil"></i> <span class="user">{{comment.user.name}}</span>
+                                                </li>
                                             </ul>
                                         </div>
                                         <!--                                    <div class="comment_tools">-->
@@ -230,50 +268,50 @@
                         </div>
                     </div>
                 </div>
-        </div>
+            </div>
 
-        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="updateListBoardModelO"
-             role="dialog"
-             tabindex="-1">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title pl-3"> Update {{list.name}} <span
-                            class="text-uppercase">[{{list.type}}]</span></h5>
-                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Add your new list here !</p>
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Title</label>
-                            <div class="col-sm-8">
-                                <input class="form-control" type="text" v-model="list.name">
-                            </div>
+            <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="updateListBoardModelO"
+                 role="dialog"
+                 tabindex="-1">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title pl-3"> Update {{list.name}} <span
+                                class="text-uppercase">[{{list.type}}]</span></h5>
+                            <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Description</label>
-                            <div class="col-sm-8">
+                        <div class="modal-body">
+                            <p>Add your new list here !</p>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Title</label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="text" v-model="list.name">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Description</label>
+                                <div class="col-sm-8">
                                 <textarea class="form-control" cols="40" id="" name="" rows="3"
                                           v-model="list.description"></textarea>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <!--                        <button @click="UpdateListOrBoard" class="btn btn-primary" type="button">Update</button>-->
-                        <button @click="UpdateListOrBoard"
-                                class="btn btn-primary ladda-button ladda_update_list_board"
-                                data-style="expand-right">
-                            Update
-                        </button>
-                        <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">
-                            Cancel
-                        </button>
+                        <div class="modal-footer">
+                            <!--                        <button @click="UpdateListOrBoard" class="btn btn-primary" type="button">Update</button>-->
+                            <button @click="UpdateListOrBoard"
+                                    class="btn btn-primary ladda-button ladda_update_list_board"
+                                    data-style="expand-right">
+                                Update
+                            </button>
+                            <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">
+                                Cancel
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     </main>
 </template>
@@ -297,7 +335,19 @@
                 baseUrl: window.location.origin,
                 project_id: this.projectID,
                 All_list: null,
-                All_files: null,
+                All_files: {
+                    data : null,
+                    last_page : null,
+                    current_page : null,
+                    first_page_url : null,
+                    last_page_url : null,
+                    next_page_url : null,
+                    per_page : null,
+                    prev_page_url : null,
+                    total : null,
+                    from : null,
+                    to : null,
+                },
                 All_comments: null,
                 list: {
                     id: null,
@@ -468,6 +518,7 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.All_files = response.files;
+                        console.log(response.files);
                         setTimeout(function () {
                             $('[data-toggle="tooltip"]').tooltip();
                         }, 500)
@@ -476,6 +527,24 @@
                         console.log('Add files api not working!!')
                     });
             },
+            FilePagination(page){
+                var _this = this;
+                _this.All_files.data = null;
+                axios.get('/api/overview-all-files/' + _this.project_id+'?page='+page)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.All_files = response.files;
+                        console.log(response.files);
+                        setTimeout(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Add files api not working!!')
+                    });
+
+            },
+
             ShowList(id) {
                 $('#list' + id).click();
             },
@@ -492,7 +561,24 @@
                     .catch(error => {
                         console.log('Add files api not working!!')
                     });
-            }
+            },
+            CommentPagination(page){
+                var _this = this;
+                _this.All_files.data = null;
+                axios.get('/api/overview-all-comments/' + _this.project_id+'?page='+page)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.All_files = response.files;
+                        console.log(response.files);
+                        setTimeout(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Add files api not working!!')
+                    });
+
+            },
         },
         watch: {
             update_overview: function (val) {

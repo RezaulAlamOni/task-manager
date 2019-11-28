@@ -66,7 +66,7 @@ class OverviewController extends Controller
         $all_files = Files::select('task_files.*','task_lists.title','task_lists.list_id')
             ->join('task_lists','task_files.tasks_id','task_lists.id')
             ->where('task_lists.project_id',$project_id)->orderBy('task_files.created_at','desc')
-            ->with('user')->get();
+            ->with('user')->paginate(18);
         return \response()->json(['files'=>$all_files,'status'=>'success']);
     }
     public function AllComments($project_id)

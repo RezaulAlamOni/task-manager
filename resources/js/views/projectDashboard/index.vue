@@ -605,14 +605,14 @@
 
                     </div>
                 </div>
-                <div class="details" id="details" v-click-outside="HideDetails">
+                <div class="detailsShow" id="details" v-click-outside="HideDetails">
                     <TaskDetails
                         :selectedData="selectedData"
                         :task_logs="task_logs"
                         @textArea="ShowTextArea">
                     </TaskDetails>
 
-                    
+
                 </div>
             </div>
             <div class="boardView" v-if="list.type === 'board'">
@@ -1005,7 +1005,7 @@
         },
         data() {
             return {
-                authUser : null, 
+                authUser : null,
                 baseUrl: window.location.origin,
                 disabledDates: {
                     id: null,
@@ -2980,15 +2980,15 @@
                     console.log(_this.selectedData);
                     $('#task_width').removeClass('task_width');
                     $('#task_width').addClass('task_widthNormal');
-                    $('#details').removeClass('details');
-                    $('#details').addClass('detailsShow');
+                    // $('#details').removeClass('details');
+                    $('#details').addClass('details');
                 }
             },
             HideDetails() {
                 $('#task_width').addClass('task_width');
                 $('#task_width').removeClass('task_widthNormal');
-                $('#details').addClass('details');
-                $('#details').removeClass('detailsShow');
+                // $('#details').addClass('details');
+                $('#details').removeClass('details');
             },
             ShowTextArea(data) {
                 var _this = this;
