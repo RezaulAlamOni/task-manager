@@ -540,10 +540,12 @@
     }
 }
 .details {
-    position: relative;
-    display: none;
-    width: 30%;
+    //position: relative;
+    //display: none;
+    //width: 30%;
     @include transition(all 0.4s linear);
+    transform: scaleX(1) !important;
+    transform-origin: 100%;
 }
 
 .detailsContainer {
@@ -568,6 +570,8 @@
     right: 0;
     @include transition(all 0.4s linear);
     padding-top: 20px;
+    transform: scaleX(0);
+    transform-origin: 100%;
 
     .input-hide {
         border: none !important;

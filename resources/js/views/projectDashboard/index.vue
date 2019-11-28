@@ -24,13 +24,11 @@
                        @keyup="searchDataFormTask($event)"
                 >
 
-                <select class="form-control " v-model="search_type"
-                        style="display: inline;position: absolute; right: 0; top: 0; height: 38px !important;width: 78px;z-index : 9999;border-radius: 0 5px 5px 0;">
-                    <option disabled value="0">
-                        Select Search Area
-                    </option>
-                    <option value="all"> All</option>
-                    <option value="this"> This</option>
+                <select class="form-control " v-model="search_type" @change="searchBYType"
+                        style="display: inline;padding: 0;position: absolute; right: 0; top: 0; height: 38px !important;width: 78px;z-index : 999;border-radius: 0 5px 5px 0;">
+
+                    <option value="all"> All </option>
+                    <option value="this"> This {{list.type}}</option>
                 </select>
 
                 <ul class="myUL" id="myUL">
@@ -605,14 +603,14 @@
 
                     </div>
                 </div>
-                <div class="details" id="details" v-click-outside="HideDetails">
+                <div class="detailsShow" id="details" v-click-outside="HideDetails">
                     <TaskDetails
                         :selectedData="selectedData"
                         :task_logs="task_logs"
                         @textArea="ShowTextArea">
                     </TaskDetails>
 
-                    
+
                 </div>
             </div>
             <div class="boardView" v-if="list.type === 'board'">
@@ -1005,7 +1003,7 @@
         },
         data() {
             return {
-                authUser : null, 
+                authUser : null,
                 baseUrl: window.location.origin,
                 disabledDates: {
                     id: null,
@@ -1072,7 +1070,7 @@
                     update: null
                 },
                 overview: '',
-                search_type : 0
+                search_type : 'all',
             }
         },
         mounted() {
@@ -1275,6 +1273,7 @@
             },
             showSearchInputField() {
                 // if (this.list.type === 'list') {
+                this.search_type = (this.list.type === 'overview') ? 'all' : 'this';
                 $('.searchList').toggle();
                 $('.searchTaskList').focus();
                 // }
@@ -1287,7 +1286,7 @@
                     'user_id': id,
                     p_id: _this.projectId,
                     list_id: nav_type.list_id,
-                    type: nav_type.type
+                    type: (_this.search_type === 'all') ? 'overview' : nav_type.type,
                 })
                     .then(response => response.data)
                     .then(response => {
@@ -1306,7 +1305,7 @@
                 var value = e.target.value;
                 var _this = this;
                 if (value.charAt(0) === '@') {
-                    value = value.substr(1)
+                    value = value.substr(1);
 
                     axios.get('/api/task-list/all-suggest-user')
                         .then(response => response.data)
@@ -1342,7 +1341,7 @@
                         'text': value,
                         'project_id': _this.projectId,
                         list_id: nav_type.list_id,
-                        type: nav_type.type
+                        type: (_this.search_type === 'all') ? 'overview' : nav_type.type ,
                     })
                         .then(response => response.data)
                         .then(response => {
@@ -1358,6 +1357,30 @@
                     // }
                 }
             },
+            searchBYType(){
+                var _this = this;
+                var value = $('.searchTaskList').val();
+                var nav_type = JSON.parse(localStorage.selected_nav);
+                axios.post('/api/task-list/suggest-user', {
+                    'text': value,
+                    'project_id': _this.projectId,
+                    list_id: nav_type.list_id,
+                    type: (_this.search_type === 'all') ? 'overview' : nav_type.type ,
+                })
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.searchData.tasks = response.search_tasks;
+                        // console.log(response.search_tasks);
+                    })
+                    .catch(error => {
+                        console.log('Api is drag and drop not Working !!!')
+                    });
+
+                $('#myUL').removeClass('myUL');
+                $('#myUL').addClass('myUL-show');
+
+            },
+
             selectTaskFromTaskTreeList(task) {
                 var nav = JSON.parse(localStorage.selected_nav)
                 if (nav.type === 'list') {
@@ -2980,15 +3003,15 @@
                     console.log(_this.selectedData);
                     $('#task_width').removeClass('task_width');
                     $('#task_width').addClass('task_widthNormal');
-                    $('#details').removeClass('details');
-                    $('#details').addClass('detailsShow');
+                    // $('#details').removeClass('details');
+                    $('#details').addClass('details');
                 }
             },
             HideDetails() {
                 $('#task_width').addClass('task_width');
                 $('#task_width').removeClass('task_widthNormal');
-                $('#details').addClass('details');
-                $('#details').removeClass('detailsShow');
+                // $('#details').addClass('details');
+                $('#details').removeClass('details');
             },
             ShowTextArea(data) {
                 var _this = this;
