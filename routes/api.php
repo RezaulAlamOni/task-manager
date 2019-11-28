@@ -44,6 +44,7 @@ Route::post('/task-list/move-task', 'TaskController@moveTask');//move-task
 Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog'); //lod
 
 //search task
+Route::get('/task-list/all-suggest-user','SearchController@getAllUser'); //user for search
 Route::post('/task-list/suggest-user','SearchController@suggestUser'); //user suggest for search
 
 //navigation management
@@ -79,6 +80,8 @@ Route::post('/add-existing-tasks', 'MultipleBoardController@addExistingTasks');
 
 Route::post('/card-add', 'MultipleBoardController@cardAdd');
 Route::post('/card-file-upload', 'MultipleBoardController@fileUpload');
+Route::post('/delete-card-file', 'MultipleBoardController@cardFileDelete');
+Route::post('/delete-card-comment', 'CommentController@cardCommentDelete');
 Route::post('/get-card-file', 'MultipleBoardController@getCardFiles');
 Route::post('/hideChildes', 'MultipleBoardController@childHide');
 Route::post('/show-child-parent', 'MultipleBoardController@childrenAndParent');
@@ -102,5 +105,7 @@ Route::post('/rules-delete', 'RulesController@delete');
 
 //overview
 Route::get('/project-overview/{project_id}', 'OverviewController@index');
+Route::get('/overview-all-files/{project_id}', 'OverviewController@All_files');
+Route::get('/overview-all-comments/{project_id}', 'OverviewController@AllComments');
 Route::post('/project-overview/list-sort', 'OverviewController@ListSort');
 Route::post('/project-overview/list-open-close', 'OverviewController@ListToggle');

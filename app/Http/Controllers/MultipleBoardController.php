@@ -139,7 +139,7 @@ class MultipleBoardController extends Controller
                     }
 
                     $boards[$key]['task'][$keys]['userName'] = Auth::user()->name;
-                    $boards[$key]['task'][$keys]['comment'] = $values['comment'];
+                    $boards[$key]['task'][$keys]['comment'] = [];
                     $boards[$key]['task'][$keys]['children'] = $values['childTask'];
                     $boards[$key]['task'][$keys]['parents'] = $values['parents'];
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
@@ -905,7 +905,7 @@ class MultipleBoardController extends Controller
     {
         if (isset($request->file)) {
             $task_id = $request->id;
-            $photo = $_FILES['file']['name'];
+            $photo = uniqid().$_FILES['file']['name'];
             $path = public_path() . "/storage/" . $task_id ;
             if (!is_dir($path)) {
                 if (!is_dir(public_path() . "/storage/")) {
@@ -913,7 +913,7 @@ class MultipleBoardController extends Controller
                 }
                 mkdir($path);
             }
-            if (move_uploaded_file($_FILES["file"]["tmp_name"], $path."/" . $_FILES['file']['name'])) {
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], $path."/" . $photo)) {
                 $data = [
                     'tasks_id' => $task_id,
                     'created_by' => Auth::id(),
@@ -931,6 +931,18 @@ class MultipleBoardController extends Controller
                 return response()->json('failed', 500);
             }
         }
+    }
+
+    public function cardFileDelete(Request $request)
+    {   
+        $delete = Files::where('id', $request->id)->first();
+        if(unlink(public_path().'/storage/'.$delete->tasks_id.'/'.$delete->file_name)){
+            $delete = Files::where('id', $request->id)->delete();
+            if($delete){
+                return response()->json(['success' => true]);
+            }    
+        }
+        
     }
 
     public function getCardFiles(Request $request)

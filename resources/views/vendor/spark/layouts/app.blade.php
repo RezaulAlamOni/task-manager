@@ -163,6 +163,12 @@
             });
         }
 
+        function getComment()
+        {
+            alert('dsfsdafjdsklf');
+        }
+
+
 
 
     </script>

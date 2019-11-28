@@ -15,6 +15,8 @@ Route::get('/', 'WelcomeController@show');
 
 Route::get('/home', 'HomeController@show');
 
+Route::get('/allcomments', 'HomeController@allComment');
+
 Route::get('/clear', 'ClearController@show');
 
 Route::get('/select', 'ClearController@show_select');

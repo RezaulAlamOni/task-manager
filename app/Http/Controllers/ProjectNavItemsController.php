@@ -137,7 +137,7 @@ class ProjectNavItemsController extends Controller
     public function navList(Request $request)
     {
         // return $request->all();
-        $nav = Multiple_list::where('project_id', $request->projectId)->where('nav_id', $request->navId)->get();
+        $nav = Multiple_list::where('project_id', $request->projectId)->where('nav_id', $request->navId)->where('is_delete', 0)->get();
 
         return response()->json(['success' => $nav]);
     }
