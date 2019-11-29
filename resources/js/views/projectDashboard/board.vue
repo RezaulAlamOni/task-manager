@@ -1096,6 +1096,7 @@
                 });
                 $("#popoverData").popover({trigger: "hover"});
             });
+            $('#loder-hide').fadeIn();
             _this.getBoardTask();
             $(document).ready(function () {
                 $('.searchList').hide();
@@ -1871,8 +1872,8 @@
             },
             getBoardTask() {
                 var _this = this;
-                this.scene = {};
-                $('#loder-hide').fadeIn()
+                // this.scene = {};
+                // $('#loder-hide').fadeIn();
                 var datePicker = new Date();
                 datePicker.setDate(datePicker.getDate() - 1);
                 _this.disabledDates = {
@@ -2604,6 +2605,7 @@
             },
             board_id: function (val) {
                 this.board_id = val;
+                $('#loder-hide').fadeIn();
                 this.getBoardTask()
             },
             nav_id: function (val) {
