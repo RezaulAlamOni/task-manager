@@ -1110,16 +1110,19 @@
 }
 .page-titles {
     width: 100%;
-    display: table;
+    display: inline-block;
     background: #fff;
     height: 50px;
+    margin-bottom: 10px;
     box-shadow: 0 2px 4px rgba(55, 63, 67, 0.04);
 }
 
 .nav-bar-right{
     position: absolute;
-    right: 60px;
+    right: 0;
     top: 0;
+    padding: 0 50px;
+    background: #ffffff;
 }
 .task-log {
     max-height: 720px;

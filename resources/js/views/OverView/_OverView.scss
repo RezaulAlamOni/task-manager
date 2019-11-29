@@ -279,3 +279,29 @@ body {
     margin-left: 10px;
 }
 
+
+
+//=======================
+// nav-train-station
+//=======================
+.nav-train-station{
+    width: calc(100% - 500px);
+    display: inline-block;
+    float: left;
+    overflow-y: hidden;
+    overflow-x: auto;
+    &.stop-train{
+        overflow-y: initial;
+        overflow-x: initial;
+    }
+    @media only screen and (max-width: 991px) {
+        width: calc(100% - 0px);
+    }
+    .nav-train{
+        display: flex;
+        .navbar-nav-cabin{
+            position: relative;
+            float: left;
+        }
+    }
+}
