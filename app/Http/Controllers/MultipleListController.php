@@ -194,6 +194,6 @@ class MultipleListController extends Controller
 //        return view('TaskListPdf',['lists'=>$data,'project' => $project]);
             $pdf = PDF::loadView('TaskListPdf', ['lists'=>$data,'project' => $project]);
             return $pdf->download($title. '.pdf');
-//        return $pdf->save(public_path('pdf/abc.pdf'))->stream('download.pdf');
+//        return $pdf->save(public_path('/abc.pdf'))->stream('download.pdf');
     }
 }
