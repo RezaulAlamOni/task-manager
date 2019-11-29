@@ -2,165 +2,166 @@
     <div class="container" v-if="Object.keys(selectedData).length > 0">
         <!-- {{selectedData}} -->
         <div class="row">
-            <div class="col-md-2" style="padding: 0px;">
-                <h4 class="compltit-blue" @click="showOriginalList(selectedData)" style="cursor:pointer;" data-toggle="tooltip"
+            <div class="col-2">
+                <!--                <h4 class="compltit-blue" >#ID{{selectedData.id}}</h4>-->
+                <h4 class="compltit-blue  details-header" @click="showOriginalList(selectedData)"
+                    style="cursor:pointer;" data-toggle="tooltip"
                     :title="(selectedData.list_id === null) ? 'This Card Is Only show In Board' : 'Click For Go List'">
                     #ID{{ selectedData.cardId }}</h4>
             </div>
-            <div class="col-md-2" style="padding: 0px;">
-                <i class="fa fa-calendar details-title"></i>
-                <a class="calender li-opacity clickHide" v-if="!selectedData.date">
-                    <i class="outline-event icon-image-preview" data-toggle title="toggle"></i>
-                </a>
+            <div class="col-2">
+                <img :src="baseUrl+ '/img/task-icon/date-plus.png'" style=" height: 29px;cursor: pointer"
+                     v-if="selectedData.date === '0000-00-00'"
+                     class="details-title calender-for-details details-header">
+                <!--                <i class="fa fa-calendar details-title calender-for-details details-header"-->
+                <!--                   v-if="selectedData.date === '0000-00-00'"></i>-->
 
                 <datepicker
                     :disabled-dates="disabledDates"
                     @selected="updateDate"
                     calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
                     format='dd MMM'
-                    input-class="dateCal due-details"
+                    input-class="dateCal due-details details-header"
                     v-model="selectedData.date">
                 </datepicker>
             </div>
-            <!-- <div class="col-1">
-                <img class="img-responsive" src="/img/12.jpg" style="height:30px;width:30px;">
-            </div> -->
-            <div class="col-md-1" style="padding: 0px;" v-if="selectedData.progress != null && selectedData.progress != ''">
-                <img :title="''" :src="baseUrl+'/img/'+selectedData.progress+'.png'" height="40" width="40" style="clear: right;">
-            </div>
-            <div class="col-md-3" style="padding: 0px;">
+            <div class="col-1">
+                <img class="img-responsive details-header"
+                     :src="baseUrl+'/img/'+selectedData.progress+'.png'"
+                     style="height:30px;width:30px;">
 
-                <!-- Tags -->
-                <div class="col-md-8">
-                    <a :class="{'tag-icon': true, 'tag-icon-free': selectedData.tags == undefined || selectedData.tags.length == 0}">
-                        <div v-if="selectedData.tags && selectedData.tags.length !== 0">
-                            <div style="float: left;" v-for="(item, tagIndex) in selectedData.tags">
-                                <div class="dropdown-toggle-split "
-                                     data-toggle="dropdown"
-                                     style="padding-right: 0px; padding-left: 1px;" v-if="tagIndex < 2">
+            </div>
+            <div class="col-4 text-center" >
+                <a :class="{'tag-icon': true, 'tag-icon-free': selectedData.tags == undefined || selectedData.tags.length == 0}">
+                    <div v-if="selectedData.tags && selectedData.tags.length !== 0" style="display:inline-flex;">
+                        <div style="margin-top: 10px;" v-for="(item, tagIndex) in selectedData.tags">
+                            <div class="dropdown-toggle-split "
+                                 data-toggle="dropdown"
+                                 style="padding-right: 0px; padding-left: 1px;" v-if="tagIndex < 2">
                                     <span class="badge badge-danger "
                                           v-if='item == "Dont Forget"'>{{item.text.substring(0,12)}}</span>
-                                    <span :title="selectedData.tagTooltip"
-                                          class="badge badge-success "
-                                          data-placement="bottom"
-                                          data-toggle="tooltip"
-                                          v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]"
-                                          v-else
-                                    >{{item.text.substring(0,10)}}
+                                <span :title="selectedData.tagTooltip"
+                                      class="badge badge-success "
+                                      data-placement="bottom"
+                                      data-toggle="tooltip"
+                                      v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]"
+                                      style="line-height: 19px;font-size: 12px"
+                                      v-else
+                                >{{item.text.substring(0,10)}}
                                         <span v-if="item.text.length > 10">..</span>
                                     </span>
-                                </div>
+                            </div>
 
-                                <div :id="'dropdown1'+selectedData.cardId" class="dropdown-menu dropdown-menu1">
+                            <div :id="'dropdown1'+selectedData.cardId" class="dropdown-menu dropdown-menu1"  style="width: 250px !important;">
 
-                                    <diV class="collapse show switchToggle">
-                                        <div class="container-fluid">
-                                            <vue-tags-input
-                                                :allow-edit-tags="true"
-                                                :tags="selectedData.tags"
-                                                @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,selectedData)"
-                                                @tags-changed="newTags => (changeTag(newTags,selectedData))"
-                                                v-model="tag"
-                                            />
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <template v-for="(tag, tagIndx) in selectedData.existing_tags">
-                                                        <li class="badge-pill tags"
-                                                            @click="addExistingTag( tagIndx, selectedData.cardId, '')"
-                                                            v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
-                                                            v-if="tag.text !== 'Dont Forget'">
-                                                            {{(tag.title !== undefined) ?tag.title.substring(0,12) :
-                                                            ''}}
-                                                        </li>
-                                                    </template>
-                                                    <!-- <template> -->
-                                                    <!-- <li class="badge-pill tags"
-                                                        v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
-                                                    </li> -->
-                                                    <!-- </template> -->
-                                                    <li @click="addExistingTag( 0, selectedData.cardId, 'Dont Forget')"
-                                                        class="badge-pill tags" style="background: #FB8678"> Dont Forget
+                                <diV class="collapse show switchToggle">
+                                    <div class="container-fluid">
+                                        <vue-tags-input
+                                            :allow-edit-tags="true"
+                                            :tags="selectedData.tags"
+                                            @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,selectedData)"
+                                            @tags-changed="newTags => (changeTag(newTags,selectedData))"
+                                            v-model="tag"
+                                        />
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <template v-for="(tag, tagIndx) in selectedData.existing_tags">
+                                                    <li class="badge-pill tags"
+                                                        @click="addExistingTag( tagIndx, selectedData.cardId, '')"
+                                                        v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
+                                                        v-if="tag.text !== 'Dont Forget'">
+                                                        {{(tag.title !== undefined) ?tag.title.substring(0,12) :
+                                                        ''}}
                                                     </li>
-                                                </div>
+                                                </template>
+                                                <!-- <template> -->
+                                                <!-- <li class="badge-pill tags"
+                                                    v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
+                                                </li> -->
+                                                <!-- </template> -->
+                                                <li @click="addExistingTag( 0, selectedData.cardId, 'Dont Forget')"
+                                                    class="badge-pill tags" style="background: #FB8678"> Dont Forget
+                                                </li>
                                             </div>
-                                            <!-- <hr> -->
-                                            <!-- <div class="row">
-                                                <div class="col-12">
-                                                    <template>
-                                                        <li class="badge-pill tags"
-                                                            v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
-                                                        </li>
-                                                    </template>
-                                                    <li class="badge-pill tags" style="background: #FB8678" >Dont Forget</li>
-                                                </div>
-                                            </div>
-                                            <hr> -->
-                                            <!-- <div class="col-xs-12"
-                                                style="margin-top:10px;width: 100%;">
-                                                <button @click="showTagManageModel"
-                                                        class="btn btn-small btn-primary pull-right"
-                                                        type="submit">
-                                                    Manage Tag
-                                                </button>
-                                            </div> -->
                                         </div>
+                                        <!-- <hr> -->
+                                        <!-- <div class="row">
+                                            <div class="col-12">
+                                                <template>
+                                                    <li class="badge-pill tags"
+                                                        v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]">
+                                                    </li>
+                                                </template>
+                                                <li class="badge-pill tags" style="background: #FB8678" >Dont Forget</li>
+                                            </div>
+                                        </div>
+                                        <hr> -->
+                                        <!-- <div class="col-xs-12"
+                                            style="margin-top:10px;width: 100%;">
+                                            <button @click="showTagManageModel"
+                                                    class="btn btn-small btn-primary pull-right"
+                                                    type="submit">
+                                                Manage Tag
+                                            </button>
+                                        </div> -->
+                                    </div>
 
-                                    </diV>
-                                </div>
+                                </diV>
                             </div>
                         </div>
-                        <i class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
-                           data-toggle="dropdown"
-                           v-else></i>
+                    </div>
 
-                        <div class="dropdown-menu dropdown-menu1 ">
+                    <img :src="baseUrl+'/img/task-icon/tag-add.png'" data-toggle="dropdown"
+                         class="dropdown-toggle-split li-opacity" style=" height: 29px;cursor: pointer; margin: 9px 5px;" v-else
+                         data-original-title="Add Tag">
 
-                            <diV class="collapse show switchToggle">
-                                <div class="container-fluid">
-                                    <vue-tags-input
-                                        :allow-edit-tags="true"
-                                        :tags="tag1"
-                                        @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,selectedData)"
-                                        @tags-changed="newTags => (changeTag(newTags,selectedData))"
-                                        v-model="tag"
-                                    />
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <template v-for="(tag, tagIndx) in selectedData.existing_tags">
-                                                <li class="badge-pill tags"
-                                                    @click="addExistingTag( tagIndx, selectedData.cardId ,'')"
-                                                    v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
-                                                    v-if="tag.text !== 'Dont Forget'">
-                                                    {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
-                                                </li>
-                                            </template>
-                                            <li @click="addExistingTag( 0, selectedData.cardId, 'Dont Forget')"
-                                                class="badge-pill tags" style="background: #FB8678"> Dont Forget
+
+                    <div class="dropdown-menu dropdown-menu1 " style="width: 250px !important;">
+                        <diV class="collapse show switchToggle">
+                            <div class="container-fluid">
+                                <vue-tags-input
+                                    :allow-edit-tags="true"
+                                    :tags="tag1"
+                                    @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,selectedData)"
+                                    @tags-changed="newTags => (changeTag(newTags,selectedData))"
+                                    v-model="tag"
+                                />
+                                <div class="row">
+                                    <div class="col-12">
+                                        <template v-for="(tag, tagIndx) in selectedData.existing_tags">
+                                            <li class="badge-pill tags"
+                                                @click="addExistingTag( tagIndx, selectedData.cardId ,'')"
+                                                v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
+                                                v-if="tag.text !== 'Dont Forget'">
+                                                {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
                                             </li>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <div class="col-xs-12"
-                                         style="margin-top:10px;width: 100%;">
-                                        <button @click="showTagManageModel"
-                                                class="btn btn-small btn-primary pull-right"
-                                                type="submit">
-                                            Manage Tag
-                                        </button>
+                                        </template>
+                                        <li @click="addExistingTag( 0, selectedData.cardId, 'Dont Forget')"
+                                            class="badge-pill tags" style="background: #FB8678"> Dont Forget
+                                        </li>
                                     </div>
                                 </div>
+                                <hr>
+                                <div class="col-xs-12"
+                                     style="margin-top:10px;width: 100%;">
+                                    <button @click="showTagManageModel"
+                                            class="btn btn-small btn-primary pull-right"
+                                            type="submit">
+                                        Manage Tag
+                                    </button>
+                                </div>
+                            </div>
 
-                            </diV>
-                        </div>
+                        </diV>
+                    </div>
 
-                    </a>
-                </div>
+                </a>
             </div>
-            <!-- user assign -->
-            <div class="col-md-4" style="padding: 0px;">
+            <!-- Assign Users -->
+            <div class="col-md-3" style="padding: 0px;">
                 <a class="user dropdown-hide-with-remove-icon">
                     <template v-if="selectedData.assigned_user.length > 0">
-                        <span class="assigned_user dropdown-toggle-split "
+                        <span class="assigned_user dropdown-toggle-split " style="float: right;padding-right: 50px"
                               data-toggle="dropdown" v-for="(assign,keyId) in selectedData.assigned_user">
                             <p :title="assign.name"
                                class="assignUser-photo-for-selected text-uppercase"
@@ -171,13 +172,19 @@
 
                         </span>
                     </template>
-                    <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
-                        <i class="outline-person icon-image-preview li-opacity "
-                           data-toggle="tooltip" title="Assignee">
-                        </i>
+                    <span data-toggle="dropdown" class=" dropdown-toggle-split" style="float: right;margin: 9px 11px;" v-else>
+
+<!--                        <i class="outline-person icon-image-preview li-opacity "-->
+<!--                           data-toggle="tooltip" title="Assignee">-->
+<!--                        </i>-->
+                        <img :src="baseUrl+'/img/task-icon/add-user.png'"
+                             class="li-opacity"
+                             style=" height: 29px;cursor: pointer; margin: 9px 11px;"
+                             data-original-title="Add User">
+
                     </span>
 
-                    <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
+                    <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;right: -50px;left: inherit !important;width: 300px">
                         <diV class="collapse show switchToggle">
                             <li class="assignUser">
                                 <input class="input-group searchUser"
@@ -229,7 +236,7 @@
                         <li @click="switchEvent($event)"
                             class="border-top pl-2 assign-user-drop-down-footer">
 
-                                <span class="assign-user-drop-down-text">Assign an external team</span>
+                            <span class="assign-user-drop-down-text">Assign an external team</span>
                             <switches class="assign-user-switch-for-dropdown"
                                       color="success"
                                       theme="bootstrap"
@@ -368,10 +375,10 @@
                                             <div style="float: left;" v-else>
                                                 <img title="Click To Download" data-toggle="tooltip"
                                                     :src="'/img/attachment.png'" height="50" width="50">
-                                            </div> 
+                                            </div>
                                         </a>
-                                        <span :title="(files != undefined ) ? files.user.name : ''" data-toggle="tooltip" style="position: relative; float: right;" v-html="dateFormate(files.created_at)+'<br>&emsp;&emsp;'+files.user.name.split(' ')[0].substring(0,9)"></span> 
-                                        
+                                        <span :title="(files != undefined ) ? files.user.name : ''" data-toggle="tooltip" style="position: relative; float: right;" v-html="dateFormate(files.created_at)+'<br>&emsp;&emsp;'+files.user.name.split(' ')[0].substring(0,9)"></span>
+
                                         <span>
                                             <img @click="deleteFile(files.id)" style="position: absolute; right: 5px; bottom: 10px;" :src="'https://img.icons8.com/color/48/000000/delete-forever.png'" height="20" width="20">
                                         </span>
@@ -390,23 +397,23 @@
                            </div>
                        </div>
                    </div>
-               </span>	
+               </span>
            </div>
-           
+
             <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel" style="overflow: hidden;">
                 <span>
                     <div class="row comment-section-in-task-details" style="max-height: calc(100vh - 300px);">
                         <div id='cmntSection' style="margin:0px auto; max-height: calc(100vh - 370px); width: 90%; height: 1000px; margin-bottom: 20px; overflow: auto;" >
-                            
+
                             <div class="comment_block">
                                 <div class="new_comment">
                                     <template v-for="comments in comment" style="margin-top: 15px;" >
                                         <ul class="user_comment">
                                             <div class="user_avatar" :title="comments.user.name" data-placement="bottom" data-toggle="tooltip" >
                                                 <img :src="comments.user.photo_url" v-if="comments.user.photo_url !== null && comments.user.photo_url !== ''">
-                                                <p :title="comments.user.name" 
+                                                <p :title="comments.user.name"
                                                  data-placement="bottom" data-toggle="tooltip"
-                                                class="comment-avature user_avatar" 
+                                                class="comment-avature user_avatar"
                                                 v-else>
                                                     {{ comments.user.name.substring(0,2) }}</p>
                                             </div>
@@ -419,22 +426,22 @@
                                                 </span>
                                                 <span style="padding: 10px;" v-if="comments.attatchment != '' && comments.attatchment != null">
                                                     <span class="user">{{comments.user.name}} :</span>
-                                                    <a target="_blank" :href="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" 
+                                                    <a target="_blank" :href="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment"
                                                         style="cursor: pointer;">
                                                         <div v-if="comments.attatchment.endsWith('.png') || comments.attatchment.endsWith('.jpg') || comments.attatchment.endsWith('.gif')">
-                                                            <img title="Click To Download" data-toggle="tooltip" 
+                                                            <img title="Click To Download" data-toggle="tooltip"
                                                                 :src="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" height="80" width="80">
                                                         </div>
                                                         <div v-if="comments.attatchment.endsWith('.txt') ">
-                                                            <img title="Click To Download" data-toggle="tooltip" 
+                                                            <img title="Click To Download" data-toggle="tooltip"
                                                                 :src="'/img/txt.png'" height="50" width="50">
                                                         </div>
                                                         <div v-if="comments.attatchment.endsWith('.pdf') ">
-                                                            <img title="Click To Download" data-toggle="tooltip" 
+                                                            <img title="Click To Download" data-toggle="tooltip"
                                                                 :src="'/img/pdf.png'" height="50" width="50">
                                                         </div>
                                                         <div v-if="comments.attatchment.endsWith('.doc') || comments.attatchment.endsWith('.docx') || comments.attatchment.endsWith('.xls') || comments.attatchment.endsWith('.xlsx')">
-                                                            <img title="Click To Download" data-toggle="tooltip" 
+                                                            <img title="Click To Download" data-toggle="tooltip"
                                                                 :src="'/img/file.png'" height="50" width="50">
                                                         </div>
                                                     </a>
@@ -459,27 +466,27 @@
                                                 </div>
 
                                             </div>
-                                            <li :id="'replyBox'+comments.id" style="display : none;" v-click-outside="hidereplaybox(comments.id)"> 
-                                                <!-- <input type='text' class="form-control" style="width: 85% !important; margin-bottom: 10px;"> 
+                                            <li :id="'replyBox'+comments.id" style="display : none;" v-click-outside="hidereplaybox(comments.id)">
+                                                <!-- <input type='text' class="form-control" style="width: 85% !important; margin-bottom: 10px;">
                                                 <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="saveComment(selectedData.cardId)">Post</a> -->
                                                 <div class="input-group display-inline position-relative" style="margin-bottom: 10px; left: 78px;">
-                                                    <input  :id="'replyTextBox'+comments.id" type="text" 
-                                                            class="custom-input" 
-                                                            name="subscribe_email" 
+                                                    <input  :id="'replyTextBox'+comments.id" type="text"
+                                                            class="custom-input"
+                                                            name="subscribe_email"
                                                             placeholder="Reply ... ">
                                                     <div class="input-group-prepend">
                                                         <span @click="saveReply(comments.id, selectedData.cardId)" class="input-group-text" id="basic-addon1">Reply</span>
                                                     </div>
                                                 </div>
                                             </li>
-                                            <ul style="position: relative; left: 77px; width: calc(100% - 80px);" 
-                                                v-if="comments.comment_reply.length > 0" 
+                                            <ul style="position: relative; left: 77px; width: calc(100% - 80px);"
+                                                v-if="comments.comment_reply.length > 0"
                                                 v-for="reply in comments.comment_reply">
                                                 <div class="user_avatar" :title="reply.user.name" data-placement="bottom" data-toggle="tooltip" >
                                                     <img :src="reply.user.photo_url" v-if="reply.user.photo_url !== null && reply.user.photo_url !== ''">
-                                                    <p :title="reply.user.name" 
+                                                    <p :title="reply.user.name"
                                                     data-placement="bottom" data-toggle="tooltip"
-                                                    class="comment-avature user_avatar" 
+                                                    class="comment-avature user_avatar"
                                                     v-else>
                                                         {{ reply.user.name.substring(0,2) }}</p>
                                                 </div>
@@ -492,22 +499,22 @@
                                                     </span>
                                                     <span style="padding: 10px;" v-if="reply.attatchment != '' && reply.attatchment != null">
                                                         <span class="user">{{reply.user.name}} :</span>
-                                                        <a target="_blank" :href="'/storage/'+selectedData.cardId+'/comment/'+reply.attatchment" 
+                                                        <a target="_blank" :href="'/storage/'+selectedData.cardId+'/comment/'+reply.attatchment"
                                                             style="cursor: pointer;">
                                                             <div v-if="reply.attatchment.endsWith('.png') || reply.attatchment.endsWith('.jpg') || reply.attatchment.endsWith('.gif')">
-                                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                                <img title="Click To Download" data-toggle="tooltip"
                                                                     :src="'/storage/'+selectedData.cardId+'/comment/'+reply.attatchment" height="80" width="80">
                                                             </div>
                                                             <div v-if="reply.attatchment.endsWith('.txt') ">
-                                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                                <img title="Click To Download" data-toggle="tooltip"
                                                                     :src="'/img/txt.png'" height="50" width="50">
                                                             </div>
                                                             <div v-if="reply.attatchment.endsWith('.pdf') ">
-                                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                                <img title="Click To Download" data-toggle="tooltip"
                                                                     :src="'/img/pdf.png'" height="50" width="50">
                                                             </div>
                                                             <div v-if="reply.attatchment.endsWith('.doc') || reply.attatchment.endsWith('.docx') || reply.attatchment.endsWith('.xls') || reply.attatchment.endsWith('.xlsx')">
-                                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                                <img title="Click To Download" data-toggle="tooltip"
                                                                     :src="'/img/file.png'" height="50" width="50">
                                                             </div>
                                                         </a>
@@ -531,7 +538,7 @@
                                                     </div> -->
                                                 </div>
                                             </ul>
-                                            
+
                                         </ul>
                                     </template>
 
@@ -578,10 +585,10 @@
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Log Type</th>
-                                        <th scope="col">Action Type</th>
-                                        <th scope="col">Action At</th>
+                                        <th scope="col" style=" width: 40%;">Title</th>
+                                        <th scope="col" style=" width: 20%;">Log Type</th>
+                                        <th scope="col" style=" width: 20%;">Action Type</th>
+                                        <th scope="col" style=" width: 20%;">Action At</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -969,7 +976,7 @@
             },
             deleteFile(id){
                 let _this = this;
-                
+
                 swal({
                     title: 'Are you sure to delete this file?',
                     text: "",
@@ -988,13 +995,13 @@
                     .then(response => {
                         _this.getFiles(_this.selectedData.cardId);
                         swal("Deleted!", "Successfully Deleted", "success");
-                        
+
                     })
                     .catch(error =>{
 
                     });
                 });
-                
+
             },
             saveComment(id){
                 let _this = this;
@@ -1326,7 +1333,7 @@
             },
 
             deleteDetailComment(id)
-            {   
+            {
                 let _this = this;
                 swal({
                     title: 'Are you sure to delete this comment?',
@@ -1356,12 +1363,12 @@
                 });
             },
             replyToComment(id)
-            {   
+            {
                 $('#replyBox'+id).show();
                 $('#replyTextBox'+id).focus();
             },
             hidereplaybox(id)
-            {   
+            {
                 $('#replyBox'+id).hide();
                 $('#replyTextBox'+id).val('');
             },

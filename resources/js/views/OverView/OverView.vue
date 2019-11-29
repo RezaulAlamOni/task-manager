@@ -161,7 +161,7 @@
                                     <div class="card-body" style="padding: 5px 0px 6px 10px;">
                                         <h3 data-toggle="tooltip" :title="file.title" style="cursor: pointer"
                                             @click="ShowList(file.list_id)">
-                                            #TID{{file.tasks_id}}
+<!--                                            #TID{{file.tasks_id}}-->
                                         </h3>
                                         <div class="comment_details">
                                             <ul style="margin: 0px !important;">
@@ -235,8 +235,8 @@
                                         <p>
                                             <span style="cursor : pointer;color: #6495ED"
                                                   @click="ShowList(comment.list_id)">
-                                                #TID-{{comment.task_id}}
-                                            </span><br>
+<!--                                                #TID-{{comment.task_id}}-->
+                                            </span><!--<br>-->
                                             Task : {{comment.title}}
                                         </p>
                                     </div>

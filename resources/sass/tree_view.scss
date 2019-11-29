@@ -539,7 +539,7 @@
         display: none;
     }
 }
-.details {
+.details-show {
     //position: relative;
     //display: none;
     //width: 30%;
@@ -552,7 +552,7 @@
     padding: 20px;
 }
 
-.detailsShow {
+.detailsShowFull {
     display: block;
     position: absolute;
     top: 50px;
@@ -1090,7 +1090,7 @@
 }
 .details-header {
     margin-top: 8px !important;
-    margin-bottom: 0px !important;
+    margin-bottom: 5px !important;
 }
 .details-header-tag {
     margin-top: 10px !important;
@@ -1110,16 +1110,19 @@
 }
 .page-titles {
     width: 100%;
-    display: table;
+    display: inline-block;
     background: #fff;
     height: 50px;
+    margin-bottom: 10px;
     box-shadow: 0 2px 4px rgba(55, 63, 67, 0.04);
 }
 
 .nav-bar-right{
     position: absolute;
-    right: 60px;
+    right: 0;
     top: 0;
+    padding: 0 50px;
+    background: #ffffff;
 }
 .task-log {
     max-height: 720px;

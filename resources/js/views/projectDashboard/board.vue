@@ -967,7 +967,7 @@
                 </div>
             </div>
         </div>
-        <div class="detailsShow " id="details" >
+        <div class="detailsShowFull" id="details">
             <TaskDetails v-if="Object.keys(selectedData).length > 0"
                 :selectedData="selectedData"
                 :task_logs="task_logs"
@@ -1074,6 +1074,7 @@
             var _this = this;
             $('#header-item').text('Project  / Task Board');
 
+
             $(document)
             .one('focus.autoExpand', 'textarea.autoExpand', function(){
                 var savedValue = this.value;
@@ -1087,7 +1088,6 @@
                 rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
                 this.rows = minRows + rows;
             });
-
 
 
             $(document).ready(function () {
@@ -1872,8 +1872,9 @@
             },
             getBoardTask() {
                 var _this = this;
-                // this.scene = {};
                 // $('#loder-hide').fadeIn();
+                // this.scene = {};
+
                 var datePicker = new Date();
                 datePicker.setDate(datePicker.getDate() - 1);
                 _this.disabledDates = {
@@ -2389,7 +2390,7 @@
                     $('#task_width').addClass('task_widthNormal');
                     // $('#details').removeClass('details');
                     // $('#details').addClass('detailsShow');
-                    $('#details').addClass('details');
+                    $('#details').addClass('details-show');
                 }
             },
             HideDetails() {
@@ -2398,7 +2399,7 @@
                 $('#task_width').removeClass('task_widthNormal');
                 // $('#details').addClass('details');
                 // $('#details').removeClass('detailsShow');
-                $('#details').removeClass('details');
+                $('#details').removeClass('details-show');
             },
             ShowTextArea(data) {
                 var _this = this;
