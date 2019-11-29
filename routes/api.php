@@ -90,6 +90,7 @@ Route::post('/change-board-parent', 'MultipleBoardController@changeParentId');
 Route::post('/column-sort', 'MultipleBoardController@columnSort');
 Route::post('/get-card-comment', 'CommentController@getCardComment');
 Route::post('/add-comment', 'CommentController@addComment');
+Route::post('/save-comment-reply', 'CommentController@saveCommentReply');
 Route::post('/comment-file-upload', 'CommentController@fileUpload');
 Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');
 Route::get('/card-delete/{id}','MultipleBoardController@cardDelete'); //delete card

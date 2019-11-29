@@ -308,8 +308,8 @@
                                         <a @click="updateDescription('#bx'+selectedData.cardId)" class="btn btn-default"
                                            href="javascript:void(0)"
                                            style="background: #7BB348;">Post</a>
-                                        <a class="btn btn-default" href="javascript:void(0)"
-                                           style="border: 1px solid #f1efe6" @click="HideDetails">Cancel</a>
+                                        <!-- <a class="btn btn-default" href="javascript:void(0)"
+                                           style="border: 1px solid #f1efe6" @click="HideDetails">Cancel</a> -->
                                     </div>
                                 </div>
                             </div>
@@ -395,8 +395,8 @@
            
             <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel" style="overflow: hidden;">
                 <span>
-                    <div class="row comment-section-in-task-details" style="max-height: calc(100vh - 285px);">
-                        <div id='cmntSection' style="margin:0px auto; max-height: calc(100vh - 350px); width: 90%; height: 1000px; margin-bottom: 20px; overflow: auto;" >
+                    <div class="row comment-section-in-task-details" style="max-height: calc(100vh - 300px);">
+                        <div id='cmntSection' style="margin:0px auto; max-height: calc(100vh - 370px); width: 90%; height: 1000px; margin-bottom: 20px; overflow: auto;" >
                             
                             <div class="comment_block">
                                 <div class="new_comment">
@@ -445,20 +445,93 @@
                                                 <div class="comment_details">
                                                     <ul>
                                                         <li><i class="fa fa-clock-o"></i> {{comments.created_at.substring(11,16)}}</li>
-                                                        <li><i class="fa fa-calendar"></i>{{comments.created_at.substring(0,10)}}</li>
+                                                        <li><i class="fa fa-calendar"></i>{{ ' '+comments.created_at.substring(0,10)}}</li>
                                                         <li><i class="fa fa-pencil"></i> <span class="user">{{comments.user.name}}</span></li>
-                                                        <li @click="deleteDetailComment(comments.id)"><i class="fa fa-trash"></i> <span class="user"> Delete</span></li>
+                                                        <li @click="deleteDetailComment(comments.id)"><i class="fa fa-trash"></i> <span class="user" style="color: red"> Delete</span></li>
                                                     </ul>
                                                 </div>
-                                                <!-- <div class="comment_tools">-->
-                                                <!--     <ul>-->
+                                                <div class="comment_tools">
+                                                    <ul>
+                                                        <li @click="replyToComment(comments.id)"><i class="fa fa-reply"></i></li>
                                                 <!--         <li><i class="fa fa-share-alt"></i></li>-->
-                                                <!--         <li><i class="fa fa-reply"></i></li>-->
                                                 <!--         <li><i class="fa fa-heart love"></i></li>-->
-                                                <!--     </ul>-->
-                                                <!-- </div>-->
+                                                    </ul>
+                                                </div>
 
                                             </div>
+                                            <li :id="'replyBox'+comments.id" style="display : none;" v-click-outside="hidereplaybox(comments.id)"> 
+                                                <!-- <input type='text' class="form-control" style="width: 85% !important; margin-bottom: 10px;"> 
+                                                <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="saveComment(selectedData.cardId)">Post</a> -->
+                                                <div class="input-group display-inline position-relative" style="margin-bottom: 10px; left: 78px;">
+                                                    <input  :id="'replyTextBox'+comments.id" type="text" 
+                                                            class="custom-input" 
+                                                            name="subscribe_email" 
+                                                            placeholder="Reply ... ">
+                                                    <div class="input-group-prepend">
+                                                        <span @click="saveReply(comments.id, selectedData.cardId)" class="input-group-text" id="basic-addon1">Reply</span>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <ul style="position: relative; left: 77px; width: calc(100% - 80px);" 
+                                                v-if="comments.comment_reply.length > 0" 
+                                                v-for="reply in comments.comment_reply">
+                                                <div class="user_avatar" :title="reply.user.name" data-placement="bottom" data-toggle="tooltip" >
+                                                    <img :src="reply.user.photo_url" v-if="reply.user.photo_url !== null && reply.user.photo_url !== ''">
+                                                    <p :title="reply.user.name" 
+                                                    data-placement="bottom" data-toggle="tooltip"
+                                                    class="comment-avature user_avatar" 
+                                                    v-else>
+                                                        {{ reply.user.name.substring(0,2) }}</p>
+                                                </div>
+                                                <div class="comment_body">
+                                                    <span style="padding: 10px;" v-if="reply.comment != '' && reply.comment != null">
+                                                        <p>
+                                                            <span class="user">{{reply.user.name}} :</span>
+                                                            <span v-html="reply.comment"></span>
+                                                        </p>
+                                                    </span>
+                                                    <span style="padding: 10px;" v-if="reply.attatchment != '' && reply.attatchment != null">
+                                                        <span class="user">{{reply.user.name}} :</span>
+                                                        <a target="_blank" :href="'/storage/'+selectedData.cardId+'/comment/'+reply.attatchment" 
+                                                            style="cursor: pointer;">
+                                                            <div v-if="reply.attatchment.endsWith('.png') || reply.attatchment.endsWith('.jpg') || reply.attatchment.endsWith('.gif')">
+                                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                                    :src="'/storage/'+selectedData.cardId+'/comment/'+reply.attatchment" height="80" width="80">
+                                                            </div>
+                                                            <div v-if="reply.attatchment.endsWith('.txt') ">
+                                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                                    :src="'/img/txt.png'" height="50" width="50">
+                                                            </div>
+                                                            <div v-if="reply.attatchment.endsWith('.pdf') ">
+                                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                                    :src="'/img/pdf.png'" height="50" width="50">
+                                                            </div>
+                                                            <div v-if="reply.attatchment.endsWith('.doc') || reply.attatchment.endsWith('.docx') || reply.attatchment.endsWith('.xls') || reply.attatchment.endsWith('.xlsx')">
+                                                                <img title="Click To Download" data-toggle="tooltip" 
+                                                                    :src="'/img/file.png'" height="50" width="50">
+                                                            </div>
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                                <div class="comment_toolbar">
+                                                    <div class="comment_details">
+                                                        <ul>
+                                                            <li><i class="fa fa-clock-o"></i> {{reply.created_at.substring(11,16)}}</li>
+                                                            <li><i class="fa fa-calendar"></i>{{reply.created_at.substring(0,10)}}</li>
+                                                            <li><i class="fa fa-pencil"></i> <span class="user">{{reply.user.name}}</span></li>
+                                                            <li @click="deleteDetailComment(reply.id)"><i class="fa fa-trash"></i> <span class="user" style="color: red"> Delete</span></li>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- <div class="comment_tools">
+                                                        <ul>
+                                                            <li @click="replyToComment(comments.id)"><i class="fa fa-reply"></i></li>
+                                                            <li><i class="fa fa-share-alt"></i></li>
+                                                            <li><i class="fa fa-heart love"></i></li>
+                                                        </ul>
+                                                    </div> -->
+                                                </div>
+                                            </ul>
+                                            
                                         </ul>
                                     </template>
 
@@ -483,8 +556,8 @@
 
                                 <div class="SubmitButton" id="SubmitButton" style="margin-bottom: 10px; margin-top: 10px;">
                                     <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="saveComment(selectedData.cardId)">Post</a>
-                                    <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6"
-                                    @click="HideTextArea">Cancel</a>
+                                    <!-- <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6"
+                                    @click="HideTextArea">Cancel</a> -->
                                     <input :id="'file'+selectedData.cardId" :ref="selectedData.cardId" style="display: none;" @change="updatePicture($event,selectedData)"
                                         type="file">
                                     <a @click="addAttachment(selectedData)" class="btn btn-default btn-sm"
@@ -808,11 +881,11 @@
             },
             HideTextArea() {
                 var _this = this;
-                $('#cmntSection').css({maxHeight:' calc(100vh - 350px)'});
+                $('#cmntSection').css({maxHeight:' calc(100vh - 370px)'});
                 $('.SubmitButton').hide();
             },
             ShowTextArea(data) {
-                $('#cmntSection').css({maxHeight:' calc(100vh - 400px)'});
+                $('#cmntSection').css({maxHeight:' calc(100vh - 420px)'});
                 this.$emit('textArea', data)
                 $('#comment'+data.cardId).css({height : '50px', maxHeight : '100px'});
                  var hei = $("#cmntSection").height();
@@ -965,7 +1038,7 @@
             },
             commentPress(data){
                 let cmHe = $('#comment'+data.cardId).height();
-                $('#cmntSection').css({maxHeight: ' calc(100vh - 400px - '+cmHe+'px + 30px)'});
+                $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
                 console.log(this.selectedData.comment);
             },
             // removeAssignedUser(user, index, key) {
@@ -1281,6 +1354,36 @@
 
                     });
                 });
+            },
+            replyToComment(id)
+            {   
+                $('#replyBox'+id).show();
+                $('#replyTextBox'+id).focus();
+            },
+            hidereplaybox(id)
+            {   
+                $('#replyBox'+id).hide();
+                $('#replyTextBox'+id).val('');
+            },
+            saveReply(id, task_id)
+            {
+                let _this = this;
+                let reply = $('#replyTextBox'+id).val();
+                let data = {
+                    'parent_id' : id,
+                    'task_id'   : task_id,
+                    'comment'   : reply
+                }
+                // console.log(data);
+                axios.post('/api/save-comment-reply', data)
+                .then(response => data)
+                .then(response => {
+                    _this.getComments(task_id);
+                    $('#replyBox'+id).hide();
+                })
+                .catch(error => {
+
+                })
             }
         },
 

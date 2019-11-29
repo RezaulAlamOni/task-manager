@@ -21,4 +21,9 @@ class Comment extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
+    public function commentReply()
+    {
+        return $this->hasMany(self::class, 'parent_id', 'id')->with('user','commentReply');
+    }
+
 }

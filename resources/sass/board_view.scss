@@ -663,3 +663,29 @@
 .ck-file-dialog-button {
     display: none;
 }
+
+.custom-input {
+    border: 2px solid #fff;
+    background: #f2f2f2;
+    padding: 10px 0 10px 20px;
+    width: 75.5%;
+    max-width: 500px;
+    margin: 15px 0 0 0;
+    /* border-radius: 30px; */
+    color: #525252;
+    transition: .4s;
+}
+
+.input-group-text {
+    position: absolute;
+    right: 78px;
+    top: 17px;
+    background: #1167a2;
+    color: #fff;
+    /* border-radius: 0 31px 31px 0; */
+    padding: 8px 10px;
+    border: 2px solid #1167a2;
+    cursor: pointer;
+    font-family: Lato,sans-serif;
+    font-size: 12px;
+}
