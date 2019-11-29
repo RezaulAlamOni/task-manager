@@ -603,7 +603,7 @@
 
                     </div>
                 </div>
-                <div class="detailsShow" id="details" v-click-outside="HideDetails">
+                <div class="detailsShowFull" id="details" v-click-outside="HideDetails">
                     <TaskDetails
                         :selectedData="selectedData"
                         :task_logs="task_logs"

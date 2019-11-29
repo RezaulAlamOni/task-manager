@@ -967,7 +967,7 @@
                 </div>
             </div>
         </div>
-        <div class="detailsShow " id="details" >
+        <div class="detailsShowFull" id="details" >
             <TaskDetails v-if="Object.keys(selectedData).length > 0"
                 :selectedData="selectedData"
                 :task_logs="task_logs"
