@@ -824,6 +824,7 @@
             },
 
             setListId(navList, nav_id, description, type) {
+
                 this.list_id = navList.id;
                 this.nav_id = nav_id;
                 var title = (type === 'list') ? navList.list_title : navList.board_title;

@@ -132,6 +132,6 @@ class Task extends Model
 
     public function comment()
     {
-        return $this->hasMany(Comment::class, 'task_id', 'id')->with('user');
+        return $this->hasMany(Comment::class, 'task_id', 'id')->where('parent_id', null)->with('user','commentReply');
     }
 }   

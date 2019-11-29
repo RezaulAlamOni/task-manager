@@ -2401,6 +2401,9 @@
 
             //collect data by child navbar component
             showTask(data) {
+                setTimeout(function () {
+                    $('#details').removeClass('details');
+                },300);
                 this.list_id = data.list_id;
                 this.nav_id = data.nav_id;
                 this.list.name = data.title;
@@ -3004,14 +3007,14 @@
                     $('#task_width').removeClass('task_width');
                     $('#task_width').addClass('task_widthNormal');
                     // $('#details').removeClass('details');
-                    $('#details').addClass('details');
+                    $('#details').addClass('details-show');
                 }
             },
             HideDetails() {
                 $('#task_width').addClass('task_width');
                 $('#task_width').removeClass('task_widthNormal');
                 // $('#details').addClass('details');
-                $('#details').removeClass('details');
+                $('#details').removeClass('details-show');
             },
             ShowTextArea(data) {
                 var _this = this;
