@@ -217,6 +217,80 @@
         }
     }
 
+    .jquery-accordion-menu > ul > li:hover > a {
+        background: #8ec0da
+    }
+
+    .jquery-accordion-menu, .jquery-accordion-menu * {
+        font-family: 'Open Sans', sans-serif;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        outline: 0
+    }
+
+    .jquery-accordion-menu {
+        width: 310px;
+        float: left;
+        position: absolute;
+        box-shadow: 0 5px 10px #333;
+        border-radius: 15px;
+        display : none;
+        z-index: 99999;
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            li {
+                width: 100%;
+                display: block;
+                float: left;
+                position: relative;
+                background: transparent;
+
+                a {
+                    width: 100%;
+                    padding: 10px 0px 10px 13px;
+                    float: left;
+                    text-decoration: none;
+                    color: #f0f0f0;
+                    font-size: 13px;
+                    background: #ecf2fa;
+                    color: black;
+                    border-bottom: solid 1px #427bcc;
+                    white-space: nowrap;
+                    position: relative;
+                    overflow: hidden;
+                    border-radius: 5px;
+                    -webkit-transition: color .2s linear, background .2s linear;
+                    transition: color .2s linear, background .2s linear;
+                }
+            }
+        }
+    }
+
+    //.jquery-accordion-menu > ul > li:first-child > a {
+    //    border-radius: 15px 15px 0 0;
+    //}
+    //.jquery-accordion-menu > ul > li:last-child > a {
+    //    border-radius:  0 0 15px 15px;
+    //}
+    //.jquery-accordion-menu > ul > li > a {
+    //    border-bottom: solid 1px #3b424d
+    //}
+    .dateCal-selected{
+        border: none;
+        width: 353%;
+        position: absolute;
+        top: 6px;
+        z-index: 1;
+        line-height: 29px;
+        background: transparent;
+        opacity: 0;
+        cursor: pointer;
+    }
 }
 
 .list-group-item {

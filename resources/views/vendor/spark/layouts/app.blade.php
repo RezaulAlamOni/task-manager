@@ -44,6 +44,26 @@
         window.Spark = <?php echo json_encode(array_merge(
             Spark::scriptVariables(), []
         )); ?>;
+        setTimeout(() => {
+            $('#getAllComment').hide();
+        }, 500);
+        setTimeout(() => {
+            $('#getAllComment').on('click',function(){
+                $.ajax({
+                    type: "GET",
+                    url: "/api/get-all-comment",
+                    cache: false,
+                    success: function(data){
+                        $('#getAllComment').show();
+                        $("#r_tab4").html(data);
+
+                    },
+                    error: function(){
+
+                    }
+                });
+            })
+        }, 2000);
     </script>
 </head>
 <body class="skin-default" style="-webkit-print-color-adjust:exact;">
