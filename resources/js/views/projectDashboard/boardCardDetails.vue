@@ -386,7 +386,7 @@
                                 </div>
                             </div>
                        </div>
-                       <div class="col-12" >
+                       <div class="col-12" style="margin: 10px 0px;">
                            <div class="">
                                <input :id="'files'+selectedData.cardId" :ref="selectedData.cardId" style="display: none;" @change="updateCardPicture($event,selectedData)"
                                         type="file">
@@ -403,7 +403,7 @@
             <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel" style="overflow: hidden;">
                 <span>
                     <div class="row comment-section-in-task-details" style="max-height: calc(100vh - 300px);">
-                        <div id='cmntSection' style="margin:0px auto; max-height: calc(100vh - 370px); width: 90%; height: 1000px; margin-bottom: 20px; overflow: auto;" >
+                        <div id='cmntSection' style="margin:0px 28px; max-height: calc(100vh - 370px); width: 90%; height: 1000px; overflow: auto;" >
 
                             <div class="comment_block">
                                 <div class="new_comment">
@@ -523,9 +523,9 @@
                                                 <div class="comment_toolbar">
                                                     <div class="comment_details">
                                                         <ul>
-                                                            <li><i class="fa fa-clock-o"></i> {{reply.created_at.substring(11,16)}}</li>
-                                                            <li><i class="fa fa-calendar"></i>{{reply.created_at.substring(0,10)}}</li>
-                                                            <li><i class="fa fa-pencil"></i> <span class="user">{{reply.user.name}}</span></li>
+                                                            <li><i class="fa fa-clock-o"></i> {{ reply.created_at.substring(11,16)}}</li>
+                                                            <li><i class="fa fa-calendar"></i> {{ reply.created_at.substring(0,10)}}</li>
+                                                            <li><i class="fa fa-pencil"></i> <span class="user"> {{reply.user.name}}</span></li>
                                                             <li @click="deleteDetailComment(reply.id)"><i class="fa fa-trash"></i> <span class="user" style="color: red"> Delete</span></li>
                                                         </ul>
                                                     </div>
@@ -545,7 +545,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12" >
+                        <div class="col-12" style="margin: 10px 0px;">
                             <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater">
                             position: fixed; bottom: 0px; width: 54%; right: 15px; background: white; width: 100%; max-width: 634px;
                              -->
@@ -580,7 +580,7 @@
             <div aria-labelledby="log-tab" class="tab-pane" id="log" role="tabpanel">
                 <span>
                     <div class="log-data">
-                        <h3 class="p-3">Log data for <b>{{selectedData.data}}</b></h3>
+                        <h3 class="p-3">Log data :</h3>
                         <div class="tags-log">
                             <table class="table table-striped table-bordered">
                                 <thead>
