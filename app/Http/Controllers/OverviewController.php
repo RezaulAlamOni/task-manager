@@ -76,4 +76,5 @@ class OverviewController extends Controller
             ->where('task_lists.project_id',$project_id)->with('user')->get();
         return \response()->json(['comments'=>$all_comments,'status'=>'success']);
     }
+
 }

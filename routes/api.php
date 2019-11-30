@@ -110,3 +110,6 @@ Route::get('/overview-all-files/{project_id}', 'OverviewController@All_files');
 Route::get('/overview-all-comments/{project_id}', 'OverviewController@AllComments');
 Route::post('/project-overview/list-sort', 'OverviewController@ListSort');
 Route::post('/project-overview/list-open-close', 'OverviewController@ListToggle');
+
+//logs
+Route::get('/overview-all-logs/{project_id}', 'ActionLogController@AllLogs');
