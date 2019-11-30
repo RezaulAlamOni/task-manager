@@ -23,7 +23,7 @@ class ActionLogController extends Controller
             ->where('task_lists.project_id',$project_id)
             ->orWhere('action_logs.project_id',$project_id)
             ->with('user')
-            ->paginate(50);
+            ->paginate(500);
         return \response()->json(['logs'=>$all_logs,'status'=>'success']);
     }
 
