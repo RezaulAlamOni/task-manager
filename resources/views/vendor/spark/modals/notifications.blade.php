@@ -26,7 +26,7 @@
                                         <i class="fa fa-fw ti-settings"></i>
                                     </a>
                                 </li>
-                                <li class="text-center nav-item" onclick="getComment">
+                                <li class="text-center nav-item" id="getAllComment">
                                     <a href="#r_tab4" role="tab" data-toggle="tab" class="nav-link">
                                         <i class="fa fa-comments"></i>
                                     </a>
@@ -192,16 +192,9 @@
                                         <i class="fa fa-btn fa-spinner fa-spin"></i> {{__('Loading Notifications')}}
                                     </div>
 
-                                    <div class="notification-container" v-if=" ! loadingNotifications && activeNotifications.length == 0"  style="width:100%;float: left;">
-                                        <div class="alert alert-warning m-b-none" v-for="cn in 10" >
-                                            {{__('We don\'t have anything to show you right now! But when we do, we\'ll be sure to let you know. Talk to you soon!')}}
-                                            {{-- @{{ comments }} --}}
-                                        </div>
-                                    </div>
-
                                     <!-- List Of Notifications -->
                                     <div class="notification-container" v-if="showingNotifications && hasNotifications">
-                                        <div class="notification" v-for="notification in notifications.notifications">  style="width:100%;float: left;"
+                                        <div class="notification" v-for="notification in notifications.notifications">
 
                                             <!-- Notification Icon -->
                                             <figure>
@@ -251,7 +244,7 @@
 
                     <!-- Modal Actions -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-success" data-dismiss="modal">{{__('Close')}}</button>
+                        <button type="button" class="btn btn-default " data-dismiss="modal">{{__('Close')}}</button>
                     </div>
                 </div>
             </div>

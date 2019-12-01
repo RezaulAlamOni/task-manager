@@ -81,7 +81,6 @@ Route::post('/add-existing-tasks', 'MultipleBoardController@addExistingTasks');
 Route::post('/card-add', 'MultipleBoardController@cardAdd');
 Route::post('/card-file-upload', 'MultipleBoardController@fileUpload');
 Route::post('/delete-card-file', 'MultipleBoardController@cardFileDelete');
-Route::post('/delete-card-comment', 'CommentController@cardCommentDelete');
 Route::post('/get-card-file', 'MultipleBoardController@getCardFiles');
 Route::post('/hideChildes', 'MultipleBoardController@childHide');
 Route::post('/show-child-parent', 'MultipleBoardController@childrenAndParent');
@@ -90,8 +89,11 @@ Route::post('/change-board-parent', 'MultipleBoardController@changeParentId');
 Route::post('/column-sort', 'MultipleBoardController@columnSort');
 Route::post('/get-card-comment', 'CommentController@getCardComment');
 Route::post('/add-comment', 'CommentController@addComment');
+Route::post('/delete-card-comment', 'CommentController@cardCommentDelete');
 Route::post('/save-comment-reply', 'CommentController@saveCommentReply');
 Route::post('/comment-file-upload', 'CommentController@fileUpload');
+Route::get('/get-all-comment', 'CommentController@allComment');
+
 Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');
 Route::get('/card-delete/{id}','MultipleBoardController@cardDelete'); //delete card
 Route::get('/board-task-delete/{id}','MultipleBoardController@existingTaskDelete'); //delete card

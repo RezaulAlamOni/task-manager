@@ -1521,7 +1521,7 @@
                     e.preventDefault();
                     e.stopPropagation();
                     if (_this.context_menu_flag !== 1) {
-                        $('#rmenu').addClass('menu-show');
+                        // $('#rmenu').addClass('menu-show');
                         let target = $(e.target);
                         let w = target.closest('#tree_view_list').width();
                         let h = target.closest('#tree_view_list').height();

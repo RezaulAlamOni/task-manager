@@ -148,7 +148,8 @@
                                         <div :class="card.props.className"
                                             :style="card.props.style"
                                             class="card-list"
-                                            @click="selectCard(card,column.children)"
+                                            @contextmenu="makeItClick($event, card,column.children)"
+                                            @click="makeItClick($event, card,column.children)"
                                             :id="'card_'+card.cardId"
                                             v-on:dblclick="showLog" >
                                                 <!-- @click="selectCard(card)" -->
@@ -453,6 +454,125 @@
                             </p>
                         </div>
                     </Container>
+                    <div class="jquery-accordion-menu" id="jquery-accordion-menu" v-click-outside="HideCustomMenu">
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split "><img src="/img/task-icon/copy-1.png" class="contex-menu-icon"> Copy </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">C</span></span>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split "><img src="/img/task-icon/cut.png" class="contex-menu-icon"> Cut </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">X</span></span>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split disabled" style="color: gray;"><img src="/img/task-icon/past.png" class="contex-menu-icon"> Paste </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">v</span></span>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"><img src="/img/task-icon/copy-to.png" class="contex-menu-icon"> Copy Selected To
+                                </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">T</span></span>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"><img src="/img/task-icon/move.png" class="contex-menu-icon"> Move Selected
+                                </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">M</span></span>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"><img src="/img/task-icon/trash.png" class="contex-menu-icon"> Delete Selected <span class="badge-pill badge-default contex-menu-sortcut">Delete</span></a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split "><img src="/img/task-icon/add-user.png" class="contex-menu-icon"> Assign User to Selected </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">U</span></span>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="collapse show switchToggle">
+                                        <ul>
+                                            <li class="assignUser">
+                                                <label class="pl-2 label-text"><span class="assign-user-drop-down-text">
+                                                                            Select User For Assign To Selected Task.
+                                                                        </span></label>
+                                            </li>
+                                            <li class="assignUser">
+                                                <div class="users-select row">
+                                                    <div class="col-md-3 pt-1 pl-4">
+                                                        <p class="assignUser-photo">
+                                                            Br</p>
+                                                    </div>
+                                                    <div class="col-md-9 assign-user-name-email">
+                                                        <h5>Bryan<br> <small>bnatter123@gmail.com</small></h5></div>
+                                                </div>
+                                                <div class="users-select row">
+                                                    <div class="col-md-3 pt-1 pl-4">
+                                                        <p class="assignUser-photo">
+                                                            Ia</p>
+                                                    </div>
+                                                    <div class="col-md-9 assign-user-name-email">
+                                                        <h5>Ian Weyenberg<br> <small>eeyonw@gmail.com</small></h5></div>
+                                                </div>
+                                                <div class="users-select row">
+                                                    <div class="col-md-3 pt-1 pl-4">
+                                                        <p class="assignUser-photo">
+                                                            Md</p>
+                                                    </div>
+                                                    <div class="col-md-9 assign-user-name-email">
+                                                        <h5>Md Shahinur Rahman<br> <small>coredeveloper.2013@gmail.com</small></h5></div>
+                                                </div>
+                                                <div class="users-select row">
+                                                    <div class="col-md-3 pt-1 pl-4">
+                                                        <p class="assignUser-photo">
+                                                            Su</p>
+                                                    </div>
+                                                    <div class="col-md-9 assign-user-name-email">
+                                                        <h5>Sudip<br> <small>sudip.mediusware@gmail.com</small></h5></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split "><img src="/img/task-icon/tag-add.png" class="contex-menu-icon"> Add Tags to Selected
+                                </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Shift</span>+<span class="badge-pill badge-default">#</span></span>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="collapse show switchToggle">
+                                        <ul>
+                                            <li class="assignUser">
+                                                <label class="pl-2 label-text"><span class="assign-user-drop-down-text">
+                                                                            Select Tag For Add tag To Selected Task.
+                                                                        </span></label>
+                                            </li>
+                                            <li class="assignUser">
+                                                <div class="users-select row">
+                                                    <div class="col-md-9 add-tag-to-selected"><span class="badge badge-default tag-color-custom-contextmenu" style="background: rgb(153, 38, 0);">.</span>
+                                                        <h5>Bug</h5></div>
+                                                </div>
+                                                <div class="users-select row">
+                                                    <div class="col-md-9 add-tag-to-selected"><span class="badge badge-default tag-color-custom-contextmenu" style="background: rgb(0, 128, 255);">.</span>
+                                                        <h5>Priority High</h5></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <li style="position: relative;">
+                                <div class="vdp-datepicker">
+                                    <div class="">
+                                        <!---->
+                                        <input type="text" readonly="readonly" autocomplete="off" class="dateCal-selected">
+                                        <!---->
+                                    </div>
+                                    <div class="vdp-datepicker__calendar" style="display: none;">
+                                        <header><span class="prev">&lt;</span> <span class="day__month_btn up">Nov 2019</span> <span class="next">&gt;</span></header>
+                                        <div class=""><span class="cell day-header">Sun</span><span class="cell day-header">Mon</span><span class="cell day-header">Tue</span><span class="cell day-header">Wed</span><span class="cell day-header">Thu</span><span class="cell day-header">Fri</span><span class="cell day-header">Sat</span> <span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day">1</span><span class="cell day weekend sat">2</span><span class="cell day weekend sun">3</span><span class="cell day">4</span><span class="cell day">5</span><span class="cell day">6</span><span class="cell day">7</span><span class="cell day">8</span><span class="cell day weekend sat">9</span><span class="cell day weekend sun">10</span><span class="cell day">11</span><span class="cell day">12</span><span class="cell day">13</span><span class="cell day">14</span><span class="cell day">15</span><span class="cell day weekend sat">16</span><span class="cell day weekend sun">17</span><span class="cell day">18</span><span class="cell day">19</span><span class="cell day">20</span><span class="cell day">21</span><span class="cell day">22</span><span class="cell day weekend sat">23</span><span class="cell day weekend sun">24</span><span class="cell day">25</span><span class="cell day">26</span><span class="cell day">27</span><span class="cell day">28</span><span class="cell day">29</span><span class="cell day today weekend sat">30</span></div>
+                                    </div>
+                                    <div class="vdp-datepicker__calendar" style="display: none;">
+                                        <header><span class="prev">&lt;</span> <span class="month__year_btn up">2019</span> <span class="next">&gt;</span></header> <span class="cell month">January</span><span class="cell month">February</span><span class="cell month">March</span><span class="cell month">April</span><span class="cell month">May</span><span class="cell month">June</span><span class="cell month">July</span><span class="cell month">August</span><span class="cell month">September</span><span class="cell month">October</span><span class="cell month">November</span><span class="cell month">December</span></div>
+                                    <div class="vdp-datepicker__calendar" style="display: none;">
+                                        <header><span class="prev">&lt;</span> <span>2010 - 2019</span> <span class="next">&gt;</span></header> <span class="cell year">2010</span><span class="cell year">2011</span><span class="cell year">2012</span><span class="cell year">2013</span><span class="cell year">2014</span><span class="cell year">2015</span><span class="cell year">2016</span><span class="cell year">2017</span><span class="cell year">2018</span><span class="cell year">2019</span></div>
+                                </div>
+                                <a class="calender li-opacity clickHide"><img src="/img/task-icon/date-plus.png" class="contex-menu-icon"> Set Due Date
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"><img src="/img/task-icon/move-1.png" class="contex-menu-icon"> Move To Dont Forget Section </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1065,6 +1185,7 @@
                     project_id: null,
                 },
                 selectedData : {},
+                selectedIds : {},
                 task_logs : null,
                 check_uncheck_child : null,
                 manageTag: null,
@@ -2420,30 +2541,116 @@
                 }, 500)
 
             },
-            // removeAssignedUser(user_id, task_id) {
+            HideCustomMenu() {
+                $('.jquery-accordion-menu').hide();
+            },
+            makeItClick(e, card, child) {
+                var _this = this;
 
-            //     // console.log(user.id, user.task_id);
-            //     var _this = this;
-            //     var postData = {
-            //         user_id: user_id,
-            //         task_id: task_id
-            //     };
-            //     axios.post('/api/task-list/assign-user-remove', postData)
-            //         .then(response => response.data)
-            //         .then(response => {
-            //             // console.log(response);
-            //             if (response === 'success') {
-            //                 _this.cards[index].task[key].assigned_user.splice(0,1);
-            //                 _this.cards[index].task[key].assigned_user_i.splice(0,1);
-            //                 setTimeout(function () {
-            //                     _this.getData();
-            //                 }, 100);
-            //             }
-            //         })
-            //         .catch(error => {
-            //             console.log('Api assign-user-remove is not Working !!!')
-            //         });
-            // },
+
+                
+
+
+
+                
+                if (e.ctrlKey && e.which === 1) {
+                    // if (card.text !== '' && _this.selectedIds.length <= 1) {
+                    //     _this.DeleteEmptyTask();
+                    // }
+                    // var index = _this.selectedIds.indexOf(card.cardId);
+                    // if (index > -1) {
+                    //     _this.selectedIds.splice(index, 1);
+                    //     $('#click' + card.cardId).removeClass('clicked');
+
+                    // } else {
+                    //     _this.selectedIds.push(card.cardId);
+                    //     $('#click' + card.cardId).addClass('clicked');
+                    // }
+                    // $('.jquery-accordion-menu').hide();
+                    // if (_this.selectedIds.length > 1) {
+                    //     _this.selectedData = {};
+                    //     _this.context_menu_flag = 0;
+                    // }
+
+
+                } else if (e.shiftKey && e.which === 1) {
+
+                    // $('#click' + card.cardId).addClass('clicked');
+
+                } else if (e.which === 1) {
+                    
+                    // if (card.text !== '') {
+                    //     _this.DeleteEmptyTask();
+                    // }
+                    _this.selectedIds = [];
+                    _this.selectedIds.push(card.cardId);
+                    // this.selectedData = card;
+                    // this.tags = card.tags;
+                    // $('.eachItemRow').removeClass('clicked');
+                    // $(e.target).addClass('clicked');
+                    // $(e.target).closest('.eachItemRow').addClass('clicked');
+                    // if (card.text !== 'Dont Forget Section') {
+                    //     // data.draggable = true;
+                    // }
+                    // $('.jquery-accordion-menu').hide();
+
+                    this.selectedData = card;
+                    this.selectedCard = card.cardId;
+                    this.task_logs = null;
+                    this.HideDetails();
+                    $('.card-list').css("background-color", "#ffffff");
+                    $('#card_'+this.selectedCard).css("background-color","#ddf3fd");
+                    // console.log(this.selectedData);
+
+
+                } else if (e.which === 3) {
+                    //  && card.draggable == true
+                    // alert('single');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (_this.context_menu_flag !== 1) {
+                        $('#rmenu').addClass('menu-show');
+                        let target = $(e.target);
+                        let w = target.closest('#board_view_list').width();
+                        // console.log(w);
+                        let h = target.closest('#board_view_list').height();
+                        let p = target.closest('#board_view_list').offset();
+                        let left = e.clientX - p.left;
+                        let top = e.clientY - p.top;
+
+                        let clickH = $('.jquery-accordion-menu').height();
+                        clickH = clickH < 150 ? 400 : clickH;
+                        if ((w - left) < 230) {
+                            left = w - 250;
+                        }
+                        if (h < top + clickH) {
+                            top = top - (top + clickH - h);
+                        }
+                        if (top < 10) {
+                            top = 10;
+                        }
+
+                        let ttarget = target.closest('#board_view_list').find('.jquery-accordion-menu');
+                        
+                        if (_this.selectedIds.length > 0) {
+                            var index = _this.selectedIds.indexOf(card.cardId);
+                            if (index > -1) {
+                                ttarget.css({
+                                    top: top,
+                                    left: left,
+                                }).fadeIn();
+                            } else {
+                                $('.eachItemRow').removeClass('clicked');
+
+                                $('.jquery-accordion-menu').hide();
+                                _this.selectedIds = [];
+                            }
+                        }
+                    }
+                } else if (e.ctrlKey && e.which === 65) {
+                    e.target.setSelectionRange(0, card.text.length);
+                }
+            },
             removeAssignedUser(user_id, task_id) {
 
                 // console.log(user.id, user.task_id);

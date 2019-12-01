@@ -99,4 +99,13 @@ class CommentController extends Controller
         }
         return response()->json(['success' => true, 'Data' => $insert]);
     }
+
+    public function allComment()
+    {   
+        $user = Auth::user()->id;
+        $comment = Comment::where('user_id', $user)->orderBy('id','DESC')->get();
+        $project = view('vendor.spark.layouts.commentsNotification', ['comment' => $comment])->render();
+        // return response()->json(['success' => true, 'Data' => $project]);
+        print_r($project);
+    }
 }
