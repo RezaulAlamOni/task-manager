@@ -4,12 +4,12 @@
         <nav class="navbar-expand-md navbar-spark">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse show">
-<!--                    <li class="nav-item ml-4" style="list-style: none;">-->
-<!--                        <a @click="setOverview" class="d-block d-md-flex text-center nav-link"-->
-<!--                           href="Javascript:void(0)">-->
-<!--                            <span class="d-none d-md-block">Overview</span>-->
-<!--                        </a>-->
-<!--                    </li>-->
+                    <!--                    <li class="nav-item ml-4" style="list-style: none;">-->
+                    <!--                        <a @click="setOverview" class="d-block d-md-flex text-center nav-link"-->
+                    <!--                           href="Javascript:void(0)">-->
+                    <!--                            <span class="d-none d-md-block">Overview</span>-->
+                    <!--                        </a>-->
+                    <!--                    </li>-->
                     <div class="nav-train-station">
                         <div class="nav-train">
                             <ul class="navbar-nav navbar-nav-cabin ml-4 float-sm-left">
@@ -54,7 +54,8 @@
                                                href="Javascript:void(0)"
                                                v-if="nav.type === 'list'">
                                                 <!--                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>-->
-                                                <img src="/img/task-icon/add-list.png" class="icon-image-preview li-opacity-sub ">
+                                                <img src="/img/task-icon/add-list.png"
+                                                     class="icon-image-preview li-opacity-sub ">
                                                 Create  <!--<b>{{nav.title}}</b>--> List
                                             </a>
 
@@ -62,7 +63,8 @@
                                                href="Javascript:void(0)"
                                                v-else-if="nav.type === 'board'">
                                                 <!--                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>-->
-                                                <img src="/img/task-icon/add-list.png" class="icon-image-preview li-opacity-sub ">
+                                                <img src="/img/task-icon/add-list.png"
+                                                     class="icon-image-preview li-opacity-sub ">
                                                 Create <!--<b>{{nav.title}}</b>--> Board
                                             </a>
                                         </div>
@@ -75,7 +77,7 @@
                         <ul class="navbar-nav ml-4 nav-bar-right">
                             <li class="nav-item search-nav-icon">
                                 <!--                            v-if="list_selected.type === 'list'"-->
-                                <button class="btn btn-default"  type="submit"
+                                <button class="btn btn-default" type="submit"
                                         @click="showSearchInputField"
                                         style="padding-right: 32px; padding-left: 7px;background: none">
                                     <img :src="baseUrl+'/img/task-icon/search.png'" height="30" width="30" alt=""
@@ -86,7 +88,8 @@
                                 <button class="btn btn-default" @click="HideShowBoardTitle" type="submit"
                                         style="padding-right: 32px; padding-left: 7px;background: none;">
                                     <img :src="baseUrl+'/img/task-icon/title_show.png'" height="30" width="30" alt=""
-                                         title="'Hide' or 'Show' Board Title" data-toggle="tooltip" style="margin: -2px;">
+                                         title="'Hide' or 'Show' Board Title" data-toggle="tooltip"
+                                         style="margin: -2px;">
                                 </button>
                             </li>
                             <li class="nav-item" style="margin-right:10px;">
@@ -114,7 +117,8 @@
                                         </template>
                                         <template v-else>
                                             <h6 class="dropdown-header text-uppercase">Action For <span
-                                                v-if="list_selected.type === 'board'">Board</span> <span v-else>List</span></h6>
+                                                v-if="list_selected.type === 'board'">Board</span> <span
+                                                v-else>List</span></h6>
                                             <div class="dropdown-divider"></div>
                                             <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
                                         <a href="javascript:void(0)">
@@ -244,7 +248,8 @@
                             </li>
 
                             <li class="nav-item dropdown">
-                                <a aria-expanded="false" aria-haspopup="true" class="d-block d-md-flex text-center nav-link"
+                                <a aria-expanded="false" aria-haspopup="true"
+                                   class="d-block d-md-flex text-center nav-link"
                                    data-toggle="dropdown" href="#">
                                         <span class="d-none d-md-block">
                                            <i class="fa fa-fw fa-plus-circle compltit-blue"
@@ -404,6 +409,15 @@
                                 <span class="badge-pill badge-default">X</span>
                             </li>
                             <li class="list-group-item">Cut Task</li>
+                        </ul>
+                        <ul class="list-group list-group-horizontal multi-list-group"
+                            style="margin-left: 0px !important;">
+                            <li class="list-group-item">
+                                <span class="badge-pill badge-default">CTRL</span>
+                                +
+                                <span class="badge-pill badge-default">M</span>
+                            </li>
+                            <li class="list-group-item">Move task</li>
                         </ul>
                         <ul class="list-group list-group-horizontal multi-list-group"
                             style="margin-left: 0px !important;">
@@ -608,7 +622,8 @@
                 </div>
             </div>
         </div>
-        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="addListFromOverviewModel" role="dialog"
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="addListFromOverviewModel"
+             role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -626,7 +641,8 @@
                                 <select class="form-control" v-model="list.nav_id">
                                     <option disabled value="0">Select List Nav
                                     </option>
-                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in AllNavItems" v-if="navs.type === 'list'">
+                                    <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in AllNavItems"
+                                            v-if="navs.type === 'list'">
                                         {{navs.title}}
                                     </option>
                                 </select>
@@ -659,6 +675,14 @@
 
 
 </template>
+<style>
+    .list-group-item{
+        border: none !important;
+    }
+    #shortcutModel .modal-body {
+        padding: 0 20px;
+    }
+</style>
 
 <script>
     export default {
@@ -853,7 +877,7 @@
                     type: 'overview'
                 })
             },
-            setOverview(){
+            setOverview() {
                 localStorage.selected_nav = JSON.stringify({
                     list_id: null,
                     nav_id: null,
@@ -913,7 +937,7 @@
             AddNewListOverview() {
                 var _this = this;
                 this.list.project_id = this.projectId;
-                if(_this.list.name !== null && _this.list.description !== null && _this.list.nav_id !== 0){
+                if (_this.list.name !== null && _this.list.description !== null && _this.list.nav_id !== 0) {
                     axios.post('/api/list-add', this.list)
                         .then(response => response.data)
                         .then(response => {
@@ -986,9 +1010,9 @@
         directives: {},
         watch: {
             AllNavGet: function (val) {
-                if(val === null){
+                if (val === null) {
                     this.AllNavItem()
-                }else {
+                } else {
                     this.AllNavItems = val;
                 }
 

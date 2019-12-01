@@ -24,6 +24,11 @@
                        aria-controls="contact"
                        @click="GetAllComments" aria-selected="false">Comments</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="contact-logs" data-toggle="tab" href="#logs" role="tab"
+                       aria-controls="contact"
+                       @click="GetAllLogs" aria-selected="false">All Logs</a>
+                </li>
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -161,7 +166,7 @@
                                     <div class="card-body" style="padding: 5px 0px 6px 10px;">
                                         <h3 data-toggle="tooltip" :title="file.title" style="cursor: pointer"
                                             @click="ShowList(file.list_id)">
-<!--                                            #TID{{file.tasks_id}}-->
+                                            <!--                                            #TID{{file.tasks_id}}-->
                                         </h3>
                                         <div class="comment_details">
                                             <ul style="margin: 0px !important;">
@@ -186,16 +191,20 @@
                         <nav aria-label="Page navigation example" style="padding-top: 39px;">
                             <ul class="pagination justify-content-end">
                                 <li class="page-item " :class="(All_files.prev_page_url === null) ? 'disabled' : ''">
-                                    <a class="page-link" href="javascript:void(0)" @click="FilePagination(All_files.current_page-1)" tabindex="-1">Previous</a>
+                                    <a class="page-link" href="javascript:void(0)"
+                                       @click="FilePagination(All_files.current_page-1)" tabindex="-1">Previous</a>
                                 </li>
                                 <template v-for="i in All_files.last_page">
                                     <li class="page-item" :class="(All_files.current_page === i) ? 'active' : ''">
-                                        <a class="page-link" @click="FilePagination(i)" href="javascript:void(0)">{{i}}</a>
+                                        <a class="page-link" @click="FilePagination(i)"
+                                           href="javascript:void(0)">{{i}}</a>
                                     </li>
                                 </template>
 
-                                <li class="page-item" :class="(All_files.last_page === All_files.current_page) ? 'disabled' : ''">
-                                    <a class="page-link" @click="FilePagination(All_files.current_page+1)" href="javascript:void(0)">Next</a>
+                                <li class="page-item"
+                                    :class="(All_files.last_page === All_files.current_page) ? 'disabled' : ''">
+                                    <a class="page-link" @click="FilePagination(All_files.current_page+1)"
+                                       href="javascript:void(0)">Next</a>
                                 </li>
                             </ul>
                         </nav>
@@ -205,7 +214,7 @@
 
                     <!-- comments container -->
                     <div class="comment_block">
-<!--                        <h2>All Comments Here</h2>-->
+                        <!--                        <h2>All Comments Here</h2>-->
                         <div class="new_comment">
                             <template v-for="comment in All_comments">
                                 <ul class="user_comment">
@@ -221,7 +230,8 @@
                                             <span v-if="comment.attatchment === null">{{comment.comment}}</span>
                                             <template v-else>
                                                 <a :href="baseUrl+'/storage/'+comment.task_id+'/comment/'+comment.attatchment"
-                                                    data-toggle="tooltip" title="Click For View Attachment" target="_blank">
+                                                   data-toggle="tooltip" title="Click For View Attachment"
+                                                   target="_blank">
                                                     <img
                                                         v-if="comment.attatchment.endsWith('.png') || comment.attatchment.endsWith('.jpg')|| comment.attatchment.endsWith('.jpeg')"
                                                         :src="baseUrl+'/storage/'+comment.task_id+'/comment/'+comment.attatchment"
@@ -265,6 +275,38 @@
                                     </div>
                                 </ul>
                             </template>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="logs" role="tabpanel" aria-labelledby="contact-logs">
+
+                    <!-- comments container -->
+                    <div class="comment_block">
+                        <div class="new_comment">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th scope="col" style="width: 30%;">Title</th>
+                                    <th scope="col" style="width: 17%;">Log Type</th>
+                                    <th scope="col" style="width: 17%;">Action Type</th>
+                                    <th scope="col" style="width: 17%;">Action At</th>
+                                    <th scope="col" style="width: 19%;">Action By</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <template v-for="log in All_logs.data">
+                                    <tr>
+                                        <td>{{log.title}}</td>
+                                        <td>{{log.log_type}}</td>
+                                        <td>{{log.action_type}}</td>
+                                        <td>{{log.action_at}}</td>
+                                        <td>{{log.user.name}}</td>
+                                    </tr>
+                                </template>
+
+                                </tbody>
+                            </table>
 
                         </div>
                     </div>
@@ -316,7 +358,7 @@
         </div>
     </main>
 </template>
-<style></style>
+
 <script>
     import Sortable from 'sortablejs';
     import draggableHelper from 'draggable-helper';
@@ -337,19 +379,22 @@
                 project_id: this.projectID,
                 All_list: null,
                 All_files: {
-                    data : null,
-                    last_page : null,
-                    current_page : null,
-                    first_page_url : null,
-                    last_page_url : null,
-                    next_page_url : null,
-                    per_page : null,
-                    prev_page_url : null,
-                    total : null,
-                    from : null,
-                    to : null,
+                    data: null,
+                    last_page: null,
+                    current_page: null,
+                    first_page_url: null,
+                    last_page_url: null,
+                    next_page_url: null,
+                    per_page: null,
+                    prev_page_url: null,
+                    total: null,
+                    from: null,
+                    to: null,
                 },
                 All_comments: null,
+                All_logs: {
+                    data : null,
+                },
                 list: {
                     id: null,
                     name: null,
@@ -528,10 +573,10 @@
                         console.log('Add files api not working!!')
                     });
             },
-            FilePagination(page){
+            FilePagination(page) {
                 var _this = this;
                 _this.All_files.data = null;
-                axios.get('/api/overview-all-files/' + _this.project_id+'?page='+page)
+                axios.get('/api/overview-all-files/' + _this.project_id + '?page=' + page)
                     .then(response => response.data)
                     .then(response => {
                         _this.All_files = response.files;
@@ -563,10 +608,10 @@
                         console.log('Add files api not working!!')
                     });
             },
-            CommentPagination(page){
+            CommentPagination(page) {
                 var _this = this;
                 _this.All_files.data = null;
-                axios.get('/api/overview-all-comments/' + _this.project_id+'?page='+page)
+                axios.get('/api/overview-all-comments/' + _this.project_id + '?page=' + page)
                     .then(response => response.data)
                     .then(response => {
                         _this.All_files = response.files;
@@ -580,6 +625,21 @@
                     });
 
             },
+            GetAllLogs() {
+                var _this = this;
+                axios.get('/api/overview-all-logs/' + _this.project_id)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.All_logs = response.logs;
+                        setTimeout(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        }, 500)
+                    })
+                    .catch(error => {
+                        console.log('Add files api not working!!')
+                    });
+            },
+
         },
         watch: {
             update_overview: function (val) {
