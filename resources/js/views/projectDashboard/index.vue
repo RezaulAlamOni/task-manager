@@ -314,9 +314,9 @@
                                             </span>
                                             </template>
                                             <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
-<!--                                            <i class="outline-person icon-image-preview li-opacity "-->
-                                                <!--                                               data-toggle="tooltip" title="Assignee">-->
-                                                <!--                                            </i>-->
+                                                <!-- <i class="outline-person icon-image-preview li-opacity "-->
+                                                <!--    data-toggle="tooltip" title="Assignee">-->
+                                                <!-- </i>-->
                                             <img :src="baseUrl+'/img/task-icon/add-user.png'"
                                                  class="icon-image-preview li-opacity assign-user-"
                                                  data-toggle="tooltip" title="Assignee user">
@@ -335,8 +335,7 @@
                                                         </label>
                                                     </li>
                                                     <li class="assignUser">
-                                                        <template v-for="user in data.users"
-                                                                  v-if="data.users !== undefined">
+                                                        <template v-for="user in data.users" v-if="data.users !== undefined">
                                                             <div
                                                                 @click="(data.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user,data) "
                                                                 :class="(data.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
@@ -344,9 +343,8 @@
                                                                 v-bind:disabled="(data.assigned_user_ids.includes(user.id)) ? true : false">
                                                                 <div class="col-md-3 pt-1 pl-4">
                                                                     <p class="assignUser-photo">
-                                                                        {{(user.name !== null) ?
-                                                                        user.name.substring(0,2) :
-                                                                        ''}}</p>
+                                                                        {{(user.name !== null) ? user.name.substring(0,2) : ''}}
+                                                                    </p>
                                                                 </div>
                                                                 <div class="col-md-9 assign-user-name-email">
                                                                     <h5>{{user.name}}<br>
@@ -494,9 +492,9 @@
                                         <img :src="baseUrl+'/img/task-icon/add-user.png'" class="contex-menu-icon">
                                         Assign User to Selected </a>
                                     <span class="contex-menu-sortcut">
-                                    <span class="badge-pill badge-default">Ctrl</span>+<span
-                                        class="badge-pill badge-default">U</span>
-                                </span>
+                                        <span class="badge-pill badge-default">Ctrl</span>+<span
+                                            class="badge-pill badge-default">U</span>
+                                    </span>
 
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <diV class="collapse show switchToggle">
@@ -537,9 +535,8 @@
                                         Add Tags to Selected
                                     </a>
                                     <span class="contex-menu-sortcut">
-                                    <span class="badge-pill badge-default">Shift</span>+<span
-                                        class="badge-pill badge-default">#</span>
-                                </span>
+                                        <span class="badge-pill badge-default">Shift</span>+<span class="badge-pill badge-default">#</span>
+                                    </span>
 
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <diV class="collapse show switchToggle">

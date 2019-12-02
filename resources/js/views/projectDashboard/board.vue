@@ -130,20 +130,6 @@
                                     group-name="col"
 
                                 >
-                                <!-- <div class="card-list card" style="background-color: white;">
-                                    <div class="card-title-blur" style="padding: 10px;">
-                                        task1 ch1 ch2
-                                    </div>
-                                </div> -->
-                                <!-- @drag-start="(e) => onDragStart(column.id,column.boardId, index,  e)"
-                                    @drag-end="(e) => log('', e)" -->
-                                    <!-- <div v-if="column.moveToCol == true">
-                                        <Draggable>
-                                            <div class="card-list card">
-                                                <span v-html="'This column has rule <strong>'+column.ruleName+'</strong> and moves cards to <strong>'+column.boardName+'</strong> Board in Column <strong>'+column.moveToColName+'</strong>'"></span>
-                                            </div>
-                                        </Draggable>
-                                    </div> -->
                                     <Draggable :key="card.id" v-for="(card , key) in column.children">
                                         <div :class="card.props.className"
                                             :style="card.props.style"
@@ -177,28 +163,6 @@
                                                     </diV>
                                                 </div>
                                             </span>
-                                            <!-- {{card.textareaShow}} -->
-                                            <!-- <froala
-                                                :id="'id'+index+key"
-                                                :tag="'textarea'"
-                                                :data-text="card.data"
-                                                @blur="showItem($event,card,index,key);card.textareaShow = false"
-                                                @click="makeInput($event)"
-                                                @focus="hideItem($event)"
-                                                class="inp input-hide text-area autoExpand"
-                                                data-grow="auto" style="padding: 10px !important;"
-                                                v-model="card.data"
-                                                v-if="card.textareaShow === true"></froala> -->
-<!--                                            <textarea-->
-<!--                                                :data-text="card.data"-->
-<!--                                                :id="'id'+index+key"-->
-<!--                                                @blur="showItem($event,card,index,key);card.textareaShow = false"-->
-<!--                                                @click="makeInput($event)"-->
-<!--                                                @focus="hideItem($event)"-->
-<!--                                                class="inp input-hide text-area autoExpand"-->
-<!--                                                data-grow="auto" style="padding: 10px !important;"-->
-<!--                                                v-if="card.textareaShow === true" >{{ card.data }}-->
-<!--                                            </textarea>-->
 
                                             <div :id="'title'+card.cardId" contenteditable="true" style="padding: 10px;" class="card-title-blur"
                                                  @click="makeInput($event,card.cardId)"
@@ -207,10 +171,7 @@
                                                  v-html="card.data">
                                             </div>
 
-                                            <!--  -->
-                                            <!-- <div v-if="card.textareaShow === false" @click="showHideTextarea(index, key, card)">{{ card.data }}</div> -->
-<!--                                            <div v-if="card.textareaShow === false" @click="card.textareaShow = true;showHideTextarea('#id'+index+key)">{{ card.data }}</div>-->
-                                            <br>
+                                           <br>
                                             <div class="">
                                                 <div>
                                                     <a class="calender clickHide" v-if="card.date === '0000-00-00'">
@@ -428,19 +389,15 @@
                                                                         </button>
                                                                     </div>
                                                                 </div>
-
                                                             </diV>
                                                         </div>
-
                                                     </a>
                                                 </div>
-                                                <div class="total-child" style="margin-top: 8px; " v-if="card.child > 0" @click="hideChilds(card.cardId)"> <strong>
-                                                    <!-- {{ JSON.stringify(card) }} -->
-                                                    <!-- {{  }} -->
-                                                        <!-- console.log(str.match(new RegExp('cardId','gi')).length);     -->
-                                                    <!-- #30 -->
-                                                    {{ card.child }}
-                                                </strong> </div>
+                                                <div class="total-child" style="margin-top: 8px; " v-if="card.child > 0" @click="hideChilds(card.cardId)"> 
+                                                    <strong>
+                                                        {{ card.child }}
+                                                    </strong> 
+                                                </div>
                                             </div>
                                         </div>
                                     </Draggable>
@@ -456,121 +413,142 @@
                     </Container>
                     <div class="jquery-accordion-menu" id="jquery-accordion-menu" v-click-outside="HideCustomMenu">
                         <ul>
+                            <!-- <li>
+                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split ">
+                                    <img src="/img/task-icon/copy-1.png" class="contex-menu-icon"> Copy </a> 
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+
+                                    <span class="badge-pill badge-default">C</span>
+                                </span>
+                            </li> -->
+                            <!-- <li>
+                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split ">
+                                    <img src="/img/task-icon/cut.png" class="contex-menu-icon"> Cut </a> 
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+
+                                    <span class="badge-pill badge-default">X</span>
+                                </span>
+                            </li> -->
+                            <!-- <li>
+                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split disabled" style="color: gray;">
+                                    <img src="/img/task-icon/past.png" class="contex-menu-icon"> Paste </a> 
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+
+                                    <span class="badge-pill badge-default">v</span>
+                                </span>
+                            </li> -->
                             <li>
-                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split "><img src="/img/task-icon/copy-1.png" class="contex-menu-icon"> Copy </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">C</span></span>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split "><img src="/img/task-icon/cut.png" class="contex-menu-icon"> Cut </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">X</span></span>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split disabled" style="color: gray;"><img src="/img/task-icon/past.png" class="contex-menu-icon"> Paste </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">v</span></span>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><img src="/img/task-icon/copy-to.png" class="contex-menu-icon"> Copy Selected To
-                                </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">T</span></span>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><img src="/img/task-icon/move.png" class="contex-menu-icon"> Move Selected
-                                </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">M</span></span>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><img src="/img/task-icon/trash.png" class="contex-menu-icon"> Delete Selected <span class="badge-pill badge-default contex-menu-sortcut">Delete</span></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split "><img src="/img/task-icon/add-user.png" class="contex-menu-icon"> Assign User to Selected </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">U</span></span>
+                                <a href="javascript:void(0)" 
+                                    data-toggle="dropdown" class="dropdown-toggle-split ">
+                                    <img src="/img/task-icon/add-user.png" class="contex-menu-icon"> Assign User to Selected 
+                                </a> 
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">U</span>
+                                </span>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <div class="collapse show switchToggle">
                                         <ul>
                                             <li class="assignUser">
-                                                <label class="pl-2 label-text"><span class="assign-user-drop-down-text">
-                                                                            Select User For Assign To Selected Task.
-                                                                        </span></label>
+                                                <label class="pl-2 label-text">
+                                                    <span class="assign-user-drop-down-text">
+                                                        Select User For Assign To Selected Task.
+                                                    </span>
+                                                </label>
                                             </li>
-                                            <li class="assignUser">
-                                                <div class="users-select row">
-                                                    <div class="col-md-3 pt-1 pl-4">
-                                                        <p class="assignUser-photo">
-                                                            Br</p>
+                                            <li class="assignUser"> 
+                                                <!-- {{ scene.children[0].children[0].users }} -->
+                                                <!-- v-for="user in scene.children[0].children[0].users" -->
+                                                <template v-for="user in scene.children[0].children[0].users">
+                                                    <div @click="ActionToSelectedTask(user.id,'user')" class="users-select row">
+                                                        <div class="col-md-3 pt-1 pl-4">
+                                                            <p class="assignUser-photo">
+                                                                {{(user.name !== null) ? user.name.substring(0,2) : ''}}
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-md-9 assign-user-name-email">
+                                                            <h5>{{user.name}}<br>
+                                                                <small>{{user.email}}</small>
+                                                            </h5>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-9 assign-user-name-email">
-                                                        <h5>Bryan<br> <small>bnatter123@gmail.com</small></h5></div>
-                                                </div>
-                                                <div class="users-select row">
-                                                    <div class="col-md-3 pt-1 pl-4">
-                                                        <p class="assignUser-photo">
-                                                            Ia</p>
-                                                    </div>
-                                                    <div class="col-md-9 assign-user-name-email">
-                                                        <h5>Ian Weyenberg<br> <small>eeyonw@gmail.com</small></h5></div>
-                                                </div>
-                                                <div class="users-select row">
-                                                    <div class="col-md-3 pt-1 pl-4">
-                                                        <p class="assignUser-photo">
-                                                            Md</p>
-                                                    </div>
-                                                    <div class="col-md-9 assign-user-name-email">
-                                                        <h5>Md Shahinur Rahman<br> <small>coredeveloper.2013@gmail.com</small></h5></div>
-                                                </div>
-                                                <div class="users-select row">
-                                                    <div class="col-md-3 pt-1 pl-4">
-                                                        <p class="assignUser-photo">
-                                                            Su</p>
-                                                    </div>
-                                                    <div class="col-md-9 assign-user-name-email">
-                                                        <h5>Sudip<br> <small>sudip.mediusware@gmail.com</small></h5></div>
-                                                </div>
+                                                </template>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
                             </li>
                             <li>
-                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split "><img src="/img/task-icon/tag-add.png" class="contex-menu-icon"> Add Tags to Selected
-                                </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Shift</span>+<span class="badge-pill badge-default">#</span></span>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <div class="collapse show switchToggle">
-                                        <ul>
-                                            <li class="assignUser">
-                                                <label class="pl-2 label-text"><span class="assign-user-drop-down-text">
-                                                                            Select Tag For Add tag To Selected Task.
-                                                                        </span></label>
-                                            </li>
-                                            <li class="assignUser">
-                                                <div class="users-select row">
-                                                    <div class="col-md-9 add-tag-to-selected"><span class="badge badge-default tag-color-custom-contextmenu" style="background: rgb(153, 38, 0);">.</span>
-                                                        <h5>Bug</h5></div>
-                                                </div>
-                                                <div class="users-select row">
-                                                    <div class="col-md-9 add-tag-to-selected"><span class="badge badge-default tag-color-custom-contextmenu" style="background: rgb(0, 128, 255);">.</span>
-                                                        <h5>Priority High</h5></div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
-                            <li style="position: relative;">
-                                <div class="vdp-datepicker">
-                                    <div class="">
-                                        <!---->
-                                        <input type="text" readonly="readonly" autocomplete="off" class="dateCal-selected">
-                                        <!---->
-                                    </div>
-                                    <div class="vdp-datepicker__calendar" style="display: none;">
-                                        <header><span class="prev">&lt;</span> <span class="day__month_btn up">Nov 2019</span> <span class="next">&gt;</span></header>
-                                        <div class=""><span class="cell day-header">Sun</span><span class="cell day-header">Mon</span><span class="cell day-header">Tue</span><span class="cell day-header">Wed</span><span class="cell day-header">Thu</span><span class="cell day-header">Fri</span><span class="cell day-header">Sat</span> <span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day blank"></span><span class="cell day">1</span><span class="cell day weekend sat">2</span><span class="cell day weekend sun">3</span><span class="cell day">4</span><span class="cell day">5</span><span class="cell day">6</span><span class="cell day">7</span><span class="cell day">8</span><span class="cell day weekend sat">9</span><span class="cell day weekend sun">10</span><span class="cell day">11</span><span class="cell day">12</span><span class="cell day">13</span><span class="cell day">14</span><span class="cell day">15</span><span class="cell day weekend sat">16</span><span class="cell day weekend sun">17</span><span class="cell day">18</span><span class="cell day">19</span><span class="cell day">20</span><span class="cell day">21</span><span class="cell day">22</span><span class="cell day weekend sat">23</span><span class="cell day weekend sun">24</span><span class="cell day">25</span><span class="cell day">26</span><span class="cell day">27</span><span class="cell day">28</span><span class="cell day">29</span><span class="cell day today weekend sat">30</span></div>
-                                    </div>
-                                    <div class="vdp-datepicker__calendar" style="display: none;">
-                                        <header><span class="prev">&lt;</span> <span class="month__year_btn up">2019</span> <span class="next">&gt;</span></header> <span class="cell month">January</span><span class="cell month">February</span><span class="cell month">March</span><span class="cell month">April</span><span class="cell month">May</span><span class="cell month">June</span><span class="cell month">July</span><span class="cell month">August</span><span class="cell month">September</span><span class="cell month">October</span><span class="cell month">November</span><span class="cell month">December</span></div>
-                                    <div class="vdp-datepicker__calendar" style="display: none;">
-                                        <header><span class="prev">&lt;</span> <span>2010 - 2019</span> <span class="next">&gt;</span></header> <span class="cell year">2010</span><span class="cell year">2011</span><span class="cell year">2012</span><span class="cell year">2013</span><span class="cell year">2014</span><span class="cell year">2015</span><span class="cell year">2016</span><span class="cell year">2017</span><span class="cell year">2018</span><span class="cell year">2019</span></div>
-                                </div>
-                                <a class="calender li-opacity clickHide"><img src="/img/task-icon/date-plus.png" class="contex-menu-icon"> Set Due Date
+                                <a @click="deleteSelectedTask" href="javascript:void(0)">
+                                    <img :src="baseUrl+'/img/task-icon/trash.png'" class="contex-menu-icon">Delete Selected 
+                                    <span class="badge-pill badge-default contex-menu-sortcut">Delete</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0)"><img src="/img/task-icon/move-1.png" class="contex-menu-icon"> Move To Dont Forget Section </a>
+                                <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split ">
+                                    <img src="/img/task-icon/tag-add.png" class="contex-menu-icon"> Add Tags to Selected
+                                </a> 
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Shift</span>+
+                                    <span class="badge-pill badge-default">#</span>
+                                </span>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="collapse show switchToggle">
+                                        <ul>
+                                            <li class="assignUser">
+                                                <label class="pl-2 label-text">
+                                                    <span class="assign-user-drop-down-text">
+                                                        Select Tag For Add tag To Selected Task.
+                                                    </span>
+                                                </label>
+                                            </li>
+                                            <li class="assignUser">
+                                                <template v-for="user in scene.children[0].children[0].existing_tags">
+                                                    <div @click="ActionToSelectedTask(user.id,'tag')" class="users-select row">
+                                                        <div class="col-md-9 add-tag-to-selected">
+                                                            <span
+                                                                class="badge badge-default tag-color-custom-contextmenu" 
+                                                                :style="{'background' : user.color}">.</span>
+                                                            <h5>{{user.title}}</h5>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </li>
+                            <li>
+                                <a href="javascript:void(0)">
+                                    <img src="/img/task-icon/copy-to.png" class="contex-menu-icon"> Move to another column or Board
+                                </a> 
+                                <span class="contex-menu-sortcut">
+                                    <span class="badge-pill badge-default">Ctrl</span>+
+                                    <span class="badge-pill badge-default">T</span>
+                                </span>
+                            </li>
+                            <!-- <li>
+                                <a href="javascript:void(0)"><img src="/img/task-icon/move.png" class="contex-menu-icon"> Move Selected
+                                </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">M</span></span>
+                            </li> -->
+                            
+
+                            <li style="position: relative" @click="openPicker()">
+                                <datepicker
+                                    :disabled-dates="disabledDates"
+                                    v-model="date_for_selected"
+                                    @selected="ActionToSelectedTask('','date')"
+                                    calendar-button-icon='<i class="outline-event icon-image-preview"></i>'
+                                    format='dd MMM'
+                                    input-class="dateCal-selected">
+                                </datepicker>
+                                <a class="calender li-opacity clickHide">
+                                    <img :src="baseUrl+'/img/task-icon/date-plus.png'" class="contex-menu-icon">
+                                    Set Due Date
+                                </a>
+                            </li>
+                            <!-- <li>
+                                <a href="javascript:void(0)"><img src="/img/task-icon/move-1.png" class="contex-menu-icon"> Move To Dont Forget Section </a>
+                            </li> -->
                         </ul>
                     </div>
                 </div>
@@ -1140,6 +1118,7 @@
                     altFormat: 'Y-m-d',
                     dateFormat: 'd M',
                 },
+                date_for_selected: null,
                 nav: [],
                 board: [],
                 subNav: [],
@@ -1185,7 +1164,7 @@
                     project_id: null,
                 },
                 selectedData : {},
-                selectedIds : {},
+                selectedIds : [],
                 task_logs : null,
                 check_uncheck_child : null,
                 manageTag: null,
@@ -2136,21 +2115,6 @@
 
 
             },
-            // deleteCard(index, cardIndex, id) {
-            //     let _this = this;
-            //     if (confirm('Are you sure you want to delete this card?') && this.cards[index].task[cardIndex].id == id) {
-            //         axios.get('/api/card-delete/' + id)
-            //             .then(response => response.data)
-            //             .then(response => {
-            //                 _this.cards[index].task.splice(cardIndex, 1);
-            //                 _this.getData();
-            //                 if (response.success) {
-            //                 }
-            //             })
-            //             .catch(error => {
-            //             });
-            //     }
-            // },
             deleteTask(index, cardIndex, id) {
                 let _this = this;
                 swal({
@@ -2193,16 +2157,6 @@
             },
             addExistingTag(index, tagIndx, key, cardId, dntfrgt = '') {
                 let _this = this;
-                // let data = {
-                //     'board_id' : this.cards[index].task[key].existing_tags[tagIndx].board_id,
-                //     'classes' : '',
-                //     'color' : this.cards[index].task[key].existing_tags[tagIndx].color,
-                //     'id' : this.cards[index].task[key].existing_tags[tagIndx].id,
-                //     'style' : "background-color: "+this.cards[index].task[key].existing_tags[tagIndx].color,
-                //     'text' : this.cards[index].task[key].existing_tags[tagIndx].title,
-                // };
-
-                // this.getData();
                 if(dntfrgt !== ''){
                     var postData = {
                         id: cardId,
@@ -2218,9 +2172,6 @@
                         type: 'task',
                     };
                 }
-                // if(card.types == "task"){
-                //     postData.id = card.id;
-                // }
                 axios.post('/api/task-list/add-tag', postData)
                 .then(response => response.data)
                 .then(response => {
@@ -2334,16 +2285,7 @@
                 // let attDataNew = e.target.value;
 
                 let attDataNew = $('#title'+data.cardId).text();
-                // if( $.trim(attData) === $.trim(attDataNew)){
-                //     // console.log($.trim(attData) , $.trim(attDataNew), $.trim(attData) === $.trim(attDataNew));
-                //     this.getData();
-                //     $('.inp').addClass('input-hide');
-                //     $('.inp').removeClass('form-control');
-                //     return false;
-                // }
                 data.data = attDataNew;
-                // $('.inp').addClass('input-hide');
-                // $('.inp').removeClass('form-control');
                 this.saveData(data, index, child_key);
             },
             showHideTextarea(id){
@@ -2546,39 +2488,31 @@
             },
             makeItClick(e, card, child) {
                 var _this = this;
-
-
-                
-
-
-
-                
                 if (e.ctrlKey && e.which === 1) {
-                    // if (card.text !== '' && _this.selectedIds.length <= 1) {
-                    //     _this.DeleteEmptyTask();
-                    // }
-                    // var index = _this.selectedIds.indexOf(card.cardId);
-                    // if (index > -1) {
-                    //     _this.selectedIds.splice(index, 1);
-                    //     $('#click' + card.cardId).removeClass('clicked');
-
-                    // } else {
-                    //     _this.selectedIds.push(card.cardId);
-                    //     $('#click' + card.cardId).addClass('clicked');
-                    // }
-                    // $('.jquery-accordion-menu').hide();
-                    // if (_this.selectedIds.length > 1) {
-                    //     _this.selectedData = {};
-                    //     _this.context_menu_flag = 0;
-                    // }
-
-
+                    if (_this.selectedIds.includes(card.cardId)) {
+                        var indexs = _this.selectedIds.indexOf(card.cardId);
+                        if (indexs > -1) {
+                            $('#card_'+_this.selectedIds[indexs]).removeClass('selected-card');
+                            _this.selectedIds.splice(indexs, 1);
+                        }
+                    } else {
+                        _this.selectedIds.push(card.cardId);
+                    }
+                    // console.log(_this.selectedIds);
+                    for (let index = 0; index < _this.selectedIds.length; index++) {
+                        $('#card_'+_this.selectedIds[index]).addClass('selected-card');          
+                    }
                 } else if (e.shiftKey && e.which === 1) {
-
+                    // alert('shft+left clk');
+                    _this.selectedIds.push(card.cardId);
+                    console.log(_this.selectedIds);
+                    // for (let index = 0; index < _this.selectedIds.length; index++) {
+                    //     $('#card_'+this.selectedCard).addClass('selected-card');          
+                    // }
                     // $('#click' + card.cardId).addClass('clicked');
 
                 } else if (e.which === 1) {
-                    
+                    // alert('left clk');
                     // if (card.text !== '') {
                     //     _this.DeleteEmptyTask();
                     // }
@@ -2598,12 +2532,15 @@
                     this.selectedCard = card.cardId;
                     this.task_logs = null;
                     this.HideDetails();
-                    $('.card-list').css("background-color", "#ffffff");
-                    $('#card_'+this.selectedCard).css("background-color","#ddf3fd");
+                    // $('.card-list').css("background-color", "#ffffff");
+                    // $('#card_'+this.selectedCard).css("background-color","#ddf3fd");
                     // console.log(this.selectedData);
+                    $('.card-list').removeClass('selected-card');
+                    $('#card_'+this.selectedCard).addClass('selected-card');
 
 
                 } else if (e.which === 3) {
+                    // alert('right clk');
                     //  && card.draggable == true
                     // alert('single');
                     e.preventDefault();
@@ -2648,7 +2585,7 @@
                         }
                     }
                 } else if (e.ctrlKey && e.which === 65) {
-                    e.target.setSelectionRange(0, card.text.length);
+                    // e.target.setSelectionRange(0, card.text.length);
                 }
             },
             removeAssignedUser(user_id, task_id) {
@@ -2801,6 +2738,78 @@
             },
             switchEvent(e) {
                 $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
+            },
+            ActionToSelectedTask(value, type) {
+                var _this = this;
+                setTimeout(function () {
+                    if (type === 'date') {
+                        var date = new Date(_this.date_for_selected)
+                        var month = (parseFloat(date.getMonth() + 1) > 9) ? parseFloat(date.getMonth() + 1) : '0' + parseFloat(date.getMonth() + 1);
+                        var day = (parseFloat(date.getDate() + 1) > 9) ? parseFloat(date.getDate()) : '0' + parseFloat(date.getDate());
+                        var date_for_selected = date.getFullYear() + '-' + month + '-' + day;
+                    }
+                    var postData = {
+                        ids: _this.selectedIds,
+                        type: type,
+                        value: type === 'date' ? date_for_selected : value,
+                    };
+
+                    axios.post('/api/task-list/assign-user-add-tag', postData)
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.getBoardTask();
+                            $('.jquery-accordion-menu').hide();
+                            _this.selectedIds = [];
+                        })
+                        .catch(error => {
+                            console.log('Api for delete task not Working !!!')
+                        });
+                }, 500)
+            },
+            openPicker: function () {
+                let _this = this;
+                setTimeout(function () {
+                    let target = $('.vdp-datepicker__calendar:visible');
+                    let wH = window.innerHeight + 140;
+                    let position = target.offset();
+                    let tH = target.height();
+                    let cH = wH - position.top;
+                    if (cH < tH) {
+                        target.css({bottom: 0 + 'px'});
+                    }
+                }, 200)
+            },
+            deleteSelectedTask() {
+                var _this = this;
+                _this.delete_popup = 1;
+                var postData = {
+                    ids: _this.selectedIds,
+                };
+                $('.jquery-accordion-menu').hide();
+                swal({
+                    title: "Are you sure?",
+                    text: "You want to delete all selected task !!!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger btn",
+                    confirmButtonColor: 'red',
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: true
+                },
+                function () {
+                    axios.post('/api/task-list/delete-task', postData)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getBoardTask();
+                        $('.jquery-accordion-menu').hide();
+                        _this.delete_popup = 0;
+                        // swal("Deleted!", "Successfully delete selected task !", "success");
+                        swal.close();
+                    })
+                    .catch(error => {
+                        console.log('Api for delete task not Working !!!')
+                    });
+                });
             },
         },
         directives: {
