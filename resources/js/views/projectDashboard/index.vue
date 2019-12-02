@@ -27,7 +27,7 @@
                 <select class="form-control " v-model="search_type" @change="searchBYType"
                         style="display: inline;padding: 0;position: absolute; right: 0; top: 0; height: 38px !important;width: 78px;z-index : 999;border-radius: 0 5px 5px 0;">
 
-                    <option value="all"> All </option>
+                    <option value="all"> All</option>
                     <option value="this"> This {{list.type}}</option>
                 </select>
 
@@ -157,11 +157,11 @@
                                 </span>
 
                                     <b @click="HideShowChild(store , data)"
-                                       v-if="data.children && data.children.length && data.open"><i
-                                        class="fa fa-fw fa-minus"></i></b>
+                                       v-if="data.children && data.children.length && data.open">
+                                        <i class="fa fa-fw fa-minus"></i></b>
                                     <b @click="HideShowChild(store , data)"
-                                       v-else-if="data.children && data.children.length && !data.open"><i
-                                        class="fa fa-fw fa-plus"></i></b>
+                                       v-else-if="data.children && data.children.length && !data.open">
+                                        <i class="fa fa-fw fa-plus"></i></b>
                                     <span>
                                         <input :id="data.id"
                                                @blur="showItem($event,data)"
@@ -173,6 +173,33 @@
                                                class="inp input-hide input-title"
                                                type="text" v-model="data.text">
                                     </span>
+
+                                    <!--                                    <span class="priority-icon li-opacity" style="width: auto !important;">-->
+
+                                    <!--                                    </span>-->
+                                    <div class="hide-item-res-user">
+                                        <a class="priority-icon dropdown-hide-with-remove-icon">
+                                            <span data-toggle="dropdown" class=" dropdown-toggle-split">
+                                                <img :src="baseUrl+'/img/priority.png'"
+                                                     class="icon-image-preview li-opacity assign-user-"
+                                                     data-toggle="tooltip" title="Assignee user">
+                                            </span>
+
+                                            <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;width: 100px;">
+                                                <diV class="collapse show switchToggle">
+                                                    <li class="badge-pill tags" style="background: #f783d1;">
+                                                        High
+                                                    </li>
+                                                    <li class="badge-pill tags" style="background: #FF9F1A;">
+                                                        Medium
+                                                    </li>
+                                                    <li class="badge-pill tags" style="background: #172B4D;">
+                                                        Low
+                                                    </li>
+                                                </diV>
+                                            </div>
+                                        </a>
+                                    </div>
 
                                     <a class="attach-icon hide-item-res" style="width: auto !important;">
                                         <span v-if="data.files && data.files.length !== 0">
@@ -923,7 +950,6 @@
                 </div>
             </div>
         </div>
-
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transToNav" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
@@ -1000,7 +1026,7 @@
         },
         data() {
             return {
-                authUser : null,
+                authUser: null,
                 baseUrl: window.location.origin,
                 disabledDates: {
                     id: null,
@@ -1067,7 +1093,7 @@
                     update: null
                 },
                 overview: '',
-                search_type : 'all',
+                search_type: 'all',
             }
         },
         mounted() {
@@ -1338,7 +1364,7 @@
                         'text': value,
                         'project_id': _this.projectId,
                         list_id: nav_type.list_id,
-                        type: (_this.search_type === 'all') ? 'overview' : nav_type.type ,
+                        type: (_this.search_type === 'all') ? 'overview' : nav_type.type,
                     })
                         .then(response => response.data)
                         .then(response => {
@@ -1354,7 +1380,7 @@
                     // }
                 }
             },
-            searchBYType(){
+            searchBYType() {
                 var _this = this;
                 var value = $('.searchTaskList').val();
                 var nav_type = JSON.parse(localStorage.selected_nav);
@@ -1362,7 +1388,7 @@
                     'text': value,
                     'project_id': _this.projectId,
                     list_id: nav_type.list_id,
-                    type: (_this.search_type === 'all') ? 'overview' : nav_type.type ,
+                    type: (_this.search_type === 'all') ? 'overview' : nav_type.type,
                 })
                     .then(response => response.data)
                     .then(response => {
@@ -1583,6 +1609,7 @@
                 $(e.target).closest('.eachItemRow').find('.calender').hide();
                 $(e.target).closest('.eachItemRow').find('.user').hide();
                 $(e.target).closest('.eachItemRow').find('.dateCal').hide();
+                $(e.target).closest('.eachItemRow').find('.priority-icon').hide();
                 // $(e.target).closest('.eachItemRow').find('.delete-icon').show();
             },
             showItem(e, data) {
@@ -1599,6 +1626,7 @@
                     $(e.target).closest('.eachItemRow').find('.calender').show();
                     $(e.target).closest('.eachItemRow').find('.user').show();
                     $(e.target).closest('.eachItemRow').find('.dateCal').show();
+                    $(e.target).closest('.eachItemRow').find('.priority-icon').show();
                     data.draggable = true;
                     data.droppable = true;
                 }, 500);
@@ -2400,7 +2428,7 @@
             showTask(data) {
                 setTimeout(function () {
                     $('#details').removeClass('details');
-                },300);
+                }, 300);
                 this.list_id = data.list_id;
                 this.nav_id = data.nav_id;
                 this.list.name = data.title;
@@ -2998,7 +3026,7 @@
                     _this.selectedData.files = []
                     _this.selectedData.parents = []
                     _this.selectedData.userName = _this.authUser.name,
-                    _this.selectedData.cardId = _this.selectedData.id
+                        _this.selectedData.cardId = _this.selectedData.id
                     _this.selectedData.data = _this.selectedData.text
                     console.log(_this.selectedData);
                     $('#task_width').removeClass('task_width');

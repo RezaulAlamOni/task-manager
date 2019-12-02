@@ -99,10 +99,12 @@
                                                          slot-scope="{data, _id,store,vm}"
                                                          style="font-size: 12px">
                                                         <template v-html="data.html">
-                                                <span class="progress-bar-custom">
+                                                <span class="">
                                                     <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28"
                                                          width="28"
                                                          v-if="(data.progress !== null)"
+                                                         :title="(data.complete_tooltip !== '') ? data.complete_tooltip : 'Complete'"
+                                                         data-toggle="tooltip"
                                                          class="task-complete-progress left-content">
 
                                                     <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28"
@@ -112,17 +114,7 @@
                                                          data-toggle="tooltip"
                                                          class="task-complete left-content li-opacity ">
 
-                                                    <img :src="baseUrl+'/img/task-icon/circle-check.png'" alt=""
-                                                         height="28" width="28"
-                                                         v-else
-                                                         :title="(data.complete_tooltip !== '') ? data.complete_tooltip : 'Complete'"
-                                                         data-toggle="tooltip"
-                                                         class="task-complete left-content li-opacity">
                                                 </span>
-                                                            <!--                                                    <b v-if="data.children && data.children.length && data.open">-->
-                                                            <!--                                                        <i class="fa fa-fw fa-minus"></i></b>-->
-                                                            <!--                                                    <b v-else-if="data.children && data.children.length && !data.open">-->
-                                                            <!--                                                        <i class="fa fa-fw fa-plus"></i></b>-->
                                                             <span>
                                                         <span class="inp input-hide input-title"
                                                               style="width: 95%;">
@@ -233,7 +225,7 @@
                                                    data-toggle="tooltip" title="Click For View Attachment"
                                                    target="_blank">
                                                     <img
-                                                        v-if="comment.attatchment.endsWith('.png') || comment.attatchment.endsWith('.jpg')|| comment.attatchment.endsWith('.jpeg')"
+                                                        v-if="comment.attatchment.toLowerCase().endsWith('.png') || comment.attatchment.toLowerCase().endsWith('.jpg') || comment.attatchment.toLowerCase().endsWith('.jpeg')"
                                                         :src="baseUrl+'/storage/'+comment.task_id+'/comment/'+comment.attatchment"
                                                         height="100" alt="">
                                                     <span v-else>{{comment.attatchment}}</span>
@@ -283,11 +275,61 @@
 
                     <!-- comments container -->
                     <div class="comment_block">
+                        <div>
+                            <div class="form-inline" style="position:relative;">
+                                <div class="form-group pl-1">
+                                    <label for="perPage">Select Per Page Item : &nbsp;</label>
+                                    <select class="form-control" id="perPage" name="perPage" v-model="per_page"
+                                            @change="setPerPageItem">
+                                        <option :value="All_logs.total">All</option>
+                                        <template v-for="i in Math.floor(All_logs.total/100)">
+                                            <option v-if="i == 1" value="50">50</option>
+                                            <option v-if="i == 2" value="100">100</option>
+                                            <option v-if="i == 3" value="300">300</option>
+                                            <option v-if="i == 4" value="500">500</option>
+                                            <option v-if="i == 5" value="1000">1000</option>
+                                        </template>
+
+                                    </select>
+                                </div>
+                                <div>&emsp; Total : {{All_logs.total}}</div>
+                                <div>
+                                    <template v-if="All_logs.last_page > 1">
+                                        <nav aria-label="Page navigation example"
+                                             style="position: absolute;right: 0;top: 0;">
+                                            <ul class="pagination justify-content-end"
+                                                style="padding: 0px;margin: 0px;">
+                                                <li class="page-item "
+                                                    :class="(All_logs.prev_page_url === null) ? 'disabled' : ''">
+                                                    <a class="page-link" href="javascript:void(0)"
+                                                       @click="LogPagination(All_logs.current_page-1)" tabindex="-1">Previous</a>
+                                                </li>
+                                                <template v-for="i in pages">
+                                                    <li class="page-item"
+                                                        :class="(All_logs.current_page === i) ? 'active' : ''">
+                                                        <a class="page-link" @click="LogPagination(i)"
+                                                           href="javascript:void(0)">{{i}}</a>
+                                                    </li>
+                                                </template>
+
+                                                <li class="page-item"
+                                                    :class="(All_logs.last_page === All_logs.current_page) ? 'disabled' : ''">
+                                                    <a class="page-link" @click="LogPagination(All_logs.current_page+1)"
+                                                       href="javascript:void(0)">Next</a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </template>
+                                </div>
+                            </div>
+
+                        </div>
                         <div class="new_comment">
                             <table class="table table-striped table-bordered">
                                 <thead>
                                 <tr>
-                                    <th scope="col" style="width: 30%;">Title</th>
+                                    <th scope="col" style="width: 4%;">#</th>
+                                    <th scope="col" style="width: 26%;">Title</th>
                                     <th scope="col" style="width: 17%;">Log Type</th>
                                     <th scope="col" style="width: 17%;">Action Type</th>
                                     <th scope="col" style="width: 17%;">Action At</th>
@@ -295,8 +337,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <template v-for="log in All_logs.data">
+                                <template v-for="(log , key) in All_logs.data">
                                     <tr>
+                                        <td>{{log.id}}</td>
                                         <td>{{log.title}}</td>
                                         <td>{{log.log_type}}</td>
                                         <td>{{log.action_type}}</td>
@@ -308,6 +351,33 @@
                                 </tbody>
                             </table>
 
+                        </div>
+                        <div>
+                            <template v-if="All_logs.last_page > 1">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-end">
+                                        <li class="page-item "
+                                            :class="(All_logs.prev_page_url === null) ? 'disabled' : ''">
+                                            <a class="page-link" href="javascript:void(0)"
+                                               @click="LogPagination(All_logs.current_page-1)"
+                                               tabindex="-1">Previous</a>
+                                        </li>
+                                        <template v-for="i in pages">
+                                            <li class="page-item"
+                                                :class="(All_logs.current_page === i) ? 'active' : ''">
+                                                <a class="page-link" @click="LogPagination(i)"
+                                                   href="javascript:void(0)">{{i}}</a>
+                                            </li>
+                                        </template>
+
+                                        <li class="page-item"
+                                            :class="(All_logs.last_page === All_logs.current_page) ? 'disabled' : ''">
+                                            <a class="page-link" @click="LogPagination(All_logs.current_page+1)"
+                                               href="javascript:void(0)">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -391,10 +461,20 @@
                     from: null,
                     to: null,
                 },
-                All_comments: null,
                 All_logs: {
-                    data : null,
+                    data: null,
+                    last_page: null,
+                    current_page: null,
+                    first_page_url: null,
+                    last_page_url: null,
+                    next_page_url: null,
+                    per_page: null,
+                    prev_page_url: null,
+                    total: null,
+                    from: null,
+                    to: null,
                 },
+                All_comments: null,
                 list: {
                     id: null,
                     name: null,
@@ -402,6 +482,8 @@
                     nav_id: null,
                     type: null
                 },
+                per_page: 100,
+                pages: [],
             }
         },
         mounted() {
@@ -444,12 +526,11 @@
                         }
                         _this.All_list = new_list;
                         _this.All_list.sort((a, b) => (a.sort_id > b.sort_id) ? 1 : -1)
-                        // setTimeout(function () {
-                        $('#loder-hide').fadeOut();
-                        // $('#loder-hide').addClass('loder-hide')
-                        // console.log(_this.All_list)
-                        // }, 10)
 
+                        $('#loder-hide').fadeOut();
+                        setTimeout(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        }, 500)
                     })
                     .catch(error => {
                         console.log('Api is drag and drop not Working !!!')
@@ -575,12 +656,13 @@
             },
             FilePagination(page) {
                 var _this = this;
+                $('#loder-hide').fadeIn();
                 _this.All_files.data = null;
                 axios.get('/api/overview-all-files/' + _this.project_id + '?page=' + page)
                     .then(response => response.data)
                     .then(response => {
                         _this.All_files = response.files;
-                        console.log(response.files);
+                        $('#loder-hide').fadeOut();
                         setTimeout(function () {
                             $('[data-toggle="tooltip"]').tooltip();
                         }, 500)
@@ -631,6 +713,17 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.All_logs = response.logs;
+                        _this.pages = [];
+                        if (_this.All_logs.last_page > 5 && _this.All_logs.current_page > 2) {
+                            _this.pages.push(_this.All_logs.current_page - 2)
+                            _this.pages.push(_this.All_logs.current_page - 1)
+                            _this.pages.push(_this.All_logs.current_page)
+                            _this.pages.push(_this.All_logs.current_page + 1)
+                            _this.pages.push(_this.All_logs.current_page + 2)
+                        } else {
+                            _this.pages = [1, 2, 3, 4, 5]
+                        }
+                        console.log(_this.pages)
                         setTimeout(function () {
                             $('[data-toggle="tooltip"]').tooltip();
                         }, 500)
@@ -639,6 +732,42 @@
                         console.log('Add files api not working!!')
                     });
             },
+            LogPagination(page) {
+                var _this = this;
+                $('#loder-hide').fadeIn();
+                // _this.All_logs.data = null;
+                axios.get('/api/overview-all-logs/' + _this.project_id + '?page=' + page + '&per_page=' + _this.per_page)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.All_logs = response.logs;
+                        _this.pages = [];
+                        if (_this.All_logs.last_page > 5 && _this.All_logs.current_page > 2 && _this.All_logs.last_page > _this.All_logs.current_page + 1) {
+                            _this.pages.push(_this.All_logs.current_page - 2)
+                            _this.pages.push(_this.All_logs.current_page - 1)
+                            _this.pages.push(_this.All_logs.current_page)
+                            _this.pages.push(_this.All_logs.current_page + 1)
+                            _this.pages.push(_this.All_logs.current_page + 2)
+                        }else if (_this.All_logs.last_page > 5 && _this.All_logs.current_page <= 2) {
+                            _this.pages = [1, 2, 3, 4, 5]
+                        }else if (_this.All_logs.last_page > 5){
+                            _this.pages = [_this.All_logs.last_page - 4, _this.All_logs.last_page - 3, _this.All_logs.last_page - 2, _this.All_logs.last_page - 1, _this.All_logs.last_page]
+                        }else {
+                            _this.pages=[]
+                            for (var i=1; i<=_this.All_logs.last_page;i++){
+                                _this.pages.push(i);
+                            }
+                        }
+                        $('#loder-hide').fadeOut();
+                    })
+                    .catch(error => {
+                        console.log('Add files api not working!!')
+                    });
+
+            },
+            setPerPageItem() {
+                $('#loder-hide').fadeIn();
+                this.LogPagination(1);
+            }
 
         },
         watch: {
