@@ -282,10 +282,10 @@
                         <a aria-controls="log" aria-selected="false" class="nav-link" data-toggle="tab" href="#log"
                            id="_log" role="tab">Logs</a>
                     </li>
-                    <!-- <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.childrens.length  > 0 || selectedData.parents.length  > 0">
+                    <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.childrens.length  > 0 || selectedData.parents.length  > 0">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_child" role="tab">Parents & Childs</a>
-                    </li> -->
+                    </li>
                     <!-- <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.parents.length  > 0">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_child" role="tab">Childs</a>
@@ -356,19 +356,19 @@
                                     <span style="padding: 10px;" >
                                         <a target="_blank" :href="'/storage/'+selectedData.cardId+'/'+files.file_name"
                                             style="cursor: pointer;position: absolute;">
-                                            <div style="float: left;" v-if="files.file_name.endsWith('.png') || files.file_name.endsWith('.jpg') || files.file_name.endsWith('.jpeg') || files.file_name.endsWith('.gif')">
+                                            <div style="float: left;" v-if="files.file_name.toLowerCase().endsWith('.png') || files.file_name.toLowerCase().endsWith('.jpg') || files.file_name.toLowerCase().endsWith('.jpeg') || files.file_name.toLowerCase().endsWith('.gif')">
                                                 <img title="Click To Download" data-toggle="tooltip"
                                                         :src="'/storage/'+selectedData.cardId+'/'+files.file_name" height="50" width="50">
                                             </div>
-                                            <div style="float: left;" v-else-if="files.file_name.endsWith('.txt') ">
+                                            <div style="float: left;" v-else-if="files.file_name.toLowerCase().endsWith('.txt') ">
                                                 <img title="Click To Download" data-toggle="tooltip"
                                                     :src="'/img/txt.png'" height="50" width="50">
                                             </div>
-                                            <div style="float: left;" v-else-if="files.file_name.endsWith('.pdf') ">
+                                            <div style="float: left;" v-else-if="files.file_name.toLowerCase().endsWith('.pdf') ">
                                                 <img title="Click To Download" data-toggle="tooltip"
                                                     :src="'/img/pdf.png'" height="50" width="50">
                                             </div>
-                                            <div style="float: left;" v-else-if="files.file_name.endsWith('.doc') || files.file_name.endsWith('.docx') || files.file_name.endsWith('.xls') || files.file_name.endsWith('.xlsx')">
+                                            <div style="float: left;" v-else-if="files.file_name.toLowerCase().endsWith('.doc') || files.file_name.toLowerCase().endsWith('.docx') || files.file_name.toLowerCase().endsWith('.xls') || files.file_name.toLowerCase().endsWith('.xlsx')">
                                                 <img title="Click To Download" data-toggle="tooltip"
                                                     :src="'/img/file.png'" height="50" width="50">
                                             </div>
@@ -428,19 +428,19 @@
                                                     <span class="user">{{comments.user.name}} :</span>
                                                     <a target="_blank" :href="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment"
                                                         style="cursor: pointer;">
-                                                        <div v-if="comments.attatchment.endsWith('.png') || comments.attatchment.endsWith('.jpg') || comments.attatchment.endsWith('.gif')">
+                                                        <div v-if="comments.attatchment.toLowerCase().endsWith('.png') || comments.attatchment.toLowerCase().endsWith('.jpg') || comments.attatchment.toLowerCase().endsWith('.gif')">
                                                             <img title="Click To Download" data-toggle="tooltip"
                                                                 :src="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" height="80" width="80">
                                                         </div>
-                                                        <div v-if="comments.attatchment.endsWith('.txt') ">
+                                                        <div v-if="comments.attatchment.toLowerCase().endsWith('.txt') ">
                                                             <img title="Click To Download" data-toggle="tooltip"
                                                                 :src="'/img/txt.png'" height="50" width="50">
                                                         </div>
-                                                        <div v-if="comments.attatchment.endsWith('.pdf') ">
+                                                        <div v-if="comments.attatchment.toLowerCase().endsWith('.pdf') ">
                                                             <img title="Click To Download" data-toggle="tooltip"
                                                                 :src="'/img/pdf.png'" height="50" width="50">
                                                         </div>
-                                                        <div v-if="comments.attatchment.endsWith('.doc') || comments.attatchment.endsWith('.docx') || comments.attatchment.endsWith('.xls') || comments.attatchment.endsWith('.xlsx')">
+                                                        <div v-if="comments.attatchment.toLowerCase().endsWith('.doc') || comments.attatchment.toLowerCase().endsWith('.docx') || comments.attatchment.toLowerCase().endsWith('.xls') || comments.attatchment.toLowerCase().endsWith('.xlsx')">
                                                             <img title="Click To Download" data-toggle="tooltip"
                                                                 :src="'/img/file.png'" height="50" width="50">
                                                         </div>

@@ -26,6 +26,7 @@ class MultipleBoardController extends Controller
     protected $dont_forget_tag;
     protected $totalChild = 0;
     protected $childIds = [];
+    protected $parents = [];
 
     public function __construct()
     {
