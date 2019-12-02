@@ -99,10 +99,12 @@
                                                          slot-scope="{data, _id,store,vm}"
                                                          style="font-size: 12px">
                                                         <template v-html="data.html">
-                                                <span class="progress-bar-custom">
+                                                <span class="">
                                                     <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28"
                                                          width="28"
                                                          v-if="(data.progress !== null)"
+                                                         :title="(data.complete_tooltip !== '') ? data.complete_tooltip : 'Complete'"
+                                                         data-toggle="tooltip"
                                                          class="task-complete-progress left-content">
 
                                                     <img :src="baseUrl+'/img/'+data.progress+'.png'" alt="" height="28"
@@ -112,17 +114,7 @@
                                                          data-toggle="tooltip"
                                                          class="task-complete left-content li-opacity ">
 
-                                                    <img :src="baseUrl+'/img/task-icon/circle-check.png'" alt=""
-                                                         height="28" width="28"
-                                                         v-else
-                                                         :title="(data.complete_tooltip !== '') ? data.complete_tooltip : 'Complete'"
-                                                         data-toggle="tooltip"
-                                                         class="task-complete left-content li-opacity">
                                                 </span>
-                                                            <!--                                                    <b v-if="data.children && data.children.length && data.open">-->
-                                                            <!--                                                        <i class="fa fa-fw fa-minus"></i></b>-->
-                                                            <!--                                                    <b v-else-if="data.children && data.children.length && !data.open">-->
-                                                            <!--                                                        <i class="fa fa-fw fa-plus"></i></b>-->
                                                             <span>
                                                         <span class="inp input-hide input-title"
                                                               style="width: 95%;">
@@ -233,7 +225,7 @@
                                                    data-toggle="tooltip" title="Click For View Attachment"
                                                    target="_blank">
                                                     <img
-                                                        v-if="comment.attatchment.endsWith('.png') || comment.attatchment.endsWith('.jpg')|| comment.attatchment.endsWith('.jpeg')"
+                                                        v-if="comment.attatchment.toLowerCase().endsWith('.png') || comment.attatchment.toLowerCase().endsWith('.jpg') || comment.attatchment.toLowerCase().endsWith('.jpeg')"
                                                         :src="baseUrl+'/storage/'+comment.task_id+'/comment/'+comment.attatchment"
                                                         height="100" alt="">
                                                     <span v-else>{{comment.attatchment}}</span>
@@ -393,7 +385,7 @@
                 },
                 All_comments: null,
                 All_logs: {
-                    data : null,
+                    data: null,
                 },
                 list: {
                     id: null,
@@ -444,12 +436,11 @@
                         }
                         _this.All_list = new_list;
                         _this.All_list.sort((a, b) => (a.sort_id > b.sort_id) ? 1 : -1)
-                        // setTimeout(function () {
-                        $('#loder-hide').fadeOut();
-                        // $('#loder-hide').addClass('loder-hide')
-                        // console.log(_this.All_list)
-                        // }, 10)
 
+                        $('#loder-hide').fadeOut();
+                        setTimeout(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        },500)
                     })
                     .catch(error => {
                         console.log('Api is drag and drop not Working !!!')
