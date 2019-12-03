@@ -1350,6 +1350,7 @@
                                 className: 'card',
                                 style: {backgroundColor: 'white'}
                             },
+                            type: 'card',
                             child: this.cards[i].task[j].child,
                             childrens: this.cards[i].task[j].children,
                             parents: this.cards[i].task[j].parents,

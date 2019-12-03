@@ -282,7 +282,7 @@
                         <a aria-controls="log" aria-selected="false" class="nav-link" data-toggle="tab" href="#log"
                            id="_log" role="tab">Logs</a>
                     </li>
-                    <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.childrens.length  > 0 || selectedData.parents.length  > 0">
+                    <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.type !== 'task' && (selectedData.childrens.length  > 0 || selectedData.parents.length  > 0)">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_child" role="tab">Parents & Childs</a>
                     </li>
@@ -624,7 +624,7 @@
                             </li> -->
                             <Br/>
                         </div>
-                        <div  v-if="selectedData.childrens.length  > 0">
+                        <div  v-if="selectedData.type !== 'task' && selectedData.childrens.length  > 0">
                             <label class="label"> <h5>Childrens:</h5></label>
                             <div v-for="(child,index) in selectedData.childrens">
                                 <li class="list-group-item">
