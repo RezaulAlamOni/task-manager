@@ -2285,7 +2285,7 @@
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger btn",
-                        confirmButtonColor: '#e65174',
+                        confirmButtonColor: 'Red',
                         confirmButtonText: "Yes, delete it!",
                         closeOnConfirm: true
                     },

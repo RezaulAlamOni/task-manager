@@ -134,8 +134,8 @@
                                         <div :class="card.props.className"
                                             :style="card.props.style"
                                             class="card-list"
-                                            @contextmenu="makeItClick($event, card,column.children)"
-                                            @click="makeItClick($event, card,column.children)"
+                                            @contextmenu="makeItClick($event, card,column.children, index, column.boardId)"
+                                            @click="makeItClick($event, card, column.children, index, column.boardId)"
                                             :id="'card_'+card.cardId"
                                             v-on:dblclick="showLog" >
                                                 <!-- @click="selectCard(card)" -->
@@ -149,17 +149,19 @@
                                                         <!-- <a @click="updateColumSow()" class="dropdown-item" href="#"><i
                                                             class="fa fa-edit opacity"></i> Edit column</a> -->
 
-                                                        <a @click="showTransferModel(index, key, card.cardId, column.boardId)" class="dropdown-item"
-                                                        href="#"><i
-                                                            class="fa fa-share-square-o opacity"></i> Transfer task to another board</a>
+                                                        <a @click="showTransferModel(index, key, card.cardId, column.boardId)" class="dropdown-item" href="#">
+                                                        <!-- <i class="fa fa-share-square-o opacity"></i>  -->
+                                                        <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18" width="18" title="Transfer To Other Board Or Column" />
+                                                        Transfer task to another board</a>
 
                                                         <div class="dropdown-divider" v-if="card.types === 'task'"></div>
                                                         <a @click="deleteTask(index, key, card.cardId)" class="dropdown-item"
                                                         href="#" v-if="card.types === 'task'">
-                                                            <i class="fa fa-minus-circle opacity"></i> Remove task from <strong>This Board</strong> </a>
+                                                             <img :src="baseUrl+'/img/task-icon/minus-o.png'" height="18" width="18" title="Remove Task" />
+                                                            Remove task from <strong>This Board</strong> </a>
                                                         <div class="dropdown-divider"></div>
                                                         <a @click="RemoveNodeAndChildren()" class="dropdown-item"
-                                                        href="#"><i class="fa fa-trash opacity"></i> Delete the task</a>
+                                                        href="#"><img :src="baseUrl+'/img/task-icon/trash.png'" height="18" width="18" >     Delete the task</a>
                                                     </diV>
                                                 </div>
                                             </span>
@@ -518,7 +520,7 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="javascript:void(0)">
+                                <a @click="showTransferModel(this.currentColumn , '' , '', this.currentColumnIndex)">
                                     <img src="/img/task-icon/copy-to.png" class="contex-menu-icon"> Move to another column or Board
                                 </a> 
                                 <span class="contex-menu-sortcut">
@@ -1170,7 +1172,9 @@
                 manageTag: null,
                 allUsers : null,
                 allTags : null,
-                disabledDates : null,
+               disabledDates: {
+                    id: null,
+                },
             }
         },
         mounted() {
@@ -1208,7 +1212,7 @@
         },
         created() {
             let _this = this;
-             hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3', function (event, handler) {
+             hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+t,delete,ctrl+b,ctrl+s,ctrl+i,shift+3', function (event, handler) {
                 event.preventDefault();
                 switch (handler.key) {
                     case "enter" :
@@ -1253,10 +1257,10 @@
                         // _this.pastCopyAndCut(_this.selectedData);
                         break;
                     case "delete":
-                        // _this.RemoveNodeAndChildren(_this.selectedData);
+                        _this.deleteSelectedTask();
                         break;
-                    case "ctrl+u":
-                        // _this.shwAssignUserDropDown(_this.selectedData);
+                    case "ctrl+t":
+                        _this.showTransferModel(_this.currentColumn , '' , '', _this.currentColumnIndex);
                         break;
                     case "ctrl+b":
                         // _this.AddDontForgetTagToSelectedIds();//add DON'T FORGET SECTION
@@ -1268,8 +1272,8 @@
                         // _this.addAttachment(_this.selectedData);
                         break;
                     case "shift+3":
-                        // $('#tag-' + _this.selectedData._id).click();
-                        // console.log(_this.selectedData);
+                        // $('#dropdown1' + _this.selectedData.cardId).click();
+                        // console.log(_this.selectedData.cardId);
                         break;
                 }
             });
@@ -1311,8 +1315,8 @@
                     };
                 }
             },
-
             getData() {
+                this.HideDetails();
                 this.scene = {
                     type: 'container',
                     props: {
@@ -1377,7 +1381,6 @@
                     $('[data-toggle="tooltip"]').tooltip();
                 }, 1000)
             },
-
             selectChild(id){
                 var _this = this;
                 _this.findChild(id,_this.tree4data)
@@ -1483,7 +1486,6 @@
                     }
                 }
             },
-
             onColumnDrop(dropResult) {
                 const scene = Object.assign({}, this.scene);
                 scene.children = applyDrag(scene.children, dropResult);
@@ -1512,7 +1514,7 @@
 
                     // console.log(this.scene.children[index]);
 
-// console.log(this.scene, dropResult);
+                    // console.log(this.scene, dropResult);
                     const scene = Object.assign({}, this.scene);
                     const column = scene.children.filter(p => p.id === columnId)[0];
                     const columnIndex = scene.children.indexOf(column);
@@ -1703,6 +1705,7 @@
                     });
             },
             showTransferModel(index, key, cardId, id) {
+                $('.jquery-accordion-menu').hide();
                 this.board = [];
                 this.subBoard = [];
                 this.boardColumn = [];
@@ -2001,7 +2004,6 @@
                     .catch(error => {
                     });
             },
-
             clearInputFeild() {
                 $("#EditModal").modal('hide');
                 $("#addModal").modal('hide');
@@ -2492,7 +2494,9 @@
             HideCustomMenu() {
                 $('.jquery-accordion-menu').hide();
             },
-            makeItClick(e, card, child) {
+            makeItClick(e, card, child, index, boardId) {
+                this.currentColumn = boardId;
+                this.currentColumnIndex = index;
                 var _this = this;
                 if (e.ctrlKey && e.which === 1) {
                     if (_this.selectedIds.includes(card.cardId)) {
@@ -2798,7 +2802,7 @@
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonClass: "btn-danger btn",
-                    confirmButtonColor: 'red',
+                    confirmButtonColor: 'Red',
                     confirmButtonText: "Yes, delete it!",
                     closeOnConfirm: true
                 },

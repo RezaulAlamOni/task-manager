@@ -1006,6 +1006,10 @@
             saveComment(id){
                 let _this = this;
                 let comment = $('#comment'+id).val();
+                if (comment === '' || comment === null) {
+                    swal('Warning!!','Comment is empty','warning');
+                    return false;
+                }
                 var commentData = {
                     'comment' : comment,
                     'task_id' : id
