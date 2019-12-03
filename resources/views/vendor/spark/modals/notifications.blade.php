@@ -54,8 +54,8 @@
                                     </h5>
 
                                     <!-- List Of Announcements -->
-                                    <div class="notification-container" style="width:100%;float: left;">
-                                        <div class="notification" v-for="announcement in notifications.announcements">
+                                    <div class="notification-container" style="width:100%;float: left;" >
+                                        <div class="notification" v-for="announcement in notifications.announcements" >
 
                                             <!-- Notification Icon -->
                                             <figure>
@@ -74,7 +74,7 @@
 
                                                 <div class="notification-body" v-html="announcement.parsed_body"></div>
 
-                                                <!-- Announcement Action -->
+                                                   <!-- Announcement Action -->
                                                 <a :href="announcement.action_url" class="btn btn-primary" v-if="announcement.action_text">
                                                     @{{ announcement.action_text }}
                                                 </a>
@@ -251,4 +251,5 @@
         </div>
     </div>
 </spark-notifications>
+
 

@@ -35,11 +35,13 @@ class TaskController extends Controller
 
     public function decorateData ($obj, $drag = null)
     {
-        $team_id = Auth::user()->current_team_id;
-        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
-                            ->where('team_users.team_id', $team_id)->get()->toArray();
-        $allTeamTags = Tags::where('team_id', $team_id)->where('title', '!=', $this->dont_forget_tag)
-                            ->get()->toArray();
+//        $team_id = Auth::user()->current_team_id;
+//        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
+//                            ->where('team_users.team_id', $team_id)->get()->toArray();
+//        $allTeamTags = Tags::where('team_id', $team_id)->where('title', '!=', $this->dont_forget_tag)
+//                            ->get()->toArray();
+        $allTeamUsers = [];
+        $allTeamTags = [];
         $data = [];
         foreach ($obj as $key => $task) {
             $info = array();
@@ -152,7 +154,21 @@ class TaskController extends Controller
         $userName = Auth::user();
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
-        return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list, 'empty_task' => $task, 'userName' => $userName]);
+
+        $team_id = Auth::user()->current_team_id;
+        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
+            ->where('team_users.team_id', $team_id)->get()->toArray();
+        $allTeamTags = Tags::where('team_id', $team_id)->where('title', '!=', $this->dont_forget_tag)
+            ->get()->toArray();
+
+        return response()->json([
+            'task_list' => $data,
+            'multiple_list' => $multiple_list,
+            'empty_task' => $task,
+            'userName' => $userName,
+            'allTeamUsers' => $allTeamUsers,
+            'allTeamTags' => $allTeamTags,
+        ]);
     }
 
     protected function createLog ($task_id, $type, $message, $title)

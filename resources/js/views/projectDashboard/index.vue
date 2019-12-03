@@ -571,8 +571,8 @@
                                                     </label>
                                                 </li>
                                                 <li class="assignUser">
-                                                    <template v-if="treeList[0].users && treeList[0].users.length > 0"
-                                                              v-for="user in treeList[0].users">
+                                                    <template v-if="allUsers.length > 0"
+                                                              v-for="user in allUsers">
                                                         <div @click="ActionToSelectedTask(user.id,'user')"
                                                              class="users-select row">
                                                             <div class="col-md-3 pt-1 pl-4">
@@ -614,8 +614,8 @@
                                                     </label>
                                                 </li>
                                                 <li class="assignUser">
-                                                    <template v-if="treeList[0].existing_tags.length > 0"
-                                                              v-for="user in treeList[0].existing_tags">
+                                                    <template v-if="allTags.length > 0"
+                                                              v-for="user in allTags">
                                                         <div @click="ActionToSelectedTask(user.id,'tag')"
                                                              class="users-select row">
                                                             <div class="col-md-9 add-tag-to-selected">
@@ -1131,6 +1131,8 @@
                 },
                 overview: '',
                 search_type: 'all',
+                allUsers : null,
+                allTags : null
             }
         },
         mounted() {
@@ -2384,8 +2386,11 @@
                 axios.post('/api/task-list', data)
                     .then(response => response.data)
                     .then(response => {
-                        this.treeList = response.task_list;
-                        this.multiple_list = response.multiple_list;
+                        _this.treeList = response.task_list;
+                        _this.multiple_list = response.multiple_list;
+                        _this.allUsers = response.allTeamTags;
+                        _this.allTags = response.allTeamTags;
+
                         setTimeout(function () {
                             $('[data-toggle="tooltip"]').tooltip();
                         }, 1000);
