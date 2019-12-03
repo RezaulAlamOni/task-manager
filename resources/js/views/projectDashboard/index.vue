@@ -174,29 +174,53 @@
                                                type="text" v-model="data.text">
                                     </span>
 
-                                    <!--                                    <span class="priority-icon li-opacity" style="width: auto !important;">-->
-
-                                    <!--                                    </span>-->
                                     <div class="hide-item-res-user">
                                         <a class="priority-icon dropdown-hide-with-remove-icon">
                                             <span data-toggle="dropdown" class=" dropdown-toggle-split">
                                                 <img :src="baseUrl+'/img/priority.png'"
                                                      class="icon-image-preview li-opacity assign-user-"
-                                                     data-toggle="tooltip" title="Assignee user">
+                                                     data-toggle="tooltip" title="Add Priority">
                                             </span>
 
-                                            <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;width: 100px;">
-                                                <diV class="collapse show switchToggle">
-                                                    <li class="badge-pill tags" style="background: #f783d1;">
-                                                        High
-                                                    </li>
-                                                    <li class="badge-pill tags" style="background: #FF9F1A;">
-                                                        Medium
-                                                    </li>
-                                                    <li class="badge-pill tags" style="background: #172B4D;">
-                                                        Low
-                                                    </li>
-                                                </diV>
+                                            <div class="dropdown-menu dropdown-menu-right"
+                                                 style="z-index: 1;width: 185px;">
+                                                <div class="collapse show switchToggle">
+                                                    <ul>
+                                                        <li class="assignUser">
+                                                            <label class="pl-2 label-text">
+                                                                <span class="assign-user-drop-down-text">
+                                                                    Select Task Priority
+                                                                </span>
+                                                            </label>
+                                                        </li>
+                                                        <li class="assignUser">
+                                                            <div class="users-select row">
+                                                                <div class="col-md-9 add-tag-to-selected">
+                                                                    <span
+                                                                        class="badge badge-default tag-color-custom-contextmenu"
+                                                                        style="background: #f783d1;">.</span>
+                                                                    <h5> High</h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="users-select row">
+                                                                <div class="col-md-9 add-tag-to-selected">
+                                                                    <span
+                                                                        class="badge badge-default tag-color-custom-contextmenu"
+                                                                        style="background: #FF9F1A;">.</span>
+                                                                    <h5>Medium</h5>
+                                                                </div>
+                                                            </div>
+                                                            <div class="users-select row">
+                                                                <div class="col-md-9 add-tag-to-selected">
+                                                                    <span
+                                                                        class="badge badge-default tag-color-custom-contextmenu"
+                                                                        style="background: #172B4D;">.</span>
+                                                                    <h5>Low</h5>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </a>
                                     </div>
@@ -362,7 +386,8 @@
                                                         </label>
                                                     </li>
                                                     <li class="assignUser">
-                                                        <template v-for="user in data.users" v-if="data.users !== undefined">
+                                                        <template v-for="user in data.users"
+                                                                  v-if="data.users !== undefined">
                                                             <div
                                                                 @click="(data.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user,data) "
                                                                 :class="(data.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
@@ -370,7 +395,8 @@
                                                                 v-bind:disabled="(data.assigned_user_ids.includes(user.id)) ? true : false">
                                                                 <div class="col-md-3 pt-1 pl-4">
                                                                     <p class="assignUser-photo">
-                                                                        {{(user.name !== null) ? user.name.substring(0,2) : ''}}
+                                                                        {{(user.name !== null) ?
+                                                                        user.name.substring(0,2) : ''}}
                                                                     </p>
                                                                 </div>
                                                                 <div class="col-md-9 assign-user-name-email">
@@ -520,7 +546,7 @@
                                         Assign User to Selected </a>
                                     <span class="contex-menu-sortcut">
                                         <span class="badge-pill badge-default">Ctrl</span>+<span
-                                            class="badge-pill badge-default">U</span>
+                                        class="badge-pill badge-default">U</span>
                                     </span>
 
                                     <div class="dropdown-menu dropdown-menu-right">
@@ -562,7 +588,8 @@
                                         Add Tags to Selected
                                     </a>
                                     <span class="contex-menu-sortcut">
-                                        <span class="badge-pill badge-default">Shift</span>+<span class="badge-pill badge-default">#</span>
+                                        <span class="badge-pill badge-default">Shift</span>+<span
+                                        class="badge-pill badge-default">#</span>
                                     </span>
 
                                     <div class="dropdown-menu dropdown-menu-right">
