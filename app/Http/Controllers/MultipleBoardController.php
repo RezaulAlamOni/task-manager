@@ -51,7 +51,11 @@ class MultipleBoardController extends Controller
                 // ->orderby('sort_id', 'ASC')
                 ->get();
         // return $board[0]->moveToCol->moveTo->multipleBord->board_title;
+        $team = DB::table('team_users')->where('user_id', Auth::id())->first();
         $team_id = Auth::user()->current_team_id;
+        $allUsers =  User::join('team_users', 'team_users.user_id', 'users.id')
+                        ->where('team_users.team_id', $team->team_id)->get()->toArray();
+        $allTags = Tags::where('team_id', $team_id)->where('title','!=', $this->dont_forget_tag)->get()->toArray();
         foreach ($board as $key => $value) {
             $keys = -1;
             $boards[$key]['id'] = $value['id'];
@@ -123,9 +127,7 @@ class MultipleBoardController extends Controller
                     }
 
                     $boards[$key]['task'][$keys]['assigned_user_ids'] = $assigned_user_ids;
-                    $team = DB::table('team_users')->where('user_id', Auth::id())->first();
-                    $boards[$key]['task'][$keys]['users'] = User::join('team_users', 'team_users.user_id', 'users.id')
-                                                            ->where('team_users.team_id', $team->team_id)->get()->toArray();
+                    $boards[$key]['task'][$keys]['users'] = $allUsers;
 
 
                     $boards[$key]['task'][$keys]['tags'] = $tags;
@@ -157,7 +159,7 @@ class MultipleBoardController extends Controller
                         $boards[$key]['task'][$keys]['type'] = 'card';
                     }
                     $boards[$key]['task'][$keys]['date'] = ($values['date'] == '0000-00-00')? $values['date'] : date('d M', strtotime($values['date']));
-                    $boards[$key]['task'][$keys]['existing_tags'] = Tags::where('team_id', $team_id)->where('title','!=', $this->dont_forget_tag)->get()->toArray();
+                    $boards[$key]['task'][$keys]['existing_tags'] = $allTags;
 
                 }
             } else {
@@ -165,7 +167,7 @@ class MultipleBoardController extends Controller
             }
         }
         // return  $boards;
-        return response()->json(['success' => $boards]);
+        return response()->json(['success' => $boards, 'allUsers' => $allUsers, 'allTags' => $allTags]);
     }
 
     public function recurChild($child)

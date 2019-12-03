@@ -1527,9 +1527,20 @@
                     if (data.text !== '') {
                         _this.DeleteEmptyTask();
                     }
+                    this.selectedData = data;
+
+                    _this.selectedData.childrens = _this.selectedData.children;
+                    _this.selectedData.files    = [];
+                    _this.selectedData.child    = [];
+                    _this.selectedData.comment  = [];
+                    _this.selectedData.parents  = [];
+                    _this.selectedData.userName = _this.authUser.name;
+                    _this.selectedData.cardId   = _this.selectedData.id;
+                    _this.selectedData.data     = _this.selectedData.text;
+                    _this.selectedData.type     = 'task';
+
                     _this.selectedIds = [];
                     _this.selectedIds.push(data.id);
-                    this.selectedData = data;
                     this.tags = data.tags;
                     $('.eachItemRow').removeClass('clicked');
                     $(e.target).addClass('clicked');
@@ -2274,7 +2285,7 @@
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger btn",
-                        confirmButtonColor: '#e65174',
+                        confirmButtonColor: 'Red',
                         confirmButtonText: "Yes, delete it!",
                         closeOnConfirm: true
                     },
@@ -3019,20 +3030,19 @@
                 if (_this.selectedData != null && _this.selectedData.sort_id !== -2) {
 
                     // console.log(_this.selectedData);
-                    _this.selectedData.childrens = []
-                    _this.selectedData.files = []
-                    _this.selectedData.child = []
-                    _this.selectedData.comment = []
-                    _this.selectedData.files = []
-                    _this.selectedData.parents = []
-                    _this.selectedData.userName = _this.authUser.name,
-                        _this.selectedData.cardId = _this.selectedData.id
-                    _this.selectedData.data = _this.selectedData.text
-                    console.log(_this.selectedData);
+                    // _this.selectedData.childrens = _this.selectedData.children;
+                    // _this.selectedData.files = [];
+                    // _this.selectedData.child = [];
+                    // _this.selectedData.comment = [];
+                    // _this.selectedData.parents = [];
+                    // _this.selectedData.userName = _this.authUser.name;
+                    // _this.selectedData.cardId = _this.selectedData.id;
+                    // _this.selectedData.data = _this.selectedData.text;
+                    // console.log(_this.selectedData);
                     $('#task_width').removeClass('task_width');
                     $('#task_width').addClass('task_widthNormal');
-                    // $('#details').removeClass('details');
                     $('#details').addClass('details-show');
+                    // $('#details').removeClass('details');
                 }
             },
             HideDetails() {
