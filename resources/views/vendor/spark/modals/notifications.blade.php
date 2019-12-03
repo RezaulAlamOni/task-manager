@@ -26,7 +26,7 @@
                                         <i class="fa fa-fw ti-settings"></i>
                                     </a>
                                 </li>
-                                <li class="text-center nav-item" id="getAllComment">
+                                <li class="text-center nav-item" id="getAllComment-2">
                                     <a href="#r_tab4" role="tab" data-toggle="tab" class="nav-link">
                                         <i class="fa fa-comments"></i>
                                     </a>
@@ -54,7 +54,7 @@
                                     </h5>
 
                                     <!-- List Of Announcements -->
-                                    <div class="notification-container" style="width:100%;float: left;" >
+                                    <div class="notification-container" style="width:100%;float: left;" v-if="notifications && notifications.announcements != null">
                                         <div class="notification" v-for="announcement in notifications.announcements" >
 
                                             <!-- Notification Icon -->
@@ -193,45 +193,46 @@
                                     </div>
 
                                     <!-- List Of Notifications -->
-                                    <div class="notification-container" v-if="showingNotifications && hasNotifications">
-                                        <div class="notification" v-for="notification in notifications.notifications">
+                                    <div class="notification-container" v-if="notifications.comments.length > 0 ">
+                                        <div class="notification" v-for="comment in notifications.comments">
+                                            @{{ comment }}
+{{--                                            <!-- Notification Icon -->--}}
+{{--                                            <figure>--}}
+{{--                                                <img v-if="notification.creator" :src="notification.creator.photo_url" class="spark-profile-photo">--}}
 
-                                            <!-- Notification Icon -->
-                                            <figure>
-                                                <img v-if="notification.creator" :src="notification.creator.photo_url" class="spark-profile-photo">
+{{--                                                <span class="fa-stack fa-2x">--}}
+{{--                                                    <i class="fa fa-circle fa-stack-2x"></i>--}}
+{{--                                                    <i :class="['fa', 'fa-stack-1x', 'fa-inverse', notification.icon]"></i>--}}
+{{--                                                </span>--}}
+{{--                                            </figure>--}}
 
-                                                <span v-else class="fa-stack fa-2x">
-                                                    <i class="fa fa-circle fa-stack-2x"></i>
-                                                    <i :class="['fa', 'fa-stack-1x', 'fa-inverse', notification.icon]"></i>
-                                                </span>
-                                            </figure>
+{{--                                            <!-- Notification -->--}}
+{{--                                            <div class="notification-content">--}}
+{{--                                                <div class="meta">--}}
+{{--                                                    <p class="title">--}}
+{{--                                                        <span v-if="notification.creator">--}}
+{{--                                                            @{{ notification.creator.name }}--}}
+{{--                                                        </span>--}}
 
-                                            <!-- Notification -->
-                                            <div class="notification-content">
-                                                <div class="meta">
-                                                    <p class="title">
-                                                        <span v-if="notification.creator">
-                                                            @{{ notification.creator.name }}
-                                                        </span>
+{{--                                                        kkkkkk--}}
+{{--                                                        <span>--}}
+{{--                                                            {{ Spark::product() }}--}}
+{{--                                                        </span>--}}
+{{--                                                    </p>--}}
 
-                                                        <span v-else>
-                                                            {{ Spark::product() }}
-                                                        </span>
-                                                    </p>
+{{--                                                    <div class="date">--}}
+{{--                                                        @{{ comment.created_at | relative }}--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
 
-                                                    <div class="date">
-                                                        @{{ notification.created_at | relative }}
-                                                    </div>
-                                                </div>
+{{--                                                <div class="notification-body" v-html="notification.parsed_body"></div>--}}
 
-                                                <div class="notification-body" v-html="notification.parsed_body"></div>
+{{--                                                <!-- Notification Action -->--}}
+{{--                                                <a  class="btn btn-primary" v-if="comment">--}}
+{{--                                                    @{{ notification.action_text }}--}}{{-- kkkkk--}}
+{{--                                                </a>--}}
 
-                                                <!-- Notification Action -->
-                                                <a :href="notification.action_url" class="btn btn-primary" v-if="notification.action_text">
-                                                    @{{ notification.action_text }}
-                                                </a>
-
-                                            </div>
+{{--                                            </div>--}}
                                         </div>
                                     </div>
 
