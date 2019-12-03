@@ -196,23 +196,26 @@
                                                             </label>
                                                         </li>
                                                         <li class="assignUser">
-                                                            <div class="users-select row">
+                                                            <div class="users-select row"
+                                                                 @click="Add_Priority('high',data.id)">
                                                                 <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #f783d1;">.</span>
-                                                                    <h5> High</h5>
+                                                                        style="background: #F4F5F7;">.</span>
+                                                                    <h5 class="text-capitalize"> high</h5>
                                                                 </div>
                                                             </div>
-                                                            <div class="users-select row">
+                                                            <div class="users-select row"
+                                                                 @click="Add_Priority('medium',data.id)">
                                                                 <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #FF9F1A;">.</span>
-                                                                    <h5>Medium</h5>
+                                                                    <h5 class="text-capitalize">medium</h5>
                                                                 </div>
                                                             </div>
-                                                            <div class="users-select row">
+                                                            <div class="users-select row"
+                                                                 @click="Add_Priority('low',data.id)">
                                                                 <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
@@ -226,12 +229,27 @@
                                             </div>
                                         </a>
                                         <tampate v-else>
-                                            <span title="" data-placement="bottom" data-toggle="tooltip"
-                                                  class="badge badge-warning"
-                                                  style="background: rgb(134, 252, 253); margin-left: 1px; float: left;"
-                                                  data-original-title="#NN sdfsd as ">
+                                            <span class="priority-icon" style="top: 12px;">
+                                                 <span title="" data-placement="bottom" data-toggle="tooltip" v-if="data.priority_label === 'high'"
+                                                       class="badge badge-warning text-capitalize "
+                                                       style="background: #F4F5F7; margin-left: 1px; float: left;margin-right: 5px;color:black"
+                                                       data-original-title="">
                                                     {{data.priority_label}}
-                                                </span>
+                                                 </span>
+                                                <span title="" data-placement="bottom" data-toggle="tooltip" v-if="data.priority_label === 'low'"
+                                                       class="badge badge-warning text-capitalize "
+                                                       style="background: #172B4D; margin-left: 1px; float: left;margin-right: 5px;"
+                                                       data-original-title="">
+                                                    {{data.priority_label}}
+                                                 </span>
+                                                <span title="" data-placement="bottom" data-toggle="tooltip"v-if="data.priority_label === 'medium'"
+                                                       class="badge badge-warning text-capitalize "
+                                                       style="background: #FF9F1A; margin-left: 1px; float: left;margin-right: 5px;"
+                                                       data-original-title="">
+                                                    {{data.priority_label}}
+                                                 </span>
+                                            </span>
+
                                         </tampate>
                                     </div>
 
@@ -1131,8 +1149,8 @@
                 },
                 overview: '',
                 search_type: 'all',
-                allUsers : null,
-                allTags : null
+                allUsers: null,
+                allTags: null
             }
         },
         mounted() {
@@ -1569,14 +1587,14 @@
                     this.selectedData = data;
 
                     _this.selectedData.childrens = _this.selectedData.children;
-                    _this.selectedData.files    = [];
-                    _this.selectedData.child    = [];
-                    _this.selectedData.comment  = [];
-                    _this.selectedData.parents  = [];
+                    _this.selectedData.files = [];
+                    _this.selectedData.child = [];
+                    _this.selectedData.comment = [];
+                    _this.selectedData.parents = [];
                     _this.selectedData.userName = _this.authUser.name;
-                    _this.selectedData.cardId   = _this.selectedData.id;
-                    _this.selectedData.data     = _this.selectedData.text;
-                    _this.selectedData.type     = 'task';
+                    _this.selectedData.cardId = _this.selectedData.id;
+                    _this.selectedData.data = _this.selectedData.text;
+                    _this.selectedData.type = 'task';
 
                     _this.selectedIds = [];
                     _this.selectedIds.push(data.id);
@@ -3012,7 +3030,22 @@
                         console.log('Api for task date update not Working !!!')
                     });
             },
-
+            Add_Priority(priority, id) {
+                console.log(id, priority)
+                var _this = this;
+                var data = {
+                    ids: [id],
+                    priority: priority
+                }
+                axios.post('/api/task-list/add-priority', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getTaskList();
+                    })
+                    .catch(error => {
+                        console.log('Api for task add priority not Working !!!')
+                    });
+            },
             hasPermission(permission) {
                 return helper.hasPermission(permission);
             },
@@ -3122,7 +3155,8 @@
             },
             RuleUpdate() {
                 this.AllNavItems = null;
-            }
+            },
+
 
         },
         directives: {

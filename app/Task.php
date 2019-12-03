@@ -15,6 +15,7 @@ class Task extends Model
         'board_flag',
         'parent_id',
         'board_parent_id',
+        'priority_label',
         'project_id',
         'created_by',
         'updated_by',
@@ -116,17 +117,17 @@ class Task extends Model
     }
 
     public function moveTo()
-    {  
+    {
         return $this->belongsTo(Rules::class, 'move_to', 'id');
     }
 
     public function moveFrom()
-    {  
+    {
         return $this->belongsTo(Rules::class, 'move_from', 'id');
     }
 
     public function moveToCol()
-    {  
+    {
         return $this->hasOne(Rules::class, 'move_from', 'id')->with('moveTo');
     }
 
@@ -134,4 +135,4 @@ class Task extends Model
     {
         return $this->hasMany(Comment::class, 'task_id', 'id')->where('parent_id', null)->with('user','commentReply');
     }
-}   
+}
