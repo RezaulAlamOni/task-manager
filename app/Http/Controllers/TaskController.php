@@ -25,7 +25,7 @@ class TaskController extends Controller
     protected $actionLog;
     protected $dont_forget_tag;
 
-    public function __construct()
+    public function __construct ()
     {
         date_default_timezone_set('UTC');
         $this->actionLog = new ActionLogController;
@@ -33,8 +33,13 @@ class TaskController extends Controller
         $this->middleware('auth');
     }
 
-    public function decorateData($obj,$drag = null)
+    public function decorateData ($obj, $drag = null)
     {
+        $team_id = Auth::user()->current_team_id;
+        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
+                            ->where('team_users.team_id', $team_id)->get()->toArray();
+        $allTeamTags = Tags::where('team_id', $team_id)->where('title', '!=', $this->dont_forget_tag)
+                            ->get()->toArray();
         $data = [];
         foreach ($obj as $key => $task) {
             $info = array();
@@ -43,6 +48,7 @@ class TaskController extends Controller
             $info['sort_id'] = $task->sort_id;
             $info['board_parent_id'] = $task->board_parent_id;
             $info['multiple_board_id'] = $task->multiple_board_id;
+            $info['priority_label'] = $task->priority_label;
             $info['list_id'] = $task->list_id;//list_id
             $info['text'] = $task->title;
             if ($task->title == 'Dont Forget Section' || $drag != null) {
@@ -89,18 +95,16 @@ class TaskController extends Controller
             }
             $info['assigned_user_ids'] = $assigned_user_ids;
 
-            $team_id = Auth::user()->current_team_id;
-            $info['users'] = User::join('team_users', 'team_users.user_id', 'users.id')
-                ->where('team_users.team_id', $team_id)->get()->toArray();
-            $info['existing_tags'] = Tags::where('team_id', $team_id)->where('title', '!=', $this->dont_forget_tag)
-                ->get()->toArray();
+
+            $info['users'] = $allTeamUsers;
+            $info['existing_tags'] = $allTeamTags;
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
                 ->orderBy('sort_id', 'ASC')
                 ->get();
             if (!empty($childrens)) {
-                $info['children'] = $this->decorateData($childrens,$drag);
+                $info['children'] = $this->decorateData($childrens, $drag);
             } else {
                 $info['children'] = [];
             }
@@ -109,7 +113,7 @@ class TaskController extends Controller
         return $data;
     }
 
-    public function getAll(Request $request)
+    public function getAll (Request $request)
     {
         if ($request->list_id == null) {
             $list = Multiple_list::where('project_id', $request->id)->orderBy('id', 'ASC')->first();
@@ -144,14 +148,14 @@ class TaskController extends Controller
                 ->orderBy('sort_id', 'ASC')->get();
 
         }
-        $data = $this->decorateData($tasks,null);
+        $data = $this->decorateData($tasks, null);
         $userName = Auth::user();
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
         return response()->json(['task_list' => $data, 'multiple_list' => $multiple_list, 'empty_task' => $task, 'userName' => $userName]);
     }
 
-    protected function createLog($task_id, $type, $message, $title)
+    protected function createLog ($task_id, $type, $message, $title)
     {
         $log_data = [
             'task_id' => $task_id,
@@ -164,7 +168,7 @@ class TaskController extends Controller
         $this->actionLog->store($log_data);
     }
 
-    public function getAllTask(Request $request)
+    public function getAllTask (Request $request)
     {
         if ($request->list_id == null) {
             $list = Multiple_list::where('project_id', $request->id)->orderBy('id', 'ASC')->first();
@@ -177,11 +181,11 @@ class TaskController extends Controller
             ->where('list_id', $list_id)
             ->orderBy('sort_id', 'ASC')
             ->get();
-        $data = $this->decorateData($tasks,null);
+        $data = $this->decorateData($tasks, null);
         return response()->json(['task_list' => $data]);
     }
 
-    public function addTask(Request $request)
+    public function addTask (Request $request)
     {
         $list_id = $request->list_id;
         $etask = Task::where(['id' => $request->id])->get();
@@ -239,7 +243,7 @@ class TaskController extends Controller
         }
     }
 
-    public function addChildTask(Request $request)
+    public function addChildTask (Request $request)
     {
         $task_id = Task::where('title', '')->where('parent_id', $request->id)->first();
         if ($task_id) {
@@ -265,7 +269,7 @@ class TaskController extends Controller
         return response()->json(['success' => $task]);
     }
 
-    public function makeChild(Request $request)
+    public function makeChild (Request $request)
     {
         if (isset($request->parent_id)) {
             $task = Task::where('parent_id', $request->parent_id)
@@ -285,7 +289,7 @@ class TaskController extends Controller
         }
     }
 
-    public function updateTagWithDataMove($task_id, $target_parent_id)
+    public function updateTagWithDataMove ($task_id, $target_parent_id)
     {
         $tag_ids = $tags = Tags::where(['title' => $this->dont_forget_tag, 'team_id' => Auth::user()->current_team_id])->first();
         if ($tag_ids) {
@@ -320,7 +324,7 @@ class TaskController extends Controller
         }
     }
 
-    public function reverseChild(Request $request)
+    public function reverseChild (Request $request)
     {
         if (isset($request->parent_id) && $request->parent_id != 0) {
             $task = Task::where('id', $request->parent_id)->first();
@@ -341,7 +345,7 @@ class TaskController extends Controller
         }
     }
 
-    public function CopyCutPast(Request $request)
+    public function CopyCutPast (Request $request)
     {
         if ($request->type == 'copy') {
 
@@ -371,7 +375,7 @@ class TaskController extends Controller
         }
     }
 
-    public function CopyPastMultipleTaskToAnotherList(Request $request)
+    public function CopyPastMultipleTaskToAnotherList (Request $request)
     {
         $task_ids = $request->task_ids;
         $target_nav_id = $request->nav_id;
@@ -416,7 +420,7 @@ class TaskController extends Controller
 //        $this->createLog($task->id, 'copy', 'Copy', $task->title);
     }
 
-    function CopayPast($target_id, $copy_id)
+    function CopayPast ($target_id, $copy_id)
     {
 
         $target = Task::where('id', $target_id)->first();
@@ -445,7 +449,7 @@ class TaskController extends Controller
         return $task->id;
     }
 
-    public function deleteTask(Request $request)
+    public function deleteTask (Request $request)
     {
         if (isset($request->ids)) {
             $ids = $request->ids;
@@ -460,7 +464,7 @@ class TaskController extends Controller
 
     }
 
-    public function ActionSelectedTask(Request $request)
+    public function ActionSelectedTask (Request $request)
     {
         if (isset($request->type) && $request->type == 'user') {
             $ids = $request->ids;
@@ -494,7 +498,7 @@ class TaskController extends Controller
         }
     }
 
-    public function deleteTaskWithChild($id)
+    public function deleteTaskWithChild ($id)
     {
         $check_dontForgetSection = Task::where('id', $id)->first();
         if ($check_dontForgetSection == null) {
@@ -527,7 +531,7 @@ class TaskController extends Controller
         }
     }
 
-    public function deleteImg(Request $request)
+    public function deleteImg (Request $request)
     {
         if (isset($request->img) && isset($request->id)) {
             $task_id = $request->id;//we need a check to make sure this is set.
@@ -546,7 +550,7 @@ class TaskController extends Controller
     }
 
 
-    public function moveTask(Request $request)
+    public function moveTask (Request $request)
     {
         if ($request->type == 'up') {
             if ($request->sort_id <= 0) {
@@ -584,7 +588,7 @@ class TaskController extends Controller
         return response()->json($pre_task);
     }
 
-    public function taskDragDrop(Request $request)
+    public function taskDragDrop (Request $request)
     {
         $id = $request->id;
         $parent_id = $request->parent_id;
@@ -599,13 +603,13 @@ class TaskController extends Controller
         return response()->json(['success' => 1]);
     }
 
-    public function deleteEmptyTask(Request $request)
+    public function deleteEmptyTask (Request $request)
     {
         $this->deleteTaskWithChild($request->id);
         return response()->json(['success' => 1, 'id' => $request->id]);
     }
 
-    public function update(Request $request)
+    public function update (Request $request)
     {
         if (isset($request->details)) {
             if (Task::where('id', $request->id)->update(['description' => $request->details])) {
@@ -648,11 +652,11 @@ class TaskController extends Controller
         } elseif (isset($request->file)) {
             $task_id = $request->id;
             $photo = $_FILES['file']['name'];
-            $path = public_path() . "/storage/" . $task_id ;
+            $path = public_path() . "/storage/" . $task_id;
             if (!is_dir($path)) {
                 mkdir($path);
             }
-            if (move_uploaded_file($_FILES["file"]["tmp_name"], $path."/" . $_FILES['file']['name'])) {
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], $path . "/" . $_FILES['file']['name'])) {
                 $file = [
                     'file_name' => $photo,
                     'tasks_id' => $task_id,
