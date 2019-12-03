@@ -458,7 +458,7 @@
                                             <li class="assignUser"> 
                                                 <!-- {{ scene.children[0].children[0].users }} -->
                                                 <!-- v-for="user in scene.children[0].children[0].users" -->
-                                                <template v-for="user in scene.children[0].children[0].users">
+                                                <template v-for="user in allUsers">
                                                     <div @click="ActionToSelectedTask(user.id,'user')" class="users-select row">
                                                         <div class="col-md-3 pt-1 pl-4">
                                                             <p class="assignUser-photo">
@@ -502,7 +502,7 @@
                                                 </label>
                                             </li>
                                             <li class="assignUser">
-                                                <template v-for="user in scene.children[0].children[0].existing_tags">
+                                                <template v-for="user in allTags">
                                                     <div @click="ActionToSelectedTask(user.id,'tag')" class="users-select row">
                                                         <div class="col-md-9 add-tag-to-selected">
                                                             <span
@@ -1168,6 +1168,9 @@
                 task_logs : null,
                 check_uncheck_child : null,
                 manageTag: null,
+                allUsers : null,
+                allTags : null,
+                disabledDates : null,
             }
         },
         mounted() {
@@ -1989,6 +1992,8 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.cards = response.success;
+                        _this.allUsers = response.allUsers;
+                        _this.allTags = response.allTags;
                         _this.getData();
 
                     })
