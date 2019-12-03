@@ -50,7 +50,7 @@ class NotificationController extends Controller
     public function recent(Request $request)
     {
         $user = Auth::user()->id;
-        $comment = Comment::where('user_id', $user)->orderBy('id','DESC')->get();
+        $comment = Comment::where('user_id', $user)->orderBy('id','DESC')->with('user')->get();
 
 //        dd($comment);
         return response()->json([
