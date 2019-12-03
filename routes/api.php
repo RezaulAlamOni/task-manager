@@ -46,6 +46,7 @@ Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog
 //search task
 Route::get('/task-list/all-suggest-user','SearchController@getAllUser'); //user for search
 Route::post('/task-list/suggest-user','SearchController@suggestUser'); //user suggest for search
+Route::post('/task-list/add-priority','PriorityController@AddPriority'); //add priority
 
 //navigation management
 Route::post('/allNavs','ProjectNavItemsController@store'); //add new nav item

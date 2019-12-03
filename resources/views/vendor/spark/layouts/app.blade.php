@@ -45,7 +45,7 @@
             Spark::scriptVariables(), []
         )); ?>;
         setTimeout(() => {
-            $('#getAllComment').hide();
+            // $('#getAllComment').hide();
         }, 500);
         setTimeout(() => {
             $('#getAllComment').on('click',function(){
