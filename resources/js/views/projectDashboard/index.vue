@@ -175,7 +175,9 @@
                                     </span>
 
                                     <div class="hide-item-res-user">
-                                        <a class="priority-icon dropdown-hide-with-remove-icon">
+
+                                        <a class="priority-icon dropdown-hide-with-remove-icon"
+                                           v-if="data.priority_label === null">
                                             <span data-toggle="dropdown" class=" dropdown-toggle-split">
                                                 <img :src="baseUrl+'/img/priority.png'"
                                                      class="icon-image-preview li-opacity assign-user-"
@@ -223,6 +225,14 @@
                                                 </div>
                                             </div>
                                         </a>
+                                        <tampate v-else>
+                                            <span title="" data-placement="bottom" data-toggle="tooltip"
+                                                  class="badge badge-warning"
+                                                  style="background: rgb(134, 252, 253); margin-left: 1px; float: left;"
+                                                  data-original-title="#NN sdfsd as ">
+                                                    {{data.priority_label}}
+                                                </span>
+                                        </tampate>
                                     </div>
 
                                     <a class="attach-icon hide-item-res" style="width: auto !important;">
