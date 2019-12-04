@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <div>
-                        <ul class="navbar-nav ml-4 nav-bar-right">
+                        <ul class="navbar-nav ml-4 nav-bar-right" style="padding-right: 10px;">
                             <li class="nav-item search-nav-icon">
                                 <!--                            v-if="list_selected.type === 'list'"-->
                                 <button class="btn btn-default" type="submit"
@@ -100,7 +100,7 @@
                                          class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
 
 
-                                        <template v-if="overview === 'overview' && list_selected.type !== 'list'">
+                                        <template v-if="overview === 'overview' && list_selected.type !== 'list' && list_selected.type !== 'board'">
                                             <h6 class="dropdown-header text-uppercase">Action For Overview</h6>
                                             <span class="dropdown-item custom-dropdown-item">
                                                 <a :href="'/list-pdf-create/overview/'+ projectId" target="_blank">
