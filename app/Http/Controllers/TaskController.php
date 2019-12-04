@@ -485,14 +485,20 @@ class TaskController extends Controller
         if (isset($request->type) && $request->type == 'user') {
             $ids = $request->ids;
             foreach ($ids as $id) {
-                AssignedUser::create([
+                $checkIsUserAssigned = AssignedUser::where([
                     'task_id' => $id,
-                    'user_id' => $request->value,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                    'created_by' => Auth::id(),
-                    'updated_by' => Auth::id(),
-                ]);
+                    'user_id' => $request->value
+                ])->count();
+                if ($checkIsUserAssigned <= 0){
+                    AssignedUser::create([
+                        'task_id' => $id,
+                        'user_id' => $request->value,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                        'created_by' => Auth::id(),
+                        'updated_by' => Auth::id(),
+                    ]);
+                }
             }
             return response()->json(['success' => 1]);
         } else if (isset($request->type) && $request->type == 'tag') {
