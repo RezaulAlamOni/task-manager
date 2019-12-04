@@ -259,7 +259,7 @@
                                             <template v-for="(fl,file_id ) in data.files">
 
                                                 <img :src="baseUrl+'/storage/'+data.id+'/'+fl.file_name"
-                                                     v-if="file_id < 2 && ( fl.file_name.endsWith('.png') || fl.file_name.endsWith('.jpg'))"
+                                                     v-if="file_id < 2 && ( fl.file_name.toLowerCase().endsWith('.png') || fl.file_name.toLowerCase().endsWith('.jpg') || fl.file_name.toLowerCase().endsWith('.jpeg'))"
                                                      @click="showImage(data.files, fl.file_name,data.id)"
                                                      title="Click For View File" data-toggle="tooltip"
                                                      class="task-img">
@@ -2459,7 +2459,7 @@
             getTaskList() {
                 var _this = this;
                 // $('#loder-hide').removeClass('loder-hide')
-                $('#loder-hide').fadeIn();
+
                 let data = {
                     id: this.projectId,
                     list_id: this.list_id,
@@ -2505,6 +2505,7 @@
                 setTimeout(function () {
                     $('#details').removeClass('details');
                 }, 300);
+                $('#loder-hide').fadeIn();
                 this.list_id = data.list_id;
                 this.nav_id = data.nav_id;
                 this.list.name = data.title;

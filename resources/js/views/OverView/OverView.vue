@@ -141,16 +141,16 @@
                                     <a :href="baseUrl+'/storage/'+file.tasks_id+'/'+file.file_name"
                                        style="height: 120px;" target="_blank">
                                         <img :src="baseUrl+'/storage/'+file.tasks_id+'/'+file.file_name"
-                                             v-if="file.file_name.endsWith('.png') || file.file_name.endsWith('.jpg') || file.file_name.endsWith('.jpeg')  "
+                                             v-if="file.file_name.toLowerCase().endsWith('.png') || file.file_name.toLowerCase().endsWith('.jpg') || file.file_name.toLowerCase().endsWith('.jpeg')  "
                                              class="card-img-top" alt="..." height="120">
                                         <img :src="baseUrl+'/img/txt.png'"
-                                             v-else-if="file.file_name.endsWith('.txt')"
+                                             v-else-if="file.file_name.toLowerCase().endsWith('.txt')"
                                              class="card-img-top" alt="..." height="120">
                                         <img :src="baseUrl+'/img/pdf.png'"
-                                             v-else-if="file.file_name.endsWith('.pdf')"
+                                             v-else-if="file.file_name.toLowerCase().endsWith('.pdf')"
                                              class="card-img-top" alt="..." height="120">
                                         <img :src="baseUrl+'/img/file.png'"
-                                             v-else-if="file.file_name.endsWith('.docx')"
+                                             v-else-if="file.file_name.toLowerCase().endsWith('.docx')"
                                              class="card-img-top" alt="..." height="120">
                                         <img :src="baseUrl+'/img/txt.png'"
                                              v-else class="card-img-top" alt="..." height="120">
@@ -163,12 +163,12 @@
                                         <div class="comment_details">
                                             <ul style="margin: 0px !important;">
                                                 <li data-toggle="tooltip" :title="file.user.name">
-                                                    <i class="fa fa-pencil"></i>
+                                                    <i class="fa fa-pencil" style="color: #5299e0;"></i>
                                                     <span class="user">{{file.user.name}}</span>
                                                 </li>
-                                                <li><i class="fa fa-calendar"></i> {{file.created_at.substring(0,10)}}
+                                                <li><i class="fa fa-calendar" style="color: #5299e0;"></i> {{file.created_at.substring(0,10)}}
                                                 </li>
-                                                <li><i class="fa fa-clock-o"></i> {{file.created_at.substring(11,16)}}
+                                                <li><i class="fa fa-clock-o" style="color: #5299e0;"></i> {{file.created_at.substring(11,16)}}
                                                 </li>
                                             </ul>
                                         </div>
