@@ -1247,13 +1247,21 @@
                         console.log("1st error =>" + error)
                     });
             },
-            showOriginalList(task)
-            {
-                if (task.list_id !== null){
-                    $('#list'+ task.list_id).click();
+            showOriginalList(task) {
+                if (task.type !== 'task') {
+                    $('#list' + task.list_id).click();
                     setTimeout(function () {
-                        $('#click'+ task.cardId).click();
-                    },600)
+                        $('#click' + task.cardId).click();
+                    }, 1000)
+                    $('[data-toggle="tooltip"]').tooltip('dispose');
+                    setTimeout(function () {
+                        $('[data-toggle="tooltip"]').tooltip('enable');
+                    }, 500);
+                } else {
+                    $('.board' + task.multiple_board_id).click();
+                    setTimeout(function () {
+                        $('#card_' + task.cardId).click();
+                    }, 1000)
                     $('[data-toggle="tooltip"]').tooltip('dispose');
                     setTimeout(function () {
                         $('[data-toggle="tooltip"]').tooltip('enable');
