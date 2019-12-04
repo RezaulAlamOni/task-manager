@@ -847,9 +847,10 @@ class MultipleBoardController extends Controller
                     ->with('childTask')
                     ->get();
         $ids[] = $request->id;
+        $hidden = 0;
         foreach ($data as $childs) {
             if (count($childs['childTask']) > 0) {
-                $ids = $this->recurChildIds($childs);
+                $ids = $this->recurChildIds($childs);   
             }
         }
         $delKey = array_search($request->parent_id, $ids);
@@ -878,7 +879,7 @@ class MultipleBoardController extends Controller
     {
         $childs = Task::where('id',$request->task_id)
                     ->with('childTask')
-                    ->first();
+                    ->get();
         $parents = Task::where('id',$request->task_id)
                     ->with('parents')
                     ->get();
@@ -889,15 +890,19 @@ class MultipleBoardController extends Controller
             }
         }
         if ($this->parents) {
-            $this->parents = array_reverse($this->parents);
+            // $this->parents = array_reverse($this->parents);
+            $childs = Task::where('id', $this->parents->id)
+                    ->with('childTask')
+                    ->get();
         }
+        // return $this->parents->id;
         return response()->json(['success' => true, 'childs' => $childs, 'parents' => $this->parents]);
     }
 
     public function recurParent($parent)
     {
         foreach ($parent as $key => $value) {
-            $this->parents[] = $value;
+            $this->parents = $value;
             if (count($value['parents']) > 0) {
                 $this->recurParent($value['parents']);
             }
