@@ -72,7 +72,7 @@ class Task extends Model
 
     public function files()
     {
-        return $this->hasMany('App\Files', 'tasks_id', 'id')->orderBY('id','desc');
+        return $this->hasMany('App\Files', 'tasks_id', 'id')->orderBY('id','desc')->with('user');
     }
 
     public function board()

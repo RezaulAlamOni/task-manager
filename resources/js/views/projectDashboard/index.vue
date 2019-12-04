@@ -1548,7 +1548,7 @@
                     user_id: user_id,
                     task_id: task_id
                 };
-                console.log(postData)
+
                 axios.post('/api/task-list/assign-user-remove', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -1594,7 +1594,7 @@
                     this.selectedData = data;
 
                     _this.selectedData.childrens = _this.selectedData.children;
-                    _this.selectedData.files = [];
+                    // _this.selectedData.files = [];
                     _this.selectedData.child = [];
                     _this.selectedData.comment = [];
                     _this.selectedData.parents = [];
@@ -1662,6 +1662,13 @@
             makeInput(e, data) {
                 var _this = this;
                 this.selectedData = data;
+                _this.selectedData.childrens = _this.selectedData.children;
+                _this.selectedData.parents = [];
+                _this.selectedData.userName = _this.authUser.name;
+                _this.selectedData.cardId = _this.selectedData.id;
+                _this.selectedData.data = _this.selectedData.text;
+                _this.selectedData.type = 'task';
+
                 _this.empty_task_delete_flag = data.id;
                 if (data.text === 'Dont Forget Section') {
                     $(e.target).attr('disabled', 'disabled');
@@ -1754,7 +1761,6 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.nav_T = response.success;
-                        console.log(response)
                         setTimeout(() => {
                             $('#CopyTaskTo').modal('show');
                         }, 200);
@@ -2774,7 +2780,6 @@
             },
             MoveTaskToListOrBoard() {
                 var _this = this;
-                console.log(_this.selectedIds)
                 swal({
                         title: "Are you sure?",
                         text: "You want to move selected task ?!!!",
@@ -3043,7 +3048,6 @@
                     });
             },
             Add_Priority(priority, id) {
-                console.log(id, priority)
                 var _this = this;
                 var data = {
                     ids: [id],
@@ -3116,16 +3120,6 @@
 
                 if (_this.selectedData != null && _this.selectedData.sort_id !== -2) {
 
-                    // console.log(_this.selectedData);
-                    // _this.selectedData.childrens = _this.selectedData.children;
-                    // _this.selectedData.files = [];
-                    // _this.selectedData.child = [];
-                    // _this.selectedData.comment = [];
-                    // _this.selectedData.parents = [];
-                    // _this.selectedData.userName = _this.authUser.name;
-                    // _this.selectedData.cardId = _this.selectedData.id;
-                    // _this.selectedData.data = _this.selectedData.text;
-                    // console.log(_this.selectedData);
                     $('#task_width').removeClass('task_width');
                     $('#task_width').addClass('task_widthNormal');
                     $('#details').addClass('details-show');
