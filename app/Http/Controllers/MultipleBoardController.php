@@ -153,6 +153,7 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['description'] = $values['description'];
                     $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
                     $boards[$key]['task'][$keys]['progress'] = $values['progress'];
+                    $boards[$key]['task'][$keys]['priority_label'] = $values['priority_label'];
                     if ($values['list_id'] != '') {
                         $boards[$key]['task'][$keys]['type'] = 'task';
                     } else {

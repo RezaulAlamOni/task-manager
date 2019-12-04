@@ -175,7 +175,6 @@
                                     </span>
 
                                     <div class="hide-item-res-user">
-
                                         <a class=" dropdown-hide-with-remove-icon">
                                             <span class="priority-icon dropdown-toggle-split"
                                                   v-if="data.priority_label !== null"

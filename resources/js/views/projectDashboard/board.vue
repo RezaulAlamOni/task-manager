@@ -1,6 +1,6 @@
-<template >
+<template>
     <div>
-        <div id="board_view_list"  @click="HideDetails">
+        <div id="board_view_list" @click="HideDetails">
             <div class="col-12" id="col10" style="border: none">
                 <div class="card-scene">
                     <Container
@@ -23,9 +23,9 @@
                                     <div class="row" style="position: relative;">
                                         <div class="col-md-3" style="margin: 0px;  padding : 0px;">
                                             <span class="column-drag-handle">&nbsp; &#x2630;</span>
-                                            <img :src="baseUrl+'/img/'+column.progress+'.png'" height="40" width="40" />
+                                            <img :src="baseUrl+'/img/'+column.progress+'.png'" height="40" width="40"/>
                                         </div>
-                                        <div class="col-md-6 " style="margin: 0px; padding : 0px;word-break: break-all" >
+                                        <div class="col-md-6 " style="margin: 0px; padding : 0px;word-break: break-all">
                                             <span class="col_name"
                                                   style="word-break: break-all; max-height: 71px; display: block; height: 42px; overflow: hidden;"
                                                   :title="column.name" data-placement="bottom" data-toggle="tooltip">
@@ -35,58 +35,85 @@
                                         <div style="margin: 0px; padding : 0px;">
                                             <span class="total-task">{{column.children.length}}</span>
                                         </div>
-                                        <div class="col-md-1" style="position: absolute; display: inline; right: 0px; top: 9px">
+                                        <div class="col-md-1"
+                                             style="position: absolute; display: inline; right: 0px; top: 9px">
                                             <span class="pull-right" style="display: inline-flex;">
                                                 <!-- <span>
                                                     <span class="dropdown-toggle-split  opacity"
                                                         data-toggle="dropdown">
                                                         <img :src="baseUrl+'/img/task-icon/plus.png'" height="18" width="18" >
                                                         <!-- <i class="fa fa-plus"></i> -->
-                                                    <!--</span>
-                                                    <div class="dropdown-menu">
-                                                        <diV class="collapse show switchToggle">
-                                                            <a @click="addExistingTask(index,column.boardId)" class="dropdown-item"
-                                                            href="javascript:void(0)">
-                                                                <img :src="baseUrl+'/img/task-icon/plus-o.png'" height="18" width="18" > Add existing tasks</a>
-                                                            <a @click="addCard(index,column.boardId)" class="dropdown-item"
-                                                            href="javascript:void(0)"><img :src="baseUrl+'/img/task-icon/create.png'" height="18" width="18" > Create new tasks</a>
-                                                        </diV>
-                                                    </div>
-                                                </span> -->
+                                                <!--</span>
+                                                <div class="dropdown-menu">
+                                                    <diV class="collapse show switchToggle">
+                                                        <a @click="addExistingTask(index,column.boardId)" class="dropdown-item"
+                                                        href="javascript:void(0)">
+                                                            <img :src="baseUrl+'/img/task-icon/plus-o.png'" height="18" width="18" > Add existing tasks</a>
+                                                        <a @click="addCard(index,column.boardId)" class="dropdown-item"
+                                                        href="javascript:void(0)"><img :src="baseUrl+'/img/task-icon/create.png'" height="18" width="18" > Create new tasks</a>
+                                                    </diV>
+                                                </div>
+                                            </span> -->
 
                                                 <span>
                                                     <span class="dropdown-toggle-split opacity"
-                                                        data-toggle="dropdown" style="padding: 0px;">
-                                                        <img :src="baseUrl+'/img/task-icon/ellipsis.png'" height="18" width="18" >
+                                                          data-toggle="dropdown" style="padding: 0px;">
+                                                        <img :src="baseUrl+'/img/task-icon/ellipsis.png'" height="18"
+                                                             width="18">
                                                         <!-- <i class="fa fa-ellipsis-h"></i> -->
                                                     </span>
                                                     <div class="dropdown-menu">
                                                         <diV class="collapse show switchToggle">
-                                                            <a @click="addExistingTask(index,column.boardId)" class="dropdown-item"
-                                                            href="javascript:void(0)" v-if="column.moveToCol == false || column.ruleType === 'asnUser'">
-                                                                <img :src="baseUrl+'/img/task-icon/plus-o.png'" height="18" width="18"> Add existing tasks</a>
-                                                            <a @click="addCard(index,column.boardId)" class="dropdown-item"
-                                                            href="javascript:void(0)" v-if="column.moveToCol == false || column.ruleType === 'asnUser'"><img :src="baseUrl+'/img/task-icon/create.png'" height="18" width="18" > Create new tasks</a>
-                                                            <div class="dropdown-divider" v-if="column.moveToCol == false || column.ruleType === 'asnUser'"></div>
-                                                            <a @click="updateColumSow(index)" class="dropdown-item" href="#">
-                                                                <img :src="baseUrl+'/img/task-icon/edit.png'" height="18" width="18" >  Edit column</a>
-                                                            <a @click="hideColumn(index, column.boardId)" class="dropdown-item"
-                                                            href="#"><img :src="baseUrl+'/img/task-icon/hide.png'" height="18" width="18" > Hide column</a>
+                                                            <a @click="addExistingTask(index,column.boardId)"
+                                                               class="dropdown-item"
+                                                               href="javascript:void(0)"
+                                                               v-if="column.moveToCol == false || column.ruleType === 'asnUser'">
+                                                                <img :src="baseUrl+'/img/task-icon/plus-o.png'"
+                                                                     height="18" width="18"> Add existing tasks</a>
+                                                            <a @click="addCard(index,column.boardId)"
+                                                               class="dropdown-item"
+                                                               href="javascript:void(0)"
+                                                               v-if="column.moveToCol == false || column.ruleType === 'asnUser'"><img
+                                                                :src="baseUrl+'/img/task-icon/create.png'" height="18"
+                                                                width="18"> Create new tasks</a>
+                                                            <div class="dropdown-divider"
+                                                                 v-if="column.moveToCol == false || column.ruleType === 'asnUser'"></div>
+                                                            <a @click="updateColumSow(index)" class="dropdown-item"
+                                                               href="#">
+                                                                <img :src="baseUrl+'/img/task-icon/edit.png'"
+                                                                     height="18" width="18">  Edit column</a>
+                                                            <a @click="hideColumn(index, column.boardId)"
+                                                               class="dropdown-item"
+                                                               href="#"><img :src="baseUrl+'/img/task-icon/hide.png'"
+                                                                             height="18" width="18"> Hide column</a>
                                                             <div class="dropdown-divider"></div>
                                                             <!-- <a @click="deleteColumnCards(index, column.boardId)" class="dropdown-item"
                                                             href="#">
                                                                 <i class="fa fa-trash opacity"></i> Peekaboo all tasks in this column</a> -->
-                                                            <a @click="transferColumnToOtherBoard(index, column.boardId)" class="dropdown-item"
-                                                                href="#">
-                                                                <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18" width="18" > Transfer Column to another board</a>
-                                                            <a @click="showLinkModel(index, column.boardId)" class="dropdown-item"
-                                                                href="#" v-if="column.moveToCol == false || column.ruleType === 'asnUser'"><img :src="baseUrl+'/img/task-icon/link.png'" height="18" width="18" > Link to List </a>
-                                                                <!-- v-if="column.linkToList.length <= 0"  -->
-                                                            <li class="dropdown-submenu" v-if="column.linkToList.length > 0">
-                                                                <a class="dropdown-item" href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink Lists</a>
+                                                            <a @click="transferColumnToOtherBoard(index, column.boardId)"
+                                                               class="dropdown-item"
+                                                               href="#">
+                                                                <img :src="baseUrl+'/img/task-icon/transfer.png'"
+                                                                     height="18" width="18"> Transfer Column to another board</a>
+                                                            <a @click="showLinkModel(index, column.boardId)"
+                                                               class="dropdown-item"
+                                                               href="#"
+                                                               v-if="column.moveToCol == false || column.ruleType === 'asnUser'"><img
+                                                                :src="baseUrl+'/img/task-icon/link.png'" height="18"
+                                                                width="18"> Link to List </a>
+                                                            <!-- v-if="column.linkToList.length <= 0"  -->
+                                                            <li class="dropdown-submenu"
+                                                                v-if="column.linkToList.length > 0">
+                                                                <a class="dropdown-item" href="#"><img
+                                                                    :src="baseUrl+'/img/task-icon/unlink.png'"
+                                                                    height="18" width="18"> Unlink Lists</a>
                                                                 <ul class="dropdown-menu">
-                                                                    <li v-for="unlinks in column.linkToList" class="dropdown-item"  @click="unlinklistToCol(index, column.boardId, unlinks.id)">
-                                                                        <a href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" >
+                                                                    <li v-for="unlinks in column.linkToList"
+                                                                        class="dropdown-item"
+                                                                        @click="unlinklistToCol(index, column.boardId, unlinks.id)">
+                                                                        <a href="#"><img
+                                                                            :src="baseUrl+'/img/task-icon/unlink.png'"
+                                                                            height="18" width="18">
                                                                              {{(unlinks.link_to_list_column !== null && unlinks.link_to_list_column !== undefined) ? unlinks.link_to_list_column.list_title : ''}}
                                                                         </a>
                                                                     </li>
@@ -100,19 +127,27 @@
                                                                  </a> -->
 
                                                             <div class="dropdown-divider"></div>
-                                                            <a @click="deleteColumn(index,column.boardId)" class="dropdown-item"
-                                                            href="#">
-                                                                <img :src="baseUrl+'/img/task-icon/trash.png'" height="18" width="18" > Delete column</a>
+                                                            <a @click="deleteColumn(index,column.boardId)"
+                                                               class="dropdown-item"
+                                                               href="#">
+                                                                <img :src="baseUrl+'/img/task-icon/trash.png'"
+                                                                     height="18" width="18"> Delete column</a>
                                                         </diV>
                                                     </div>
                                                 </span>
                                             </span>
                                         </div>
-                                        <div v-if="column.moveToCol === true || column.ruleType === 'asnUser'" :id="column.boardId+'rulesCard'" style="float: left; position: absolute; top: 55px; padding: 0px 9px;">
+                                        <div v-if="column.moveToCol === true || column.ruleType === 'asnUser'"
+                                             :id="column.boardId+'rulesCard'"
+                                             style="float: left; position: absolute; top: 55px; padding: 0px 9px;">
                                             <div class="card-list card">
-                                                <span v-if="column.ruleStatus === 0" v-html="'<strong>Rule is paused</strong>'" class="text-warning"></span>
-                                                <span v-if="column.ruleType === 'mvCard'" v-html="'This column has rule <strong>'+column.ruleName+'</strong> and moves cards to <strong>'+column.boardName+'</strong> Board in Column <strong>'+column.moveToColName+'</strong>'"></span>
-                                                <span v-if="column.ruleType === 'asnUser'" v-html="'This column has rule <strong>'+column.ruleName+',</strong> assign to <strong>'+ column.usersName +'</strong>'"></span>
+                                                <span v-if="column.ruleStatus === 0"
+                                                      v-html="'<strong>Rule is paused</strong>'"
+                                                      class="text-warning"></span>
+                                                <span v-if="column.ruleType === 'mvCard'"
+                                                      v-html="'This column has rule <strong>'+column.ruleName+'</strong> and moves cards to <strong>'+column.boardName+'</strong> Board in Column <strong>'+column.moveToColName+'</strong>'"></span>
+                                                <span v-if="column.ruleType === 'asnUser'"
+                                                      v-html="'This column has rule <strong>'+column.ruleName+',</strong> assign to <strong>'+ column.usersName +'</strong>'"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -132,258 +167,233 @@
                                 >
                                     <Draggable :key="card.id" v-for="(card , key) in column.children">
                                         <div :class="card.props.className"
-                                            :style="card.props.style"
-                                            class="card-list"
-                                            @contextmenu="makeItClick($event, card,column.children, index, key, column.boardId)"
-                                            @click="makeItClick($event, card, column.children, index, key, column.boardId)"
-                                            :id="'card_'+card.cardId"
-                                            v-on:dblclick="showLog" >
-                                                <!-- @click="selectCard(card)" -->
-                                            <span style="position: absolute; right: 10px; top: 8px; " > <!-- v-if="card.textareaShow === true" -->
+                                             :style="card.props.style"
+                                             class="card-list"
+                                             @contextmenu="makeItClick($event, card,column.children, index, key, column.boardId)"
+                                             @click="makeItClick($event, card, column.children, index, key, column.boardId)"
+                                             :id="'card_'+card.cardId"
+                                             v-on:dblclick="showLog">
+                                            <!-- @click="selectCard(card)" -->
+                                            <span style="position: absolute; right: 10px; top: 8px; "> <!-- v-if="card.textareaShow === true" -->
                                                 <span class="dropdown-toggle-split opacity"
-                                                    data-toggle="dropdown" >
-                                                    <i class="fa fa-ellipsis-h" ></i>
+                                                      data-toggle="dropdown">
+                                                    <i class="fa fa-ellipsis-h " style="color: #272757"></i>
                                                 </span>
                                                 <div class="dropdown-menu">
                                                     <diV class="collapse show switchToggle">
                                                         <!-- <a @click="updateColumSow()" class="dropdown-item" href="#"><i
                                                             class="fa fa-edit opacity"></i> Edit column</a> -->
 
-                                                        <a @click="showTransferModel(index, key, card.cardId, column.boardId)" class="dropdown-item" href="#">
+                                                        <a @click="showTransferModel(index, key, card.cardId, column.boardId)"
+                                                           class="dropdown-item" href="#">
                                                         <!-- <i class="fa fa-share-square-o opacity"></i>  -->
-                                                        <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18" width="18" title="Transfer To Other Board Or Column" />
+                                                        <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18"
+                                                             width="18" title="Transfer To Other Board Or Column"/>
                                                         Transfer task to another board</a>
 
-                                                        <div class="dropdown-divider" v-if="card.types === 'task'"></div>
-                                                        <a @click="deleteTask(index, key, card.cardId)" class="dropdown-item"
-                                                        href="#" v-if="card.types === 'task'">
-                                                             <img :src="baseUrl+'/img/task-icon/minus-o.png'" height="18" width="18" title="Remove Task" />
+                                                        <div class="dropdown-divider"
+                                                             v-if="card.types === 'task'"></div>
+                                                        <a @click="deleteTask(index, key, card.cardId)"
+                                                           class="dropdown-item"
+                                                           href="#" v-if="card.types === 'task'">
+                                                             <img :src="baseUrl+'/img/task-icon/minus-o.png'"
+                                                                  height="18" width="18" title="Remove Task"/>
                                                             Remove task from <strong>This Board</strong> </a>
                                                         <div class="dropdown-divider"></div>
                                                         <a @click="RemoveNodeAndChildren()" class="dropdown-item"
-                                                        href="#"><img :src="baseUrl+'/img/task-icon/trash.png'" height="18" width="18" >     Delete the task</a>
+                                                           href="#"><img :src="baseUrl+'/img/task-icon/trash.png'"
+                                                                         height="18" width="18">     Delete the task</a>
                                                     </diV>
                                                 </div>
                                             </span>
 
-                                            <div :id="'title'+card.cardId" contenteditable="true" style="padding: 10px;" class="card-title-blur"
+                                            <div :id="'title'+card.cardId" contenteditable="true"
+                                                 class="card-title-blur card-title-show"
                                                  @click="makeInput($event,card.cardId)"
                                                  @blur="showItem($event,card,index,key)"
                                                  @keypress="preventEnter($event)"
                                                  v-html="card.data">
                                             </div>
 
-                                           <br>
-                                            <div class="">
-                                                <div>
-                                                    <a class="calender clickHide" v-if="card.date === '0000-00-00'">
-                                                        <!-- <i class="outline-event icon-image-preview" data-toggle
-                                                        title="toggle"></i> -->
-                                                        <img :src="baseUrl+'/img/task-icon/date-plus.png'" data-toggle title="toggle" class="icon-image-preview">
-                                                    </a>
-                                                    <flatPickr
-                                                        :class="{
+                                            <div>
+                                                <a class="calender clickHide" v-if="card.date === '0000-00-00'">
+                                                    <!-- <i class="outline-event icon-image-preview" data-toggle
+                                                    title="toggle"></i> -->
+                                                    <img :src="baseUrl+'/img/task-icon/date-plus.png'" data-toggle
+                                                         title="toggle" class="icon-image-preview">
+                                                </a>
+                                                <flatPickr
+                                                    :class="{
                                                                 dateCal:true,
                                                                 'flatpickr-input': true,
                                                                 'flatpickr-input1': card.date != '0000-00-00' ? false : true,
                                                                     active: true,
                                                                     dateCal1: card.date != '0000-00-00' ? true : false
                                                                 }"
-                                                        :config="date_config"
-                                                        @on-change="updateDate(card)"
-                                                        name="date"
-                                                        v-model="card.date">
-                                                    </flatPickr>
-                                                </div>
-                                                <div style="position: absolute; right: 160px; bottom: 12px; opacity: 1">
-                                                    <a @click="deleteCard(index, key, card.cardId)"
-                                                    v-if="card.types == 'card'">
-                                                        <!-- <i class="baseline-playlist_delete icon-image-preview"></i> -->
-                                                        <img src="https://img.icons8.com/color/48/000000/delete-forever.png" class="icon-image-preview">
-                                                    </a>
-                                                    <a @click="deleteTask(index, key, card.cardId)"
-                                                    v-if="card.types == 'task'">
-                                                        <!-- <i class="baseline-playlist_delete icon-image-preview"></i> -->
-                                                        <img src="https://img.icons8.com/color/48/000000/delete-forever.png" class="icon-image-preview">
-                                                    </a>
-                                                </div>
+                                                    :config="date_config"
+                                                    @on-change="updateDate(card)"
+                                                    name="date"
+                                                    v-model="card.date">
+                                                </flatPickr>
+                                            </div>
+                                            <div class="card-delete-icon">
+                                                <a @click="deleteCard(index, key, card.cardId)"
+                                                   v-if="card.types == 'card'">
+                                                    <!-- <i class="baseline-playlist_delete icon-image-preview"></i> -->
+                                                    <img src="https://img.icons8.com/color/48/000000/delete-forever.png"
+                                                         class="icon-image-preview">
+                                                </a>
+                                                <a @click="deleteTask(index, key, card.cardId)"
+                                                   v-if="card.types == 'task'">
+                                                    <!-- <i class="baseline-playlist_delete icon-image-preview"></i> -->
+                                                    <img src="https://img.icons8.com/color/48/000000/delete-forever.png"
+                                                         class="icon-image-preview">
+                                                </a>
+                                            </div>
 
-                                                <div style="float: left;">
-                                                    <a class="user dropdown-hide-with-remove-icon">
-                                                        <template v-if="card.assigned_user.length > 0">
-                                                            <span class="assigned_user dropdown-toggle-split "
-                                                                data-toggle="dropdown" v-for="(assign,keyId) in card.assigned_user">
-                                                                <p :title="assign.name"
-                                                                class="assignUser-photo-for-selected text-uppercase"
-                                                                data-placement="bottom" data-toggle="tooltip"
-                                                                style="top: 10px;"
-                                                                v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
-                                                                </p>
 
-                                                            </span>
-                                                        </template>
-                                                        <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
-                                                            <!-- <i class="outline-person icon-image-preview li-opacity "
-                                                            data-toggle="tooltip" title="Assignee">
-                                                            </i> -->
-                                                            <img :src="baseUrl+'/img/task-icon/add-user.png'"  class="icon-image-preview " data-toggle="tooltip" title="Assignee">
-                                                        </span>
+                                            <a class="user-assign-card ">
+                                                <template v-if="card.assigned_user.length > 0">
+                                                    <span class="assigned_user-card dropdown-toggle-split "
+                                                          data-toggle="dropdown"
+                                                          v-for="(assign,keyId) in card.assigned_user">
+                                                        <p :title="assign.name"
+                                                           class="assignUser-photo-for-card text-uppercase"
+                                                           data-placement="bottom" data-toggle="tooltip"
+                                                           v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
+                                                        </p>
+                                                    </span>
+                                                </template>
+                                                <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
+                                                    <img :src="baseUrl+'/img/task-icon/add-user.png'"
+                                                         class="icon-image-preview " data-toggle="tooltip"
+                                                         title="Assignee">
+                                                </span>
 
-                                                        <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
-                                                            <diV class="collapse show switchToggle">
-                                                                <li class="assignUser">
-                                                                    <input class="input-group searchUser"
-                                                                        placeholder="Assign by name and email"
-                                                                        style="width: 90%; padding: 12px 20px; margin: 10px; display: inline-block; border: 1px solid #ccc;
+                                                <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
+                                                    <diV class="collapse show switchToggle">
+                                                        <li class="assignUser">
+                                                            <input class="input-group searchUser"
+                                                                   placeholder="Assign by name and email"
+                                                                   style="width: 90%; padding: 12px 20px; margin: 10px; display: inline-block; border: 1px solid #ccc;
                                                                                     border-radius: 4px; box-sizing: border-box; "
-                                                                        type="text">
-                                                                    <label class="pl-2 label-text">
+                                                                   type="text">
+                                                            <label class="pl-2 label-text">
                                                                         <span class="assign-user-drop-down-text">
                                                                             Or invite a new member by email address
                                                                         </span>
-                                                                    </label>
-                                                                </li>
-                                                                <li class="assignUser">
-                                                                    <template v-for="user in card.users">
-                                                                        <div
-                                                                            @click="(card.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user, index, key, card) "
-                                                                            :class="(card.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
-                                                                            class="row"
-                                                                            v-bind:disabled="(card.assigned_user_ids.includes(user.id)) ? true : false">
-                                                                            <div class="col-md-3 pt-1 pl-4">
-                                                                                <p class="assignUser-photo">
-                                                                                    {{(user.name !== null) ? user.name.substring(0,2) :
-                                                                                    ''}}</p>
-                                                                            </div>
-                                                                            <div class="col-md-9 assign-user-name-email">
-                                                                                <h5>{{user.name}}<br>
-                                                                                    <small>{{user.email}}</small>
-                                                                                </h5>
-                                                                            </div>
-                                                                            <a :id="'remove-assign-user'+user.id"
-                                                                            v-if="card.assigned_user_ids.includes(user.id)"
-                                                                            @click="removeAssignedUser(user.id, card.cardId)"
-                                                                            data-toggle="tooltip" title="Remove user from assigned !"
-                                                                            class="remove-assign-user badge badge-danger"
-                                                                            href="javascript:void(0)">
-                                                                                <i class="fa fa-user-times remove-assign-user-icon"></i>
-                                                                            </a>
-                                                                            <a :id="'remove-assign-user'+user.id" v-else
-                                                                            data-toggle="tooltip" title="Assign user to task!"
-                                                                            class="remove-assign-user badge badge-success"
-                                                                            href="javascript:void(0)">
-                                                                                <i class="fa fa-user-plus remove-assign-user-icon"></i>
-                                                                            </a>
-                                                                        </div>
+                                                            </label>
+                                                        </li>
+                                                        <li class="assignUser">
+                                                            <template v-for="user in card.users">
+                                                                <div
+                                                                    @click="(card.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user, index, key, card) "
+                                                                    :class="(card.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
+                                                                    class="row"
+                                                                    v-bind:disabled="(card.assigned_user_ids.includes(user.id)) ? true : false">
+                                                                    <div class="col-md-3 pt-1 pl-4">
+                                                                        <p class="assignUser-photo">
+                                                                            {{(user.name !== null) ?
+                                                                            user.name.substring(0,2) :
+                                                                            ''}}</p>
+                                                                    </div>
+                                                                    <div class="col-md-9 assign-user-name-email">
+                                                                        <h5>{{user.name}}<br>
+                                                                            <small>{{user.email}}</small>
+                                                                        </h5>
+                                                                    </div>
+                                                                    <a :id="'remove-assign-user'+user.id"
+                                                                       v-if="card.assigned_user_ids.includes(user.id)"
+                                                                       @click="removeAssignedUser(user.id, card.cardId)"
+                                                                       data-toggle="tooltip"
+                                                                       title="Remove user from assigned !"
+                                                                       class="remove-assign-user badge badge-danger"
+                                                                       href="javascript:void(0)">
+                                                                        <i class="fa fa-user-times remove-assign-user-icon"></i>
+                                                                    </a>
+                                                                    <a :id="'remove-assign-user'+user.id" v-else
+                                                                       data-toggle="tooltip"
+                                                                       title="Assign user to task!"
+                                                                       class="remove-assign-user badge badge-success"
+                                                                       href="javascript:void(0)">
+                                                                        <i class="fa fa-user-plus remove-assign-user-icon"></i>
+                                                                    </a>
+                                                                </div>
 
-                                                                    </template>
-                                                                </li>
-                                                            </diV>
-                                                            <li @click="switchEvent($event)"
-                                                                class="border-top pl-2 assign-user-drop-down-footer">
+                                                            </template>
+                                                        </li>
+                                                    </diV>
+                                                    <li @click="switchEvent($event)"
+                                                        class="border-top pl-2 assign-user-drop-down-footer">
 
                                                                     <span
                                                                         class="assign-user-drop-down-text">Assign an external team</span>
-                                                                <switches class="assign-user-switch-for-dropdown"
-                                                                        color="success"
-                                                                        theme="bootstrap"
-                                                                        v-model="id">
-                                                                </switches>
-                                                            </li>
-                                                        </div>
-                                                    </a>
+                                                        <switches class="assign-user-switch-for-dropdown"
+                                                                  color="success"
+                                                                  theme="bootstrap"
+                                                                  v-model="id">
+                                                        </switches>
+                                                    </li>
                                                 </div>
+                                            </a>
 
-                                                <div>
-                                                    <a :class="{'tag-icon': true, 'tag-icon-free': card.tags == undefined || card.tags.length == 0}">
-                                                        <div v-if="card.tags && card.tags.length !== 0">
-                                                            <div style="float: left;" v-for="(item, tagIndex) in card.tags">
-                                                                <div class="dropdown-toggle-split "
-                                                                    data-toggle="dropdown"
-                                                                    style="padding-right: 0px; padding-left: 1px;" v-if="tagIndex < 2">
-                                                                    <span class="badge badge-danger "
-                                                                        v-if='item == "Dont Forget"'>{{item.text.substring(0,12)}}</span>
-                                                                    <span :title="card.tagTooltip"
-                                                                        class="badge badge-success "
-                                                                        data-placement="bottom"
-                                                                        data-toggle="tooltip"
-                                                                        v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]"
-                                                                        v-else
-                                                                    >{{item.text.substring(0,10)}}
-                                                                        <span v-if="item.text.length > 10">..</span>
-                                                                    </span>
-                                                                </div>
 
-                                                                <div :id="'dropdown1'+card.cardId" class="dropdown-menu dropdown-menu1">
-
-                                                                    <diV class="collapse show switchToggle" style="">
-                                                                        <div class="container-fluid">
-                                                                            <vue-tags-input
-                                                                                :allow-edit-tags="true"
-                                                                                :tags="card.tags"
-                                                                                @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,card,index,key)"
-                                                                                @tags-changed="newTags => (changeTag(newTags,card,index,key))"
-                                                                                v-model="tag"
-                                                                            />
-                                                                            <div class="row">
-                                                                                <div class="col-12">
-                                                                                    <template v-for="(tag, tagIndx) in card.existing_tags">
-                                                                                        <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key, card.cardId, '')"
-                                                                                            v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
-                                                                                            v-if="tag.text !== 'Dont Forget'">
-                                                                                            {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
-                                                                                        </li>
-                                                                                    </template>
-                                                                                    <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')" class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
-                                                                                </div>
-                                                                            </div>
-                                                                            <hr>
-                                                                            <div class="col-xs-12"
-                                                                                style="margin-top:10px;width: 100%;">
-                                                                                <button @click="showTagManageModel"
-                                                                                        class="btn btn-small btn-primary pull-right"
-                                                                                        type="submit">
-                                                                                    Manage Tag
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </diV>
-                                                                </div>
-                                                            </div>
+                                            <a class="tag-icon">
+                                                <div v-if="card.tags && card.tags.length !== 0">
+                                                    <div style="float: left;" v-for="(item, tagIndex) in card.tags">
+                                                        <div class="dropdown-toggle-split "
+                                                             data-toggle="dropdown"
+                                                             style="padding-right: 0px; padding-left: 1px;"
+                                                             v-if="tagIndex < 2">
+                                                            <span class="badge badge-danger "
+                                                                  v-if='item == "Dont Forget"'>
+                                                                {{item.text.substring(0,12)}}
+                                                            </span>
+                                                            <span :title="card.tagTooltip"
+                                                                  class="badge badge-success "
+                                                                  data-placement="bottom"
+                                                                  data-toggle="tooltip"
+                                                                  v-bind:style="[{'background': item.color },{'margin-left' : 1 +'px'}]"
+                                                                  style="height: 18px;line-height: 14px;"
+                                                                  v-else>
+                                                                {{item.text.substring(0,5)}}
+                                                                <span v-if="item.text.length > 5">.</span>
+                                                            </span>
                                                         </div>
-                                                        <img :src="baseUrl+'/img/task-icon/tag-add.png'" class="icon-image-preview"  data-toggle="dropdown" title="Add Tag" v-else>
-                                                        <!-- <i class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
-                                                            data-toggle="dropdown"
-                                                            ></i> -->
 
-                                                        <div class="dropdown-menu dropdown-menu1 ">
+                                                        <div :id="'dropdown1'+card.cardId"
+                                                             class="dropdown-menu dropdown-menu1">
 
                                                             <diV class="collapse show switchToggle" style="">
                                                                 <div class="container-fluid">
                                                                     <vue-tags-input
                                                                         :allow-edit-tags="true"
-                                                                        :tags="tag1"
+                                                                        :tags="card.tags"
                                                                         @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,card,index,key)"
                                                                         @tags-changed="newTags => (changeTag(newTags,card,index,key))"
-                                                                        v-model="tag"
-                                                                    />
+                                                                        v-model="tag"/>
                                                                     <div class="row">
                                                                         <div class="col-12">
-                                                                            <template v-for="(tag, tagIndx) in card.existing_tags">
-                                                                                <li class="badge-pill tags" @click="addExistingTag(index , tagIndx, key, card.cardId ,'')"
+                                                                            <template
+                                                                                v-for="(tag, tagIndx) in card.existing_tags">
+                                                                                <li class="badge-pill tags"
+                                                                                    @click="addExistingTag(index , tagIndx, key, card.cardId, '')"
                                                                                     v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
                                                                                     v-if="tag.text !== 'Dont Forget'">
-                                                                                    {{(tag.title !== undefined) ?tag.title.substring(0,12) : ''}}
+                                                                                    {{(tag.title !== undefined) ?
+                                                                                    tag.title.substring(0,12) : ''}}
                                                                                 </li>
                                                                             </template>
                                                                             <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')"
-                                                                                class="badge-pill tags" style="background: #FB8678" > Dont Forget </li>
+                                                                                class="badge-pill tags"
+                                                                                style="background: #FB8678;height: 17px;line-height: 14px;">
+                                                                                Dont Forget
+                                                                            </li>
                                                                         </div>
                                                                     </div>
                                                                     <hr>
                                                                     <div class="col-xs-12"
-                                                                        style="margin-top:10px;width: 100%;">
+                                                                         style="margin-top:10px;width: 100%;">
                                                                         <button @click="showTagManageModel"
                                                                                 class="btn btn-small btn-primary pull-right"
                                                                                 type="submit">
@@ -391,16 +401,144 @@
                                                                         </button>
                                                                     </div>
                                                                 </div>
+
                                                             </diV>
                                                         </div>
-                                                    </a>
+                                                    </div>
                                                 </div>
-                                                <div class="total-child" style="margin-top: 8px; " v-if="card.child > 0" @click="hideChilds(card.cardId)"> 
-                                                    <strong>
-                                                        {{ card.child }}
-                                                    </strong> 
+                                                <img :src="baseUrl+'/img/task-icon/tag-add.png'"
+                                                     class="icon-image-preview" data-toggle="dropdown"
+                                                     title="Add Tag" v-else>
+                                                <!-- <i class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
+                                                    data-toggle="dropdown"
+                                                    ></i> -->
+
+                                                <div class="dropdown-menu dropdown-menu1 ">
+
+                                                    <diV class="collapse show switchToggle" style="">
+                                                        <div class="container-fluid">
+                                                            <vue-tags-input
+                                                                :allow-edit-tags="true"
+                                                                :tags="tag1"
+                                                                @before-deleting-tag="deleteTag => deleteCardTag(deleteTag,card,index,key)"
+                                                                @tags-changed="newTags => (changeTag(newTags,card,index,key))"
+                                                                v-model="tag"
+                                                            />
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <template
+                                                                        v-for="(tag, tagIndx) in card.existing_tags">
+                                                                        <li class="badge-pill tags"
+                                                                            @click="addExistingTag(index , tagIndx, key, card.cardId ,'')"
+                                                                            v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
+                                                                            v-if="tag.text !== 'Dont Forget'">
+                                                                            {{(tag.title !== undefined)
+                                                                            ?tag.title.substring(0,12) : ''}}
+                                                                        </li>
+                                                                    </template>
+                                                                    <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')"
+                                                                        class="badge-pill tags"
+                                                                        style="background: #FB8678"> Dont Forget
+                                                                    </li>
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="col-xs-12"
+                                                                 style="margin-top:10px;width: 100%;">
+                                                                <button @click="showTagManageModel"
+                                                                        class="btn btn-small btn-primary pull-right"
+                                                                        type="submit">
+                                                                    Manage Tag
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </diV>
                                                 </div>
+                                            </a>
+                                            <a class="priority-icon-card" data-toggle="tooltip" title="Priority">
+                                                <span class="priority-icon dropdown-toggle-split"
+                                                      v-if="card.priority_label !== null"
+                                                      style="top: 12px;"
+                                                      data-toggle="dropdown">
+                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
+                                                           v-if="card.priority_label === 'high'"
+                                                           class="badge badge-warning text-capitalize "
+                                                           style="background: #F4F5F7;height: 18px; line-height: 14px;border: 1px solid #944d4d;color : black "
+                                                           data-original-title="">
+                                                        {{card.priority_label}}
+                                                     </span>
+                                                    <span title="" data-placement="bottom" data-toggle="tooltip"
+                                                          v-if="card.priority_label === 'low'"
+                                                          class="badge badge-warning text-capitalize "
+                                                          style="background: #172B4D;height: 18px; line-height: 14px;border: 1px solid #944d4d; "
+                                                          data-original-title="">
+                                                        {{card.priority_label}}
+                                                     </span>
+                                                    <span title="" data-placement="bottom" data-toggle="tooltip"
+                                                          v-if="card.priority_label === 'medium'"
+                                                          class="badge badge-warning text-capitalize "
+                                                          style="background: #FF9F1A;height: 18px; line-height: 14px;border: 1px solid #944d4d;"
+                                                          data-original-title="">
+                                                        {{card.priority_label}}
+                                                     </span>
+                                                </span>
+                                                <img :src="baseUrl+'/img/priority.png'" v-else
+                                                     class="icon-image-preview" data-toggle="dropdown"
+                                                     title="Add Tag">
+
+                                                <div class="dropdown-menu dropdown-menu-right"
+                                                     style="z-index: 1;width: 185px;">
+                                                    <div class="collapse show switchToggle">
+                                                        <ul>
+                                                            <li class="assignUser">
+                                                                <label class="pl-2 label-text">
+                                                                <span class="assign-user-drop-down-text">
+                                                                    Select Task Priority
+                                                                </span>
+                                                                </label>
+                                                            </li>
+                                                            <li class="assignUser">
+                                                                <div class="users-select row"
+                                                                     @click="Add_Priority('high',card.cardId)">
+                                                                    <div class="col-md-9 add-tag-to-selected">
+                                                                    <span
+                                                                        class="badge badge-default tag-color-custom-contextmenu"
+                                                                        style="background: #F4F5F7;">.</span>
+                                                                        <h5 class="text-capitalize"> high</h5>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="users-select row"
+                                                                     @click="Add_Priority('medium',card.cardId)">
+                                                                    <div class="col-md-9 add-tag-to-selected">
+                                                                    <span
+                                                                        class="badge badge-default tag-color-custom-contextmenu"
+                                                                        style="background: #FF9F1A;">.</span>
+                                                                        <h5 class="text-capitalize">medium</h5>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="users-select row"
+                                                                     @click="Add_Priority('low',card.cardId)">
+                                                                    <div class="col-md-9 add-tag-to-selected">
+                                                                    <span
+                                                                        class="badge badge-default tag-color-custom-contextmenu"
+                                                                        style="background: #172B4D;">.</span>
+                                                                        <h5>Low</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                            </a>
+
+                                            <div class="total-child" v-if="card.child > 0"
+                                                 @click="hideChilds(card.cardId)">
+                                                <strong>
+                                                    {{ card.child }}
+                                                </strong>
                                             </div>
+
                                         </div>
                                     </Draggable>
                                 </Container>
@@ -417,7 +555,7 @@
                         <ul>
                             <!-- <li>
                                 <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split ">
-                                    <img src="/img/task-icon/copy-1.png" class="contex-menu-icon"> Copy </a> 
+                                    <img src="/img/task-icon/copy-1.png" class="contex-menu-icon"> Copy </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+
                                     <span class="badge-pill badge-default">C</span>
@@ -425,7 +563,7 @@
                             </li> -->
                             <!-- <li>
                                 <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split ">
-                                    <img src="/img/task-icon/cut.png" class="contex-menu-icon"> Cut </a> 
+                                    <img src="/img/task-icon/cut.png" class="contex-menu-icon"> Cut </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+
                                     <span class="badge-pill badge-default">X</span>
@@ -433,19 +571,21 @@
                             </li> -->
                             <!-- <li>
                                 <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split disabled" style="color: gray;">
-                                    <img src="/img/task-icon/past.png" class="contex-menu-icon"> Paste </a> 
+                                    <img src="/img/task-icon/past.png" class="contex-menu-icon"> Paste </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+
                                     <span class="badge-pill badge-default">v</span>
                                 </span>
                             </li> -->
                             <li>
-                                <a href="javascript:void(0)" 
-                                    data-toggle="dropdown" class="dropdown-toggle-split ">
-                                    <img src="/img/task-icon/add-user.png" class="contex-menu-icon"> Assign User to Selected 
-                                </a> 
+                                <a href="javascript:void(0)"
+                                   data-toggle="dropdown" class="dropdown-toggle-split ">
+                                    <img src="/img/task-icon/add-user.png" class="contex-menu-icon"> Assign User to
+                                    Selected
+                                </a>
                                 <span class="contex-menu-sortcut">
-                                    <span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">U</span>
+                                    <span class="badge-pill badge-default">Ctrl</span>+<span
+                                    class="badge-pill badge-default">U</span>
                                 </span>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <div class="collapse show switchToggle">
@@ -457,11 +597,12 @@
                                                     </span>
                                                 </label>
                                             </li>
-                                            <li class="assignUser"> 
+                                            <li class="assignUser">
                                                 <!-- {{ scene.children[0].children[0].users }} -->
                                                 <!-- v-for="user in scene.children[0].children[0].users" -->
                                                 <template v-for="user in allUsers">
-                                                    <div @click="ActionToSelectedTask(user.id,'user')" class="users-select row">
+                                                    <div @click="ActionToSelectedTask(user.id,'user')"
+                                                         class="users-select row">
                                                         <div class="col-md-3 pt-1 pl-4">
                                                             <p class="assignUser-photo">
                                                                 {{(user.name !== null) ? user.name.substring(0,2) : ''}}
@@ -481,14 +622,15 @@
                             </li>
                             <li>
                                 <a @click="deleteSelectedTask" href="javascript:void(0)">
-                                    <img :src="baseUrl+'/img/task-icon/trash.png'" class="contex-menu-icon">Delete Selected 
+                                    <img :src="baseUrl+'/img/task-icon/trash.png'" class="contex-menu-icon">Delete
+                                    Selected
                                     <span class="badge-pill badge-default contex-menu-sortcut">Delete</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split ">
                                     <img src="/img/task-icon/tag-add.png" class="contex-menu-icon"> Add Tags to Selected
-                                </a> 
+                                </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Shift</span>+
                                     <span class="badge-pill badge-default">#</span>
@@ -505,10 +647,11 @@
                                             </li>
                                             <li class="assignUser">
                                                 <template v-for="user in allTags">
-                                                    <div @click="ActionToSelectedTask(user.id,'tag')" class="users-select row">
+                                                    <div @click="ActionToSelectedTask(user.id,'tag')"
+                                                         class="users-select row">
                                                         <div class="col-md-9 add-tag-to-selected">
                                                             <span
-                                                                class="badge badge-default tag-color-custom-contextmenu" 
+                                                                class="badge badge-default tag-color-custom-contextmenu"
                                                                 :style="{'background' : user.color}">.</span>
                                                             <h5>{{user.title}}</h5>
                                                         </div>
@@ -521,16 +664,19 @@
                             </li>
                             <li>
                                 <a @click="showTransferModel(this.currentColumn , '' , '', this.currentColumnIndex)">
-                                    <img src="/img/task-icon/copy-to.png" class="contex-menu-icon"> Move to another column or Board
-                                </a> 
+                                    <img src="/img/task-icon/copy-to.png" class="contex-menu-icon"> Move to another
+                                    column or Board
+                                </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+
                                     <span class="badge-pill badge-default">T</span>
                                 </span>
                             </li>
                             <li v-if="selectedCards.types == 'task'">
-                                <a @click="deleteTask(currentColumnIndex, currentColumnKey, selectedCards.cardId)" href="javascript:void(0)">
-                                    <img :src="baseUrl+'/img/task-icon/minus-o.png'" class="contex-menu-icon">Remove Tasks From This Column 
+                                <a @click="deleteTask(currentColumnIndex, currentColumnKey, selectedCards.cardId)"
+                                   href="javascript:void(0)">
+                                    <img :src="baseUrl+'/img/task-icon/minus-o.png'" class="contex-menu-icon">Remove
+                                    Tasks From This Column
                                     <!-- <span class="badge-pill badge-default contex-menu-sortcut">Delete</span> -->
                                 </a>
                             </li>
@@ -538,7 +684,7 @@
                                 <a href="javascript:void(0)"><img src="/img/task-icon/move.png" class="contex-menu-icon"> Move Selected
                                 </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">M</span></span>
                             </li> -->
-                            
+
 
                             <li style="position: relative" @click="openPicker()">
                                 <datepicker
@@ -710,7 +856,8 @@
                                                    type="color">
                                         </td>
                                         <td>
-                                            <a @click="DeleteTagFromModal(tag)" class="compltit-blue-a badge badge-danger"
+                                            <a @click="DeleteTagFromModal(tag)"
+                                               class="compltit-blue-a badge badge-danger"
                                                href="javascript:void(0)">
                                                 Delete
                                             </a>
@@ -770,7 +917,8 @@
                             <div class="col-sm-8">
                                 <select @change="getBttn()" class="form-control" v-model="selectedBoardColumn">
                                     <option disabled>Select Board Column</option>
-                                    <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in boardColumn">
+                                    <option :key="index" v-bind:value="navList.id"
+                                            v-for="(navList, index) in boardColumn">
                                         {{navList.title}}
                                     </option>
                                 </select>
@@ -778,7 +926,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button v-if="transferBtn" aria-label="Close" @click="transferCardToOtherBoard" class="btn btn-success" data-dismiss="modal" type="button">Transfer
+                        <button v-if="transferBtn" aria-label="Close" @click="transferCardToOtherBoard"
+                                class="btn btn-success" data-dismiss="modal" type="button">Transfer
                         </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
@@ -835,7 +984,8 @@
                         </div> -->
                     </div>
                     <div class="modal-footer">
-                        <button v-if="transferBtn" aria-label="Close" @click="transferColumnToOtherBoardSave" class="btn btn-success" data-dismiss="modal" type="button">Transfer
+                        <button v-if="transferBtn" aria-label="Close" @click="transferColumnToOtherBoardSave"
+                                class="btn btn-success" data-dismiss="modal" type="button">Transfer
                         </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
@@ -850,7 +1000,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header" style="border-radius: 13px;">
-                        <h4 class="text-center ">Link List To Column  </h4>
+                        <h4 class="text-center ">Link List To Column </h4>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -891,7 +1041,8 @@
                         </div> -->
                     </div>
                     <div class="modal-footer">
-                        <button v-if="linkBtn" aria-label="Close" @click="listLinkToCol" class="btn btn-success" data-dismiss="modal" type="button">Link
+                        <button v-if="linkBtn" aria-label="Close" @click="listLinkToCol" class="btn btn-success"
+                                data-dismiss="modal" type="button">Link
                         </button>
                         <button aria-label="Close" class="btn btn-secondary" data-dismiss="modal" type="button">Cancel
                         </button>
@@ -944,108 +1095,139 @@
                                 </select>
                             </div>
                         </div>
-                         <ul class="list-group list-group-flush">
+                        <ul class="list-group list-group-flush">
                             <div v-if="tree4data.length > 0">
                                 <label class="checkbox_cus_mini">
-                                    <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All
+                                    <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav"> All
                                     <span class="checkmark"></span>
                                 </label>
                                 <!-- <input type="checkbox" @change="selectAll()" class="checkedAll"> All <br> -->
                             </div>
                             <div v-for="tree in tree4data">
-                                <li class="list-group-item" :class="(tree.board_parent_id !== null && tree.children.length <= 0) ? 'list-group-item-hide' : ''">
-                                    <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': tree.board_parent_id !== null}"
-                                            v-if="tree.text !== '' && tree.board_parent_id !== null && tree.children.length > 0"  v-html="tree.text">
+                                <li class="list-group-item"
+                                    :class="(tree.board_parent_id !== null && tree.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                    <label
+                                        :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': tree.board_parent_id !== null}"
+                                        v-if="tree.text !== '' && tree.board_parent_id !== null && tree.children.length > 0"
+                                        v-html="tree.text">
                                         <!-- <input :id="tree.id" :value="tree.id" type="checkbox"
                                                 v-if="tree.text !== '' && tree.board_parent_id !== null"
                                                 checked disable> -->
 
                                         <!-- <span class="checkmark"></span>-->
                                     </label>
-                                    <label class="checkbox_cus_mini"  v-if="tree.text !== '' && tree.board_parent_id == null" >
-                                        <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask"
-                                                :class="{'selectAll': true}" @change="selectChild(tree.id)" v-if="tree.text !== '' && tree.board_parent_id === null">
-                                                <span v-html="tree.text"></span>
+                                    <label class="checkbox_cus_mini"
+                                           v-if="tree.text !== '' && tree.board_parent_id == null">
+                                        <input :id="tree.id" :value="tree.id" type="checkbox"
+                                               v-model="selectedExistedTask"
+                                               :class="{'selectAll': true}" @change="selectChild(tree.id)"
+                                               v-if="tree.text !== '' && tree.board_parent_id === null">
+                                        <span v-html="tree.text"></span>
                                         <span class="checkmark"></span>
                                     </label>
                                     <ul class="list-group list-group-flush" v-if="tree.children">
-                                        <div v-for="child in tree.children" :class="(child.board_parent_id !== null && child.children.length <= 0) ? 'list-group-item-hide' : ''">
-                                            <li class="list-group-item" >
-                                                <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child.board_parent_id !== null}"
-                                                       v-if="child.text !== '' && child.board_parent_id !== null && child.children.length > 0" >
+                                        <div v-for="child in tree.children"
+                                             :class="(child.board_parent_id !== null && child.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                            <li class="list-group-item">
+                                                <label
+                                                    :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child.board_parent_id !== null}"
+                                                    v-if="child.text !== '' && child.board_parent_id !== null && child.children.length > 0">
                                                     <input :id="child.id" class="tree-child" :value="child.id"
-                                                       type="checkbox"
-                                                       checked disable> <span v-html="child.text"></span>
-                                                <!--<span class="checkmark"></span>-->
+                                                           type="checkbox"
+                                                           checked disable> <span v-html="child.text"></span>
+                                                    <!--<span class="checkmark"></span>-->
                                                 </label>
-                                                <label class="checkbox_cus_mini" v-if="child.text !== '' && child.board_parent_id == null">
+                                                <label class="checkbox_cus_mini"
+                                                       v-if="child.text !== '' && child.board_parent_id == null">
                                                     <input :id="child.id" class="tree-child selectAll" :value="child.id"
-                                                       type="checkbox" v-model="selectedExistedTask" @change="selectChild(child.id)" > <span v-html="child.text"></span>
+                                                           type="checkbox" v-model="selectedExistedTask"
+                                                           @change="selectChild(child.id)"> <span
+                                                    v-html="child.text"></span>
                                                     <span class="checkmark"></span>
                                                 </label>
 
                                                 <ul class="list-group list-group-flush" v-if="child.children">
-                                                    <div v-for="child1 in child.children" :class="(child1.board_parent_id !== null && child1.children.length <= 0) ? 'list-group-item-hide' : ''">
-                                                        <li class="list-group-item" >
-                                                            <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child1.board_parent_id !== null}"
-                                                            v-if="child1.text !== '' && child1.board_parent_id !== null  && child1.children.length > 0">
-                                                                <input :id="child1.id" :value="child1.id" class="tree-child"
-                                                                    type="checkbox"
-                                                                    checked disable> <span v-html="child1.text"></span>
+                                                    <div v-for="child1 in child.children"
+                                                         :class="(child1.board_parent_id !== null && child1.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                                        <li class="list-group-item">
+                                                            <label
+                                                                :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child1.board_parent_id !== null}"
+                                                                v-if="child1.text !== '' && child1.board_parent_id !== null  && child1.children.length > 0">
+                                                                <input :id="child1.id" :value="child1.id"
+                                                                       class="tree-child"
+                                                                       type="checkbox"
+                                                                       checked disable> <span
+                                                                v-html="child1.text"></span>
                                                                 <!-- <span class="checkmark"></span>-->
                                                             </label>
 
-                                                            <label class="checkbox_cus_mini" v-if="child1.text !== '' && child1.board_parent_id == null">
-                                                                <input :id="child1.id" :value="child1.id" class="tree-child selectAll"
-                                                                    type="checkbox" v-model="selectedExistedTask" @change="selectChild(child1.id)"><span v-html="child1.text"></span>
+                                                            <label class="checkbox_cus_mini"
+                                                                   v-if="child1.text !== '' && child1.board_parent_id == null">
+                                                                <input :id="child1.id" :value="child1.id"
+                                                                       class="tree-child selectAll"
+                                                                       type="checkbox" v-model="selectedExistedTask"
+                                                                       @change="selectChild(child1.id)"><span
+                                                                v-html="child1.text"></span>
                                                                 <span class="checkmark"></span>
                                                             </label>
-                                                            <ul class="list-group list-group-flush" v-if="child1.children">
-                                                                <div v-for="child2 in child1.children" :class="(child2.board_parent_id !== null && child2.children.length <= 0) ? 'list-group-item-hide' : ''">
-                                                                    <li class="list-group-item" >
-                                                                        <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
-                                                                                v-if="child2.text !== '' && child2.board_parent_id !== null  && child2.children.length > 0">
+                                                            <ul class="list-group list-group-flush"
+                                                                v-if="child1.children">
+                                                                <div v-for="child2 in child1.children"
+                                                                     :class="(child2.board_parent_id !== null && child2.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                                                    <li class="list-group-item">
+                                                                        <label
+                                                                            :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
+                                                                            v-if="child2.text !== '' && child2.board_parent_id !== null  && child2.children.length > 0">
                                                                             <input :id="child2.id" :value="child2.id"
-                                                                               class="tree-child"
-                                                                               type="checkbox"
-                                                                               checked disable> <span v-html="child2.text"></span>
+                                                                                   class="tree-child"
+                                                                                   type="checkbox"
+                                                                                   checked disable> <span
+                                                                            v-html="child2.text"></span>
                                                                             <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
                                                                             <!-- <span class="checkmark"></span>-->
                                                                         </label>
 
-                                                                        <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
+                                                                        <label class="checkbox_cus_mini"
+                                                                               v-if="child2.text !== '' && child2.board_parent_id == null">
                                                                             <input :id="child2.id" :value="child2.id"
-                                                                               class="tree-child selectAll"
-                                                                               type="checkbox"
-                                                                               v-model="selectedExistedTask"
-                                                                               @change="selectChild(child2.id)"> <span v-html="child2.text"></span>
+                                                                                   class="tree-child selectAll"
+                                                                                   type="checkbox"
+                                                                                   v-model="selectedExistedTask"
+                                                                                   @change="selectChild(child2.id)">
+                                                                            <span v-html="child2.text"></span>
                                                                             <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
                                                                             <span class="checkmark"></span>
                                                                         </label>
 
-                                                                        <ul class="list-group list-group-flush" v-if="child2.children">
-                                                                            <div v-for="child3 in child2.children" :class="(child3.board_parent_id !== null && child3.children.length <= 0) ? 'list-group-item-hide' : ''">
-                                                                                <li class="list-group-item" >
-                                                                                    <label :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
-                                                                                            v-if="child3.text !== '' && child3.board_parent_id !== null && child3.children.length > 0">
+                                                                        <ul class="list-group list-group-flush"
+                                                                            v-if="child2.children">
+                                                                            <div v-for="child3 in child2.children"
+                                                                                 :class="(child3.board_parent_id !== null && child3.children.length <= 0) ? 'list-group-item-hide' : ''">
+                                                                                <li class="list-group-item">
+                                                                                    <label
+                                                                                        :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
+                                                                                        v-if="child3.text !== '' && child3.board_parent_id !== null && child3.children.length > 0">
                                                                                         <input :id="child3.id"
-                                                                                                :value="child3.id"
-                                                                                                class="tree-child"
-                                                                                                type="checkbox"
-                                                                                                 checked disable>
-                                                                                            <span v-html="child3.text"></span>
+                                                                                               :value="child3.id"
+                                                                                               class="tree-child"
+                                                                                               type="checkbox"
+                                                                                               checked disable>
+                                                                                        <span
+                                                                                            v-html="child3.text"></span>
                                                                                         <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
                                                                                         <!-- <span class="checkmark"></span>-->
                                                                                     </label>
 
-                                                                                    <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
+                                                                                    <label class="checkbox_cus_mini"
+                                                                                           v-if="child2.text !== '' && child2.board_parent_id == null">
                                                                                         <input :id="child3.id"
-                                                                                                :value="child3.id"
-                                                                                                class="tree-child selectAll"
-                                                                                                type="checkbox"
-                                                                                                v-model="selectedExistedTask"
-                                                                                                @change="selectChild(child3.id)">
-                                                                                            <span v-html="child3.text"></span>
+                                                                                               :value="child3.id"
+                                                                                               class="tree-child selectAll"
+                                                                                               type="checkbox"
+                                                                                               v-model="selectedExistedTask"
+                                                                                               @change="selectChild(child3.id)">
+                                                                                        <span
+                                                                                            v-html="child3.text"></span>
                                                                                         <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
                                                                                         <span class="checkmark"></span>
                                                                                     </label>
@@ -1063,7 +1245,7 @@
                                     </ul>
                                 </li>
                             </div>
-                         </ul>
+                        </ul>
                     </div>
                     <div class="modal-footer">
                         <!-- {{ selectedExistedTask }} -->
@@ -1075,9 +1257,9 @@
         </div>
         <div class="detailsShowFull" id="details">
             <TaskDetails v-if="Object.keys(selectedData).length > 0"
-                :selectedData="selectedData"
-                :task_logs="task_logs"
-                @textArea="ShowTextArea">
+                         :selectedData="selectedData"
+                         :task_logs="task_logs"
+                         @textArea="ShowTextArea">
             </TaskDetails>
         </div>
 
@@ -1103,7 +1285,7 @@
         components: {Container, Draggable, flatPickr, switches, VueTagsInput, Datepicker, TaskDetails},
         data() {
             return {
-                baseUrl : window.location.origin,
+                baseUrl: window.location.origin,
                 id: 0,
                 tags: [],
                 addField: {
@@ -1137,8 +1319,8 @@
                 selectedSubNav: 'Select Nav List',
                 selectedSubBoard: 'Select Board List',
                 selectedBoardColumn: 'Select Board Column',
-                transferBtn : false,
-                linkBtn : false,
+                transferBtn: false,
+                linkBtn: false,
                 project: null,
                 tree4data: [],
                 currentColumn: null,
@@ -1173,14 +1355,14 @@
                     sort_id: null,
                     project_id: null,
                 },
-                selectedData : {},
-                selectedIds : [],
-                task_logs : null,
-                check_uncheck_child : null,
+                selectedData: {},
+                selectedIds: [],
+                task_logs: null,
+                check_uncheck_child: null,
                 manageTag: null,
-                allUsers : null,
-                allTags : null,
-               disabledDates: {
+                allUsers: null,
+                allTags: null,
+                disabledDates: {
                     id: null,
                 },
             }
@@ -1191,18 +1373,18 @@
 
 
             $(document)
-            .one('focus.autoExpand', 'textarea.autoExpand', function(){
-                var savedValue = this.value;
-                this.value = '';
-                this.baseScrollHeight = this.scrollHeight;
-                this.value = savedValue;
-            })
-            .on('input.autoExpand', 'textarea.autoExpand', function(){
-                var minRows = this.getAttribute('data-min-rows')|0, rows;
-                this.rows = minRows;
-                rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
-                this.rows = minRows + rows;
-            });
+                .one('focus.autoExpand', 'textarea.autoExpand', function () {
+                    var savedValue = this.value;
+                    this.value = '';
+                    this.baseScrollHeight = this.scrollHeight;
+                    this.value = savedValue;
+                })
+                .on('input.autoExpand', 'textarea.autoExpand', function () {
+                    var minRows = this.getAttribute('data-min-rows') | 0, rows;
+                    this.rows = minRows;
+                    rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
+                    this.rows = minRows + rows;
+                });
 
 
             $(document).ready(function () {
@@ -1220,7 +1402,7 @@
         },
         created() {
             let _this = this;
-             hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+t,delete,ctrl+b,ctrl+s,ctrl+i,shift+3', function (event, handler) {
+            hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+v,ctrl+t,delete,ctrl+b,ctrl+s,ctrl+i,shift+3', function (event, handler) {
                 event.preventDefault();
                 switch (handler.key) {
                     case "enter" :
@@ -1234,13 +1416,13 @@
                         break;
                     case "up" :
                         // if (Object.keys(_this.selectedData).length > 0) {
-                            // _this.moveItemUp(_this.selectedData);
+                        // _this.moveItemUp(_this.selectedData);
                         // }
                         _this.selectedData = {};
                         break;
                     case "down" :
                         // if (Object.keys(_this.selectedData).length > 0) {
-                            // _this.moveItemDown(_this.selectedData);
+                        // _this.moveItemDown(_this.selectedData);
                         // }
                         // _this.selectedData = {};
                         break;
@@ -1268,7 +1450,7 @@
                         _this.deleteSelectedTask();
                         break;
                     case "ctrl+t":
-                        _this.showTransferModel(_this.currentColumn , '' , '', _this.currentColumnIndex);
+                        _this.showTransferModel(_this.currentColumn, '', '', _this.currentColumnIndex);
                         break;
                     case "ctrl+b":
                         // _this.AddDontForgetTagToSelectedIds();//add DON'T FORGET SECTION
@@ -1379,7 +1561,8 @@
                             progress: this.cards[i].task[j].progress,
                             tags: this.cards[i].task[j].tags,
                             tagTooltip: this.cards[i].task[j].tagTooltip,
-                            delete: this.cards[i].task[j].name
+                            delete: this.cards[i].task[j].name,
+                            priority_label: this.cards[i].task[j].priority_label
                         }))
                     })),
                 };
@@ -1389,81 +1572,81 @@
                     $('[data-toggle="tooltip"]').tooltip();
                 }, 1000)
             },
-            selectChild(id){
+            selectChild(id) {
                 var _this = this;
-                _this.findChild(id,_this.tree4data)
+                _this.findChild(id, _this.tree4data)
                 var is_checked = _this.selectedExistedTask.indexOf(id);
-                if (is_checked > -1){
-                   _this.CheckWithChild(id,_this.check_uncheck_child);
-                }else{
-                   _this.UncheckWithChild(id,_this.check_uncheck_child);
+                if (is_checked > -1) {
+                    _this.CheckWithChild(id, _this.check_uncheck_child);
+                } else {
+                    _this.UncheckWithChild(id, _this.check_uncheck_child);
                 }
             },
-            findChild(id,data){
-                if (data.length > 0){
+            findChild(id, data) {
+                if (data.length > 0) {
                     for (let index = 0; index < data.length; index++) {
-                        if(index !== undefined && data[index].id === id){
-                            if(data[index].board_parent_id === null){
+                        if (index !== undefined && data[index].id === id) {
+                            if (data[index].board_parent_id === null) {
                                 this.check_uncheck_child = data[index].children;
                             }
                             return true;
-                        }else {
-                            this.findChild(id,data[index].children);
+                        } else {
+                            this.findChild(id, data[index].children);
                         }
                     }
                 }
 
             },
-            CheckWithChild(id , child){
+            CheckWithChild(id, child) {
                 // console.log(id);
                 var _this = this;
-                if (id !== 0 && _this.selectedExistedTask.indexOf(id) === -1){
+                if (id !== 0 && _this.selectedExistedTask.indexOf(id) === -1) {
                     _this.selectedExistedTask.push(id);
                 }
-                if (child.length > 0){
+                if (child.length > 0) {
                     for (let index = 0; index < child.length; index++) {
-                        if(child[index].board_parent_id === null){
-                            _this.CheckWithChild(child[index].id,child[index].children);
+                        if (child[index].board_parent_id === null) {
+                            _this.CheckWithChild(child[index].id, child[index].children);
                         } else {
-                            _this.CheckWithChild(0,child[index].children);
+                            _this.CheckWithChild(0, child[index].children);
                         }
                     }
                 }
             },
-            UncheckWithChild(id,child){
+            UncheckWithChild(id, child) {
                 var _this = this;
                 var key = _this.selectedExistedTask.indexOf(id);
-                if (key !== -1){
-                    _this.selectedExistedTask.splice(key,1);
+                if (key !== -1) {
+                    _this.selectedExistedTask.splice(key, 1);
                 }
 
-                if (child.length > 0){
+                if (child.length > 0) {
                     for (let index = 0; index < child.length; index++) {
-                        _this.UncheckWithChild(child[index].id,child[index].children);
+                        _this.UncheckWithChild(child[index].id, child[index].children);
                     }
                 }
 
             },
-            hideChilds(cardId){
+            hideChilds(cardId) {
                 let _this = this;
                 let data = {
-                    'parent_id' : cardId
+                    'parent_id': cardId
                 };
                 axios.post('/api/hideChildes', data)
-                .then(response => response.data)
-                .then(response => {
-                    console.log(response);
-                    _this.getBoardTask();
-                })
-                .catch(error => {
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response);
+                        _this.getBoardTask();
+                    })
+                    .catch(error => {
 
-                })
+                    })
             },
-            selectAll(){
-                if($('.checkedAll').prop('checked') === false){
+            selectAll() {
+                if ($('.checkedAll').prop('checked') === false) {
                     $('.selectAll').prop('checked', false);
                     this.selectedExistedTask = [];
-                }else{
+                } else {
                     $('.selectAll').prop('checked', true);
 
                     // console.log(this.tree4data);
@@ -1472,7 +1655,7 @@
                             // console.log(this.tree4data[index].id);
                             this.selectedExistedTask.push(this.tree4data[index].id);
                         }
-                            this.recursive(this.tree4data[index].children, this.tree4data[index].id);
+                        this.recursive(this.tree4data[index].children, this.tree4data[index].id);
                     }
                     // console.log(this.selectedExistedTask);
                 }
@@ -1482,14 +1665,14 @@
                 for (let index = 0; index < child.length; index++) {
                     let key = this.selectedExistedTask.indexOf(child[index].id);
                     let parentKey = this.selectedExistedTask.indexOf(parent_id);
-                    if(key !== -1 && parentKey === -1){
-                        this.selectedExistedTask.splice(key,1);
+                    if (key !== -1 && parentKey === -1) {
+                        this.selectedExistedTask.splice(key, 1);
                     } else {
-                        if(key === -1 && child[index].board_parent_id === null){
+                        if (key === -1 && child[index].board_parent_id === null) {
                             this.selectedExistedTask.push(child[index].id);
                         }
                     }
-                    if(child[index].children.length > 0) {
+                    if (child[index].children.length > 0) {
                         this.recursive(child[index].children, child[index].id);
                     }
                 }
@@ -1500,19 +1683,19 @@
                 this.scene = scene
                 let data = scene;
                 $('#loader').modal('show');
-                axios.post('/api/column-sort',data)
-                .then(response => response.data)
-                .then(response => {
-                    setTimeout(() => {
-                        $('#loader').modal('hide');
-                    }, 500);
-                })
-                .catch(error => {
-                    setTimeout(() => {
-                                $('#loader').modal('hide');
-                            }, 500);
-                    console.log('sorting failed');
-                });
+                axios.post('/api/column-sort', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        setTimeout(() => {
+                            $('#loader').modal('hide');
+                        }, 500);
+                    })
+                    .catch(error => {
+                        setTimeout(() => {
+                            $('#loader').modal('hide');
+                        }, 500);
+                        console.log('sorting failed');
+                    });
             },
             onCardDrop(columnId, boardId, index, dropResult) {
                 // index = index+1;
@@ -1534,47 +1717,47 @@
                     this.scene = scene
                     let data = this.scene.children[index];
                     // console.log("sort",data);
-                    axios.post('/api/card-sort',data)
-                    .then(response => response.data)
-                    .then(response => {
-                        // _this.getBoardTask();
-                         setTimeout(() => {
-                        }, 500);
-                        // console.log('sorted');
-                    })
-                    .catch(error => {
-                        // console.log('sorting failed');
-                    });
+                    axios.post('/api/card-sort', data)
+                        .then(response => response.data)
+                        .then(response => {
+                            // _this.getBoardTask();
+                            setTimeout(() => {
+                            }, 500);
+                            // console.log('sorted');
+                        })
+                        .catch(error => {
+                            // console.log('sorting failed');
+                        });
 
-                    if( dropResult.removedIndex === null && dropResult.addedIndex !== null ) {
+                    if (dropResult.removedIndex === null && dropResult.addedIndex !== null) {
                         // console.log("Drag started",columnId, boardId, index, dropResult);
                         let data = {
-                            'id' : dropResult.payload.cardId,
-                            'board_parent_id' : boardId
+                            'id': dropResult.payload.cardId,
+                            'board_parent_id': boardId
                         }
                         $('#loader').modal('show');
                         axios.post('/api/change-board-parent', data)
-                        .then(response => response.data)
-                        .then(response => {
-                            setTimeout(() => {
-                                _this.getBoardTask();
-                                $('#loader').modal('hide');
+                            .then(response => response.data)
+                            .then(response => {
+                                setTimeout(() => {
+                                    _this.getBoardTask();
+                                    $('#loader').modal('hide');
 
-                            }, 500);
-                            // console.log('shifted');
-                        })
-                        .catch(error => {
-                            setTimeout(() => {
-                                $('#loader').modal('hide');
-                            }, 500);
-                            // console.log('shifting failed');
-                        });
+                                }, 500);
+                                // console.log('shifted');
+                            })
+                            .catch(error => {
+                                setTimeout(() => {
+                                    $('#loader').modal('hide');
+                                }, 500);
+                                // console.log('shifting failed');
+                            });
                     }
 
                 }
             },
             onDragStart(columnId, boardId, index, dropResult) {
-                if(dropResult.addedIndex != null){
+                if (dropResult.addedIndex != null) {
                     //console.log("Drag started",columnId, boardId, index, dropResult);
                 }
             },
@@ -1664,7 +1847,7 @@
                         .then(response => {
                             if (response.success === true) {
                                 _this.cards[_this.updateIndex].column = _this.editField.name;
-                               _this.cards[_this.updateIndex].progress = _this.editField.progress;
+                                _this.cards[_this.updateIndex].progress = _this.editField.progress;
                             }
                         })
                         .catch(error => {
@@ -1680,8 +1863,8 @@
             addExistingTask(index, id) {
                 this.tree4data = [];
                 this.subNav = [];
-                this.selectedNav= 'Select Nav';
-                this.selectedSubNav= 'Select Nav List';
+                this.selectedNav = 'Select Nav';
+                this.selectedSubNav = 'Select Nav List';
                 this.selectedExistedTask = [];
                 this.currentColumn = id;
                 this.currentColumnIndex = index;
@@ -1717,30 +1900,30 @@
                 this.board = [];
                 this.subBoard = [];
                 this.boardColumn = [];
-                this.selectedBoard= 'Select Board';
-                this.selectedSubBoard= 'Select Board List';
+                this.selectedBoard = 'Select Board';
+                this.selectedSubBoard = 'Select Board List';
                 this.selectedExistedTask = [];
                 this.transferBtn = false;
                 this.currentColumn = id;
                 this.currentColumnIndex = index;
                 let _this = this;
                 axios.get('/api/nav-item/' + this.projectId)
-                .then(response => response.data)
-                .then(response => {
-                    // console.log(response.success);
-                    _this.board = response.success;
-                    // console.log(_this.board);
-                    setTimeout(() => {
-                        $('#transferCard').modal('show');
-                    }, 500);
-                })
-                .catch(error => {
+                    .then(response => response.data)
+                    .then(response => {
+                        // console.log(response.success);
+                        _this.board = response.success;
+                        // console.log(_this.board);
+                        setTimeout(() => {
+                            $('#transferCard').modal('show');
+                        }, 500);
+                    })
+                    .catch(error => {
 
-                });
+                    });
                 this.updateIndex = index;
                 // this.getAllTask();
             },
-            showLinkModel(index, boardId){
+            showLinkModel(index, boardId) {
                 this.nav = [];
                 this.subNav = [];
                 this.selectedNav = 'Select Nav';
@@ -1751,101 +1934,101 @@
                 let _this = this;
                 this.linkBtn = false;
                 axios.get('/api/nav-item/' + this.projectId)
-                .then(response => response.data)
-                .then(response => {
-                    // console.log(response.success);
-                    _this.nav = response.success;
-                    // console.log(_this.nav);
-                    setTimeout(() => {
-                        $('#listLinkColumn').modal('show');
-                    }, 500);
-                })
-                .catch(error => {
+                    .then(response => response.data)
+                    .then(response => {
+                        // console.log(response.success);
+                        _this.nav = response.success;
+                        // console.log(_this.nav);
+                        setTimeout(() => {
+                            $('#listLinkColumn').modal('show');
+                        }, 500);
+                    })
+                    .catch(error => {
 
-                });
+                    });
                 this.updateIndex = index;
 
             },
-            linkToCol(){
+            linkToCol() {
                 let _this = this;
                 let data = {
-                    'projectId' : this.projectId,
-                    'columnId' : this.currentColumn,
-                    'multiple_list' : this.selectedSubNav
+                    'projectId': this.projectId,
+                    'columnId': this.currentColumn,
+                    'multiple_list': this.selectedSubNav
                 }
                 axios.post('/api/is-linked', data)
-                .then(response => response.data)
-                .then(response => {
-                    if (response.success === false) {
-                        this.linkBtn = true;
-                    } else {
-                        swal('Warning!!','That list is already linked. Need to unlink first','warning');
-                    }
-                    // _this.getBoardTask();
-                    // console.log('added');
-                })
-                .catch(error => {
-                    console.log('not added');
-                });
-            },
-            listLinkToCol(){
-                let _this = this;
-                // alert(this.currentColumn);
-                // alert(this.selectedSubNav);
-                let data = {
-                    'projectId' : this.projectId,
-                    'columnId' : this.currentColumn,
-                    'multiple_list' : this.selectedSubNav
-                }
-                axios.post('/api/link-list-to-column', data)
-                .then(response => response.data)
-                .then(response => {
-
-                    _this.getBoardTask();
-                    console.log('added');
-                })
-                .catch(error => {
-                    console.log('not added');
-                });
-                // swal('Warning!!','Work in progress','warning');
-            },
-            unlinklistToCol(index, boardId, linkListId){
-                let _this = this;
-                // alert(this.currentColumn);
-                // alert(this.selectedSubNav);
-                swal({
-                    title: 'Are you sure to unlink?',
-                    text: "",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: 'red',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, unlink it!'
-                },
-                function(){
-                    let data = {
-                        'linkListId' : linkListId,
-                        'projectId' : _this.projectId,
-                        'columnId' : boardId,
-                        'multiple_list' : _this.selectedSubNav
-                    }
-                    axios.post('/api/unlink-list-to-column', data)
                     .then(response => response.data)
                     .then(response => {
-                        _this.getBoardTask();
-                        swal("Unlinked!", "Successfully Unlinked", "success");
+                        if (response.success === false) {
+                            this.linkBtn = true;
+                        } else {
+                            swal('Warning!!', 'That list is already linked. Need to unlink first', 'warning');
+                        }
+                        // _this.getBoardTask();
+                        // console.log('added');
                     })
                     .catch(error => {
                         console.log('not added');
                     });
-                });
+            },
+            listLinkToCol() {
+                let _this = this;
+                // alert(this.currentColumn);
+                // alert(this.selectedSubNav);
+                let data = {
+                    'projectId': this.projectId,
+                    'columnId': this.currentColumn,
+                    'multiple_list': this.selectedSubNav
+                }
+                axios.post('/api/link-list-to-column', data)
+                    .then(response => response.data)
+                    .then(response => {
+
+                        _this.getBoardTask();
+                        console.log('added');
+                    })
+                    .catch(error => {
+                        console.log('not added');
+                    });
+                // swal('Warning!!','Work in progress','warning');
+            },
+            unlinklistToCol(index, boardId, linkListId) {
+                let _this = this;
+                // alert(this.currentColumn);
+                // alert(this.selectedSubNav);
+                swal({
+                        title: 'Are you sure to unlink?',
+                        text: "",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: 'red',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, unlink it!'
+                    },
+                    function () {
+                        let data = {
+                            'linkListId': linkListId,
+                            'projectId': _this.projectId,
+                            'columnId': boardId,
+                            'multiple_list': _this.selectedSubNav
+                        }
+                        axios.post('/api/unlink-list-to-column', data)
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.getBoardTask();
+                                swal("Unlinked!", "Successfully Unlinked", "success");
+                            })
+                            .catch(error => {
+                                console.log('not added');
+                            });
+                    });
             },
             showSubBoard() {
                 let _this = this;
                 this.subBoard = [];
                 this.boardColumn = [];
                 this.transferBtn = false;
-                this.selectedSubBoard= 'Select Board List';
+                this.selectedSubBoard = 'Select Board List';
                 let data = {
                     'projectId': this.projectId,
                     'boardId': this.selectedBoard
@@ -1858,7 +2041,7 @@
                     .catch(error => {
                     });
             },
-            getColumn(){
+            getColumn() {
                 let _this = this;
                 this.selectedBoardColumn = 'Select Board Column';
                 this.transferBtn = false;
@@ -1869,14 +2052,14 @@
                 };
 
                 axios.post('/api/board-column', data)
-                .then(response => response.data)
-                .then(response => {
-                    // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
-                    _this.boardColumn = response.data;
-                })
-                .catch(error => {
+                    .then(response => response.data)
+                    .then(response => {
+                        // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
+                        _this.boardColumn = response.data;
+                    })
+                    .catch(error => {
 
-                });
+                    });
 
             },
             getBttn() {
@@ -1885,76 +2068,76 @@
             transferCardToOtherBoard() {
                 var _this = this;
                 let data = {
-                    'cardId' : this.selectedData.cardId,
-                    'board_parent_id' : this.selectedBoardColumn,
+                    'cardId': this.selectedData.cardId,
+                    'board_parent_id': this.selectedBoardColumn,
                 };
                 axios.post('/api/Transfer-to-board', data)
-                .then(response => response.data)
-                .then(response => {
+                    .then(response => response.data)
+                    .then(response => {
 
-                    if (response.success) {
-                        _this.getBoardTask();
-                        $('#transferCard').modal('hide');
-                    } else {
-                        $('#transferCard').modal('hide');
-                    }
-                    // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
-                    // _this.boardColumn = response.data;
-                })
-                .catch(error => {
+                        if (response.success) {
+                            _this.getBoardTask();
+                            $('#transferCard').modal('hide');
+                        } else {
+                            $('#transferCard').modal('hide');
+                        }
+                        // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
+                        // _this.boardColumn = response.data;
+                    })
+                    .catch(error => {
 
-                });
+                    });
             },
-            transferColumnToOtherBoard(index, id){
+            transferColumnToOtherBoard(index, id) {
 
                 this.board = [];
                 this.subBoard = [];
                 this.boardColumn = [];
-                this.selectedBoard= 'Select Board';
-                this.selectedSubBoard= 'Select Board List';
+                this.selectedBoard = 'Select Board';
+                this.selectedSubBoard = 'Select Board List';
                 this.selectedExistedTask = [];
                 this.transferBtn = false;
                 this.currentColumn = id;
                 this.currentColumnIndex = index;
                 let _this = this;
                 axios.get('/api/nav-item/' + this.projectId)
-                .then(response => response.data)
-                .then(response => {
-                    // console.log(response.success);
-                    _this.board = response.success;
-                    console.log(_this.board);
-                    setTimeout(() => {
-                        $('#transferColumn').modal('show');
-                    }, 500);
-                })
-                .catch(error => {
+                    .then(response => response.data)
+                    .then(response => {
+                        // console.log(response.success);
+                        _this.board = response.success;
+                        console.log(_this.board);
+                        setTimeout(() => {
+                            $('#transferColumn').modal('show');
+                        }, 500);
+                    })
+                    .catch(error => {
 
-                });
+                    });
                 this.updateIndex = index;
             },
-            transferColumnToOtherBoardSave(){
+            transferColumnToOtherBoardSave() {
                 var _this = this;
 
                 let data = {
-                    'columnId' : this.currentColumn,
-                    'multiple_board_id' : this.selectedSubBoard,
+                    'columnId': this.currentColumn,
+                    'multiple_board_id': this.selectedSubBoard,
                 };
                 axios.post('/api/Transfer-column-to-board', data)
-                .then(response => response.data)
-                .then(response => {
+                    .then(response => response.data)
+                    .then(response => {
 
-                    if (response.success) {
-                        _this.getBoardTask();
-                        $('#transferColumn').modal('hide');
-                    } else {
-                        $('#transferColumn').modal('hide');
-                    }
-                    // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
-                    // _this.boardColumn = response.data;
-                })
-                .catch(error => {
+                        if (response.success) {
+                            _this.getBoardTask();
+                            $('#transferColumn').modal('hide');
+                        } else {
+                            $('#transferColumn').modal('hide');
+                        }
+                        // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
+                        // _this.boardColumn = response.data;
+                    })
+                    .catch(error => {
 
-                });
+                    });
             },
             RemoveNodeAndChildren() {
                 var _this = this;
@@ -1963,26 +2146,26 @@
                     text: this.selectedData.data
                 };
                 swal({
-                    title: "Are you sure?",
-                    text: "You want to delete this task !!!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonClass: "btn-danger btn",
-                    confirmButtonText: "Yes, delete it!",
-                    closeOnConfirm: false
-                },
-                function () {
-                    axios.post('/api/task-list/delete-task', postData)
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.getBoardTask()
-                            swal("Deleted!", "Successfully delete task !", "success");
-                        })
-                        .catch(error => {
-                            console.log('Api for delete task not Working !!!')
-                        });
+                        title: "Are you sure?",
+                        text: "You want to delete this task !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger btn",
+                        confirmButtonText: "Yes, delete it!",
+                        closeOnConfirm: false
+                    },
+                    function () {
+                        axios.post('/api/task-list/delete-task', postData)
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.getBoardTask()
+                                swal("Deleted!", "Successfully delete task !", "success");
+                            })
+                            .catch(error => {
+                                console.log('Api for delete task not Working !!!')
+                            });
 
-                });
+                    });
 
             },
             getBoardTask() {
@@ -2022,7 +2205,7 @@
                 let _this = this;
                 let total = this.selectedExistedTask.length;
                 if (total <= 0) {
-                    swal('Warning!','No Task To Add','warning');
+                    swal('Warning!', 'No Task To Add', 'warning');
                     return false;
                 }
                 let data = {
@@ -2055,10 +2238,10 @@
                 this.selectedExistedTask = [];
                 $("#addExistingTask").modal('hide');
             },
-            makeInput(e,id) {
+            makeInput(e, id) {
                 let _this = this;
-                $('#title'+id).removeClass('card-title-blur');
-                $('#title'+id).addClass('card-title-focus');
+                $('#title' + id).removeClass('card-title-blur');
+                $('#title' + id).addClass('card-title-focus');
 
 
                 // $('.inp').addClass('input-hide');
@@ -2076,24 +2259,33 @@
 
                 // console.log(index,id)
                 let _this = this;
-                axios.post('/api/card-add',{'id': id})
-                .then(response => response.data)
-                .then(response => {
-                    if(response.success == true){
-                        let data = response.data;
-                        _this.cards[index].task.push({id: data.id, name: data.title, date: data.date, tags: [], assigned_user:[], users:[], clicked: 0, textareaShow : true});
-                        let keys = _this.cards[index].task.length-1;
-                        _this.getBoardTask();
-                        setTimeout(function () {
-                            $('#id'+index+keys).click();
-                            $('#id'+index+keys).focus();
-                        },100)
-                    }
-                })
-                .catch(error => {
-                });
+                axios.post('/api/card-add', {'id': id})
+                    .then(response => response.data)
+                    .then(response => {
+                        if (response.success == true) {
+                            let data = response.data;
+                            _this.cards[index].task.push({
+                                id: data.id,
+                                name: data.title,
+                                date: data.date,
+                                tags: [],
+                                assigned_user: [],
+                                users: [],
+                                clicked: 0,
+                                textareaShow: true
+                            });
+                            let keys = _this.cards[index].task.length - 1;
+                            _this.getBoardTask();
+                            setTimeout(function () {
+                                $('#id' + index + keys).click();
+                                $('#id' + index + keys).focus();
+                            }, 100)
+                        }
+                    })
+                    .catch(error => {
+                    });
             },
-            deleteCard(index,cardIndex,id){
+            deleteCard(index, cardIndex, id) {
 
                 let _this = this;
                 swal({
@@ -2104,28 +2296,28 @@
                     confirmButtonColor: 'Red',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, delete it!'
-                },function(){
-                    if(_this.cards[index].task[cardIndex].id == id){
-                        axios.get('/api/card-delete/'+id)
-                        .then(response => response.data)
-                        .then(response => {
-                            if (response.success == true) {
-                                let keys = _this.cards[index].task.length - 1;
-                                _this.getBoardTask();
-                                _this.getData();
-                                setTimeout(function () {
-                                    $('#id' + index + keys).click();
-                                    $('#id' + index + keys).focus();
-                                }, 100)
-                                swal("Deleted!", "The card has been deleted.", "success");
-                                setTimeout(() => {
-                                    swal.close();
-                                }, 1000);
-                            }
-                        })
-                        .catch(error => {
-                            console.log('error => '+error);
-                        });
+                }, function () {
+                    if (_this.cards[index].task[cardIndex].id == id) {
+                        axios.get('/api/card-delete/' + id)
+                            .then(response => response.data)
+                            .then(response => {
+                                if (response.success == true) {
+                                    let keys = _this.cards[index].task.length - 1;
+                                    _this.getBoardTask();
+                                    _this.getData();
+                                    setTimeout(function () {
+                                        $('#id' + index + keys).click();
+                                        $('#id' + index + keys).focus();
+                                    }, 100)
+                                    swal("Deleted!", "The card has been deleted.", "success");
+                                    setTimeout(() => {
+                                        swal.close();
+                                    }, 1000);
+                                }
+                            })
+                            .catch(error => {
+                                console.log('error => ' + error);
+                            });
                     }
                 });
 
@@ -2141,8 +2333,8 @@
                     confirmButtonColor: 'Red',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, delete it!'
-                },function(){
-                    if ( _this.cards[index].task[cardIndex].id == id ) {
+                }, function () {
+                    if (_this.cards[index].task[cardIndex].id == id) {
                         axios.get('/api/board-task-delete/' + id)
                             .then(response => response.data)
                             .then(response => {
@@ -2173,14 +2365,14 @@
             },
             addExistingTag(index, tagIndx, key, cardId, dntfrgt = '') {
                 let _this = this;
-                if(dntfrgt !== ''){
+                if (dntfrgt !== '') {
                     var postData = {
                         id: cardId,
                         tags: "Dont Forget",
                         color: "#FF0000",
                         type: 'task',
                     };
-                }else{
+                } else {
                     var postData = {
                         id: cardId,
                         tags: this.cards[index].task[key].existing_tags[tagIndx].title,
@@ -2189,43 +2381,43 @@
                     };
                 }
                 axios.post('/api/task-list/add-tag', postData)
-                .then(response => response.data)
-                .then(response => {
-                    // _this.cards[index].task[key].tags.push(data);
-                    _this.cards[index].task[key].existing_tags.splice(tagIndx, 1);
-                    // $('#dropdown' + cardId).toggle();
-                    setTimeout(function () {
-                        _this.getBoardTask();
-                    }, 100);
-                })
-                .catch(error => {
-                    console.log("1st error =>"+error)
-                });
+                    .then(response => response.data)
+                    .then(response => {
+                        // _this.cards[index].task[key].tags.push(data);
+                        _this.cards[index].task[key].existing_tags.splice(tagIndx, 1);
+                        // $('#dropdown' + cardId).toggle();
+                        setTimeout(function () {
+                            _this.getBoardTask();
+                        }, 100);
+                    })
+                    .catch(error => {
+                        console.log("1st error =>" + error)
+                    });
             },
             deleteColumn(index, id) {
                 let _this = this;
                 swal({
-                    title: "Are you sure?",
-                    text: "Your will not be able to recover this",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonClass: "btn-danger",
-                    confirmButtonText: "Yes, delete it!",
-                    closeOnConfirm: false
-                },
-                function(){
-                    axios.get('/api/board-delete/' + id)
-                        .then(response => response.data)
-                        .then(response => {
-                            if (response.success) {
-                                _this.cards.splice(index, 1);
-                                _this.getData();
-                                swal("Deleted!", "Your imaginary file has been deleted.", "success");
-                            }
-                        })
-                        .catch(error => {
-                        });
-                });
+                        title: "Are you sure?",
+                        text: "Your will not be able to recover this",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, delete it!",
+                        closeOnConfirm: false
+                    },
+                    function () {
+                        axios.get('/api/board-delete/' + id)
+                            .then(response => response.data)
+                            .then(response => {
+                                if (response.success) {
+                                    _this.cards.splice(index, 1);
+                                    _this.getData();
+                                    swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                }
+                            })
+                            .catch(error => {
+                            });
+                    });
             },
             // peekabo option commented. don't remove the code yet
             // deleteColumnCards(index, id) {
@@ -2287,7 +2479,7 @@
                     .catch(error => {
                     });
             },
-            preventEnter(e){
+            preventEnter(e) {
                 if (e.which == 13) {
                     e.preventDefault();
                     // alert('Enter pressed');
@@ -2295,16 +2487,16 @@
             },
             showItem(e, data, index, child_key) {
 
-                $('#title'+data.cardId).addClass('card-title-blur');
-                $('#title'+data.cardId).removeClass('card-title-focus');
+                $('#title' + data.cardId).addClass('card-title-blur');
+                $('#title' + data.cardId).removeClass('card-title-focus');
                 // let attData = $(e.target).attr('data-text');
                 // let attDataNew = e.target.value;
 
-                let attDataNew = $('#title'+data.cardId).text();
+                let attDataNew = $('#title' + data.cardId).text();
                 data.data = attDataNew;
                 this.saveData(data, index, child_key);
             },
-            showHideTextarea(id){
+            showHideTextarea(id) {
                 let _this = this;
 
                 $('.inp').addClass('input-hide');
@@ -2326,19 +2518,19 @@
                 // console.log("data = "+data.data);
                 if (data.data === "") {
                     _this.getBoardTask();
-                    swal('Blank!','Title is required!','warning');
+                    swal('Blank!', 'Title is required!', 'warning');
                 } else {
                     let title = {
                         'title': data.data
                     };
                     axios.post('/api/card-update/' + data.cardId, title)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.cards[index].task[child_key].name = data.data;
-                        _this.getData();
-                    })
-                    .catch(error => {
-                    });
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.cards[index].task[child_key].name = data.data;
+                            _this.getData();
+                        })
+                        .catch(error => {
+                        });
                 }
             },
             saveCardData(e, data) {
@@ -2382,18 +2574,18 @@
                         type: 'task',
                     };
                     axios.post('/api/task-list/add-tag', postData)
-                    .then(response => response.data)
-                    .then(response => {
+                        .then(response => response.data)
+                        .then(response => {
 
-                        setTimeout(function () {
-                            _this.getBoardTask();
-                           $('.dropdown-menu').removeClass('show');
-                            // _this.getData();
-                        }, 100);
-                    })
-                    .catch(error => {
-                        console.log("2nd error =>"+error)
-                    });
+                            setTimeout(function () {
+                                _this.getBoardTask();
+                                $('.dropdown-menu').removeClass('show');
+                                // _this.getData();
+                            }, 100);
+                        })
+                        .catch(error => {
+                            console.log("2nd error =>" + error)
+                        });
                 }
             },
             deleteCardTag(obj, card, columnIndex, cardIndex) {
@@ -2427,14 +2619,14 @@
                     list_id: this.selectedSubNav,
                 };
                 axios.post('/api/all-task-list', data)
-                .then(response => response.data)
-                .then(response => {
-                    console.log(response.task_list);
-                    this.tree4data = response.task_list;
-                })
-                .catch(error => {
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.task_list);
+                        this.tree4data = response.task_list;
+                    })
+                    .catch(error => {
 
-                });
+                    });
             },
             showLog() {
                 var _this = this;
@@ -2453,13 +2645,13 @@
                         console.log('Api for move down task not Working !!!')
                     });
             },
-            selectCard(card,child){
+            selectCard(card, child) {
                 this.selectedData = card;
                 this.selectedCard = card.cardId;
                 this.task_logs = null;
                 this.HideDetails();
                 $('.card-list').css("background-color", "#ffffff");
-                $('#card_'+this.selectedCard).css("background-color","#ddf3fd");
+                $('#card_' + this.selectedCard).css("background-color", "#ddf3fd");
                 console.log(this.selectedData);
             },
             ShowDetails() {
@@ -2472,6 +2664,23 @@
                     $('#details').addClass('details-show');
                 }
             },
+            Add_Priority(priority, id) {
+                var _this = this;
+                var data = {
+                    ids: [id],
+                    priority: priority
+                }
+                axios.post('/api/task-list/add-priority', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getBoardTask();
+                    })
+                    .catch(error => {
+                        console.log('Api for task add priority not Working !!!')
+                    });
+            },
+
+
             HideDetails() {
                 // this.getBoardTask();
                 $('#task_width').addClass('task_width');
@@ -2512,7 +2721,7 @@
                     if (_this.selectedIds.includes(card.cardId)) {
                         var indexs = _this.selectedIds.indexOf(card.cardId);
                         if (indexs > -1) {
-                            $('#card_'+_this.selectedIds[indexs]).removeClass('selected-card');
+                            $('#card_' + _this.selectedIds[indexs]).removeClass('selected-card');
                             _this.selectedIds.splice(indexs, 1);
                         }
                     } else {
@@ -2520,14 +2729,14 @@
                     }
                     // console.log(_this.selectedIds);
                     for (let index = 0; index < _this.selectedIds.length; index++) {
-                        $('#card_'+_this.selectedIds[index]).addClass('selected-card');          
+                        $('#card_' + _this.selectedIds[index]).addClass('selected-card');
                     }
                 } else if (e.shiftKey && e.which === 1) {
                     // alert('shft+left clk');
                     _this.selectedIds.push(card.cardId);
                     console.log(_this.selectedIds);
                     // for (let index = 0; index < _this.selectedIds.length; index++) {
-                    //     $('#card_'+this.selectedCard).addClass('selected-card');          
+                    //     $('#card_'+this.selectedCard).addClass('selected-card');
                     // }
                     // $('#click' + card.cardId).addClass('clicked');
 
@@ -2556,7 +2765,7 @@
                     // $('#card_'+this.selectedCard).css("background-color","#ddf3fd");
                     // console.log(this.selectedData);
                     $('.card-list').removeClass('selected-card');
-                    $('#card_'+this.selectedCard).addClass('selected-card');
+                    $('#card_' + this.selectedCard).addClass('selected-card');
 
 
                 } else if (e.which === 3) {
@@ -2588,7 +2797,7 @@
                         }
 
                         let ttarget = target.closest('#board_view_list').find('.jquery-accordion-menu');
-                        
+
                         if (_this.selectedIds.length > 0) {
                             var index = _this.selectedIds.indexOf(card.cardId);
                             if (index > -1) {
@@ -2616,7 +2825,7 @@
                     user_id: user_id,
                     task_id: task_id
                 };
-                        // console.log(postData)
+                // console.log(postData)
                 axios.post('/api/task-list/assign-user-remove', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -2691,44 +2900,44 @@
             DeleteTagFromModal(tag) {
                 var _this = this;
                 swal({
-                    title: 'Are you sure to delete the tag?',
-                    text: "You won't be able to revert this!",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: 'red',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                },
-                function(){
-                    var postData = {
-                        id : tag.id,
-                        title: tag.title,
-                    };
-                    axios.post('/api/task-list/delete-tag', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        // _this.manageTag = response.tags;
-                        // _this.showTagManageModel();
-                        _this.getBoardTask();
-                        swal("Deleted!", "The tag has been deleted.", "success");
+                        title: 'Are you sure to delete the tag?',
+                        text: "You won't be able to revert this!",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: 'red',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    },
+                    function () {
+                        var postData = {
+                            id: tag.id,
+                            title: tag.title,
+                        };
+                        axios.post('/api/task-list/delete-tag', postData)
+                            .then(response => response.data)
+                            .then(response => {
+                                // _this.manageTag = response.tags;
+                                // _this.showTagManageModel();
+                                _this.getBoardTask();
+                                swal("Deleted!", "The tag has been deleted.", "success");
 
-                        // _this.getData();
-                        // _this.tag = null
-                    })
-                    .catch(error => {
-                        console.log('Api for delete tag not Working !!!');
+                                // _this.getData();
+                                // _this.tag = null
+                            })
+                            .catch(error => {
+                                console.log('Api for delete tag not Working !!!');
+                            });
+
                     });
-
-                });
             },
-            ruleAlertHeight: function(obj, trigger){
-                setTimeout(function(){
-                    let target = $('#'+obj);
+            ruleAlertHeight: function (obj, trigger) {
+                setTimeout(function () {
+                    let target = $('#' + obj);
                     let h = 0;
-                    if(target.length > 0){
-                        h = $('#'+obj).height();
+                    if (target.length > 0) {
+                        h = $('#' + obj).height();
                     }
-                    $('#'+trigger).css({top: h+'px'});
+                    $('#' + trigger).css({top: h + 'px'});
                 }, 400)
             },
             updateTagName(e, tag) {
@@ -2807,29 +3016,29 @@
                 };
                 $('.jquery-accordion-menu').hide();
                 swal({
-                    title: "Are you sure?",
-                    text: "You want to delete all selected task !!!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonClass: "btn-danger btn",
-                    confirmButtonColor: 'Red',
-                    confirmButtonText: "Yes, delete it!",
-                    closeOnConfirm: true
-                },
-                function () {
-                    axios.post('/api/task-list/delete-task', postData)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.getBoardTask();
-                        $('.jquery-accordion-menu').hide();
-                        _this.delete_popup = 0;
-                        // swal("Deleted!", "Successfully delete selected task !", "success");
-                        swal.close();
-                    })
-                    .catch(error => {
-                        console.log('Api for delete task not Working !!!')
+                        title: "Are you sure?",
+                        text: "You want to delete all selected task !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger btn",
+                        confirmButtonColor: 'Red',
+                        confirmButtonText: "Yes, delete it!",
+                        closeOnConfirm: true
+                    },
+                    function () {
+                        axios.post('/api/task-list/delete-task', postData)
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.getBoardTask();
+                                $('.jquery-accordion-menu').hide();
+                                _this.delete_popup = 0;
+                                // swal("Deleted!", "Successfully delete selected task !", "success");
+                                swal.close();
+                            })
+                            .catch(error => {
+                                console.log('Api for delete task not Working !!!')
+                            });
                     });
-                });
             },
         },
         directives: {
