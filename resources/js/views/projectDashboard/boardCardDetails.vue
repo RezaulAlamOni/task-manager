@@ -174,9 +174,9 @@
                     </template>
                     <span data-toggle="dropdown" class=" dropdown-toggle-split" style="float: right;margin: 9px 11px;" v-else>
 
-<!--                        <i class="outline-person icon-image-preview li-opacity "-->
-<!--                           data-toggle="tooltip" title="Assignee">-->
-<!--                        </i>-->
+                    <!-- <i class="outline-person icon-image-preview li-opacity "-->
+                    <!--    data-toggle="tooltip" title="Assignee">-->
+                    <!-- </i>-->
                         <img :src="baseUrl+'/img/task-icon/add-user.png'"
                              class="li-opacity"
                              style=" height: 29px;cursor: pointer; margin: 9px 11px;"
