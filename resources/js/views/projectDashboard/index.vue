@@ -176,14 +176,37 @@
 
                                     <div class="hide-item-res-user">
 
-                                        <a class="priority-icon dropdown-hide-with-remove-icon"
-                                           v-if="data.priority_label === null">
-                                            <span data-toggle="dropdown" class=" dropdown-toggle-split">
+                                        <a class=" dropdown-hide-with-remove-icon">
+                                            <span class="priority-icon dropdown-toggle-split" v-if="data.priority_label !== null"
+                                                  style="top: 12px;"
+                                                  data-toggle="dropdown">
+                                                 <span title="" data-placement="bottom" data-toggle="tooltip"
+                                                       v-if="data.priority_label === 'high'"
+                                                       class="badge badge-warning text-capitalize "
+                                                       style="background: #F4F5F7; margin-left: 1px; float: left;margin-right: 5px;color:black"
+                                                       data-original-title="">
+                                                    {{data.priority_label}}
+                                                 </span>
+                                                <span title="" data-placement="bottom" data-toggle="tooltip"
+                                                      v-if="data.priority_label === 'low'"
+                                                      class="badge badge-warning text-capitalize "
+                                                      style="background: #172B4D; margin-left: 1px; float: left;margin-right: 5px;"
+                                                      data-original-title="">
+                                                    {{data.priority_label}}
+                                                 </span>
+                                                <span title="" data-placement="bottom" data-toggle="tooltip"
+                                                      v-if="data.priority_label === 'medium'"
+                                                      class="badge badge-warning text-capitalize "
+                                                      style="background: #FF9F1A; margin-left: 1px; float: left;margin-right: 5px;"
+                                                      data-original-title="">
+                                                    {{data.priority_label}}
+                                                 </span>
+                                            </span>
+                                            <span data-toggle="dropdown" class="priority-icon dropdown-toggle-split" v-else>
                                                 <img :src="baseUrl+'/img/priority.png'"
                                                      class="icon-image-preview li-opacity assign-user-"
                                                      data-toggle="tooltip" title="Add Priority">
                                             </span>
-
                                             <div class="dropdown-menu dropdown-menu-right"
                                                  style="z-index: 1;width: 185px;">
                                                 <div class="collapse show switchToggle">
@@ -228,29 +251,7 @@
                                                 </div>
                                             </div>
                                         </a>
-                                        <tampate v-else>
-                                            <span class="priority-icon" style="top: 12px;">
-                                                 <span title="" data-placement="bottom" data-toggle="tooltip" v-if="data.priority_label === 'high'"
-                                                       class="badge badge-warning text-capitalize "
-                                                       style="background: #F4F5F7; margin-left: 1px; float: left;margin-right: 5px;color:black"
-                                                       data-original-title="">
-                                                    {{data.priority_label}}
-                                                 </span>
-                                                <span title="" data-placement="bottom" data-toggle="tooltip" v-if="data.priority_label === 'low'"
-                                                       class="badge badge-warning text-capitalize "
-                                                       style="background: #172B4D; margin-left: 1px; float: left;margin-right: 5px;"
-                                                       data-original-title="">
-                                                    {{data.priority_label}}
-                                                 </span>
-                                                <span title="" data-placement="bottom" data-toggle="tooltip"v-if="data.priority_label === 'medium'"
-                                                       class="badge badge-warning text-capitalize "
-                                                       style="background: #FF9F1A; margin-left: 1px; float: left;margin-right: 5px;"
-                                                       data-original-title="">
-                                                    {{data.priority_label}}
-                                                 </span>
-                                            </span>
 
-                                        </tampate>
                                     </div>
 
                                     <a class="attach-icon hide-item-res" style="width: auto !important;">
@@ -328,7 +329,7 @@
                                                     />
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <template v-for="tag in data.existing_tags">
+                                                            <template v-for="tag in allTags">
                                                                 <li class="badge-pill tags"
                                                                     @click="addExistingTag(data , tag.title,tag.color)"
                                                                     v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
@@ -414,8 +415,8 @@
                                                         </label>
                                                     </li>
                                                     <li class="assignUser">
-                                                        <template v-for="user in data.users"
-                                                                  v-if="data.users !== undefined">
+                                                        <template v-for="user in allUsers"
+                                                                  v-if="allUsers.length > 0">
                                                             <div
                                                                 @click="(data.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user,data) "
                                                                 :class="(data.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
@@ -2468,9 +2469,13 @@
                     .then(response => response.data)
                     .then(response => {
 
-                        this.treeList = response.task_list;
-                        this.multiple_list = response.multiple_list;
-                        this.authUser = response.userName
+                        _this.treeList = response.task_list;
+                        _this.multiple_list = response.multiple_list;
+                        _this.authUser = response.userName
+                        _this.allUsers = response.allTeamUsers;
+                        _this.allTags = response.allTeamTags;
+
+
                         $('[data-toggle="tooltip"]').tooltip('dispose');
                         setTimeout(function () {
                             // $('#loder-hide').addClass('loder-hide')
