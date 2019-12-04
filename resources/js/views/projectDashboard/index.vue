@@ -177,7 +177,8 @@
                                     <div class="hide-item-res-user">
 
                                         <a class=" dropdown-hide-with-remove-icon">
-                                            <span class="priority-icon dropdown-toggle-split" v-if="data.priority_label !== null"
+                                            <span class="priority-icon dropdown-toggle-split"
+                                                  v-if="data.priority_label !== null"
                                                   style="top: 12px;"
                                                   data-toggle="dropdown">
                                                  <span title="" data-placement="bottom" data-toggle="tooltip"
@@ -202,7 +203,8 @@
                                                     {{data.priority_label}}
                                                  </span>
                                             </span>
-                                            <span data-toggle="dropdown" class="priority-icon dropdown-toggle-split" v-else>
+                                            <span data-toggle="dropdown" class="priority-icon dropdown-toggle-split"
+                                                  v-else>
                                                 <img :src="baseUrl+'/img/priority.png'"
                                                      class="icon-image-preview li-opacity assign-user-"
                                                      data-toggle="tooltip" title="Add Priority">
@@ -728,7 +730,11 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Image Show</h5>
-                        <span @click="deletePhoto(modalImg[0],modalImg[1])" class="badge badge-warning file-delete">Delete Photo</span>
+                        <span @click="deletePhoto(modalImg[0],modalImg[1])" class="file-delete"
+                        data-toggle="tooltip" title="Delete this file "
+                        >
+                            <img src="/img/task-icon/trash.png" class="contex-menu-icon">
+                        </span>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
