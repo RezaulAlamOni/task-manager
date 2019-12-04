@@ -38,6 +38,23 @@
         cursor: default;
     }
 
+    .assignUser-photo-for-card {
+        width: 22px;
+        border-radius: 74%;
+        background: #4f4f8a;
+        height: 22px;
+        display: inline-block;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 23px;
+        color: white;
+        font-size: 10px;
+        padding-left: 1px;
+        cursor: pointer;
+        position: relative;
+        margin: 0;
+    }
+
     .dragging {
         background-color: yellow;
     }
@@ -235,7 +252,7 @@
         position: absolute;
         box-shadow: 0 5px 10px #333;
         border-radius: 15px;
-        display : none;
+        display: none;
         z-index: 99999;
 
         ul {
@@ -280,7 +297,7 @@
     //.jquery-accordion-menu > ul > li > a {
     //    border-bottom: solid 1px #3b424d
     //}
-    .dateCal-selected{
+    .dateCal-selected {
         border: none;
         width: 353%;
         position: absolute;
@@ -300,7 +317,7 @@
 
 .list-group-item-hide {
     display: none;
-    border:none;
+    border: none;
 }
 
 .list-group {
@@ -317,10 +334,19 @@
 }
 
 .card-list {
+    position: relative;
+
     &:hover {
         border: 0.50px solid #896799;
         box-shadow: 0px 2px 10px -3px #434745 !important;
         cursor: pointer;
+    }
+
+    .card-delete-icon {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        opacity: 1;
     }
 
     .input-hide {
@@ -440,14 +466,20 @@
 
     .tag-icon {
         position: absolute;
-        // top: 69%;
-        bottom: 14px;
-        left: 145px;
+        bottom: 10px;
+        left: 120px;
+        width: 88px;
+        text-align: center;
     }
 
-    .tag-icon-free {
+    .priority-icon-card {
+        position: absolute;
         bottom: 10px;
+        right: 30px;
+        width: 64px;
+        text-align: center;
     }
+
 
 
     .li-opacity {
@@ -458,7 +490,7 @@
 
     .flatpickr-input {
         width: 63px;
-        height: 25px !important;
+        height: 21px !important;
         font-size: 12px;
         color: rgba(0, 0, 0, 0.62);
         text-align: center;
@@ -467,7 +499,7 @@
         background: transparent;
         outline: 0;
         position: absolute;
-        bottom: 13px;
+        bottom: 10px;
         left: 49px;
         font-weight: bold;
         border-radius: 12px;
@@ -475,7 +507,7 @@
 
     .flatpickr-input1 {
         width: 63px;
-        height: 25px !important;
+        height: 21px !important;
         font-size: 12px;
         color: rgba(0, 0, 0, 0.62);
         text-align: center;
@@ -484,7 +516,7 @@
         background: transparent;
         outline: 0;
         position: absolute;
-        bottom: 13px;
+        bottom: 10px;
         left: 49px;
         font-weight: bold;
         border-radius: 12px;
@@ -524,15 +556,26 @@
     top: 9px;
 }
 
+.card-title-show {
+    padding: 15px 8px !important;
+    margin: 10px 0 30px 0;
+}
+
+.user-assign-card {
+    position : absolute;
+    bottom: 10px;
+    left: 3px;
+}
+
 .total-child {
-    float: right;
+    position: absolute;
+    top: 5px;
+    right: 36px;
     font-size: 11px;
     height: 25px;
     width: 25px;
     background: #aaff00;
     border-radius: 50%;
-    margin-left: 14px;
-    display: inline-block;
     text-align: center;
     line-height: 25px;
     color: #5f5f5f;
@@ -622,13 +665,15 @@
     height: 62px;
     transition: all .58s ease;
 }
+
 .action-task-list {
-    display: table!important;
+    display: table !important;
     height: 62px;
     transition: all .58s ease;
     padding-bottom: 10px;
 }
-.board-title-show{
+
+.board-title-show {
 
 }
 
@@ -636,12 +681,13 @@
     max-height: 625px;
     overflow-y: auto;
 }
+
 // for submenu in column ellips
 .dropdown-submenu {
     position: relative;
 }
 
-.dropdown-submenu>.dropdown-menu {
+.dropdown-submenu > .dropdown-menu {
     top: 0;
     left: 100%;
     margin-top: -6px;
@@ -651,11 +697,11 @@
     border-radius: 0 6px 6px 6px;
 }
 
-.dropdown-submenu:hover>.dropdown-menu {
+.dropdown-submenu:hover > .dropdown-menu {
     display: block;
 }
 
-.dropdown-submenu>a:after {
+.dropdown-submenu > a:after {
     display: block;
     content: " ";
     float: right;
@@ -669,7 +715,7 @@
     margin-right: -10px;
 }
 
-.dropdown-submenu:hover>a:after {
+.dropdown-submenu:hover > a:after {
     border-left-color: #fff;
 }
 
@@ -677,7 +723,7 @@
     float: none;
 }
 
-.dropdown-submenu.pull-left>.dropdown-menu {
+.dropdown-submenu.pull-left > .dropdown-menu {
     left: -100%;
     margin-left: 10px;
     -webkit-border-radius: 6px 0 6px 6px;
@@ -710,6 +756,7 @@
     background: #f1ffda;
     padding: 6px 13px;
 }
+
 .card-title-blur {
     height: auto;
     //padding: 5px;
@@ -717,16 +764,17 @@
     overflow: auto;
     width: 100%;
     font-size: 13px;
-    background: transparent ;
-    border : none;
+    background: transparent;
+    border: none;
     padding: 6px 13px;
 }
 
 
-.ck .ck-content{
+.ck .ck-content {
     min-height: 220px !important;
 }
-.detailsTitle{
+
+.detailsTitle {
     height: 64px;
     overflow: auto;
     border: 0.5px solid #e6e6e6;
@@ -760,10 +808,13 @@
     padding: 8px 10px;
     border: 2px solid #1167a2;
     cursor: pointer;
-    font-family: Lato,sans-serif;
+    font-family: Lato, sans-serif;
     font-size: 12px;
 }
 
 .selected-card {
     background-color: #ddf3fd !important;
 }
+
+
+
