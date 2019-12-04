@@ -1032,7 +1032,8 @@
                 });
 
             },
-            showImage(data, image) {
+            showImage(data, image) 
+            {
                 this.modalImg = image;
                 $("#imageModal").modal();
             },
@@ -1047,7 +1048,8 @@
                 }, 500)
 
             },
-            commentPress(data){
+            commentPress(data)
+            {
                 let cmHe = $('#comment'+data.cardId).height();
                 $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
                 console.log(this.selectedData.comment);
@@ -1077,7 +1079,8 @@
             //             console.log('Api assign-user-remove is not Working !!!')
             //         });
             // },
-            removeAssignedUser(user_id, task_id) {
+            removeAssignedUser(user_id, task_id) 
+            {
 
                 // console.log(user.id, user.task_id);
                 var _this = this;
@@ -1102,7 +1105,8 @@
                         console.log('Api assign-user-remove is not Working !!!')
                     });
             },
-            assignUserToTask(user, data) {
+            assignUserToTask(user, data) 
+            {
                 var _this = this;
                 var postData = {
                     task_id: data.cardId,
@@ -1126,10 +1130,12 @@
                         console.log('Api is not Working !!!')
                     });
             },
-            switchEvent(e) {
+            switchEvent(e) 
+            {
                 $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
             },
-            deleteCardTag(obj, card) {
+            deleteCardTag(obj, card) 
+            {
                 var _this = this;
                 var postData = {
                     assign_id: obj.tag.assign_id,
@@ -1152,7 +1158,8 @@
                 }
 
             },
-            changeTag(tags, card, columnIndex, cardIndex) {
+            changeTag(tags, card, columnIndex, cardIndex) 
+            {
                 // console.log(card);
                 var _this = this;
                 var old = this.selectedData.tags.length;
@@ -1193,7 +1200,8 @@
                         });
                 }
             },
-            addExistingTag(index, cardId, dntfrgt = '') {
+            addExistingTag(index, cardId, dntfrgt = '') 
+            {
                 let _this = this;
                 console.log(this.selectedData.existing_tags[index]);
                 if (dntfrgt !== '') {
@@ -1239,7 +1247,8 @@
                         console.log("1st error =>" + error)
                     });
             },
-            showOriginalList(task){
+            showOriginalList(task)
+            {
                 if (task.list_id !== null){
                     $('#list'+ task.list_id).click();
                     setTimeout(function () {
@@ -1252,7 +1261,8 @@
                 }
 
             },
-            showTagManageModel() {
+            showTagManageModel() 
+            {
                 var _this = this;
                 axios.get('/api/task-list/all-tag-for-manage')
                     .then(response => response.data)
@@ -1265,7 +1275,8 @@
                     });
 
             },
-            generateColor() {
+            generateColor() 
+            {
                 var myColor = '#000000';
                 myColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
                 return myColor;
@@ -1288,7 +1299,8 @@
                 var moment =  '&emsp;&emsp;'+formatedate.getDate()+' '+monthNames[formatedate.getMonth()]+' '+formatedate.getFullYear()+'<br>&emsp;&emsp;'+strTime;
                 return moment;
             },
-            showChild(cardId){
+            showChild(cardId)
+            {
                 let _this = this;
                 let data = {
                     'task_id' : cardId
@@ -1304,7 +1316,8 @@
 
                 })
             },
-            getFiles(cardId){
+            getFiles(cardId)
+            {
                 let _this = this;
                 let data = {
                     'task_id' : cardId
@@ -1319,7 +1332,8 @@
 
                 })
             },
-            getComments(cardId){
+            getComments(cardId)
+            {
                 let _this = this;
                 let data = {
                     'task_id' : cardId
@@ -1335,7 +1349,6 @@
 
                 })
             },
-
             deleteDetailComment(id)
             {
                 let _this = this;
