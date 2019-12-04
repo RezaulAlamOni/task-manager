@@ -36,7 +36,7 @@ class MultipleBoardController extends Controller
     }
 
     public function index(Request $request)
-    {   
+    {
         $boards = [];
         $board = Task::where('board_parent_id', 0)
                 ->with(['moveToCol','task' => function($q){
@@ -267,7 +267,7 @@ class MultipleBoardController extends Controller
 
     public function changeParentId(Request $request)
     {
-        //  $request->all();        
+        //  $request->all();
         // $taskModal = Task::where('board_parent_id','move_from_id')->;
         $parent = Task::find($request->board_parent_id);
         $parent_task = Task::find($request->id);
@@ -320,7 +320,7 @@ class MultipleBoardController extends Controller
                 'progress'=> $parent->progress
             ]);
         }
-       
+
         if ($update) {
             $this->createLog($request->id, 'Update', 'Parent changed', 'Board Card Parent Changed');
             return response()->json(['success' => true, 'data' => $update]);
@@ -329,7 +329,7 @@ class MultipleBoardController extends Controller
     }
 
     public function recurChildIds($child)
-    {   
+    {
         if ($child['board_parent_id'] != null) {
             $this->childIds[] = $child['id'];
         }
@@ -847,9 +847,10 @@ class MultipleBoardController extends Controller
                     ->with('childTask')
                     ->get();
         $ids[] = $request->id;
+        $hidden = 0;
         foreach ($data as $childs) {
             if (count($childs['childTask']) > 0) {
-                $ids = $this->recurChildIds($childs);
+                $ids = $this->recurChildIds($childs);   
             }
         }
         $delKey = array_search($request->parent_id, $ids);
@@ -878,7 +879,7 @@ class MultipleBoardController extends Controller
     {
         $childs = Task::where('id',$request->task_id)
                     ->with('childTask')
-                    ->first();
+                    ->get();
         $parents = Task::where('id',$request->task_id)
                     ->with('parents')
                     ->get();
@@ -889,15 +890,19 @@ class MultipleBoardController extends Controller
             }
         }
         if ($this->parents) {
-            $this->parents = array_reverse($this->parents);
+            // $this->parents = array_reverse($this->parents);
+            $childs = Task::where('id', $this->parents->id)
+                    ->with('childTask')
+                    ->get();
         }
+        // return $this->parents->id;
         return response()->json(['success' => true, 'childs' => $childs, 'parents' => $this->parents]);
     }
 
     public function recurParent($parent)
-    {   
+    {
         foreach ($parent as $key => $value) {
-            $this->parents[] = $value;
+            $this->parents = $value;
             if (count($value['parents']) > 0) {
                 $this->recurParent($value['parents']);
             }
@@ -923,8 +928,8 @@ class MultipleBoardController extends Controller
                     'updated_by' => Auth::id(),
                     'file_name' => $photo,
                     'created_at' => Carbon::now()
-                ]; 
-        
+                ];
+
                 $insert = Files::create($data);
                 if ($insert) {
                     $insert = Files::where('id',$insert->id)->with('user')->first();
@@ -937,15 +942,15 @@ class MultipleBoardController extends Controller
     }
 
     public function cardFileDelete(Request $request)
-    {   
+    {
         $delete = Files::where('id', $request->id)->first();
         if(unlink(public_path().'/storage/'.$delete->tasks_id.'/'.$delete->file_name)){
             $delete = Files::where('id', $request->id)->delete();
             if($delete){
                 return response()->json(['success' => true]);
-            }    
+            }
         }
-        
+
     }
 
     public function getCardFiles(Request $request)

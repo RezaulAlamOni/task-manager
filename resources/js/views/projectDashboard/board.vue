@@ -134,8 +134,8 @@
                                         <div :class="card.props.className"
                                             :style="card.props.style"
                                             class="card-list"
-                                            @contextmenu="makeItClick($event, card,column.children, index, column.boardId)"
-                                            @click="makeItClick($event, card, column.children, index, column.boardId)"
+                                            @contextmenu="makeItClick($event, card,column.children, index, key, column.boardId)"
+                                            @click="makeItClick($event, card, column.children, index, key, column.boardId)"
                                             :id="'card_'+card.cardId"
                                             v-on:dblclick="showLog" >
                                                 <!-- @click="selectCard(card)" -->
@@ -527,6 +527,12 @@
                                     <span class="badge-pill badge-default">Ctrl</span>+
                                     <span class="badge-pill badge-default">T</span>
                                 </span>
+                            </li>
+                            <li v-if="selectedCards.types == 'task'">
+                                <a @click="deleteTask(currentColumnIndex, currentColumnKey, selectedCards.cardId)" href="javascript:void(0)">
+                                    <img :src="baseUrl+'/img/task-icon/minus-o.png'" class="contex-menu-icon">Remove Tasks From This Column 
+                                    <!-- <span class="badge-pill badge-default contex-menu-sortcut">Delete</span> -->
+                                </a>
                             </li>
                             <!-- <li>
                                 <a href="javascript:void(0)"><img src="/img/task-icon/move.png" class="contex-menu-icon"> Move Selected
@@ -954,7 +960,7 @@
                                                 v-if="tree.text !== '' && tree.board_parent_id !== null"
                                                 checked disable> -->
 
-<!--                                        <span class="checkmark"></span>-->
+                                        <!-- <span class="checkmark"></span>-->
                                     </label>
                                     <label class="checkbox_cus_mini"  v-if="tree.text !== '' && tree.board_parent_id == null" >
                                         <input :id="tree.id" :value="tree.id" type="checkbox" v-model="selectedExistedTask"
@@ -970,7 +976,7 @@
                                                     <input :id="child.id" class="tree-child" :value="child.id"
                                                        type="checkbox"
                                                        checked disable> <span v-html="child.text"></span>
-<!--                                                    <span class="checkmark"></span>-->
+                                                <!--<span class="checkmark"></span>-->
                                                 </label>
                                                 <label class="checkbox_cus_mini" v-if="child.text !== '' && child.board_parent_id == null">
                                                     <input :id="child.id" class="tree-child selectAll" :value="child.id"
@@ -1004,7 +1010,7 @@
                                                                                type="checkbox"
                                                                                checked disable> <span v-html="child2.text"></span>
                                                                             <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
-<!--                                                                            <span class="checkmark"></span>-->
+                                                                            <!-- <span class="checkmark"></span>-->
                                                                         </label>
 
                                                                         <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
@@ -1029,7 +1035,7 @@
                                                                                                  checked disable>
                                                                                             <span v-html="child3.text"></span>
                                                                                         <!-- <input type="checkbox" @change="selectAll()" class="checkedAll" name="side_dav" > All -->
-<!--                                                                                        <span class="checkmark"></span>-->
+                                                                                        <!-- <span class="checkmark"></span>-->
                                                                                     </label>
 
                                                                                     <label class="checkbox_cus_mini" v-if="child2.text !== '' && child2.board_parent_id == null">
@@ -1137,7 +1143,9 @@
                 tree4data: [],
                 currentColumn: null,
                 currentColumnIndex: null,
+                currentColumnKey: null,
                 cards: [],
+                selectedCards: [],
                 scene: {},
                 upperDropPlaceholderOptions: {
                     className: 'cards-drop-preview',
@@ -2494,9 +2502,11 @@
             HideCustomMenu() {
                 $('.jquery-accordion-menu').hide();
             },
-            makeItClick(e, card, child, index, boardId) {
+            makeItClick(e, card, child, index, key, boardId) {
                 this.currentColumn = boardId;
                 this.currentColumnIndex = index;
+                this.currentColumnKey = key;
+                this.selectedCards = card;
                 var _this = this;
                 if (e.ctrlKey && e.which === 1) {
                     if (_this.selectedIds.includes(card.cardId)) {
@@ -2632,9 +2642,9 @@
                     .then(response => {
                         if (response.success === 'success') {
                             _this.cards[index].task[key].assigned_user.push(response.data);
-                             console.log(_this.cards);
+                            //  console.log(_this.cards);
                             setTimeout(function () {
-                                _this.getData();
+                                _this.getBoardTask();
                             }, 100);
                         }
                     })

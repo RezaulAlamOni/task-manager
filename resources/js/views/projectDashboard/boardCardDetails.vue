@@ -174,9 +174,9 @@
                     </template>
                     <span data-toggle="dropdown" class=" dropdown-toggle-split" style="float: right;margin: 9px 11px;" v-else>
 
-<!--                        <i class="outline-person icon-image-preview li-opacity "-->
-<!--                           data-toggle="tooltip" title="Assignee">-->
-<!--                        </i>-->
+                    <!-- <i class="outline-person icon-image-preview li-opacity "-->
+                    <!--    data-toggle="tooltip" title="Assignee">-->
+                    <!-- </i>-->
                         <img :src="baseUrl+'/img/task-icon/add-user.png'"
                              class="li-opacity"
                              style=" height: 29px;cursor: pointer; margin: 9px 11px;"
@@ -608,7 +608,7 @@
             <div aria-labelledby="child-tab" class="tab-pane" id="child" role="tabpanel">
                 <span>
                     <div class="tags-log">
-                        <div v-if="selectedData.parents.length  > 0">
+                        <!-- <div v-if="selectedData.parents.length  > 0">
                         <label class="label"> <h5>Parents:</h5></label>
                             <li class="list-group-item" v-for="(parent, index) in selectedData.parents" :key="index">
                                 <label class="checkbox_cus_mini ">
@@ -616,47 +616,49 @@
                                     {{ parent.title }}
                                 </label>
                             </li>
-                            <!-- <li class="list-group-item">
+                            <li class="list-group-item">
                                 <label class="checkbox_cus_mini">
                                     <span v-for="(tab,iid) in (selectedData.parents.length+1)" :key="iid"> &emsp;</span>
                                     {{ selectedData.data }}
                                 </label>
-                            </li> -->
+                            </li> 
                             <Br/>
-                        </div>
+                        </div> -->
                         <div  v-if="selectedData.type !== 'task' && selectedData.childrens.length  > 0">
-                            <label class="label"> <h5>Childrens:</h5></label>
+                            <label class="label"> <h5>Tree View:</h5></label>
                             <div v-for="(child,index) in selectedData.childrens">
-                                <li class="list-group-item">
+                                <li class="list-group-item detail-tree-view ">
                                     <label class="checkbox_cus_mini ">
-                                        <!-- <input id="109" type="checkbox" checked="checked" disable="" value="109">  -->
                                         {{ child.title }}
-                                        <!-- <span class="checkmark"></span> -->
                                     </label>
-                                    <!---->
                                     <ul v-if="child.child_task.length  > 0" class="list-group list-group-flush">
                                         <div v-for="child1 in child.child_task">
-                                            <li class="list-group-item">
+                                            <li class="list-group-item detail-tree-view">
                                                 <label class="checkbox_cus_mini ">
-                                                    <!-- <input id="111" type="checkbox" checked="checked" disable="" class="tree-child" value="111">  -->
                                                     {{ child1.title }}
-                                                    <!-- <span class="checkmark"></span> -->
                                                     </label>
-                                                <!---->
                                                 <ul v-if="child1.child_task.length  > 0" class="list-group list-group-flush">
                                                     <div v-for="child2 in child1.child_task">
-                                                        <li class="list-group-item">
+                                                        <li class="list-group-item detail-tree-view">
                                                             <label class="checkbox_cus_mini ">
-                                                                <!-- <input id="120" type="checkbox" checked="checked" disable="" class="tree-child" value="120">  -->
                                                                 {{ child2.title }}
-                                                                <!-- <span class="checkmark"></span> -->
-                                                                </label>
-                                                            <!---->
+                                                            </label>
                                                             <ul v-if="child2.child_task.length  > 0"
                                                                 class="list-group list-group-flush">
                                                                 <div v-for="child3 in child2.child_task">
-                                                                    <li class="list-group-item">
-                                                                        {{ child3.title }}
+                                                                    <li class="list-group-item detail-tree-view">
+                                                                        <label class="checkbox_cus_mini ">
+                                                                            {{ child3.title }}
+                                                                        </label>
+                                                                        <ul v-if="child1.child_task.length  > 0" class="list-group list-group-flush">
+                                                                            <div v-for="child2 in child1.child_task">
+                                                                                <li class="list-group-item detail-tree-view">
+                                                                                    <label class="checkbox_cus_mini ">
+                                                                                        {{ child2.title }}
+                                                                                    </label>
+                                                                                </li>
+                                                                            </div>
+                                                                        </ul>
                                                                     </li>
                                                                 </div>
                                                             </ul>
@@ -675,7 +677,15 @@
         </div>
     </div>
 </template>
+<style scoped>
+    .detail-tree-view {
+        border-top: 1px solid gray !important;
+    }
 
+    .selected-li {
+        background-color: #ddf3fd;
+    }
+</style>
 <script>
     import switches from 'vue-switches';
     import Datepicker from 'vuejs-datepicker';
@@ -1032,7 +1042,8 @@
                 });
 
             },
-            showImage(data, image) {
+            showImage(data, image) 
+            {
                 this.modalImg = image;
                 $("#imageModal").modal();
             },
@@ -1047,7 +1058,8 @@
                 }, 500)
 
             },
-            commentPress(data){
+            commentPress(data)
+            {
                 let cmHe = $('#comment'+data.cardId).height();
                 $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
                 console.log(this.selectedData.comment);
@@ -1077,7 +1089,8 @@
             //             console.log('Api assign-user-remove is not Working !!!')
             //         });
             // },
-            removeAssignedUser(user_id, task_id) {
+            removeAssignedUser(user_id, task_id) 
+            {
 
                 // console.log(user.id, user.task_id);
                 var _this = this;
@@ -1102,7 +1115,8 @@
                         console.log('Api assign-user-remove is not Working !!!')
                     });
             },
-            assignUserToTask(user, data) {
+            assignUserToTask(user, data) 
+            {
                 var _this = this;
                 var postData = {
                     task_id: data.cardId,
@@ -1126,10 +1140,12 @@
                         console.log('Api is not Working !!!')
                     });
             },
-            switchEvent(e) {
+            switchEvent(e) 
+            {
                 $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
             },
-            deleteCardTag(obj, card) {
+            deleteCardTag(obj, card) 
+            {
                 var _this = this;
                 var postData = {
                     assign_id: obj.tag.assign_id,
@@ -1152,7 +1168,8 @@
                 }
 
             },
-            changeTag(tags, card, columnIndex, cardIndex) {
+            changeTag(tags, card, columnIndex, cardIndex) 
+            {
                 // console.log(card);
                 var _this = this;
                 var old = this.selectedData.tags.length;
@@ -1193,7 +1210,8 @@
                         });
                 }
             },
-            addExistingTag(index, cardId, dntfrgt = '') {
+            addExistingTag(index, cardId, dntfrgt = '') 
+            {
                 let _this = this;
                 console.log(this.selectedData.existing_tags[index]);
                 if (dntfrgt !== '') {
@@ -1239,12 +1257,21 @@
                         console.log("1st error =>" + error)
                     });
             },
-            showOriginalList(task){
-                if (task.list_id !== null){
-                    $('#list'+ task.list_id).click();
+            showOriginalList(task) {
+                if (task.type !== 'task') {
+                    $('#list' + task.list_id).click();
                     setTimeout(function () {
-                        $('#click'+ task.cardId).click();
-                    },600)
+                        $('#click' + task.cardId).click();
+                    }, 1000);
+                    $('[data-toggle="tooltip"]').tooltip('dispose');
+                    setTimeout(function () {
+                        $('[data-toggle="tooltip"]').tooltip('enable');
+                    }, 500);
+                } else {
+                    $('.board' + task.multiple_board_id).click();
+                    setTimeout(function () {
+                        $('#card_' + task.cardId).click();
+                    }, 1000);
                     $('[data-toggle="tooltip"]').tooltip('dispose');
                     setTimeout(function () {
                         $('[data-toggle="tooltip"]').tooltip('enable');
@@ -1252,7 +1279,8 @@
                 }
 
             },
-            showTagManageModel() {
+            showTagManageModel() 
+            {
                 var _this = this;
                 axios.get('/api/task-list/all-tag-for-manage')
                     .then(response => response.data)
@@ -1265,7 +1293,8 @@
                     });
 
             },
-            generateColor() {
+            generateColor() 
+            {
                 var myColor = '#000000';
                 myColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
                 return myColor;
@@ -1288,7 +1317,8 @@
                 var moment =  '&emsp;&emsp;'+formatedate.getDate()+' '+monthNames[formatedate.getMonth()]+' '+formatedate.getFullYear()+'<br>&emsp;&emsp;'+strTime;
                 return moment;
             },
-            showChild(cardId){
+            showChild(cardId)
+            {
                 let _this = this;
                 let data = {
                     'task_id' : cardId
@@ -1296,15 +1326,16 @@
                 axios.post('/api/show-child-parent',data)
                 .then(response => response.data)
                 .then(response => {
-                    console.log(response.parents);
-                    _this.selectedData.childrens = response.childs.child_task;
-                    _this.selectedData.parents = response.parents;
+                    _this.selectedData.childrens = response.childs;//.child_task;
+                    _this.selectedData.parents = response.childs;
+                    console.log(response.childs.length);
                 })
                 .catch(error => {
 
                 })
             },
-            getFiles(cardId){
+            getFiles(cardId)
+            {
                 let _this = this;
                 let data = {
                     'task_id' : cardId
@@ -1319,7 +1350,8 @@
 
                 })
             },
-            getComments(cardId){
+            getComments(cardId)
+            {
                 let _this = this;
                 let data = {
                     'task_id' : cardId
@@ -1335,7 +1367,6 @@
 
                 })
             },
-
             deleteDetailComment(id)
             {
                 let _this = this;

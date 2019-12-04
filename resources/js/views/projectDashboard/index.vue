@@ -176,14 +176,39 @@
 
                                     <div class="hide-item-res-user">
 
-                                        <a class="priority-icon dropdown-hide-with-remove-icon"
-                                           v-if="data.priority_label === null">
-                                            <span data-toggle="dropdown" class=" dropdown-toggle-split">
+                                        <a class=" dropdown-hide-with-remove-icon">
+                                            <span class="priority-icon dropdown-toggle-split"
+                                                  v-if="data.priority_label !== null"
+                                                  style="top: 12px;"
+                                                  data-toggle="dropdown">
+                                                 <span title="" data-placement="bottom" data-toggle="tooltip"
+                                                       v-if="data.priority_label === 'high'"
+                                                       class="badge badge-warning text-capitalize "
+                                                       style="background: #F4F5F7; margin-left: 1px; float: left;margin-right: 5px;color:black"
+                                                       data-original-title="">
+                                                    {{data.priority_label}}
+                                                 </span>
+                                                <span title="" data-placement="bottom" data-toggle="tooltip"
+                                                      v-if="data.priority_label === 'low'"
+                                                      class="badge badge-warning text-capitalize "
+                                                      style="background: #172B4D; margin-left: 1px; float: left;margin-right: 5px;"
+                                                      data-original-title="">
+                                                    {{data.priority_label}}
+                                                 </span>
+                                                <span title="" data-placement="bottom" data-toggle="tooltip"
+                                                      v-if="data.priority_label === 'medium'"
+                                                      class="badge badge-warning text-capitalize "
+                                                      style="background: #FF9F1A; margin-left: 1px; float: left;margin-right: 5px;"
+                                                      data-original-title="">
+                                                    {{data.priority_label}}
+                                                 </span>
+                                            </span>
+                                            <span data-toggle="dropdown" class="priority-icon dropdown-toggle-split"
+                                                  v-else>
                                                 <img :src="baseUrl+'/img/priority.png'"
                                                      class="icon-image-preview li-opacity assign-user-"
                                                      data-toggle="tooltip" title="Add Priority">
                                             </span>
-
                                             <div class="dropdown-menu dropdown-menu-right"
                                                  style="z-index: 1;width: 185px;">
                                                 <div class="collapse show switchToggle">
@@ -228,29 +253,7 @@
                                                 </div>
                                             </div>
                                         </a>
-                                        <tampate v-else>
-                                            <span class="priority-icon" style="top: 12px;">
-                                                 <span title="" data-placement="bottom" data-toggle="tooltip" v-if="data.priority_label === 'high'"
-                                                       class="badge badge-warning text-capitalize "
-                                                       style="background: #F4F5F7; margin-left: 1px; float: left;margin-right: 5px;color:black"
-                                                       data-original-title="">
-                                                    {{data.priority_label}}
-                                                 </span>
-                                                <span title="" data-placement="bottom" data-toggle="tooltip" v-if="data.priority_label === 'low'"
-                                                       class="badge badge-warning text-capitalize "
-                                                       style="background: #172B4D; margin-left: 1px; float: left;margin-right: 5px;"
-                                                       data-original-title="">
-                                                    {{data.priority_label}}
-                                                 </span>
-                                                <span title="" data-placement="bottom" data-toggle="tooltip"v-if="data.priority_label === 'medium'"
-                                                       class="badge badge-warning text-capitalize "
-                                                       style="background: #FF9F1A; margin-left: 1px; float: left;margin-right: 5px;"
-                                                       data-original-title="">
-                                                    {{data.priority_label}}
-                                                 </span>
-                                            </span>
 
-                                        </tampate>
                                     </div>
 
                                     <a class="attach-icon hide-item-res" style="width: auto !important;">
@@ -258,7 +261,7 @@
                                             <template v-for="(fl,file_id ) in data.files">
 
                                                 <img :src="baseUrl+'/storage/'+data.id+'/'+fl.file_name"
-                                                     v-if="file_id < 2 && ( fl.file_name.endsWith('.png') || fl.file_name.endsWith('.jpg'))"
+                                                     v-if="file_id < 2 && ( fl.file_name.toLowerCase().endsWith('.png') || fl.file_name.toLowerCase().endsWith('.jpg') || fl.file_name.toLowerCase().endsWith('.jpeg'))"
                                                      @click="showImage(data.files, fl.file_name,data.id)"
                                                      title="Click For View File" data-toggle="tooltip"
                                                      class="task-img">
@@ -328,7 +331,7 @@
                                                     />
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <template v-for="tag in data.existing_tags">
+                                                            <template v-for="tag in allTags">
                                                                 <li class="badge-pill tags"
                                                                     @click="addExistingTag(data , tag.title,tag.color)"
                                                                     v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
@@ -414,8 +417,8 @@
                                                         </label>
                                                     </li>
                                                     <li class="assignUser">
-                                                        <template v-for="user in data.users"
-                                                                  v-if="data.users !== undefined">
+                                                        <template v-for="user in allUsers"
+                                                                  v-if="allUsers.length > 0">
                                                             <div
                                                                 @click="(data.assigned_user_ids.includes(user.id)) ? '' : assignUserToTask(user,data) "
                                                                 :class="(data.assigned_user_ids.includes(user.id)) ? 'active-user disabled' : 'users-select'"
@@ -727,7 +730,11 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Image Show</h5>
-                        <span @click="deletePhoto(modalImg[0],modalImg[1])" class="badge badge-warning file-delete">Delete Photo</span>
+                        <span @click="deletePhoto(modalImg[0],modalImg[1])" class="file-delete"
+                        data-toggle="tooltip" title="Delete this file "
+                        >
+                            <img src="/img/task-icon/trash.png" class="contex-menu-icon">
+                        </span>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -1362,7 +1369,7 @@
                 $('.searchTaskList').val('@' + name);
                 var _this = this;
                 var nav_type = JSON.parse(localStorage.selected_nav);
-                axios.post('/api/task-list/suggest-user', {
+                axios.post('/api/task-list/search-result', {
                     'user_id': id,
                     p_id: _this.projectId,
                     list_id: nav_type.list_id,
@@ -1397,7 +1404,7 @@
                         })
 
                     if (value.length > 0) {
-                        axios.post('/api/task-list/suggest-user', {'user_name': value})
+                        axios.post('/api/task-list/search-result', {'user_name': value})
                             .then(response => response.data)
                             .then(response => {
                                 _this.searchData.users = response.search_user;
@@ -1417,7 +1424,7 @@
                 } else {
                     // if (value.length >= 2) {
                     var nav_type = JSON.parse(localStorage.selected_nav);
-                    axios.post('/api/task-list/suggest-user', {
+                    axios.post('/api/task-list/search-result', {
                         'text': value,
                         'project_id': _this.projectId,
                         list_id: nav_type.list_id,
@@ -1441,7 +1448,7 @@
                 var _this = this;
                 var value = $('.searchTaskList').val();
                 var nav_type = JSON.parse(localStorage.selected_nav);
-                axios.post('/api/task-list/suggest-user', {
+                axios.post('/api/task-list/search-result', {
                     'text': value,
                     'project_id': _this.projectId,
                     list_id: nav_type.list_id,
@@ -1541,7 +1548,7 @@
                     user_id: user_id,
                     task_id: task_id
                 };
-                console.log(postData)
+
                 axios.post('/api/task-list/assign-user-remove', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -1587,7 +1594,7 @@
                     this.selectedData = data;
 
                     _this.selectedData.childrens = _this.selectedData.children;
-                    _this.selectedData.files = [];
+                    // _this.selectedData.files = [];
                     _this.selectedData.child = [];
                     _this.selectedData.comment = [];
                     _this.selectedData.parents = [];
@@ -1655,6 +1662,13 @@
             makeInput(e, data) {
                 var _this = this;
                 this.selectedData = data;
+                _this.selectedData.childrens = _this.selectedData.children;
+                _this.selectedData.parents = [];
+                _this.selectedData.userName = _this.authUser.name;
+                _this.selectedData.cardId = _this.selectedData.id;
+                _this.selectedData.data = _this.selectedData.text;
+                _this.selectedData.type = 'task';
+
                 _this.empty_task_delete_flag = data.id;
                 if (data.text === 'Dont Forget Section') {
                     $(e.target).attr('disabled', 'disabled');
@@ -1747,7 +1761,6 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.nav_T = response.success;
-                        console.log(response)
                         setTimeout(() => {
                             $('#CopyTaskTo').modal('show');
                         }, 200);
@@ -2458,7 +2471,7 @@
             getTaskList() {
                 var _this = this;
                 // $('#loder-hide').removeClass('loder-hide')
-                $('#loder-hide').fadeIn();
+
                 let data = {
                     id: this.projectId,
                     list_id: this.list_id,
@@ -2468,9 +2481,13 @@
                     .then(response => response.data)
                     .then(response => {
 
-                        this.treeList = response.task_list;
-                        this.multiple_list = response.multiple_list;
-                        this.authUser = response.userName
+                        _this.treeList = response.task_list;
+                        _this.multiple_list = response.multiple_list;
+                        _this.authUser = response.userName
+                        _this.allUsers = response.allTeamUsers;
+                        _this.allTags = response.allTeamTags;
+
+
                         $('[data-toggle="tooltip"]').tooltip('dispose');
                         setTimeout(function () {
                             // $('#loder-hide').addClass('loder-hide')
@@ -2500,6 +2517,7 @@
                 setTimeout(function () {
                     $('#details').removeClass('details');
                 }, 300);
+                $('#loder-hide').fadeIn();
                 this.list_id = data.list_id;
                 this.nav_id = data.nav_id;
                 this.list.name = data.title;
@@ -2762,7 +2780,6 @@
             },
             MoveTaskToListOrBoard() {
                 var _this = this;
-                console.log(_this.selectedIds)
                 swal({
                         title: "Are you sure?",
                         text: "You want to move selected task ?!!!",
@@ -3031,7 +3048,6 @@
                     });
             },
             Add_Priority(priority, id) {
-                console.log(id, priority)
                 var _this = this;
                 var data = {
                     ids: [id],
@@ -3104,16 +3120,6 @@
 
                 if (_this.selectedData != null && _this.selectedData.sort_id !== -2) {
 
-                    // console.log(_this.selectedData);
-                    // _this.selectedData.childrens = _this.selectedData.children;
-                    // _this.selectedData.files = [];
-                    // _this.selectedData.child = [];
-                    // _this.selectedData.comment = [];
-                    // _this.selectedData.parents = [];
-                    // _this.selectedData.userName = _this.authUser.name;
-                    // _this.selectedData.cardId = _this.selectedData.id;
-                    // _this.selectedData.data = _this.selectedData.text;
-                    // console.log(_this.selectedData);
                     $('#task_width').removeClass('task_width');
                     $('#task_width').addClass('task_widthNormal');
                     $('#details').addClass('details-show');
