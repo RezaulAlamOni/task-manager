@@ -36,11 +36,13 @@ class SearchController extends Controller
             } elseif ($type == 'board') {
                 $task = Task::where('project_id', (int)$request->project_id)
                     ->where('title', 'like', '%' . $request->text . '%')
+                    ->where('board_parent_id','!=',0)
                     ->where('multiple_board_id',$list_id)
                     ->orWhere('id', $request->text)->get();
             } else {
                 $task = Task::where('project_id', (int)$request->project_id)
                     ->where('title', 'like', '%' . $request->text . '%')
+                    ->where('board_parent_id','!=',0)
                     ->orWhere('id', $request->text)->get();
             }
 

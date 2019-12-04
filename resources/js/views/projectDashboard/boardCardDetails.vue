@@ -31,7 +31,7 @@
                      style="height:30px;width:30px;">
 
             </div>
-            <div class="col-4 text-center" >
+            <div class="col-4 text-center">
                 <a :class="{'tag-icon': true, 'tag-icon-free': selectedData.tags == undefined || selectedData.tags.length == 0}">
                     <div v-if="selectedData.tags && selectedData.tags.length !== 0" style="display:inline-flex;">
                         <div style="margin-top: 10px;" v-for="(item, tagIndex) in selectedData.tags">
@@ -52,7 +52,8 @@
                                     </span>
                             </div>
 
-                            <div :id="'dropdown1'+selectedData.cardId" class="dropdown-menu dropdown-menu1"  style="width: 250px !important;">
+                            <div :id="'dropdown1'+selectedData.cardId" class="dropdown-menu dropdown-menu1"
+                                 style="width: 250px !important;">
 
                                 <diV class="collapse show switchToggle">
                                     <div class="container-fluid">
@@ -112,7 +113,8 @@
                     </div>
 
                     <img :src="baseUrl+'/img/task-icon/tag-add.png'" data-toggle="dropdown"
-                         class="dropdown-toggle-split li-opacity" style=" height: 29px;cursor: pointer; margin: 9px 5px;" v-else
+                         class="dropdown-toggle-split li-opacity"
+                         style=" height: 29px;cursor: pointer; margin: 9px 5px;" v-else
                          data-original-title="Add Tag">
 
 
@@ -172,11 +174,12 @@
 
                         </span>
                     </template>
-                    <span data-toggle="dropdown" class=" dropdown-toggle-split" style="float: right;margin: 9px 11px;" v-else>
+                    <span data-toggle="dropdown" class=" dropdown-toggle-split" style="float: right;margin: 9px 11px;"
+                          v-else>
 
 <!--                        <i class="outline-person icon-image-preview li-opacity "-->
-<!--                           data-toggle="tooltip" title="Assignee">-->
-<!--                        </i>-->
+                        <!--                           data-toggle="tooltip" title="Assignee">-->
+                        <!--                        </i>-->
                         <img :src="baseUrl+'/img/task-icon/add-user.png'"
                              class="li-opacity"
                              style=" height: 29px;cursor: pointer; margin: 9px 11px;"
@@ -184,7 +187,8 @@
 
                     </span>
 
-                    <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;right: -50px;left: inherit !important;width: 300px">
+                    <div class="dropdown-menu dropdown-menu-right"
+                         style="z-index: 1;right: -50px;left: inherit !important;width: 300px">
                         <diV class="collapse show switchToggle">
                             <li class="assignUser">
                                 <input class="input-group searchUser"
@@ -263,10 +267,10 @@
                            id="_details" role="tab">Details</a>
                     </li>
                     <li class="nav-item" @click="getFiles(selectedData.cardId)">
-                       <a aria-controls="file" aria-selected="false" class="nav-link" data-toggle="tab"
-                          href="#file"
-                          id="_file" role="tab">Files</a>
-                   </li>
+                        <a aria-controls="file" aria-selected="false" class="nav-link" data-toggle="tab"
+                           href="#file"
+                           id="_file" role="tab">Files</a>
+                    </li>
                     <li class="nav-item" @click="getComments(selectedData.cardId)">
                         <a aria-controls="comment" aria-selected="false" class="nav-link" data-toggle="tab"
                            href="#comment"
@@ -282,7 +286,8 @@
                         <a aria-controls="log" aria-selected="false" class="nav-link" data-toggle="tab" href="#log"
                            id="_log" role="tab">Logs</a>
                     </li>
-                    <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.type !== 'task' && (selectedData.childrens.length  > 0 || selectedData.parents.length  > 0)">
+                    <li @click="showChild(selectedData.cardId)" class="nav-item"
+                        v-if="selectedData.type !== 'task' && (selectedData.childrens.length  > 0 || selectedData.parents.length  > 0)">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_child" role="tab">Parents & Childs</a>
                     </li>
@@ -306,7 +311,8 @@
                                     <h3>Details</h3>
                                 </div>
                                 <div class="col-12">
-                                    <ckeditor :editor="editor" v-model="selectedData.description" :config="editorConfig"></ckeditor>
+                                    <ckeditor :editor="editor" v-model="selectedData.description"
+                                              :config="editorConfig"></ckeditor>
                                 </div>
                             </div>
                             <div class="row">
@@ -348,39 +354,50 @@
                <span>
                    <h3 class="p-3">Files of this card </h3>
                    <div class=" comment-section-in-task-details" style="max-height: calc(100vh - 315px);">
-                       <div class="row" v-if="selectedData.files !== ''" id='fileSection' style=" max-height: calc(100vh - 390px); width: 100%; overflow: auto;" >
-                            <div class="col-md-4" v-for="files in selectedData.files" >
+                       <div class="row" v-if="selectedData.files !== ''" id='fileSection'
+                            style=" max-height: calc(100vh - 390px); width: 100%; overflow: auto;">
+                            <div class="col-md-4" v-for="files in selectedData.files">
                                 <!-- <p :title="comments.user.name" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
                                     data-placement="bottom" data-toggle="tooltip"> {{ comments.user.name.substring(0,2) }}</p> -->
-                                <div class="card-list card" >
-                                    <span style="padding: 10px;" >
+                                <div class="card-list card">
+                                    <span style="padding: 10px;">
                                         <a target="_blank" :href="'/storage/'+selectedData.cardId+'/'+files.file_name"
-                                            style="cursor: pointer;position: absolute;">
-                                            <div style="float: left;" v-if="files.file_name.toLowerCase().endsWith('.png') || files.file_name.toLowerCase().endsWith('.jpg') || files.file_name.toLowerCase().endsWith('.jpeg') || files.file_name.toLowerCase().endsWith('.gif')">
+                                           style="cursor: pointer;position: absolute;">
+                                            <div style="float: left;"
+                                                 v-if="files.file_name.toLowerCase().endsWith('.png') || files.file_name.toLowerCase().endsWith('.jpg') || files.file_name.toLowerCase().endsWith('.jpeg') || files.file_name.toLowerCase().endsWith('.gif')">
                                                 <img title="Click To Download" data-toggle="tooltip"
-                                                        :src="'/storage/'+selectedData.cardId+'/'+files.file_name" height="50" width="50">
+                                                     :src="'/storage/'+selectedData.cardId+'/'+files.file_name"
+                                                     height="50" width="50">
                                             </div>
-                                            <div style="float: left;" v-else-if="files.file_name.toLowerCase().endsWith('.txt') ">
+                                            <div style="float: left;"
+                                                 v-else-if="files.file_name.toLowerCase().endsWith('.txt') ">
                                                 <img title="Click To Download" data-toggle="tooltip"
-                                                    :src="'/img/txt.png'" height="50" width="50">
+                                                     :src="'/img/txt.png'" height="50" width="50">
                                             </div>
-                                            <div style="float: left;" v-else-if="files.file_name.toLowerCase().endsWith('.pdf') ">
+                                            <div style="float: left;"
+                                                 v-else-if="files.file_name.toLowerCase().endsWith('.pdf') ">
                                                 <img title="Click To Download" data-toggle="tooltip"
-                                                    :src="'/img/pdf.png'" height="50" width="50">
+                                                     :src="'/img/pdf.png'" height="50" width="50">
                                             </div>
-                                            <div style="float: left;" v-else-if="files.file_name.toLowerCase().endsWith('.doc') || files.file_name.toLowerCase().endsWith('.docx') || files.file_name.toLowerCase().endsWith('.xls') || files.file_name.toLowerCase().endsWith('.xlsx')">
+                                            <div style="float: left;"
+                                                 v-else-if="files.file_name.toLowerCase().endsWith('.doc') || files.file_name.toLowerCase().endsWith('.docx') || files.file_name.toLowerCase().endsWith('.xls') || files.file_name.toLowerCase().endsWith('.xlsx')">
                                                 <img title="Click To Download" data-toggle="tooltip"
-                                                    :src="'/img/file.png'" height="50" width="50">
+                                                     :src="'/img/file.png'" height="50" width="50">
                                             </div>
                                             <div style="float: left;" v-else>
                                                 <img title="Click To Download" data-toggle="tooltip"
-                                                    :src="'/img/attachment.png'" height="50" width="50">
+                                                     :src="'/img/attachment.png'" height="50" width="50">
                                             </div>
                                         </a>
-                                        <span :title="(files != undefined ) ? files.user.name : ''" data-toggle="tooltip" style="position: relative; float: right;" v-html="dateFormate(files.created_at)+'<br>&emsp;&emsp;'+files.user.name.split(' ')[0].substring(0,9)"></span>
+                                        <span :title="(files != undefined ) ? files.user.name : ''"
+                                              data-toggle="tooltip" style="position: relative; float: right;"
+                                              v-html="dateFormate(files.created_at)+'<br>&emsp;&emsp;'+files.user.name.split(' ')[0].substring(0,9)"></span>
 
                                         <span>
-                                            <img @click="deleteFile(files.id)" style="position: absolute; right: 5px; bottom: 10px;" :src="'https://img.icons8.com/color/48/000000/delete-forever.png'" height="20" width="20">
+                                            <img @click="deleteFile(files.id)"
+                                                 style="position: absolute; right: 5px; bottom: 10px;"
+                                                 :src="'https://img.icons8.com/color/48/000000/delete-forever.png'"
+                                                 height="20" width="20">
                                         </span>
                                     </span>
                                 </div>
@@ -388,61 +405,74 @@
                        </div>
                        <div class="col-12" style="margin: 10px 0px;">
                            <div class="">
-                               <input :id="'files'+selectedData.cardId" :ref="selectedData.cardId" style="display: none;" @change="updateCardPicture($event,selectedData)"
-                                        type="file">
-                               <span> Upload File : </span><a @click="addCardAttachment(selectedData)" class="btn btn-default btn-sm"
-                                   style="border: 1px solid #f1efe6">
+                               <input :id="'files'+selectedData.cardId" :ref="selectedData.cardId"
+                                      style="display: none;" @change="updateCardPicture($event,selectedData)"
+                                      type="file">
+                               <span> Upload File : </span><a @click="addCardAttachment(selectedData)"
+                                                              class="btn btn-default btn-sm"
+                                                              style="border: 1px solid #f1efe6">
                                        <i class="fa fa-paperclip"></i>
                                </a>
                            </div>
                        </div>
                    </div>
                </span>
-           </div>
+            </div>
 
             <div aria-labelledby="comment-tab" class="tab-pane" id="comment" role="tabpanel" style="overflow: hidden;">
                 <span>
                     <div class="row comment-section-in-task-details" style="max-height: calc(100vh - 300px);">
-                        <div id='cmntSection' style="margin:0px 28px; max-height: calc(100vh - 370px); width: 90%; height: 1000px; overflow: auto;" >
+                        <div id='cmntSection'
+                             style="margin:0px 28px; max-height: calc(100vh - 370px); width: 90%; height: 1000px; overflow: auto;">
 
                             <div class="comment_block">
                                 <div class="new_comment">
-                                    <template v-for="comments in comment" style="margin-top: 15px;" >
+                                    <template v-for="comments in comment" style="margin-top: 15px;">
                                         <ul class="user_comment">
-                                            <div class="user_avatar" :title="comments.user.name" data-placement="bottom" data-toggle="tooltip" >
-                                                <img :src="comments.user.photo_url" v-if="comments.user.photo_url !== null && comments.user.photo_url !== ''">
+                                            <div class="user_avatar" :title="comments.user.name" data-placement="bottom"
+                                                 data-toggle="tooltip">
+                                                <img :src="comments.user.photo_url"
+                                                     v-if="comments.user.photo_url !== null && comments.user.photo_url !== ''">
                                                 <p :title="comments.user.name"
-                                                 data-placement="bottom" data-toggle="tooltip"
-                                                class="comment-avature user_avatar"
-                                                v-else>
+                                                   data-placement="bottom" data-toggle="tooltip"
+                                                   class="comment-avature user_avatar"
+                                                   v-else>
                                                     {{ comments.user.name.substring(0,2) }}</p>
                                             </div>
                                             <div class="comment_body">
-                                                <span style="padding: 10px;" v-if="comments.comment != '' && comments.comment != null">
+                                                <span style="padding: 10px;"
+                                                      v-if="comments.comment != '' && comments.comment != null">
                                                     <p>
                                                         <span class="user">{{comments.user.name}} :</span>
                                                         <span v-html="comments.comment"></span>
                                                     </p>
                                                 </span>
-                                                <span style="padding: 10px;" v-if="comments.attatchment != '' && comments.attatchment != null">
+                                                <span style="padding: 10px;"
+                                                      v-if="comments.attatchment != '' && comments.attatchment != null">
                                                     <span class="user">{{comments.user.name}} :</span>
-                                                    <a target="_blank" :href="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment"
-                                                        style="cursor: pointer;">
-                                                        <div v-if="comments.attatchment.toLowerCase().endsWith('.png') || comments.attatchment.toLowerCase().endsWith('.jpg') || comments.attatchment.toLowerCase().endsWith('.gif')">
+                                                    <a target="_blank"
+                                                       :href="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment"
+                                                       style="cursor: pointer;">
+                                                        <div
+                                                            v-if="comments.attatchment.toLowerCase().endsWith('.png') || comments.attatchment.toLowerCase().endsWith('.jpg') || comments.attatchment.toLowerCase().endsWith('.gif')">
                                                             <img title="Click To Download" data-toggle="tooltip"
-                                                                :src="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" height="80" width="80">
+                                                                 :src="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment"
+                                                                 height="80" width="80">
                                                         </div>
-                                                        <div v-if="comments.attatchment.toLowerCase().endsWith('.txt') ">
+                                                        <div
+                                                            v-if="comments.attatchment.toLowerCase().endsWith('.txt') ">
                                                             <img title="Click To Download" data-toggle="tooltip"
-                                                                :src="'/img/txt.png'" height="50" width="50">
+                                                                 :src="'/img/txt.png'" height="50" width="50">
                                                         </div>
-                                                        <div v-if="comments.attatchment.toLowerCase().endsWith('.pdf') ">
+                                                        <div
+                                                            v-if="comments.attatchment.toLowerCase().endsWith('.pdf') ">
                                                             <img title="Click To Download" data-toggle="tooltip"
-                                                                :src="'/img/pdf.png'" height="50" width="50">
+                                                                 :src="'/img/pdf.png'" height="50" width="50">
                                                         </div>
-                                                        <div v-if="comments.attatchment.toLowerCase().endsWith('.doc') || comments.attatchment.toLowerCase().endsWith('.docx') || comments.attatchment.toLowerCase().endsWith('.xls') || comments.attatchment.toLowerCase().endsWith('.xlsx')">
+                                                        <div
+                                                            v-if="comments.attatchment.toLowerCase().endsWith('.doc') || comments.attatchment.toLowerCase().endsWith('.docx') || comments.attatchment.toLowerCase().endsWith('.xls') || comments.attatchment.toLowerCase().endsWith('.xlsx')">
                                                             <img title="Click To Download" data-toggle="tooltip"
-                                                                :src="'/img/file.png'" height="50" width="50">
+                                                                 :src="'/img/file.png'" height="50" width="50">
                                                         </div>
                                                     </a>
                                                 </span>
@@ -454,68 +484,82 @@
                                                         <li><i class="fa fa-clock-o"></i> {{comments.created_at.substring(11,16)}}</li>
                                                         <li><i class="fa fa-calendar"></i>{{ ' '+comments.created_at.substring(0,10)}}</li>
                                                         <li><i class="fa fa-pencil"></i> <span class="user">{{comments.user.name}}</span></li>
-                                                        <li @click="deleteDetailComment(comments.id)"><i class="fa fa-trash"></i> <span class="user" style="color: red"> Delete</span></li>
+                                                        <li @click="deleteDetailComment(comments.id)"><i
+                                                            class="fa fa-trash"></i> <span class="user"
+                                                                                           style="color: red"> Delete</span></li>
                                                     </ul>
                                                 </div>
                                                 <div class="comment_tools">
                                                     <ul>
-                                                        <li @click="replyToComment(comments.id)"><i class="fa fa-reply"></i></li>
-                                                <!--         <li><i class="fa fa-share-alt"></i></li>-->
-                                                <!--         <li><i class="fa fa-heart love"></i></li>-->
+                                                        <li @click="replyToComment(comments.id)"><i
+                                                            class="fa fa-reply"></i></li>
+                                                        <!--         <li><i class="fa fa-share-alt"></i></li>-->
+                                                        <!--         <li><i class="fa fa-heart love"></i></li>-->
                                                     </ul>
                                                 </div>
 
                                             </div>
-                                            <li :id="'replyBox'+comments.id" style="display : none;" v-click-outside="hidereplaybox(comments.id)">
+                                            <li :id="'replyBox'+comments.id" style="display : none;"
+                                                v-click-outside="hidereplaybox(comments.id)">
                                                 <!-- <input type='text' class="form-control" style="width: 85% !important; margin-bottom: 10px;">
                                                 <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="saveComment(selectedData.cardId)">Post</a> -->
-                                                <div class="input-group display-inline position-relative" style="margin-bottom: 10px; left: 78px;">
-                                                    <input  :id="'replyTextBox'+comments.id" type="text"
-                                                            class="custom-input"
-                                                            name="subscribe_email"
-                                                            placeholder="Reply ... ">
+                                                <div class="input-group display-inline position-relative"
+                                                     style="margin-bottom: 10px; left: 78px;">
+                                                    <input :id="'replyTextBox'+comments.id" type="text"
+                                                           class="custom-input"
+                                                           name="subscribe_email"
+                                                           placeholder="Reply ... ">
                                                     <div class="input-group-prepend">
-                                                        <span @click="saveReply(comments.id, selectedData.cardId)" class="input-group-text" id="basic-addon1">Reply</span>
+                                                        <span @click="saveReply(comments.id, selectedData.cardId)"
+                                                              class="input-group-text" id="basic-addon1">Reply</span>
                                                     </div>
                                                 </div>
                                             </li>
                                             <ul style="position: relative; left: 77px; width: calc(100% - 80px);"
                                                 v-if="comments.comment_reply.length > 0"
                                                 v-for="reply in comments.comment_reply">
-                                                <div class="user_avatar" :title="reply.user.name" data-placement="bottom" data-toggle="tooltip" >
-                                                    <img :src="reply.user.photo_url" v-if="reply.user.photo_url !== null && reply.user.photo_url !== ''">
+                                                <div class="user_avatar" :title="reply.user.name"
+                                                     data-placement="bottom" data-toggle="tooltip">
+                                                    <img :src="reply.user.photo_url"
+                                                         v-if="reply.user.photo_url !== null && reply.user.photo_url !== ''">
                                                     <p :title="reply.user.name"
-                                                    data-placement="bottom" data-toggle="tooltip"
-                                                    class="comment-avature user_avatar"
-                                                    v-else>
+                                                       data-placement="bottom" data-toggle="tooltip"
+                                                       class="comment-avature user_avatar"
+                                                       v-else>
                                                         {{ reply.user.name.substring(0,2) }}</p>
                                                 </div>
                                                 <div class="comment_body">
-                                                    <span style="padding: 10px;" v-if="reply.comment != '' && reply.comment != null">
+                                                    <span style="padding: 10px;"
+                                                          v-if="reply.comment != '' && reply.comment != null">
                                                         <p>
                                                             <span class="user">{{reply.user.name}} :</span>
                                                             <span v-html="reply.comment"></span>
                                                         </p>
                                                     </span>
-                                                    <span style="padding: 10px;" v-if="reply.attatchment != '' && reply.attatchment != null">
+                                                    <span style="padding: 10px;"
+                                                          v-if="reply.attatchment != '' && reply.attatchment != null">
                                                         <span class="user">{{reply.user.name}} :</span>
-                                                        <a target="_blank" :href="'/storage/'+selectedData.cardId+'/comment/'+reply.attatchment"
-                                                            style="cursor: pointer;">
-                                                            <div v-if="reply.attatchment.endsWith('.png') || reply.attatchment.endsWith('.jpg') || reply.attatchment.endsWith('.gif')">
+                                                        <a target="_blank"
+                                                           :href="'/storage/'+selectedData.cardId+'/comment/'+reply.attatchment"
+                                                           style="cursor: pointer;">
+                                                            <div
+                                                                v-if="reply.attatchment.endsWith('.png') || reply.attatchment.endsWith('.jpg') || reply.attatchment.endsWith('.gif')">
                                                                 <img title="Click To Download" data-toggle="tooltip"
-                                                                    :src="'/storage/'+selectedData.cardId+'/comment/'+reply.attatchment" height="80" width="80">
+                                                                     :src="'/storage/'+selectedData.cardId+'/comment/'+reply.attatchment"
+                                                                     height="80" width="80">
                                                             </div>
                                                             <div v-if="reply.attatchment.endsWith('.txt') ">
                                                                 <img title="Click To Download" data-toggle="tooltip"
-                                                                    :src="'/img/txt.png'" height="50" width="50">
+                                                                     :src="'/img/txt.png'" height="50" width="50">
                                                             </div>
                                                             <div v-if="reply.attatchment.endsWith('.pdf') ">
                                                                 <img title="Click To Download" data-toggle="tooltip"
-                                                                    :src="'/img/pdf.png'" height="50" width="50">
+                                                                     :src="'/img/pdf.png'" height="50" width="50">
                                                             </div>
-                                                            <div v-if="reply.attatchment.endsWith('.doc') || reply.attatchment.endsWith('.docx') || reply.attatchment.endsWith('.xls') || reply.attatchment.endsWith('.xlsx')">
+                                                            <div
+                                                                v-if="reply.attatchment.endsWith('.doc') || reply.attatchment.endsWith('.docx') || reply.attatchment.endsWith('.xls') || reply.attatchment.endsWith('.xlsx')">
                                                                 <img title="Click To Download" data-toggle="tooltip"
-                                                                    :src="'/img/file.png'" height="50" width="50">
+                                                                     :src="'/img/file.png'" height="50" width="50">
                                                             </div>
                                                         </a>
                                                     </span>
@@ -526,7 +570,9 @@
                                                             <li><i class="fa fa-clock-o"></i> {{ reply.created_at.substring(11,16)}}</li>
                                                             <li><i class="fa fa-calendar"></i> {{ reply.created_at.substring(0,10)}}</li>
                                                             <li><i class="fa fa-pencil"></i> <span class="user"> {{reply.user.name}}</span></li>
-                                                            <li @click="deleteDetailComment(reply.id)"><i class="fa fa-trash"></i> <span class="user" style="color: red"> Delete</span></li>
+                                                            <li @click="deleteDetailComment(reply.id)"><i
+                                                                class="fa fa-trash"></i> <span class="user"
+                                                                                               style="color: red"> Delete</span></li>
                                                         </ul>
                                                     </div>
                                                     <!-- <div class="comment_tools">
@@ -549,26 +595,30 @@
                             <!-- <img alt="user" class="commentPic" src="/images/avatar.png" title="Avater">
                             position: fixed; bottom: 0px; width: 54%; right: 15px; background: white; width: 100%; max-width: 634px;
                              -->
-                            <div  v-click-outside="HideTextArea" >
-                                <p :title="selectedData.userName" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
-                                data-placement="bottom" data-toggle="tooltip" style="overflow:hidden;"> {{ selectedData.userName.substring(0,2) }}</p>
+                            <div v-click-outside="HideTextArea">
+                                <p :title="selectedData.userName"
+                                   class="assignUser-photo-for-selected text-uppercase details-comments-pic"
+                                   data-placement="bottom" data-toggle="tooltip" style="overflow:hidden;"> {{ selectedData.userName.substring(0,2) }}</p>
                                 <textarea @focus="ShowTextArea(selectedData)"
-                                        :id="'comment'+selectedData.cardId"
-                                        class="form-control commentInput"
-                                        data-grow="auto"
-                                        @keyup="commentPress(selectedData)"
-                                        placeholder="Add comment">
+                                          :id="'comment'+selectedData.cardId"
+                                          class="form-control commentInput"
+                                          data-grow="auto"
+                                          @keyup="commentPress(selectedData)"
+                                          placeholder="Add comment">
                                 </textarea>
                                 <!--  -->
 
-                                <div class="SubmitButton" id="SubmitButton" style="margin-bottom: 10px; margin-top: 10px;">
-                                    <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="saveComment(selectedData.cardId)">Post</a>
+                                <div class="SubmitButton" id="SubmitButton"
+                                     style="margin-bottom: 10px; margin-top: 10px;">
+                                    <a class="btn btn-default btn-sm" style="background: #7BB348;"
+                                       @click="saveComment(selectedData.cardId)">Post</a>
                                     <!-- <a class="btn btn-default btn-sm" style="border: 1px solid #f1efe6"
                                     @click="HideTextArea">Cancel</a> -->
-                                    <input :id="'file'+selectedData.cardId" :ref="selectedData.cardId" style="display: none;" @change="updatePicture($event,selectedData)"
-                                        type="file">
+                                    <input :id="'file'+selectedData.cardId" :ref="selectedData.cardId"
+                                           style="display: none;" @change="updatePicture($event,selectedData)"
+                                           type="file">
                                     <a @click="addAttachment(selectedData)" class="btn btn-default btn-sm"
-                                    style="border: 1px solid #f1efe6">
+                                       style="border: 1px solid #f1efe6">
                                         <i class="fa fa-paperclip"></i>
                                     </a>
                                 </div>
@@ -624,7 +674,7 @@
                             </li> -->
                             <Br/>
                         </div>
-                        <div  v-if="selectedData.type !== 'task' && selectedData.childrens.length  > 0">
+                        <div v-if="selectedData.type !== 'task' && selectedData.childrens.length  > 0">
                             <label class="label"> <h5>Childrens:</h5></label>
                             <div v-for="(child,index) in selectedData.childrens">
                                 <li class="list-group-item">
@@ -643,7 +693,8 @@
                                                     <!-- <span class="checkmark"></span> -->
                                                     </label>
                                                 <!---->
-                                                <ul v-if="child1.child_task.length  > 0" class="list-group list-group-flush">
+                                                <ul v-if="child1.child_task.length  > 0"
+                                                    class="list-group list-group-flush">
                                                     <div v-for="child2 in child1.child_task">
                                                         <li class="list-group-item">
                                                             <label class="checkbox_cus_mini ">
@@ -786,7 +837,7 @@
             setTimeout(function () {
                 $('[data-toggle="tooltip"]').tooltip();
                 var hei = $("#cmntSection").height();
-                $("#cmntSection").animate({ scrollTop: hei }, 2000);
+                $("#cmntSection").animate({scrollTop: hei}, 2000);
                 // $('#comment'+selectedData.cardId);
                 //  .getElementById('comment'+_this.selectedData.cardId).addEventListener("paste", _this.handlePaste);
             }, 1000);
@@ -795,7 +846,7 @@
 
         },
         methods: {
-            handlePaste(){
+            handlePaste() {
                 console.log('paste');
             },
             grow: function (text, options) {
@@ -873,30 +924,30 @@
                     description: _this.selectedData.description
                 };
                 axios.post('/api/card-update/' + _this.selectedData.cardId, postData)
-                .then(response => response.data)
-                .then(response => {
-                    console.log(response)
-                    _this.HideDetails();
-                    // $('.submitdetails').hide();
-                    // _this.getTaskList()
-                    // $('#dropdown' + data._id).toggle();
-                    // _this.selectedData.tags = tag
-                })
-                .catch(error => {
-                    console.log('Api for move down task not Working !!!');
-                });
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response)
+                        _this.HideDetails();
+                        // $('.submitdetails').hide();
+                        // _this.getTaskList()
+                        // $('#dropdown' + data._id).toggle();
+                        // _this.selectedData.tags = tag
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!');
+                    });
             },
             HideTextArea() {
                 var _this = this;
-                $('#cmntSection').css({maxHeight:' calc(100vh - 370px)'});
+                $('#cmntSection').css({maxHeight: ' calc(100vh - 370px)'});
                 $('.SubmitButton').hide();
             },
             ShowTextArea(data) {
-                $('#cmntSection').css({maxHeight:' calc(100vh - 420px)'});
+                $('#cmntSection').css({maxHeight: ' calc(100vh - 420px)'});
                 this.$emit('textArea', data)
-                $('#comment'+data.cardId).css({height : '50px', maxHeight : '100px'});
-                 var hei = $("#cmntSection").height();
-                $("#cmntSection").animate({ scrollTop: hei }, 1000);
+                $('#comment' + data.cardId).css({height: '50px', maxHeight: '100px'});
+                var hei = $("#cmntSection").height();
+                $("#cmntSection").animate({scrollTop: hei}, 1000);
                 // var _this = this;
                 // $('.SubmitButton').show();
                 // var option = {
@@ -935,17 +986,17 @@
                 formData.append('files', 'sdsds');
 
                 axios.post('/api/comment-file-upload', formData, {headers: {'Content-Type': 'multipart/form-data'}})
-                .then(response => response.data)
-                .then(response => {
-                    _this.comment.push(response.Data);
-                    setTimeout(() => {
-                        $('[data-toggle="tooltip"]').tooltip();
-                    }, 100);
-                    // _this.getTaskList()
-                })
-                .catch(error => {
-                    console.log('Api for task date update not Working !!!')
-                });
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.comment.push(response.Data);
+                        setTimeout(() => {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        }, 100);
+                        // _this.getTaskList()
+                    })
+                    .catch(error => {
+                        console.log('Api for task date update not Working !!!')
+                    });
             },
             updateCardPicture(e, data) {
                 var _this = this;
@@ -956,80 +1007,80 @@
                 formData.append('files', 'sdsds');
 
                 axios.post('/api/card-file-upload', formData, {headers: {'Content-Type': 'multipart/form-data'}})
-                .then(response => response.data)
-                .then(response => {
-                    console.log(response.files);
-                    console.log(_this.selectedData.files);
-                    _this.selectedData.files.push(response.files);
-                    console.log(_this.selectedData.files);
-                    setTimeout(() => {
-                        $('[data-toggle="tooltip"]').tooltip();
-                        e.target.type = 'text';
-                        e.target.value = '';
-                        e.target.type = 'file';
-                    }, 100);
-                    // _this.getTaskList()
-                })
-                .catch(error => {
-                    console.log('Api for task date update not Working !!!')
-                });
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(response.files);
+                        console.log(_this.selectedData.files);
+                        _this.selectedData.files.push(response.files);
+                        console.log(_this.selectedData.files);
+                        setTimeout(() => {
+                            $('[data-toggle="tooltip"]').tooltip();
+                            e.target.type = 'text';
+                            e.target.value = '';
+                            e.target.type = 'file';
+                        }, 100);
+                        // _this.getTaskList()
+                    })
+                    .catch(error => {
+                        console.log('Api for task date update not Working !!!')
+                    });
             },
-            deleteFile(id){
+            deleteFile(id) {
                 let _this = this;
 
                 swal({
-                    title: 'Are you sure to delete this file?',
-                    text: "",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: 'red',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, Delete It!'
-                },
-                function(){
-                    var data = {
-                         'id' : id
-                    };
-                    axios.post('/api/delete-card-file', data)
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.getFiles(_this.selectedData.cardId);
-                        swal("Deleted!", "Successfully Deleted", "success");
+                        title: 'Are you sure to delete this file?',
+                        text: "",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: 'red',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, Delete It!'
+                    },
+                    function () {
+                        var data = {
+                            'id': id
+                        };
+                        axios.post('/api/delete-card-file', data)
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.getFiles(_this.selectedData.cardId);
+                                swal("Deleted!", "Successfully Deleted", "success");
 
-                    })
-                    .catch(error =>{
+                            })
+                            .catch(error => {
 
+                            });
                     });
-                });
 
             },
-            saveComment(id){
+            saveComment(id) {
                 let _this = this;
-                let comment = $('#comment'+id).val();
+                let comment = $('#comment' + id).val();
                 if (comment === '' || comment === null) {
-                    swal('Warning!!','Comment is empty','warning');
+                    swal('Warning!!', 'Comment is empty', 'warning');
                     return false;
                 }
                 var commentData = {
-                    'comment' : comment,
-                    'task_id' : id
+                    'comment': comment,
+                    'task_id': id
                 };
                 axios.post('/api/add-comment', commentData)
-                .then(response => response.data)
-                .then(response => {
-                    console.log(_this.comment);
-                    $('#comment'+id).val('');
-                    setTimeout(() => {
-                        _this.comment.push(response.Data);
-                        _this.HideTextArea();
-                        var hei = $("#cmntSection").height();
-                        $("#cmntSection").animate({ scrollTop: hei }, 1000);
-                        // console.log(_this.selectedData.comment);
-                    }, 500);
-                })
-                .catch(error =>{
+                    .then(response => response.data)
+                    .then(response => {
+                        console.log(_this.comment);
+                        $('#comment' + id).val('');
+                        setTimeout(() => {
+                            _this.comment.push(response.Data);
+                            _this.HideTextArea();
+                            var hei = $("#cmntSection").height();
+                            $("#cmntSection").animate({scrollTop: hei}, 1000);
+                            // console.log(_this.selectedData.comment);
+                        }, 500);
+                    })
+                    .catch(error => {
 
-                });
+                    });
 
             },
             showImage(data, image) {
@@ -1047,9 +1098,9 @@
                 }, 500)
 
             },
-            commentPress(data){
-                let cmHe = $('#comment'+data.cardId).height();
-                $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
+            commentPress(data) {
+                let cmHe = $('#comment' + data.cardId).height();
+                $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - ' + cmHe + 'px + 30px)'});
                 console.log(this.selectedData.comment);
             },
             // removeAssignedUser(user, index, key) {
@@ -1239,12 +1290,21 @@
                         console.log("1st error =>" + error)
                     });
             },
-            showOriginalList(task){
-                if (task.list_id !== null){
-                    $('#list'+ task.list_id).click();
+            showOriginalList(task) {
+                if (task.type !== 'task') {
+                    $('#list' + task.list_id).click();
                     setTimeout(function () {
-                        $('#click'+ task.cardId).click();
-                    },600)
+                        $('#click' + task.cardId).click();
+                    }, 1000)
+                    $('[data-toggle="tooltip"]').tooltip('dispose');
+                    setTimeout(function () {
+                        $('[data-toggle="tooltip"]').tooltip('enable');
+                    }, 500);
+                } else {
+                    $('.board' + task.multiple_board_id).click();
+                    setTimeout(function () {
+                        $('#card_' + task.cardId).click();
+                    }, 1000)
                     $('[data-toggle="tooltip"]').tooltip('dispose');
                     setTimeout(function () {
                         $('[data-toggle="tooltip"]').tooltip('enable');
@@ -1270,8 +1330,7 @@
                 myColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
                 return myColor;
             },
-            dateFormate(date)
-            {
+            dateFormate(date) {
                 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
                 ];
@@ -1282,119 +1341,115 @@
                 var ampm = hours >= 12 ? 'pm' : 'am';
                 hours = hours % 12;
                 hours = hours ? hours : 12; // the hour '0' should be '12'
-                minutes = minutes < 10 ? '0'+minutes : minutes;
+                minutes = minutes < 10 ? '0' + minutes : minutes;
                 var strTime = hours + ':' + minutes + ' ' + ampm;
 
-                var moment =  '&emsp;&emsp;'+formatedate.getDate()+' '+monthNames[formatedate.getMonth()]+' '+formatedate.getFullYear()+'<br>&emsp;&emsp;'+strTime;
+                var moment = '&emsp;&emsp;' + formatedate.getDate() + ' ' + monthNames[formatedate.getMonth()] + ' ' + formatedate.getFullYear() + '<br>&emsp;&emsp;' + strTime;
                 return moment;
             },
-            showChild(cardId){
+            showChild(cardId) {
                 let _this = this;
                 let data = {
-                    'task_id' : cardId
+                    'task_id': cardId
                 };
-                axios.post('/api/show-child-parent',data)
-                .then(response => response.data)
-                .then(response => {
-                    console.log(response.parents);
-                    _this.selectedData.childrens = response.childs.child_task;
-                    _this.selectedData.parents = response.parents;
-                })
-                .catch(error => {
-
-                })
-            },
-            getFiles(cardId){
-                let _this = this;
-                let data = {
-                    'task_id' : cardId
-                };
-                axios.post('/api/get-card-file',data)
-                .then(response => response.data)
-                .then(response => {
-                    _this.selectedData.files = response.files ;
-                    console.log(_this.selectedData);
-                })
-                .catch(error => {
-
-                })
-            },
-            getComments(cardId){
-                let _this = this;
-                let data = {
-                    'task_id' : cardId
-                };
-                axios.post('/api/get-card-comment',data)
-                .then(response => response.data)
-                .then(response => {
-                    _this.comment = response.comment.comment;
-                    _this.selectedData.comment = _this.comment;
-                    console.log(_this.selectedData);
-                })
-                .catch(error => {
-
-                })
-            },
-
-            deleteDetailComment(id)
-            {
-                let _this = this;
-                swal({
-                    title: 'Are you sure to delete this comment?',
-                    text: "",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: 'red',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, Delete It!'
-                },
-                function(){
-                    var data = {
-                         'id' : id
-                    };
-                    axios.post('/api/delete-card-comment', data)
+                axios.post('/api/show-child-parent', data)
                     .then(response => response.data)
                     .then(response => {
-                        _this.getComments(_this.selectedData.cardId);
-                        swal("Deleted!", "Successfully Deleted", "success");
-                        setTimeout(() => {
-                            swal.close();
-                        }, 1000);
+                        console.log(response.parents);
+                        _this.selectedData.childrens = response.childs.child_task;
+                        _this.selectedData.parents = response.parents;
                     })
-                    .catch(error =>{
+                    .catch(error => {
 
-                    });
-                });
+                    })
             },
-            replyToComment(id)
-            {
-                $('#replyBox'+id).show();
-                $('#replyTextBox'+id).focus();
-            },
-            hidereplaybox(id)
-            {
-                $('#replyBox'+id).hide();
-                $('#replyTextBox'+id).val('');
-            },
-            saveReply(id, task_id)
-            {
+            getFiles(cardId) {
                 let _this = this;
-                let reply = $('#replyTextBox'+id).val();
                 let data = {
-                    'parent_id' : id,
-                    'task_id'   : task_id,
-                    'comment'   : reply
+                    'task_id': cardId
+                };
+                axios.post('/api/get-card-file', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.selectedData.files = response.files;
+                        console.log(_this.selectedData);
+                    })
+                    .catch(error => {
+
+                    })
+            },
+            getComments(cardId) {
+                let _this = this;
+                let data = {
+                    'task_id': cardId
+                };
+                axios.post('/api/get-card-comment', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.comment = response.comment.comment;
+                        _this.selectedData.comment = _this.comment;
+                        console.log(_this.selectedData);
+                    })
+                    .catch(error => {
+
+                    })
+            },
+
+            deleteDetailComment(id) {
+                let _this = this;
+                swal({
+                        title: 'Are you sure to delete this comment?',
+                        text: "",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: 'red',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, Delete It!'
+                    },
+                    function () {
+                        var data = {
+                            'id': id
+                        };
+                        axios.post('/api/delete-card-comment', data)
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.getComments(_this.selectedData.cardId);
+                                swal("Deleted!", "Successfully Deleted", "success");
+                                setTimeout(() => {
+                                    swal.close();
+                                }, 1000);
+                            })
+                            .catch(error => {
+
+                            });
+                    });
+            },
+            replyToComment(id) {
+                $('#replyBox' + id).show();
+                $('#replyTextBox' + id).focus();
+            },
+            hidereplaybox(id) {
+                $('#replyBox' + id).hide();
+                $('#replyTextBox' + id).val('');
+            },
+            saveReply(id, task_id) {
+                let _this = this;
+                let reply = $('#replyTextBox' + id).val();
+                let data = {
+                    'parent_id': id,
+                    'task_id': task_id,
+                    'comment': reply
                 }
                 // console.log(data);
                 axios.post('/api/save-comment-reply', data)
-                .then(response => data)
-                .then(response => {
-                    _this.getComments(task_id);
-                    $('#replyBox'+id).hide();
-                })
-                .catch(error => {
+                    .then(response => data)
+                    .then(response => {
+                        _this.getComments(task_id);
+                        $('#replyBox' + id).hide();
+                    })
+                    .catch(error => {
 
-                })
+                    })
             }
         },
 

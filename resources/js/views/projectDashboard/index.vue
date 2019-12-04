@@ -1369,7 +1369,7 @@
                 $('.searchTaskList').val('@' + name);
                 var _this = this;
                 var nav_type = JSON.parse(localStorage.selected_nav);
-                axios.post('/api/task-list/suggest-user', {
+                axios.post('/api/task-list/search-result', {
                     'user_id': id,
                     p_id: _this.projectId,
                     list_id: nav_type.list_id,
@@ -1404,7 +1404,7 @@
                         })
 
                     if (value.length > 0) {
-                        axios.post('/api/task-list/suggest-user', {'user_name': value})
+                        axios.post('/api/task-list/search-result', {'user_name': value})
                             .then(response => response.data)
                             .then(response => {
                                 _this.searchData.users = response.search_user;
@@ -1424,7 +1424,7 @@
                 } else {
                     // if (value.length >= 2) {
                     var nav_type = JSON.parse(localStorage.selected_nav);
-                    axios.post('/api/task-list/suggest-user', {
+                    axios.post('/api/task-list/search-result', {
                         'text': value,
                         'project_id': _this.projectId,
                         list_id: nav_type.list_id,
@@ -1448,7 +1448,7 @@
                 var _this = this;
                 var value = $('.searchTaskList').val();
                 var nav_type = JSON.parse(localStorage.selected_nav);
-                axios.post('/api/task-list/suggest-user', {
+                axios.post('/api/task-list/search-result', {
                     'text': value,
                     'project_id': _this.projectId,
                     list_id: nav_type.list_id,
