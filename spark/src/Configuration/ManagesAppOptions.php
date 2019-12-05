@@ -71,7 +71,7 @@ trait ManagesAppOptions
      */
     public static function afterLoginRedirectTo($path)
     {
-        static::$afterLoginRedirectTo = $path;
+        static::$afterLoginRedirectTo = '/home';//$path;
     }
 
     /**

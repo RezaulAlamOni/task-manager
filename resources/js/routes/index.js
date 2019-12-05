@@ -10,6 +10,7 @@ import addProject from '../views/project/edit'
 
 let routes = [
 
+    // { path: '*', redirect: '/projects' },    
     {
         path: '/projects',
         component: Index

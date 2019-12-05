@@ -260,7 +260,7 @@ class MultipleBoardController extends Controller
         ];
         $child = Task::create($data);
         if ($child) {
-            $this->createLog($child->id, 'created', 'Create Card', 'Board Card Created');
+            $this->createLog($child->id, 'created', 'Create Card', 'Empty Card Created');
             return response()->json(['success' => true, 'data' => $child]);
         }
         return response()->json(['success' => false]);
@@ -323,7 +323,7 @@ class MultipleBoardController extends Controller
         }
 
         if ($update) {
-            $this->createLog($request->id, 'Update', 'Parent changed', 'Board Card Parent Changed');
+            $this->createLog($request->id, 'Update', 'Parent changed', $parent_task->title);
             return response()->json(['success' => true, 'data' => $update]);
         }
         return response()->json(['success' => false]);
@@ -351,11 +351,14 @@ class MultipleBoardController extends Controller
             }
             $data[$key] = $value;
         }
-
+        $datas = Task::find($id);
+        if ( isset($request->title) && $datas->title === $request->title) {
+            return response()->json(['success' => false]);
+        }
         $child = Task::where('id', $id)->update($data);
         if ($child) {
             $datas = Task::find($id);
-            $this->createLog($id, 'Update', 'Card Update', 'Board Card Updated');
+            $this->createLog($id, 'updated', 'Card Update', $datas->title);
             return response()->json(['success' => true, 'data' => $datas]);
         }
         return response()->json(['success' => false]);
