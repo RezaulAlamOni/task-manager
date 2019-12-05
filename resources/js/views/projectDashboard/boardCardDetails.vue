@@ -621,7 +621,7 @@
                                     <span v-for="(tab,iid) in (selectedData.parents.length+1)" :key="iid"> &emsp;</span>
                                     {{ selectedData.data }}
                                 </label>
-                            </li> 
+                            </li>
                             <Br/>
                         </div> -->
                         <div  v-if="selectedData.type !== 'task' && selectedData.childrens.length  > 0">
@@ -1042,7 +1042,7 @@
                 });
 
             },
-            showImage(data, image) 
+            showImage(data, image)
             {
                 this.modalImg = image;
                 $("#imageModal").modal();
@@ -1089,7 +1089,7 @@
             //             console.log('Api assign-user-remove is not Working !!!')
             //         });
             // },
-            removeAssignedUser(user_id, task_id) 
+            removeAssignedUser(user_id, task_id)
             {
 
                 // console.log(user.id, user.task_id);
@@ -1115,7 +1115,7 @@
                         console.log('Api assign-user-remove is not Working !!!')
                     });
             },
-            assignUserToTask(user, data) 
+            assignUserToTask(user, data)
             {
                 var _this = this;
                 var postData = {
@@ -1140,11 +1140,11 @@
                         console.log('Api is not Working !!!')
                     });
             },
-            switchEvent(e) 
+            switchEvent(e)
             {
                 $(e.target).closest('.eachItemRow').find('.switchToggle').collapse('toggle');
             },
-            deleteCardTag(obj, card) 
+            deleteCardTag(obj, card)
             {
                 var _this = this;
                 var postData = {
@@ -1168,7 +1168,7 @@
                 }
 
             },
-            changeTag(tags, card, columnIndex, cardIndex) 
+            changeTag(tags, card, columnIndex, cardIndex)
             {
                 // console.log(card);
                 var _this = this;
@@ -1210,7 +1210,7 @@
                         });
                 }
             },
-            addExistingTag(index, cardId, dntfrgt = '') 
+            addExistingTag(index, cardId, dntfrgt = '')
             {
                 let _this = this;
                 console.log(this.selectedData.existing_tags[index]);
@@ -1279,7 +1279,7 @@
                 }
 
             },
-            showTagManageModel() 
+            showTagManageModel()
             {
                 var _this = this;
                 axios.get('/api/task-list/all-tag-for-manage')
@@ -1293,7 +1293,7 @@
                     });
 
             },
-            generateColor() 
+            generateColor()
             {
                 var myColor = '#000000';
                 myColor = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
