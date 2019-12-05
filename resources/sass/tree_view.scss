@@ -726,14 +726,14 @@
 .searchList {
     float: right;
     position: absolute;
-    right: 445px;
+    right: 410px;
     top: 7px;
     @include transition(all 0.2s linear);
 }
 .searchList-board {
     float: right;
     position: absolute;
-    right: 498px;
+    right: 462px;
     top: 7px;
     display: block;
     @include transition(all 0.2s linear);
@@ -772,7 +772,7 @@
     margin: 0;
     width: 100%;
     z-index: 999;
-    height: calc(100vh - 116px);
+    max-height: calc(100vh - 116px);
     overflow: auto;
 }
 
