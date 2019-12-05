@@ -466,18 +466,18 @@
                                                            style="background: #F4F5F7;height: 18px; line-height: 14px;border: 1px solid #944d4d;color : black "
                                                            data-original-title="">
                                                         {{card.priority_label}}
-                                                     </span>
+                                                    </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
                                                           v-if="card.priority_label === 'low'"
                                                           class="badge badge-warning text-capitalize "
                                                           style="background: #172B4D;height: 18px; line-height: 14px;border: 1px solid #944d4d; "
                                                           data-original-title="">
                                                         {{card.priority_label}}
-                                                     </span>
+                                                    </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
                                                           v-if="card.priority_label === 'medium'"
                                                           class="badge badge-warning text-capitalize "
-                                                          style="background: #FF9F1A;height: 18px; line-height: 14px;border: 1px solid #944d4d;"
+                                                          style="background: #ff8170;height: 18px; line-height: 14px;border: 1px solid #944d4d;"
                                                           data-original-title="">
                                                         {{card.priority_label}}
                                                      </span>
@@ -512,7 +512,7 @@
                                                                     <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #FF9F1A;">.</span>
+                                                                        style="background: #ff8170;">.</span>
                                                                         <h5 class="text-capitalize">medium</h5>
                                                                     </div>
                                                                 </div>

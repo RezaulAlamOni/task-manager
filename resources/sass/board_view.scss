@@ -478,6 +478,14 @@
         right: 30px;
         width: 64px;
         text-align: center;
+        .dropdown-menu {
+            &:before {
+                display: none;
+            }
+            &:after {
+                display: none;
+            }
+        }
     }
 
 

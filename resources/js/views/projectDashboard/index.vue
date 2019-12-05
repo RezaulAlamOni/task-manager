@@ -183,21 +183,21 @@
                                                  <span title="" data-placement="bottom" data-toggle="tooltip"
                                                        v-if="data.priority_label === 'high'"
                                                        class="badge badge-warning text-capitalize "
-                                                       style="background: #F4F5F7; margin-left: 1px; float: left;margin-right: 5px;color:black"
+                                                       style="background: #F4F5F7;border: 1px solid #944d4d; margin-left: 1px; float: left;margin-right: 5px;color:black"
                                                        data-original-title="">
                                                     {{data.priority_label}}
                                                  </span>
                                                 <span title="" data-placement="bottom" data-toggle="tooltip"
                                                       v-if="data.priority_label === 'low'"
                                                       class="badge badge-warning text-capitalize "
-                                                      style="background: #172B4D; margin-left: 1px; float: left;margin-right: 5px;"
+                                                      style="border: 1px solid #944d4d;background: #172B4D; margin-left: 1px; float: left;margin-right: 5px;"
                                                       data-original-title="">
                                                     {{data.priority_label}}
                                                  </span>
                                                 <span title="" data-placement="bottom" data-toggle="tooltip"
                                                       v-if="data.priority_label === 'medium'"
                                                       class="badge badge-warning text-capitalize "
-                                                      style="background: #FF9F1A; margin-left: 1px; float: left;margin-right: 5px;"
+                                                      style="border: 1px solid #944d4d;background: #ff8170; margin-left: 1px; float: left;margin-right: 5px;"
                                                       data-original-title="">
                                                     {{data.priority_label}}
                                                  </span>
@@ -225,7 +225,7 @@
                                                                 <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #F4F5F7;">.</span>
+                                                                        style="background: #F4F5F7;border: 1px solid #944d4d;">.</span>
                                                                     <h5 class="text-capitalize"> high</h5>
                                                                 </div>
                                                             </div>
@@ -234,7 +234,7 @@
                                                                 <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #FF9F1A;">.</span>
+                                                                        style="background: #ff8170;border: 1px solid #944d4d;">.</span>
                                                                     <h5 class="text-capitalize">medium</h5>
                                                                 </div>
                                                             </div>
@@ -243,7 +243,7 @@
                                                                 <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #172B4D;">.</span>
+                                                                        style="background: #172B4D;border: 1px solid #944d4d;">.</span>
                                                                     <h5>Low</h5>
                                                                 </div>
                                                             </div>
