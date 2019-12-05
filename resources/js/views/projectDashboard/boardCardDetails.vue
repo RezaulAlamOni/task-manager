@@ -279,7 +279,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a aria-controls="log" aria-selected="false" class="nav-link" data-toggle="tab" href="#log"
+                        <a @click="showLog" aria-controls="log" aria-selected="false" class="nav-link" data-toggle="tab" href="#log"
                            id="_log" role="tab">Logs</a>
                     </li>
                     <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.type !== 'task' && (selectedData.childrens.length  > 0 || selectedData.parents.length  > 0)">
@@ -432,17 +432,21 @@
                                                             <img title="Click To Download" data-toggle="tooltip"
                                                                 :src="'/storage/'+selectedData.cardId+'/comment/'+comments.attatchment" height="80" width="80">
                                                         </div>
-                                                        <div v-if="comments.attatchment.toLowerCase().endsWith('.txt') ">
+                                                        <div v-else-if="comments.attatchment.toLowerCase().endsWith('.txt') ">
                                                             <img title="Click To Download" data-toggle="tooltip"
                                                                 :src="'/img/txt.png'" height="50" width="50">
                                                         </div>
-                                                        <div v-if="comments.attatchment.toLowerCase().endsWith('.pdf') ">
+                                                        <div v-else-if="comments.attatchment.toLowerCase().endsWith('.pdf') ">
                                                             <img title="Click To Download" data-toggle="tooltip"
                                                                 :src="'/img/pdf.png'" height="50" width="50">
                                                         </div>
-                                                        <div v-if="comments.attatchment.toLowerCase().endsWith('.doc') || comments.attatchment.toLowerCase().endsWith('.docx') || comments.attatchment.toLowerCase().endsWith('.xls') || comments.attatchment.toLowerCase().endsWith('.xlsx')">
+                                                        <div v-else-if="comments.attatchment.toLowerCase().endsWith('.doc') || comments.attatchment.toLowerCase().endsWith('.docx') || comments.attatchment.toLowerCase().endsWith('.xls') || comments.attatchment.toLowerCase().endsWith('.xlsx')">
                                                             <img title="Click To Download" data-toggle="tooltip"
                                                                 :src="'/img/file.png'" height="50" width="50">
+                                                        </div>
+                                                        <div style="float: left;" v-else>
+                                                            <img title="Click To Download" data-toggle="tooltip"
+                                                                :src="'/img/attachment.png'" height="50" width="50">
                                                         </div>
                                                     </a>
                                                 </span>
@@ -596,7 +600,7 @@
                                         <td>{{log.title}}</td>
                                         <td>{{log.log_type}}</td>
                                         <td>{{log.action_type}}</td>
-                                        <td>{{log.action_at}}</td>
+                                        <td class="text-center">{{ log.action_at | relative }} </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -697,7 +701,7 @@
     export default {
         components: {switches, Datepicker, VueTagsInput, ckeditor: CKEditor.component},
         name: "TaskDetails",
-        props: ['selectedData', 'task_logs'],
+        props: ['selectedData'],
         data() {
             return {
                 comment: null,
@@ -783,7 +787,7 @@
                     project_id: null,
                 },
                 // selectedData : {},
-                // task_logs : null,
+                task_logs : [],
                 check_uncheck_child: null,
                 manageTag: null,
             }
@@ -1005,7 +1009,9 @@
                     .then(response => {
                         _this.getFiles(_this.selectedData.cardId);
                         swal("Deleted!", "Successfully Deleted", "success");
-
+                        setTimeout(() => {
+                            swal.close();
+                        }, 1000);
                     })
                     .catch(error =>{
 
@@ -1018,6 +1024,9 @@
                 let comment = $('#comment'+id).val();
                 if (comment === '' || comment === null) {
                     swal('Warning!!','Comment is empty','warning');
+                    setTimeout(() => {
+                        swal.close();
+                    }, 1000);
                     return false;
                 }
                 var commentData = {
@@ -1340,6 +1349,7 @@
                 let data = {
                     'task_id' : cardId
                 };
+                _this.selectedData.files = [];
                 axios.post('/api/get-card-file',data)
                 .then(response => response.data)
                 .then(response => {
@@ -1356,6 +1366,7 @@
                 let data = {
                     'task_id' : cardId
                 };
+                _this.comment = [];
                 axios.post('/api/get-card-comment',data)
                 .then(response => response.data)
                 .then(response => {
@@ -1426,7 +1437,19 @@
                 .catch(error => {
 
                 })
-            }
+            },
+            showLog() {
+                var _this = this;
+                _this.task_logs = [];
+                axios.get('/api/task-list/get-log/' + _this.selectedData.cardId)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.task_logs = response;
+                    })
+                    .catch(error => {
+                        console.log('Api for move down task not Working !!!')
+                    });
+            },
         },
 
         directives: {

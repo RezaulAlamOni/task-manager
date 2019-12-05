@@ -1258,7 +1258,6 @@
         <div class="detailsShowFull" id="details">
             <TaskDetails v-if="Object.keys(selectedData).length > 0"
                          :selectedData="selectedData"
-                         :task_logs="task_logs"
                          @textArea="ShowTextArea">
             </TaskDetails>
         </div>
@@ -1817,7 +1816,10 @@
                                 task: []
                             });
                             _this.getBoardTask();
-                            swal("Successful", "Board successfuly created", "success")
+                            swal("Successful", "Board successfuly created", "success");
+                            setTimeout(() => {
+                                swal.close();
+                            }, 1000);
                         }
                     })
                     .catch(error => {
@@ -1963,6 +1965,9 @@
                             this.linkBtn = true;
                         } else {
                             swal('Warning!!', 'That list is already linked. Need to unlink first', 'warning');
+                            setTimeout(() => {
+                                swal.close();
+                            }, 1000);
                         }
                         // _this.getBoardTask();
                         // console.log('added');
@@ -2017,6 +2022,9 @@
                             .then(response => {
                                 _this.getBoardTask();
                                 swal("Unlinked!", "Successfully Unlinked", "success");
+                                setTimeout(() => {
+                                    swal.close();
+                                }, 1000);
                             })
                             .catch(error => {
                                 console.log('not added');
@@ -2160,6 +2168,9 @@
                             .then(response => {
                                 _this.getBoardTask()
                                 swal("Deleted!", "Successfully delete task !", "success");
+                                setTimeout(() => {
+                                    swal.close();
+                                }, 1000);
                             })
                             .catch(error => {
                                 console.log('Api for delete task not Working !!!')
@@ -2206,6 +2217,9 @@
                 let total = this.selectedExistedTask.length;
                 if (total <= 0) {
                     swal('Warning!', 'No Task To Add', 'warning');
+                    setTimeout(() => {
+                        swal.close();
+                    }, 1000);
                     return false;
                 }
                 let data = {
@@ -2413,6 +2427,9 @@
                                     _this.cards.splice(index, 1);
                                     _this.getData();
                                     swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                    setTimeout(() => {
+                                        swal.close();
+                                    }, 1000);
                                 }
                             })
                             .catch(error => {
@@ -2519,6 +2536,9 @@
                 if (data.data === "") {
                     _this.getBoardTask();
                     swal('Blank!', 'Title is required!', 'warning');
+                    setTimeout(() => {
+                        swal.close();
+                    }, 1000);
                 } else {
                     let title = {
                         'title': data.data
@@ -2630,20 +2650,26 @@
             },
             showLog() {
                 var _this = this;
-                axios.get('/api/task-list/get-log/' + _this.selectedData.cardId)
-                    .then(response => response.data)
-                    .then(response => {
-                        // console.log(response);
-                        _this.task_logs = response;
-                        _this.ShowDetails();
-                        setTimeout(function () {
-                            $('#_details').click();
-                            // $('#_log').click()
-                        }, 300)
-                    })
-                    .catch(error => {
-                        console.log('Api for move down task not Working !!!')
-                    });
+                // _this.task_logs = [];
+                _this.ShowDetails();
+                setTimeout(function () {
+                    $('#_details').click();
+                    // $('#_log').click()
+                }, 300)
+                // axios.get('/api/task-list/get-log/' + _this.selectedData.cardId)
+                //     .then(response => response.data)
+                //     .then(response => {
+                //         // console.log(response);
+                //         _this.task_logs = response;
+                //         _this.ShowDetails();
+                //         setTimeout(function () {
+                //             $('#_details').click();
+                //             // $('#_log').click()
+                //         }, 300)
+                //     })
+                //     .catch(error => {
+                //         console.log('Api for move down task not Working !!!')
+                //     });
             },
             selectCard(card, child) {
                 this.selectedData = card;
@@ -2920,7 +2946,9 @@
                                 // _this.showTagManageModel();
                                 _this.getBoardTask();
                                 swal("Deleted!", "The tag has been deleted.", "success");
-
+                                setTimeout(() => {
+                                    swal.close();
+                                }, 1000);
                                 // _this.getData();
                                 // _this.tag = null
                             })
@@ -3032,8 +3060,10 @@
                                 _this.getBoardTask();
                                 $('.jquery-accordion-menu').hide();
                                 _this.delete_popup = 0;
-                                // swal("Deleted!", "Successfully delete selected task !", "success");
-                                swal.close();
+                                swal("Deleted!", "Successfully delete selected task !", "success");
+                                setTimeout(() => {
+                                    swal.close();
+                                }, 1000);
                             })
                             .catch(error => {
                                 console.log('Api for delete task not Working !!!')
