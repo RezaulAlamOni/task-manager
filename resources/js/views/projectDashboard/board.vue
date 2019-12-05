@@ -254,10 +254,10 @@
 
                                             <a class="user-assign-card ">
                                                 <template v-if="card.assigned_user.length > 0">
-                                                    <span class="assigned_user-card dropdown-toggle-split "
+                                                    <span class="assigned_user-card "
                                                           data-toggle="dropdown"
                                                           v-for="(assign,keyId) in card.assigned_user">
-                                                        <p :title="assign.name"
+                                                        <p :title="assign.name" style="margin-right: 1px;"
                                                            class="assignUser-photo-for-card text-uppercase"
                                                            data-placement="bottom" data-toggle="tooltip"
                                                            v-if="keyId <= 1">{{(assign.name !== null) ? assign.name.substring(0,2) : ''}}
@@ -463,21 +463,21 @@
                                                      <span title="" data-placement="bottom" data-toggle="tooltip"
                                                            v-if="card.priority_label === 'high'"
                                                            class="badge badge-warning text-capitalize "
-                                                           style="background: #F4F5F7;height: 18px; line-height: 14px;border: 1px solid #944d4d;color : black "
+                                                           style="background: #F4F5F7;height: 18px; line-height: 12px;border: 1px solid #944d4d;color : black "
                                                            data-original-title="">
                                                         {{card.priority_label}}
-                                                     </span>
+                                                    </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
                                                           v-if="card.priority_label === 'low'"
                                                           class="badge badge-warning text-capitalize "
-                                                          style="background: #172B4D;height: 18px; line-height: 14px;border: 1px solid #944d4d; "
+                                                          style="background: #172B4D;height: 18px; line-height: 12px;border: 1px solid #944d4d; "
                                                           data-original-title="">
                                                         {{card.priority_label}}
-                                                     </span>
+                                                    </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
                                                           v-if="card.priority_label === 'medium'"
                                                           class="badge badge-warning text-capitalize "
-                                                          style="background: #FF9F1A;height: 18px; line-height: 14px;border: 1px solid #944d4d;"
+                                                          style="background: #ff8170;height: 18px; line-height: 12px;border: 1px solid #944d4d;"
                                                           data-original-title="">
                                                         {{card.priority_label}}
                                                      </span>
@@ -512,7 +512,7 @@
                                                                     <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #FF9F1A;">.</span>
+                                                                        style="background: #ff8170;">.</span>
                                                                         <h5 class="text-capitalize">medium</h5>
                                                                     </div>
                                                                 </div>
@@ -3077,6 +3077,7 @@
         watch: {
             projectId: function (val) {
                 this.projectId = val;
+                $('#loder-hide').fadeIn();
                 this.getBoardTask()
             },
             board_id: function (val) {
@@ -3086,6 +3087,7 @@
             },
             nav_id: function (val) {
                 this.nav_id = val;
+                $('#loder-hide').fadeIn();
                 this.getBoardTask()
             },
         }

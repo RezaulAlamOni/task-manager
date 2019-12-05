@@ -332,8 +332,9 @@
                                     <th scope="col" style="width: 26%;">Title</th>
                                     <th scope="col" style="width: 17%;">Log Type</th>
                                     <th scope="col" style="width: 17%;">Action Type</th>
-                                    <th scope="col" style="width: 17%;">Action At</th>
-                                    <th scope="col" style="width: 19%;">Action By</th>
+                                    <th scope="col" style="width: 17%;">Action By</th>
+                                    <th scope="col" style="width: 11%;text-align: center">Action At</th>
+                                    <th scope="col" style="width: 8%;text-align: center">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -343,8 +344,11 @@
                                         <td>{{log.title}}</td>
                                         <td>{{log.log_type}}</td>
                                         <td>{{log.action_type}}</td>
-                                        <td>{{log.action_at}}</td>
                                         <td>{{log.user.name}}</td>
+                                        <td class="text-center">{{log.action_at | relative}}</td>
+                                        <td class="text-center" style="cursor : pointer">
+                                            <img src="/img/task-icon/trash.png" alt="" height="20px" width="20px" class="mr-2">
+                                        </td>
                                     </tr>
                                 </template>
 

@@ -183,21 +183,21 @@
                                                  <span title="" data-placement="bottom" data-toggle="tooltip"
                                                        v-if="data.priority_label === 'high'"
                                                        class="badge badge-warning text-capitalize "
-                                                       style="background: #F4F5F7; margin-left: 1px; float: left;margin-right: 5px;color:black"
+                                                       style="background: #F4F5F7;border: 1px solid #944d4d; margin-left: 1px; float: left;margin-right: 5px;color:black"
                                                        data-original-title="">
                                                     {{data.priority_label}}
                                                  </span>
                                                 <span title="" data-placement="bottom" data-toggle="tooltip"
                                                       v-if="data.priority_label === 'low'"
                                                       class="badge badge-warning text-capitalize "
-                                                      style="background: #172B4D; margin-left: 1px; float: left;margin-right: 5px;"
+                                                      style="border: 1px solid #944d4d;background: #172B4D; margin-left: 1px; float: left;margin-right: 5px;"
                                                       data-original-title="">
                                                     {{data.priority_label}}
                                                  </span>
                                                 <span title="" data-placement="bottom" data-toggle="tooltip"
                                                       v-if="data.priority_label === 'medium'"
                                                       class="badge badge-warning text-capitalize "
-                                                      style="background: #FF9F1A; margin-left: 1px; float: left;margin-right: 5px;"
+                                                      style="border: 1px solid #944d4d;background: #ff8170; margin-left: 1px; float: left;margin-right: 5px;"
                                                       data-original-title="">
                                                     {{data.priority_label}}
                                                  </span>
@@ -225,7 +225,7 @@
                                                                 <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #F4F5F7;">.</span>
+                                                                        style="background: #F4F5F7;border: 1px solid #944d4d;">.</span>
                                                                     <h5 class="text-capitalize"> high</h5>
                                                                 </div>
                                                             </div>
@@ -234,7 +234,7 @@
                                                                 <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #FF9F1A;">.</span>
+                                                                        style="background: #ff8170;border: 1px solid #944d4d;">.</span>
                                                                     <h5 class="text-capitalize">medium</h5>
                                                                 </div>
                                                             </div>
@@ -243,7 +243,7 @@
                                                                 <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #172B4D;">.</span>
+                                                                        style="background: #172B4D;border: 1px solid #944d4d;">.</span>
                                                                     <h5>Low</h5>
                                                                 </div>
                                                             </div>
@@ -2489,12 +2489,10 @@
 
                         $('[data-toggle="tooltip"]').tooltip('dispose');
                         setTimeout(function () {
-                            // $('#loder-hide').addClass('loder-hide')
                             $('[data-toggle="tooltip"]').tooltip('enable');
                         }, 500);
                         setTimeout(function () {
                             $('#loder-hide').fadeOut()
-                            // $('#loder-hide').addClass('loder-hide')
                         }, 100);
                         if (this.treeList.length === 1 && this.treeList[0].text === '') {
                             let id = this.treeList[0].id;
@@ -2516,7 +2514,7 @@
                 setTimeout(function () {
                     $('#details').removeClass('details');
                 }, 300);
-                $('#loder-hide').fadeIn();
+                // $('#loder-hide').fadeIn();
                 this.list_id = data.list_id;
                 this.nav_id = data.nav_id;
                 this.list.name = data.title;
@@ -2530,6 +2528,7 @@
                         project_id: this.projectId,
                         type: 'list'
                     });
+                    $('#loder-hide').fadeIn();
                     this.getTaskList()
                 } else if (data.type === 'board') {
                     localStorage.selected_nav = JSON.stringify({

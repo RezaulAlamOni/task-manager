@@ -204,23 +204,19 @@ class TaskController extends Controller
     public function addTask (Request $request)
     {
         $list_id = $request->list_id;
-        $etask = Task::where(['id' => $request->id])->get();
+        $etask = Task::where(['id' => $request->id])->first();
         if ($request->text == '') {
-//            Task::where(['id' => $request->id, 'project_id' => $request->project_id])->delete();
             $this->deleteTaskWithChild($request->id);
-            $this->createLog($request->id, 'deleted', 'Delete task', '');
-//            Task::where([
-//                'title' => '',
-//                'parent_id' => $request->parent_id,
-//                'project_id' => $request->project_id
-//            ])->delete();
+            $this->createLog($request->id, 'deleted', 'Delete task', $etask->title);
             return response()->json(['success' => ['id' => $request->id]]);
         } else {
-            if ($etask->count() > 0 && $request->text != '') {
+            if ($etask && $request->text != '') {
+                if ($etask->title !== $request->text){
+                    Task::where('id', $request->id)
+                        ->update(['title' => $request->text]);
+                    $this->createLog($request->id, 'updated', 'Update task', $request->text);
+                }
 
-                Task::where('id', $request->id)
-                    ->update(['title' => $request->text]);
-                $this->createLog($request->id, 'updated', 'Update task', $request->text);
                 Task::where([
                     'title' => '',
                     'parent_id' => $request->parent_id,
@@ -252,8 +248,8 @@ class TaskController extends Controller
                     $data['multiple_board_id'] = $progress->multiple_board_id;
                 }
                 $task = Task::create($data);
+                $this->createLog($task->id, 'created', 'Create task', $task->title == '' ? 'Epmty Task' : $task->title );
                 $this->updateTagWithDataMove($task->id, $request->parent_id);
-                $this->createLog($task->id, 'created', 'Create task', $request->text);
                 return response()->json(['success' => $task]);
             }
         }
@@ -264,7 +260,7 @@ class TaskController extends Controller
         $task_id = Task::where('title', '')->where('parent_id', $request->id)->first();
         if ($task_id) {
             Task::where('title', '')->where('parent_id', $request->id)->delete();
-            $this->createLog($task_id->id, 'deleted', 'Delete empty task', '');
+            $this->createLog($task_id->id, 'deleted', 'Delete empty task', $task_id->title);
         }
         $sort_id = Task::where('parent_id', $request->id)->orderBy('id', 'desc')->first();
         $data = [
@@ -279,8 +275,8 @@ class TaskController extends Controller
             'created_at' => Carbon::now(),
         ];
         $task = Task::create($data);
+        $this->createLog($task->id, 'created', 'create task', 'Empty Task');
         $this->updateTagWithDataMove($task->id, $request->id);
-        $this->createLog($task->id, 'created', 'create task', 'new');
 
         return response()->json(['success' => $task]);
     }
@@ -298,8 +294,8 @@ class TaskController extends Controller
                 $sort_id = ($taskSortId > 0) ? $taskSortId + 1 : 1;
                 $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => $sort_id, 'title' => $request->text]);
 
-                $this->updateTagWithDataMove($request->id, $task->id);
                 $this->createLog($request->id, 'updated', 'Update parent', $request->text);
+                $this->updateTagWithDataMove($request->id, $task->id);
             }
             return response()->json(['success' => $request->id]);
         }
@@ -328,9 +324,10 @@ class TaskController extends Controller
                 }
 
             } else {
-                $self = AssignTag::where(['task_id' => $task_id, 'tag_id' => $tag_ids->id])->get();
-                if ($self->count() <= 0) {
+                $self = AssignTag::where(['task_id' => $task_id, 'tag_id' => $tag_ids->id])->with('task')->first();
+                if ($self) {
                     AssignTag::create(['task_id' => $task_id, 'tag_id' => $tag_ids->id]);
+                    $this->createLog($task_id, 'updated', 'Add dont\'t forget tag', $self->task->title);
                 }
             }
             $children = Task::where('parent_id', $task_id)->get();
@@ -460,8 +457,8 @@ class TaskController extends Controller
             'created_at' => Carbon::now(),
         ];
         $task = Task::create($data);
-        $this->updateTagWithDataMove($task->id, $target->parent_id);
         $this->createLog($task->id, 'copy', 'Copy', $task->title);
+        $this->updateTagWithDataMove($task->id, $target->parent_id);
         return $task->id;
     }
 
@@ -662,7 +659,17 @@ class TaskController extends Controller
                 $empty = false;
             }
             ($request->text == null) ? $title = '' : $title = $request->text;
+
+            if ($check_is_empty->title == $request->text){
+                return response()->json(['success' => 20, 'empty' => 'not change']);
+            }
+
             if (Task::where('id', $request->id)->update(['title' => $title])) {
+                if ($empty){
+                    $this->createLog($request->id, 'updated', 'Update From empty task', $title);
+                }else{
+                    $this->createLog($request->id, 'updated', 'Update task', $title);
+                }
                 return response()->json(['success' => 1, 'empty' => $empty]);
             } else {
                 return response()->json(['success' => 0, 'empty' => $empty]);
