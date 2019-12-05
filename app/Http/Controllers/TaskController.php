@@ -324,10 +324,10 @@ class TaskController extends Controller
                 }
 
             } else {
-                $self = AssignTag::where(['task_id' => $task_id, 'tag_id' => $tag_ids->id])->eith()->first();
+                $self = AssignTag::where(['task_id' => $task_id, 'tag_id' => $tag_ids->id])->with('task')->first();
                 if ($self) {
                     AssignTag::create(['task_id' => $task_id, 'tag_id' => $tag_ids->id]);
-                    $this->createLog($task_id, 'updated', 'Add dont\'t forget tag', '');
+                    $this->createLog($task_id, 'updated', 'Add dont\'t forget tag', $self->task->title);
                 }
             }
             $children = Task::where('parent_id', $task_id)->get();

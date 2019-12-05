@@ -2516,7 +2516,7 @@
                 setTimeout(function () {
                     $('#details').removeClass('details');
                 }, 300);
-                $('#loder-hide').fadeIn();
+                // $('#loder-hide').fadeIn();
                 this.list_id = data.list_id;
                 this.nav_id = data.nav_id;
                 this.list.name = data.title;
@@ -2530,6 +2530,7 @@
                         project_id: this.projectId,
                         type: 'list'
                     });
+                    $('#loder-hide').fadeIn();
                     this.getTaskList()
                 } else if (data.type === 'board') {
                     localStorage.selected_nav = JSON.stringify({
