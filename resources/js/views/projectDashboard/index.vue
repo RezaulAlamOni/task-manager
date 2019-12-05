@@ -2489,12 +2489,10 @@
 
                         $('[data-toggle="tooltip"]').tooltip('dispose');
                         setTimeout(function () {
-                            // $('#loder-hide').addClass('loder-hide')
                             $('[data-toggle="tooltip"]').tooltip('enable');
                         }, 500);
                         setTimeout(function () {
                             $('#loder-hide').fadeOut()
-                            // $('#loder-hide').addClass('loder-hide')
                         }, 100);
                         if (this.treeList.length === 1 && this.treeList[0].text === '') {
                             let id = this.treeList[0].id;
