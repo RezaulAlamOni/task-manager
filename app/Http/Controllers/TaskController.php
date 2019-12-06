@@ -103,6 +103,7 @@ class TaskController extends Controller
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
+                ->where('is_delated', '!=', 1)
                 ->orderBy('sort_id', 'ASC')
                 ->get();
             if (!empty($childrens)) {
@@ -125,6 +126,7 @@ class TaskController extends Controller
         }
         $tasks = Task::where('parent_id', 0)
             ->where('project_id', $request->id)
+            ->where('is_delated', '!=', 1)
             ->where('list_id', $list_id)->with('column')
             ->orderBy('sort_id', 'ASC')
             ->get();
@@ -462,7 +464,7 @@ class TaskController extends Controller
         return $task->id;
     }
 
-    public function deleteTask (Request $request)
+    public function parmanentDeleteTask (Request $request)
     {
         if (isset($request->ids)) {
             $ids = $request->ids;
@@ -477,6 +479,33 @@ class TaskController extends Controller
 
     }
 
+    public function deleteTask (Request $request)
+    {
+        if (isset($request->ids)) {
+            $ids = $request->ids;
+            foreach ($ids as $id) {
+                // $this->deleteTaskWithChild($id);
+                $delete = Task::where('id',$id)->update([
+                    'is_delated' => 1,
+                    'deleted_at' => carbon::now()
+                ]);
+                $task = Task::find($id);
+                $this->createLog($id,'softdelete','Task Softdeleted',$task->title);
+            }
+        } else {
+            $delete = Task::where('id', $request->id)->update([
+                'is_delated' => 1,
+                'deleted_at' => carbon::now()
+            ]);
+            $task = Task::find($request->id);
+            $this->createLog($request->id,'softdelete','Task Softdeleted',$task->title);
+            // $this->deleteTaskWithChild($request->id);
+        }
+        return response()->json(['success' => 1]);
+
+    }
+
+    
     public function ActionSelectedTask (Request $request)
     {
         if (isset($request->type) && $request->type == 'user') {

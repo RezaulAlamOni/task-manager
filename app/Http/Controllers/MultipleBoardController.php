@@ -40,6 +40,7 @@ class MultipleBoardController extends Controller
         $boards = [];
         $board = Task::where('board_parent_id', 0)
                 ->with(['moveToCol','task' => function($q){
+                    $q->where('is_delated', '!=', 1);
                     $q->where('hidden', '!=', 1);
                     $q->orWhereNull('hidden');
                 },'linkToList'])
@@ -387,8 +388,8 @@ class MultipleBoardController extends Controller
         return response()->json(['success' => false]);
     }
 
-    public function destroy($id)
-    {
+    public function destroyColumn($id)
+    {   // column delete parmanently 
         $child  = Task::where('board_parent_id', $id)->get();
         foreach ($child as $key => $value) {
             $this->cardDelete($value->id);
@@ -398,6 +399,27 @@ class MultipleBoardController extends Controller
             ->delete();
         if ($delete) {
             $this->createLog($id, 'Delete', 'Column Deleted', 'Board Column Deleted With All Card');
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    public function destroy($id)
+    {
+        $child  = Task::where('board_parent_id', $id)->get();
+        foreach ($child as $key => $value) {
+            $this->cardDelete($value->id);
+        }
+        $delete = Task::where('id', $id)
+            ->orWhere('board_parent_id', $id)
+            ->update([
+                'is_delated' => 1,
+                'deleted_at' => carbon::now()
+            ]);
+        if ($delete) {
+            $card = Task::find($id);
+            $this->createLog($id, 'Soft Deleted', 'Column Soft Deleted', $card->title);
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -419,7 +441,7 @@ class MultipleBoardController extends Controller
         }
     }
 
-    public function cardDelete($id)
+    public function parmanentCardDelete($id)
     {
         $cards = Task::where('id', $id)->first();
         if ($cards->list_id === null) {
@@ -428,6 +450,34 @@ class MultipleBoardController extends Controller
             $delete = Task::where('id', $id)->delete();
             if ($delete) {
                 $this->createLog($id, 'Delete', 'Card Deleted', 'Board Single Card Deleted');
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false]);
+            }
+        } else {
+            $delete = $this->existingTaskDelete($id);
+            if ($delete) {
+                return response()->json(['success' => true]);
+            } else {
+                return response()->json(['success' => false]);
+            }
+        }
+        return response()->json(['success' => false]);
+    }
+
+    public function cardDelete($id)
+    {
+        $cards = Task::where('id', $id)->first();
+        if ($cards->list_id === null) {
+            // $assiagnUser = AssignedUser::where('task_id', $id)->delete();
+            // $assiagnTag = AssignTag::where('task_id', $id)->delete();
+            $delete = Task::where('id', $id)->update([
+                'is_delated' => 1,
+                'deleted_at' => carbon::now()
+            ]);
+            if ($delete) {
+                $card = Task::where('id', $id)->first();
+                $this->createLog($id, 'Soft Deleted', 'Card Soft Deleted', $card->title);
                 return response()->json(['success' => true]);
             } else {
                 return response()->json(['success' => false]);
@@ -596,6 +646,7 @@ class MultipleBoardController extends Controller
         }
         return $data;
     }
+
     public function cardSort(Request $request)
     {
         // return $request->children;
