@@ -40,7 +40,7 @@ class MultipleBoardController extends Controller
         $boards = [];
         $board = Task::where('board_parent_id', 0)
                 ->with(['moveToCol','task' => function($q){
-                    $q->where('is_delated', '!=', 1);
+                    $q->where('is_deleted', '!=', 1);
                     $q->where('hidden', '!=', 1);
                     $q->orWhereNull('hidden');
                 },'linkToList'])
@@ -414,7 +414,7 @@ class MultipleBoardController extends Controller
         $delete = Task::where('id', $id)
             ->orWhere('board_parent_id', $id)
             ->update([
-                'is_delated' => 1,
+                'is_deleted' => 1,
                 'deleted_at' => carbon::now()
             ]);
         if ($delete) {
@@ -472,7 +472,7 @@ class MultipleBoardController extends Controller
             // $assiagnUser = AssignedUser::where('task_id', $id)->delete();
             // $assiagnTag = AssignTag::where('task_id', $id)->delete();
             $delete = Task::where('id', $id)->update([
-                'is_delated' => 1,
+                'is_deleted' => 1,
                 'deleted_at' => carbon::now()
             ]);
             if ($delete) {

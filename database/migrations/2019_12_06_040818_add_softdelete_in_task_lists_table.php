@@ -14,8 +14,8 @@ class AddSoftdeleteInTaskListsTable extends Migration
     public function up()
     {
         Schema::table('task_lists', function (Blueprint $table) {
-            $table->tinyInteger('is_delated')->default(0)->after('is_complete');
-            $table->dateTime('deleted_at')->nullable()->after('is_delated');
+            $table->tinyInteger('is_deleted')->default(0)->after('is_complete');
+            $table->dateTime('deleted_at')->nullable()->after('is_deleted');
         });
     }
 
@@ -27,7 +27,7 @@ class AddSoftdeleteInTaskListsTable extends Migration
     public function down()
     {
         Schema::table('task_lists', function (Blueprint $table) {
-            $table->dropColumn('is_delated');
+            $table->dropColumn('is_deleted');
             $table->dropColumn('deleted_at');
         });
     }
