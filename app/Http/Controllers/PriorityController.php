@@ -30,11 +30,11 @@ class PriorityController extends Controller
                     'action_at' => Carbon::now()
                 ];
                 ActionLog::create($log_data);
-                return response()->json(['status' => 'success']);
             } catch (\Exception $e) {
                 DB::rollBack();
                 return response()->json(['status' => 'success', 'error' => $e]);
             }
         }
+        return response()->json(['status' => 'success']);
     }
 }
