@@ -40,8 +40,11 @@ class ActionLogController extends Controller
 
             if ($log->task_id != null){
                 $task_id = $log->task_id;
-                Task::where('id',$task_id)->update(['is_deleted'=>0,'deleted_at'=>Carbon::now()]);
-                return response()->json(['task_id'=>$task_id]);
+                if (Task::where('id',$task_id)->update(['is_deleted'=>0,'deleted_at'=>Carbon::now()])){
+                    ActionLog::where('id',$log_id)->delete();
+                }
+
+                return response()->json(['status'=>true]);
             }
         }
 

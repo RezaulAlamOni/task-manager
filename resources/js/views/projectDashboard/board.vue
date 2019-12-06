@@ -482,7 +482,7 @@
                                                         {{card.priority_label}}
                                                      </span>
                                                 </span>
-                                                <img :src="baseUrl+'/img/priority.png'" v-else
+                                                <img :src="baseUrl+'/img/priority.png'" v-else style="margin-bottom: -2px"
                                                      class="icon-image-preview" data-toggle="dropdown"
                                                      title="Add Tag">
 
@@ -2159,6 +2159,7 @@
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger btn",
+                        confirmButtonColor: "red",
                         confirmButtonText: "Yes, delete it!",
                         closeOnConfirm: false
                     },
@@ -2415,6 +2416,7 @@
                         text: "Your will not be able to recover this",
                         type: "warning",
                         showCancelButton: true,
+                        confirmButtonColor: "red",
                         confirmButtonClass: "btn-danger",
                         confirmButtonText: "Yes, delete it!",
                         closeOnConfirm: false

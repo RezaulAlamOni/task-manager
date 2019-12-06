@@ -103,7 +103,7 @@ class TaskController extends Controller
 
             $childrens = Task::where('parent_id', $task->id)
                 ->where('list_id', $task->list_id)
-                ->where('is_delated', '!=', 1)
+                ->where('is_deleted', '!=', 1)
                 ->orderBy('sort_id', 'ASC')
                 ->get();
             if (!empty($childrens)) {
@@ -126,7 +126,7 @@ class TaskController extends Controller
         }
         $tasks = Task::where('parent_id', 0)
             ->where('project_id', $request->id)
-            ->where('is_delated', '!=', 1)
+            ->where('is_deleted', '!=', 1)
             ->where('list_id', $list_id)->with('column')
             ->orderBy('sort_id', 'ASC')
             ->get();
@@ -486,7 +486,7 @@ class TaskController extends Controller
             foreach ($ids as $id) {
                 // $this->deleteTaskWithChild($id);
                 $delete = Task::where('id',$id)->update([
-                    'is_delated' => 1,
+                    'is_deleted' => 1,
                     'deleted_at' => carbon::now()
                 ]);
                 $task = Task::find($id);
@@ -494,7 +494,7 @@ class TaskController extends Controller
             }
         } else {
             $delete = Task::where('id', $request->id)->update([
-                'is_delated' => 1,
+                'is_deleted' => 1,
                 'deleted_at' => carbon::now()
             ]);
             $task = Task::find($request->id);

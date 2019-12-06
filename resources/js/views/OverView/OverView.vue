@@ -801,7 +801,9 @@
                             .then(response => response.data)
                             .then(response => {
                                 // swal("Success!", "Undo successfully Done !", "success");
-                                // _this.GetAllLogs();
+                                if (response.status){
+                                    _this.GetAllLogs();
+                                }
 
                                 swal.close();
                             })
