@@ -419,7 +419,7 @@ class MultipleBoardController extends Controller
             ]);
         if ($delete) {
             $card = Task::find($id);
-            $this->createLog($id, 'Soft Deleted', 'Column Soft Deleted', $card->title);
+            $this->createLog($id, 'softdelete', 'Column Soft Deleted', $card->title);
             return response()->json(['success' => true]);
         } else {
             return response()->json(['success' => false]);
@@ -477,7 +477,7 @@ class MultipleBoardController extends Controller
             ]);
             if ($delete) {
                 $card = Task::where('id', $id)->first();
-                $this->createLog($id, 'Soft Deleted', 'Card Soft Deleted', $card->title);
+                $this->createLog($id, 'softdelete', 'Card Soft Deleted', $card->title);
                 return response()->json(['success' => true]);
             } else {
                 return response()->json(['success' => false]);
