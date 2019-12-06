@@ -125,7 +125,9 @@
                               cross-tree="cross-tree"
                               draggable="draggable"
                               v-if="list.type === 'list'">
-                            <div :class="{eachItemRow: true}" :id="'click'+data.id"
+                            <div :class="(data.priority_label !== null) ? 'p-'+data.priority_label : ''"
+                                 :id="'click'+data.id"
+                                 class="eachItemRow"
                                  @contextmenu="makeItClick($event, data,vm)"
                                  slot-scope="{data, _id,store,vm}"
                                  @click="makeItClick($event, data,vm)"
@@ -298,7 +300,7 @@
                                                 <template v-if="index < 2">
                                                     <span :title="data.tagTooltip" class="badge badge-warning"
                                                           data-placement="bottom" data-toggle="tooltip"
-                                                          v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'},{'float' : 'left'}]"
+                                                          v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]" style="padding-top: 5px;margin-top: 2px;"
                                                           v-if="tag.text !== null">
                                                         {{(data.tags.length > 2 ) ? tag.text.substring(0,3) : tag.text.substring(0,3) }}
                                                     </span>

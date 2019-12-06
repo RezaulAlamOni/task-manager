@@ -166,7 +166,7 @@
 
                                 >
                                     <Draggable :key="card.id" v-for="(card , key) in column.children">
-                                        <div :class="card.props.className"
+                                        <div :class="[card.props.className,(card.priority_label !== null) ? 'p-'+card.priority_label : '']"
                                              :style="card.props.style"
                                              class="card-list"
                                              @contextmenu="makeItClick($event, card,column.children, index, key, column.boardId)"
