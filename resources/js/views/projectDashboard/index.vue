@@ -2260,7 +2260,7 @@
             RemoveNodeAndChildren(data) {
                 var _this = this;
                 var postData = {
-                    id: data.id,
+                    ids: _this.selectedIds,
                     text: data.text
                 };
                 swal({
@@ -2269,6 +2269,7 @@
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger btn",
+                        confirmButtonColor: "red",
                         confirmButtonText: "Yes, delete it!",
                         closeOnConfirm: false
                     },
