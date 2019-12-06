@@ -28,6 +28,13 @@ class ActionLogController extends Controller
             ->orWhere('action_logs.project_id',$project_id)
             ->with('user')
             ->paginate(($per_page != null ) ? $per_page : 100);
+        foreach ($all_logs as $log) {
+            if ($log->action_type == 'softdelete' && $log->action_at > Carbon::now()->subDays(30) ){
+                $log->undo = 1;
+            }else{
+                $log->undo = 0;
+            }
+        }
         return \response()->json(['logs'=>$all_logs,'status'=>'success']);
     }
 

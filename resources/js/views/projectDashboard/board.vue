@@ -629,13 +629,14 @@
                             </li>
                             <li>
                                 <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split ">
-                                    <img src="/img/task-icon/tag-add.png" class="contex-menu-icon"> Add Tags to Selected
+                                    <img src="/img/task-icon/tag-add.png" class="contex-menu-icon">
+                                    Add Tags to Selected
                                 </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Shift</span>+
                                     <span class="badge-pill badge-default">#</span>
                                 </span>
-                                <div class="dropdown-menu dropdown-menu-right">
+                                <div class="dropdown-menu dropdown-menu-right" style="width: 240px;">
                                     <div class="collapse show switchToggle">
                                         <ul>
                                             <li class="assignUser">
@@ -671,6 +672,59 @@
                                     <span class="badge-pill badge-default">Ctrl</span>+
                                     <span class="badge-pill badge-default">T</span>
                                 </span>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
+                                    <img :src="baseUrl+'/img/priority.png'" class="contex-menu-icon">
+                                    Add Priority
+                                </a>
+<!--                                <span class="contex-menu-sortcut">-->
+<!--                                        <span class="badge-pill badge-default">Shift</span>+<span-->
+<!--                                    class="badge-pill badge-default">#</span>-->
+<!--                                    </span>-->
+
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="collapse show switchToggle">
+                                        <ul>
+                                            <li class="assignUser">
+                                                <label class="pl-2 label-text">
+                                                        <span class="assign-user-drop-down-text">
+                                                            Select Task Priority
+                                                        </span>
+                                                </label>
+                                            </li>
+                                            <li class="assignUser">
+                                                <div class="users-select row"
+                                                     @click="Add_Priority('high',null)">
+                                                    <div class="col-md-9 add-tag-to-selected">
+                                                                    <span
+                                                                        class="badge badge-default tag-color-custom-contextmenu"
+                                                                        style="background: #F4F5F7;border: 1px solid #944d4d;">.</span>
+                                                        <h5 class="text-capitalize"> high</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="users-select row"
+                                                     @click="Add_Priority('medium',null)">
+                                                    <div class="col-md-9 add-tag-to-selected">
+                                                                    <span
+                                                                        class="badge badge-default tag-color-custom-contextmenu"
+                                                                        style="background: #ff8170;border: 1px solid #944d4d;">.</span>
+                                                        <h5 class="text-capitalize">medium</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="users-select row"
+                                                     @click="Add_Priority('low',null)">
+                                                    <div class="col-md-9 add-tag-to-selected">
+                                                                    <span
+                                                                        class="badge badge-default tag-color-custom-contextmenu"
+                                                                        style="background: #172B4D;border: 1px solid #944d4d;">.</span>
+                                                        <h5>Low</h5>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </li>
                             <li v-if="selectedCards.types == 'task'">
                                 <a @click="deleteTask(currentColumnIndex, currentColumnKey, selectedCards.cardId)"
@@ -2695,13 +2749,15 @@
             Add_Priority(priority, id) {
                 var _this = this;
                 var data = {
-                    ids: [id],
+                    ids:  (id == null) ? _this.selectedIds : [id],
                     priority: priority
                 }
                 axios.post('/api/task-list/add-priority', data)
                     .then(response => response.data)
                     .then(response => {
                         _this.getBoardTask();
+                        _this.selectedIds = [];
+                        $('.jquery-accordion-menu').hide();
                     })
                     .catch(error => {
                         console.log('Api for task add priority not Working !!!')

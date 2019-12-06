@@ -624,7 +624,7 @@
                                         class="badge-pill badge-default">#</span>
                                     </span>
 
-                                    <div class="dropdown-menu dropdown-menu-right">
+                                    <div class="dropdown-menu dropdown-menu-right" style="width: 240px;!important;">
                                         <diV class="collapse show switchToggle">
 
                                             <ul>
@@ -659,10 +659,10 @@
                                         <img :src="baseUrl+'/img/priority.png'" class="contex-menu-icon">
                                         Add Priority
                                     </a>
-                                    <span class="contex-menu-sortcut">
-                                        <span class="badge-pill badge-default">Shift</span>+<span
-                                        class="badge-pill badge-default">#</span>
-                                    </span>
+<!--                                    <span class="contex-menu-sortcut">-->
+<!--                                        <span class="badge-pill badge-default">Shift</span>+<span-->
+<!--                                        class="badge-pill badge-default">#</span>-->
+<!--                                    </span>-->
 
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <div class="collapse show switchToggle">
@@ -3111,6 +3111,7 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.getTaskList();
+                        _this.selectedIds = [];
                         $('.jquery-accordion-menu').hide();
                     })
                     .catch(error => {
