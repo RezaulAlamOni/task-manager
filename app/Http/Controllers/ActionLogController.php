@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\ActionLog;
+use App\Task;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ActionLogController extends Controller
@@ -27,6 +29,22 @@ class ActionLogController extends Controller
             ->with('user')
             ->paginate(($per_page != null ) ? $per_page : 100);
         return \response()->json(['logs'=>$all_logs,'status'=>'success']);
+    }
+
+    public function UndoAction(Request $request){
+        isset($request->type) ? $undo_type = $request->type : $undo_type = null;
+        isset($request->id) ? $log_id = $request->id : $log_id = null;
+        if($undo_type == 'delete' && $log_id != null){
+            $log = ActionLog::find($log_id);
+//            $keys = array_keys(array_filter($log, function($v) { if($v !== null){ return $v;}}));
+
+            if ($log->task_id != null){
+                $task_id = $log->task_id;
+                Task::where('id',$task_id)->update(['is_deleted'=>0,'deleted_at'=>Carbon::now()]);
+                return response()->json(['task_id'=>$task_id]);
+            }
+        }
+
     }
 
     public function store($req = [])

@@ -28,7 +28,9 @@ class Task extends Model
         'date',
         'created_at',
         'updated_at',
-        'list_id'
+        'list_id',
+        'is_delete',
+        'deleted_at'
     ];
 
     public function owner()

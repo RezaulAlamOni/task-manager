@@ -347,13 +347,13 @@
                                         <td>{{log.id}}</td>
                                         <td>{{log.title}}</td>
                                         <td>{{log.log_type}}</td>
-                                        <td>{{log.action_type}}</td>
+                                        <td class="text-capitalize">{{log.action_type}}</td>
                                         <td>{{log.user.name}}</td>
                                         <td class="text-center">{{log.action_at | relative}}</td>
 
                                         <td class="text-center" style="cursor : pointer">
                                             <a href="javascript:void(0)" v-if="log.action_type === 'softdelete'"
-                                            data-toggle="tooltip" title="Resotre Deleted Item" @click="RestoreDeletedItem(log.id)">
+                                            data-toggle="tooltip" title="Undo Delete" @click="RestoreDeletedItem(log.id)">
                                                 <img src="/img/task-icon/restore.png" alt="" height="20px" width="20px" class="mr-2">
                                             </a>
                                             <a href="javascript:void(0)" v-else>
@@ -784,7 +784,33 @@
                 this.LogPagination(1);
             },
             RestoreDeletedItem(id){
-                swal('On Progress','Working On It')
+                var _this = this;
+                swal({
+                        title: "Are you sure?",
+                        text: "If you want to Undo this delete action !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonColor: "#e6c28e",
+                        confirmButtonText: "Yes, Restore it!",
+                        closeOnConfirm: false,
+                        showLoaderOnConfirm: true
+                    },
+                    function () {
+                        axios.post('/api/overview-log/undo-action', {type: 'delete', id : id})
+                            .then(response => response.data)
+                            .then(response => {
+                                // swal("Success!", "Undo successfully Done !", "success");
+                                // _this.GetAllLogs();
+
+                                swal.close();
+                            })
+                            .catch(error => {
+                                console.log('undo failed')
+                            });
+                    });
+
+
             }
 
         },
