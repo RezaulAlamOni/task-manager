@@ -175,7 +175,9 @@ class TaskController extends Controller
 
     protected function createLog ($task_id, $type, $message, $title)
     {
+        $task = Task::where('id',$task_id)->first();
         $log_data = [
+            'project_id'=>$task->project_id,
             'task_id' => $task_id,
             'title' => $title,
             'log_type' => $message,
@@ -505,7 +507,7 @@ class TaskController extends Controller
 
     }
 
-    
+
     public function ActionSelectedTask (Request $request)
     {
         if (isset($request->type) && $request->type == 'user') {

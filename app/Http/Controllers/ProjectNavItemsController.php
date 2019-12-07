@@ -123,7 +123,9 @@ class ProjectNavItemsController extends Controller
 
     protected function createLog($nav_id, $type, $message, $title)
     {
+        $nav = ProjectNavItems::where('id',$nav_id)->first();
         $log_data = [
+            'project_id'=>$nav->project_id,
             'nav_id' => $nav_id,
             'title' => $title,
             'log_type' => $message,
