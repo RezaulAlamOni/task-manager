@@ -2341,8 +2341,8 @@
             deleteTask(index, cardIndex, id) {
                 let _this = this;
                 swal({
-                    title: 'Are you sure to delete the card?',
-                    text: "You won't be able to revert this!",
+                    title: 'Are you sure?',
+                    text: "You want to remove this task",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: 'Red',
@@ -2358,7 +2358,7 @@
                                 // delete _this.cards[index].task[cardIndex];
                                 // _this.cards[index].task.length = _this.cards[index].task.length-1;
                                 _this.getData();
-                                swal("Deleted!", "The card has been deleted.", "success");
+                                swal("Removed!", "The task has been removed.", "success");
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1000);
