@@ -1553,10 +1553,20 @@
                     }
                 } else if (nav.type === 'board') {
                     $('#card_' + task.id).click();
+                    if (this.search_type == 'all' && task.list_id != null){
+                        $('#list' + task.list_id).click();
+                        setTimeout(function () {
+                            $('#click' + task.id).addClass('clicked');
+                        },1500)
+
+                    }
 
                 } else {
                     if (task.list_id !== null) {
                         $('#list' + task.list_id).click();
+                        setTimeout(function () {
+                            $('#click' + task.id).addClass('clicked');
+                        },1500)
                     } else {
                         $('.board' + task.multiple_board_id).click();
                     }

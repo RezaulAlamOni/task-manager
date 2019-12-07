@@ -18,10 +18,11 @@ class SearchController extends Controller
     public function suggestUser(Request $request)
     {
         if (isset($request->user_name) && trim($request->user_name) != '') {
-            $team_id = DB::table('team_users')->where('user_id', Auth::id())->first();
-            $search_user = User::join('team_users', 'team_users.user_id', 'users.id')->where('team_users.team_id', $team_id->team_id)
+            $team_id = Auth::user()->current_team_id;
+            $search_user = User::join('team_users', 'users.id', 'team_users.user_id')->where('team_users.team_id', $team_id)
                 ->Where('name', 'like', '%' . $request->user_name . '%')
                 ->orWhere('email', 'like', '%' . $request->user_name . '%')
+                ->where('team_users.team_id', $team_id)
                 ->get();
             return response()->json(['search_user' => $search_user]);
         } else if (isset($request->text) && trim($request->text) != '') {
@@ -78,9 +79,9 @@ class SearchController extends Controller
 
     public function getAllUser()
     {
-        $team_id = DB::table('team_users')->where('user_id', Auth::id())->first();
+        $team_id = Auth::user()->current_team_id;
         $search_user = User::join('team_users', 'team_users.user_id', 'users.id')
-            ->where('team_users.team_id', $team_id->team_id)
+            ->where('team_users.team_id', $team_id)
             ->get();
         return response()->json(['search_user' => $search_user]);
     }
