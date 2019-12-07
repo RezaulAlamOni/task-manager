@@ -525,11 +525,11 @@
                                                     </span>
                                                 </div>
                                                 <div class="comment_toolbar">
-                                                    <div class="comment_details">
+                                                    <div class="comment_details" style="width: 100% !important;">
                                                         <ul>
                                                             <li><i class="fa fa-clock-o"></i> {{ reply.created_at.substring(11,16)}}</li>
                                                             <li><i class="fa fa-calendar"></i> {{ reply.created_at.substring(0,10)}}</li>
-                                                            <li><i class="fa fa-pencil"></i> <span class="user"> {{reply.user.name}}</span></li>
+                                                            <li><i class="fa fa-pencil"></i> <span class="user"> {{ reply.user.name }}</span></li>
                                                             <li @click="deleteDetailComment(reply.id)"><i class="fa fa-trash"></i> <span class="user" style="color: red"> Delete</span></li>
                                                         </ul>
                                                     </div>
@@ -554,16 +554,40 @@
                             position: fixed; bottom: 0px; width: 54%; right: 15px; background: white; width: 100%; max-width: 634px;
                              -->
                             <div  v-click-outside="HideTextArea" >
+                                <ul id="myUL-user" class="myUL-user-comment">
+                                    <template v-for="user in projectUsers" v-if=" projectUsers !== null && projectUsers.length > 0">
+                                        <li @click="SearchTaskByAssignedUser(user.id,user.name)">
+                                            <a href="javascript:void(0)">
+                                                <span class="assignUser-suggest-photo">
+                                                        {{(user.name !== null) ? user.name.substring(0,2) : ''}}
+                                                </span>
+                                                {{user.name}}
+                                            </a>
+                                        </li>
+                                    </template>
+                                    <template v-else>
+                                        <li>
+                                            <a href="javascript:void(0)">
+                                                No user found!
+                                            </a>
+                                        </li>
+                                    </template>
+                                    <!-- <li>
+                                        <a href="javascript:void(0)">
+                                            <span class="assignUser-suggest-photo"> Su </span> Sudip
+                                        </a>
+                                    </li> -->
+                                </ul>
                                 <p :title="selectedData.userName" class="assignUser-photo-for-selected text-uppercase details-comments-pic"
                                 data-placement="bottom" data-toggle="tooltip" style="overflow:hidden;"> {{ selectedData.userName.substring(0,2) }}</p>
                                 <textarea @focus="ShowTextArea(selectedData)"
                                         :id="'comment'+selectedData.cardId"
                                         class="form-control commentInput"
                                         data-grow="auto"
-                                        @keyup="commentPress(selectedData)"
+                                        @keyup="commentPress($event,selectedData)"
                                         placeholder="Add comment">
                                 </textarea>
-                                <!--  -->
+                                <!-- v-on:keyup.50="userList($event,selectedData)" -->
 
                                 <div class="SubmitButton" id="SubmitButton" style="margin-bottom: 10px; margin-top: 10px;">
                                     <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="saveComment(selectedData.cardId)">Post</a>
@@ -755,6 +779,7 @@
                 selectedBoardColumn: 'Select Board Column',
                 transferBtn: false,
                 project: null,
+                projectUsers: null,
                 tree4data: [],
                 currentColumn: null,
                 currentColumnIndex: null,
@@ -790,6 +815,9 @@
                 task_logs : [],
                 check_uncheck_child: null,
                 manageTag: null,
+                trigger : false,
+                userNames : '',
+                commentsData : '',
             }
         },
         mounted() {
@@ -1067,11 +1095,72 @@
                 }, 500)
 
             },
-            commentPress(data)
-            {
+            commentPress(e,data)
+            {   
+                console.log(e.which);
+                let _this = this;
+                // this.projectUsers = null;
                 let cmHe = $('#comment'+data.cardId).height();
                 $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
-                console.log(this.selectedData.comment);
+                // console.log(this.selectedData.comment);
+                if (e.which == 32) {
+                    _this.trigger = false;
+                    _this.userNames = '';
+                    _this.projectUsers = null;
+                }
+
+                if (_this.trigger == true && e.which !== 16 && e.which !== 50) {
+                    _this.userNames += e.key;
+                    // console.log(e.key, _this.userNames);
+                    // axios.post('/api/task-list/search-result', {
+                    //     'user_id': id,
+                    //     p_id: _this.projectId,
+                    //     list_id: nav_type.list_id,
+                    //     type: (_this.search_type === 'all') ? 'overview' : nav_type.type,
+                    // })
+                    // .then(response => response.data)
+                    // .then(response => {
+                    //     _this.searchData.tasks = response.search_tasks;
+                    //     // console.log(_this.searchData.tasks)
+                    //     $('#myUL-user').removeClass('myUL-user');
+                    //     $('#myUL').removeClass('myUL');
+                    //     $('#myUL').addClass('myUL-show');
+
+                    // })
+                    // .catch(error => {
+                    //     console.log('Api is drag and drop not Working !!!')
+                    // });
+                }
+                
+                if (e.shiftKey && e.which == 50) {
+                    _this.trigger = true;
+                    _this.commentsData = $('.commentInput').val();
+                    axios.get('/api/task-list/all-suggest-user')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.projectUsers = response.search_user;
+                    })
+                    .catch(error => {
+                        console.log('All suggest user api not working')
+                    })
+                }
+            },
+            userList(e,data)
+            {   
+                let _this = this;
+                var value = e.target.value;
+                // console.log(value.endsWith('@'));
+                let cmHe = $('#comment'+data.cardId).height();
+                $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
+                
+                // console.log(this.selectedData);
+            },
+            SearchTaskByAssignedUser(id, name) {
+                let _this = this;
+               $('.commentInput').val(_this.commentsData+''+name+' ');
+            //    $('.SubmitButton').show();
+            //    $('.commentInput').focus();
+               _this.projectUsers = null;
             },
             // removeAssignedUser(user, index, key) {
 
