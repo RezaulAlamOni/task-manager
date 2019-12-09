@@ -22,6 +22,7 @@ class PriorityController extends Controller
                 DB::commit();
                 $task = Task::find($id);
                 $log_data = [
+                    'project_id'=>$task->project_id,
                     'task_id' => $id,
                     'title' => $task->title,
                     'log_type' => 'Add '.$priority.' Priority',

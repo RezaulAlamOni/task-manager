@@ -134,7 +134,7 @@
                 </div>
                 <div class="tab-pane fade row" id="profile" role="tabpanel" aria-labelledby="profile-tab"
                      style="margin: 0px 15px;">
-                    <div class="row">
+                    <div class="row" v-if="All_files != null && All_files.length > 0">
                         <template v-for="file in All_files.data" v-if="All_files.data.length > 0">
                             <div class="">
                                 <div class="card" style="width: 13rem;margin: 10px 15px 0 0;">
@@ -178,7 +178,9 @@
                                 </div>
                             </div>
                         </template>
-
+                    </div>
+                    <div v-else style="text-align: center; margin-top: 25px; color: #637588;">
+                        <h3>No files added yet!</h3>
                     </div>
 
                     <template v-if="All_files.last_page > 1">
@@ -209,7 +211,7 @@
                     <!-- comments container -->
                     <div class="comment_block">
                         <!--                        <h2>All Comments Here</h2>-->
-                        <div class="new_comment">
+                        <div class="new_comment" v-if="All_comments != null && All_comments.length > 0">
                             <template v-for="comment in All_comments">
                                 <ul class="user_comment">
                                     <div class="user_avatar">
@@ -271,7 +273,9 @@
                                     </div>
                                 </ul>
                             </template>
-
+                        </div>
+                        <div v-else style="text-align: center; margin-top: 25px; color: #637588;">
+                            <h3>No comments yet!</h3>
                         </div>
                     </div>
                 </div>

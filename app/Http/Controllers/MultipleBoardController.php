@@ -389,7 +389,7 @@ class MultipleBoardController extends Controller
     }
 
     public function destroyColumn($id)
-    {   // column delete parmanently 
+    {   // column delete parmanently
         $child  = Task::where('board_parent_id', $id)->get();
         foreach ($child as $key => $value) {
             $this->cardDelete($value->id);
@@ -906,7 +906,7 @@ class MultipleBoardController extends Controller
         $hidden = 0;
         foreach ($data as $childs) {
             if (count($childs['childTask']) > 0) {
-                $ids = $this->recurChildIds($childs);   
+                $ids = $this->recurChildIds($childs);
             }
         }
         $delKey = array_search($request->parent_id, $ids);
@@ -1017,7 +1017,9 @@ class MultipleBoardController extends Controller
 
     protected function createLog($task_id, $type, $message, $title)
     {
+        $task = Task::where('id',$task_id)->first();
         $log_data = [
+            'project_id'=>$task->project_id,
             'task_id' => $task_id,
             'title' => $title,
             'log_type' => $message,
