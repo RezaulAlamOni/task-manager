@@ -116,3 +116,5 @@ Route::post('/project-overview/list-open-close', 'OverviewController@ListToggle'
 
 //logs
 Route::get('/overview-all-logs/{project_id}', 'ActionLogController@AllLogs');
+Route::post('/overview-log/undo-action', 'ActionLogController@UndoAction');
+

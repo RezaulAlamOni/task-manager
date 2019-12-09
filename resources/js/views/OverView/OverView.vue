@@ -168,7 +168,9 @@
                                                 </li>
                                                 <li><i class="fa fa-calendar" style="color: #5299e0;"></i> {{file.created_at.substring(0,10)}}
                                                 </li>
-                                                <li><i class="fa fa-clock-o" style="color: #5299e0;"></i> {{file.created_at.substring(11,16)}}
+                                                <li><i class="fa fa-clock-o" style="color: #5299e0;"></i>
+<!--                                                    {{file.created_at.substring(11,16)}}-->
+                                                    {{file.created_at | relative}}
                                                 </li>
                                             </ul>
                                         </div>
@@ -247,11 +249,13 @@
                                         <div class="comment_details">
                                             <ul>
                                                 <li><i class="fa fa-clock-o"></i>
-                                                    {{comment.created_at.substring(11,16)}}
+<!--                                                    {{comment.created_at.substring(11,16)}}-->
+                                                    {{comment.created_at | relative}}
                                                 </li>
-                                                <li><i class="fa fa-calendar"></i>
-                                                    {{comment.created_at.substring(0,10)}}
-                                                </li>
+<!--                                                <li><i class="fa fa-calendar"></i>-->
+<!--&lt;!&ndash;                                                    {{comment.created_at.substring(0,10)}}&ndash;&gt;-->
+<!--                                                    -->
+<!--                                                </li>-->
                                                 <li><i class="fa fa-pencil"></i> <span class="user">{{comment.user.name}}</span>
                                                 </li>
                                             </ul>
@@ -343,11 +347,18 @@
                                         <td>{{log.id}}</td>
                                         <td>{{log.title}}</td>
                                         <td>{{log.log_type}}</td>
-                                        <td>{{log.action_type}}</td>
+                                        <td class="text-capitalize">{{log.action_type}}</td>
                                         <td>{{log.user.name}}</td>
                                         <td class="text-center">{{log.action_at | relative}}</td>
+
                                         <td class="text-center" style="cursor : pointer">
-                                            <img src="/img/task-icon/trash.png" alt="" height="20px" width="20px" class="mr-2">
+                                            <a href="javascript:void(0)" v-if="log.action_type === 'softdelete'"
+                                            data-toggle="tooltip" title="Undo Delete" @click="RestoreDeletedItem(log.id)">
+                                                <img src="/img/task-icon/restore.png" alt="" height="20px" width="20px" class="mr-2">
+                                            </a>
+                                            <a href="javascript:void(0)" v-else>
+<!--                                                <img src="/img/task-icon/trash.png" alt="" height="20px" width="20px" class="mr-2">-->
+                                            </a>
                                         </td>
                                     </tr>
                                 </template>
@@ -771,6 +782,37 @@
             setPerPageItem() {
                 $('#loder-hide').fadeIn();
                 this.LogPagination(1);
+            },
+            RestoreDeletedItem(id){
+                var _this = this;
+                swal({
+                        title: "Are you sure?",
+                        text: "If you want to Undo this delete action !!!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonColor: "#e6c28e",
+                        confirmButtonText: "Yes, Restore it!",
+                        closeOnConfirm: false,
+                        showLoaderOnConfirm: true
+                    },
+                    function () {
+                        axios.post('/api/overview-log/undo-action', {type: 'delete', id : id})
+                            .then(response => response.data)
+                            .then(response => {
+                                // swal("Success!", "Undo successfully Done !", "success");
+                                if (response.status){
+                                    _this.GetAllLogs();
+                                }
+
+                                swal.close();
+                            })
+                            .catch(error => {
+                                console.log('undo failed')
+                            });
+                    });
+
+
             }
 
         },

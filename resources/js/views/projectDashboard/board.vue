@@ -166,7 +166,7 @@
 
                                 >
                                     <Draggable :key="card.id" v-for="(card , key) in column.children">
-                                        <div :class="card.props.className"
+                                        <div :class="[card.props.className,(card.priority_label !== null) ? 'p-'+card.priority_label : '']"
                                              :style="card.props.style"
                                              class="card-list"
                                              @contextmenu="makeItClick($event, card,column.children, index, key, column.boardId)"
@@ -482,7 +482,7 @@
                                                         {{card.priority_label}}
                                                      </span>
                                                 </span>
-                                                <img :src="baseUrl+'/img/priority.png'" v-else
+                                                <img :src="baseUrl+'/img/priority.png'" v-else style="margin-bottom: -2px"
                                                      class="icon-image-preview" data-toggle="dropdown"
                                                      title="Add Tag">
 
@@ -2159,6 +2159,7 @@
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger btn",
+                        confirmButtonColor: "red",
                         confirmButtonText: "Yes, delete it!",
                         closeOnConfirm: false
                     },
@@ -2340,8 +2341,8 @@
             deleteTask(index, cardIndex, id) {
                 let _this = this;
                 swal({
-                    title: 'Are you sure to delete the card?',
-                    text: "You won't be able to revert this!",
+                    title: 'Are you sure?',
+                    text: "You want to remove this task",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: 'Red',
@@ -2357,7 +2358,7 @@
                                 // delete _this.cards[index].task[cardIndex];
                                 // _this.cards[index].task.length = _this.cards[index].task.length-1;
                                 _this.getData();
-                                swal("Deleted!", "The card has been deleted.", "success");
+                                swal("Removed!", "The task has been removed.", "success");
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1000);
@@ -2415,6 +2416,7 @@
                         text: "Your will not be able to recover this",
                         type: "warning",
                         showCancelButton: true,
+                        confirmButtonColor: "red",
                         confirmButtonClass: "btn-danger",
                         confirmButtonText: "Yes, delete it!",
                         closeOnConfirm: false
