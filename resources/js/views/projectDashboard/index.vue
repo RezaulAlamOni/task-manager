@@ -1211,7 +1211,9 @@
                 overview: '',
                 search_type: 'all',
                 allUsers: null,
-                allTags: null
+                allTags: null,
+                allTaskId : null,
+                shift_first : null
             }
         },
         mounted() {
@@ -1649,8 +1651,29 @@
 
                 } else if (e.shiftKey && e.which === 1) {
 
-                    $('#click' + data.id).addClass('clicked');
+                    var first = _this.shift_first;
+                    var last = data.id;
+                    var flag = 0;
+                    var flag1 = 0;
 
+                    var index_last = _this.allTaskId.indexOf(last);
+                    var index_first = _this.allTaskId.indexOf(first);
+                    if (index_first > index_last ){
+                        first = data.id  ;
+                        index_first = _this.allTaskId.indexOf(first);
+                        last = _this.shift_first;
+                    }
+                    _this.selectedIds = [];
+                    $('.eachItemRow').removeClass('clicked');
+
+                    for (var i = index_first; i <= _this.allTaskId.length; i++){
+                        if (_this.allTaskId[i] === first) {flag = 1;flag1 = 1;}
+                        if (flag === 1){
+                            _this.selectedIds.push(_this.allTaskId[i]);
+                            $('#click' + _this.allTaskId[i]).addClass('clicked');
+                        }
+                        if (flag1 === 1 && _this.allTaskId[i] === last) {flag = 0;flag1 = 0; break;}
+                    }
                 } else if (e.which === 1) {
                     if (data.text !== '') {
                         _this.DeleteEmptyTask();
@@ -1669,6 +1692,8 @@
 
                     _this.selectedIds = [];
                     _this.selectedIds.push(data.id);
+                    _this.shift_first = data.id;
+
                     this.tags = data.tags;
                     $('.eachItemRow').removeClass('clicked');
                     $(e.target).addClass('clicked');
@@ -2551,6 +2576,7 @@
                         _this.authUser = response.userName
                         _this.allUsers = response.allTeamUsers;
                         _this.allTags = response.allTeamTags;
+                        _this.allTaskId = response.all_ids;
 
 
                         $('[data-toggle="tooltip"]').tooltip('dispose');
