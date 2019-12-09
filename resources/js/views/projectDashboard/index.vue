@@ -1659,18 +1659,20 @@
                     var index_last = _this.allTaskId.indexOf(last);
                     var index_first = _this.allTaskId.indexOf(first);
                     if (index_first > index_last ){
-                        var first = data.id  ;
-                        var last = _this.shift_first;
+                        first = data.id  ;
+                        index_first = _this.allTaskId.indexOf(first);
+                        last = _this.shift_first;
                     }
                     _this.selectedIds = [];
                     $('.eachItemRow').removeClass('clicked');
-                    for (var i = 0; i < _this.allTaskId.length; i++){
+
+                    for (var i = index_first; i <= _this.allTaskId.length; i++){
                         if (_this.allTaskId[i] === first) {flag = 1;flag1 = 1;}
                         if (flag === 1){
                             _this.selectedIds.push(_this.allTaskId[i]);
                             $('#click' + _this.allTaskId[i]).addClass('clicked');
                         }
-                        if (flag1 === 1 && _this.allTaskId[i] === last) {flag = 0;flag1 = 0;}
+                        if (flag1 === 1 && _this.allTaskId[i] === last) {flag = 0;flag1 = 0; break;}
                     }
                 } else if (e.which === 1) {
                     if (data.text !== '') {
