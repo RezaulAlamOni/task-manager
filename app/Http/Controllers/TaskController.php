@@ -24,6 +24,7 @@ class TaskController extends Controller
 {
     protected $actionLog;
     protected $dont_forget_tag;
+    protected $all_ids = [];
 
     public function __construct ()
     {
@@ -45,6 +46,7 @@ class TaskController extends Controller
         $data = [];
         foreach ($obj as $key => $task) {
             $info = array();
+            array_push($this->all_ids,$task->id);
             $info['id'] = $task->id;
             $info['parent_id'] = $task->parent_id;
             $info['sort_id'] = $task->sort_id;
@@ -106,12 +108,15 @@ class TaskController extends Controller
                 ->where('is_deleted', '!=', 1)
                 ->orderBy('sort_id', 'ASC')
                 ->get();
+
             if (!empty($childrens)) {
                 $info['children'] = $this->decorateData($childrens, $drag);
             } else {
                 $info['children'] = [];
             }
             $data[] = $info;
+
+
         }
         return $data;
     }
@@ -152,6 +157,7 @@ class TaskController extends Controller
                 ->orderBy('sort_id', 'ASC')->get();
 
         }
+        $this->all_ids =[];
         $data = $this->decorateData($tasks, null);
         $userName = Auth::user();
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
@@ -170,6 +176,7 @@ class TaskController extends Controller
             'userName' => $userName,
             'allTeamUsers' => $allTeamUsers,
             'allTeamTags' => $allTeamTags,
+            'all_ids' => $this->all_ids,
         ]);
     }
 
