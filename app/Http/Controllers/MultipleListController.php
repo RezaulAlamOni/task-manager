@@ -131,6 +131,8 @@ class MultipleListController extends Controller
                     Multiple_list::where('id', $id)->update(['is_delete'=>1]);
                 }else if ($request->overview == 2){
                     Multiple_list::where('id', $id)->update(['is_delete'=>0]);
+                }else if($request->overview == 3){
+                    Multiple_list::where('id', $id)->update(['is_delete'=>2]);
                 }
 
 
