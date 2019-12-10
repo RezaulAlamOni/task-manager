@@ -34,7 +34,9 @@
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <div class="accordion" id="listWithHandle">
                         <template v-for="list in All_list">
-                            <div class="card overview-list" :data-id="list.id">
+                            <div class="card overview-list"
+                                 v-if="list.is_delete == 1 || list.is_delete == 0"
+                                 :data-id="list.id">
                                 <div class="card-header overview-list-header" id="headingOne" data-toggle="collapse"
                                      data-target="" aria-expanded="false"
                                      aria-controls="collapseOne">
@@ -606,30 +608,107 @@
             },
             DeleteList(list) {
                 var _this = this;
+
                 swal({
-                        title: "Are you sure?",
-                        text: "If you delete this this then all task will delete !!!",
+                        title: "Keep this list on List View!?",
+                        text: "You will not be able to recover this imaginary file!",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger",
-                        confirmButtonColor: "#e66983",
-                        confirmButtonText: "Yes, Delete it!",
+                        confirmButtonText: "No Delete it !",
+                        confirmButtonColor: '#f56065',
+                        cancelButtonText: "Yes Keep on List",
+                        cancelButtonColor: "#c3dda3",
                         closeOnConfirm: false,
-                        showLoaderOnConfirm: true
+                        closeOnCancel: false,
+                        dangerMode: true,
                     },
-                    function () {
-                        axios.post('/api/board-list-delete', {type: 'list', id: list.id, action: 'delete', overview: 0})
-                            .then(response => response.data)
-                            .then(response => {
-                                swal("Complete!", "This List is deleted successfully !", "success");
-                                _this.getAllList()
-                                _this.$emit('updateLatestNav')
-                                swal.close();
-                            })
-                            .catch(error => {
-                                console.log('Add list api not working!!')
-                            });
-                    });
+                    function (isConfirm) {
+                            var data = null;
+                            if (isConfirm) {
+                                swal({
+                                    title: "Are you sure!?",
+                                    text: "You want to delete this list with all task !",
+                                    type: "warning",
+                                    showCancelButton: true,
+                                    confirmButtonClass: "btn-danger",
+                                    confirmButtonText: "Yes Delete it !",
+                                    confirmButtonColor: '#f56065',
+                                    cancelButtonText: "Cancel",
+                                    closeOnConfirm: true,
+                                    closeOnCancel: true,
+                                }, function () {
+                                    data = {type: 'list', id: list.id, action: 'delete', overview: 0};
+                                    axios.post('/api/board-list-delete', data)
+                                        .then(response => response.data)
+                                        .then(response => {
+                                            swal("Complete!", "This List is deleted successfully !", "success");
+                                            _this.getAllList()
+                                            _this.$emit('updateLatestNav')
+                                            swal.close();
+                                        })
+                                        .catch(error => {
+                                            console.log('Add list api not working!!')
+                                        });
+                                })
+
+                            } else {
+                                swal({
+                                    title: "Are you sure!?",
+                                    text: "You want to delete this list with all task !",
+                                    type: "warning",
+                                    showCancelButton: true,
+                                    confirmButtonClass: "btn-danger",
+                                    confirmButtonText: "Yes Delete it !",
+                                    confirmButtonColor: '#f56065',
+                                    cancelButtonText: "Cancel",
+                                    closeOnConfirm: true,
+                                    closeOnCancel: true,
+                                }, function () {
+
+                                    axios.post('/api/board-list-delete', {type: 'list', id: list.id, action: 'delete', overview: 3})
+                                        .then(response => response.data)
+                                        .then(response => {
+                                            swal("Complete!", "This List is deleted successfully !", "success");
+                                            _this.getAllList()
+                                            _this.$emit('updateLatestNav')
+                                            swal.close();
+                                        })
+                                        .catch(error => {
+                                            console.log('Add list api not working!!')
+                                        });
+                                })
+                            }
+                        });
+
+
+
+
+
+                // swal({
+                //         title: "Are you sure?",
+                //         text: "If you delete this this then all task will delete !!!",
+                //         type: "warning",
+                //         showCancelButton: true,
+                //         confirmButtonClass: "btn-danger",
+                //         confirmButtonColor: "#e66983",
+                //         confirmButtonText: "Yes, Delete it!",
+                //         closeOnConfirm: false,
+                //         showLoaderOnConfirm: true
+                //     },
+                //     function () {
+                //         axios.post('/api/board-list-delete', {type: 'list', id: list.id, action: 'delete', overview: 0})
+                //             .then(response => response.data)
+                //             .then(response => {
+                //                 swal("Complete!", "This List is deleted successfully !", "success");
+                //                 _this.getAllList()
+                //                 _this.$emit('updateLatestNav')
+                //                 swal.close();
+                //             })
+                //             .catch(error => {
+                //                 console.log('Add list api not working!!')
+                //             });
+                //     });
             },
             RestoreList(list_id) {
                 var _this = this;

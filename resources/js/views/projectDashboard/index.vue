@@ -300,7 +300,8 @@
                                                 <template v-if="index < 2">
                                                     <span :title="data.tagTooltip" class="badge badge-warning"
                                                           data-placement="bottom" data-toggle="tooltip"
-                                                          v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]" style="padding-top: 5px;margin-top: 2px;"
+                                                          v-bind:style="[{'background':tag.color},{'margin-left' : 1 +'px'}]"
+                                                          style="padding-top: 5px;margin-top: 2px;"
                                                           v-if="tag.text !== null">
                                                         {{(data.tags.length > 2 ) ? tag.text.substring(0,3) : tag.text.substring(0,3) }}
                                                     </span>
@@ -659,10 +660,10 @@
                                         <img :src="baseUrl+'/img/priority.png'" class="contex-menu-icon">
                                         Add Priority
                                     </a>
-<!--                                    <span class="contex-menu-sortcut">-->
-<!--                                        <span class="badge-pill badge-default">Shift</span>+<span-->
-<!--                                        class="badge-pill badge-default">#</span>-->
-<!--                                    </span>-->
+                                    <!--                                    <span class="contex-menu-sortcut">-->
+                                    <!--                                        <span class="badge-pill badge-default">Shift</span>+<span-->
+                                    <!--                                        class="badge-pill badge-default">#</span>-->
+                                    <!--                                    </span>-->
 
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <div class="collapse show switchToggle">
@@ -785,7 +786,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title">Image Show</h5>
                         <span @click="deletePhoto(modalImg[0],modalImg[1])" class="file-delete"
-                        data-toggle="tooltip" title="Delete this file "
+                              data-toggle="tooltip" title="Delete this file "
                         >
                             <img src="/img/task-icon/trash.png" class="contex-menu-icon">
                         </span>
@@ -1212,8 +1213,8 @@
                 search_type: 'all',
                 allUsers: null,
                 allTags: null,
-                allTaskId : null,
-                shift_first : null
+                allTaskId: null,
+                shift_first: null
             }
         },
         mounted() {
@@ -1555,11 +1556,11 @@
                     }
                 } else if (nav.type === 'board') {
                     $('#card_' + task.id).click();
-                    if (this.search_type == 'all' && task.list_id != null){
+                    if (this.search_type == 'all' && task.list_id != null) {
                         $('#list' + task.list_id).click();
                         setTimeout(function () {
                             $('#click' + task.id).addClass('clicked');
-                        },1500)
+                        }, 1500)
 
                     }
 
@@ -1568,7 +1569,7 @@
                         $('#list' + task.list_id).click();
                         setTimeout(function () {
                             $('#click' + task.id).addClass('clicked');
-                        },1500)
+                        }, 1500)
                     } else {
                         $('.board' + task.multiple_board_id).click();
                     }
@@ -1658,21 +1659,28 @@
 
                     var index_last = _this.allTaskId.indexOf(last);
                     var index_first = _this.allTaskId.indexOf(first);
-                    if (index_first > index_last ){
-                        first = data.id  ;
+                    if (index_first > index_last) {
+                        first = data.id;
                         index_first = _this.allTaskId.indexOf(first);
                         last = _this.shift_first;
                     }
                     _this.selectedIds = [];
                     $('.eachItemRow').removeClass('clicked');
 
-                    for (var i = index_first; i <= _this.allTaskId.length; i++){
-                        if (_this.allTaskId[i] === first) {flag = 1;flag1 = 1;}
-                        if (flag === 1){
+                    for (var i = index_first; i <= _this.allTaskId.length; i++) {
+                        if (_this.allTaskId[i] === first) {
+                            flag = 1;
+                            flag1 = 1;
+                        }
+                        if (flag === 1) {
                             _this.selectedIds.push(_this.allTaskId[i]);
                             $('#click' + _this.allTaskId[i]).addClass('clicked');
                         }
-                        if (flag1 === 1 && _this.allTaskId[i] === last) {flag = 0;flag1 = 0; break;}
+                        if (flag1 === 1 && _this.allTaskId[i] === last) {
+                            flag = 0;
+                            flag1 = 0;
+                            break;
+                        }
                     }
                 } else if (e.which === 1) {
                     if (data.text !== '') {

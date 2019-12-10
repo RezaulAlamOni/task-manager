@@ -163,10 +163,9 @@
                                     drag-class="card-ghost"
                                     drop-class="card-ghost-drop"
                                     group-name="col"
-
                                 >
                                     <Draggable :key="card.id" v-for="(card , key) in column.children">
-                                        <div :class="[card.props.className,(card.priority_label !== null) ? 'p-'+card.priority_label : '']"
+                                        <div :class="[card.props.className,(card.priority_label !== null) ? 'pc-'+card.priority_label : '']"
                                              :style="card.props.style"
                                              class="card-list"
                                              @contextmenu="makeItClick($event, card,column.children, index, key, column.boardId)"
@@ -174,19 +173,20 @@
                                              :id="'card_'+card.cardId"
                                              v-on:dblclick="showLog">
                                             <!-- @click="selectCard(card)" -->
-                                            <span style="position: absolute; right: 10px; top: 8px; "> <!-- v-if="card.textareaShow === true" -->
+                                            <span
+                                                  :class="[(card.priority_label !== null) ? 'pch-'+card.priority_label : 'ch-option']"
+                                            > <!-- v-if="card.textareaShow === true" -->
                                                 <span class="dropdown-toggle-split opacity"
                                                       data-toggle="dropdown">
-                                                    <i class="fa fa-ellipsis-h " style="color: #272757"></i>
+                                                    <i class="fa fa-ellipsis-h"
+                                                       :class="[(card.priority_label === 'low') ? 'ch-option-icon' : '']"
+                                                       style="color: #272757"></i>
                                                 </span>
                                                 <div class="dropdown-menu">
                                                     <diV class="collapse show switchToggle">
-                                                        <!-- <a @click="updateColumSow()" class="dropdown-item" href="#"><i
-                                                            class="fa fa-edit opacity"></i> Edit column</a> -->
 
                                                         <a @click="showTransferModel(index, key, card.cardId, column.boardId)"
                                                            class="dropdown-item" href="#">
-                                                        <!-- <i class="fa fa-share-square-o opacity"></i>  -->
                                                         <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18"
                                                              width="18" title="Transfer To Other Board Or Column"/>
                                                         Transfer task to another board</a>
@@ -214,7 +214,6 @@
                                                  @keypress="preventEnter($event)"
                                                  v-html="card.data">
                                             </div>
-
                                             <div>
                                                 <a class="calender clickHide" v-if="card.date === '0000-00-00'">
                                                     <!-- <i class="outline-event icon-image-preview" data-toggle
@@ -250,8 +249,6 @@
                                                          class="icon-image-preview">
                                                 </a>
                                             </div>
-
-
                                             <a class="user-assign-card ">
                                                 <template v-if="card.assigned_user.length > 0">
                                                     <span class="assigned_user-card "
@@ -336,8 +333,6 @@
                                                     </li>
                                                 </div>
                                             </a>
-
-
                                             <a class="tag-icon">
                                                 <div v-if="card.tags && card.tags.length !== 0">
                                                     <div style="float: left;" v-for="(item, tagIndex) in card.tags">
@@ -531,8 +526,9 @@
                                                 </div>
 
                                             </a>
-
-                                            <div class="total-child" v-if="card.child > 0"
+                                            <div class=""
+                                                 :class="[(card.priority_label !== null) ? 'pch-total-child' : 'total-child']"
+                                                 v-if="card.child > 0"
                                                  @click="hideChilds(card.cardId)">
                                                 <strong>
                                                     {{ card.child }}
@@ -2818,7 +2814,7 @@
                     for (let index = 0; index < _this.selectedIds.length; index++) {
                         $('#card_' + _this.selectedIds[index]).addClass('selected-card');
                     }
-                } 
+                }
                 // else if (e.shiftKey && e.which === 1) {
                     // alert('shft+left clk');
                     // _this.selectedIds.push(card.cardId);
@@ -2828,7 +2824,7 @@
                     // }
                     // $('#click' + card.cardId).addClass('clicked');
 
-                // } 
+                // }
                 else if (e.shiftKey && e.which === 1) {
 
                     var first = _this.shift_first;
