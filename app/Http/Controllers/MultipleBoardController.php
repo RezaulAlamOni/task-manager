@@ -52,11 +52,12 @@ class MultipleBoardController extends Controller
                 ->orderby('parent_id', 'ASC')
                 // ->orderby('sort_id', 'ASC')
                 ->get();
+//        return($board);
         // return $board[0]->moveToCol->moveTo->multipleBord->board_title;
         $team = DB::table('team_users')->where('user_id', Auth::id())->first();
         $team_id = Auth::user()->current_team_id;
         $allUsers =  User::join('team_users', 'team_users.user_id', 'users.id')
-                        ->where('team_users.team_id', $team->team_id)->get()->toArray();
+                        ->where('team_users.team_id', $team_id)->get()->toArray();
         $allTags = Tags::where('team_id', $team_id)->where('title','!=', $this->dont_forget_tag)->get()->toArray();
         foreach ($board as $key => $value) {
             $keys = -1;

@@ -36,7 +36,7 @@
                         <template v-for="list in All_list">
                             <div class="card overview-list"
                                  v-if="list.is_delete == 1 || list.is_delete == 0"
-                                 :data-id="list.id"> {{list.is_delete}}
+                                 :data-id="list.id">
                                 <div class="card-header overview-list-header" id="headingOne" data-toggle="collapse"
                                      data-target="" aria-expanded="false"
                                      aria-controls="collapseOne">
