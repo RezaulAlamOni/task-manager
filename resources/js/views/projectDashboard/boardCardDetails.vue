@@ -10,12 +10,9 @@
                     #ID{{ selectedData.cardId }}</h4>
             </div>
             <div class="col-2">
-                <img :src="baseUrl+ '/img/task-icon/date-plus.png'" style=" height: 29px;cursor: pointer"
+                <i style="height: 29px; cursor: pointer;"
                      v-if="selectedData.date === '0000-00-00'"
-                     class="details-title calender-for-details details-header">
-                <!--                <i class="fa fa-calendar details-title calender-for-details details-header"-->
-                <!--                   v-if="selectedData.date === '0000-00-00'"></i>-->
-
+                   class="fal fa-calendar-plus details-title calender-for-details details-header"></i>
                 <datepicker
                     :disabled-dates="disabledDates"
                     @selected="updateDate"
@@ -111,9 +108,9 @@
                         </div>
                     </div>
 
-                    <img :src="baseUrl+'/img/task-icon/tag-add.png'" data-toggle="dropdown"
-                         class="dropdown-toggle-split li-opacity" style=" height: 29px;cursor: pointer; margin: 9px 5px;" v-else
-                         data-original-title="Add Tag">
+                    <i class="fal fa-tags dropdown-toggle-split li-opacity" data-toggle="dropdown"
+                          style=" height: 29px;cursor: pointer; margin: 9px 5px;" v-else
+                       data-original-title="Add Tag"></i>
 
 
                     <div class="dropdown-menu dropdown-menu1 " style="width: 250px !important;">
@@ -177,10 +174,9 @@
                     <!-- <i class="outline-person icon-image-preview li-opacity "-->
                     <!--    data-toggle="tooltip" title="Assignee">-->
                     <!-- </i>-->
-                        <img :src="baseUrl+'/img/task-icon/add-user.png'"
-                             class="li-opacity"
+                       <i class="fal fa-user-plus li-opacity"
                              style=" height: 29px;cursor: pointer; margin: 9px 11px;"
-                             data-original-title="Add User">
+                             data-original-title="Assign User" ></i>
 
                     </span>
 
@@ -220,29 +216,19 @@
                                            data-toggle="tooltip" title="Remove user from assigned !"
                                            class="remove-assign-user badge badge-danger"
                                            href="javascript:void(0)">
-                                            <i class="fa fa-user-times remove-assign-user-icon"></i>
+                                            <i class="fal fa-user-times remove-assign-user-icon"></i>
                                         </a>
                                         <a :id="'remove-assign-user'+user.id" v-else
                                            data-toggle="tooltip" title="Assign user to task!"
                                            class="remove-assign-user badge badge-success"
                                            href="javascript:void(0)">
-                                            <i class="fa fa-user-plus remove-assign-user-icon"></i>
+                                            <i class="fal fa-user-plus remove-assign-user-icon"></i>
                                         </a>
                                     </div>
 
                                 </template>
                             </li>
                         </diV>
-                        <li @click="switchEvent($event)"
-                            class="border-top pl-2 assign-user-drop-down-footer">
-
-                            <span class="assign-user-drop-down-text">Assign an external team</span>
-                            <switches class="assign-user-switch-for-dropdown"
-                                      color="success"
-                                      theme="bootstrap"
-                                      v-model="id">
-                            </switches>
-                        </li>
                     </div>
                 </a>
             </div>
@@ -337,7 +323,7 @@
                         <div style="cursor: pointer; background-color: #F8F8F8; margin:10px 0;">
                             <input :id="'file'+selectedData.cardId" :ref="selectedData.cardId"
                                    type="file">
-                            <a @click="addAttachment(selectedData)"><i class="fa fa-paperclip"></i></a>
+                            <a @click="addAttachment(selectedData)"><i class="fal fa-paperclip"></i></a>
                         </div>
                     </div>
                 </div>
@@ -392,7 +378,7 @@
                                         type="file">
                                <span> Upload File : </span><a @click="addCardAttachment(selectedData)" class="btn btn-default btn-sm"
                                    style="border: 1px solid #f1efe6">
-                                       <i class="fa fa-paperclip"></i>
+                                       <i class="fal fa-paperclip"></i>
                                </a>
                            </div>
                        </div>
@@ -418,9 +404,11 @@
                                                     {{ comments.user.name.substring(0,2) }}</p>
                                             </div>
                                             <div class="comment_body">
+                                                <span class="user">{{comments.user.name}}</span>
+                                                <span> | {{comments.created_at.substring(11,16)}} | </span>
+                                                <span>{{ ' '+comments.created_at.substring(0,10)}}</span>
                                                 <span style="padding: 10px;" v-if="comments.comment != '' && comments.comment != null">
                                                     <p>
-                                                        <span class="user">{{comments.user.name}} :</span>
                                                         <span v-html="comments.comment"></span>
                                                     </p>
                                                 </span>
@@ -455,19 +443,19 @@
                                             <div class="comment_toolbar">
                                                 <div class="comment_details">
                                                     <ul>
-                                                        <li><i class="fa fa-clock-o"></i> {{comments.created_at.substring(11,16)}}</li>
-                                                        <li><i class="fa fa-calendar"></i>{{ ' '+comments.created_at.substring(0,10)}}</li>
-                                                        <li><i class="fa fa-pencil"></i> <span class="user">{{comments.user.name}}</span></li>
-                                                        <li @click="deleteDetailComment(comments.id)"><i class="fa fa-trash"></i> <span class="user" style="color: red"> Delete</span></li>
+                                                        <!-- BRYAN I removed this section Not sure what it's for -->
+                                                        <!-- <li><i class="fa fa-pencil"></i> <span class="user">{{comments.user.name}}</span></li> -->
+                                                        <li @click="deleteDetailComment(comments.id)"><i class="fal fa-trash-alt"></i></li>
+                                                        <li @click="replyToComment(comments.id)"><i class="fas fa-reply"></i></li>
                                                     </ul>
                                                 </div>
-                                                <div class="comment_tools">
-                                                    <ul>
-                                                        <li @click="replyToComment(comments.id)"><i class="fa fa-reply"></i></li>
-                                                <!--         <li><i class="fa fa-share-alt"></i></li>-->
-                                                <!--         <li><i class="fa fa-heart love"></i></li>-->
+                                                <!-- <div class="comment_tools">
+                                                   <ul>
+
+                                                       <li><i class="fa fa-share-alt"></i></li>
+                                                     <li><i class="fa fa-heart love"></i></li>
                                                     </ul>
-                                                </div>
+                                                </div> -->
 
                                             </div>
                                             <li :id="'replyBox'+comments.id" class="replyCommentSection" style="display : none;" >
