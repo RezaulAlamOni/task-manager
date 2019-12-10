@@ -2710,6 +2710,7 @@
                 var _this = this;
                 // _this.task_logs = [];
                 _this.ShowDetails();
+                    $('#_file').click();
                 setTimeout(function () {
                     $('#_details').click();
                     // $('#_log').click()
