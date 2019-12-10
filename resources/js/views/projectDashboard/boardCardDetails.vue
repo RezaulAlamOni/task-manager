@@ -332,7 +332,7 @@
 
             <div aria-labelledby="log-tab" class="tab-pane" id="file" role="tabpanel">
                <span>
-                   <h3 class="p-3">Files of this card </h3>
+                   <h3 class="p-3">Files</h3>
                    <div class=" comment-section-in-task-details" style="max-height: calc(100vh - 315px);">
                        <div class="row" v-if="selectedData.files !== ''" id='fileSection' style=" max-height: calc(100vh - 390px); width: 100%; overflow: auto;" >
                             <div class="col-md-4" v-for="files in selectedData.files" >
@@ -376,9 +376,9 @@
                            <div class="">
                                <input :id="'files'+selectedData.cardId" :ref="selectedData.cardId" style="display: none;" @change="updateCardPicture($event,selectedData)"
                                         type="file">
-                               <span> Upload File : </span><a @click="addCardAttachment(selectedData)" class="btn btn-default btn-sm"
+                               <a @click="addCardAttachment(selectedData)" class="btn btn-default btn-sm"
                                    style="border: 1px solid #f1efe6">
-                                       <i class="fal fa-paperclip"></i>
+                                       Upload File <i class="fal fa-file-upload"></i>
                                </a>
                            </div>
                        </div>
