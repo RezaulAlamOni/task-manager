@@ -1418,6 +1418,7 @@
                 disabledDates: {
                     id: null,
                 },
+                shift_first : null,
             }
         },
         mounted() {
@@ -2252,6 +2253,7 @@
                 axios.post('/api/board-task', data)
                     .then(response => response.data)
                     .then(response => {
+                        _this.allCardIds = response.allCardIds;
                         _this.cards = response.success;
                         _this.allUsers = response.allUsers;
                         _this.allTags = response.allTags;
@@ -2815,15 +2817,43 @@
                     for (let index = 0; index < _this.selectedIds.length; index++) {
                         $('#card_' + _this.selectedIds[index]).addClass('selected-card');
                     }
-                } else if (e.shiftKey && e.which === 1) {
+                } 
+                // else if (e.shiftKey && e.which === 1) {
                     // alert('shft+left clk');
-                    _this.selectedIds.push(card.cardId);
-                    console.log(_this.selectedIds);
+                    // _this.selectedIds.push(card.cardId);
+                    // console.log(_this.selectedIds);
                     // for (let index = 0; index < _this.selectedIds.length; index++) {
                     //     $('#card_'+this.selectedCard).addClass('selected-card');
                     // }
                     // $('#click' + card.cardId).addClass('clicked');
 
+                // } 
+                else if (e.shiftKey && e.which === 1) {
+
+                    var first = _this.shift_first;
+                    var last = card.cardId;
+                    var flag = 0;
+                    var flag1 = 0;
+
+                    var index_last = _this.allCardIds.indexOf(last);
+                    var index_first = _this.allCardIds.indexOf(first);
+                    if (index_first > index_last ){
+                        first = card.cardId  ;
+                        index_first = _this.allCardIds.indexOf(first);
+                        last = _this.shift_first;
+                    }
+                    _this.selectedIds = [];
+                    $('.card-list').removeClass('selected-card');
+
+                    for (var i = index_first; i <= _this.allCardIds.length; i++){
+                        if (_this.allCardIds[i] === first) {flag = 1;flag1 = 1;}
+                        if (flag === 1){
+                            _this.selectedIds.push(_this.allCardIds[i]);
+                            // $('#click' + _this.allCardIds[i]).addClass('clicked');
+                            $('#card_' + _this.allCardIds[i]).addClass('selected-card');
+                        }
+                        if (flag1 === 1 && _this.allCardIds[i] === last) {flag = 0;flag1 = 0; break;}
+                    }
                 } else if (e.which === 1) {
                     // alert('left clk');
                     // if (card.text !== '') {
@@ -2831,6 +2861,7 @@
                     // }
                     _this.selectedIds = [];
                     _this.selectedIds.push(card.cardId);
+                    _this.shift_first = card.cardId;
                     // this.selectedData = card;
                     // this.tags = card.tags;
                     // $('.eachItemRow').removeClass('clicked');

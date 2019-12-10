@@ -38,6 +38,7 @@ class MultipleBoardController extends Controller
     public function index(Request $request)
     {
         $boards = [];
+        $allTaskIds = [];
         $board = Task::where('board_parent_id', 0)
                 ->with(['moveToCol','task' => function($q){
                     $q->where('is_deleted', '!=', 1);
@@ -91,7 +92,7 @@ class MultipleBoardController extends Controller
                     $boards[$key]['colName'] = '';
                     $boards[$key]['users'] = $user_name;
                 }
-            }else{
+            } else {
                 $boards[$key]['moveToCol'] = false;
                 $boards[$key]['ruleName'] = '';
                 $boards[$key]['boardName'] = '';
@@ -99,7 +100,7 @@ class MultipleBoardController extends Controller
             }
             if (!empty($value['task']) && count($value['task']) > 0) {
                 foreach ($value['task'] as $keys => $values) {
-
+                    $allTaskIds[] = $values['id'];
                     $tagTooltip = '';
                     $tags = [];
                     if (!empty($values['Assign_tags']) && count($values['Assign_tags']) > 0) {
@@ -169,7 +170,7 @@ class MultipleBoardController extends Controller
             }
         }
         // return  $boards;
-        return response()->json(['success' => $boards, 'allUsers' => $allUsers, 'allTags' => $allTags]);
+        return response()->json(['success' => $boards, 'allUsers' => $allUsers, 'allTags' => $allTags, 'allCardIds' => $allTaskIds]);
     }
 
     public function recurChild($child)

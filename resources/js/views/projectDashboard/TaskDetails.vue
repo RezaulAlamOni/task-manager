@@ -22,7 +22,7 @@
                 </datepicker>
             </div>
             <div class="col-1">
-                <img class="img-responsive details-header" src="/img/12.jpg" style="height:30px;width:30px;">
+                <img class="img-responsive details-header" src="/img/12.jpg" style="height:30px; width:30px;">
             </div>
             <div class="col-4">
                 <!-- Tags -->
@@ -60,7 +60,6 @@
                                     <i class="fa fa-times remove-assign-user-icon"></i>
                                 </a>
                             </p>
-
                         </span>
                     </template>
                 </a>

@@ -172,7 +172,7 @@
 
                         </span>
                     </template>
-                    <span data-toggle="dropdown" class=" dropdown-toggle-split" style="float: right;margin: 9px 11px;" v-else>
+                    <span data-toggle="dropdown" class=" dropdown-toggle-split" style="float: right;" v-else>
 
                     <!-- <i class="outline-person icon-image-preview li-opacity "-->
                     <!--    data-toggle="tooltip" title="Assignee">-->
@@ -470,15 +470,36 @@
                                                 </div>
 
                                             </div>
-                                            <li :id="'replyBox'+comments.id" style="display : none;" v-click-outside="hidereplaybox(comments.id)">
+                                            <li :id="'replyBox'+comments.id" class="replyCommentSection" style="display : none;" >
+                                                <!-- v-click-outside="hidereplaybox(comments.id)" -->
                                                 <!-- <input type='text' class="form-control" style="width: 85% !important; margin-bottom: 10px;">
                                                 <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="saveComment(selectedData.cardId)">Post</a> -->
-                                                <div class="input-group display-inline position-relative" style="margin-bottom: 10px; left: 78px;">
+                                                <div class="mb-3 input-group display-inline position-relative" style="margin-bottom: 10px; left: 78px;">
+                                                    <div :id="'myUL-user-reply'+comments.id" class="myUL-user-comment" style="left: 0px; top: -20px;">
+                                                        <template v-for="user in replyProjectUsers" v-if=" replyProjectUsers !== null && replyProjectUsers.length > 0">
+                                                            <li @click="replySearchTaskByAssignedUser(user.id,user.name,comments)">
+                                                                <a href="javascript:void(0)">
+                                                                    <span class="assignUser-suggest-photo">
+                                                                            {{(user.name !== null) ? user.name.substring(0,2) : ''}}
+                                                                    </span>
+                                                                    {{user.name}}
+                                                                </a>
+                                                            </li>
+                                                        </template>
+                                                        <template v-else>
+                                                            <li>
+                                                                <a href="javascript:void(0)">
+                                                                    No user found!
+                                                                </a>
+                                                            </li>
+                                                        </template>
+                                                    </div>
                                                     <input  :id="'replyTextBox'+comments.id" type="text"
                                                             class="custom-input"
                                                             name="subscribe_email"
+                                                            @keyup="commentReplyPress($event,selectedData,comments)"
                                                             placeholder="Reply ... ">
-                                                    <div class="input-group-prepend">
+                                                    <div class="input-group-append">
                                                         <span @click="saveReply(comments.id, selectedData.cardId)" class="input-group-text" id="basic-addon1">Reply</span>
                                                     </div>
                                                 </div>
@@ -780,6 +801,7 @@
                 transferBtn: false,
                 project: null,
                 projectUsers: null,
+                replyProjectUsers: null,
                 tree4data: [],
                 currentColumn: null,
                 currentColumnIndex: null,
@@ -1096,7 +1118,7 @@
 
             },
             commentPress(e,data)
-            {   
+            {
                 console.log(e.which);
                 let _this = this;
                 // this.projectUsers = null;
@@ -1145,6 +1167,57 @@
                     })
                 }
             },
+            commentReplyPress(e,data,comments)
+            {
+                // console.log(e.which);
+                let _this = this;
+                // this.projectUsers = null;
+                // let cmHe = $('#replyTextBox'+comments.id).height();
+                // $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
+                // console.log(this.selectedData.comment);
+                if (e.which == 32) {
+                    _this.trigger = false;
+                    _this.userNames = '';
+                    _this.replyProjectUsers = null;
+                }
+
+                if (_this.trigger == true && e.which !== 16 && e.which !== 50) {
+                    _this.userNames += e.key;
+                    console.log(_this.userNames);
+                    // console.log(e.key, _this.userNames);
+                    // axios.post('/api/task-list/search-result', {
+                    //     'user_id': id,
+                    //     p_id: _this.projectId,
+                    //     list_id: nav_type.list_id,
+                    //     type: (_this.search_type === 'all') ? 'overview' : nav_type.type,
+                    // })
+                    // .then(response => response.data)
+                    // .then(response => {
+                    //     _this.searchData.tasks = response.search_tasks;
+                    //     // console.log(_this.searchData.tasks)
+                    //     $('#myUL-user').removeClass('myUL-user');
+                    //     $('#myUL').removeClass('myUL');
+                    //     $('#myUL').addClass('myUL-show');
+
+                    // })
+                    // .catch(error => {
+                    //     console.log('Api is drag and drop not Working !!!')
+                    // });
+                }
+                
+                if (e.shiftKey && e.which == 50) {
+                    _this.trigger = true;
+                    _this.commentsData = $('#replyTextBox'+comments.id).val();
+                    axios.get('/api/task-list/all-suggest-user')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.replyProjectUsers = response.search_user;
+                    })
+                    .catch(error => {
+                        console.log('All suggest user api not working')
+                    })
+                }
+            },
             userList(e,data)
             {   
                 let _this = this;
@@ -1152,14 +1225,20 @@
                 // console.log(value.endsWith('@'));
                 let cmHe = $('#comment'+data.cardId).height();
                 $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
-                
                 // console.log(this.selectedData);
+            },
+            replySearchTaskByAssignedUser(id, name, comment) {
+                let _this = this;
+               $('#replyTextBox'+comment.id).val(_this.commentsData+''+name+' ');
+                //    $('.SubmitButton').show();
+                   $('#replyTextBox'+comment.id).focus();
+               _this.replyProjectUsers = null;
             },
             SearchTaskByAssignedUser(id, name) {
                 let _this = this;
                $('.commentInput').val(_this.commentsData+''+name+' ');
-            //    $('.SubmitButton').show();
-            //    $('.commentInput').focus();
+                //    $('.SubmitButton').show();
+                //    $('.commentInput').focus();
                _this.projectUsers = null;
             },
             // removeAssignedUser(user, index, key) {
@@ -1499,13 +1578,18 @@
             },
             replyToComment(id)
             {
+                this.replyProjectUsers = null;
+                $('.replyCommentSection').hide();
                 $('#replyBox'+id).show();
                 $('#replyTextBox'+id).focus();
             },
             hidereplaybox(id)
             {
-                $('#replyBox'+id).hide();
-                $('#replyTextBox'+id).val('');
+                let _this = this;
+                if(_this.replyProjectUsers === null){
+                    $('#replyBox'+id).hide();
+                    $('#replyTextBox'+id).val('');
+                }
             },
             saveReply(id, task_id)
             {
