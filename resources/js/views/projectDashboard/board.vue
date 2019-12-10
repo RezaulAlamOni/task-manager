@@ -418,21 +418,21 @@
                                                      <span title="" data-placement="bottom" data-toggle="tooltip"
                                                            v-if="card.priority_label === 'high'"
                                                            class="badge badge-warning text-capitalize "
-                                                           style="background: #F4F5F7;height: 18px; line-height: 12px;border: 1px solid #944d4d;color : black "
+                                                           style="background: #e25858;height: 18px; line-height: 12px;color:#ffffff "
                                                            data-original-title="">
                                                         {{card.priority_label}}
                                                     </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
                                                           v-if="card.priority_label === 'low'"
                                                           class="badge badge-warning text-capitalize "
-                                                          style="background: #172B4D;height: 18px; line-height: 12px;border: 1px solid #944d4d; "
+                                                          style="background: #5987d1;height: 18px; line-height: 12px; "
                                                           data-original-title="">
                                                         {{card.priority_label}}
                                                     </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
                                                           v-if="card.priority_label === 'medium'"
                                                           class="badge badge-warning text-capitalize "
-                                                          style="background: #ff8170;height: 18px; line-height: 12px;border: 1px solid #944d4d;"
+                                                          style="background: #e58c62;height: 18px; line-height: 12px;"
                                                           data-original-title="">
                                                         {{card.priority_label}}
                                                      </span>
@@ -489,6 +489,7 @@
                                                  :class="[(card.priority_label !== null) ? 'pch-total-child' : 'total-child']"
                                                  v-if="card.child > 0"
                                                  @click="hideChilds(card.cardId)">
+                                                <i class="fal fa-layer-minus" style="font-size: 14px;"></i>
                                                 <strong>
                                                     {{ card.child }}
                                                 </strong>
@@ -2164,8 +2165,8 @@
                     text: this.selectedData.data
                 };
                 swal({
-                        title: "Are you sure?",
-                        text: "You want to delete this task !!!",
+                        title: "Are you sure",
+                        text: "You want to delete this task?",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger btn",
@@ -2178,7 +2179,7 @@
                             .then(response => response.data)
                             .then(response => {
                                 _this.getBoardTask()
-                                swal("Deleted!", "Successfully delete task !", "success");
+                                swal("Deleted!", "Successfully deleted task", "success");
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1000);
@@ -2352,13 +2353,13 @@
             deleteTask(index, cardIndex, id) {
                 let _this = this;
                 swal({
-                    title: 'Are you sure?',
-                    text: "You want to remove this task",
+                    title: 'Are you sure',
+                    text: "You want to remove this task?",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: 'Red',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
+                    confirmButtonText: 'Yes, remove it'
                 }, function () {
                     if (_this.cards[index].task[cardIndex].id == id) {
                         axios.get('/api/board-task-delete/' + id)
@@ -3088,13 +3089,13 @@
                 };
                 $('.jquery-accordion-menu').hide();
                 swal({
-                        title: "Are you sure?",
-                        text: "You want to delete all selected task !!!",
+                        title: "Are you sure",
+                        text: "You want to delete all selected tasks?",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger btn",
                         confirmButtonColor: 'Red',
-                        confirmButtonText: "Yes, delete it!",
+                        confirmButtonText: "Yes, delete them",
                         closeOnConfirm: true
                     },
                     function () {
@@ -3104,7 +3105,7 @@
                                 _this.getBoardTask();
                                 $('.jquery-accordion-menu').hide();
                                 _this.delete_popup = 0;
-                                swal("Deleted!", "Successfully delete selected task !", "success");
+                                swal("Deleted!", "Successfully deleted selected tasks", "success");
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1000);
