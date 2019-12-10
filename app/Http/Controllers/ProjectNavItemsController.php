@@ -85,7 +85,7 @@ class ProjectNavItemsController extends Controller
         $nav = ProjectNavItems::where('id', $nav_id)->first();
         $type = $nav->type;
         if ($type == 'list') {
-            $list = Multiple_list::where(['project_id' => (int)$project_id, 'nav_id' => $nav_id,'is_delete'=>0])->get();
+            $list = Multiple_list::where(['project_id' => (int)$project_id, 'nav_id' => $nav_id])->get();
             $list->type = $type;
             return [$list, $nav->type];
         } else {
