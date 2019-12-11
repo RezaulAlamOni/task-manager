@@ -193,6 +193,7 @@
                                                  @click="makeInput($event,card.cardId)"
                                                  @blur="showItem($event,card,index,key)"
                                                  @keypress="preventEnter($event)"
+                                                 @keyup="cardTitlePress($event,card,index,key)"
                                                  v-html="card.data">
                                             </div>
                                             <div>
@@ -2514,6 +2515,57 @@
                 if (e.which == 13) {
                     e.preventDefault();
                     // alert('Enter pressed');
+                }
+            },
+            cardTitlePress(e,card,index,key)
+            {
+                // console.log(e.which);
+                let _this = this;
+                // this.projectUsers = null;
+                // let cmHe = $('#replyTextBox'+comments.id).height();
+                // $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
+                // console.log(this.selectedData.comment);
+                if (e.which == 32) {
+                    _this.trigger = false;
+                    _this.userNames = '';
+                    _this.replyProjectUsers = null;
+                }
+
+                if (_this.trigger == true && e.which !== 16 && e.which !== 50) {
+                    _this.userNames += e.key;
+                    console.log(_this.userNames);
+                    // console.log(e.key, _this.userNames);
+                    // axios.post('/api/task-list/search-result', {
+                    //     'user_id': id,
+                    //     p_id: _this.projectId,
+                    //     list_id: nav_type.list_id,
+                    //     type: (_this.search_type === 'all') ? 'overview' : nav_type.type,
+                    // })
+                    // .then(response => response.data)
+                    // .then(response => {
+                    //     _this.searchData.tasks = response.search_tasks;
+                    //     // console.log(_this.searchData.tasks)
+                    //     $('#myUL-user').removeClass('myUL-user');
+                    //     $('#myUL').removeClass('myUL');
+                    //     $('#myUL').addClass('myUL-show');
+
+                    // })
+                    // .catch(error => {
+                    //     console.log('Api is drag and drop not Working !!!')
+                    // });
+                }
+                
+                if (e.shiftKey && e.which == 50) {
+                    _this.trigger = true;
+                    _this.commentsData = $('#title'+card.id).val();
+                    axios.get('/api/task-list/all-suggest-user')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.replyProjectUsers = response.search_user;
+                    })
+                    .catch(error => {
+                        console.log('All suggest user api not working')
+                    })
                 }
             },
             showItem(e, data, index, child_key) {

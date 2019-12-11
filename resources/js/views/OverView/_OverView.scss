@@ -86,7 +86,7 @@ $RED: #FF6347;
 *:before,
 *:after {
     margin: 0;
-    // padding: 0;
+    padding: 0;
     -webkit-box-sizing: border-box;
     transition: all 0.2s ease;
 }
@@ -300,5 +300,17 @@ body {
             position: relative;
             float: left;
         }
+    }
+}
+
+
+.ck .ck-content {
+    ul {
+        padding-left: 30px !important;
+        list-style: disc !important;
+    }
+
+    ol{
+        padding-left: 30px !important;
     }
 }
