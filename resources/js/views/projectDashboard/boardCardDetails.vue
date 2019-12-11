@@ -259,10 +259,10 @@
                            id="_comment" role="tab">Comments</a>
                     </li>
 
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_requirement" role="tab">Requirement</a>
-                    </li>
+                    </li> -->
 
                     <li class="nav-item">
                         <a @click="showLog" aria-controls="log" aria-selected="false" class="nav-link" data-toggle="tab" href="#log"
