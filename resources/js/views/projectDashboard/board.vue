@@ -100,8 +100,6 @@
                                                                     </li>
                                                                 </ul>
                                                             </li>
-
-
                                                             <!-- <a v-if="column.linkToList.length > 0" @click="unlinklistToCol(index, column.boardId)" class="dropdown-item"
                                                                 href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink Lists
 
@@ -145,7 +143,7 @@
                                     drop-class="card-ghost-drop"
                                     group-name="col"
                                 >
-                                    <Draggable :key="card.id" v-for="(card , key) in column.children">
+                                    <Draggable :key="card.id" v-for="(card , key) in column.children">                                       
                                         <div :class="[card.props.className,(card.priority_label !== null) ? 'pc-'+card.priority_label : '']"
                                              :style="card.props.style"
                                              class="card-list"
@@ -153,6 +151,29 @@
                                              @click="makeItClick($event, card, column.children, index, key, column.boardId)"
                                              :id="'card_'+card.cardId"
                                              v-on:dblclick="showLog">
+                                                <div :id="'titleUserMention'+card.cardId" class="dropdowns-card-user" style="z-index: 1;">
+                                                    <diV class="collapse show switchToggle">
+                                                        <ul id="myUL-user" class="myUL-user-card">
+                                                            <template v-for="user in projectUsers" v-if=" projectUsers !== null && projectUsers.length > 0">
+                                                                <li @click="SearchTaskByAssignedUsers(user.id, user.name, card)">
+                                                                    <a href="javascript:void(0)">
+                                                                        <span class="assignUser-suggest-photo">
+                                                                            {{(user.name !== null) ? user.name.substring(0,2) : ''}}
+                                                                        </span>
+                                                                        {{user.name}}
+                                                                    </a>
+                                                                </li>
+                                                            </template>
+                                                            <template v-else>
+                                                                <li>
+                                                                    <a href="javascript:void(0)">
+                                                                        No user found!
+                                                                    </a>
+                                                                </li>
+                                                            </template>
+                                                        </ul>
+                                                    </diV>
+                                                </div>
                                             <!-- @click="selectCard(card)" -->
                                             <span
                                                   :class="[(card.priority_label !== null) ? 'pch-'+card.priority_label : 'ch-option']"
@@ -187,7 +208,7 @@
                                                     </diV>
                                                 </div>
                                             </span>
-
+                                            
                                             <div :id="'title'+card.cardId" contenteditable="true"
                                                  class="card-title-blur card-title-show"
                                                  @click="makeInput($event,card.cardId)"
@@ -1379,6 +1400,7 @@
                 triggers : null,
                 userNames : null,
                 projectUsers : null,
+                commentsData : null,
             }
         },
         mounted() {
@@ -2273,7 +2295,7 @@
                 let _this = this;
                 $('#title' + id).removeClass('card-title-blur');
                 $('#title' + id).addClass('card-title-focus');
-
+                $('.dropdowns-card-user').hide();
 
                 // $('.inp').addClass('input-hide');
                 // $('.inp').removeClass('form-control');
@@ -2521,17 +2543,19 @@
                 }
             },
             cardTitlePress(e,card,index,key)
-            {
+            {   
+                $('.dropdowns-card-user').hide();
                 console.log(e.which);
                 let _this = this;
                 // this.projectUsers = null;
                 // let cmHe = $('#replyTextBox'+comments.id).height();
                 // $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
                 // console.log(this.selectedData.comment);
-                if (e.which == 32) {
+                if (e.which == 32 || e.which == 13 || e.which == 8) {
                     _this.triggers = false;
                     _this.userNames = '';
                     _this.projectUsers = null;
+                    $('.dropdowns-card-user').hide();
                 }
 
                 if (_this.triggers == true && e.which !== 16 && e.which !== 50) {
@@ -2560,16 +2584,27 @@
                 
                 if (e.shiftKey && e.which == 50) {
                     _this.triggers = true;
-                    _this.commentsData = $('#title'+card.id).val();
+                    _this.commentsData = $('#title'+card.cardId).text();
                     axios.get('/api/task-list/all-suggest-user')
                     .then(response => response.data)
                     .then(response => {
                         _this.projectUsers = response.search_user;
+                        $('.dropdowns-card-user').hide();
+                        $('#titleUserMention'+card.cardId).show();
                     })
                     .catch(error => {
                         console.log('All suggest user api not working')
                     })
                 }
+            },
+            SearchTaskByAssignedUsers(id, name, card) {
+                // alert('sdfsaf');
+                let _this = this;
+                console.log(_this.commentsData);
+                $('#title'+card.cardId).focus();
+                $('#title'+card.cardId).html(_this.commentsData+''+name+' ');
+                _this.projectUsers = null;
+                $('.dropdowns-card-user').hide();
             },
             showItem(e, data, index, child_key) {
 
@@ -2577,7 +2612,7 @@
                 $('#title' + data.cardId).removeClass('card-title-focus');
                 // let attData = $(e.target).attr('data-text');
                 // let attDataNew = e.target.value;
-
+                // $('.dropdowns-card-user').hide();
                 let attDataNew = $('#title' + data.cardId).text();
                 data.data = attDataNew;
                 this.saveData(data, index, child_key);
@@ -2777,8 +2812,6 @@
                         console.log('Api for task add priority not Working !!!')
                     });
             },
-
-
             HideDetails() {
                 // this.getBoardTask();
                 $('#task_width').addClass('task_width');
@@ -2977,7 +3010,7 @@
                     .then(response => response.data)
                     .then(response => {
                         if (response.success === 'success') {
-                            _this.cards[index].task[key].assigned_user.push(response.data);
+                            // _this.cards[index].task[key].assigned_user.push(response.data);
                             //  console.log(_this.cards);
                             setTimeout(function () {
                                 _this.getBoardTask();
