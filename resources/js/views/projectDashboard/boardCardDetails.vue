@@ -463,7 +463,7 @@
                                                 <!-- <input type='text' class="form-control" style="width: 85% !important; margin-bottom: 10px;">
                                                 <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="saveComment(selectedData.cardId)">Post</a> -->
                                                 <div class="mb-3 input-group display-inline position-relative" style="margin-bottom: 10px; left: 78px;">
-                                                    <div :id="'myUL-user-reply'+comments.id" class="myUL-user-comment" style="left: 0px; top: -20px;">
+                                                    <div :id="'myUL-user-reply'+comments.id" class="myUL-user-comment myUL-user-comment-reply" style="left: 0px;">
                                                         <template v-for="user in replyProjectUsers" v-if=" replyProjectUsers !== null && replyProjectUsers.length > 0">
                                                             <li @click="replySearchTaskByAssignedUser(user.id,user.name,comments)">
                                                                 <a href="javascript:void(0)">
@@ -551,7 +551,6 @@
                                                     </div> -->
                                                 </div>
                                             </ul>
-
                                         </ul>
                                     </template>
 
@@ -940,6 +939,8 @@
             },
             HideTextArea() {
                 var _this = this;
+                _this.projectUsers = null;                
+                $('.myUL-user-comment').css({display : 'none'});
                 $('#cmntSection').css({maxHeight:' calc(100vh - 370px)'});
                 $('.SubmitButton').hide();
             },
@@ -947,6 +948,7 @@
                 $('#cmntSection').css({maxHeight:' calc(100vh - 420px)'});
                 this.$emit('textArea', data)
                 $('#comment'+data.cardId).css({height : '50px', maxHeight : '100px'});
+                $('.myUL-user-comment').css({bottom: '108px'});
                  var hei = $("#cmntSection").height();
                 $("#cmntSection").animate({ scrollTop: hei }, 1000);
                 // var _this = this;
@@ -1112,8 +1114,9 @@
                 // this.projectUsers = null;
                 let cmHe = $('#comment'+data.cardId).height();
                 $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
+                $('.myUL-user-comment').css({bottom: ' calc(100vh - 864px + '+cmHe+'px - 38px)'});
                 // console.log(this.selectedData.comment);
-                if (e.which == 32) {
+                if (e.which === 32 || e.which === 13 || e.which === 8) {
                     _this.trigger = false;
                     _this.userNames = '';
                     _this.projectUsers = null;
@@ -1148,6 +1151,7 @@
                     axios.get('/api/task-list/all-suggest-user')
                     .then(response => response.data)
                     .then(response => {
+                        $('.myUL-user-comment').css({display : 'block'});
                         _this.projectUsers = response.search_user;
                     })
                     .catch(error => {
@@ -1163,10 +1167,11 @@
                 // let cmHe = $('#replyTextBox'+comments.id).height();
                 // $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
                 // console.log(this.selectedData.comment);
-                if (e.which == 32) {
+                if (e.which === 32 || e.which === 13 || e.which === 8) {
                     _this.trigger = false;
                     _this.userNames = '';
-                    _this.replyProjectUsers = null;
+                    _this.replyProjectUsers = null;                    
+                    $('.myUL-user-comment').css({display : 'none'});
                 }
 
                 if (_this.trigger == true && e.which !== 16 && e.which !== 50) {
@@ -1199,6 +1204,7 @@
                     axios.get('/api/task-list/all-suggest-user')
                     .then(response => response.data)
                     .then(response => {
+                        $('.myUL-user-comment').css({display : 'block'});
                         _this.replyProjectUsers = response.search_user;
                     })
                     .catch(error => {
@@ -1221,6 +1227,7 @@
                 //    $('.SubmitButton').show();
                    $('#replyTextBox'+comment.id).focus();
                _this.replyProjectUsers = null;
+               $('.myUL-user-comment').css({display : 'none'});
             },
             SearchTaskByAssignedUser(id, name) {
                 let _this = this;
