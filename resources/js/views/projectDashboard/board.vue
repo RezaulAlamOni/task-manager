@@ -1376,6 +1376,9 @@
                     id: null,
                 },
                 shift_first : null,
+                triggers : null,
+                userNames : null,
+                projectUsers : null,
             }
         },
         mounted() {
@@ -2519,19 +2522,19 @@
             },
             cardTitlePress(e,card,index,key)
             {
-                // console.log(e.which);
+                console.log(e.which);
                 let _this = this;
                 // this.projectUsers = null;
                 // let cmHe = $('#replyTextBox'+comments.id).height();
                 // $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
                 // console.log(this.selectedData.comment);
                 if (e.which == 32) {
-                    _this.trigger = false;
+                    _this.triggers = false;
                     _this.userNames = '';
-                    _this.replyProjectUsers = null;
+                    _this.projectUsers = null;
                 }
 
-                if (_this.trigger == true && e.which !== 16 && e.which !== 50) {
+                if (_this.triggers == true && e.which !== 16 && e.which !== 50) {
                     _this.userNames += e.key;
                     console.log(_this.userNames);
                     // console.log(e.key, _this.userNames);
@@ -2556,12 +2559,12 @@
                 }
                 
                 if (e.shiftKey && e.which == 50) {
-                    _this.trigger = true;
+                    _this.triggers = true;
                     _this.commentsData = $('#title'+card.id).val();
                     axios.get('/api/task-list/all-suggest-user')
                     .then(response => response.data)
                     .then(response => {
-                        _this.replyProjectUsers = response.search_user;
+                        _this.projectUsers = response.search_user;
                     })
                     .catch(error => {
                         console.log('All suggest user api not working')

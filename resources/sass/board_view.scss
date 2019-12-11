@@ -876,7 +876,14 @@
     z-index: 999;
     position: absolute;
     left: 68px;
-    top: -35px;
+    bottom : 52px;
+}
+
+.myUL-user-comment-reply {
+    bottom : 42px !important;
+    max-height: 136px;
+    overflow: auto;
+
 }
 
 .myUL-user-comment li a {
