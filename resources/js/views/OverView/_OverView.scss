@@ -71,7 +71,7 @@
 $LATO: 'Lato', sans-serif;
 
 $GREY: #CCC;
-$BACKGROUND_GREY: lighten(#EEEDED, 2.5%);
+$BACKGROUND_GREY: #f9f9f9;
 $SUBTLE_GREY: #F2F2F2;
 $MURKY_GREY: #384148;
 $DARK_GREY: #333;
@@ -106,9 +106,9 @@ body {
 }
 
 .user_avatar {
-    width: 65px;
-    height: 65px;
-
+    width: 35px;
+    height: 35px;
+    float: left;
     display: inline-block;
     vertical-align: middle;
 
@@ -171,14 +171,11 @@ body {
             vertical-align: middle;
 
             width: calc(100% - 80px);
-            min-height: 65px;
+            min-height: 15px;
             margin-left: 10px;
             padding: 5px 10px;
             font-size: .9rem;
             color: #555;
-            background-color: #f1f0f0;
-            border-bottom: 2px solid #f2f2f2;
-            border-radius: 5px;
 
             .replied_to {
                 margin: 5px 0px;
@@ -202,14 +199,13 @@ body {
 
             ul {
                 list-style-type: none;
-                padding-left: 75px;
+                padding-left: 40px;
                 font-size: 0;
 
                 li {
                     display: inline-block;
                     padding: 5px;
-                    font-size: .7rem;
-                    color: lighten(#5e9f64, 0%);
+                    font-size: 12px;
 
                     &:hover {
                         cursor: pointer;
@@ -256,10 +252,11 @@ body {
     }
 
     .user {
-        color: $BLUE;
+        color: $DARK_GREY;
+        font-weight: bold;
 
         &:hover {
-            color: $BLUE;
+            color: $DARK_GREY;
             text-decoration: underline;
         }
     }

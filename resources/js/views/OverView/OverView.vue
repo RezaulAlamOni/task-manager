@@ -9,7 +9,7 @@
                     <div class="circle"></div>
                 </div>
             </div>
-            <ul class="nav nav-pills" id="myTab" role="tablist" style="background: #e4e4e4;padding: 4px 0px 0 0px">
+            <ul class="nav nav-tabs nav-float" id="myTab" role="tablist" >
                 <li class="nav-item">
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                        aria-controls="home" aria-selected="true">All List</a>

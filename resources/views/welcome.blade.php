@@ -7,22 +7,21 @@
     <meta name="keywords" content="">
 
     <title>CompltIt - Project Management From Idea to Complete</title>
-    <script src="https://kit.fontawesome.com/770fef9945.js" crossorigin="anonymous"></script>
-
 
     <!-- Styles -->
     <link href="../css/page.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
 
-
     <!-- Favicons -->
     <link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
     <link rel="icon" href="../img/favicon.ico">
+    <script src="https://kit.fontawesome.com/1a9af935ca.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/latest/css/pro.min.css" media="all">
+    <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/latest/css/pro-v4-font-face.min.css" media="all">
+    <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/latest/css/pro-v4-shims.min.css" media="all">
 </head>
 
 <body>
-
-
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark" data-navbar="fixed">
     <div class="container">

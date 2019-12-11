@@ -217,7 +217,7 @@
 
         .hide-item-res {
             position: absolute;
-            right: 25px;
+            right: 10px;
             top: 0;
             width: 75px;
             background: transparent;
@@ -233,13 +233,13 @@
 
         .tag-icon {
             position: absolute;
-            right: 102px;
+            right: 80px;
             top: 10px;
         }
 
         .attach-icon {
             position: absolute;
-            right: 175px;
+            right: 140px;
             top: 9px;
             font-size: 15px;
             cursor: pointer;
@@ -247,7 +247,7 @@
 
         .priority-icon {
             position: absolute;
-            right: 227px;
+            right: 200px;
             top: 9px;
             font-size: 15px;
             cursor: pointer;
@@ -449,11 +449,10 @@
     }
 
     .jquery-accordion-menu > ul > li:hover > a {
-        background: #8ec0da
+        background: #FFFFFF;
     }
 
     .jquery-accordion-menu, .jquery-accordion-menu * {
-        font-family: 'Open Sans', sans-serif;
         box-sizing: border-box;
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
@@ -486,15 +485,13 @@
                     padding: 10px 0px 10px 13px;
                     float: left;
                     text-decoration: none;
-                    color: #f0f0f0;
                     font-size: 13px;
-                    background: #ecf2fa;
-                    color: black;
-                    border-bottom: solid 1px #427bcc;
+                    background: #FFFFFF;
+                    color: #333;
+                    border-bottom: solid 1px #174991;
                     white-space: nowrap;
                     position: relative;
                     overflow: hidden;
-                    border-radius: 5px;
                     -webkit-transition: color .2s linear, background .2s linear;
                     transition: color .2s linear, background .2s linear;
                 }
@@ -996,13 +993,11 @@
 .remove-assign-user {
     display: inline-block !important;
     position: absolute;
-    //width: 21px;
-    //height: 22px;
     right: 10px;
     z-index: 9999;
-    color: #000;
-    //background: #d0e3fd;
+    color: #ffffff;
     top: 16px;
+    font-size:16px;
 }
 
 .users-select {
@@ -1292,7 +1287,7 @@
     top: 0px;
     width: 100%;
     text-align: right;
-    background: rgb(244, 245, 247);
+    background: #e25858;
     padding-top: 4px;
     //border-bottom: 1px solid rgba(125, 125, 125, 0.3);
     border-radius: 0.25rem 0.25rem 0 0;
@@ -1304,7 +1299,7 @@
     top: 0px;
     width: 100%;
     text-align: right;
-    background: rgb(255, 129, 112);
+    background: #e58c62;
     padding-top: 4px;
     border-radius: 0.25rem 0.25rem 0 0;
 }
@@ -1315,7 +1310,7 @@
     top: 0px;
     width: 100%;
     text-align: right;
-    background: rgb(23, 43, 77);
+    background: #5987d1;
     padding-top: 4px;
     border-radius: 0.25rem 0.25rem 0 0;
 }
@@ -1328,4 +1323,8 @@
 
 .ch-option-icon {
    color: white !important;
+}
+
+a{
+    cursor: pointer !important;
 }

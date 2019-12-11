@@ -11,8 +11,7 @@
 
     <!-- Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'>
-    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
-
+    <script src="https://kit.fontawesome.com/1a9af935ca.js" crossorigin="anonymous"></script>
 {{--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">--}}
     <!-- CSS -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">

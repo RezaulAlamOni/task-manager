@@ -36,31 +36,12 @@
                                             <span class="total-task">{{column.children.length}}</span>
                                         </div>
                                         <div class="col-md-1"
-                                             style="position: absolute; display: inline; right: 0px; top: 9px">
+                                             style="position: absolute; display: inline; right: 10px; top: 9px">
                                             <span class="pull-right" style="display: inline-flex;">
-                                                <!-- <span>
-                                                    <span class="dropdown-toggle-split  opacity"
-                                                        data-toggle="dropdown">
-                                                        <img :src="baseUrl+'/img/task-icon/plus.png'" height="18" width="18" >
-                                                        <!-- <i class="fa fa-plus"></i> -->
-                                                <!--</span>
-                                                <div class="dropdown-menu">
-                                                    <diV class="collapse show switchToggle">
-                                                        <a @click="addExistingTask(index,column.boardId)" class="dropdown-item"
-                                                        href="javascript:void(0)">
-                                                            <img :src="baseUrl+'/img/task-icon/plus-o.png'" height="18" width="18" > Add existing tasks</a>
-                                                        <a @click="addCard(index,column.boardId)" class="dropdown-item"
-                                                        href="javascript:void(0)"><img :src="baseUrl+'/img/task-icon/create.png'" height="18" width="18" > Create new tasks</a>
-                                                    </diV>
-                                                </div>
-                                            </span> -->
 
-                                                <span>
                                                     <span class="dropdown-toggle-split opacity"
                                                           data-toggle="dropdown" style="padding: 0px;">
-                                                        <img :src="baseUrl+'/img/task-icon/ellipsis.png'" height="18"
-                                                             width="18">
-                                                        <!-- <i class="fa fa-ellipsis-h"></i> -->
+                                                       <i class="fal fa-ellipsis-h" style="font-size:22px"></i>
                                                     </span>
                                                     <div class="dropdown-menu">
                                                         <diV class="collapse show switchToggle">
@@ -178,9 +159,9 @@
                                             > <!-- v-if="card.textareaShow === true" -->
                                                 <span class="dropdown-toggle-split opacity"
                                                       data-toggle="dropdown">
-                                                    <i class="fa fa-ellipsis-h"
+                                                    <i class="fal fa-ellipsis-h"
                                                        :class="[(card.priority_label === 'low') ? 'ch-option-icon' : '']"
-                                                       style="color: #272757"></i>
+                                                       style="color: #272757; font-size:22px;"></i>
                                                 </span>
                                                 <div class="dropdown-menu">
                                                     <diV class="collapse show switchToggle">
@@ -216,10 +197,8 @@
                                             </div>
                                             <div>
                                                 <a class="calender clickHide" v-if="card.date === '0000-00-00'">
-                                                    <!-- <i class="outline-event icon-image-preview" data-toggle
-                                                    title="toggle"></i> -->
-                                                    <img :src="baseUrl+'/img/task-icon/date-plus.png'" data-toggle
-                                                         title="toggle" class="icon-image-preview">
+                                                    <i class="fal fa-calendar-plus icon-image-preview" data-toggle
+                                                         title="toggle"></i>
                                                 </a>
                                                 <flatPickr
                                                     :class="{
@@ -239,14 +218,12 @@
                                                 <a @click="deleteCard(index, key, card.cardId)"
                                                    v-if="card.types == 'card'">
                                                     <!-- <i class="baseline-playlist_delete icon-image-preview"></i> -->
-                                                    <img src="https://img.icons8.com/color/48/000000/delete-forever.png"
-                                                         class="icon-image-preview">
+                                                    <i class="fal fa-trash-alt icon-image-preview"></i>
                                                 </a>
                                                 <a @click="deleteTask(index, key, card.cardId)"
                                                    v-if="card.types == 'task'">
                                                     <!-- <i class="baseline-playlist_delete icon-image-preview"></i> -->
-                                                    <img src="https://img.icons8.com/color/48/000000/delete-forever.png"
-                                                         class="icon-image-preview">
+                                                    <i class="fal fa-trash-alt icon-image-preview"></i>
                                                 </a>
                                             </div>
                                             <a class="user-assign-card ">
@@ -262,9 +239,8 @@
                                                     </span>
                                                 </template>
                                                 <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
-                                                    <img :src="baseUrl+'/img/task-icon/add-user.png'"
-                                                         class="icon-image-preview " data-toggle="tooltip"
-                                                         title="Assignee">
+                                                    <i class="fal fa-user-plus icon-image-preview " data-toggle="tooltip"
+                                                         title="Assignee"></i>
                                                 </span>
 
                                                 <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
@@ -306,31 +282,20 @@
                                                                        title="Remove user from assigned !"
                                                                        class="remove-assign-user badge badge-danger"
                                                                        href="javascript:void(0)">
-                                                                        <i class="fa fa-user-times remove-assign-user-icon"></i>
+                                                                        <i class="fal fa-user-times"></i>
                                                                     </a>
                                                                     <a :id="'remove-assign-user'+user.id" v-else
                                                                        data-toggle="tooltip"
                                                                        title="Assign user to task!"
                                                                        class="remove-assign-user badge badge-success"
                                                                        href="javascript:void(0)">
-                                                                        <i class="fa fa-user-plus remove-assign-user-icon"></i>
+                                                                        <i class="fal fa-user-times"></i>
                                                                     </a>
                                                                 </div>
 
                                                             </template>
                                                         </li>
                                                     </diV>
-                                                    <li @click="switchEvent($event)"
-                                                        class="border-top pl-2 assign-user-drop-down-footer">
-
-                                                                    <span
-                                                                        class="assign-user-drop-down-text">Assign an external team</span>
-                                                        <switches class="assign-user-switch-for-dropdown"
-                                                                  color="success"
-                                                                  theme="bootstrap"
-                                                                  v-model="id">
-                                                        </switches>
-                                                    </li>
                                                 </div>
                                             </a>
                                             <a class="tag-icon">
@@ -401,13 +366,8 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <img :src="baseUrl+'/img/task-icon/tag-add.png'"
-                                                     class="icon-image-preview" data-toggle="dropdown"
-                                                     title="Add Tag" v-else>
-                                                <!-- <i class="outline-local_offer icon-image-preview dropdown-toggle-split li-opacity"
-                                                    data-toggle="dropdown"
-                                                    ></i> -->
-
+                                                <i class="fal fa-tags icon-image-preview" data-toggle="dropdown"
+                                                     title="Add Tag" v-else></i>
                                                 <div class="dropdown-menu dropdown-menu1 ">
 
                                                     <diV class="collapse show switchToggle" style="">
@@ -458,28 +418,27 @@
                                                      <span title="" data-placement="bottom" data-toggle="tooltip"
                                                            v-if="card.priority_label === 'high'"
                                                            class="badge badge-warning text-capitalize "
-                                                           style="background: #F4F5F7;height: 18px; line-height: 12px;border: 1px solid #944d4d;color : black "
+                                                           style="background: #e25858;height: 18px; line-height: 12px;color:#ffffff "
                                                            data-original-title="">
                                                         {{card.priority_label}}
                                                     </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
                                                           v-if="card.priority_label === 'low'"
                                                           class="badge badge-warning text-capitalize "
-                                                          style="background: #172B4D;height: 18px; line-height: 12px;border: 1px solid #944d4d; "
+                                                          style="background: #5987d1;height: 18px; line-height: 12px; "
                                                           data-original-title="">
                                                         {{card.priority_label}}
                                                     </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
                                                           v-if="card.priority_label === 'medium'"
                                                           class="badge badge-warning text-capitalize "
-                                                          style="background: #ff8170;height: 18px; line-height: 12px;border: 1px solid #944d4d;"
+                                                          style="background: #e58c62;height: 18px; line-height: 12px;"
                                                           data-original-title="">
                                                         {{card.priority_label}}
                                                      </span>
                                                 </span>
-                                                <img :src="baseUrl+'/img/priority.png'" v-else style="margin-bottom: -2px"
-                                                     class="icon-image-preview" data-toggle="dropdown"
-                                                     title="Add Tag">
+                                                <i class="fal fa-exclamation-triangle icon-image-preview" v-else style="margin-bottom: -2px"
+                                                     data-toggle="dropdown" title="Add Priority"></i>
 
                                                 <div class="dropdown-menu dropdown-menu-right"
                                                      style="z-index: 1;width: 185px;">
@@ -498,7 +457,7 @@
                                                                     <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #F4F5F7;">.</span>
+                                                                        style="background: #e25858;">.</span>
                                                                         <h5 class="text-capitalize"> high</h5>
                                                                     </div>
                                                                 </div>
@@ -507,7 +466,7 @@
                                                                     <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #ff8170;">.</span>
+                                                                        style="background: #e58c62;">.</span>
                                                                         <h5 class="text-capitalize">medium</h5>
                                                                     </div>
                                                                 </div>
@@ -516,7 +475,7 @@
                                                                     <div class="col-md-9 add-tag-to-selected">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #172B4D;">.</span>
+                                                                        style="background: #5987d1;">.</span>
                                                                         <h5>Low</h5>
                                                                     </div>
                                                                 </div>
@@ -530,6 +489,7 @@
                                                  :class="[(card.priority_label !== null) ? 'pch-total-child' : 'total-child']"
                                                  v-if="card.child > 0"
                                                  @click="hideChilds(card.cardId)">
+                                                <i class="fal fa-layer-minus" style="font-size: 14px;"></i>
                                                 <strong>
                                                     {{ card.child }}
                                                 </strong>
@@ -625,8 +585,8 @@
                             </li>
                             <li>
                                 <a href="javascript:void(0)" data-toggle="dropdown" class="dropdown-toggle-split ">
-                                    <img src="/img/task-icon/tag-add.png" class="contex-menu-icon">
-                                    Add Tags to Selected
+                                    <i class="fal fa-tags contex-menu-icon"></i>
+                                    Add Tags
                                 </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Shift</span>+
@@ -638,7 +598,7 @@
                                             <li class="assignUser">
                                                 <label class="pl-2 label-text">
                                                     <span class="assign-user-drop-down-text">
-                                                        Select Tag For Add tag To Selected Task.
+                                                        Select Tag
                                                     </span>
                                                 </label>
                                             </li>
@@ -671,7 +631,7 @@
                             </li>
                             <li>
                                 <a href="javascript:void(0)" class="dropdown-toggle-split " data-toggle="dropdown">
-                                    <img :src="baseUrl+'/img/priority.png'" class="contex-menu-icon">
+                                    <i class="fal fa-exclamation-triangle contex-menu-icon"></i>
                                     Add Priority
                                 </a>
 <!--                                <span class="contex-menu-sortcut">-->
@@ -746,7 +706,7 @@
                                     input-class="dateCal-selected">
                                 </datepicker>
                                 <a class="calender li-opacity clickHide">
-                                    <img :src="baseUrl+'/img/task-icon/date-plus.png'" class="contex-menu-icon">
+                                    <i class="fal fa-calendar-plus contex-menu-icon"></i>
                                     Set Due Date
                                 </a>
                             </li>
@@ -2205,8 +2165,8 @@
                     text: this.selectedData.data
                 };
                 swal({
-                        title: "Are you sure?",
-                        text: "You want to delete this task !!!",
+                        title: "Are you sure",
+                        text: "You want to delete this task?",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger btn",
@@ -2219,7 +2179,7 @@
                             .then(response => response.data)
                             .then(response => {
                                 _this.getBoardTask()
-                                swal("Deleted!", "Successfully delete task !", "success");
+                                swal("Deleted!", "Successfully deleted task", "success");
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1000);
@@ -2393,13 +2353,13 @@
             deleteTask(index, cardIndex, id) {
                 let _this = this;
                 swal({
-                    title: 'Are you sure?',
-                    text: "You want to remove this task",
+                    title: 'Are you sure',
+                    text: "You want to remove this task?",
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: 'Red',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
+                    confirmButtonText: 'Yes, remove it'
                 }, function () {
                     if (_this.cards[index].task[cardIndex].id == id) {
                         axios.get('/api/board-task-delete/' + id)
@@ -3130,13 +3090,13 @@
                 };
                 $('.jquery-accordion-menu').hide();
                 swal({
-                        title: "Are you sure?",
-                        text: "You want to delete all selected task !!!",
+                        title: "Are you sure",
+                        text: "You want to delete all selected tasks?",
                         type: "warning",
                         showCancelButton: true,
                         confirmButtonClass: "btn-danger btn",
                         confirmButtonColor: 'Red',
-                        confirmButtonText: "Yes, delete it!",
+                        confirmButtonText: "Yes, delete them",
                         closeOnConfirm: true
                     },
                     function () {
@@ -3146,7 +3106,7 @@
                                 _this.getBoardTask();
                                 $('.jquery-accordion-menu').hide();
                                 _this.delete_popup = 0;
-                                swal("Deleted!", "Successfully delete selected task !", "success");
+                                swal("Deleted!", "Successfully deleted selected tasks", "success");
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1000);
