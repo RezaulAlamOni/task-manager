@@ -176,6 +176,8 @@ body {
             padding: 5px 10px;
             font-size: .9rem;
             color: #555;
+            background: #efefef;
+            border-radius: 5px;
 
             .replied_to {
                 margin: 5px 0px;
@@ -196,6 +198,7 @@ body {
 
         .comment_toolbar {
             width: 100%;
+            float: right;
 
             ul {
                 list-style-type: none;
@@ -216,7 +219,14 @@ body {
             .comment_details {
                 display: inline-block;
                 vertical-align: middle;
-                width: 70%;
+                width: 100%;
+                text-align: right;
+                padding-right: 35px;
+            }
+            .comment_details-reply {
+                display: inline-block;
+                vertical-align: middle;
+                width: 100%;
                 text-align: left;
             }
 

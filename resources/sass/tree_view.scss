@@ -207,7 +207,7 @@
 
         .dateCal {
             position: absolute;
-            right: 18px;
+            right: 28px;
             top: 11px;
             border: none;
             background: transparent;
@@ -233,13 +233,13 @@
 
         .tag-icon {
             position: absolute;
-            right: 80px;
+            right: 95px;
             top: 10px;
         }
 
         .attach-icon {
             position: absolute;
-            right: 140px;
+            right: 160px;
             top: 9px;
             font-size: 15px;
             cursor: pointer;
@@ -819,7 +819,7 @@
 }
 
 .myUL-user {
-    display: inline-block;
+    display: inline-block !important;
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -893,9 +893,9 @@
 }
 
 .task-img {
-    height: 15px;
-    width: 15px;
-    border: 1px solid gray;
+    height: 18px;
+    width: 16px;
+    border: 1px solid #a59b9b;
     border-radius: 4px;
 }
 
@@ -937,18 +937,20 @@
 }
 
 .assignUser-photo {
-    width: 30px;
+    width: 28px;
     border-radius: 74%;
     background: #2d1931;
-    height: 30px;
+    height: 28px;
     display: inline-block;
     text-align: center;
     vertical-align: middle;
     line-height: 29px;
     color: white;
-    font-size: 17px;
+    font-size: 13px;
     font-weight: bold;
     cursor: pointer;
+    margin-top: 5px;
+    text-transform: uppercase;
 }
 
 .assignUser-suggest-photo {
@@ -966,19 +968,20 @@
 }
 
 .assignUser-photo-for-selected {
-    width: 22px;
+    width: 20px;
     border-radius: 74%;
     background: #4f4f8a;
-    height: 22px;
+    height: 20px;
     display: inline-block;
     text-align: center;
     vertical-align: middle;
-    line-height: 23px;
+    line-height: 22px;
     color: white;
-    font-size: 10px;
-    padding-left: 1px;
+    font-size: 9px;
+    /* padding-left: 1px; */
     cursor: pointer;
     position: relative;
+    margin: 0;
 }
 
 .remove-assigned {

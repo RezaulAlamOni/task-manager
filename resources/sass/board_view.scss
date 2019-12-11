@@ -39,17 +39,17 @@
     }
 
     .assignUser-photo-for-card {
-        width: 22px;
+        width: 20px;
         border-radius: 74%;
         background: #4f4f8a;
-        height: 22px;
+        height: 20px;
         display: inline-block;
         text-align: center;
         vertical-align: middle;
-        line-height: 23px;
+        line-height: 22px;
         color: white;
-        font-size: 10px;
-        padding-left: 1px;
+        font-size: 9px;
+        /* padding-left: 1px; */
         cursor: pointer;
         position: relative;
         margin: 0;
@@ -468,7 +468,7 @@
         position: absolute;
         bottom: 10px;
         left: 120px;
-        width: 88px;
+        width: 95px;
         text-align: center;
     }
 
@@ -577,14 +577,14 @@
 .total-child {
     position: absolute;
     top: 5px;
-    left: 5px;
+    left: 14px;
     font-size: 12px;
     height: 25px;
-    width: 28px;
-    text-align: center;
+    width: 50px;
+    text-align: left;
     line-height: 25px;
     color: #333;
-    bottom: 18px;
+    //bottom: 18px;
 }
 
 .pch-total-child{

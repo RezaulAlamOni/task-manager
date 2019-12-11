@@ -393,7 +393,7 @@
 
                             <div class="comment_block">
                                 <div class="new_comment">
-                                    <template v-for="comments in comment" style="margin-top: 15px;" >
+                                    <template v-for="comments in comment" style="margin-top: 15px;">
                                         <ul class="user_comment">
                                             <div class="user_avatar" :title="comments.user.name" data-placement="bottom" data-toggle="tooltip" >
                                                 <img :src="comments.user.photo_url" v-if="comments.user.photo_url !== null && comments.user.photo_url !== ''">
@@ -466,11 +466,10 @@
                                                     <div :id="'myUL-user-reply'+comments.id" class="myUL-user-comment" style="left: 0px; top: -20px;">
                                                         <template v-for="user in replyProjectUsers" v-if=" replyProjectUsers !== null && replyProjectUsers.length > 0">
                                                             <li @click="replySearchTaskByAssignedUser(user.id,user.name,comments)">
-                                                                <a href="javascript:void(0)">
+                                                                <a href="#">
                                                                     <span class="assignUser-suggest-photo">
                                                                             {{(user.name !== null) ? user.name.substring(0,2) : ''}}
-                                                                    </span>
-                                                                    {{user.name}}
+                                                                    </span> {{user.name}}
                                                                 </a>
                                                             </li>
                                                         </template>
@@ -491,6 +490,7 @@
                                                         <span @click="saveReply(comments.id, selectedData.cardId)" class="input-group-text" id="basic-addon1">Reply</span>
                                                     </div>
                                                 </div>
+
                                             </li>
                                             <ul style="position: relative; left: 77px; width: calc(100% - 80px);"
                                                 v-if="comments.comment_reply.length > 0"
@@ -504,9 +504,9 @@
                                                         {{ reply.user.name.substring(0,2) }}</p>
                                                 </div>
                                                 <div class="comment_body">
-                                                    <span style="padding: 10px;" v-if="reply.comment != '' && reply.comment != null">
+                                                    <span style="" v-if="reply.comment != '' && reply.comment != null">
                                                         <p>
-                                                            <span class="user">{{reply.user.name}} :</span>
+<!--                                                            <span class="user">{{reply.user.name}} :</span>-->
                                                             <span v-html="reply.comment"></span>
                                                         </p>
                                                     </span>
@@ -534,7 +534,7 @@
                                                     </span>
                                                 </div>
                                                 <div class="comment_toolbar">
-                                                    <div class="comment_details" style="width: 100% !important;">
+                                                    <div class="comment_details-reply" style="width: 100% !important;">
                                                         <ul>
                                                             <li><i class="fa fa-clock-o"></i> {{ reply.created_at.substring(11,16)}}</li>
                                                             <li><i class="fa fa-calendar"></i> {{ reply.created_at.substring(0,10)}}</li>
@@ -551,7 +551,6 @@
                                                     </div> -->
                                                 </div>
                                             </ul>
-
                                         </ul>
                                     </template>
 
@@ -1141,7 +1140,7 @@
                     //     console.log('Api is drag and drop not Working !!!')
                     // });
                 }
-                
+
                 if (e.shiftKey && e.which == 50) {
                     _this.trigger = true;
                     _this.commentsData = $('.commentInput').val();
@@ -1192,7 +1191,7 @@
                     //     console.log('Api is drag and drop not Working !!!')
                     // });
                 }
-                
+
                 if (e.shiftKey && e.which == 50) {
                     _this.trigger = true;
                     _this.commentsData = $('#replyTextBox'+comments.id).val();
@@ -1207,7 +1206,7 @@
                 }
             },
             userList(e,data)
-            {   
+            {
                 let _this = this;
                 var value = e.target.value;
                 // console.log(value.endsWith('@'));
