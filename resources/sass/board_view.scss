@@ -902,3 +902,55 @@
     background-color: #eee;
 }
 
+.myUL-user-card {
+    display: inline-block;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    // z-index: 999;
+    // position: absolute;
+    // left: 68px;
+    // bottom : 52px;
+}
+
+.myUL-user-card-reply {
+    // bottom : 42px !important;
+    max-height: 136px;
+    overflow: auto;
+
+}
+
+.myUL-user-card li a {
+    border: 1px solid #ddd;
+    margin-top: -1px; /* Prevent double borders */
+    background-color: #f6f6f6;
+    padding: 3px 0px 3px 9px;
+    text-decoration: none;
+    font-size: 18px;
+    color: black;
+    display: block;
+    border-radius: 5px;
+}
+
+.myUL-user-card li a:hover:not(.header) {
+    background-color: #eee;
+}
+
+.dropdowns-card-user{
+    // top: 48px !important;
+    display: none;
+    z-index: 1;
+    position: absolute;
+    width: 90%;
+    top: 80px;
+}
+.dropdowns-card-user::before{
+    border: none !important;
+    background: transparent !important;
+}
+.dropdowns-card-user::after{
+    border: none !important;
+    background: transparent !important;
+}
+
