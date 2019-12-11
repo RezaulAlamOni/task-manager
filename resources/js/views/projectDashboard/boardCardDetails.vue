@@ -492,7 +492,7 @@
                                                 </div>
 
                                             </li>
-                                            <ul style="position: relative; left: 77px; width: calc(100% - 80px);"
+                                            <ul style="position: relative; left: 77px; width: calc(100% - 80px);margin-top: 23px;"
                                                 v-if="comments.comment_reply.length > 0"
                                                 v-for="reply in comments.comment_reply">
                                                 <div class="user_avatar" :title="reply.user.name" data-placement="bottom" data-toggle="tooltip" >
@@ -939,7 +939,7 @@
             },
             HideTextArea() {
                 var _this = this;
-                _this.projectUsers = null;                
+                _this.projectUsers = null;
                 $('.myUL-user-comment').css({display : 'none'});
                 $('#cmntSection').css({maxHeight:' calc(100vh - 370px)'});
                 $('.SubmitButton').hide();
@@ -1170,7 +1170,7 @@
                 if (e.which === 32 || e.which === 13 || e.which === 8) {
                     _this.trigger = false;
                     _this.userNames = '';
-                    _this.replyProjectUsers = null;                    
+                    _this.replyProjectUsers = null;
                     $('.myUL-user-comment').css({display : 'none'});
                 }
 
