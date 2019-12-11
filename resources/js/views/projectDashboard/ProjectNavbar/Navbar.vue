@@ -110,14 +110,12 @@
                                             <h6 class="dropdown-header text-uppercase">Action For Overview</h6>
                                             <span class="dropdown-item custom-dropdown-item">
                                                 <a :href="'/list-pdf-create/overview/'+ projectId" target="_blank">
-                                                    <img :src="baseUrl+'/img/task-icon/pdf.png'" alt="" height="20px"
-                                                         width="20px" class="mr-2">
+                                                    <i class="fal fa-file-pdf mr-2"></i>
                                                     Create Overview PDF </a>
                                            </span>
                                             <span class="dropdown-item custom-dropdown-item">
                                             <a @click="addListFromOverview">
-                                                <img :src="baseUrl+'/img/task-icon/addList.png'" alt="" height="20px"
-                                                     width="20px" class="mr-2">
+                                                <i class="fal fa-layer-plus mr-2"></i>
                                                 Add New List</a>
                                         </span>
                                         </template>
@@ -128,15 +126,13 @@
                                             <div class="dropdown-divider"></div>
                                             <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
                                         <a href="javascript:void(0)">
-                                            <img :src="baseUrl+'/img/task-icon/edit.png'" alt="" height="20px"
-                                                 width="20px" class="mr-2">
+                                            <i class="fal fa-edit mr-2"></i>
                                             Edit  <span
                                             v-if="list_selected.type === 'board'">Board</span>  <span v-else>List</span></a>
                                     </span>
                                             <span class="dropdown-item custom-dropdown-item">
                                         <a href="javascript:void(0)" @click="MoveListTOAnotherNav(list_selected.type)">
-                                            <img :src="baseUrl+'/img/task-icon/move.png'" alt="" height="20px"
-                                                 width="20px" class="mr-2">
+                                            <i class="fal fa-expand-arrows mr-2"></i>
                                             Move
                                             <span v-if="list_selected.type === 'board'">Board</span>  <span
                                             v-else>List</span> to Another Nav </a>
@@ -144,24 +140,21 @@
                                             <span class="dropdown-item custom-dropdown-item"
                                                   @click="DeleteListOrBoard(list_selected.type,'delete')">
                                         <a href="javascript:void(0)">
-                                            <img :src="baseUrl+'/img/task-icon/trash.png'" alt="" height="20px"
-                                                 width="20px" class="mr-2">
+                                            <i class="fal fa-trash-alt mr-2"></i>
                                             Delete with all <span
                                             v-if="list_selected.type === 'board'">Card</span>  <span v-else> Task</span></a>
                                     </span>
                                             <span class="dropdown-item custom-dropdown-item"
                                                   @click="DeleteListOrBoard(list_selected.type,'move')">
                                         <a href="javascript:void(0)">
-                                            <img :src="baseUrl+'/img/task-icon/move-1.png'" alt="" height="20px"
-                                                 width="20px" class="mr-2">
+                                            <i class="fal fa-person-carry mr-2"></i>
                                             Delete & move <span
                                             v-if="list_selected.type === 'board'">Card</span>  <span v-else>Task</span> </a>
                                     </span>
                                             <span class="dropdown-item custom-dropdown-item"
                                                   v-if="list_selected.type === 'list'">
                                         <a :href="'/list-pdf-create/list/'+list_selected.id" target="_blank">
-                                            <img :src="baseUrl+'/img/task-icon/pdf.png'" alt="" height="20px"
-                                                 width="20px" class="mr-2">
+                                            <i class="fal fa-file-pdf mr-2"></i>
                                             Create PDF </a>
                                     </span>
                                         </template>

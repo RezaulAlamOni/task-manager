@@ -2557,7 +2557,7 @@
                     //     console.log('Api is drag and drop not Working !!!')
                     // });
                 }
-                
+
                 if (e.shiftKey && e.which == 50) {
                     _this.triggers = true;
                     _this.commentsData = $('#title'+card.id).val();
