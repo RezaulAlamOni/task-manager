@@ -418,21 +418,21 @@
                                                      <span title="" data-placement="bottom" data-toggle="tooltip"
                                                            v-if="card.priority_label === 'high'"
                                                            class="badge badge-warning text-capitalize "
-                                                           style="background: #e25858;height: 18px; line-height: 12px;color:#ffffff "
+                                                           style="background: #e25858;height: 18px; line-height: 13px;color:#ffffff "
                                                            data-original-title="">
                                                         {{card.priority_label}}
                                                     </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
                                                           v-if="card.priority_label === 'low'"
                                                           class="badge badge-warning text-capitalize "
-                                                          style="background: #5987d1;height: 18px; line-height: 12px; "
+                                                          style="background: #5987d1;height: 18px; line-height: 13px; "
                                                           data-original-title="">
                                                         {{card.priority_label}}
                                                     </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
                                                           v-if="card.priority_label === 'medium'"
                                                           class="badge badge-warning text-capitalize "
-                                                          style="background: #e58c62;height: 18px; line-height: 12px;"
+                                                          style="background: #e58c62;height: 18px; line-height: 13px;"
                                                           data-original-title="">
                                                         {{card.priority_label}}
                                                      </span>

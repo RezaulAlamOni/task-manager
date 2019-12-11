@@ -43,14 +43,14 @@
                                                       @click="setListId(nav_list,nav.id,nav_list.description,nav.type)"
                                                       class="dropdown-item">
                                                     <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>
-<!--                                                     <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>-->
+                                                    <!--                                                     <a href="javascript:void(0)" v-else>{{nav_list.board_title}}</a>-->
                                                  </span>
                                                 <span :id="'list'+nav_list.id"
                                                       v-else-if="!nav_list.is_delete"
                                                       :class="(nav.type === 'board') ? 'board'+nav_list.id : '' "
                                                       @click="setListId(nav_list,nav.id,nav_list.description,nav.type)"
                                                       class="dropdown-item"> {{nav_list.is_delete}}
-<!--                                                    <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>-->
+                                                    <!--                                                    <a href="javascript:void(0)" v-if="nav.type === 'list'">{{nav_list.list_title}} </a>-->
                                                      <a href="javascript:void(0)">{{nav_list.board_title}}</a>
                                                  </span>
                                             </span>
@@ -62,19 +62,15 @@
                                             <a @click="addListModel(nav.id)" class="dropdown-item"
                                                href="Javascript:void(0)"
                                                v-if="nav.type === 'list'">
-                                                <!--                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>-->
-                                                <img src="/img/task-icon/add-list.png"
-                                                     class="icon-image-preview li-opacity-sub ">
-                                                Create  <!--<b>{{nav.title}}</b>--> List
+                                                <i class="fa fa-fw text-left fa-plus-circle"></i>
+                                                Create List
                                             </a>
 
                                             <a @click="addBoardModel(nav.id)" class="dropdown-item"
                                                href="Javascript:void(0)"
                                                v-else-if="nav.type === 'board'">
-                                                <!--                                            <i class="fa fa-fw text-left fa-btn fa-plus-circle"></i>-->
-                                                <img src="/img/task-icon/add-list.png"
-                                                     class="icon-image-preview li-opacity-sub ">
-                                                Create <!--<b>{{nav.title}}</b>--> Board
+                                                <i class="fa fa-fw text-left fa-plus-circle"></i>
+                                                Create Board
                                             </a>
                                         </div>
                                     </li>
