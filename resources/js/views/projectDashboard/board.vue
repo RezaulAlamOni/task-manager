@@ -160,7 +160,7 @@
                                                 <span class="dropdown-toggle-split opacity"
                                                       data-toggle="dropdown">
                                                     <i class="fal fa-ellipsis-h"
-                                                       :class="[(card.priority_label === 'low') ? 'ch-option-icon' : '']"
+                                                       :class="[(card.priority_label !== null) ? 'ch-option-icon' : '']"
                                                        style="color: #272757; font-size:22px;"></i>
                                                 </span>
                                                 <div class="dropdown-menu">
@@ -193,6 +193,7 @@
                                                  @click="makeInput($event,card.cardId)"
                                                  @blur="showItem($event,card,index,key)"
                                                  @keypress="preventEnter($event)"
+                                                 @keyup="cardTitlePress($event,card,index,key)"
                                                  v-html="card.data">
                                             </div>
                                             <div>
@@ -418,21 +419,21 @@
                                                      <span title="" data-placement="bottom" data-toggle="tooltip"
                                                            v-if="card.priority_label === 'high'"
                                                            class="badge badge-warning text-capitalize "
-                                                           style="background: #e25858;height: 18px; line-height: 12px;color:#ffffff "
+                                                           style="background: #e25858;height: 18px; line-height: 13px;color:#ffffff "
                                                            data-original-title="">
                                                         {{card.priority_label}}
                                                     </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
                                                           v-if="card.priority_label === 'low'"
                                                           class="badge badge-warning text-capitalize "
-                                                          style="background: #5987d1;height: 18px; line-height: 12px; "
+                                                          style="background: #5987d1;height: 18px; line-height: 13px; "
                                                           data-original-title="">
                                                         {{card.priority_label}}
                                                     </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
                                                           v-if="card.priority_label === 'medium'"
                                                           class="badge badge-warning text-capitalize "
-                                                          style="background: #e58c62;height: 18px; line-height: 12px;"
+                                                          style="background: #e58c62;height: 18px; line-height: 13px;"
                                                           data-original-title="">
                                                         {{card.priority_label}}
                                                      </span>
@@ -1375,6 +1376,9 @@
                     id: null,
                 },
                 shift_first : null,
+                triggers : null,
+                userNames : null,
+                projectUsers : null,
             }
         },
         mounted() {
@@ -2516,6 +2520,57 @@
                     // alert('Enter pressed');
                 }
             },
+            cardTitlePress(e,card,index,key)
+            {
+                console.log(e.which);
+                let _this = this;
+                // this.projectUsers = null;
+                // let cmHe = $('#replyTextBox'+comments.id).height();
+                // $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
+                // console.log(this.selectedData.comment);
+                if (e.which == 32) {
+                    _this.triggers = false;
+                    _this.userNames = '';
+                    _this.projectUsers = null;
+                }
+
+                if (_this.triggers == true && e.which !== 16 && e.which !== 50) {
+                    _this.userNames += e.key;
+                    console.log(_this.userNames);
+                    // console.log(e.key, _this.userNames);
+                    // axios.post('/api/task-list/search-result', {
+                    //     'user_id': id,
+                    //     p_id: _this.projectId,
+                    //     list_id: nav_type.list_id,
+                    //     type: (_this.search_type === 'all') ? 'overview' : nav_type.type,
+                    // })
+                    // .then(response => response.data)
+                    // .then(response => {
+                    //     _this.searchData.tasks = response.search_tasks;
+                    //     // console.log(_this.searchData.tasks)
+                    //     $('#myUL-user').removeClass('myUL-user');
+                    //     $('#myUL').removeClass('myUL');
+                    //     $('#myUL').addClass('myUL-show');
+
+                    // })
+                    // .catch(error => {
+                    //     console.log('Api is drag and drop not Working !!!')
+                    // });
+                }
+
+                if (e.shiftKey && e.which == 50) {
+                    _this.triggers = true;
+                    _this.commentsData = $('#title'+card.id).val();
+                    axios.get('/api/task-list/all-suggest-user')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.projectUsers = response.search_user;
+                    })
+                    .catch(error => {
+                        console.log('All suggest user api not working')
+                    })
+                }
+            },
             showItem(e, data, index, child_key) {
 
                 $('#title' + data.cardId).addClass('card-title-blur');
@@ -2666,6 +2721,7 @@
                 var _this = this;
                 // _this.task_logs = [];
                 _this.ShowDetails();
+                    $('#_file').click();
                 setTimeout(function () {
                     $('#_details').click();
                     // $('#_log').click()

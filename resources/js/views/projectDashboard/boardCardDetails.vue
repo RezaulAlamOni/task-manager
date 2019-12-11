@@ -259,10 +259,10 @@
                            id="_comment" role="tab">Comments</a>
                     </li>
 
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
                            id="_requirement" role="tab">Requirement</a>
-                    </li>
+                    </li> -->
 
                     <li class="nav-item">
                         <a @click="showLog" aria-controls="log" aria-selected="false" class="nav-link" data-toggle="tab" href="#log"
@@ -393,7 +393,7 @@
 
                             <div class="comment_block">
                                 <div class="new_comment">
-                                    <template v-for="comments in comment" style="margin-top: 15px;" >
+                                    <template v-for="comments in comment" style="margin-top: 15px;">
                                         <ul class="user_comment">
                                             <div class="user_avatar" :title="comments.user.name" data-placement="bottom" data-toggle="tooltip" >
                                                 <img :src="comments.user.photo_url" v-if="comments.user.photo_url !== null && comments.user.photo_url !== ''">
@@ -463,14 +463,13 @@
                                                 <!-- <input type='text' class="form-control" style="width: 85% !important; margin-bottom: 10px;">
                                                 <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="saveComment(selectedData.cardId)">Post</a> -->
                                                 <div class="mb-3 input-group display-inline position-relative" style="margin-bottom: 10px; left: 78px;">
-                                                    <div :id="'myUL-user-reply'+comments.id" class="myUL-user-comment" style="left: 0px; top: -20px;">
+                                                    <div :id="'myUL-user-reply'+comments.id" class="myUL-user-comment myUL-user-comment-reply" style="left: 0px;">
                                                         <template v-for="user in replyProjectUsers" v-if=" replyProjectUsers !== null && replyProjectUsers.length > 0">
                                                             <li @click="replySearchTaskByAssignedUser(user.id,user.name,comments)">
-                                                                <a href="javascript:void(0)">
+                                                                <a href="#">
                                                                     <span class="assignUser-suggest-photo">
                                                                             {{(user.name !== null) ? user.name.substring(0,2) : ''}}
-                                                                    </span>
-                                                                    {{user.name}}
+                                                                    </span> {{user.name}}
                                                                 </a>
                                                             </li>
                                                         </template>
@@ -491,8 +490,9 @@
                                                         <span @click="saveReply(comments.id, selectedData.cardId)" class="input-group-text" id="basic-addon1">Reply</span>
                                                     </div>
                                                 </div>
+
                                             </li>
-                                            <ul style="position: relative; left: 77px; width: calc(100% - 80px);"
+                                            <ul style="position: relative; left: 77px; width: calc(100% - 80px);margin-top: 23px;"
                                                 v-if="comments.comment_reply.length > 0"
                                                 v-for="reply in comments.comment_reply">
                                                 <div class="user_avatar" :title="reply.user.name" data-placement="bottom" data-toggle="tooltip" >
@@ -504,9 +504,9 @@
                                                         {{ reply.user.name.substring(0,2) }}</p>
                                                 </div>
                                                 <div class="comment_body">
-                                                    <span style="padding: 10px;" v-if="reply.comment != '' && reply.comment != null">
+                                                    <span style="" v-if="reply.comment != '' && reply.comment != null">
                                                         <p>
-                                                            <span class="user">{{reply.user.name}} :</span>
+<!--                                                            <span class="user">{{reply.user.name}} :</span>-->
                                                             <span v-html="reply.comment"></span>
                                                         </p>
                                                     </span>
@@ -534,7 +534,7 @@
                                                     </span>
                                                 </div>
                                                 <div class="comment_toolbar">
-                                                    <div class="comment_details" style="width: 100% !important;">
+                                                    <div class="comment_details-reply" style="width: 100% !important;">
                                                         <ul>
                                                             <li><i class="fa fa-clock-o"></i> {{ reply.created_at.substring(11,16)}}</li>
                                                             <li><i class="fa fa-calendar"></i> {{ reply.created_at.substring(0,10)}}</li>
@@ -551,7 +551,6 @@
                                                     </div> -->
                                                 </div>
                                             </ul>
-
                                         </ul>
                                     </template>
 
@@ -940,6 +939,8 @@
             },
             HideTextArea() {
                 var _this = this;
+                _this.projectUsers = null;
+                $('.myUL-user-comment').css({display : 'none'});
                 $('#cmntSection').css({maxHeight:' calc(100vh - 370px)'});
                 $('.SubmitButton').hide();
             },
@@ -947,6 +948,7 @@
                 $('#cmntSection').css({maxHeight:' calc(100vh - 420px)'});
                 this.$emit('textArea', data)
                 $('#comment'+data.cardId).css({height : '50px', maxHeight : '100px'});
+                $('.myUL-user-comment').css({bottom: '108px'});
                  var hei = $("#cmntSection").height();
                 $("#cmntSection").animate({ scrollTop: hei }, 1000);
                 // var _this = this;
@@ -1112,8 +1114,9 @@
                 // this.projectUsers = null;
                 let cmHe = $('#comment'+data.cardId).height();
                 $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
+                $('.myUL-user-comment').css({bottom: ' calc(100vh - 864px + '+cmHe+'px - 38px)'});
                 // console.log(this.selectedData.comment);
-                if (e.which == 32) {
+                if (e.which === 32 || e.which === 13 || e.which === 8) {
                     _this.trigger = false;
                     _this.userNames = '';
                     _this.projectUsers = null;
@@ -1141,13 +1144,14 @@
                     //     console.log('Api is drag and drop not Working !!!')
                     // });
                 }
-                
+
                 if (e.shiftKey && e.which == 50) {
                     _this.trigger = true;
                     _this.commentsData = $('.commentInput').val();
                     axios.get('/api/task-list/all-suggest-user')
                     .then(response => response.data)
                     .then(response => {
+                        $('.myUL-user-comment').css({display : 'block'});
                         _this.projectUsers = response.search_user;
                     })
                     .catch(error => {
@@ -1163,10 +1167,11 @@
                 // let cmHe = $('#replyTextBox'+comments.id).height();
                 // $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
                 // console.log(this.selectedData.comment);
-                if (e.which == 32) {
+                if (e.which === 32 || e.which === 13 || e.which === 8) {
                     _this.trigger = false;
                     _this.userNames = '';
                     _this.replyProjectUsers = null;
+                    $('.myUL-user-comment').css({display : 'none'});
                 }
 
                 if (_this.trigger == true && e.which !== 16 && e.which !== 50) {
@@ -1192,13 +1197,14 @@
                     //     console.log('Api is drag and drop not Working !!!')
                     // });
                 }
-                
+
                 if (e.shiftKey && e.which == 50) {
                     _this.trigger = true;
                     _this.commentsData = $('#replyTextBox'+comments.id).val();
                     axios.get('/api/task-list/all-suggest-user')
                     .then(response => response.data)
                     .then(response => {
+                        $('.myUL-user-comment').css({display : 'block'});
                         _this.replyProjectUsers = response.search_user;
                     })
                     .catch(error => {
@@ -1207,7 +1213,7 @@
                 }
             },
             userList(e,data)
-            {   
+            {
                 let _this = this;
                 var value = e.target.value;
                 // console.log(value.endsWith('@'));
@@ -1221,6 +1227,7 @@
                 //    $('.SubmitButton').show();
                    $('#replyTextBox'+comment.id).focus();
                _this.replyProjectUsers = null;
+               $('.myUL-user-comment').css({display : 'none'});
             },
             SearchTaskByAssignedUser(id, name) {
                 let _this = this;

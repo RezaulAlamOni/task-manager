@@ -1,9 +1,9 @@
 .icon-image-preview {
-    display: inline-block;
-    width: 21px;
-    height: 22px;
-    background-repeat: no-repeat;
-    background-size: contain;
+    /*display: inline-block;*/
+    /*width: 21px;*/
+    /*height: 22px;*/
+    /*background-repeat: no-repeat;*/
+    /*background-size: contain;*/
 }
 .outline-local_offer {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAQAAABIkb+zAAACE0lEQVR4Ae3bIUgDYRjG8bdZDMOsbaaJzOe192CvrlftmASjTUE7YlGw39dBHcv2JjtEEQX9zNMLx3j5ewffc1EO/z/c3Q7krKysrKysrGnb636g5LXnZQ99+J327D82WvVrfXuOOHQ7WjV2wxW/9xx3aDpaQwE68xx8zECChvoKB5CEneP4fJTgj557TfB3z70m/P6ltuR0BBACAAABAAAEAAAQAgCaeKW55l75PksIAIwHXi38rBoPOEIAQOlPRAX8FaIAmjRFaAIRAgCpEZCYyzkA4HUjYM7fkUIBXgM3VeAjBBCAiziAQN9GlYBv58gvskWC0ngQ/YABPEooee21kibAMxLyMAcQAABAAAAAAQAABAAAEAAAQAAAAAEAAAQAABAAAEDgAXEEAAAQ/GXxZB31jKCp514TdOK5o4T74UqLk8eb+uoqQWftTj733FWCq92/WR86Szi1Nhut+ayjhJlZvwlvZvEEEKBXs3gC+RF6MosnkBfxhVk8gcvPO7tm8QQsX5fWMIAAPEoABOBhDiAA+QAByAcIQD5AAPIBQrt8gADkAwQgHyAA+QAByAcIQD5AAPIBApAPEALzAQKQDxCAfIAA5AMEIB8gxOczBCAfIMTno4T4fJgQnA8QgHyAAOQDBCAfIMTnAwRN+VcTo18qvfkV/60r4OXQyGnP7/zTsz8r+eHWhgWurKysrKzsB3VIAhH+6ppoAAAAAElFTkSuQmCC);

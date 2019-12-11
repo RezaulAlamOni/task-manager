@@ -39,17 +39,17 @@
     }
 
     .assignUser-photo-for-card {
-        width: 22px;
+        width: 20px;
         border-radius: 74%;
         background: #4f4f8a;
-        height: 22px;
+        height: 20px;
         display: inline-block;
         text-align: center;
         vertical-align: middle;
-        line-height: 23px;
+        line-height: 22px;
         color: white;
-        font-size: 10px;
-        padding-left: 1px;
+        font-size: 9px;
+        /* padding-left: 1px; */
         cursor: pointer;
         position: relative;
         margin: 0;
@@ -344,8 +344,8 @@
 
     .card-delete-icon {
         position: absolute;
-        right: 8px;
-        bottom: 8px;
+        right: 10px;
+        bottom: 10px;
         opacity: 1;
     }
 
@@ -468,7 +468,7 @@
         position: absolute;
         bottom: 10px;
         left: 120px;
-        width: 88px;
+        width: 95px;
         text-align: center;
     }
 
@@ -564,8 +564,8 @@
 }
 
 .card-title-show {
-    padding: 15px 8px !important;
-    margin: 10px 0 30px 0;
+    padding: 5px 5px 15px 5px!important;
+    margin: 19px 0 30px 0;
 }
 
 .user-assign-card {
@@ -577,14 +577,14 @@
 .total-child {
     position: absolute;
     top: 5px;
-    left: 5px;
+    left: 14px;
     font-size: 12px;
     height: 25px;
-    width: 28px;
-    text-align: center;
+    width: 50px;
+    text-align: left;
     line-height: 25px;
     color: #333;
-    bottom: 18px;
+    //bottom: 18px;
 }
 
 .pch-total-child{
@@ -752,7 +752,7 @@
     height: auto;
     //padding: 5px;
     display: inline-block;
-    overflow: auto;
+    overflow: hidden;
     width: 100%;
     min-height: 40px;
     font-size: 13px;
@@ -765,7 +765,7 @@
     height: auto;
     //padding: 5px;
     display: inline-block;
-    overflow: auto;
+    overflow: hidden;
     width: 100%;
     font-size: 13px;
     min-height: 50px;
@@ -778,7 +778,7 @@
     height: auto;
     //padding: 5px;
     display: inline-block;
-    overflow: auto;
+    overflow: hidden;
     width: 100%;
     font-size: 13px;
     background: transparent;
@@ -876,7 +876,14 @@
     z-index: 999;
     position: absolute;
     left: 68px;
-    top: -35px;
+    bottom : 52px;
+}
+
+.myUL-user-comment-reply {
+    bottom : 42px !important;
+    max-height: 136px;
+    overflow: auto;
+
 }
 
 .myUL-user-comment li a {
