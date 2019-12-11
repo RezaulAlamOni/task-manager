@@ -160,7 +160,7 @@
                                                 <span class="dropdown-toggle-split opacity"
                                                       data-toggle="dropdown">
                                                     <i class="fal fa-ellipsis-h"
-                                                       :class="[(card.priority_label === 'low') ? 'ch-option-icon' : '']"
+                                                       :class="[(card.priority_label !== null) ? 'ch-option-icon' : '']"
                                                        style="color: #272757; font-size:22px;"></i>
                                                 </span>
                                                 <div class="dropdown-menu">

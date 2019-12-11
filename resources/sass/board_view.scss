@@ -564,8 +564,8 @@
 }
 
 .card-title-show {
-    padding: 15px 8px !important;
-    margin: 10px 0 30px 0;
+    padding: 5px 5px 15px 5px!important;
+    margin: 19px 0 30px 0;
 }
 
 .user-assign-card {
@@ -752,7 +752,7 @@
     height: auto;
     //padding: 5px;
     display: inline-block;
-    overflow: auto;
+    overflow: hidden;
     width: 100%;
     min-height: 40px;
     font-size: 13px;
@@ -765,7 +765,7 @@
     height: auto;
     //padding: 5px;
     display: inline-block;
-    overflow: auto;
+    overflow: hidden;
     width: 100%;
     font-size: 13px;
     min-height: 50px;
@@ -778,7 +778,7 @@
     height: auto;
     //padding: 5px;
     display: inline-block;
-    overflow: auto;
+    overflow: hidden;
     width: 100%;
     font-size: 13px;
     background: transparent;
