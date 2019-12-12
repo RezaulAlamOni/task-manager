@@ -1825,7 +1825,7 @@
             cardTitlePress(e,data)
             {
                 $('.dropdowns-card-user').hide();
-                console.log(e.which);
+                // console.log(e.which);
                 let _this = this;
                 // this.projectUsers = null;
                 // let cmHe = $('#replyTextBox'+comments.id).height();
@@ -1840,7 +1840,7 @@
 
                 if (_this.triggers == true && e.which !== 16 && e.which !== 50) {
                     _this.userNames += e.key;
-                    console.log(_this.userNames);
+                    // console.log(_this.userNames);
                     // console.log(e.key, _this.userNames);
                     // axios.post('/api/task-list/search-result', {
                     //     'user_id': id,
@@ -1878,14 +1878,16 @@
                 }
             },
             SearchTaskByAssignedUsers(id, name, data) {
-                // alert('sdfsaf');
                 let _this = this;
-                console.log(_this.commentsData);
                 $('#'+data.id).focus();
                 $('#'+data.id).click();
+                let user = {
+                    id : id
+                };
+                _this.assignUserToTask(user, data);
                 data.text = _this.commentsData+''+name+' ';
                 // $('#'+card.cardId).html(_this.commentsData+''+name+' ');
-                _this.projectUsers = null;
+                _this.allUsers = null;
                 $('.dropdowns-task-user').hide();
             },
             copyTask() {
