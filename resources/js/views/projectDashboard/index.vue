@@ -1604,7 +1604,7 @@
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
-                        _this.getTaskList()
+                        _this.getTaskList();
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -1816,7 +1816,7 @@
 
                 setTimeout(() => {
                     $('.dropdowns-task-user').hide();
-                }, 100);
+                }, 300);
 
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
@@ -1825,7 +1825,7 @@
             cardTitlePress(e,data)
             {
                 $('.dropdowns-card-user').hide();
-                console.log(e.which);
+                // console.log(e.which);
                 let _this = this;
                 // this.projectUsers = null;
                 // let cmHe = $('#replyTextBox'+comments.id).height();
@@ -1840,7 +1840,7 @@
 
                 if (_this.triggers == true && e.which !== 16 && e.which !== 50) {
                     _this.userNames += e.key;
-                    console.log(_this.userNames);
+                    // console.log(_this.userNames);
                     // console.log(e.key, _this.userNames);
                     // axios.post('/api/task-list/search-result', {
                     //     'user_id': id,
@@ -1878,14 +1878,20 @@
                 }
             },
             SearchTaskByAssignedUsers(id, name, data) {
-                // alert('sdfsaf');
                 let _this = this;
-                console.log(_this.commentsData);
+                data.text = _this.commentsData+''+name+' ';
+                _this.selectedData.description = _this.commentsData+''+name+' ';
+                let user = {
+                    id : id
+                };
+                // _this.updateDescription(function(res){
+                    //     console.log(res);
+                _this.assignUserToTask(user, data);
+                // });
+                // $('#'+card.cardId).html(_this.commentsData+''+name+' ');
                 $('#'+data.id).focus();
                 $('#'+data.id).click();
-                data.text = _this.commentsData+''+name+' ';
-                // $('#'+card.cardId).html(_this.commentsData+''+name+' ');
-                _this.projectUsers = null;
+                _this.allUsers = null;
                 $('.dropdowns-task-user').hide();
             },
             copyTask() {
@@ -3094,6 +3100,7 @@
                             if (response.empty) {
 
                             }
+                            _this.getTaskList();
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')

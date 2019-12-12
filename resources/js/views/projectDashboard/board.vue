@@ -153,13 +153,12 @@
                                             @click="makeItClick($event, card, column.children, index, key, column.boardId)"
                                             :id="'card_'+card.cardId"
                                             v-on:dblclick="showLog(card)">
-                                            <div :id="'titleUserMention'+card.cardId" class="dropdowns-card-user"
-                                                 style="z-index: 1;">
+                                            <div :id="'titleUserMention'+card.cardId" class="dropdowns-card-user" style="z-index: 1;">
                                                 <diV class="collapse show switchToggle">
                                                     <ul id="myUL-user" class="myUL-user-card">
                                                         <template v-for="user in projectUsers"
                                                                   v-if=" projectUsers !== null && projectUsers.length > 0">
-                                                            <li @click="SearchTaskByAssignedUsers(user.id, user.name, card)">
+                                                            <li @click="SearchTaskByAssignedUsers(user.id, user.name, card, user)">
                                                                 <a href="javascript:void(0)">
                                                                         <span class="assignUser-suggest-photo">
                                                                             {{(user.name !== null) ? user.name.substring(0,2) : ''}}
@@ -2609,12 +2608,11 @@
                         })
                 }
             },
-            SearchTaskByAssignedUsers(id, name, card) {
-                // alert('sdfsaf');
+            SearchTaskByAssignedUsers(id, name, card, user) {
                 let _this = this;
-                console.log(_this.commentsData);
-                $('#title' + card.cardId).focus();
-                $('#title' + card.cardId).html(_this.commentsData + '' + name + ' ');
+                $('#title'+card.cardId).focus();
+                _this.assignUserToTask(user, 0, 0, card);
+                $('#title'+card.cardId).html(_this.commentsData+''+name+' ');
                 _this.projectUsers = null;
                 $('.dropdowns-card-user').hide();
             },
