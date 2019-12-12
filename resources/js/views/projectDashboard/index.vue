@@ -1604,7 +1604,7 @@
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
-                        _this.getTaskList()
+                        _this.getTaskList();
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -1816,7 +1816,7 @@
 
                 setTimeout(() => {
                     $('.dropdowns-task-user').hide();
-                }, 100);
+                }, 300);
 
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
@@ -1879,14 +1879,18 @@
             },
             SearchTaskByAssignedUsers(id, name, data) {
                 let _this = this;
-                $('#'+data.id).focus();
-                $('#'+data.id).click();
+                data.text = _this.commentsData+''+name+' ';
+                _this.selectedData.description = _this.commentsData+''+name+' ';
                 let user = {
                     id : id
                 };
+                // _this.updateDescription(function(res){
+                    //     console.log(res);
                 _this.assignUserToTask(user, data);
-                data.text = _this.commentsData+''+name+' ';
+                // });
                 // $('#'+card.cardId).html(_this.commentsData+''+name+' ');
+                $('#'+data.id).focus();
+                $('#'+data.id).click();
                 _this.allUsers = null;
                 $('.dropdowns-task-user').hide();
             },
@@ -3096,6 +3100,7 @@
                             if (response.empty) {
 
                             }
+                            _this.getTaskList();
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')

@@ -158,7 +158,7 @@
                                                     <ul id="myUL-user" class="myUL-user-card">
                                                         <template v-for="user in projectUsers"
                                                                   v-if=" projectUsers !== null && projectUsers.length > 0">
-                                                            <li @click="SearchTaskByAssignedUsers(user.id, user.name, card)">
+                                                            <li @click="SearchTaskByAssignedUsers(user.id, user.name, card, user)">
                                                                 <a href="javascript:void(0)">
                                                                         <span class="assignUser-suggest-photo">
                                                                             {{(user.name !== null) ? user.name.substring(0,2) : ''}}
