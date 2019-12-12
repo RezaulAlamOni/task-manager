@@ -83,18 +83,16 @@
                             <li class="nav-item search-nav-icon">
                                 <!--                            v-if="list_selected.type === 'list'"-->
                                 <button class="btn btn-default" type="submit"
-                                        @click="showSearchInputField"
+                                        @click="showSearchInputField" title="Find Task" data-toggle="tooltip"
                                         style="padding-right: 32px; padding-left: 7px;background: none">
-                                    <img :src="baseUrl+'/img/task-icon/search.png'" height="30" width="30" alt=""
-                                         title="Find Task" data-toggle="tooltip">
+                                    <i class="fal fa-file-search" style="padding-left: 9px;font-size: 22px;"></i>
                                 </button>
                             </li>
                             <li class="nav-item search-nav-icon" v-if="list_selected.type === 'board'">
                                 <button class="btn btn-default" @click="HideShowBoardTitle" type="submit"
-                                        style="padding-right: 32px; padding-left: 7px;background: none;">
-                                    <img :src="baseUrl+'/img/task-icon/title_show.png'" height="30" width="30" alt=""
-                                         title="'Hide' or 'Show' Board Title" data-toggle="tooltip"
-                                         style="margin: -2px;">
+                                        style="padding-right: 32px; padding-left: 7px;background: none;"
+                                        title="'Hide' or 'Show' Board Title" data-toggle="tooltip">
+                                    <i class="fal fa-eye" style="padding-left: 9px;font-size: 22px;"></i>
                                 </button>
                             </li>
                             <li class="nav-item" style="margin-right:10px;">
@@ -198,8 +196,9 @@
                                 <a aria-expanded="false" aria-haspopup="true"
                                    class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
                                    href="#">
-                                <span class="d-none d-md-block"><i class="fa fa-fw fa-filter"
-                                                                   style="font-size: 26px;"></i></span>
+                                <span class="d-none d-md-block">
+                                    <i class="fal fa-filter" style="font-size: 20px;"></i>
+                                </span>
                                 </a>
                                 <div aria-labelledby="dropdownMenuButton" class="dropdown-menu dropdown-menu-right">
 
