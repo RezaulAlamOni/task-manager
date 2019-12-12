@@ -250,8 +250,7 @@
                                    class="d-block d-md-flex text-center nav-link"
                                    data-toggle="dropdown" href="#">
                                         <span class="d-none d-md-block">
-                                           <i class="fa fa-fw fa-plus-circle compltit-blue"
-                                              style="font-size: 26px;"></i>
+                                            <i class="far fa-plus-hexagon compltit-blue" style="font-size: 22px;"></i>
                                         </span>
                                 </a>
                                 <div aria-labelledby="dropdownMenuButton" class="dropdown-menu dropdown-menu-right">

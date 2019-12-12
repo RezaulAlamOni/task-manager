@@ -56,24 +56,20 @@
                                         <div class="collapse show switchToggle">
 
                                             <a href="#" class="dropdown-item" @click="EditList(list)">
-                                                <img data-v-0ca4b43b="" src="/img/task-icon/edit.png" alt=""
-                                                     height="17px" width="17px" class="mr-2">
+                                                <i data-v-0ca4b43b="" class="fal fa-edit mr-2" aria-hidden="true"></i>
                                                 Edit List
                                             </a>
                                             <a href="#" class="dropdown-item" @click="DeleteList(list)">
-                                                <img data-v-0ca4b43b="" src="/img/task-icon/trash.png"
-                                                     alt="" height="20px" width="20px" class="mr-2">
+                                                <i data-v-0ca4b43b="" class="fal fa-trash-alt mr-2" aria-hidden="true"></i>
                                                 Delete List
                                             </a>
                                             <a :href="'/list-pdf-create/'+list.id" class="dropdown-item">
-                                                <img data-v-0ca4b43b="" src="/img/task-icon/pdf.png"
-                                                     alt="" height="20px" width="20px" class="mr-2">
+                                               <i data-v-0ca4b43b="" class="fal fa-download mr-2" aria-hidden="true"></i>
                                                 Download PDF
                                             </a>
                                             <a href="#" class="dropdown-item" v-if="list.is_delete === 1"
                                                @click="RestoreList(list.id)">
-                                                <img data-v-0ca4b43b="" src="/img/task-icon/restore.png" alt=""
-                                                     height="17px" width="17px" class="mr-2">
+                                                <i class="far fa-trash-undo-alt mr-2"></i>
                                                 Restore this list
                                             </a>
                                         </div>

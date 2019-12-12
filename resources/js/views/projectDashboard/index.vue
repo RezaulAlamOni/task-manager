@@ -156,7 +156,7 @@
                                          data-toggle="tooltip"
                                          class="task-complete left-content li-opacity">
                                 </span>
-                                
+
 
                                 <div :id="'titleUserMention'+data.id" class="dropdowns-task-user" style="z-index: 1;">
                                     <diV class="collapse show switchToggle">
@@ -198,7 +198,7 @@
                                                 @keypress="saveData($event,data)"
                                                 @keyup="cardTitlePress($event,data)"
                                                 class="inp input-hide input-title"
-                                                type="text" 
+                                                type="text"
                                                 autocomplete="off"
                                                 v-model="data.text">
                                     </span>
@@ -234,7 +234,7 @@
                                             <span data-toggle="dropdown" class="priority-icon dropdown-toggle-split"
                                                   v-else>
                                                 <i class="fal fa-exclamation-triangle icon-image-preview li-opacity assign-user-"
-                                                   data-toggle="tooltip" title="Add Priority"></i>
+                                                   data-toggle="tooltip" title="Add Priority" style="padding-right: 12px;"></i>
                                             </span>
                                             <div class="dropdown-menu dropdown-menu-right"
                                                  style="z-index: 1;width: 185px;">
@@ -335,7 +335,7 @@
                                             </template>
                                         </i>
                                         <span :id="'tag-'+data._id" data-toggle="dropdown" v-else>
-                                        <i class="fal fa-tags icon-image-preview li-opacity pull-right" style="margin-right: 19px;"
+                                        <i class="fal fa-tags icon-image-preview li-opacity pull-right" style="margin-right: 19px;padding-top: 5px;"
                                            data-toggle="tooltip" title="Add Tag"></i>
                                     </span>
 
