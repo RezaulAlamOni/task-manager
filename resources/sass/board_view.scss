@@ -695,7 +695,7 @@
 }
 
 .tags-log {
-    max-height: 625px;
+    max-height: calc(100vh - 300px);
     overflow-y: auto;
 }
 

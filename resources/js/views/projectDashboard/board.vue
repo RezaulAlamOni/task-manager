@@ -110,8 +110,8 @@
                                                             <a @click="deleteColumn(index,column.boardId)"
                                                                class="dropdown-item"
                                                                href="#">
-                                                                <img :src="baseUrl+'/img/task-icon/trash.png'"
-                                                                     height="18" width="18"> Delete column</a>
+                                                                <i data-v-0ca4b43b="" class="fal fa-trash-alt mr-2" aria-hidden="true"></i>
+                                                                Delete column</a>
                                                         </diV>
                                                     </div>
                                                 </span>
@@ -2767,7 +2767,7 @@
             showLog(card) {
                 var _this = this;
                 $('#title'+card.cardId).blur();
-                
+
                 setTimeout(function () {
                     _this.ShowDetails();
                     $('#_file').click();

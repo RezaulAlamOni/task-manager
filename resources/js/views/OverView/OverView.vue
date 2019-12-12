@@ -41,16 +41,15 @@
                                      data-target="" aria-expanded="false"
                                      aria-controls="collapseOne">
                                     <div class="col-md-12">
-                                        <img src="/img/task-icon/move.png" alt="" height="20px" width="20px"
-                                             class="mr-2 sort-trigger" data-toggle="tooltip"
-                                             title="Change sort-order lists">
+                                        <i class="fad fa-arrows  sort-trigger"data-toggle="tooltip"
+                                           title="Change sort-order lists"></i>
                                         <h2 style="margin: 10px 15px;cursor: pointer" data-placement="bottom"
                                             @click="dataCollapse('#collapse'+list.id,list.id)" data-toggle="tooltip">
                                             {{list.list_title}}
                                         </h2>
                                         <span class="option-btn">
                                     <span data-toggle="dropdown" class="dropdown-toggle-split col-md-12 opacity">
-                                        <i class="fa fa-ellipsis-h"></i>
+                                        <i class="fad fa-ellipsis-h"></i>
                                     </span>
                                     <div class="dropdown-menu overview-dropdown dropdown-menu-right">
                                         <div class="collapse show switchToggle">
