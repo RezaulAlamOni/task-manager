@@ -955,3 +955,12 @@
     background: transparent !important;
 }
 
+.card-option-dropdown::before{
+    border:none !important;
+    background-color: transparent;
+}
+
+.card-option-dropdown::after{
+    border:none !important;
+    background-color: transparent;
+}

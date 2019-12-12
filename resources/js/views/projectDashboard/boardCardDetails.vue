@@ -155,10 +155,10 @@
                 </a>
             </div>
             <!-- Assign Users -->
-            <div class="col-md-3" style="padding: 0px;">
+            <div class="col-md-3" style="padding: 0px;text-align: center">
                 <a class="user dropdown-hide-with-remove-icon">
                     <template v-if="selectedData.assigned_user.length > 0">
-                        <span class="assigned_user dropdown-toggle-split " style="float: right;padding-right: 50px"
+                        <span class="assigned_user dropdown-toggle-split "
                               data-toggle="dropdown" v-for="(assign,keyId) in selectedData.assigned_user">
                             <p :title="assign.name"
                                class="assignUser-photo-for-selected text-uppercase"
