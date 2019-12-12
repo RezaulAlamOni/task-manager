@@ -2543,7 +2543,7 @@
                 }
             },
             cardTitlePress(e,card,index,key)
-            {   
+            {
                 $('.dropdowns-card-user').hide();
                 console.log(e.which);
                 let _this = this;
