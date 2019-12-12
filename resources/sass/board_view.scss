@@ -902,6 +902,13 @@
     background-color: #eee;
 }
 
+.myUL-user-card-reply {
+    // bottom : 42px !important;
+    max-height: 136px;
+    overflow: auto;
+
+}
+
 .myUL-user-card {
     display: inline-block;
     list-style-type: none;
@@ -914,12 +921,6 @@
     // bottom : 52px;
 }
 
-.myUL-user-card-reply {
-    // bottom : 42px !important;
-    max-height: 136px;
-    overflow: auto;
-
-}
 
 .myUL-user-card li a {
     border: 1px solid #ddd;

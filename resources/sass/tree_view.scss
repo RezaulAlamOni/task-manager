@@ -1331,3 +1331,52 @@
 a{
     cursor: pointer !important;
 }
+
+
+
+.dropdowns-task-user{
+    // top: 48px !important;
+    display: none;
+    z-index: 1;
+    position: absolute;
+    width: 25%;
+    top: 43px;
+}
+.dropdowns-task-user::before{
+    border: none !important;
+    background: transparent !important;
+}
+.dropdowns-task-user::after{
+    border: none !important;
+    background: transparent !important;
+}
+
+
+.myUL-user-task {
+    display: inline-block;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    // z-index: 999;
+    // position: absolute;
+    // left: 68px;
+    // bottom : 52px;
+}
+
+
+.myUL-user-task li a {
+    border: 1px solid #ddd;
+    margin-top: -1px; /* Prevent double borders */
+    background-color: #f6f6f6;
+    padding: 3px 0px 3px 9px;
+    text-decoration: none;
+    font-size: 18px;
+    color: black;
+    display: block;
+    border-radius: 5px;
+}
+
+.myUL-user-task li a:hover:not(.header) {
+    background-color: #eee;
+}

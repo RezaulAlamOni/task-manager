@@ -21,8 +21,7 @@
                        placeholder="Search for names.."
                        title="Type in a name"
                        autocomplete="off"
-                       @keyup="searchDataFormTask($event)"
-                >
+                       @keyup="searchDataFormTask($event)">
 
                 <select class="form-control " v-model="search_type" @change="searchBYType"
                         style="display: inline;padding: 0;position: absolute; right: 0; top: 0; height: 38px !important;width: 78px;z-index : 999;border-radius: 0 5px 5px 0;">
@@ -157,6 +156,32 @@
                                          data-toggle="tooltip"
                                          class="task-complete left-content li-opacity">
                                 </span>
+                                
+
+                                <div :id="'titleUserMention'+data.id" class="dropdowns-task-user" style="z-index: 1;">
+                                    <diV class="collapse show switchToggle">
+                                        <ul id="myUL-user" class="myUL-user-task">
+                                            <template v-for="user in allUsers" v-if=" allUsers !== null && allUsers.length > 0">
+                                                <li @click="SearchTaskByAssignedUsers(user.id, user.name, data)">
+                                                    <a href="javascript:void(0)">
+                                                        <span class="assignUser-suggest-photo">
+                                                            {{(user.name !== null) ? user.name.substring(0,2) : ''}}
+                                                        </span>
+                                                        {{user.name}}
+                                                    </a>
+                                                </li>
+                                            </template>
+                                            <template v-else>
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        No user found!
+                                                    </a>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </diV>
+                                </div>
+
 
                                     <b @click="HideShowChild(store , data)"
                                        v-if="data.children && data.children.length && data.open">
@@ -166,14 +191,16 @@
                                         <i class="fal fa-fw fa-plus"></i></b>
                                     <span>
                                         <input :id="data.id"
-                                               @blur="showItem($event,data)"
-                                               @click="makeInput($event,data)"
-                                               @focus="hideItem($event,data)"
-                                               @keydown="keyDownAction($event,data)"
-                                               @keypress="saveData($event,data)"
-
-                                               class="inp input-hide input-title"
-                                               type="text" v-model="data.text">
+                                                @blur="showItem($event,data)"
+                                                @click="makeInput($event,data)"
+                                                @focus="hideItem($event,data)"
+                                                @keydown="keyDownAction($event,data)"
+                                                @keypress="saveData($event,data)"
+                                                @keyup="cardTitlePress($event,data)"
+                                                class="inp input-hide input-title"
+                                                type="text" 
+                                                autocomplete="off"
+                                                v-model="data.text">
                                     </span>
 
                                     <div class="hide-item-res-user">
@@ -1186,7 +1213,11 @@
                 allUsers: null,
                 allTags: null,
                 allTaskId: null,
-                shift_first: null
+                shift_first: null,
+                triggers : null,
+                userNames : null,
+                projectUsers : null,
+                commentsData : null,
             }
         },
         mounted() {
@@ -1753,6 +1784,7 @@
                 this.context_menu_flag = data.id;
                 // data.draggable = false;
                 // $(e.target).closest('.eachItemRow').find('.task-complete').hide();
+                $('.dropdowns-task-user').hide();
                 $(e.target).closest('.eachItemRow').find('.tag-icon').hide();
                 $(e.target).closest('.eachItemRow').find('.attach-icon').hide();
                 $(e.target).closest('.eachItemRow').find('.subTask_plus').hide();
@@ -1782,9 +1814,79 @@
                     data.droppable = true;
                 }, 500);
 
+                setTimeout(() => {
+                    $('.dropdowns-task-user').hide();
+                }, 100);
+
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
 
+            },
+            cardTitlePress(e,data)
+            {
+                $('.dropdowns-card-user').hide();
+                console.log(e.which);
+                let _this = this;
+                // this.projectUsers = null;
+                // let cmHe = $('#replyTextBox'+comments.id).height();
+                // $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
+                // console.log(this.selectedData.comment);
+                if (e.which == 32 || e.which == 13 || e.which == 8) {
+                    _this.triggers = false;
+                    _this.userNames = '';
+                    _this.allUsers = null;
+                    $('.dropdowns-card-user').hide();
+                }
+
+                if (_this.triggers == true && e.which !== 16 && e.which !== 50) {
+                    _this.userNames += e.key;
+                    console.log(_this.userNames);
+                    // console.log(e.key, _this.userNames);
+                    // axios.post('/api/task-list/search-result', {
+                    //     'user_id': id,
+                    //     p_id: _this.projectId,
+                    //     list_id: nav_type.list_id,
+                    //     type: (_this.search_type === 'all') ? 'overview' : nav_type.type,
+                    // })
+                    // .then(response => response.data)
+                    // .then(response => {
+                    //     _this.searchData.tasks = response.search_tasks;
+                    //     // console.log(_this.searchData.tasks)
+                    //     $('#myUL-user').removeClass('myUL-user');
+                    //     $('#myUL').removeClass('myUL');
+                    //     $('#myUL').addClass('myUL-show');
+
+                    // })
+                    // .catch(error => {
+                    //     console.log('Api is drag and drop not Working !!!')
+                    // });
+                }
+
+                if (e.shiftKey && e.which == 50) {
+                    _this.triggers = true;
+                    _this.commentsData = data.text;//$('#'+data.id).val();
+                    axios.get('/api/task-list/all-suggest-user')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.allUsers = response.search_user;
+                        $('.dropdowns-task-user').hide();
+                        $('#titleUserMention'+data.id).show();
+                    })
+                    .catch(error => {
+                        console.log('All suggest user api not working')
+                    })
+                }
+            },
+            SearchTaskByAssignedUsers(id, name, data) {
+                // alert('sdfsaf');
+                let _this = this;
+                console.log(_this.commentsData);
+                $('#'+data.id).focus();
+                $('#'+data.id).click();
+                data.text = _this.commentsData+''+name+' ';
+                // $('#'+card.cardId).html(_this.commentsData+''+name+' ');
+                _this.projectUsers = null;
+                $('.dropdowns-task-user').hide();
             },
             copyTask() {
                 var _this = this;

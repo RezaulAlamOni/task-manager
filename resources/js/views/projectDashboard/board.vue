@@ -104,17 +104,17 @@
                                                         <!-- <a v-if="column.linkToList.length > 0" @click="unlinklistToCol(index, column.boardId)" class="dropdown-item"
                                                             href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink Lists
 
-                                                             </a> -->
+                                                                 </a> -->
 
-                                                        <div class="dropdown-divider"></div>
-                                                        <a @click="deleteColumn(index,column.boardId)"
-                                                           class="dropdown-item"
-                                                           href="#">
-                                                            <i class="fal fa-trash-alt mr-2"></i>
-                                                            Delete column
-                                                        </a>
-                                                    </diV>
-                                                </div>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a @click="deleteColumn(index,column.boardId)"
+                                                               class="dropdown-item"
+                                                               href="#">
+                                                                <img :src="baseUrl+'/img/task-icon/trash.png'"
+                                                                     height="18" width="18"> Delete column</a>
+                                                        </diV>
+                                                    </div>
+                                                </span>
                                             </span>
                                         </div>
                                         <div v-if="column.moveToCol === true || column.ruleType === 'asnUser'"
