@@ -152,7 +152,7 @@
                                             @contextmenu="makeItClick($event, card,column.children, index, key, column.boardId)"
                                             @click="makeItClick($event, card, column.children, index, key, column.boardId)"
                                             :id="'card_'+card.cardId"
-                                            v-on:dblclick="showLog">
+                                            v-on:dblclick="showLog(card)">
                                             <div :id="'titleUserMention'+card.cardId" class="dropdowns-card-user"
                                                  style="z-index: 1;">
                                                 <diV class="collapse show switchToggle">
@@ -1479,7 +1479,7 @@
                         _this.HideDetails();
                         break;
                     case "right" :
-                        _this.showLog();
+                        _this.showLog(_this.selectedData);
                         // _this.task_logs = null;
                         // _this.ShowDetails(_this.selectedData);
 
@@ -2764,29 +2764,16 @@
 
                     });
             },
-            showLog() {
+            showLog(card) {
                 var _this = this;
-                // _this.task_logs = [];
-                _this.ShowDetails();
-                $('#_file').click();
+                $('#title'+card.cardId).blur();
+                
                 setTimeout(function () {
+                    _this.ShowDetails();
+                    $('#_file').click();
                     $('#_details').click();
-                    // $('#_log').click()
                 }, 300)
-                // axios.get('/api/task-list/get-log/' + _this.selectedData.cardId)
-                //     .then(response => response.data)
-                //     .then(response => {
-                //         // console.log(response);
-                //         _this.task_logs = response;
-                //         _this.ShowDetails();
-                //         setTimeout(function () {
-                //             $('#_details').click();
-                //             // $('#_log').click()
-                //         }, 300)
-                //     })
-                //     .catch(error => {
-                //         console.log('Api for move down task not Working !!!')
-                //     });
+
             },
             selectCard(card, child) {
                 this.selectedData = card;
