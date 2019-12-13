@@ -155,9 +155,8 @@
                                             v-on:dblclick="showLog(card)">
                                             <div :id="'titleUserMention'+card.cardId" class="dropdowns-card-user" style="z-index: 1;">
                                                 <diV class="collapse show switchToggle">
-                                                    <ul id="myUL-user" class="myUL-user-card">
-                                                        <template v-for="user in projectUsers"
-                                                                  v-if=" projectUsers !== null && projectUsers.length > 0">
+                                                    <ul id="myUL-user" class="myUL-user-card" style="background: #f3f3f3; border-radius: 5px; border: 1px solid #d4d4d4; ">
+                                                        <template v-for="user in projectUsers" v-if="projectUsers !== null && projectUsers.length > 0">
                                                             <li @click="SearchTaskByAssignedUsers(user.id, user.name, card, user)">
                                                                 <a href="javascript:void(0)">
                                                                         <span class="assignUser-suggest-photo">
@@ -167,13 +166,23 @@
                                                                 </a>
                                                             </li>
                                                         </template>
-                                                        <template v-else>
+                                                        <template v-for="(user, tagIndx) in card.existing_tags" v-if="card.existing_tags !== null && card.existing_tags.length > 0 && projectUsers === null ">
+                                                            <li @click="tagMention(card, user, index , tagIndx, key)" class="users-select row"> <!--addExistingTag(index , tagIndx, key, card.cardId, '') -->
+                                                                <div class="col-md-9 add-tag-to-selected">
+                                                                    <span
+                                                                        class="badge badge-default tag-color-custom-contextmenu"
+                                                                        :style="{'background' : user.color}">.</span>
+                                                                    <h5>{{user.title}}</h5>
+                                                                </div>
+                                                            </li>
+                                                        </template>
+                                                        <!-- <template v-else>
                                                             <li>
                                                                 <a href="javascript:void(0)">
                                                                     No user found!
                                                                 </a>
                                                             </li>
-                                                        </template>
+                                                        </template> -->
                                                     </ul>
                                                 </diV>
                                             </div>
@@ -1410,6 +1419,7 @@
                 },
                 shift_first: null,
                 triggers: null,
+                tagTriggers: null,
                 userNames: null,
                 projectUsers: null,
                 commentsData: null,
@@ -2449,7 +2459,7 @@
                     .then(response => response.data)
                     .then(response => {
                         // _this.cards[index].task[key].tags.push(data);
-                        _this.cards[index].task[key].existing_tags.splice(tagIndx, 1);
+                        // _this.cards[index].task[key].existing_tags.splice(tagIndx, 1);
                         // $('#dropdown' + cardId).toggle();
                         setTimeout(function () {
                             _this.getBoardTask();
@@ -2571,7 +2581,7 @@
 
                 if (_this.triggers == true && e.which !== 16 && e.which !== 50) {
                     _this.userNames += e.key;
-                    console.log(_this.userNames);
+                    // console.log(_this.userNames);
                     // console.log(e.key, _this.userNames);
                     // axios.post('/api/task-list/search-result', {
                     //     'user_id': id,
@@ -2594,6 +2604,7 @@
                 }
 
                 if (e.shiftKey && e.which == 50) {
+                    _this.allTags = null;
                     _this.triggers = true;
                     _this.commentsData = $('#title' + card.cardId).text();
                     axios.get('/api/task-list/all-suggest-user')
@@ -2602,6 +2613,22 @@
                             _this.projectUsers = response.search_user;
                             $('.dropdowns-card-user').hide();
                             $('#titleUserMention' + card.cardId).show();
+                        })
+                        .catch(error => {
+                            console.log('All suggest user api not working')
+                        })
+                }
+                if (e.shiftKey && e.which == 51) {
+                    _this.projectUsers = null;
+                    _this.tagTriggers = true;
+                    _this.commentsData = $('#title' + card.cardId).text();
+                    axios.get('/api/task-list/all-tag-for-manage')
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.allTags = response.tags;
+                            $('.dropdowns-card-user').hide();
+                            $('#titleUserMention' + card.cardId).show();
+                            console.log(_this.allTags);
                         })
                         .catch(error => {
                             console.log('All suggest user api not working')
@@ -2616,6 +2643,14 @@
                 _this.projectUsers = null;
                 $('.dropdowns-card-user').hide();
             },
+            tagMention(card, tag, index , tagIndx, key) {
+                let _this = this;
+                $('#title'+card.cardId).focus();
+                $('#title'+card.cardId).html(_this.commentsData+''+tag.title+' ');
+                _this.addExistingTag(index , tagIndx, key, card.cardId, '');
+                _this.allTags = null;
+                $('.dropdowns-card-user').hide();
+            },
             showItem(e, data, index, child_key) {
 
                 $('#title' + data.cardId).addClass('card-title-blur');
@@ -2623,6 +2658,9 @@
                 // let attData = $(e.target).attr('data-text');
                 // let attDataNew = e.target.value;
                 // $('.dropdowns-card-user').hide();
+                setTimeout(() => {
+                    $('.dropdowns-card-user').hide();
+                }, 300);
                 let attDataNew = $('#title' + data.cardId).text();
                 data.data = attDataNew;
                 this.saveData(data, index, child_key);
