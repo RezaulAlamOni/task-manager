@@ -406,19 +406,25 @@ class TaskController extends Controller
         $target_list_id = $request->list_id;
 
         $target_list_sort_id = Task::where(['list_id' => $target_list_id])->orderBy('sort_id', 'desc')->first();
+
+        $check_links = LinkListToColumn::where('multiple_list_id',$target_list_id)->first();
+        $link_column = $check_links ? Task::where('id', $check_links->task_list_id)->first() : null;
+
         $sort_id = $target_list_sort_id->sort_id;
         foreach ($task_ids as $id) {
             $past = Task::where('id', $id)->with('List')->first();
-
+            $sort_id = $sort_id+1;
             $data = [
-                'sort_id' => $sort_id + 1,
+                'sort_id' => $sort_id,
                 'parent_id' => 0,
                 'project_id' => $past->project_id,
                 'list_id' => $target_list_id,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
-                'title' => $past->title,
+                'title' => $past->title.'-copy',
                 'date' => $past->date,
+                'board_parent_id' => $check_links && $link_column ? $link_column->board_parent_id : null,
+                'progress' => $check_links && $link_column ? $link_column->progress : null,
                 'created_at' => Carbon::now(),
             ];
             $task = Task::create($data);
@@ -448,6 +454,8 @@ class TaskController extends Controller
     {
 
         $target = Task::where('id', $target_id)->first();
+        $check_links = LinkListToColumn::where('multiple_list_id',$target->list_id)->first();
+        $link_column = $check_links ? Task::where('id', $check_links->task_list_id)->first() : null;
         $past = Task::where('id', $copy_id)->first();
 
         Task::where('parent_id', $target->parent_id)
@@ -465,6 +473,8 @@ class TaskController extends Controller
             'updated_by' => Auth::id(),
             'title' => $past->title . ' -copy',
             'date' => $past->date,
+            'board_parent_id' => $check_links && $link_column ? $link_column->board_parent_id : null,
+            'progress' => $check_links && $link_column ? $link_column->progress : null,
             'created_at' => Carbon::now(),
         ];
         $task = Task::create($data);
@@ -493,7 +503,7 @@ class TaskController extends Controller
         if (isset($request->ids)) {
             $ids = $request->ids;
             foreach ($ids as $id) {
-                // $this->deleteTaskWithChild($id);
+//                $this->deleteTaskWithChild($id);
                 $delete = Task::where('id',$id)->update([
                     'is_deleted' => 1,
                     'deleted_at' => carbon::now()

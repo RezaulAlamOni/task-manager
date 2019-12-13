@@ -14,21 +14,25 @@
                     @getNavBars="getNavbar">
             </Navbar>
             <!--            @update_overview="update_overview"-->
-            <div class="input-group col-sm-4 searchList"
+            <div class="input-group col-sm-5 searchList"
                  :class="((list.type === 'board') ? 'searchList-board' : 'searchList')">
-                <input class="form-control searchTaskList"
-                       type="text" id="myInput"
-                       placeholder="Search for names.."
-                       title="Type in a name"
-                       autocomplete="off"
-                       @keyup="searchDataFormTask($event)">
 
-                <select class="form-control " v-model="search_type" @change="searchBYType"
-                        style="display: inline;padding: 0;position: absolute; right: 0; top: 0; height: 38px !important;width: 78px;z-index : 999;border-radius: 0 5px 5px 0;">
+                <div class="input-group">
+                    <input class="form-control searchTaskList"
+                           type="text" id="myInput"
+                           placeholder="Search for names.."
+                           title="Type in a name"
+                           autocomplete="off"
+                           @keyup="searchDataFormTask($event)">
 
-                    <option value="all"> All</option>
-                    <option value="this"> This {{list.type}}</option>
-                </select>
+                    <div class="input-group-append">
+                        <select class="form-control " v-model="search_type" @change="searchBYType"
+                                style="width: auto;z-index: 999;border-radius: 0px 5px 5px 0px;height: 38px;background: transparent;">
+                            <option value="all"> All</option>
+                            <option value="this"> This {{list.type}}</option>
+                        </select>
+                    </div>
+                </div>
 
                 <ul class="myUL" id="myUL">
                     <template v-for="task in searchData.tasks" v-if="searchData.tasks.length > 0">
@@ -396,12 +400,8 @@
 
                                     <div class="hide-item-res" @click="openPicker()">
                                         <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'"
-                                           title="Due Date">
+                                           title="Due Date" style="padding-right: 16px !important;padding-top: 2px;" >
                                             <i class="fal fa-calendar-plus icon-image-preview"></i>
-
-                                            <!--                                        <i class="outline-event icon-image-preview" data-toggle-->
-                                            <!--                                           title="toggle"></i>-->
-
                                         </a>
                                         <datepicker
                                             :disabled-dates="disabledDates"
@@ -1847,6 +1847,7 @@
                     _this.triggers = false;
                     _this.userNames = '';
                     _this.allUsers = null;
+                    _this.allTags = null;
                     $('.dropdowns-card-user').hide();
                 }
 
@@ -1913,8 +1914,12 @@
                     id : id
                 };
                 _this.assignUserToTask(user, data);
-                $('#'+data.id).focus();
-                $('#'+data.id).click();
+
+                // setTimeout(function () {
+                    $('#'+data.id).focus();
+                    $('#'+data.id).click();
+                // },1000)
+
                 _this.allUsers = null;
                 $('.dropdowns-task-user').hide();
             },
@@ -2467,6 +2472,9 @@
 
             },
             RemoveNodeAndChildren(data) {
+                if (this.selectedIds.length <= 0){
+                    swal("Sorry!", "You  Don't Select any task!", "warning");
+                }
                 var _this = this;
                 var postData = {
                     ids: _this.selectedIds,
@@ -2553,7 +2561,9 @@
                     });
             },
             deleteSelectedTask() {
-
+                if (this.selectedIds.length <= 0){
+                    swal("Sorry!", "You  Don't Select any task!", "warning");
+                }
                 var _this = this;
                 _this.delete_popup = 1;
                 var postData = {
@@ -2605,6 +2615,7 @@
                         console.log('Api for add tag not Working !!!')
                     });
             },
+
             showLog() {
                 var _this = this;
                 axios.get('/api/task-list/get-log/' + _this.selectedData.id)
@@ -2621,6 +2632,7 @@
                         console.log('Api for move down task not Working !!!')
                     });
             },
+
             // get task list
             getTaskListWithDynamicEmptyNode() {
                 var _this = this;
@@ -2719,6 +2731,7 @@
 
                     });
             },
+
             //collect data by child navbar component
             showTask(data) {
                 setTimeout(function () {
@@ -3124,10 +3137,11 @@
                     axios.post('/api/task-list/update', postData)
                         .then(response => response.data)
                         .then(response => {
-                            if (response.empty) {
-
+                            if (response.empty !== 'not change') {
+                                if(data.text.indexOf("@") != -1 || data.text.indexOf("#") != -1 ){
+                                    _this.getTaskList();
+                                }
                             }
-                            _this.getTaskList();
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
