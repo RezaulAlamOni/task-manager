@@ -389,12 +389,8 @@
 
                                     <div class="hide-item-res" @click="openPicker()">
                                         <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'"
-                                           title="Due Date">
+                                           title="Due Date" style="padding-right: 16px !important;padding-top: 2px;" >
                                             <i class="fal fa-calendar-plus icon-image-preview"></i>
-
-                                            <!--                                        <i class="outline-event icon-image-preview" data-toggle-->
-                                            <!--                                           title="toggle"></i>-->
-
                                         </a>
                                         <datepicker
                                             :disabled-dates="disabledDates"
@@ -1888,13 +1884,12 @@
                 let user = {
                     id : id
                 };
-                // _this.updateDescription(function(res){
-                    //     console.log(res);
                 _this.assignUserToTask(user, data);
-                // });
-                // $('#'+card.cardId).html(_this.commentsData+''+name+' ');
-                $('#'+data.id).focus();
-                $('#'+data.id).click();
+                setTimeout(function () {
+                    $('#'+data.id).focus();
+                    $('#'+data.id).click();
+                },2000)
+
                 _this.allUsers = null;
                 $('.dropdowns-task-user').hide();
             },
@@ -2438,6 +2433,9 @@
 
             },
             RemoveNodeAndChildren(data) {
+                if (this.selectedIds.length <= 0){
+                    swal("Sorry!", "You  Don't Select any task!", "warning");
+                }
                 var _this = this;
                 var postData = {
                     ids: _this.selectedIds,
@@ -2524,7 +2522,9 @@
                     });
             },
             deleteSelectedTask() {
-
+                if (this.selectedIds.length <= 0){
+                    swal("Sorry!", "You  Don't Select any task!", "warning");
+                }
                 var _this = this;
                 _this.delete_popup = 1;
                 var postData = {
@@ -3101,10 +3101,11 @@
                     axios.post('/api/task-list/update', postData)
                         .then(response => response.data)
                         .then(response => {
-                            if (response.empty) {
-
+                            if (response.empty !== 'not change') {
+                                if(data.text.indexOf("@") != -1 || data.text.indexOf("#") != -1 ){
+                                    _this.getTaskList();
+                                }
                             }
-                            _this.getTaskList();
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
