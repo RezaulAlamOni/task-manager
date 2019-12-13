@@ -39,69 +39,70 @@
                                              style="position: absolute; display: inline; right: 10px; top: 9px">
                                             <span class="pull-right" style="display: inline-flex;">
 
-                                                    <span class="dropdown-toggle-split opacity"
-                                                          data-toggle="dropdown" style="padding: 0px;">
-                                                       <i class="fal fa-ellipsis-h" style="font-size:22px"></i>
-                                                    </span>
-                                                    <div class="dropdown-menu">
-                                                        <diV class="collapse show switchToggle">
-                                                            <a @click="addExistingTask(index,column.boardId)"
-                                                               class="dropdown-item"
-                                                               href="javascript:void(0)"
-                                                               v-if="column.moveToCol == false || column.ruleType === 'asnUser'">
-                                                                <img :src="baseUrl+'/img/task-icon/plus-o.png'"
-                                                                     height="18" width="18"> Add existing tasks</a>
-                                                            <a @click="addCard(index,column.boardId)"
-                                                               class="dropdown-item"
-                                                               href="javascript:void(0)"
-                                                               v-if="column.moveToCol == false || column.ruleType === 'asnUser'"><img
-                                                                :src="baseUrl+'/img/task-icon/create.png'" height="18"
-                                                                width="18"> Create new tasks</a>
-                                                            <div class="dropdown-divider"
-                                                                 v-if="column.moveToCol == false || column.ruleType === 'asnUser'"></div>
-                                                            <a @click="updateColumSow(index)" class="dropdown-item"
-                                                               href="#">
-                                                                <img :src="baseUrl+'/img/task-icon/edit.png'"
-                                                                     height="18" width="18">  Edit column</a>
-                                                            <a @click="hideColumn(index, column.boardId)"
-                                                               class="dropdown-item"
-                                                               href="#"><img :src="baseUrl+'/img/task-icon/hide.png'"
-                                                                             height="18" width="18"> Hide column</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <!-- <a @click="deleteColumnCards(index, column.boardId)" class="dropdown-item"
-                                                            href="#">
-                                                                <i class="fa fa-trash opacity"></i> Peekaboo all tasks in this column</a> -->
-                                                            <a @click="transferColumnToOtherBoard(index, column.boardId)"
-                                                               class="dropdown-item"
-                                                               href="#">
-                                                                <img :src="baseUrl+'/img/task-icon/transfer.png'"
-                                                                     height="18" width="18"> Transfer Column to another board</a>
-                                                            <a @click="showLinkModel(index, column.boardId)"
-                                                               class="dropdown-item"
-                                                               href="#"
-                                                               v-if="column.moveToCol == false || column.ruleType === 'asnUser'"><img
-                                                                :src="baseUrl+'/img/task-icon/link.png'" height="18"
-                                                                width="18"> Link to List </a>
-                                                            <!-- v-if="column.linkToList.length <= 0"  -->
-                                                            <li class="dropdown-submenu"
-                                                                v-if="column.linkToList.length > 0">
-                                                                <a class="dropdown-item" href="#"><img
-                                                                    :src="baseUrl+'/img/task-icon/unlink.png'"
-                                                                    height="18" width="18"> Unlink Lists</a>
-                                                                <ul class="dropdown-menu">
-                                                                    <li v-for="unlinks in column.linkToList"
-                                                                        class="dropdown-item"
-                                                                        @click="unlinklistToCol(index, column.boardId, unlinks.id)">
-                                                                        <a href="#"><img
-                                                                            :src="baseUrl+'/img/task-icon/unlink.png'"
-                                                                            height="18" width="18">
-                                                                             {{(unlinks.link_to_list_column !== null && unlinks.link_to_list_column !== undefined) ? unlinks.link_to_list_column.list_title : ''}}
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </li>
-                                                            <!-- <a v-if="column.linkToList.length > 0" @click="unlinklistToCol(index, column.boardId)" class="dropdown-item"
-                                                                href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink Lists
+                                                <span class="dropdown-toggle-split opacity"
+                                                      data-toggle="dropdown" style="padding: 0px;">
+                                                   <i class="fal fa-ellipsis-h" style="font-size:22px"></i>
+                                                </span>
+                                                <div class="dropdown-menu card-option-dropdown">
+                                                    <diV class="collapse show switchToggle">
+                                                        <a @click="addExistingTask(index,column.boardId)"
+                                                           class="dropdown-item"
+                                                           href="javascript:void(0)"
+                                                           v-if="column.moveToCol == false || column.ruleType === 'asnUser'">
+                                                            <i class="fal fa-layer-plus mr-2"></i>
+                                                            Add existing tasks
+                                                        </a>
+                                                        <a @click="addCard(index,column.boardId)"
+                                                           class="dropdown-item"
+                                                           href="javascript:void(0)"
+                                                           v-if="column.moveToCol == false || column.ruleType === 'asnUser'">
+                                                            <i class="fal fa-plus-square mr-2"></i>
+                                                            Create new tasks
+                                                        </a>
+                                                        <div class="dropdown-divider"
+                                                             v-if="column.moveToCol == false || column.ruleType === 'asnUser'"></div>
+                                                        <a @click="updateColumSow(index)" class="dropdown-item"
+                                                           href="#">
+                                                            <i class="fal fa-edit mr-2"></i>
+                                                            Edit column
+                                                        </a>
+                                                        <a @click="hideColumn(index, column.boardId)"
+                                                           class="dropdown-item" href="#">
+                                                            <i class="far fa-eye-slash mr-2"></i>
+                                                            Hide column
+                                                        </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a @click="transferColumnToOtherBoard(index, column.boardId)"
+                                                           class="dropdown-item" href="#">
+                                                            <i class="fad fa-exchange-alt mr-2"></i>
+                                                            Transfer Column to another board
+                                                        </a>
+                                                        <a @click="showLinkModel(index, column.boardId)"
+                                                           class="dropdown-item" href="#"
+                                                           v-if="column.moveToCol == false || column.ruleType === 'asnUser'">
+                                                            <i class="fas fa-link mr-2"></i>
+                                                            Link to List
+                                                        </a>
+                                                        <li class="dropdown-submenu"
+                                                            v-if="column.linkToList.length > 0">
+                                                            <a class="dropdown-item" href="#">
+                                                                <i class="fas fa-unlink mr-2"></i>
+                                                                Unlink Lists
+                                                            </a>
+                                                            <ul class="dropdown-menu">
+                                                                <li v-for="unlinks in column.linkToList"
+                                                                    class="dropdown-item"
+                                                                    @click="unlinklistToCol(index, column.boardId, unlinks.id)">
+                                                                    <a href="#"><img
+                                                                        :src="baseUrl+'/img/task-icon/unlink.png'"
+                                                                        height="18" width="18">
+                                                                         {{(unlinks.link_to_list_column !== null && unlinks.link_to_list_column !== undefined) ? unlinks.link_to_list_column.list_title : ''}}
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <!-- <a v-if="column.linkToList.length > 0" @click="unlinklistToCol(index, column.boardId)" class="dropdown-item"
+                                                            href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink Lists
 
                                                                  </a> -->
 
@@ -109,8 +110,8 @@
                                                             <a @click="deleteColumn(index,column.boardId)"
                                                                class="dropdown-item"
                                                                href="#">
-                                                                <img :src="baseUrl+'/img/task-icon/trash.png'"
-                                                                     height="18" width="18"> Delete column</a>
+                                                                <i data-v-0ca4b43b="" class="fal fa-trash-alt mr-2" aria-hidden="true"></i>
+                                                                Delete column</a>
                                                         </diV>
                                                     </div>
                                                 </span>
@@ -143,40 +144,51 @@
                                     drop-class="card-ghost-drop"
                                     group-name="col"
                                 >
-                                    <Draggable :key="card.id" v-for="(card , key) in column.children">                                       
-                                        <div :class="[card.props.className,(card.priority_label !== null) ? 'pc-'+card.priority_label : '']"
-                                             :style="card.props.style"
-                                             class="card-list"
-                                             @contextmenu="makeItClick($event, card,column.children, index, key, column.boardId)"
-                                             @click="makeItClick($event, card, column.children, index, key, column.boardId)"
-                                             :id="'card_'+card.cardId"
-                                             v-on:dblclick="showLog">
-                                                <div :id="'titleUserMention'+card.cardId" class="dropdowns-card-user" style="z-index: 1;">
-                                                    <diV class="collapse show switchToggle">
-                                                        <ul id="myUL-user" class="myUL-user-card">
-                                                            <template v-for="user in projectUsers" v-if=" projectUsers !== null && projectUsers.length > 0">
-                                                                <li @click="SearchTaskByAssignedUsers(user.id, user.name, card)">
-                                                                    <a href="javascript:void(0)">
+                                    <Draggable :key="card.id" v-for="(card , key) in column.children">
+                                        <div
+                                            :class="[card.props.className,(card.priority_label !== null) ? 'pc-'+card.priority_label : '']"
+                                            :style="card.props.style"
+                                            class="card-list"
+                                            @contextmenu="makeItClick($event, card,column.children, index, key, column.boardId)"
+                                            @click="makeItClick($event, card, column.children, index, key, column.boardId)"
+                                            :id="'card_'+card.cardId"
+                                            v-on:dblclick="showLog(card)">
+                                            <div :id="'titleUserMention'+card.cardId" class="dropdowns-card-user" style="z-index: 1;">
+                                                <diV class="collapse show switchToggle">
+                                                    <ul id="myUL-user" class="myUL-user-card" style="background: #f3f3f3; border-radius: 5px; border: 1px solid #d4d4d4; ">
+                                                        <template v-for="user in projectUsers" v-if="projectUsers !== null && projectUsers.length > 0">
+                                                            <li @click="SearchTaskByAssignedUsers(user.id, user.name, card, user)">
+                                                                <a href="javascript:void(0)">
                                                                         <span class="assignUser-suggest-photo">
                                                                             {{(user.name !== null) ? user.name.substring(0,2) : ''}}
                                                                         </span>
-                                                                        {{user.name}}
-                                                                    </a>
-                                                                </li>
-                                                            </template>
-                                                            <template v-else>
-                                                                <li>
-                                                                    <a href="javascript:void(0)">
-                                                                        No user found!
-                                                                    </a>
-                                                                </li>
-                                                            </template>
-                                                        </ul>
-                                                    </diV>
-                                                </div>
+                                                                    {{user.name}}
+                                                                </a>
+                                                            </li>
+                                                        </template>
+                                                        <template v-for="(user, tagIndx) in card.existing_tags" v-if="card.existing_tags !== null && card.existing_tags.length > 0 && projectUsers === null ">
+                                                            <li @click="tagMention(card, user, index , tagIndx, key)" class="users-select row"> <!--addExistingTag(index , tagIndx, key, card.cardId, '') -->
+                                                                <div class="col-md-9 add-tag-to-selected">
+                                                                    <span
+                                                                        class="badge badge-default tag-color-custom-contextmenu"
+                                                                        :style="{'background' : user.color}">.</span>
+                                                                    <h5>{{user.title}}</h5>
+                                                                </div>
+                                                            </li>
+                                                        </template>
+                                                        <!-- <template v-else>
+                                                            <li>
+                                                                <a href="javascript:void(0)">
+                                                                    No user found!
+                                                                </a>
+                                                            </li>
+                                                        </template> -->
+                                                    </ul>
+                                                </diV>
+                                            </div>
                                             <!-- @click="selectCard(card)" -->
                                             <span
-                                                  :class="[(card.priority_label !== null) ? 'pch-'+card.priority_label : 'ch-option']"
+                                                :class="[(card.priority_label !== null) ? 'pch-'+card.priority_label : 'ch-option']"
                                             > <!-- v-if="card.textareaShow === true" -->
                                                 <span class="dropdown-toggle-split opacity"
                                                       data-toggle="dropdown">
@@ -184,31 +196,38 @@
                                                        :class="[(card.priority_label !== null) ? 'ch-option-icon' : '']"
                                                        style="color: #272757; font-size:22px;"></i>
                                                 </span>
-                                                <div class="dropdown-menu">
+                                                <div class="dropdown-menu card-option-dropdown">
                                                     <diV class="collapse show switchToggle">
 
                                                         <a @click="showTransferModel(index, key, card.cardId, column.boardId)"
-                                                           class="dropdown-item" href="#">
-                                                        <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18"
-                                                             width="18" title="Transfer To Other Board Or Column"/>
+                                                           class="dropdown-item" href="#"
+                                                           title="Transfer To Other Board Or Column">
+
+                                                            <i class="fad fa-sort-alt mr-2"></i>
+                                                            <!--                                                        <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18"-->
+                                                            <!--                                                             width="18" title="Transfer To Other Board Or Column"/>-->
+
+
                                                         Transfer task to another board</a>
 
                                                         <div class="dropdown-divider"
                                                              v-if="card.types === 'task'"></div>
                                                         <a @click="deleteTask(index, key, card.cardId)"
-                                                           class="dropdown-item"
+                                                           class="dropdown-item" title="Remove Task"
                                                            href="#" v-if="card.types === 'task'">
-                                                             <img :src="baseUrl+'/img/task-icon/minus-o.png'"
-                                                                  height="18" width="18" title="Remove Task"/>
-                                                            Remove task from <strong>This Board</strong> </a>
+                                                            <i class="fal fa-minus-octagon mr-2"></i>
+                                                            Remove task from <strong>This Board</strong>
+                                                        </a>
                                                         <div class="dropdown-divider"></div>
                                                         <a @click="RemoveNodeAndChildren()" class="dropdown-item"
-                                                           href="#"><img :src="baseUrl+'/img/task-icon/trash.png'"
-                                                                         height="18" width="18">     Delete the task</a>
+                                                           href="#">
+                                                            <i class="fad fa-trash-alt mr-2"></i>
+                                                            Delete the task
+                                                        </a>
                                                     </diV>
                                                 </div>
                                             </span>
-                                            
+
                                             <div :id="'title'+card.cardId" contenteditable="true"
                                                  class="card-title-blur card-title-show"
                                                  @click="makeInput($event,card.cardId)"
@@ -220,7 +239,7 @@
                                             <div>
                                                 <a class="calender clickHide" v-if="card.date === '0000-00-00'">
                                                     <i class="fal fa-calendar-plus icon-image-preview" data-toggle
-                                                         title="toggle"></i>
+                                                       title="toggle"></i>
                                                 </a>
                                                 <flatPickr
                                                     :class="{
@@ -261,8 +280,9 @@
                                                     </span>
                                                 </template>
                                                 <span data-toggle="dropdown" class=" dropdown-toggle-split" v-else>
-                                                    <i class="fal fa-user-plus icon-image-preview " data-toggle="tooltip"
-                                                         title="Assignee"></i>
+                                                    <i class="fal fa-user-plus icon-image-preview "
+                                                       data-toggle="tooltip"
+                                                       title="Assignee"></i>
                                                 </span>
 
                                                 <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
@@ -389,7 +409,7 @@
                                                     </div>
                                                 </div>
                                                 <i class="fal fa-tags icon-image-preview" data-toggle="dropdown"
-                                                     title="Add Tag" v-else></i>
+                                                   title="Add Tag" v-else></i>
                                                 <div class="dropdown-menu dropdown-menu1 ">
 
                                                     <diV class="collapse show switchToggle" style="">
@@ -459,8 +479,9 @@
                                                         {{card.priority_label}}
                                                      </span>
                                                 </span>
-                                                <i class="fal fa-exclamation-triangle icon-image-preview" v-else style="margin-bottom: -2px"
-                                                     data-toggle="dropdown" title="Add Priority"></i>
+                                                <i class="fal fa-exclamation-triangle icon-image-preview" v-else
+                                                   style="margin-bottom: -2px"
+                                                   data-toggle="dropdown" title="Add Priority"></i>
 
                                                 <div class="dropdown-menu dropdown-menu-right"
                                                      style="z-index: 1;width: 185px;">
@@ -656,10 +677,10 @@
                                     <i class="fal fa-exclamation-triangle contex-menu-icon"></i>
                                     Add Priority
                                 </a>
-<!--                                <span class="contex-menu-sortcut">-->
-<!--                                        <span class="badge-pill badge-default">Shift</span>+<span-->
-<!--                                    class="badge-pill badge-default">#</span>-->
-<!--                                    </span>-->
+                                <!--                                <span class="contex-menu-sortcut">-->
+                                <!--                                        <span class="badge-pill badge-default">Shift</span>+<span-->
+                                <!--                                    class="badge-pill badge-default">#</span>-->
+                                <!--                                    </span>-->
 
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <div class="collapse show switchToggle">
@@ -1396,11 +1417,12 @@
                 disabledDates: {
                     id: null,
                 },
-                shift_first : null,
-                triggers : null,
-                userNames : null,
-                projectUsers : null,
-                commentsData : null,
+                shift_first: null,
+                triggers: null,
+                tagTriggers: null,
+                userNames: null,
+                projectUsers: null,
+                commentsData: null,
             }
         },
         mounted() {
@@ -1466,7 +1488,7 @@
                         _this.HideDetails();
                         break;
                     case "right" :
-                        _this.showLog();
+                        _this.showLog(_this.selectedData);
                         // _this.task_logs = null;
                         // _this.ShowDetails(_this.selectedData);
 
@@ -2437,7 +2459,7 @@
                     .then(response => response.data)
                     .then(response => {
                         // _this.cards[index].task[key].tags.push(data);
-                        _this.cards[index].task[key].existing_tags.splice(tagIndx, 1);
+                        // _this.cards[index].task[key].existing_tags.splice(tagIndx, 1);
                         // $('#dropdown' + cardId).toggle();
                         setTimeout(function () {
                             _this.getBoardTask();
@@ -2542,8 +2564,7 @@
                     // alert('Enter pressed');
                 }
             },
-            cardTitlePress(e,card,index,key)
-            {   
+            cardTitlePress(e, card, index, key) {
                 $('.dropdowns-card-user').hide();
                 console.log(e.which);
                 let _this = this;
@@ -2560,7 +2581,7 @@
 
                 if (_this.triggers == true && e.which !== 16 && e.which !== 50) {
                     _this.userNames += e.key;
-                    console.log(_this.userNames);
+                    // console.log(_this.userNames);
                     // console.log(e.key, _this.userNames);
                     // axios.post('/api/task-list/search-result', {
                     //     'user_id': id,
@@ -2583,27 +2604,51 @@
                 }
 
                 if (e.shiftKey && e.which == 50) {
+                    _this.allTags = null;
                     _this.triggers = true;
-                    _this.commentsData = $('#title'+card.cardId).text();
+                    _this.commentsData = $('#title' + card.cardId).text();
                     axios.get('/api/task-list/all-suggest-user')
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.projectUsers = response.search_user;
-                        $('.dropdowns-card-user').hide();
-                        $('#titleUserMention'+card.cardId).show();
-                    })
-                    .catch(error => {
-                        console.log('All suggest user api not working')
-                    })
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.projectUsers = response.search_user;
+                            $('.dropdowns-card-user').hide();
+                            $('#titleUserMention' + card.cardId).show();
+                        })
+                        .catch(error => {
+                            console.log('All suggest user api not working')
+                        })
+                }
+                if (e.shiftKey && e.which == 51) {
+                    _this.projectUsers = null;
+                    _this.tagTriggers = true;
+                    _this.commentsData = $('#title' + card.cardId).text();
+                    axios.get('/api/task-list/all-tag-for-manage')
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.allTags = response.tags;
+                            $('.dropdowns-card-user').hide();
+                            $('#titleUserMention' + card.cardId).show();
+                            console.log(_this.allTags);
+                        })
+                        .catch(error => {
+                            console.log('All suggest user api not working')
+                        })
                 }
             },
-            SearchTaskByAssignedUsers(id, name, card) {
-                // alert('sdfsaf');
+            SearchTaskByAssignedUsers(id, name, card, user) {
                 let _this = this;
-                console.log(_this.commentsData);
                 $('#title'+card.cardId).focus();
+                _this.assignUserToTask(user, 0, 0, card);
                 $('#title'+card.cardId).html(_this.commentsData+''+name+' ');
                 _this.projectUsers = null;
+                $('.dropdowns-card-user').hide();
+            },
+            tagMention(card, tag, index , tagIndx, key) {
+                let _this = this;
+                $('#title'+card.cardId).focus();
+                $('#title'+card.cardId).html(_this.commentsData+''+tag.title+' ');
+                _this.addExistingTag(index , tagIndx, key, card.cardId, '');
+                _this.allTags = null;
                 $('.dropdowns-card-user').hide();
             },
             showItem(e, data, index, child_key) {
@@ -2613,6 +2658,9 @@
                 // let attData = $(e.target).attr('data-text');
                 // let attDataNew = e.target.value;
                 // $('.dropdowns-card-user').hide();
+                setTimeout(() => {
+                    $('.dropdowns-card-user').hide();
+                }, 300);
                 let attDataNew = $('#title' + data.cardId).text();
                 data.data = attDataNew;
                 this.saveData(data, index, child_key);
@@ -2752,29 +2800,16 @@
 
                     });
             },
-            showLog() {
+            showLog(card) {
                 var _this = this;
-                // _this.task_logs = [];
-                _this.ShowDetails();
-                    $('#_file').click();
+                $('#title'+card.cardId).blur();
+
                 setTimeout(function () {
+                    _this.ShowDetails();
+                    $('#_file').click();
                     $('#_details').click();
-                    // $('#_log').click()
                 }, 300)
-                // axios.get('/api/task-list/get-log/' + _this.selectedData.cardId)
-                //     .then(response => response.data)
-                //     .then(response => {
-                //         // console.log(response);
-                //         _this.task_logs = response;
-                //         _this.ShowDetails();
-                //         setTimeout(function () {
-                //             $('#_details').click();
-                //             // $('#_log').click()
-                //         }, 300)
-                //     })
-                //     .catch(error => {
-                //         console.log('Api for move down task not Working !!!')
-                //     });
+
             },
             selectCard(card, child) {
                 this.selectedData = card;
@@ -2798,7 +2833,7 @@
             Add_Priority(priority, id) {
                 var _this = this;
                 var data = {
-                    ids:  (id == null) ? _this.selectedIds : [id],
+                    ids: (id == null) ? _this.selectedIds : [id],
                     priority: priority
                 }
                 axios.post('/api/task-list/add-priority', data)
@@ -2863,7 +2898,7 @@
                         $('#card_' + _this.selectedIds[index]).addClass('selected-card');
                     }
                 }
-                // else if (e.shiftKey && e.which === 1) {
+                    // else if (e.shiftKey && e.which === 1) {
                     // alert('shft+left clk');
                     // _this.selectedIds.push(card.cardId);
                     // console.log(_this.selectedIds);
@@ -2882,22 +2917,29 @@
 
                     var index_last = _this.allCardIds.indexOf(last);
                     var index_first = _this.allCardIds.indexOf(first);
-                    if (index_first > index_last ){
-                        first = card.cardId  ;
+                    if (index_first > index_last) {
+                        first = card.cardId;
                         index_first = _this.allCardIds.indexOf(first);
                         last = _this.shift_first;
                     }
                     _this.selectedIds = [];
                     $('.card-list').removeClass('selected-card');
 
-                    for (var i = index_first; i <= _this.allCardIds.length; i++){
-                        if (_this.allCardIds[i] === first) {flag = 1;flag1 = 1;}
-                        if (flag === 1){
+                    for (var i = index_first; i <= _this.allCardIds.length; i++) {
+                        if (_this.allCardIds[i] === first) {
+                            flag = 1;
+                            flag1 = 1;
+                        }
+                        if (flag === 1) {
                             _this.selectedIds.push(_this.allCardIds[i]);
                             // $('#click' + _this.allCardIds[i]).addClass('clicked');
                             $('#card_' + _this.allCardIds[i]).addClass('selected-card');
                         }
-                        if (flag1 === 1 && _this.allCardIds[i] === last) {flag = 0;flag1 = 0; break;}
+                        if (flag1 === 1 && _this.allCardIds[i] === last) {
+                            flag = 0;
+                            flag1 = 0;
+                            break;
+                        }
                     }
                 } else if (e.which === 1) {
                     // alert('left clk');

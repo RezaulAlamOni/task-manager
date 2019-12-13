@@ -4,12 +4,6 @@
         <nav class="navbar-expand-md navbar-spark">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse show">
-                    <!--                    <li class="nav-item ml-4" style="list-style: none;">-->
-                    <!--                        <a @click="setOverview" class="d-block d-md-flex text-center nav-link"-->
-                    <!--                           href="Javascript:void(0)">-->
-                    <!--                            <span class="d-none d-md-block">Overview</span>-->
-                    <!--                        </a>-->
-                    <!--                    </li>-->
                     <div class="nav-train-station">
                         <div class="nav-train">
                             <ul class="navbar-nav navbar-nav-cabin ml-4 float-sm-left">
@@ -32,8 +26,12 @@
                                              class="dropdown-menu dropdown-menu-left"
                                              style="max-height: calc(100vh - 130px);transform: translate3d(0px, 50px, 0px);overflow-y: auto;overflow-x: hidden;min-width: 145px;">
 
-                                            <h6 class="dropdown-header" v-if="nav.type === 'list'"> Lists</h6>
-                                            <h6 class="dropdown-header" v-else-if="nav.type === 'board'"> Board</h6>
+                                            <h6 class="dropdown-header" v-if="nav.type === 'list'">
+                                                <i class="fas fa-align-left mr-2"></i>
+                                                Lists</h6>
+                                            <h6 class="dropdown-header" v-else-if="nav.type === 'board'">
+                                                <i class="far fa-clipboard mr-2"></i>
+                                                Board</h6>
 
                                             <!--                                        <a style="max-height: calc(100vh - 190px);transform: translate3d(0px, 50px, 0px);overflow: auto;">-->
                                             <span v-for="nav_list in nav.lists">
@@ -83,18 +81,16 @@
                             <li class="nav-item search-nav-icon">
                                 <!--                            v-if="list_selected.type === 'list'"-->
                                 <button class="btn btn-default" type="submit"
-                                        @click="showSearchInputField"
+                                        @click="showSearchInputField" title="Find Task" data-toggle="tooltip"
                                         style="padding-right: 32px; padding-left: 7px;background: none">
-                                    <img :src="baseUrl+'/img/task-icon/search.png'" height="30" width="30" alt=""
-                                         title="Find Task" data-toggle="tooltip">
+                                    <i class="fal fa-file-search" style="padding-left: 9px;font-size: 22px;"></i>
                                 </button>
                             </li>
                             <li class="nav-item search-nav-icon" v-if="list_selected.type === 'board'">
                                 <button class="btn btn-default" @click="HideShowBoardTitle" type="submit"
-                                        style="padding-right: 32px; padding-left: 7px;background: none;">
-                                    <img :src="baseUrl+'/img/task-icon/title_show.png'" height="30" width="30" alt=""
-                                         title="'Hide' or 'Show' Board Title" data-toggle="tooltip"
-                                         style="margin: -2px;">
+                                        style="padding-right: 32px; padding-left: 7px;background: none;"
+                                        title="'Hide' or 'Show' Board Title" data-toggle="tooltip">
+                                    <i class="fal fa-eye" style="padding-left: 9px;font-size: 22px;"></i>
                                 </button>
                             </li>
                             <li class="nav-item" style="margin-right:10px;">
@@ -198,8 +194,9 @@
                                 <a aria-expanded="false" aria-haspopup="true"
                                    class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
                                    href="#">
-                                <span class="d-none d-md-block"><i class="fa fa-fw fa-filter"
-                                                                   style="font-size: 26px;"></i></span>
+                                <span class="d-none d-md-block">
+                                    <i class="fal fa-filter" style="font-size: 20px;"></i>
+                                </span>
                                 </a>
                                 <div aria-labelledby="dropdownMenuButton" class="dropdown-menu dropdown-menu-right">
 
@@ -251,8 +248,7 @@
                                    class="d-block d-md-flex text-center nav-link"
                                    data-toggle="dropdown" href="#">
                                         <span class="d-none d-md-block">
-                                           <i class="fa fa-fw fa-plus-circle compltit-blue"
-                                              style="font-size: 26px;"></i>
+                                            <i class="far fa-plus-hexagon compltit-blue" style="font-size: 22px;"></i>
                                         </span>
                                 </a>
                                 <div aria-labelledby="dropdownMenuButton" class="dropdown-menu dropdown-menu-right">

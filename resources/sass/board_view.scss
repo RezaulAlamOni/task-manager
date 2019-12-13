@@ -695,7 +695,7 @@
 }
 
 .tags-log {
-    max-height: 625px;
+    max-height: calc(100vh - 300px);
     overflow-y: auto;
 }
 
@@ -902,6 +902,13 @@
     background-color: #eee;
 }
 
+.myUL-user-card-reply {
+    // bottom : 42px !important;
+    max-height: 136px;
+    overflow: auto;
+
+}
+
 .myUL-user-card {
     display: inline-block;
     list-style-type: none;
@@ -914,12 +921,6 @@
     // bottom : 52px;
 }
 
-.myUL-user-card-reply {
-    // bottom : 42px !important;
-    max-height: 136px;
-    overflow: auto;
-
-}
 
 .myUL-user-card li a {
     border: 1px solid #ddd;
@@ -954,3 +955,12 @@
     background: transparent !important;
 }
 
+.card-option-dropdown::before{
+    border:none !important;
+    background-color: transparent;
+}
+
+.card-option-dropdown::after{
+    border:none !important;
+    background-color: transparent;
+}

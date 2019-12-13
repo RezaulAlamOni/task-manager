@@ -41,39 +41,34 @@
                                      data-target="" aria-expanded="false"
                                      aria-controls="collapseOne">
                                     <div class="col-md-12">
-                                        <img src="/img/task-icon/move.png" alt="" height="20px" width="20px"
-                                             class="mr-2 sort-trigger" data-toggle="tooltip"
-                                             title="Change sort-order lists">
+                                        <i class="fad fa-arrows  sort-trigger"data-toggle="tooltip"
+                                           title="Change sort-order lists"></i>
                                         <h2 style="margin: 10px 15px;cursor: pointer" data-placement="bottom"
                                             @click="dataCollapse('#collapse'+list.id,list.id)" data-toggle="tooltip">
                                             {{list.list_title}}
                                         </h2>
                                         <span class="option-btn">
                                     <span data-toggle="dropdown" class="dropdown-toggle-split col-md-12 opacity">
-                                        <i class="fa fa-ellipsis-h"></i>
+                                        <i class="fad fa-ellipsis-h"></i>
                                     </span>
                                     <div class="dropdown-menu overview-dropdown dropdown-menu-right">
                                         <div class="collapse show switchToggle">
 
                                             <a href="#" class="dropdown-item" @click="EditList(list)">
-                                                <img data-v-0ca4b43b="" src="/img/task-icon/edit.png" alt=""
-                                                     height="17px" width="17px" class="mr-2">
+                                                <i data-v-0ca4b43b="" class="fal fa-edit mr-2" aria-hidden="true"></i>
                                                 Edit List
                                             </a>
                                             <a href="#" class="dropdown-item" @click="DeleteList(list)">
-                                                <img data-v-0ca4b43b="" src="/img/task-icon/trash.png"
-                                                     alt="" height="20px" width="20px" class="mr-2">
+                                                <i data-v-0ca4b43b="" class="fal fa-trash-alt mr-2" aria-hidden="true"></i>
                                                 Delete List
                                             </a>
                                             <a :href="'/list-pdf-create/'+list.id" class="dropdown-item">
-                                                <img data-v-0ca4b43b="" src="/img/task-icon/pdf.png"
-                                                     alt="" height="20px" width="20px" class="mr-2">
+                                               <i data-v-0ca4b43b="" class="fal fa-download mr-2" aria-hidden="true"></i>
                                                 Download PDF
                                             </a>
                                             <a href="#" class="dropdown-item" v-if="list.is_delete === 1"
                                                @click="RestoreList(list.id)">
-                                                <img data-v-0ca4b43b="" src="/img/task-icon/restore.png" alt=""
-                                                     height="17px" width="17px" class="mr-2">
+                                                <i class="far fa-trash-undo-alt mr-2"></i>
                                                 Restore this list
                                             </a>
                                         </div>

@@ -155,10 +155,10 @@
                 </a>
             </div>
             <!-- Assign Users -->
-            <div class="col-md-3" style="padding: 0px;">
+            <div class="col-md-3" style="padding: 0px;text-align: center">
                 <a class="user dropdown-hide-with-remove-icon">
                     <template v-if="selectedData.assigned_user.length > 0">
-                        <span class="assigned_user dropdown-toggle-split " style="float: right;padding-right: 50px"
+                        <span class="assigned_user dropdown-toggle-split "
                               data-toggle="dropdown" v-for="(assign,keyId) in selectedData.assigned_user">
                             <p :title="assign.name"
                                class="assignUser-photo-for-selected text-uppercase"
@@ -270,7 +270,7 @@
                     </li>
                     <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.type !== 'task' && (selectedData.childrens.length  > 0 || selectedData.parents.length  > 0)">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
-                           id="_child" role="tab">Parents & Childs</a>
+                           id="_child" role="tab">Related Tasks</a>
                     </li>
                     <!-- <li @click="showChild(selectedData.cardId)" class="nav-item" v-if="selectedData.parents.length  > 0">
                         <a aria-controls="child" aria-selected="false" class="nav-link" data-toggle="tab" href="#child"
@@ -1223,18 +1223,19 @@
             },
             replySearchTaskByAssignedUser(id, name, comment) {
                 let _this = this;
-               $('#replyTextBox'+comment.id).val(_this.commentsData+''+name+' ');
-                //    $('.SubmitButton').show();
-                   $('#replyTextBox'+comment.id).focus();
-               _this.replyProjectUsers = null;
-               $('.myUL-user-comment').css({display : 'none'});
+                $('#replyTextBox'+comment.id).val(_this.commentsData+''+name+' ');
+                $('#replyTextBox'+comment.id).focus();
+                setTimeout(() => {
+                    _this.replyProjectUsers = null;
+                }, 10);
+                // $('.myUL-user-comment').css({display : 'none'});
             },
             SearchTaskByAssignedUser(id, name) {
                 let _this = this;
-               $('.commentInput').val(_this.commentsData+''+name+' ');
-                //    $('.SubmitButton').show();
-                //    $('.commentInput').focus();
-               _this.projectUsers = null;
+                $('.commentInput').val(_this.commentsData+''+name+' ');
+                setTimeout(() => {
+                    _this.projectUsers = null;
+                }, 10);
             },
             // removeAssignedUser(user, index, key) {
 

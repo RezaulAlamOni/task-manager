@@ -21,8 +21,7 @@
                        placeholder="Search for names.."
                        title="Type in a name"
                        autocomplete="off"
-                       @keyup="searchDataFormTask($event)"
-                >
+                       @keyup="searchDataFormTask($event)">
 
                 <select class="form-control " v-model="search_type" @change="searchBYType"
                         style="display: inline;padding: 0;position: absolute; right: 0; top: 0; height: 38px !important;width: 78px;z-index : 999;border-radius: 0 5px 5px 0;">
@@ -158,6 +157,43 @@
                                          class="task-complete left-content li-opacity">
                                 </span>
 
+
+                                <div :id="'titleUserMention'+data.id" class="dropdowns-task-user" style="z-index: 1;">
+                                    <diV class="collapse show switchToggle">
+                                        <ul id="myUL-user" class="myUL-user-task" style="background: #f3f3f3; border-radius: 5px; border: 1px solid #d4d4d4; ">
+                                            <template v-for="user in allUsers" v-if=" allUsers !== null && allUsers.length > 0">
+                                                <li @click="SearchTaskByAssignedUsers(user.id, user.name, data)">
+                                                    <a href="javascript:void(0)">
+                                                        <span class="assignUser-suggest-photo">
+                                                            {{(user.name !== null) ? user.name.substring(0,2) : ''}}
+                                                        </span>
+                                                        {{user.name}}
+                                                    </a>
+                                                </li>
+                                            </template>
+                                            <!-- addExistingTag(data , tag.title,tag.color) -->
+                                            <template v-for="(user, tagIndx) in allTags" v-if="allTags !== null && allTags.length > 0 && allUsers === null">
+                                                <li @click="tagMention(data, user)" class="users-select row">
+                                                    <div class="col-md-9 add-tag-to-selected">
+                                                        <span
+                                                            class="badge badge-default tag-color-custom-contextmenu"
+                                                            :style="{'background' : user.color}">.</span>
+                                                        <h5>{{user.title}}</h5>
+                                                    </div>
+                                                </li>
+                                            </template>
+                                            <!-- <template v-else>
+                                                <li>
+                                                    <a href="javascript:void(0)">
+                                                        No user found!
+                                                    </a>
+                                                </li>
+                                            </template> -->
+                                        </ul>
+                                    </diV>
+                                </div>
+
+
                                     <b @click="HideShowChild(store , data)"
                                        v-if="data.children && data.children.length && data.open">
                                         <i class="fal fa-fw fa-minus"></i></b>
@@ -166,14 +202,16 @@
                                         <i class="fal fa-fw fa-plus"></i></b>
                                     <span>
                                         <input :id="data.id"
-                                               @blur="showItem($event,data)"
-                                               @click="makeInput($event,data)"
-                                               @focus="hideItem($event,data)"
-                                               @keydown="keyDownAction($event,data)"
-                                               @keypress="saveData($event,data)"
-
-                                               class="inp input-hide input-title"
-                                               type="text" v-model="data.text">
+                                                @blur="showItem($event,data)"
+                                                @click="makeInput($event,data)"
+                                                @focus="hideItem($event,data)"
+                                                @keydown="keyDownAction($event,data)"
+                                                @keypress="saveData($event,data)"
+                                                @keyup="cardTitlePress($event,data)"
+                                                class="inp input-hide input-title"
+                                                type="text"
+                                                autocomplete="off"
+                                                v-model="data.text">
                                     </span>
 
                                     <div class="hide-item-res-user">
@@ -207,7 +245,7 @@
                                             <span data-toggle="dropdown" class="priority-icon dropdown-toggle-split"
                                                   v-else>
                                                 <i class="fal fa-exclamation-triangle icon-image-preview li-opacity assign-user-"
-                                                   data-toggle="tooltip" title="Add Priority"></i>
+                                                   data-toggle="tooltip" title="Add Priority" style="padding-right: 12px;"></i>
                                             </span>
                                             <div class="dropdown-menu dropdown-menu-right"
                                                  style="z-index: 1;width: 185px;">
@@ -308,7 +346,7 @@
                                             </template>
                                         </i>
                                         <span :id="'tag-'+data._id" data-toggle="dropdown" v-else>
-                                        <i class="fal fa-tags icon-image-preview li-opacity pull-right" style="margin-right: 19px;"
+                                        <i class="fal fa-tags icon-image-preview li-opacity pull-right" style="margin-right: 19px;padding-top: 5px;"
                                            data-toggle="tooltip" title="Add Tag"></i>
                                     </span>
 
@@ -1186,7 +1224,12 @@
                 allUsers: null,
                 allTags: null,
                 allTaskId: null,
-                shift_first: null
+                shift_first: null,
+                triggers : null,
+                tagTriggers : null,
+                userNames : null,
+                projectUsers : null,
+                commentsData : null,
             }
         },
         mounted() {
@@ -1573,7 +1616,7 @@
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
-                        _this.getTaskList()
+                        _this.getTaskList();
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -1753,6 +1796,7 @@
                 this.context_menu_flag = data.id;
                 // data.draggable = false;
                 // $(e.target).closest('.eachItemRow').find('.task-complete').hide();
+                $('.dropdowns-task-user').hide();
                 $(e.target).closest('.eachItemRow').find('.tag-icon').hide();
                 $(e.target).closest('.eachItemRow').find('.attach-icon').hide();
                 $(e.target).closest('.eachItemRow').find('.subTask_plus').hide();
@@ -1782,9 +1826,107 @@
                     data.droppable = true;
                 }, 500);
 
+                setTimeout(() => {
+                    $('.dropdowns-task-user').hide();
+                }, 300);
+
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
 
+            },
+            cardTitlePress(e,data)
+            {
+                $('.dropdowns-card-user').hide();
+                // console.log(e.which);
+                let _this = this;
+                // this.projectUsers = null;
+                // let cmHe = $('#replyTextBox'+comments.id).height();
+                // $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
+                // console.log(this.selectedData.comment);
+                if (e.which == 32 || e.which == 13 || e.which == 8) {
+                    _this.triggers = false;
+                    _this.userNames = '';
+                    _this.allUsers = null;
+                    $('.dropdowns-card-user').hide();
+                }
+
+                if (_this.triggers == true && e.which !== 16 && e.which !== 50) {
+                    _this.userNames += e.key;
+                    // console.log(_this.userNames);
+                    // console.log(e.key, _this.userNames);
+                    // axios.post('/api/task-list/search-result', {
+                    //     'user_id': id,
+                    //     p_id: _this.projectId,
+                    //     list_id: nav_type.list_id,
+                    //     type: (_this.search_type === 'all') ? 'overview' : nav_type.type,
+                    // })
+                    // .then(response => response.data)
+                    // .then(response => {
+                    //     _this.searchData.tasks = response.search_tasks;
+                    //     // console.log(_this.searchData.tasks)
+                    //     $('#myUL-user').removeClass('myUL-user');
+                    //     $('#myUL').removeClass('myUL');
+                    //     $('#myUL').addClass('myUL-show');
+
+                    // })
+                    // .catch(error => {
+                    //     console.log('Api is drag and drop not Working !!!')
+                    // });
+                }
+
+                if (e.shiftKey && e.which == 50) {
+                    _this.triggers = true;
+                    _this.commentsData = data.text;//$('#'+data.id).val();
+                    axios.get('/api/task-list/all-suggest-user')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.allUsers = response.search_user;
+                        $('.dropdowns-task-user').hide();
+                        $('#titleUserMention'+data.id).show();
+                    })
+                    .catch(error => {
+                        console.log('All suggest user api not working')
+                    })
+                }
+                if (e.shiftKey && e.which == 51) {
+                    _this.allUsers = null;
+                    _this.tagTriggers = true;
+                    _this.commentsData = data.text;
+                    axios.get('/api/task-list/all-tag-for-manage')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.allTags = response.tags;
+                        $('.dropdowns-card-user').hide();
+                        $('#titleUserMention' + data.id).show();
+                        // console.log(_this.allTags);
+                    })
+                    .catch(error => {
+                        console.log('All suggest user api not working')
+                    })
+                }
+            },
+            SearchTaskByAssignedUsers(id, name, data) {
+                let _this = this;
+                data.text = _this.commentsData+''+name+' ';
+                _this.selectedData.description = _this.commentsData+''+name+' ';
+                let user = {
+                    id : id
+                };
+                _this.assignUserToTask(user, data);
+                $('#'+data.id).focus();
+                $('#'+data.id).click();
+                _this.allUsers = null;
+                $('.dropdowns-task-user').hide();
+            },
+            tagMention(data, tag) {
+                let _this = this;
+                data.text = _this.commentsData+''+tag.title+' ';
+                _this.selectedData.description = _this.commentsData+''+tag.title+' ';
+                _this.addExistingTag(data , tag.title, tag.color);
+                $('#'+data.id).focus();
+                $('#'+data.id).click();
+                _this.allTags = null;
+                $('.dropdowns-card-user').hide();
             },
             copyTask() {
                 var _this = this;
@@ -2087,7 +2229,6 @@
                 axios.post('/api/task-list/add-tag', postData)
                     .then(response => response.data)
                     .then(response => {
-
                         _this.getTaskList();
                         $('#dropdown' + data._id).toggle();
                         _this.selectedData.tags[0] = tag
@@ -2464,7 +2605,6 @@
                         console.log('Api for add tag not Working !!!')
                     });
             },
-
             showLog() {
                 var _this = this;
                 axios.get('/api/task-list/get-log/' + _this.selectedData.id)
@@ -2481,7 +2621,6 @@
                         console.log('Api for move down task not Working !!!')
                     });
             },
-
             // get task list
             getTaskListWithDynamicEmptyNode() {
                 var _this = this;
@@ -2580,7 +2719,6 @@
 
                     });
             },
-
             //collect data by child navbar component
             showTask(data) {
                 setTimeout(function () {
@@ -2650,7 +2788,6 @@
                         console.log('Add list api not working!!')
                     });
             },
-
             DeleteListOrBoard(data) {
                 var type = data.type;
                 var action = data.action;
@@ -2797,7 +2934,6 @@
             get_T_Bttn() {
                 this.transferBtn = true;
             },
-
             getColumnAndConfirmButton() {
                 var _this = this;
                 _this.selectedColumn = "Select column";
@@ -2977,7 +3113,6 @@
                     this.addNode(data);
                 }
             },
-
             SaveDataWithoutCreateNewNode(data) {
                 var _this = this;
                 var postData = {
@@ -2992,6 +3127,7 @@
                             if (response.empty) {
 
                             }
+                            _this.getTaskList();
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
@@ -3038,7 +3174,6 @@
                 }
 
             },
-
             dataCopy(data) {
                 var _this = this;
                 var targetData = data.parent.children;
@@ -3137,7 +3272,6 @@
             hasPermission(permission) {
                 return helper.hasPermission(permission);
             },
-
             shwAssignUserDropDown(data) {
                 let targets = $('#click' + data.id).find('.assign-user-');
                 if (targets.length > 0) {
@@ -3167,7 +3301,6 @@
                     }
                 }
             },
-
             keyDownAction(e, data) {
                 if (e.which === 9) {
                     e.stopPropagation();
@@ -3186,7 +3319,6 @@
                     this.addAttachment(this.selectedData);
                 }
             },
-
             ShowDetails() {
                 var _this = this;
 
@@ -3226,7 +3358,6 @@
                     node.open = false
                 })
             },
-
             showImage(data, image, task_id) {
                 this.modalImg = [image, task_id];
                 $("#imageModal").modal();
