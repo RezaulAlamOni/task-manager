@@ -1914,10 +1914,11 @@
                     id : id
                 };
                 _this.assignUserToTask(user, data);
-                setTimeout(function () {
+
+                // setTimeout(function () {
                     $('#'+data.id).focus();
                     $('#'+data.id).click();
-                },2000)
+                // },1000)
 
                 _this.allUsers = null;
                 $('.dropdowns-task-user').hide();
