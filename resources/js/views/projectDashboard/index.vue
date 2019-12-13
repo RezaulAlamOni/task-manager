@@ -14,21 +14,25 @@
                     @getNavBars="getNavbar">
             </Navbar>
             <!--            @update_overview="update_overview"-->
-            <div class="input-group col-sm-4 searchList"
+            <div class="input-group col-sm-5 searchList"
                  :class="((list.type === 'board') ? 'searchList-board' : 'searchList')">
-                <input class="form-control searchTaskList"
-                       type="text" id="myInput"
-                       placeholder="Search for names.."
-                       title="Type in a name"
-                       autocomplete="off"
-                       @keyup="searchDataFormTask($event)">
 
-                <select class="form-control " v-model="search_type" @change="searchBYType"
-                        style="display: inline;padding: 0;position: absolute; right: 0; top: 0; height: 38px !important;width: 78px;z-index : 999;border-radius: 0 5px 5px 0;">
+                <div class="input-group">
+                    <input class="form-control searchTaskList"
+                           type="text" id="myInput"
+                           placeholder="Search for names.."
+                           title="Type in a name"
+                           autocomplete="off"
+                           @keyup="searchDataFormTask($event)">
 
-                    <option value="all"> All</option>
-                    <option value="this"> This {{list.type}}</option>
-                </select>
+                    <div class="input-group-append">
+                        <select class="form-control " v-model="search_type" @change="searchBYType"
+                                style="width: auto;z-index: 999;border-radius: 0px 5px 5px 0px;height: 38px;background: transparent;">
+                            <option value="all"> All</option>
+                            <option value="this"> This {{list.type}}</option>
+                        </select>
+                    </div>
+                </div>
 
                 <ul class="myUL" id="myUL">
                     <template v-for="task in searchData.tasks" v-if="searchData.tasks.length > 0">
