@@ -160,7 +160,7 @@
 
                                 <div :id="'titleUserMention'+data.id" class="dropdowns-task-user" style="z-index: 1;">
                                     <diV class="collapse show switchToggle">
-                                        <ul id="myUL-user" class="myUL-user-task">
+                                        <ul id="myUL-user" class="myUL-user-task" style="background: #f3f3f3; border-radius: 5px; border: 1px solid #d4d4d4; ">
                                             <template v-for="user in allUsers" v-if=" allUsers !== null && allUsers.length > 0">
                                                 <li @click="SearchTaskByAssignedUsers(user.id, user.name, data)">
                                                     <a href="javascript:void(0)">
@@ -171,13 +171,24 @@
                                                     </a>
                                                 </li>
                                             </template>
-                                            <template v-else>
+                                            <!-- addExistingTag(data , tag.title,tag.color) -->
+                                            <template v-for="(user, tagIndx) in allTags" v-if="allTags !== null && allTags.length > 0 && allUsers === null">
+                                                <li @click="tagMention(data, user)" class="users-select row">
+                                                    <div class="col-md-9 add-tag-to-selected">
+                                                        <span
+                                                            class="badge badge-default tag-color-custom-contextmenu"
+                                                            :style="{'background' : user.color}">.</span>
+                                                        <h5>{{user.title}}</h5>
+                                                    </div>
+                                                </li>
+                                            </template>
+                                            <!-- <template v-else>
                                                 <li>
                                                     <a href="javascript:void(0)">
                                                         No user found!
                                                     </a>
                                                 </li>
-                                            </template>
+                                            </template> -->
                                         </ul>
                                     </diV>
                                 </div>
@@ -1215,6 +1226,7 @@
                 allTaskId: null,
                 shift_first: null,
                 triggers : null,
+                tagTriggers : null,
                 userNames : null,
                 projectUsers : null,
                 commentsData : null,
@@ -1876,6 +1888,22 @@
                         console.log('All suggest user api not working')
                     })
                 }
+                if (e.shiftKey && e.which == 51) {
+                    _this.allUsers = null;
+                    _this.tagTriggers = true;
+                    _this.commentsData = data.text;
+                    axios.get('/api/task-list/all-tag-for-manage')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.allTags = response.tags;
+                        $('.dropdowns-card-user').hide();
+                        $('#titleUserMention' + data.id).show();
+                        // console.log(_this.allTags);
+                    })
+                    .catch(error => {
+                        console.log('All suggest user api not working')
+                    })
+                }
             },
             SearchTaskByAssignedUsers(id, name, data) {
                 let _this = this;
@@ -1884,15 +1912,21 @@
                 let user = {
                     id : id
                 };
-                // _this.updateDescription(function(res){
-                    //     console.log(res);
                 _this.assignUserToTask(user, data);
-                // });
-                // $('#'+card.cardId).html(_this.commentsData+''+name+' ');
                 $('#'+data.id).focus();
                 $('#'+data.id).click();
                 _this.allUsers = null;
                 $('.dropdowns-task-user').hide();
+            },
+            tagMention(data, tag) {
+                let _this = this;
+                data.text = _this.commentsData+''+tag.title+' ';
+                _this.selectedData.description = _this.commentsData+''+tag.title+' ';
+                _this.addExistingTag(data , tag.title, tag.color);
+                $('#'+data.id).focus();
+                $('#'+data.id).click();
+                _this.allTags = null;
+                $('.dropdowns-card-user').hide();
             },
             copyTask() {
                 var _this = this;
@@ -2195,7 +2229,6 @@
                 axios.post('/api/task-list/add-tag', postData)
                     .then(response => response.data)
                     .then(response => {
-
                         _this.getTaskList();
                         $('#dropdown' + data._id).toggle();
                         _this.selectedData.tags[0] = tag
@@ -2572,7 +2605,6 @@
                         console.log('Api for add tag not Working !!!')
                     });
             },
-
             showLog() {
                 var _this = this;
                 axios.get('/api/task-list/get-log/' + _this.selectedData.id)
@@ -2589,7 +2621,6 @@
                         console.log('Api for move down task not Working !!!')
                     });
             },
-
             // get task list
             getTaskListWithDynamicEmptyNode() {
                 var _this = this;
@@ -2688,7 +2719,6 @@
 
                     });
             },
-
             //collect data by child navbar component
             showTask(data) {
                 setTimeout(function () {
@@ -2758,7 +2788,6 @@
                         console.log('Add list api not working!!')
                     });
             },
-
             DeleteListOrBoard(data) {
                 var type = data.type;
                 var action = data.action;
@@ -2905,7 +2934,6 @@
             get_T_Bttn() {
                 this.transferBtn = true;
             },
-
             getColumnAndConfirmButton() {
                 var _this = this;
                 _this.selectedColumn = "Select column";
@@ -3085,7 +3113,6 @@
                     this.addNode(data);
                 }
             },
-
             SaveDataWithoutCreateNewNode(data) {
                 var _this = this;
                 var postData = {
@@ -3147,7 +3174,6 @@
                 }
 
             },
-
             dataCopy(data) {
                 var _this = this;
                 var targetData = data.parent.children;
@@ -3246,7 +3272,6 @@
             hasPermission(permission) {
                 return helper.hasPermission(permission);
             },
-
             shwAssignUserDropDown(data) {
                 let targets = $('#click' + data.id).find('.assign-user-');
                 if (targets.length > 0) {
@@ -3276,7 +3301,6 @@
                     }
                 }
             },
-
             keyDownAction(e, data) {
                 if (e.which === 9) {
                     e.stopPropagation();
@@ -3295,7 +3319,6 @@
                     this.addAttachment(this.selectedData);
                 }
             },
-
             ShowDetails() {
                 var _this = this;
 
@@ -3335,7 +3358,6 @@
                     node.open = false
                 })
             },
-
             showImage(data, image, task_id) {
                 this.modalImg = [image, task_id];
                 $("#imageModal").modal();
