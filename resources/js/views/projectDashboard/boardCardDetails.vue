@@ -485,7 +485,8 @@
                                                             class="custom-input"
                                                             name="subscribe_email"
                                                             @keyup="commentReplyPress($event,selectedData,comments)"
-                                                            placeholder="Reply ... ">
+                                                            placeholder="Reply ... "
+                                                            autocomplete="off">
                                                     <div class="input-group-append">
                                                         <span @click="saveReply(comments.id, selectedData.cardId)" class="input-group-text" id="basic-addon1">Reply</span>
                                                     </div>
@@ -506,7 +507,7 @@
                                                 <div class="comment_body">
                                                     <span style="" v-if="reply.comment != '' && reply.comment != null">
                                                         <p>
-<!--                                                            <span class="user">{{reply.user.name}} :</span>-->
+                                            <!-- <span class="user">{{reply.user.name}} :</span>-->
                                                             <span v-html="reply.comment"></span>
                                                         </p>
                                                     </span>
@@ -1124,25 +1125,18 @@
 
                 if (_this.trigger == true && e.which !== 16 && e.which !== 50) {
                     _this.userNames += e.key;
-                    // console.log(e.key, _this.userNames);
-                    // axios.post('/api/task-list/search-result', {
-                    //     'user_id': id,
-                    //     p_id: _this.projectId,
-                    //     list_id: nav_type.list_id,
-                    //     type: (_this.search_type === 'all') ? 'overview' : nav_type.type,
-                    // })
-                    // .then(response => response.data)
-                    // .then(response => {
-                    //     _this.searchData.tasks = response.search_tasks;
-                    //     // console.log(_this.searchData.tasks)
-                    //     $('#myUL-user').removeClass('myUL-user');
-                    //     $('#myUL').removeClass('myUL');
-                    //     $('#myUL').addClass('myUL-show');
-
-                    // })
-                    // .catch(error => {
-                    //     console.log('Api is drag and drop not Working !!!')
-                    // });
+                   axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.projectUsers = response.search_user;
+                        $('.myUL-user-comment').css({display : 'none'});
+                        if (_this.projectUsers.length > 0) {
+                            $('.myUL-user-comment').css({display : 'block'});
+                        }
+                    })
+                    .catch(error => {
+                        console.log('search user is not Working !!!')
+                    });
                 }
 
                 if (e.shiftKey && e.which == 50) {
@@ -1151,8 +1145,8 @@
                     axios.get('/api/task-list/all-suggest-user')
                     .then(response => response.data)
                     .then(response => {
-                        $('.myUL-user-comment').css({display : 'block'});
-                        _this.projectUsers = response.search_user;
+                        // $('.myUL-user-comment').css({display : 'block'});
+                        // _this.projectUsers = response.search_user;
                     })
                     .catch(error => {
                         console.log('All suggest user api not working')
@@ -1176,26 +1170,18 @@
 
                 if (_this.trigger == true && e.which !== 16 && e.which !== 50) {
                     _this.userNames += e.key;
-                    console.log(_this.userNames);
-                    // console.log(e.key, _this.userNames);
-                    // axios.post('/api/task-list/search-result', {
-                    //     'user_id': id,
-                    //     p_id: _this.projectId,
-                    //     list_id: nav_type.list_id,
-                    //     type: (_this.search_type === 'all') ? 'overview' : nav_type.type,
-                    // })
-                    // .then(response => response.data)
-                    // .then(response => {
-                    //     _this.searchData.tasks = response.search_tasks;
-                    //     // console.log(_this.searchData.tasks)
-                    //     $('#myUL-user').removeClass('myUL-user');
-                    //     $('#myUL').removeClass('myUL');
-                    //     $('#myUL').addClass('myUL-show');
-
-                    // })
-                    // .catch(error => {
-                    //     console.log('Api is drag and drop not Working !!!')
-                    // });
+                   axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.replyProjectUsers = response.search_user;
+                        $('.myUL-user-comment').css({display : 'none'});
+                        if (_this.replyProjectUsers.length > 0) {
+                            $('.myUL-user-comment').css({display : 'block'});
+                        }
+                    })
+                    .catch(error => {
+                        console.log('search user is not Working !!!')
+                    });
                 }
 
                 if (e.shiftKey && e.which == 50) {
@@ -1204,8 +1190,8 @@
                     axios.get('/api/task-list/all-suggest-user')
                     .then(response => response.data)
                     .then(response => {
-                        $('.myUL-user-comment').css({display : 'block'});
-                        _this.replyProjectUsers = response.search_user;
+                        // $('.myUL-user-comment').css({display : 'block'});
+                        // _this.replyProjectUsers = response.search_user;
                     })
                     .catch(error => {
                         console.log('All suggest user api not working')
