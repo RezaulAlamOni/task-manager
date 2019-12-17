@@ -495,31 +495,49 @@
                                                                 </label>
                                                             </li>
                                                             <li class="assignUser">
-                                                                <div class="users-select row"
-                                                                     @click="Add_Priority('high',card.cardId)">
-                                                                    <div class="col-md-9 add-tag-to-selected">
+
+                                                                <div class="users-select row" >
+                                                                    <div class="col-md-9 add-tag-to-selected"
+                                                                         @click="Add_Priority('high',card.cardId)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e25858;">.</span>
                                                                         <h5 class="text-capitalize"> high</h5>
                                                                     </div>
+                                                                    <div @click="RemovePriority(card.cardId)"
+                                                                         style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
+                                                                         v-if="card.priority_label === 'high'">
+                                                                    <span>
+                                                                        <i class="far fa-minus-octagon"></i>
+                                                                    </span>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="users-select row"
-                                                                     @click="Add_Priority('medium',card.cardId)">
-                                                                    <div class="col-md-9 add-tag-to-selected">
+                                                                <div class="users-select row">
+                                                                    <div class="col-md-9 add-tag-to-selected"
+                                                                         @click="Add_Priority('medium',card.cardId)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e58c62;">.</span>
                                                                         <h5 class="text-capitalize">medium</h5>
                                                                     </div>
+                                                                    <div @click="RemovePriority(card.cardId)"
+                                                                         style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
+                                                                         v-if="card.priority_label === 'medium'">
+                                                                        <i class="far fa-minus-octagon"></i>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="users-select row"
-                                                                     @click="Add_Priority('low',card.cardId)">
-                                                                    <div class="col-md-9 add-tag-to-selected">
+                                                                <div class="users-select row">
+                                                                    <div class="col-md-9 add-tag-to-selected"
+                                                                         @click="Add_Priority('low',card.cardId)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #5987d1;">.</span>
                                                                         <h5>Low</h5>
+                                                                    </div>
+                                                                    <div @click="RemovePriority(card.cardId)"
+                                                                         style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
+                                                                         v-if="card.priority_label === 'low'">
+                                                                        <i class="far fa-minus-octagon"></i>
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -696,27 +714,27 @@
                                                 <div class="users-select row"
                                                      @click="Add_Priority('high',null)">
                                                     <div class="col-md-9 add-tag-to-selected">
-                                                                    <span
-                                                                        class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #F4F5F7;border: 1px solid #944d4d;">.</span>
+                                                            <span
+                                                                class="badge badge-default tag-color-custom-contextmenu"
+                                                                style="background: #e25858;">.</span>
                                                         <h5 class="text-capitalize"> high</h5>
                                                     </div>
                                                 </div>
                                                 <div class="users-select row"
                                                      @click="Add_Priority('medium',null)">
                                                     <div class="col-md-9 add-tag-to-selected">
-                                                                    <span
-                                                                        class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #ff8170;border: 1px solid #944d4d;">.</span>
+                                                            <span
+                                                                class="badge badge-default tag-color-custom-contextmenu"
+                                                                style="background: #e58c62;">.</span>
                                                         <h5 class="text-capitalize">medium</h5>
                                                     </div>
                                                 </div>
                                                 <div class="users-select row"
                                                      @click="Add_Priority('low',null)">
                                                     <div class="col-md-9 add-tag-to-selected">
-                                                                    <span
-                                                                        class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #172B4D;border: 1px solid #944d4d;">.</span>
+                                                            <span
+                                                                class="badge badge-default tag-color-custom-contextmenu"
+                                                                style="background: #5987d1;">.</span>
                                                         <h5>Low</h5>
                                                     </div>
                                                 </div>
@@ -2566,7 +2584,7 @@
             },
             cardTitlePress(e, card, index, key) {
                 $('.dropdowns-card-user').hide();
-                console.log(e.which);
+                // console.log(e.which);
                 let _this = this;
                 // this.projectUsers = null;
                 // let cmHe = $('#replyTextBox'+comments.id).height();
@@ -2578,29 +2596,20 @@
                     _this.projectUsers = null;
                     $('.dropdowns-card-user').hide();
                 }
-
                 if (_this.triggers == true && e.which !== 16 && e.which !== 50) {
                     _this.userNames += e.key;
-                    // console.log(_this.userNames);
-                    // console.log(e.key, _this.userNames);
-                    // axios.post('/api/task-list/search-result', {
-                    //     'user_id': id,
-                    //     p_id: _this.projectId,
-                    //     list_id: nav_type.list_id,
-                    //     type: (_this.search_type === 'all') ? 'overview' : nav_type.type,
-                    // })
-                    // .then(response => response.data)
-                    // .then(response => {
-                    //     _this.searchData.tasks = response.search_tasks;
-                    //     // console.log(_this.searchData.tasks)
-                    //     $('#myUL-user').removeClass('myUL-user');
-                    //     $('#myUL').removeClass('myUL');
-                    //     $('#myUL').addClass('myUL-show');
-
-                    // })
-                    // .catch(error => {
-                    //     console.log('Api is drag and drop not Working !!!')
-                    // });
+                    axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.projectUsers = response.search_user;
+                        $('.dropdowns-card-user').hide();
+                        if (_this.projectUsers.length > 0) {
+                            $('#titleUserMention' + card.cardId).show();
+                        }
+                    })
+                    .catch(error => {
+                        console.log('search user is not Working !!!')
+                    });
                 }
 
                 if (e.shiftKey && e.which == 50) {
@@ -2610,9 +2619,9 @@
                     axios.get('/api/task-list/all-suggest-user')
                         .then(response => response.data)
                         .then(response => {
-                            _this.projectUsers = response.search_user;
+                            // _this.projectUsers = response.search_user;
                             $('.dropdowns-card-user').hide();
-                            $('#titleUserMention' + card.cardId).show();
+                            // $('#titleUserMention' + card.cardId).show();
                         })
                         .catch(error => {
                             console.log('All suggest user api not working')
@@ -2847,6 +2856,24 @@
                         console.log('Api for task add priority not Working !!!')
                     });
             },
+            RemovePriority(id) {
+                var _this = this;
+                var data = {
+                    ids: (id == null) ? _this.selectedIds : [id],
+                    priority: null
+                }
+                axios.post('/api/task-list/add-priority', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getBoardTask();
+                        _this.selectedIds = [];
+                        $('.jquery-accordion-menu').hide();
+                    })
+                    .catch(error => {
+                        console.log('Api for task add priority not Working !!!')
+                    });
+            },
+
             HideDetails() {
                 // this.getBoardTask();
                 $('#task_width').addClass('task_width');
