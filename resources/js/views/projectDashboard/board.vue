@@ -2566,7 +2566,7 @@
             },
             cardTitlePress(e, card, index, key) {
                 $('.dropdowns-card-user').hide();
-                console.log(e.which);
+                // console.log(e.which);
                 let _this = this;
                 // this.projectUsers = null;
                 // let cmHe = $('#replyTextBox'+comments.id).height();
@@ -2578,29 +2578,20 @@
                     _this.projectUsers = null;
                     $('.dropdowns-card-user').hide();
                 }
-
                 if (_this.triggers == true && e.which !== 16 && e.which !== 50) {
                     _this.userNames += e.key;
-                    // console.log(_this.userNames);
-                    // console.log(e.key, _this.userNames);
-                    // axios.post('/api/task-list/search-result', {
-                    //     'user_id': id,
-                    //     p_id: _this.projectId,
-                    //     list_id: nav_type.list_id,
-                    //     type: (_this.search_type === 'all') ? 'overview' : nav_type.type,
-                    // })
-                    // .then(response => response.data)
-                    // .then(response => {
-                    //     _this.searchData.tasks = response.search_tasks;
-                    //     // console.log(_this.searchData.tasks)
-                    //     $('#myUL-user').removeClass('myUL-user');
-                    //     $('#myUL').removeClass('myUL');
-                    //     $('#myUL').addClass('myUL-show');
-
-                    // })
-                    // .catch(error => {
-                    //     console.log('Api is drag and drop not Working !!!')
-                    // });
+                    axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.projectUsers = response.search_user;
+                        $('.dropdowns-card-user').hide();
+                        if (_this.projectUsers.length > 0) {
+                            $('#titleUserMention' + card.cardId).show();
+                        }
+                    })
+                    .catch(error => {
+                        console.log('search user is not Working !!!')
+                    });
                 }
 
                 if (e.shiftKey && e.which == 50) {
@@ -2610,9 +2601,9 @@
                     axios.get('/api/task-list/all-suggest-user')
                         .then(response => response.data)
                         .then(response => {
-                            _this.projectUsers = response.search_user;
+                            // _this.projectUsers = response.search_user;
                             $('.dropdowns-card-user').hide();
-                            $('#titleUserMention' + card.cardId).show();
+                            // $('#titleUserMention' + card.cardId).show();
                         })
                         .catch(error => {
                             console.log('All suggest user api not working')
