@@ -539,7 +539,7 @@
                                                                          v-if="card.priority_label === 'low'">
                                                                         <i class="far fa-minus-octagon"></i>
                                                                     </div>
-                                                                </div> 
+                                                                </div>
                                                             </li>
                                                         </ul>
                                                     </div>
