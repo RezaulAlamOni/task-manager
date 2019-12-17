@@ -162,40 +162,44 @@
                                 </span>
 
 
-                                <div :id="'titleUserMention'+data.id" class="dropdowns-task-user" style="z-index: 1;">
-                                    <diV class="collapse show switchToggle">
-                                        <ul id="myUL-user" class="myUL-user-task" style="background: #f3f3f3; border-radius: 5px; border: 1px solid #d4d4d4; ">
-                                            <template v-for="user in allUsers" v-if=" allUsers !== null && allUsers.length > 0">
-                                                <li @click="SearchTaskByAssignedUsers(user.id, user.name, data)">
-                                                    <a href="javascript:void(0)">
+                                    <div :id="'titleUserMention'+data.id" class="dropdowns-task-user"
+                                         style="z-index: 1;">
+                                        <diV class="collapse show switchToggle">
+                                            <ul id="myUL-user" class="myUL-user-task"
+                                                style="background: #f3f3f3; border-radius: 5px; border: 1px solid #d4d4d4; ">
+                                                <template v-for="user in allUsers"
+                                                          v-if=" allUsers !== null && allUsers.length > 0">
+                                                    <li @click="SearchTaskByAssignedUsers(user.id, user.name, data)">
+                                                        <a href="javascript:void(0)">
                                                         <span class="assignUser-suggest-photo">
                                                             {{(user.name !== null) ? user.name.substring(0,2) : ''}}
                                                         </span>
-                                                        {{user.name}}
-                                                    </a>
-                                                </li>
-                                            </template>
-                                            <!-- addExistingTag(data , tag.title,tag.color) -->
-                                            <template v-for="(user, tagIndx) in allTags" v-if="allTags !== null && allTags.length > 0 && allUsers === null">
-                                                <li @click="tagMention(data, user)" class="users-select row">
-                                                    <div class="col-md-9 add-tag-to-selected">
+                                                            {{user.name}}
+                                                        </a>
+                                                    </li>
+                                                </template>
+                                                <!-- addExistingTag(data , tag.title,tag.color) -->
+                                                <template v-for="(user, tagIndx) in allTags"
+                                                          v-if="allTags !== null && allTags.length > 0 && allUsers === null">
+                                                    <li @click="tagMention(data, user)" class="users-select row">
+                                                        <div class="col-md-9 add-tag-to-selected">
                                                         <span
                                                             class="badge badge-default tag-color-custom-contextmenu"
                                                             :style="{'background' : user.color}">.</span>
-                                                        <h5>{{user.title}}</h5>
-                                                    </div>
-                                                </li>
-                                            </template>
-                                            <!-- <template v-else>
-                                                <li>
-                                                    <a href="javascript:void(0)">
-                                                        No user found!
-                                                    </a>
-                                                </li>
-                                            </template> -->
-                                        </ul>
-                                    </diV>
-                                </div>
+                                                            <h5>{{user.title}}</h5>
+                                                        </div>
+                                                    </li>
+                                                </template>
+                                                <!-- <template v-else>
+                                                    <li>
+                                                        <a href="javascript:void(0)">
+                                                            No user found!
+                                                        </a>
+                                                    </li>
+                                                </template> -->
+                                            </ul>
+                                        </diV>
+                                    </div>
 
 
                                     <b @click="HideShowChild(store , data)"
@@ -206,16 +210,16 @@
                                         <i class="fal fa-fw fa-plus"></i></b>
                                     <span>
                                         <input :id="data.id"
-                                                @blur="showItem($event,data)"
-                                                @click="makeInput($event,data)"
-                                                @focus="hideItem($event,data)"
-                                                @keydown="keyDownAction($event,data)"
-                                                @keypress="saveData($event,data)"
-                                                @keyup="cardTitlePress($event,data)"
-                                                class="inp input-hide input-title"
-                                                type="text"
-                                                autocomplete="off"
-                                                v-model="data.text">
+                                               @blur="showItem($event,data)"
+                                               @click="makeInput($event,data)"
+                                               @focus="hideItem($event,data)"
+                                               @keydown="keyDownAction($event,data)"
+                                               @keypress="saveData($event,data)"
+                                               @keyup="cardTitlePress($event,data)"
+                                               class="inp input-hide input-title"
+                                               type="text"
+                                               autocomplete="off"
+                                               v-model="data.text">
                                     </span>
 
                                     <div class="hide-item-res-user">
@@ -249,7 +253,8 @@
                                             <span data-toggle="dropdown" class="priority-icon dropdown-toggle-split"
                                                   v-else>
                                                 <i class="fal fa-exclamation-triangle icon-image-preview li-opacity assign-user-"
-                                                   data-toggle="tooltip" title="Add Priority" style="padding-right: 12px;"></i>
+                                                   data-toggle="tooltip" title="Add Priority"
+                                                   style="padding-right: 12px;"></i>
                                             </span>
                                             <div class="dropdown-menu dropdown-menu-right"
                                                  style="z-index: 1;width: 185px;">
@@ -263,31 +268,48 @@
                                                             </label>
                                                         </li>
                                                         <li class="assignUser">
-                                                            <div class="users-select row"
-                                                                 @click="Add_Priority('high',data.id)">
-                                                                <div class="col-md-9 add-tag-to-selected">
+                                                            <div class="users-select row" >
+                                                                <div class="col-md-9 add-tag-to-selected"
+                                                                     @click="Add_Priority('high',data.id)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e25858;">.</span>
                                                                     <h5 class="text-capitalize"> high</h5>
                                                                 </div>
+                                                                <div @click="RemovePriority(data.id)"
+                                                                    style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
+                                                                    v-if="data.priority_label === 'high'">
+                                                                    <span>
+                                                                        <i class="far fa-minus-octagon"></i>
+                                                                    </span>
+                                                                </div>
                                                             </div>
-                                                            <div class="users-select row"
-                                                                 @click="Add_Priority('medium',data.id)">
-                                                                <div class="col-md-9 add-tag-to-selected">
+                                                            <div class="users-select row">
+                                                                <div class="col-md-9 add-tag-to-selected"
+                                                                     @click="Add_Priority('medium',data.id)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e58c62;">.</span>
                                                                     <h5 class="text-capitalize">medium</h5>
                                                                 </div>
+                                                                <div @click="RemovePriority(data.id)"
+                                                                    style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
+                                                                    v-if="data.priority_label === 'medium'">
+                                                                    <i class="far fa-minus-octagon"></i>
+                                                                </div>
                                                             </div>
-                                                            <div class="users-select row"
-                                                                 @click="Add_Priority('low',data.id)">
-                                                                <div class="col-md-9 add-tag-to-selected">
+                                                            <div class="users-select row">
+                                                                <div class="col-md-9 add-tag-to-selected"
+                                                                     @click="Add_Priority('low',data.id)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #5987d1;">.</span>
                                                                     <h5>Low</h5>
+                                                                </div>
+                                                                <div @click="RemovePriority(data.id)"
+                                                                    style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
+                                                                    v-if="data.priority_label === 'low'">
+                                                                    <i class="far fa-minus-octagon"></i>
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -319,8 +341,8 @@
                                         </span>
 
                                         <i class="fal fa-file-upload icon-image-preview li-opacity pull-right"
-                                             @click="addAttachment(data)"
-                                             title="File" data-toggle="tooltip"></i>
+                                           @click="addAttachment(data)"
+                                           title="File" data-toggle="tooltip"></i>
 
                                         <input :id="'file'+data._id" @change="updatePicture($event,data)" ref="file"
                                                style="display: none; "
@@ -350,7 +372,8 @@
                                             </template>
                                         </i>
                                         <span :id="'tag-'+data._id" data-toggle="dropdown" v-else>
-                                        <i class="fal fa-tags icon-image-preview li-opacity pull-right" style="margin-right: 19px;padding-top: 5px;"
+                                        <i class="fal fa-tags icon-image-preview li-opacity pull-right"
+                                           style="margin-right: 19px;padding-top: 5px;"
                                            data-toggle="tooltip" title="Add Tag"></i>
                                     </span>
 
@@ -400,7 +423,7 @@
 
                                     <div class="hide-item-res" @click="openPicker()">
                                         <a class="calender li-opacity clickHide" v-if="data.date === '0000-00-00'"
-                                           title="Due Date" style="padding-right: 16px !important;padding-top: 2px;" >
+                                           title="Due Date" style="padding-right: 16px !important;padding-top: 2px;">
                                             <i class="fal fa-calendar-plus icon-image-preview"></i>
                                         </a>
                                         <datepicker
@@ -430,7 +453,7 @@
                                             </template>
                                             <span data-toggle="dropdown" class="dropdown-toggle-split" v-else>
                                             <i class="fal fa-user-plus icon-image-preview li-opacity assign-user-"
-                                                 data-toggle="tooltip" title="Assignee user"></i>
+                                               data-toggle="tooltip" title="Assignee user"></i>
                                         </span>
 
                                             <div class="dropdown-menu dropdown-menu-right" style="z-index: 1;">
@@ -489,7 +512,8 @@
                                     </div>
                                     <a @click="addChild(data)" class="subTask_plus li-opacity li-opacity-sub clickHide "
                                        data-toggle="tooltip" title="Add Child">
-                                        <i class="fal fa-layer-plus icon-image-preview li-opacity-sub" style="font-size: 18px; color: green;"></i>
+                                        <i class="fal fa-layer-plus icon-image-preview li-opacity-sub"
+                                           style="font-size: 18px; color: green;"></i>
                                     </a>
                                     <a @click="addNode(data)" class="task_plus li-opacity li-opacity-sub clickHide"
                                        data-toggle="tooltip"
@@ -689,27 +713,27 @@
                                                     <div class="users-select row"
                                                          @click="Add_Priority('high',null)">
                                                         <div class="col-md-9 add-tag-to-selected">
-                                                                    <span
-                                                                        class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #F4F5F7;border: 1px solid #944d4d;">.</span>
+                                                            <span
+                                                                class="badge badge-default tag-color-custom-contextmenu"
+                                                                style="background: #e25858;">.</span>
                                                             <h5 class="text-capitalize"> high</h5>
                                                         </div>
                                                     </div>
                                                     <div class="users-select row"
                                                          @click="Add_Priority('medium',null)">
                                                         <div class="col-md-9 add-tag-to-selected">
-                                                                    <span
-                                                                        class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #ff8170;border: 1px solid #944d4d;">.</span>
+                                                            <span
+                                                                class="badge badge-default tag-color-custom-contextmenu"
+                                                                style="background: #e58c62;">.</span>
                                                             <h5 class="text-capitalize">medium</h5>
                                                         </div>
                                                     </div>
                                                     <div class="users-select row"
                                                          @click="Add_Priority('low',null)">
                                                         <div class="col-md-9 add-tag-to-selected">
-                                                                    <span
-                                                                        class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #172B4D;border: 1px solid #944d4d;">.</span>
+                                                            <span
+                                                                class="badge badge-default tag-color-custom-contextmenu"
+                                                                style="background: #5987d1;">.</span>
                                                             <h5>Low</h5>
                                                         </div>
                                                     </div>
@@ -1225,11 +1249,11 @@
                 allTags: null,
                 allTaskId: null,
                 shift_first: null,
-                triggers : null,
-                tagTriggers : null,
-                userNames : null,
-                projectUsers : null,
-                commentsData : null,
+                triggers: null,
+                tagTriggers: null,
+                userNames: null,
+                projectUsers: null,
+                commentsData: null,
             }
         },
         mounted() {
@@ -1834,8 +1858,7 @@
                 $('.inp').removeClass('form-control');
 
             },
-            cardTitlePress(e,data)
-            {
+            cardTitlePress(e, data) {
                 $('.dropdowns-card-user').hide();
                 // console.log(e.which);
                 let _this = this;
@@ -1879,45 +1902,45 @@
                     _this.triggers = true;
                     _this.commentsData = data.text;//$('#'+data.id).val();
                     axios.get('/api/task-list/all-suggest-user')
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.allUsers = response.search_user;
-                        $('.dropdowns-task-user').hide();
-                        $('#titleUserMention'+data.id).show();
-                    })
-                    .catch(error => {
-                        console.log('All suggest user api not working')
-                    })
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.allUsers = response.search_user;
+                            $('.dropdowns-task-user').hide();
+                            $('#titleUserMention' + data.id).show();
+                        })
+                        .catch(error => {
+                            console.log('All suggest user api not working')
+                        })
                 }
                 if (e.shiftKey && e.which == 51) {
                     _this.allUsers = null;
                     _this.tagTriggers = true;
                     _this.commentsData = data.text;
                     axios.get('/api/task-list/all-tag-for-manage')
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.allTags = response.tags;
-                        $('.dropdowns-card-user').hide();
-                        $('#titleUserMention' + data.id).show();
-                        // console.log(_this.allTags);
-                    })
-                    .catch(error => {
-                        console.log('All suggest user api not working')
-                    })
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.allTags = response.tags;
+                            $('.dropdowns-card-user').hide();
+                            $('#titleUserMention' + data.id).show();
+                            // console.log(_this.allTags);
+                        })
+                        .catch(error => {
+                            console.log('All suggest user api not working')
+                        })
                 }
             },
             SearchTaskByAssignedUsers(id, name, data) {
                 let _this = this;
-                data.text = _this.commentsData+''+name+' ';
-                _this.selectedData.description = _this.commentsData+''+name+' ';
+                data.text = _this.commentsData + '' + name + ' ';
+                _this.selectedData.description = _this.commentsData + '' + name + ' ';
                 let user = {
-                    id : id
+                    id: id
                 };
                 _this.assignUserToTask(user, data);
 
                 // setTimeout(function () {
-                    $('#'+data.id).focus();
-                    $('#'+data.id).click();
+                $('#' + data.id).focus();
+                $('#' + data.id).click();
                 // },1000)
 
                 _this.allUsers = null;
@@ -1925,11 +1948,11 @@
             },
             tagMention(data, tag) {
                 let _this = this;
-                data.text = _this.commentsData+''+tag.title+' ';
-                _this.selectedData.description = _this.commentsData+''+tag.title+' ';
-                _this.addExistingTag(data , tag.title, tag.color);
-                $('#'+data.id).focus();
-                $('#'+data.id).click();
+                data.text = _this.commentsData + '' + tag.title + ' ';
+                _this.selectedData.description = _this.commentsData + '' + tag.title + ' ';
+                _this.addExistingTag(data, tag.title, tag.color);
+                $('#' + data.id).focus();
+                $('#' + data.id).click();
                 _this.allTags = null;
                 $('.dropdowns-card-user').hide();
             },
@@ -2472,7 +2495,7 @@
 
             },
             RemoveNodeAndChildren(data) {
-                if (this.selectedIds.length <= 0){
+                if (this.selectedIds.length <= 0) {
                     swal("Sorry!", "You  Don't Select any task!", "warning");
                 }
                 var _this = this;
@@ -2561,7 +2584,7 @@
                     });
             },
             deleteSelectedTask() {
-                if (this.selectedIds.length <= 0){
+                if (this.selectedIds.length <= 0) {
                     swal("Sorry!", "You  Don't Select any task!", "warning");
                 }
                 var _this = this;
@@ -3138,7 +3161,7 @@
                         .then(response => response.data)
                         .then(response => {
                             if (response.empty !== 'not change') {
-                                if(data.text.indexOf("@") != -1 || data.text.indexOf("#") != -1 ){
+                                if (data.text.indexOf("@") != -1 || data.text.indexOf("#") != -1) {
                                     _this.getTaskList();
                                 }
                             }
@@ -3271,6 +3294,24 @@
                 var data = {
                     ids: (id == null) ? this.selectedIds : [id],
                     priority: priority
+                }
+                axios.post('/api/task-list/add-priority', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getTaskList();
+                        _this.selectedIds = [];
+                        $('.jquery-accordion-menu').hide();
+                    })
+                    .catch(error => {
+                        console.log('Api for task add priority not Working !!!')
+                    });
+            },
+
+            RemovePriority(id){
+                var _this = this;
+                var data = {
+                    ids: (id == null) ? this.selectedIds : [id],
+                    priority: null
                 }
                 axios.post('/api/task-list/add-priority', data)
                     .then(response => response.data)

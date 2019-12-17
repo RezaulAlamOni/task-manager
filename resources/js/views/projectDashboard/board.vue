@@ -495,33 +495,51 @@
                                                                 </label>
                                                             </li>
                                                             <li class="assignUser">
-                                                                <div class="users-select row"
-                                                                     @click="Add_Priority('high',card.cardId)">
-                                                                    <div class="col-md-9 add-tag-to-selected">
+
+                                                                <div class="users-select row" >
+                                                                    <div class="col-md-9 add-tag-to-selected"
+                                                                         @click="Add_Priority('high',card.cardId)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e25858;">.</span>
                                                                         <h5 class="text-capitalize"> high</h5>
                                                                     </div>
+                                                                    <div @click="RemovePriority(card.cardId)"
+                                                                         style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
+                                                                         v-if="card.priority_label === 'high'">
+                                                                    <span>
+                                                                        <i class="far fa-minus-octagon"></i>
+                                                                    </span>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="users-select row"
-                                                                     @click="Add_Priority('medium',card.cardId)">
-                                                                    <div class="col-md-9 add-tag-to-selected">
+                                                                <div class="users-select row">
+                                                                    <div class="col-md-9 add-tag-to-selected"
+                                                                         @click="Add_Priority('medium',card.cardId)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e58c62;">.</span>
                                                                         <h5 class="text-capitalize">medium</h5>
                                                                     </div>
+                                                                    <div @click="RemovePriority(card.cardId)"
+                                                                         style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
+                                                                         v-if="card.priority_label === 'medium'">
+                                                                        <i class="far fa-minus-octagon"></i>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="users-select row"
-                                                                     @click="Add_Priority('low',card.cardId)">
-                                                                    <div class="col-md-9 add-tag-to-selected">
+                                                                <div class="users-select row">
+                                                                    <div class="col-md-9 add-tag-to-selected"
+                                                                         @click="Add_Priority('low',card.cardId)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #5987d1;">.</span>
                                                                         <h5>Low</h5>
                                                                     </div>
-                                                                </div>
+                                                                    <div @click="RemovePriority(card.cardId)"
+                                                                         style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
+                                                                         v-if="card.priority_label === 'low'">
+                                                                        <i class="far fa-minus-octagon"></i>
+                                                                    </div>
+                                                                </div> 
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -696,27 +714,27 @@
                                                 <div class="users-select row"
                                                      @click="Add_Priority('high',null)">
                                                     <div class="col-md-9 add-tag-to-selected">
-                                                                    <span
-                                                                        class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #F4F5F7;border: 1px solid #944d4d;">.</span>
+                                                            <span
+                                                                class="badge badge-default tag-color-custom-contextmenu"
+                                                                style="background: #e25858;">.</span>
                                                         <h5 class="text-capitalize"> high</h5>
                                                     </div>
                                                 </div>
                                                 <div class="users-select row"
                                                      @click="Add_Priority('medium',null)">
                                                     <div class="col-md-9 add-tag-to-selected">
-                                                                    <span
-                                                                        class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #ff8170;border: 1px solid #944d4d;">.</span>
+                                                            <span
+                                                                class="badge badge-default tag-color-custom-contextmenu"
+                                                                style="background: #e58c62;">.</span>
                                                         <h5 class="text-capitalize">medium</h5>
                                                     </div>
                                                 </div>
                                                 <div class="users-select row"
                                                      @click="Add_Priority('low',null)">
                                                     <div class="col-md-9 add-tag-to-selected">
-                                                                    <span
-                                                                        class="badge badge-default tag-color-custom-contextmenu"
-                                                                        style="background: #172B4D;border: 1px solid #944d4d;">.</span>
+                                                            <span
+                                                                class="badge badge-default tag-color-custom-contextmenu"
+                                                                style="background: #5987d1;">.</span>
                                                         <h5>Low</h5>
                                                     </div>
                                                 </div>
@@ -2847,6 +2865,24 @@
                         console.log('Api for task add priority not Working !!!')
                     });
             },
+            RemovePriority(id) {
+                var _this = this;
+                var data = {
+                    ids: (id == null) ? _this.selectedIds : [id],
+                    priority: null
+                }
+                axios.post('/api/task-list/add-priority', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.getBoardTask();
+                        _this.selectedIds = [];
+                        $('.jquery-accordion-menu').hide();
+                    })
+                    .catch(error => {
+                        console.log('Api for task add priority not Working !!!')
+                    });
+            },
+
             HideDetails() {
                 // this.getBoardTask();
                 $('#task_width').addClass('task_width');

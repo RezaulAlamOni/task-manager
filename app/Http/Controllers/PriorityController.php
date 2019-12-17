@@ -13,6 +13,7 @@ class PriorityController extends Controller
 {
     public function AddPriority (Request $request)
     {
+
         $ids = $request->ids;
         $priority = $request->priority;
         foreach ($ids as $id) {
@@ -25,7 +26,7 @@ class PriorityController extends Controller
                     'project_id'=>$task->project_id,
                     'task_id' => $id,
                     'title' => $task->title,
-                    'log_type' => 'Add '.$priority.' Priority',
+                    'log_type' => ($priority !== null) ? 'Add '.$priority.' Priority' : 'Remove Priority',
                     'action_type' => 'updated',
                     'action_by' => Auth::id(),
                     'action_at' => Carbon::now()
@@ -36,6 +37,9 @@ class PriorityController extends Controller
                 return response()->json(['status' => 'success', 'error' => $e]);
             }
         }
+
+
+
         return response()->json(['status' => 'success']);
     }
 }
