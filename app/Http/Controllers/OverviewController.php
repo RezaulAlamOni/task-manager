@@ -22,7 +22,6 @@ class OverviewController extends Controller
 
     public function index($project_id)
     {
-
         $all_list_navs = ProjectNavItems::where(['type' => 'list', 'project_id' => $project_id])->with('All_list')->get();
         foreach ($all_list_navs as $all_list_nav) {
             foreach ($all_list_nav->all_list as $item) {

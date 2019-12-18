@@ -102,7 +102,7 @@
 
 
                                         <template
-                                            v-if="overview === 'overview' && list_selected.type !== 'list' && list_selected.type !== 'board'">
+                                                v-if="overview === 'overview' && list_selected.type !== 'list' && list_selected.type !== 'board'">
                                             <h6 class="dropdown-header text-uppercase">Action For Overview</h6>
                                             <span class="dropdown-item custom-dropdown-item">
                                                 <a :href="'/list-pdf-create/overview/'+ projectId" target="_blank">
@@ -117,35 +117,38 @@
                                         </template>
                                         <template v-else>
                                             <h6 class="dropdown-header text-uppercase">Action For <span
-                                                v-if="list_selected.type === 'board'">Board</span> <span
-                                                v-else>List</span></h6>
+                                                    v-if="list_selected.type === 'board'">Board</span> <span
+                                                    v-else>List</span></h6>
                                             <div class="dropdown-divider"></div>
                                             <span class="dropdown-item custom-dropdown-item" @click="UpdateListModel">
                                         <a href="javascript:void(0)">
                                             <i class="fal fa-edit mr-2"></i>
                                             Edit  <span
-                                            v-if="list_selected.type === 'board'">Board</span>  <span v-else>List</span></a>
+                                                v-if="list_selected.type === 'board'">Board</span>  <span
+                                                v-else>List</span></a>
                                     </span>
                                             <span class="dropdown-item custom-dropdown-item">
                                         <a href="javascript:void(0)" @click="MoveListTOAnotherNav(list_selected.type)">
                                             <i class="fal fa-expand-arrows mr-2"></i>
                                             Move
                                             <span v-if="list_selected.type === 'board'">Board</span>  <span
-                                            v-else>List</span> to Another Nav </a>
+                                                v-else>List</span> to Another Nav </a>
                                     </span>
                                             <span class="dropdown-item custom-dropdown-item"
                                                   @click="DeleteListOrBoard(list_selected.type,'delete')">
                                         <a href="javascript:void(0)">
                                             <i class="fal fa-trash-alt mr-2"></i>
                                             Delete with all <span
-                                            v-if="list_selected.type === 'board'">Card</span>  <span v-else> Task</span></a>
+                                                v-if="list_selected.type === 'board'">Card</span>  <span
+                                                v-else> Task</span></a>
                                     </span>
                                             <span class="dropdown-item custom-dropdown-item"
                                                   @click="DeleteListOrBoard(list_selected.type,'move')">
                                         <a href="javascript:void(0)">
                                             <i class="fal fa-person-carry mr-2"></i>
                                             Delete & move <span
-                                            v-if="list_selected.type === 'board'">Card</span>  <span v-else>Task</span> </a>
+                                                v-if="list_selected.type === 'board'">Card</span>  <span
+                                                v-else>Task</span> </a>
                                     </span>
                                             <span class="dropdown-item custom-dropdown-item"
                                                   v-if="list_selected.type === 'list'">
@@ -599,11 +602,13 @@
                                     <div class="dropdown-divider"></div>
                                     <span class="dropdown-item custom-dropdown-item">
                                         <a href="javascript:void(0)"> <i class="fa fa-trash"></i> Delete with all <span
-                                            v-if="update_navItem.type === 'list'">List</span> <span v-else>Board</span></a>
+                                                v-if="update_navItem.type === 'list'">List</span> <span
+                                                v-else>Board</span></a>
                                     </span>
                                     <span class="dropdown-item custom-dropdown-item">
                                         <a href="javascript:void(0)"> <i class="fa fa-arrows"></i> Delete & move <span
-                                            v-if="update_navItem.type === 'list'">List</span> <span v-else>Board</span> </a>
+                                                v-if="update_navItem.type === 'list'">List</span> <span
+                                                v-else>Board</span> </a>
                                     </span>
 
                                 </div>
@@ -712,7 +717,19 @@
         },
         mounted() {
             this.AllNavItem();
-            this.ShowOverView();
+
+            if (localStorage.selected_nav !== undefined) {
+                var session_data = JSON.parse(localStorage.selected_nav);
+                this.$emit('getList', {
+                    list_id: session_data.list_id,
+                    nav_id: session_data.nav_id,
+                    title: session_data.title,
+                    description: session_data.description,
+                    type: session_data.type
+                })
+            }else {
+                this.ShowOverView();
+            }
         },
         methods: {
 
@@ -840,7 +857,6 @@
                     $('#col10').css('height', 'calc(100vh - 104px)');
                     $('.smooth-dnd-container').css('height', 'calc(100vh - 188px)');
                 }, 2000)
-
             },
 
             setListId(navList, nav_id, description, type) {
@@ -858,12 +874,6 @@
             },
 
             ShowOverView() {
-                // localStorage.selected_nav = JSON.stringify({
-                //     list_id: null,
-                //     nav_id: null,
-                //     project_id: this.projectId,
-                //     type: 'overview'
-                // });
                 this.overview = 'overview';
                 this.$emit('getList', {
                     list_id: 0,
@@ -877,6 +887,8 @@
                 localStorage.selected_nav = JSON.stringify({
                     list_id: null,
                     nav_id: null,
+                    title : '',
+                    description : '',
                     project_id: this.projectId,
                     type: 'overview'
                 });

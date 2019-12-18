@@ -41,6 +41,6 @@ class Multiple_list extends Model
         return $this->hasMany('App\Task', 'list_id', 'id');
     }
     public function tasks_list(){
-        return $this->hasMany('App\Task', 'list_id', 'id')->where('parent_id',0);
+        return $this->hasMany('App\Task', 'list_id', 'id')->where(['parent_id'=>0,'is_deleted'=>0]);
     }
 }
