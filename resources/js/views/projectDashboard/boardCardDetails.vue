@@ -292,15 +292,15 @@
                                     <h3>Details</h3>
                                 </div>
                                 <div class="col-12">
-                                    <ckeditor :editor="editor" v-model="selectedData.description" :config="editorConfig"></ckeditor>
+                                    <ckeditor :editor="editor" v-model="selectedData.description" :config="editorConfig" @blur="updateDescription('#bx'+selectedData.cardId)"></ckeditor>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="submitdetails" id="submitdetails" style="margin-top: 20px">
-                                        <a @click="updateDescription('#bx'+selectedData.cardId)" class="btn btn-default"
+                                        <!-- <a @click="updateDescription('#bx'+selectedData.cardId)" class="btn btn-default"
                                            href="javascript:void(0)"
-                                           style="background: #7BB348;">Post</a>
+                                           style="background: #7BB348;">Post</a> -->
                                         <!-- <a class="btn btn-default" href="javascript:void(0)"
                                            style="border: 1px solid #f1efe6" @click="HideDetails">Cancel</a> -->
                                     </div>
@@ -403,7 +403,7 @@
                                                 v-else>
                                                     {{ comments.user.name.substring(0,2) }}</p>
                                             </div>
-                                            <div class="comment_body">
+                                            <div class="comment_body" style="word-break: break-word;">
                                                 <span class="user">{{comments.user.name}}</span>
                                                 <span> | {{comments.created_at.substring(11,16)}} | </span>
                                                 <span>{{ ' '+comments.created_at.substring(0,10)}}</span>
@@ -504,7 +504,7 @@
                                                     v-else>
                                                         {{ reply.user.name.substring(0,2) }}</p>
                                                 </div>
-                                                <div class="comment_body">
+                                                <div class="comment_body" style="word-break: break-word;">
                                                     <span style="" v-if="reply.comment != '' && reply.comment != null">
                                                         <p>
                                             <!-- <span class="user">{{reply.user.name}} :</span>-->
@@ -1112,31 +1112,43 @@
             {
                 console.log(e.which);
                 let _this = this;
-                // this.projectUsers = null;
+                let title = $('#comment'+data.cardId).val();
+                // this.projectUsers = null; 
                 let cmHe = $('#comment'+data.cardId).height();
                 $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
                 $('.myUL-user-comment').css({bottom: ' calc(100vh - 864px + '+cmHe+'px - 38px)'});
                 // console.log(this.selectedData.comment);
-                if (e.which === 32 || e.which === 13 || e.which === 8) {
+                if (e.which === 32 || e.which === 13 ) {
+                    // || e.which === 8
                     _this.trigger = false;
                     _this.userNames = '';
                     _this.projectUsers = null;
                 }
-
                 if (_this.trigger == true && e.which !== 16 && e.which !== 50) {
-                    _this.userNames += e.key;
-                   axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.projectUsers = response.search_user;
-                        $('.myUL-user-comment').css({display : 'none'});
-                        if (_this.projectUsers.length > 0) {
-                            $('.myUL-user-comment').css({display : 'block'});
+                    var lastIndex = title.lastIndexOf(" ");
+
+                    let str = title.substring(lastIndex);
+                    if (str.includes('@')) {
+                        let notKeys = ["Backspace","ScrollLock","null","NumLock","Tab","ArrowLeft","ArrowDown","ArrowRight","ArrowUp"];
+                        if (notKeys.includes(e.key) === false) {
+                            _this.userNames += e.key;
                         }
-                    })
-                    .catch(error => {
-                        console.log('search user is not Working !!!')
-                    });
+                        if (e.key === "Backspace") {
+                            _this.userNames = _this.userNames.slice(0, -1);
+                        }
+                       axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.projectUsers = response.search_user;
+                            $('.myUL-user-comment').css({display : 'none'});
+                            if (_this.projectUsers.length > 0) {
+                                $('.myUL-user-comment').css({display : 'block'});
+                            }
+                        })
+                        .catch(error => {
+                            console.log('search user is not Working !!!')
+                        });
+                    }
                 }
 
                 if (e.shiftKey && e.which == 50) {
@@ -1157,31 +1169,44 @@
             {
                 // console.log(e.which);
                 let _this = this;
+                let title = $('#replyTextBox'+comments.id).val();
                 // this.projectUsers = null;
                 // let cmHe = $('#replyTextBox'+comments.id).height();
                 // $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
                 // console.log(this.selectedData.comment);
-                if (e.which === 32 || e.which === 13 || e.which === 8) {
+                if (e.which === 32 || e.which === 13 ) {
+                    // || e.which === 8
                     _this.trigger = false;
                     _this.userNames = '';
                     _this.replyProjectUsers = null;
                     $('.myUL-user-comment').css({display : 'none'});
                 }
-
                 if (_this.trigger == true && e.which !== 16 && e.which !== 50) {
-                    _this.userNames += e.key;
-                   axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.replyProjectUsers = response.search_user;
-                        $('.myUL-user-comment').css({display : 'none'});
-                        if (_this.replyProjectUsers.length > 0) {
-                            $('.myUL-user-comment').css({display : 'block'});
+                    var lastIndex = title.lastIndexOf(" ");
+
+                    let str = title.substring(lastIndex);
+                    if (str.includes('@')) {
+                        let notKeys = ["Backspace","ScrollLock","null","NumLock","Tab","ArrowLeft","ArrowDown","ArrowRight","ArrowUp"];
+                        // console.log(e.key);
+                        if (notKeys.includes(e.key) === false) {
+                            _this.userNames += e.key;
                         }
-                    })
-                    .catch(error => {
-                        console.log('search user is not Working !!!')
-                    });
+                        if (e.key === "Backspace") {
+                            _this.userNames = _this.userNames.slice(0, -1);
+                        }
+                        axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.replyProjectUsers = response.search_user;
+                            $('.myUL-user-comment').css({display : 'none'});
+                            if (_this.replyProjectUsers.length > 0) {
+                                $('.myUL-user-comment').css({display : 'block'});
+                            }
+                        })
+                        .catch(error => {
+                            console.log('search user is not Working !!!')
+                        });
+                    }
                 }
 
                 if (e.shiftKey && e.which == 50) {
