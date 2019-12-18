@@ -170,7 +170,7 @@ body {
         .comment_body {
             display: inline-block;
             vertical-align: middle;
-
+            word-break: break-all;
             width: calc(100% - 80px);
             min-height: 15px;
             margin-left: 10px;

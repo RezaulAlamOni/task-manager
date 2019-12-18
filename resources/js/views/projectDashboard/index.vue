@@ -1263,18 +1263,6 @@
             $('.SubmitButton').hide();
             $('.submitdetails').hide();
             $('#loder-hide').removeClass('loder-hide')
-            if (localStorage.selected_nav !== undefined) {
-                var session_data = JSON.parse(localStorage.selected_nav);
-                if (session_data.type === 'list') {
-                    setTimeout(function () {
-                        $('#list' + session_data.list_id).click();
-                    }, 1000)
-                } else if (session_data.type === 'board') {
-                    setTimeout(function () {
-                        $('.board' + session_data.list_id).click();
-                    }, 1000)
-                }
-            }
         },
         created() {
             let _this = this;
@@ -2763,14 +2751,18 @@
                 // $('#loder-hide').fadeIn();
                 this.list_id = data.list_id;
                 this.nav_id = data.nav_id;
+                this.list.nav_id = data.nav_id;
                 this.list.name = data.title;
                 this.list.id = data.list_id
                 this.list.description = data.description;
                 this.list.type = data.type;
+                this.projectId = this.$route.params.projectId;
                 if (data.type === 'list') {
                     localStorage.selected_nav = JSON.stringify({
                         list_id: data.list_id,
                         nav_id: data.nav_id,
+                        title : data.title,
+                        description : this.list.description,
                         project_id: this.projectId,
                         type: 'list'
                     });
@@ -2780,6 +2772,8 @@
                     localStorage.selected_nav = JSON.stringify({
                         list_id: data.list_id,
                         nav_id: data.nav_id,
+                        title : data.title,
+                        description : this.list.description,
                         project_id: this.projectId,
                         type: 'board'
                     });
