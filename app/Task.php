@@ -29,7 +29,7 @@ class Task extends Model
         'created_at',
         'updated_at',
         'list_id',
-        'is_delete',
+        'is_deleted',
         'deleted_at'
     ];
 
