@@ -249,7 +249,7 @@ class MultipleBoardController extends Controller
         // }
         $data = [
             'title' => '',
-            'board_sort_id' => ++$sortNo,
+            'board_sort_id' => 0,
             'board_parent_id' => $parent->id,
             'project_id' => $parent->project_id,
             'multiple_board_id' => $parent->multiple_board_id,
@@ -264,6 +264,12 @@ class MultipleBoardController extends Controller
         $child = Task::create($data);
         if ($child) {
             $this->createLog($child->id, 'created', 'Create Card', 'Empty Card Created');
+            $datas = Task::where('board_parent_id', $parent->id)->get();
+            foreach ($datas as $key => $value) {
+                Task::where('id', $value->id)->update([
+                    'board_sort_id' => $value->board_sort_id+1
+                ]);
+            }
             return response()->json(['success' => true, 'data' => $child]);
         }
         return response()->json(['success' => false]);

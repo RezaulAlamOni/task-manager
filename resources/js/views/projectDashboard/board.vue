@@ -1438,7 +1438,7 @@
                 shift_first: null,
                 triggers: null,
                 tagTriggers: null,
-                userNames: null,
+                userNames: '',
                 projectUsers: null,
                 commentsData: null,
             }
@@ -2357,7 +2357,7 @@
                     .then(response => {
                         if (response.success == true) {
                             let data = response.data;
-                            _this.cards[index].task.push({
+                            _this.cards[index].task.unshift({
                                 id: data.id,
                                 name: data.title,
                                 date: data.date,
@@ -2586,30 +2586,44 @@
                 $('.dropdowns-card-user').hide();
                 // console.log(e.which);
                 let _this = this;
+                let title = $('#title'+card.cardId).text();
                 // this.projectUsers = null;
                 // let cmHe = $('#replyTextBox'+comments.id).height();
                 // $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
                 // console.log(this.selectedData.comment);
-                if (e.which == 32 || e.which == 13 || e.which == 8) {
+                if (e.which === 32 || e.which === 13 ) {
+                    // || e.which === 8
                     _this.triggers = false;
                     _this.userNames = '';
                     _this.projectUsers = null;
                     $('.dropdowns-card-user').hide();
                 }
                 if (_this.triggers == true && e.which !== 16 && e.which !== 50) {
-                    _this.userNames += e.key;
-                    axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
-                    .then(response => response.data)
-                    .then(response => {
-                        _this.projectUsers = response.search_user;
-                        $('.dropdowns-card-user').hide();
-                        if (_this.projectUsers.length > 0) {
-                            $('#titleUserMention' + card.cardId).show();
+                    var lastIndex = title.lastIndexOf(" ");
+
+                    let str = title.substring(lastIndex);
+                    if (str.includes('@')) {
+                        let notKeys = ["Backspace","ScrollLock","null","NumLock","Tab","ArrowLeft","ArrowDown","ArrowRight","ArrowUp"];
+                        // console.log(e.key);                        
+                        if (notKeys.includes(e.key) === false) {
+                            _this.userNames += e.key;
                         }
-                    })
-                    .catch(error => {
-                        console.log('search user is not Working !!!')
-                    });
+                        if (e.key === "Backspace") {
+                            _this.userNames = _this.userNames.slice(0, -1);
+                        }
+                        axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.projectUsers = response.search_user;
+                            $('.dropdowns-card-user').hide();
+                            if (_this.projectUsers.length > 0) {
+                                $('#titleUserMention' + card.cardId).show();
+                            }
+                        })
+                        .catch(error => {
+                            console.log('search user is not Working !!!')
+                        });
+                    }
                 }
 
                 if (e.shiftKey && e.which == 50) {
