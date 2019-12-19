@@ -1417,7 +1417,8 @@
                 list: {
                     name: null,
                     description: null,
-                    nav_id: null
+                    nav_id: null,
+                    type : 'board'
                 },
                 navItem: {
                     title: null,
@@ -1523,7 +1524,11 @@
                         // _this.pastCopyAndCut(_this.selectedData);
                         break;
                     case "delete":
-                        _this.deleteSelectedTask();
+                        var nav_type = JSON.parse(localStorage.selected_nav);
+                        console.log(nav_type)
+                        if (nav_type.type === 'board' && _this.selectedIds.length > 0){
+                            _this.deleteSelectedTask();
+                        }
                         break;
                     case "ctrl+t":
                         _this.showTransferModel(_this.currentColumn, '', '', _this.currentColumnIndex);
@@ -2604,7 +2609,7 @@
                     let str = title.substring(lastIndex);
                     if (str.includes('@')) {
                         let notKeys = ["Backspace","ScrollLock","null","NumLock","Tab","ArrowLeft","ArrowDown","ArrowRight","ArrowUp"];
-                        // console.log(e.key);                        
+                        // console.log(e.key);
                         if (notKeys.includes(e.key) === false) {
                             _this.userNames += e.key;
                         }
