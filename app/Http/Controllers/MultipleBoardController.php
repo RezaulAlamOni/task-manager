@@ -151,6 +151,7 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
                     $boards[$key]['task'][$keys]['parent_id'] = $values['parent_id'];
                     $boards[$key]['task'][$keys]['name'] = $values['title'];
+                    $boards[$key]['task'][$keys]['cardOpen'] = $values['card_open'];
                     $boards[$key]['task'][$keys]['list_id'] = $values['list_id'];
                     $boards[$key]['task'][$keys]['multiple_board_id'] = $values['multiple_board_id'];
                     $boards[$key]['task'][$keys]['description'] = $values['description'];
@@ -912,6 +913,7 @@ class MultipleBoardController extends Controller
                     ->get();
         $ids[] = $request->id;
         $hidden = 0;
+        $open = 0;
         foreach ($data as $childs) {
             if (count($childs['childTask']) > 0) {
                 $ids = $this->recurChildIds($childs);
@@ -924,17 +926,23 @@ class MultipleBoardController extends Controller
         foreach ($tasks as $key => $value) {
             if($value->hidden === 1){
                 $hidden = 0;
+                $open = 0;
             } else {
                 $hidden = 1;
+                $open = 1;
             }
             break;
         }
         $hide = Task::whereIn('id',$ids)
                 ->where('board_parent_id', $data[0]->board_parent_id)
                 ->update([
-                    'hidden' => $hidden
+                    'hidden' => $hidden,
                 ]);
         if($hide){
+            Task::where('id',$request->parent_id)
+            ->update([
+                'card_open' => $open
+            ]);
             return response()->json(['success' => true]);
         }
     }

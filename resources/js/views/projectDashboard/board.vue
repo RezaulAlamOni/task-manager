@@ -103,9 +103,7 @@
                                                         </li>
                                                         <!-- <a v-if="column.linkToList.length > 0" @click="unlinklistToCol(index, column.boardId)" class="dropdown-item"
                                                             href="#"><img :src="baseUrl+'/img/task-icon/unlink.png'" height="18" width="18" > Unlink Lists
-
                                                                  </a> -->
-
                                                             <div class="dropdown-divider"></div>
                                                             <a @click="deleteColumn(index,column.boardId)"
                                                                class="dropdown-item"
@@ -294,9 +292,9 @@
                                                                                     border-radius: 4px; box-sizing: border-box; "
                                                                    type="text">
                                                             <label class="pl-2 label-text">
-                                                                        <span class="assign-user-drop-down-text">
-                                                                            Or invite a new member by email address
-                                                                        </span>
+                                                                <span class="assign-user-drop-down-text">
+                                                                    Or invite a new member by email address
+                                                                </span>
                                                             </label>
                                                         </li>
                                                         <li class="assignUser">
@@ -308,9 +306,7 @@
                                                                     v-bind:disabled="(card.assigned_user_ids.includes(user.id)) ? true : false">
                                                                     <div class="col-md-3 pt-1 pl-4">
                                                                         <p class="assignUser-photo">
-                                                                            {{(user.name !== null) ?
-                                                                            user.name.substring(0,2) :
-                                                                            ''}}</p>
+                                                                            {{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
                                                                     </div>
                                                                     <div class="col-md-9 assign-user-name-email">
                                                                         <h5>{{user.name}}<br>
@@ -550,7 +546,8 @@
                                                  :class="[(card.priority_label !== null) ? 'pch-total-child' : 'total-child']"
                                                  v-if="card.child > 0"
                                                  @click="hideChilds(card.cardId)">
-                                                <i class="fal fa-layer-minus" style="font-size: 14px;"></i>
+                                                <i v-if="card.open === 0" class="fal fa-layer-minus" style="font-size: 14px;"></i>
+                                                <i v-if="card.open === 1" class="fal fa-layer-plus" style="font-size: 14px;"></i>
                                                 <strong>
                                                     {{ card.child }}
                                                 </strong>
@@ -1628,6 +1625,7 @@
                             files: '',
                             userName: this.cards[i].task[j].userName,
                             data: this.cards[i].task[j].name,
+                            open: this.cards[i].task[j].cardOpen,
                             textareaShow: this.cards[i].task[j].textareaShow,
                             description: this.cards[i].task[j].description,
                             list_id: this.cards[i].task[j].list_id,
@@ -2349,8 +2347,6 @@
                 // _this.growInit(option);
             },
             addCard(index, id) {
-
-                // console.log(index,id)
                 let _this = this;
                 axios.post('/api/card-add', {'id': id})
                     .then(response => response.data)
@@ -2370,9 +2366,9 @@
                             let keys = _this.cards[index].task.length - 1;
                             _this.getBoardTask();
                             setTimeout(function () {
-                                $('#id' + index + keys).click();
-                                $('#id' + index + keys).focus();
-                            }, 100)
+                                $('#title' + data.id).click();
+                                $('#title' + data.id).focus();
+                            }, 1000)
                         }
                     })
                     .catch(error => {

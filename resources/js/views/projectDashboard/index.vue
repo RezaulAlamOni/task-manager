@@ -200,8 +200,6 @@
                                             </ul>
                                         </diV>
                                     </div>
-
-
                                     <b @click="HideShowChild(store , data)"
                                        v-if="data.children && data.children.length && data.open">
                                         <i class="fal fa-fw fa-minus"></i></b>
