@@ -1328,7 +1328,11 @@
                         break;
                     case "delete":
                         _this.delete_popup = 1;
-                        _this.RemoveNodeAndChildren(_this.selectedData);
+                        var nav_type = JSON.parse(localStorage.selected_nav);
+                        console.log(nav_type)
+                        if (nav_type.type === 'list' && _this.selectedIds.length > 0){
+                            _this.RemoveNodeAndChildren(_this.selectedData);
+                        }
                         break;
                     case "ctrl+u":
                         _this.shwAssignUserDropDown(_this.selectedData);

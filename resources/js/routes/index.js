@@ -6,11 +6,12 @@ import Index from '../views/project/index'
 import projectDashboard from '../views/projectDashboard/index'
 import projectBoard from '../views/projectDashboard/board'
 import addProject from '../views/project/edit'
+import Rules from '../views/Rules/index/index'
 
 
 let routes = [
 
-    // { path: '*', redirect: '/projects' },    
+    // { path: '*', redirect: '/projects' },
     {
         path: '/projects',
         component: Index
@@ -25,14 +26,6 @@ let routes = [
         component: addProject,
         name : 'project-edit'
     },
-    // {
-    //     path: '/project/:uuid',
-    //     component: require('./views/project/show')
-    // },
-    // {
-    //     path: '/report/project/summary',
-    //     component: require('./views/project/project-summary')
-    // },
     {
         path: '/project-dashboard/:projectId',
         component: projectDashboard,
@@ -43,7 +36,14 @@ let routes = [
         path: '/project-board/:projectId',
         component: projectBoard,
         name : 'project-board'
+    },
+    {
+        path: '/project-board/:projectId/rules',
+        component: Rules,
+        name : 'Rules'
     }
+
+
 ];
 
 const router = new VueRouter({

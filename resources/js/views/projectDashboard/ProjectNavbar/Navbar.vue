@@ -172,7 +172,7 @@
                             <li class="nav-item" style="margin-right:10px;">
                                 <a @click="" class="text-center nav-link"
                                    href="Javascript:void(0)">
-                                    <span class="pull-right" @click="CreateRule">Rules</span>
+                                    <span class="pull-right" @click="CreateRule(projectId)">Rules</span>
                                     <div aria-labelledby="dropdownMenuButton"
                                          class="dropdown-menu dropdown-menu-right dropdown-menu-custom">
                                         <div class="dropdown-divider"></div>
@@ -894,7 +894,8 @@
                 });
                 this.ShowOverView();
             },
-            CreateRule() {
+            CreateRule(pId) {
+                var _this = this
                 this.$emit('getList', {
                     list_id: 0,
                     nav_id: 0,
@@ -903,6 +904,7 @@
                     type: 'rules',
                     action_type: 'rules',
                 })
+                // this.$router.push({name: 'Rules', params: {projectId: this.projectId}});
             },
             UpdateRule(id) {
                 this.$emit('getList', {
