@@ -65,8 +65,8 @@ class ProjectNavItemsController extends Controller
                         if ((int)$item == $item1['id']){
                             $uin['id'] = $item1['id'];
                             $uin['name'] = $item1['name'];
+                            $us[] = $uin;
                         }
-                        $us[] = $uin;
                     }
                 }
 

@@ -462,7 +462,7 @@
                                                 <!-- v-click-outside="hidereplaybox(comments.id)" -->
                                                 <!-- <input type='text' class="form-control" style="width: 85% !important; margin-bottom: 10px;">
                                                 <a class="btn btn-default btn-sm" style="background: #7BB348;" @click="saveComment(selectedData.cardId)">Post</a> -->
-                                                <div class="mb-3 input-group display-inline position-relative" style="margin-bottom: 10px; left: 78px;">
+                                                <div class="mb-3 input-group display-inline position-relative" style="margin-bottom: 10px; left: 45px;">
                                                     <div :id="'myUL-user-reply'+comments.id" class="myUL-user-comment myUL-user-comment-reply" style="left: 0px;">
                                                         <template v-for="user in replyProjectUsers" v-if=" replyProjectUsers !== null && replyProjectUsers.length > 0">
                                                             <li @click="replySearchTaskByAssignedUser(user.id,user.name,comments)">
@@ -487,6 +487,7 @@
                                                             @keyup="commentReplyPress($event,selectedData,comments)"
                                                             placeholder="Reply ... "
                                                             autocomplete="off">
+                                                            <br>
                                                     <div class="input-group-append">
                                                         <span @click="saveReply(comments.id, selectedData.cardId)" class="input-group-text" id="basic-addon1">Reply</span>
                                                     </div>
@@ -1157,8 +1158,8 @@
                     axios.get('/api/task-list/all-suggest-user')
                     .then(response => response.data)
                     .then(response => {
-                        // $('.myUL-user-comment').css({display : 'block'});
-                        // _this.projectUsers = response.search_user;
+                        $('.myUL-user-comment').css({display : 'block'});
+                        _this.projectUsers = response.search_user;
                     })
                     .catch(error => {
                         console.log('All suggest user api not working')

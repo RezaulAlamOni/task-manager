@@ -25,6 +25,8 @@ class Task extends Model
         'color',
         'hidden',
         'progress',
+        'open',
+        'card_open',
         'date',
         'created_at',
         'updated_at',
