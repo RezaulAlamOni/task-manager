@@ -34,7 +34,7 @@
                         <template v-for="rl in all_rules">
                             <tr>
                                 <td style="width: 25%;">{{rl.name}}</td>
-                                <td style="width: 21%;">{{rl.move_from.title}}</td>
+                                <td style="width: 21%;">{{(rl.move_from !== null) ? rl.move_from.title : 0}}</td>
                                 <td style="width: 20%;">{{(rl.move_to !== null) ? rl.move_to.title : 0}}</td>
                                 <td style="width: 20%;">
                                     <template v-for="(user,index) in rl.assigned_users">
