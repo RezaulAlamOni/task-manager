@@ -945,7 +945,6 @@
             </div>
         </div>
 
-
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transferCard" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
@@ -1003,8 +1002,6 @@
                 </div>
             </div>
         </div>
-
-
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transferColumn" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
@@ -1061,8 +1058,6 @@
                 </div>
             </div>
         </div>
-
-
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="listLinkColumn" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
@@ -1118,8 +1113,6 @@
                 </div>
             </div>
         </div>
-
-
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="loader" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
@@ -1127,8 +1120,6 @@
                 </div>
             </div>
         </div>
-
-
         <div aria-hidden="true" aria-labelledby="exampleModalCenterTitle" class="modal fade" id="addExistingTask"
              role="dialog"
              tabindex="-1">
@@ -1348,7 +1339,7 @@
     // import Folder from './recurLi.vue';
 
     export default {
-        props: ['nav_id', 'board_id', 'projectId'],
+        props: ['nav_id', 'board_id', 'projectId','filter_type'],
         components: {Container, Draggable, flatPickr, switches, VueTagsInput, Datepicker, TaskDetails},
         data() {
             return {
@@ -1444,8 +1435,7 @@
         mounted() {
             var _this = this;
             $('#header-item').text('Project  / Task Board');
-
-
+            console.log(_this.filter_type)
             $(document)
                 .one('focus.autoExpand', 'textarea.autoExpand', function () {
                     var savedValue = this.value;
@@ -3307,6 +3297,9 @@
                 this.nav_id = val;
                 $('#loder-hide').fadeIn();
                 this.getBoardTask()
+            },
+            filter_type: function (val) {
+                console.log(val)
             },
         }
     }

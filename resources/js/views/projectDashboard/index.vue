@@ -6,6 +6,7 @@
                     :projectId="$route.params.projectId"
                     :lists="list"
                     @getList="showTask"
+                    @filter="filter"
                     @update_overview="update_overview"
                     @showSearchInputField="showSearchInputField"
                     @MoveListTOAnotherNav="MoveListTOAnotherNav"
@@ -787,7 +788,9 @@
                 <BoardView
                     :board_id="list_id"
                     :nav_id="nav_id"
-                    :projectId="projectId">
+                    :projectId="projectId"
+                    :filter_type="filter_type"
+                >
                 </BoardView>
 
             </div>
@@ -1180,6 +1183,7 @@
                 disabledDates: {
                     id: null,
                 },
+                filter_type : null,
                 id: 0,
                 treeList: [],
                 date_config: {
@@ -1554,6 +1558,10 @@
 
             },
 
+
+            filter(data){
+                this.filter_type = data.type
+            },
             selectTaskFromTaskTreeList(task) {
                 var nav = JSON.parse(localStorage.selected_nav)
                 if (nav.type === 'list') {

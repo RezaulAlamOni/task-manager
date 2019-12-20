@@ -205,41 +205,41 @@
 
                                     <h6 class="dropdown-header"> Filters</h6>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item active" href="javascript:void(0)">
+                                    <a class="dropdown-item active" href="javascript:void(0)" @click="FilterAction('all')">
                                         <i class="fa fa-fw fa-tasks"></i>
                                         Show All Tasks
                                     </a>
-                                    <a class="dropdown-item" href="javascript:void(0)">
+                                    <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('my')" >
                                         <i class="fa fa-user"></i>
                                         Show My Tasks
                                     </a>
-                                    <a class="dropdown-item" href="javascript:void(0)">
+                                    <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('users_task')">
                                         <i class="fa fa-users"></i>
                                         Show Users Tasks
                                     </a>
-                                    <a class="dropdown-item" href="javascript:void(0)">
+                                    <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('completed')">
                                         <i class="fa fa-clipboard-check"></i>
                                         Show Completed Tasks
                                     </a>
-                                    <a class="dropdown-item" href="javascript:void(0)">
+                                    <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('hide_completed')">
                                         <i class="fa fa-eye-slash"></i>
                                         Hide Completed Tasks
                                     </a>
-                                    <h6 class="dropdown-header"> Sort</h6>
+                                    <h6 class="dropdown-header" > Sort</h6>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item active" href="javascript:void(0)">
+                                    <a class="dropdown-item active" href="javascript:void(0)" @click="FilterAction('asc')">
                                         <i class="fa fa-sort"></i>
                                         Default
                                     </a>
-                                    <a class="dropdown-item" href="javascript:void(0)">
+                                    <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('asc')">
                                         <i class="fa fa-sort-up"></i>
                                         Oldest
                                     </a>
-                                    <a class="dropdown-item" href="javascript:void(0)">
+                                    <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('desc')">
                                         <i class="fa fa-sort-down"></i>
                                         Newest
                                     </a>
-                                    <a class="dropdown-item" href="javascript:void(0)">
+                                    <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('date')">
                                         <i class="fa fa-calendar-alt"></i>
                                         By Due Date
                                     </a>
@@ -732,6 +732,11 @@
             }
         },
         methods: {
+            FilterAction(type){
+                this.$emit('filter', {
+                    type: type
+                })
+            },
 
             showModelForNavItem() {
                 $("#addNavItem").modal('show');
