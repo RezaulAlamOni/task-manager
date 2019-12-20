@@ -46,7 +46,7 @@ class TaskController extends Controller
         $data = [];
         foreach ($obj as $key => $task) {
             $info = array();
-            array_push($this->all_ids,$task->id);
+            array_push($this->all_ids, $task->id);
             $info['id'] = $task->id;
             $info['parent_id'] = $task->parent_id;
             $info['sort_id'] = $task->sort_id;
@@ -157,7 +157,51 @@ class TaskController extends Controller
                 ->orderBy('sort_id', 'ASC')->get();
 
         }
-        $this->all_ids =[];
+        $this->all_ids = [];
+        $data = $this->decorateData($tasks, null);
+        $userName = Auth::user();
+        $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
+        $multiple_list = $multiple_list->multiple_list;
+
+        $team_id = Auth::user()->current_team_id;
+        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
+            ->where('team_users.team_id', $team_id)->get()->toArray();
+        $allTeamTags = Tags::where('team_id', $team_id)->where('title', '!=', $this->dont_forget_tag)
+            ->get()->toArray();
+
+        return response()->json([
+            'task_list' => $data,
+            'multiple_list' => $multiple_list,
+            'empty_task' => $task,
+            'userName' => $userName,
+            'allTeamUsers' => $allTeamUsers,
+            'allTeamTags' => $allTeamTags,
+            'all_ids' => $this->all_ids,
+        ]);
+    }
+
+    public function getAllFilter (Request $request)
+    {
+        if ($request->list_id == null) {
+            $list = Multiple_list::where('project_id', $request->id)
+                ->orderBy('id', 'ASC')->first();
+            $list_id = $list->id;
+        } else {
+            $list_id = $request->list_id;
+        }
+        $tasks = Task::where('project_id', $request->id)
+            ->whereHas('Assign_user', function($q){
+                $q->where('user_id', Auth::id());
+            })
+            ->where('is_deleted', '!=', 1)
+            ->where('list_id', $list_id)->with('column')
+            ->orderBy('sort_id', 'ASC')
+            ->get();
+
+        return $tasks;
+        $task = [];
+
+        $this->all_ids = [];
         $data = $this->decorateData($tasks, null);
         $userName = Auth::user();
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
@@ -182,9 +226,9 @@ class TaskController extends Controller
 
     protected function createLog ($task_id, $type, $message, $title)
     {
-        $task = Task::where('id',$task_id)->first();
+        $task = Task::where('id', $task_id)->first();
         $log_data = [
-            'project_id'=>$task->project_id,
+            'project_id' => $task->project_id,
             'task_id' => $task_id,
             'title' => $title,
             'log_type' => $message,
@@ -222,7 +266,7 @@ class TaskController extends Controller
             return response()->json(['success' => ['id' => $request->id]]);
         } else {
             if ($etask && $request->text != '') {
-                if ($etask->title !== $request->text){
+                if ($etask->title !== $request->text) {
                     Task::where('id', $request->id)
                         ->update(['title' => $request->text]);
                     $this->createLog($request->id, 'updated', 'Update task', $request->text);
@@ -259,7 +303,7 @@ class TaskController extends Controller
                     $data['multiple_board_id'] = $progress->multiple_board_id;
                 }
                 $task = Task::create($data);
-                $this->createLog($task->id, 'created', 'Create task', $task->title == '' ? 'Epmty Task' : $task->title );
+                $this->createLog($task->id, 'created', 'Create task', $task->title == '' ? 'Epmty Task' : $task->title);
                 $this->updateTagWithDataMove($task->id, $request->parent_id);
                 return response()->json(['success' => $task]);
             }
@@ -407,13 +451,13 @@ class TaskController extends Controller
 
         $target_list_sort_id = Task::where(['list_id' => $target_list_id])->orderBy('sort_id', 'desc')->first();
 
-        $check_links = LinkListToColumn::where('multiple_list_id',$target_list_id)->first();
+        $check_links = LinkListToColumn::where('multiple_list_id', $target_list_id)->first();
         $link_column = $check_links ? Task::where('id', $check_links->task_list_id)->first() : null;
 
         $sort_id = $target_list_sort_id->sort_id;
         foreach ($task_ids as $id) {
             $past = Task::where('id', $id)->with('List')->first();
-            $sort_id = $sort_id+1;
+            $sort_id = $sort_id + 1;
             $data = [
                 'sort_id' => $sort_id,
                 'parent_id' => 0,
@@ -421,7 +465,7 @@ class TaskController extends Controller
                 'list_id' => $target_list_id,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
-                'title' => $past->title.'-copy',
+                'title' => $past->title . '-copy',
                 'date' => $past->date,
                 'board_parent_id' => $check_links && $link_column ? $link_column->board_parent_id : null,
                 'progress' => $check_links && $link_column ? $link_column->progress : null,
@@ -454,7 +498,7 @@ class TaskController extends Controller
     {
 
         $target = Task::where('id', $target_id)->first();
-        $check_links = LinkListToColumn::where('multiple_list_id',$target->list_id)->first();
+        $check_links = LinkListToColumn::where('multiple_list_id', $target->list_id)->first();
         $link_column = $check_links ? Task::where('id', $check_links->task_list_id)->first() : null;
         $past = Task::where('id', $copy_id)->first();
 
@@ -504,12 +548,12 @@ class TaskController extends Controller
             $ids = $request->ids;
             foreach ($ids as $id) {
 //                $this->deleteTaskWithChild($id);
-                $delete = Task::where('id',$id)->update([
+                $delete = Task::where('id', $id)->update([
                     'is_deleted' => 1,
                     'deleted_at' => carbon::now()
                 ]);
                 $task = Task::find($id);
-                $this->createLog($id,'softdelete','Task Softdeleted',$task->title);
+                $this->createLog($id, 'softdelete', 'Task Softdeleted', $task->title);
             }
         } else {
             $delete = Task::where('id', $request->id)->update([
@@ -517,7 +561,7 @@ class TaskController extends Controller
                 'deleted_at' => carbon::now()
             ]);
             $task = Task::find($request->id);
-            $this->createLog($request->id,'softdelete','Task Softdeleted',$task->title);
+            $this->createLog($request->id, 'softdelete', 'Task Softdeleted', $task->title);
             // $this->deleteTaskWithChild($request->id);
         }
         return response()->json(['success' => 1]);
@@ -534,7 +578,7 @@ class TaskController extends Controller
                     'task_id' => $id,
                     'user_id' => $request->value
                 ])->count();
-                if ($checkIsUserAssigned <= 0){
+                if ($checkIsUserAssigned <= 0) {
                     AssignedUser::create([
                         'task_id' => $id,
                         'user_id' => $request->value,
@@ -708,14 +752,14 @@ class TaskController extends Controller
             }
             ($request->text == null) ? $title = '' : $title = $request->text;
 
-            if ($check_is_empty->title == $request->text){
+            if ($check_is_empty->title == $request->text) {
                 return response()->json(['success' => 20, 'empty' => 'not change']);
             }
 
             if (Task::where('id', $request->id)->update(['title' => $title])) {
-                if ($empty){
+                if ($empty) {
                     $this->createLog($request->id, 'updated', 'Update From empty task', $title);
-                }else{
+                } else {
                     $this->createLog($request->id, 'updated', 'Update task', $title);
                 }
                 return response()->json(['success' => 1, 'empty' => $empty]);

@@ -1561,6 +1561,56 @@
 
             filter(data){
                 this.filter_type = data.type
+                console.log(data.type)
+                if(this.list.type == 'list'){
+                    if (data.type === 'all'){
+                        this.getTaskList()
+                    }else{
+                        this.GetFilterData(data.type)
+                    }
+                }
+            },
+            GetFilterData(type){
+                var _this = this;
+                let data = {
+                    id: this.projectId,
+                    list_id: this.list_id,
+                    nav_id: this.nav_id,
+                    filter_type : type
+                };
+
+                axios.post('/api/task-list-filter', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        swal('Under Progress',"",'success')
+                        // _this.treeList = response.task_list;
+                        // _this.multiple_list = response.multiple_list;
+                        // _this.authUser = response.userName
+                        // _this.allUsers = response.allTeamUsers;
+                        // _this.allTags = response.allTeamTags;
+                        // _this.allTaskId = response.all_ids;
+                        //
+                        //
+                        // $('[data-toggle="tooltip"]').tooltip('dispose');
+                        // setTimeout(function () {
+                        //     $('[data-toggle="tooltip"]').tooltip('enable');
+                        // }, 500);
+                        // setTimeout(function () {
+                        //     $('#loder-hide').fadeOut()
+                        // }, 100);
+                        // if (this.treeList.length === 1 && this.treeList[0].text === '') {
+                        //     let id = this.treeList[0].id;
+                        //     setTimeout(function () {
+                        //         $("#" + id).click();
+                        //         $("#" + id).focus();
+                        //         $("#" + id).addClass('form-control');
+                        //         $("#" + id).removeClass('input-hide');
+                        //     }, 300)
+                        // }
+                    })
+                    .catch(error => {
+
+                    });
             },
             selectTaskFromTaskTreeList(task) {
                 var nav = JSON.parse(localStorage.selected_nav)

@@ -27,7 +27,7 @@ Route::post('/task-list/update', 'TaskController@update');//reverse child node
 Route::post('/task-list/delete-empty-task', 'TaskController@deleteEmptyTask');//delete empty node
 Route::post('/task-list/delete-img', 'TaskController@deleteImg');//reverse child node
 Route::post('/task-list/task-drag-drop', 'TaskController@taskDragDrop');//task-drag-drop
-
+Route::post('/task-list-filter', 'TaskController@getAllFilter');//get task list data
 
 //task list tags related
 Route::get('/task-list/all-tag-for-manage', 'TagsController@index');//get all tag

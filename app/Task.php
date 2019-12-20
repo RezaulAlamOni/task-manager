@@ -64,6 +64,10 @@ class Task extends Model
     {
         return $this->hasMany(AssignTag::class, 'task_id', 'id')->with('tag');
     }
+    public function Assign_user()
+    {
+        return $this->hasMany(AssignedUser::class, 'task_id', 'id');
+    }
     public function Dont_Forget_tag()
     {
         return $this->hasMany(AssignTag::class, 'task_id', 'id')->with('dont_forget');
