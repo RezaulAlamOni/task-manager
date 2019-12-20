@@ -70,6 +70,7 @@ Route::post('/task-list/assign-user-remove','AssignedUserController@delete'); //
 
 //board Section
 Route::post('/board-task','MultipleBoardController@index'); //get board item
+Route::post('/board-task-filter','MultipleBoardController@filter'); //get board item filtered
 Route::post('/board-save','MultipleBoardController@create'); //get board item
 Route::post('/board-modify','MultipleBoardController@update'); //column info update
 Route::post('/board-add', 'MultipleBoardController@store'); //add list under project

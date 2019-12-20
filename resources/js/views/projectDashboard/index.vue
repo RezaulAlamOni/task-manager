@@ -1560,7 +1560,11 @@
 
 
             filter(data){
+                let _this = this;
                 this.filter_type = data.type
+                setTimeout(() => {
+                    _this.filter_type = null;
+                }, 100);
                 console.log(data.type)
                 if(this.list.type == 'list'){
                     if (data.type === 'all'){

@@ -90,7 +90,12 @@ class Task extends Model
 
     public function task()
     {
-        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags','parents','childTask')->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC'); //comment,
+        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags','parents','childTask','Assign_user')->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC'); //comment,
+    }
+
+    public function taskFilter()
+    {
+        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags','parents','childTask','Assign_user')->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC'); //comment,
     }
 
     public function childTask()
