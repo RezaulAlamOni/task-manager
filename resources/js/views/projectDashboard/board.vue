@@ -1115,8 +1115,40 @@
         </div>
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="loader" role="dialog"
              tabindex="-1">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog " role="document">
                 <div>
+                </div>
+            </div>
+        </div>
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="user_list" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h5 class="modal-title">User List</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body list-model">
+                         <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Select Nav :</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" >
+                                    <option disabled>Select User</option>
+                                    <option v-for="user in allUsers">
+                                        {{ user.name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                    </div>
+                     <div class="modal-footer">
+                        <!-- {{ selectedExistedTask }} -->
+                        <button class="btn btn-primary" type="button">Filter User</button>
+                        <!-- <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button> -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -1260,7 +1292,7 @@
 
                                                                         <ul class="list-group list-group-flush"
                                                                             v-if="child2.children">
-                                                                            <div v-for="child3 in child2.children"
+                                                                            <div v-for="child3 in child2.children" 
                                                                                  :class="(child3.board_parent_id !== null && child3.children.length <= 0) ? 'list-group-item-hide' : ''">
                                                                                 <li class="list-group-item">
                                                                                     <label
@@ -1430,12 +1462,14 @@
                 userNames: '',
                 projectUsers: null,
                 commentsData: null,
+                filter_types: null,
             }
         },
-        mounted() {
+        mounted() { 
             var _this = this;
+            this.filter_types = this.filter_type;
             $('#header-item').text('Project  / Task Board');
-            console.log(_this.filter_type)
+            // console.log(_this.filter_type)
             $(document)
                 .one('focus.autoExpand', 'textarea.autoExpand', function () {
                     var savedValue = this.value;
@@ -2273,10 +2307,31 @@
                         _this.allUsers = response.allUsers;
                         _this.allTags = response.allTags;
                         _this.getData();
-
                     })
                     .catch(error => {
                     });
+            },
+            getBoardTaskFilter(type) {
+                // console.log(type);
+                var _this = this;
+                let data = {
+                    projectId: this.projectId,
+                    board_id: this.board_id,
+                    nav_id: this.nav_id,
+                    type : type
+                };
+                axios.post('/api/board-task-filter', data)
+                .then(response => response.data)
+                .then(response => {
+                    _this.allCardIds = response.allCardIds;
+                    _this.cards = response.success;
+                    _this.allUsers = response.allUsers;
+                    _this.allTags = response.allTags;
+                    _this.getData();
+                })
+                .catch(error => {
+                });
+                this.filter_types = null;
             },
             clearInputFeild() {
                 $("#EditModal").modal('hide');
@@ -3299,7 +3354,16 @@
                 this.getBoardTask()
             },
             filter_type: function (val) {
+                this.filter_types = val;
                 console.log(val)
+                if (val === 'my') {
+                    this.getBoardTaskFilter(val);
+                } else if(val === 'users_task'){
+                    $('#user_list').modal('show');
+                } else if(val === 'all'){
+                    this.getBoardTask();
+                }
+                this.filter_type = null;
             },
         }
     }

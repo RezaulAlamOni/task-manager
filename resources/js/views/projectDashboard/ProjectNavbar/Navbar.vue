@@ -733,6 +733,7 @@
         },
         methods: {
             FilterAction(type){
+                console.log('clicked');
                 this.$emit('filter', {
                     type: type
                 })

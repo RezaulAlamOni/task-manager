@@ -1560,7 +1560,12 @@
 
 
             filter(data){
+                console.log('index');
+                let _this = this;
                 this.filter_type = data.type
+                setTimeout(() => {
+                    _this.filter_type = null;
+                }, 100);
             },
             selectTaskFromTaskTreeList(task) {
                 var nav = JSON.parse(localStorage.selected_nav)
