@@ -175,19 +175,23 @@ class MultipleBoardController extends Controller
         return response()->json(['success' => $boards, 'allUsers' => $allUsers, 'allTags' => $allTags, 'allCardIds' => $allTaskIds]);
     }
     public function filter(Request $request)
-    {
+    {   
+        // return $request->users;
         $boards = [];
         $allTaskIds = [];
         $user_id = Auth::user()->id;
         if ($request->type === "my") {
-            $user_id = Auth::user()->id;
+            $user_id =[Auth::user()->id];
+        }
+        if (count($request->users) > 0) {
+            $user_id = $request->users;
         }
 
         $board = Task::where('board_parent_id', 0)
                 ->with(['moveToCol','linkToList', 'task' => function($q) use($user_id){
                     $q->where('is_deleted', '!=', 1);
                     $q->whereHas('Assign_user', function($q) use($user_id){
-                        $q->where('user_id', $user_id);
+                        $q->whereIn('user_id', $user_id);
                     });
                     $q->where(function ($q) {
                         $q->where('hidden', '!=', 1);
