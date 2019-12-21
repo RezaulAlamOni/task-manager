@@ -1132,21 +1132,21 @@
                     </div>
                     <div class="modal-body list-model">
                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Select Nav :</label>
                             <div class="col-sm-9">
-                                <select class="form-control" >
-                                    <option disabled>Select User</option>
-                                    <option v-for="user in allUsers">
-                                        {{ user.name }}
-                                    </option>
-                                </select>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item" v-for="user in allUsers">
+                                        <label class="checkbox_cus_mini">
+                                            <input v-model="userIdList" :value="user.id" @click="addUserToFilter(user.id)" type="checkbox" class="checkedAll" name="side_dav"> {{ user.name }}
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-
                     </div>
                      <div class="modal-footer">
                         <!-- {{ selectedExistedTask }} -->
-                        <button class="btn btn-primary" type="button">Filter User</button>
+                        <button class="btn btn-primary" @click="userFilter()" type="button">Filter User</button>
                         <!-- <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button> -->
                     </div>
                 </div>
@@ -1463,6 +1463,7 @@
                 projectUsers: null,
                 commentsData: null,
                 filter_types: null,
+                userIdList: [],
             }
         },
         mounted() {
@@ -2318,8 +2319,12 @@
                     projectId: this.projectId,
                     board_id: this.board_id,
                     nav_id: this.nav_id,
-                    type : type
+                    type : type,
+                    users : []
                 };
+                if (this.userIdList.length > 0) {
+                    data.users = this.userIdList;
+                }
                 axios.post('/api/board-task-filter', data)
                 .then(response => response.data)
                 .then(response => {
@@ -3333,6 +3338,27 @@
                             });
                     });
             },
+            addUserToFilter(userId)
+            {   
+                if (this.userIdList.includes(userId)) {
+                    var indexs = this.userIdList.indexOf(userId);
+                    if (indexs > -1) {
+                        this.userIdList.splice(indexs, 1);
+                    }
+                } else {
+                    this.userIdList.push(userId);
+                }
+            },
+            userFilter()
+            {
+                if ( this.userIdList.length < 1) {
+                    swal('Warning!!',"No user is selected ","warning");
+                }  else {
+                    this.getBoardTaskFilter(this.filter_types);
+                    $('#user_list').modal('hide');
+                }
+
+            }
         },
         directives: {
             ClickOutside
@@ -3357,13 +3383,14 @@
                 this.filter_types = val;
                 console.log(val)
                 if (val === 'my') {
+                    this.userIdList = [];
                     this.getBoardTaskFilter(val);
                 } else if(val === 'users_task'){
                     $('#user_list').modal('show');
                 } else if(val === 'all'){
                     this.getBoardTask();
                 }
-                this.filter_type = null;
+                // this.filter_type = null;
             },
         }
     }
