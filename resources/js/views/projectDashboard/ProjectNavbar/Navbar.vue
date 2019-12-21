@@ -243,6 +243,10 @@
                                         <i class="fa fa-sort-down pr-2"></i>
                                         Newest
                                     </a>
+                                    <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('priority')">
+                                        <i class="fal fa-exclamation-triangle " ></i>
+                                        Sort by Priority
+                                    </a>
                                     <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('date')">
                                         <i class="fa fa-calendar-alt pr-2"></i>
                                         By Due Date

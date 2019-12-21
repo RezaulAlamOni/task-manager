@@ -212,11 +212,12 @@ class TaskController extends Controller
             ->with('column');
 
         if ($request->filter_type === 'my' || $request->filter_type === 'users_task') {
-            if (isset($request->ids)) {
+            if (count($request->ids) > 0) {
                 $ids = $request->ids;
             } else {
                 $ids = [Auth::id()];
             }
+//            return $ids;
             $tasks = $tasks->whereHas('Assign_user', function ($q) use ($ids) {
                 $q->whereIn('user_id', $ids);
             })
@@ -249,13 +250,18 @@ class TaskController extends Controller
             $data = $this->decorateData($tasks, 'drag', 'filter');
         } elseif($request->filter_type === 'date') {
 
-            $tasks = Task::where('parent_id', 0)
-                ->where('project_id', $request->id)
-                ->where('is_deleted', '!=', 1)
-                ->where('list_id', $list_id)->with('column')
-                ->orderBy('date', 'ASC')
+//            $tasks = Task::where('parent_id', 0)
+//                ->where('project_id', $request->id)
+//                ->where('is_deleted', '!=', 1)
+//                ->where('list_id', $list_id)->with('column')
+//                ->orderBy('date', 'ASC')
+//                ->get();
+//            $data = $this->decorateData($tasks, null,'date');
+
+            $tasks = $tasks->orderBy('date', 'DESC')
                 ->get();
-            $data = $this->decorateData($tasks, null,'date');
+            $data = $this->decorateData($tasks, 'drag', 'filter');
+
         } elseif($request->filter_type === 'asc') {
 
             $tasks = $tasks->orderBy('id', 'ASC')
