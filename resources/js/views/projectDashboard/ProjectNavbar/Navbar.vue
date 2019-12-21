@@ -206,41 +206,45 @@
                                     <h6 class="dropdown-header"> Filters</h6>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item active" href="javascript:void(0)" @click="FilterAction('all')">
-                                        <i class="fa fa-fw fa-tasks"></i>
+                                        <i class="far fa-ballot pr-2"></i>
                                         Show All Tasks
                                     </a>
                                     <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('my')" >
-                                        <i class="fa fa-user"></i>
+                                        <i class="fal fa-user-visor pr-2"></i>
                                         Show My Tasks
                                     </a>
                                     <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('users_task')">
-                                        <i class="fa fa-users"></i>
+                                        <i class="fal fa-users-crown pr-2"></i>
                                         Show Users Tasks
                                     </a>
+                                    <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('not_assign')">
+                                        <i class="fal fa-user-alt-slash pr-2"></i>
+                                        No Assigned User
+                                    </a>
                                     <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('completed')">
-                                        <i class="fa fa-clipboard-check"></i>
+                                        <i class="far fa-ballot-check pr-2"></i>
                                         Show Completed Tasks
                                     </a>
                                     <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('hide_completed')">
-                                        <i class="fa fa-eye-slash"></i>
+                                        <i class="fa fa-eye-slash pr-2"></i>
                                         Hide Completed Tasks
                                     </a>
                                     <h6 class="dropdown-header" > Sort</h6>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item active" href="javascript:void(0)" @click="FilterAction('asc')">
-                                        <i class="fa fa-sort"></i>
+                                        <i class="fa fa-sort pr-2"></i>
                                         Default
                                     </a>
                                     <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('asc')">
-                                        <i class="fa fa-sort-up"></i>
+                                        <i class="fa fa-sort-up pr-2"></i>
                                         Oldest
                                     </a>
                                     <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('desc')">
-                                        <i class="fa fa-sort-down"></i>
+                                        <i class="fa fa-sort-down pr-2"></i>
                                         Newest
                                     </a>
                                     <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('date')">
-                                        <i class="fa fa-calendar-alt"></i>
+                                        <i class="fa fa-calendar-alt pr-2"></i>
                                         By Due Date
                                     </a>
                                 </div>

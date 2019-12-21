@@ -34,7 +34,7 @@ class TaskController extends Controller
         $this->middleware('auth');
     }
 
-    public function decorateData ($obj, $drag = null)
+    public function decorateData ($obj, $drag = null,$filter = null)
     {
 //        $team_id = Auth::user()->current_team_id;
 //        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
@@ -103,17 +103,22 @@ class TaskController extends Controller
             $info['users'] = $allTeamUsers;
             $info['existing_tags'] = $allTeamTags;
 
-            $childrens = Task::where('parent_id', $task->id)
-                ->where('list_id', $task->list_id)
-                ->where('is_deleted', '!=', 1)
-                ->orderBy('sort_id', 'ASC')
-                ->get();
 
-            if (!empty($childrens)) {
-                $info['children'] = $this->decorateData($childrens, $drag);
-            } else {
+            if ($filter === null){
+                $childrens = Task::where('parent_id', $task->id)
+                    ->where('list_id', $task->list_id)
+                    ->where('is_deleted', '!=', 1)
+                    ->orderBy('sort_id', 'ASC')
+                    ->get();
+                if (!empty($childrens)) {
+                    $info['children'] = $this->decorateData($childrens, $drag);
+                } else {
+                    $info['children'] = [];
+                }
+            }else {
                 $info['children'] = [];
             }
+
             $data[] = $info;
 
 
@@ -182,6 +187,7 @@ class TaskController extends Controller
 
     public function getAllFilter (Request $request)
     {
+
         if ($request->list_id == null) {
             $list = Multiple_list::where('project_id', $request->id)
                 ->orderBy('id', 'ASC')->first();
@@ -190,19 +196,31 @@ class TaskController extends Controller
             $list_id = $request->list_id;
         }
         $tasks = Task::where('project_id', $request->id)
-            ->whereHas('Assign_user', function($q){
-                $q->where('user_id', Auth::id());
-            })
             ->where('is_deleted', '!=', 1)
-            ->where('list_id', $list_id)->with('column')
-            ->orderBy('sort_id', 'ASC')
-            ->get();
+            ->where('list_id', $list_id)
+            ->with('column');
 
-        return $tasks;
+        if ($request->filter_type === 'my' || $request->filter_type === 'users_task'){
+            if (isset($request->ids)){
+                $ids = $request->ids;
+            }else{
+                $ids = [Auth::id()];
+            }
+            $tasks = $tasks->whereHas('Assign_user', function($q) use ($ids){
+                    $q->whereIn('user_id',$ids);
+                })
+                ->orderBy('sort_id', 'ASC')
+                ->get();
+        }else{
+//            $tasks = $tasks->get();
+        }
+
+
+//        return $tasks;
         $task = [];
 
         $this->all_ids = [];
-        $data = $this->decorateData($tasks, null);
+        $data = $this->decorateData($tasks, 'drag','filter');
         $userName = Auth::user();
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
