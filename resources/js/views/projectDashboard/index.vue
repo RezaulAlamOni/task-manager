@@ -1141,6 +1141,38 @@
                 </div>
             </div>
         </div>
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="user_list_f" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h5 class="modal-title">User List</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body list-model">
+                        <div class="form-group row">
+                            <div class="col-sm-9">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item" v-for="user in allUsers">
+                                        <label class="checkbox_cus_mini">
+                                            <input v-model="userIdList" :value="user.id" @click="addUserToFilter(user.id)" type="checkbox" class="checkedAll" name="side_dav"> {{ user.name }}
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- {{ selectedExistedTask }} -->
+                        <button class="btn btn-primary" @click="userFilter()" type="button">Filter User</button>
+                        <!-- <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -1212,6 +1244,7 @@
                     nav_id: null,
                     type: null
                 },
+                userIdList: [],
                 nav_id: null,
                 AllNavItems: null,
                 task_logs: null,
@@ -1565,24 +1598,49 @@
                 setTimeout(() => {
                     _this.filter_type = null;
                 }, 100);
-                console.log(data.type)
+
                 if(this.list.type == 'list'){
                     if (data.type === 'all'){
                         this.getTaskList()
+                    } else if(data.type == 'users_task'){
+                        $('#user_list_f').modal('show');
                     }else{
                         this.GetFilterData(data.type)
                     }
                 }
             },
-            GetFilterData(type){
+            addUserToFilter(userId)
+            {
+                if (this.userIdList.includes(userId)) {
+                    var indexs = this.userIdList.indexOf(userId);
+                    if (indexs > -1) {
+                        this.userIdList.splice(indexs, 1);
+                    }
+                } else {
+                    this.userIdList.push(userId);
+                }
+            },
+            userFilter()
+            {
+                if ( this.userIdList.length < 1) {
+                    swal('Warning!!',"No user is selected ","warning");
+                }  else {
+                    this.GetFilterData('users_task',this.userIdList);
+                    $('#user_list_f').modal('hide');
+                    this.userIdList = [];
+                }
+
+            },
+            GetFilterData(type,ids = []){
                 var _this = this;
                 let data = {
                     id: this.projectId,
                     list_id: this.list_id,
                     nav_id: this.nav_id,
-                    filter_type : type
+                    filter_type : type,
+                    ids : ids
                 };
-
+                console.log(data)
                 axios.post('/api/task-list-filter', data)
                     .then(response => response.data)
                     .then(response => {
