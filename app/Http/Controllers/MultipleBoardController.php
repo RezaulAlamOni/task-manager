@@ -179,11 +179,12 @@ class MultipleBoardController extends Controller
         // return $request->users;
         $boards = [];
         $allTaskIds = [];
-        $user_id = Auth::user()->id;
+        $user_id = [Auth::user()->id];
         if ($request->type === "my") {
             $user_id =[Auth::user()->id];
         }
         if (count($request->users) > 0) {
+            // exit();
             $user_id = $request->users;
         }
 
@@ -206,8 +207,24 @@ class MultipleBoardController extends Controller
                 // ->orderby('sort_id', 'ASC')
                 ->get();
 
+            if ($request->type === "not_assign") {
+                $board = Task::where('board_parent_id', 0)
+                ->with(['moveToCol','linkToList', 'task' => function($q){
+                    $q->where('is_deleted', '!=', 1);
+                    $q->whereDoesntHave('Assign_user');
+                    $q->where(function ($q) {
+                        $q->where('hidden', '!=', 1);
+                        $q->orWhereNull('hidden');
+                    });
+                }])
+                ->where('project_id', $request->projectId)
+                ->where('multiple_board_id', $request->board_id)
+                ->orderby('board_sort_id', 'ASC')
+                ->orderby('parent_id', 'ASC')
+                ->get();
+            }
 
-        //        return($board);
+        //   return($board);
         // return $board[0]->moveToCol->moveTo->multipleBord->board_title;
         $team = DB::table('team_users')->where('user_id', Auth::id())->first();
         $team_id = Auth::user()->current_team_id;

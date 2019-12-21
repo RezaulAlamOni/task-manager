@@ -1134,9 +1134,15 @@
                          <div class="form-group row">
                             <div class="col-sm-9">
                                 <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <label class="checkbox_cus_mini">
+                                            <input @click="checkedAllUser(allUsers)" type="checkbox" class="checkedAllUser" > All 
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
                                     <li class="list-group-item" v-for="user in allUsers">
                                         <label class="checkbox_cus_mini">
-                                            <input v-model="userIdList" :value="user.id" @click="addUserToFilter(user.id)" type="checkbox" class="checkedAll" name="side_dav"> {{ user.name }}
+                                            <input v-model="userIdList" :value="user.id" @click="addUserToFilter(user.id)" type="checkbox" name="side_dav"> {{ user.name }}
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
@@ -3358,6 +3364,17 @@
                     $('#user_list').modal('hide');
                 }
 
+            },
+            checkedAllUser(allUsers)
+            {   
+                if ($('.checkedAllUser').prop('checked') === false) {
+                    this.userIdList = [];
+                } else {
+                    for(let i = 0; allUsers.length > i; i++)
+                    {
+                        this.userIdList.push(allUsers[i].id);
+                    }
+                }
             }
         },
         directives: {
@@ -3389,6 +3406,8 @@
                     $('#user_list').modal('show');
                 } else if(val === 'all'){
                     this.getBoardTask();
+                } else if(val === 'not_assign'){
+                    this.getBoardTaskFilter(val);
                 }
                 // this.filter_type = null;
             },
