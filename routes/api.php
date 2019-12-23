@@ -27,7 +27,7 @@ Route::post('/task-list/update', 'TaskController@update');//reverse child node
 Route::post('/task-list/delete-empty-task', 'TaskController@deleteEmptyTask');//delete empty node
 Route::post('/task-list/delete-img', 'TaskController@deleteImg');//reverse child node
 Route::post('/task-list/task-drag-drop', 'TaskController@taskDragDrop');//task-drag-drop
-
+Route::post('/task-list-filter', 'TaskController@getAllFilter');//get task list data
 
 //task list tags related
 Route::get('/task-list/all-tag-for-manage', 'TagsController@index');//get all tag
@@ -70,6 +70,7 @@ Route::post('/task-list/assign-user-remove','AssignedUserController@delete'); //
 
 //board Section
 Route::post('/board-task','MultipleBoardController@index'); //get board item
+Route::post('/board-task-filter','MultipleBoardController@filter'); //get board item filtered
 Route::post('/board-save','MultipleBoardController@create'); //get board item
 Route::post('/board-modify','MultipleBoardController@update'); //column info update
 Route::post('/board-add', 'MultipleBoardController@store'); //add list under project

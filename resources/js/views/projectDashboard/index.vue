@@ -6,6 +6,7 @@
                     :projectId="$route.params.projectId"
                     :lists="list"
                     @getList="showTask"
+                    @filter="filter"
                     @update_overview="update_overview"
                     @showSearchInputField="showSearchInputField"
                     @MoveListTOAnotherNav="MoveListTOAnotherNav"
@@ -268,7 +269,7 @@
                                                         <li class="assignUser">
                                                             <div class="users-select row" >
                                                                 <div class="col-md-9 add-tag-to-selected"
-                                                                     @click="Add_Priority('high',data.id)">
+                                                                     @click="Add_Priority('3',data.id)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e25858;">.</span>
@@ -284,7 +285,7 @@
                                                             </div>
                                                             <div class="users-select row">
                                                                 <div class="col-md-9 add-tag-to-selected"
-                                                                     @click="Add_Priority('medium',data.id)">
+                                                                     @click="Add_Priority('2',data.id)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e58c62;">.</span>
@@ -298,7 +299,7 @@
                                                             </div>
                                                             <div class="users-select row">
                                                                 <div class="col-md-9 add-tag-to-selected"
-                                                                     @click="Add_Priority('low',data.id)">
+                                                                     @click="Add_Priority('1',data.id)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #5987d1;">.</span>
@@ -709,7 +710,7 @@
                                                 </li>
                                                 <li class="assignUser">
                                                     <div class="users-select row"
-                                                         @click="Add_Priority('high',null)">
+                                                         @click="Add_Priority('3',null)">
                                                         <div class="col-md-9 add-tag-to-selected">
                                                             <span
                                                                 class="badge badge-default tag-color-custom-contextmenu"
@@ -718,7 +719,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="users-select row"
-                                                         @click="Add_Priority('medium',null)">
+                                                         @click="Add_Priority('2',null)">
                                                         <div class="col-md-9 add-tag-to-selected">
                                                             <span
                                                                 class="badge badge-default tag-color-custom-contextmenu"
@@ -727,7 +728,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="users-select row"
-                                                         @click="Add_Priority('low',null)">
+                                                         @click="Add_Priority('1',null)">
                                                         <div class="col-md-9 add-tag-to-selected">
                                                             <span
                                                                 class="badge badge-default tag-color-custom-contextmenu"
@@ -787,7 +788,9 @@
                 <BoardView
                     :board_id="list_id"
                     :nav_id="nav_id"
-                    :projectId="projectId">
+                    :projectId="projectId"
+                    :filter_type="filter_type"
+                >
                 </BoardView>
 
             </div>
@@ -1138,6 +1141,96 @@
                 </div>
             </div>
         </div>
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="user_list_f" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h5 class="modal-title">User List</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body list-model">
+                        <div class="form-group row">
+                            <div class="col-sm-9">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input @click="addAllUserToFilter(allUsers)" type="checkbox" class="checkedAllUser"> All
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li class="list-group-item" v-for="user in allUsers">
+                                        <label class="checkbox_cus_mini">
+                                            <input v-model="userIdList" :value="user.id" @click="addUserToFilter(user.id)" type="checkbox" class="checkedAll" name="side_dav"> {{ user.name }}
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- {{ selectedExistedTask }} -->
+                        <button class="btn btn-primary" @click="userFilter()" type="button">Filter User</button>
+                        <!-- <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="priority_list_modal" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h5 class="modal-title">Priority List  </h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body list-model">
+                        <div class="form-group row">
+                            <div class="col-sm-9">
+                                <ul class="list-group list-group-flush">
+                                <!--                                    <li class="list-group-item" >-->
+                                <!--                                        <label class="checkbox_cus_mini">-->
+                                <!--                                            <input type="checkbox" class="checkedUser"> All-->
+                                <!--                                            <span class="checkmark"></span>-->
+                                <!--                                        </label>-->
+                                <!--                                    </li>-->
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input type="checkbox" class="checkedUser"> Heigh
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input type="checkbox" class="checkedUser"> Medium
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input type="checkbox" class="checkedUser"> Low
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- {{ selectedExistedTask }} -->
+                        <button class="btn btn-primary" @click="" type="button">Hide</button>
+                        <button class="btn btn-primary" @click="" type="button">Show</button>
+                        <!-- <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -1180,6 +1273,7 @@
                 disabledDates: {
                     id: null,
                 },
+                filter_type : null,
                 id: 0,
                 treeList: [],
                 date_config: {
@@ -1208,6 +1302,7 @@
                     nav_id: null,
                     type: null
                 },
+                userIdList: [],
                 nav_id: null,
                 AllNavItems: null,
                 task_logs: null,
@@ -1554,6 +1649,91 @@
 
             },
 
+
+            filter(data){
+                let _this = this;
+                this.filter_type = data.type
+                setTimeout(() => {
+                    _this.filter_type = null;
+                }, 100);
+
+                if(this.list.type == 'list'){
+                    if (data.type === 'all'){
+                        this.getTaskList()
+                    } else if(data.type == 'users_task'){
+                        $('#user_list_f').modal('show');
+                    } else if(data.type == 'priority_based'){
+                        $('#priority_list_modal').modal('show');
+                    } else {
+                        this.GetFilterData(data.type)
+                    }
+                }
+            },
+            addUserToFilter(userId)
+            {
+                if (this.userIdList.includes(userId)) {
+                    var indexs = this.userIdList.indexOf(userId);
+                    if (indexs > -1) {
+                        this.userIdList.splice(indexs, 1);
+                    }
+                } else {
+                    this.userIdList.push(userId);
+                }
+            },
+            userFilter()
+            {
+                if ( this.userIdList.length < 1) {
+                    swal('Warning!!',"No user is selected ","warning");
+                }  else {
+                    this.GetFilterData('users_task',this.userIdList);
+                    $('#user_list_f').modal('hide');
+                    this.userIdList = [];
+                }
+
+            },
+            GetFilterData(type,ids = []){
+                var _this = this;
+                let data = {
+                    id: this.projectId,
+                    list_id: this.list_id,
+                    nav_id: this.nav_id,
+                    filter_type : type,
+                    ids : ids
+                };
+                console.log(data)
+                axios.post('/api/task-list-filter', data)
+                    .then(response => response.data)
+                    .then(response => {
+                        // swal('Under Progress',"",'success')
+                        _this.treeList = response.task_list;
+                        _this.multiple_list = response.multiple_list;
+                        _this.authUser = response.userName
+                        _this.allUsers = response.allTeamUsers;
+                        _this.allTags = response.allTeamTags;
+                        _this.allTaskId = response.all_ids;
+
+
+                        $('[data-toggle="tooltip"]').tooltip('dispose');
+                        setTimeout(function () {
+                            $('[data-toggle="tooltip"]').tooltip('enable');
+                        }, 500);
+                        setTimeout(function () {
+                            $('#loder-hide').fadeOut()
+                        }, 100);
+                        if (this.treeList.length === 1 && this.treeList[0].text === '') {
+                            let id = this.treeList[0].id;
+                            setTimeout(function () {
+                                $("#" + id).click();
+                                $("#" + id).focus();
+                                $("#" + id).addClass('form-control');
+                                $("#" + id).removeClass('input-hide');
+                            }, 300)
+                        }
+                    })
+                    .catch(error => {
+
+                    });
+            },
             selectTaskFromTaskTreeList(task) {
                 var nav = JSON.parse(localStorage.selected_nav)
                 if (nav.type === 'list') {
@@ -3416,6 +3596,16 @@
             RuleUpdate() {
                 this.AllNavItems = null;
             },
+            addAllUserToFilter(allUsers){
+                if ($('.checkedAllUser').prop('checked') === false) {
+                    this.userIdList = [];
+                } else {
+                    for(let i = 0; allUsers.length > i; i++)
+                    {
+                        this.userIdList.push(allUsers[i].id);
+                    }
+                }
+            }
 
 
         },

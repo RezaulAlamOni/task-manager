@@ -84,7 +84,7 @@
                                 <div :id="'collapse'+list.id" class="collapse show multi-collapse "
                                      :class="(list.open === 0) ? 'hide-overview-list-task' : 'show-overview-list-task'"
                                      aria-labelledby="headingOne"
-                                     data-parent="#listWithHandle">
+                                     data-parent="#listWithHandle" style="padding: 20px 0px ">
                                     <div class="card-body p-0">
                                         <div class="TaskListAndDetails">
                                             <div class="col-11" id="tree_view_list">

@@ -69,7 +69,6 @@ class ProjectNavItemsController extends Controller
                         }
                     }
                 }
-
             }
             $rule->assigned_users = $us;
         }

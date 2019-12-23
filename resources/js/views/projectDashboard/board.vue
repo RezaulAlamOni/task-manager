@@ -200,13 +200,8 @@
                                                         <a @click="showTransferModel(index, key, card.cardId, column.boardId)"
                                                            class="dropdown-item" href="#"
                                                            title="Transfer To Other Board Or Column">
-
-                                                            <i class="fad fa-sort-alt mr-2"></i>
-                                                            <!--                                                        <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18"-->
-                                                            <!--                                                             width="18" title="Transfer To Other Board Or Column"/>-->
-
-
-                                                        Transfer task to another board</a>
+                                                            <i class="fad fa-sort-alt mr-2"></i> Transfer task to another board
+                                                        </a>
 
                                                         <div class="dropdown-divider"
                                                              v-if="card.types === 'task'"></div>
@@ -214,7 +209,7 @@
                                                            class="dropdown-item" title="Remove Task"
                                                            href="#" v-if="card.types === 'task'">
                                                             <i class="fal fa-minus-octagon mr-2"></i>
-                                                            Remove task from <strong>This Board</strong>
+                                                            Remove task from <strong> This Board </strong>
                                                         </a>
                                                         <div class="dropdown-divider"></div>
                                                         <a @click="RemoveNodeAndChildren()" class="dropdown-item"
@@ -241,12 +236,12 @@
                                                 </a>
                                                 <flatPickr
                                                     :class="{
-                                                                dateCal:true,
-                                                                'flatpickr-input': true,
-                                                                'flatpickr-input1': card.date != '0000-00-00' ? false : true,
-                                                                    active: true,
-                                                                    dateCal1: card.date != '0000-00-00' ? true : false
-                                                                }"
+                                                            dateCal:true,
+                                                            'flatpickr-input': true,
+                                                            'flatpickr-input1': card.date != '0000-00-00' ? false : true,
+                                                                active: true,
+                                                                dateCal1: card.date != '0000-00-00' ? true : false
+                                                            }"
                                                     :config="date_config"
                                                     @on-change="updateDate(card)"
                                                     name="date"
@@ -494,7 +489,7 @@
 
                                                                 <div class="users-select row" >
                                                                     <div class="col-md-9 add-tag-to-selected"
-                                                                         @click="Add_Priority('high',card.cardId)">
+                                                                         @click="Add_Priority('3',card.cardId)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e25858;">.</span>
@@ -510,7 +505,7 @@
                                                                 </div>
                                                                 <div class="users-select row">
                                                                     <div class="col-md-9 add-tag-to-selected"
-                                                                         @click="Add_Priority('medium',card.cardId)">
+                                                                         @click="Add_Priority('2',card.cardId)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e58c62;">.</span>
@@ -524,7 +519,7 @@
                                                                 </div>
                                                                 <div class="users-select row">
                                                                     <div class="col-md-9 add-tag-to-selected"
-                                                                         @click="Add_Priority('low',card.cardId)">
+                                                                         @click="Add_Priority('1',card.cardId)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #5987d1;">.</span>
@@ -692,10 +687,10 @@
                                     <i class="fal fa-exclamation-triangle contex-menu-icon"></i>
                                     Add Priority
                                 </a>
-                                <!--                                <span class="contex-menu-sortcut">-->
-                                <!--                                        <span class="badge-pill badge-default">Shift</span>+<span-->
-                                <!--                                    class="badge-pill badge-default">#</span>-->
-                                <!--                                    </span>-->
+                                <!-- <span class="contex-menu-sortcut">-->
+                                <!--    <span class="badge-pill badge-default">Shift</span>+<span-->
+                                <!--           class="badge-pill badge-default">#</span>-->
+                                <!-- </span>-->
 
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <div class="collapse show switchToggle">
@@ -709,7 +704,7 @@
                                             </li>
                                             <li class="assignUser">
                                                 <div class="users-select row"
-                                                     @click="Add_Priority('high',null)">
+                                                     @click="Add_Priority('3',null)">
                                                     <div class="col-md-9 add-tag-to-selected">
                                                             <span
                                                                 class="badge badge-default tag-color-custom-contextmenu"
@@ -718,7 +713,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="users-select row"
-                                                     @click="Add_Priority('medium',null)">
+                                                     @click="Add_Priority('2',null)">
                                                     <div class="col-md-9 add-tag-to-selected">
                                                             <span
                                                                 class="badge badge-default tag-color-custom-contextmenu"
@@ -727,7 +722,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="users-select row"
-                                                     @click="Add_Priority('low',null)">
+                                                     @click="Add_Priority('1',null)">
                                                     <div class="col-md-9 add-tag-to-selected">
                                                             <span
                                                                 class="badge badge-default tag-color-custom-contextmenu"
@@ -945,7 +940,6 @@
             </div>
         </div>
 
-
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transferCard" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
@@ -1003,8 +997,6 @@
                 </div>
             </div>
         </div>
-
-
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transferColumn" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
@@ -1061,8 +1053,6 @@
                 </div>
             </div>
         </div>
-
-
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="listLinkColumn" role="dialog"
              tabindex="-1">
             <div class="modal-dialog" role="document">
@@ -1118,17 +1108,102 @@
                 </div>
             </div>
         </div>
-
-
         <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="loader" role="dialog"
              tabindex="-1">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog " role="document">
                 <div>
                 </div>
             </div>
         </div>
-
-
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="user_list" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h5 class="modal-title">User List</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body list-model">
+                         <div class="form-group row">
+                            <div class="col-sm-9">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <label class="checkbox_cus_mini">
+                                            <input @click="checkedAllUser(allUsers)" type="checkbox" class="checkedAllUser" > All 
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li class="list-group-item" v-for="user in allUsers">
+                                        <label class="checkbox_cus_mini">
+                                            <input v-model="userIdList" :value="user.id" @click="addUserToFilter(user.id)" type="checkbox" name="side_dav"> {{ user.name }}
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="modal-footer">
+                        <!-- {{ selectedExistedTask }} -->
+                        <button class="btn btn-primary" @click="userFilter()" type="button">Filter User</button>
+                        <!-- <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="priority_list_modal" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h5 class="modal-title">Priority List  </h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body list-model">
+                        <div class="form-group row">
+                            <div class="col-sm-9">
+                                <ul class="list-group list-group-flush">
+                                <!--                                    <li class="list-group-item" >-->
+                                <!--                                        <label class="checkbox_cus_mini">-->
+                                <!--                                            <input type="checkbox" class="checkedUser"> All-->
+                                <!--                                            <span class="checkmark"></span>-->
+                                <!--                                        </label>-->
+                                <!--                                    </li>-->
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input type="checkbox" class="checkedUser"> Heigh
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input type="checkbox" class="checkedUser"> Medium
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input type="checkbox" class="checkedUser"> Low
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- {{ selectedExistedTask }} -->
+                        <button class="btn btn-primary" @click="" type="button">Hide</button>
+                        <button class="btn btn-primary" @click="" type="button">Show</button>
+                        <!-- <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
         <div aria-hidden="true" aria-labelledby="exampleModalCenterTitle" class="modal fade" id="addExistingTask"
              role="dialog"
              tabindex="-1">
@@ -1348,7 +1423,7 @@
     // import Folder from './recurLi.vue';
 
     export default {
-        props: ['nav_id', 'board_id', 'projectId'],
+        props: ['nav_id', 'board_id', 'projectId','filter_type'],
         components: {Container, Draggable, flatPickr, switches, VueTagsInput, Datepicker, TaskDetails},
         data() {
             return {
@@ -1439,13 +1514,15 @@
                 userNames: '',
                 projectUsers: null,
                 commentsData: null,
+                filter_types: null,
+                userIdList: [],
             }
         },
         mounted() {
             var _this = this;
+            // this.filter_types = this.filter_type;
             $('#header-item').text('Project  / Task Board');
-
-
+            // console.log(_this.filter_type)
             $(document)
                 .one('focus.autoExpand', 'textarea.autoExpand', function () {
                     var savedValue = this.value;
@@ -2283,10 +2360,35 @@
                         _this.allUsers = response.allUsers;
                         _this.allTags = response.allTags;
                         _this.getData();
-
                     })
                     .catch(error => {
                     });
+            },
+            getBoardTaskFilter(type) {
+                // console.log(type);
+                var _this = this;
+                let data = {
+                    projectId: this.projectId,
+                    board_id: this.board_id,
+                    nav_id: this.nav_id,
+                    type : type,
+                    users : []
+                };
+                if (this.userIdList.length > 0) {
+                    data.users = this.userIdList;
+                }
+                axios.post('/api/board-task-filter', data)
+                .then(response => response.data)
+                .then(response => {
+                    _this.allCardIds = response.allCardIds;
+                    _this.cards = response.success;
+                    _this.allUsers = response.allUsers;
+                    _this.allTags = response.allTags;
+                    _this.getData();
+                })
+                .catch(error => {
+                });
+                this.filter_types = null;
             },
             clearInputFeild() {
                 $("#EditModal").modal('hide');
@@ -3288,6 +3390,38 @@
                             });
                     });
             },
+            addUserToFilter(userId)
+            {   
+                if (this.userIdList.includes(userId)) {
+                    var indexs = this.userIdList.indexOf(userId);
+                    if (indexs > -1) {
+                        this.userIdList.splice(indexs, 1);
+                    }
+                } else {
+                    this.userIdList.push(userId);
+                }
+            },
+            userFilter()
+            {
+                if ( this.userIdList.length < 1) {
+                    swal('Warning!!',"No user is selected ","warning");
+                }  else {
+                    this.getBoardTaskFilter(this.filter_types);
+                    $('#user_list').modal('hide');
+                }
+
+            },
+            checkedAllUser(allUsers)
+            {   
+                if ($('.checkedAllUser').prop('checked') === false) {
+                    this.userIdList = [];
+                } else {
+                    for(let i = 0; allUsers.length > i; i++)
+                    {
+                        this.userIdList.push(allUsers[i].id);
+                    }
+                }
+            }
         },
         directives: {
             ClickOutside
@@ -3307,6 +3441,30 @@
                 this.nav_id = val;
                 $('#loder-hide').fadeIn();
                 this.getBoardTask()
+            },
+            filter_type: function (val) {
+                this.filter_types = val;
+                console.log(val)
+                if (val === 'my') {
+                    this.userIdList = [];
+                    this.getBoardTaskFilter(val);
+                } else if(val === 'users_task'){
+                    $('#user_list').modal('show');
+                } else if(val === 'all'){
+                    this.getBoardTask();
+                } else if(val === 'not_assign'){
+                    this.getBoardTaskFilter(val);
+                } else if (val === 'priority') {
+                    this.getBoardTaskFilter(val);
+                } else if (val === 'asc' || val === 'desc') {
+                    this.getBoardTaskFilter(val);
+                } else if (val === 'date') {
+                    this.getBoardTaskFilter(val);
+                } else if (val === 'priority_based') {
+                    $('#priority_list_modal').modal('show');
+                }
+                
+                // this.filter_type = null;
             },
         }
     }

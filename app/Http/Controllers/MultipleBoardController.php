@@ -44,6 +44,8 @@ class MultipleBoardController extends Controller
                     $q->where('is_deleted', '!=', 1);
                     $q->where('hidden', '!=', 1);
                     $q->orWhereNull('hidden');
+                    // $q->orderBy('board_sort_id','ASC');
+                    // $q->orderBy('parent_id','ASC');
                 },'linkToList'])
                 ->where('project_id', $request->projectId)
                 // ->where('nav_id', $request->nav_id)
@@ -52,7 +54,7 @@ class MultipleBoardController extends Controller
                 ->orderby('parent_id', 'ASC')
                 // ->orderby('sort_id', 'ASC')
                 ->get();
-//        return($board);
+        //        return($board);
         // return $board[0]->moveToCol->moveTo->multipleBord->board_title;
         $team = DB::table('team_users')->where('user_id', Auth::id())->first();
         $team_id = Auth::user()->current_team_id;
@@ -157,7 +159,250 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['description'] = $values['description'];
                     $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
                     $boards[$key]['task'][$keys]['progress'] = $values['progress'];
-                    $boards[$key]['task'][$keys]['priority_label'] = $values['priority_label'];
+                    
+                    if ($values['priority_label'] == 3 || $values['priority_label'] == 'high') {
+                        $boards[$key]['task'][$keys]['priority_label'] = 'high';
+                    } else if($values['priority_label'] == 2 || $values['priority_label'] == 'medium'){
+                        $boards[$key]['task'][$keys]['priority_label'] = 'medium';
+                    } else if($values['priority_label'] == 1 || $values['priority_label'] == 'low'){
+                        $boards[$key]['task'][$keys]['priority_label'] = 'low';
+                    }
+                    if ($values['list_id'] != '') {
+                        $boards[$key]['task'][$keys]['type'] = 'task';
+                    } else {
+                        $boards[$key]['task'][$keys]['type'] = 'card';
+                    }
+                    $boards[$key]['task'][$keys]['date'] = ($values['date'] == '0000-00-00')? $values['date'] : date('d M', strtotime($values['date']));
+                    $boards[$key]['task'][$keys]['existing_tags'] = $allTags;
+
+                }
+            } else {
+                $boards[$key]['task'] = [];
+            }
+        }
+        // return  $boards;
+        return response()->json(['success' => $boards, 'allUsers' => $allUsers, 'allTags' => $allTags, 'allCardIds' => $allTaskIds]);
+    }
+
+    public function filter(Request $request)
+    {   
+        // return $request->users;
+        $boards = [];
+        $allTaskIds = [];
+        $user_id = [Auth::user()->id];
+        if ($request->type === "my") {
+            $user_id =[Auth::user()->id];
+        }
+        if (count($request->users) > 0) {
+            // exit();
+            $user_id = $request->users;
+        }
+
+        $board = Task::where('board_parent_id', 0)
+                ->with(['moveToCol','linkToList', 'taskFilter' => function($q) use($user_id){
+                    $q->where('is_deleted', '!=', 1);
+                    $q->whereHas('Assign_user', function($q) use($user_id){
+                        $q->whereIn('user_id', $user_id);
+                    });
+                    $q->where(function ($q) {
+                        $q->where('hidden', '!=', 1);
+                        $q->orWhereNull('hidden');
+                    });
+                    $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
+                }])
+                ->where('project_id', $request->projectId)
+                // ->where('nav_id', $request->nav_id)
+                ->where('multiple_board_id', $request->board_id)
+                ->orderby('board_sort_id', 'ASC')
+                ->orderby('parent_id', 'ASC')
+                // ->orderby('sort_id', 'ASC')
+                ->get();
+
+        if ($request->type === "not_assign") {
+            $board = Task::where('board_parent_id', 0)
+            ->with(['moveToCol','linkToList', 'taskFilter' => function($q){
+                $q->where('is_deleted', '!=', 1);
+                $q->whereDoesntHave('Assign_user');
+                $q->where(function ($q) {
+                    $q->where('hidden', '!=', 1);
+                    $q->orWhereNull('hidden');
+                });
+                $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
+            }])
+            ->where('project_id', $request->projectId)
+            ->where('multiple_board_id', $request->board_id)
+            ->orderby('board_sort_id', 'ASC')
+            ->orderby('parent_id', 'ASC')
+            ->get();
+        }
+        if($request->type == 'date'){
+           $board = Task::where('board_parent_id', 0)
+                ->with(['moveToCol','taskFilter' => function($q){
+                    $q->where('is_deleted', '!=', 1);
+                    $q->where('hidden', '!=', 1);
+                    $q->orWhereNull('hidden');
+                    $q->orderBy('date', 'ASC');
+                    $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
+                },'linkToList'])
+                ->where('project_id', $request->projectId)
+                // ->where('nav_id', $request->nav_id)
+                ->where('multiple_board_id', $request->board_id)
+                ->orderby('board_sort_id', 'ASC')
+                ->orderby('parent_id', 'ASC')
+                // ->orderby('sort_id', 'ASC')
+                ->get();
+        }
+        if ($request->type == 'asc' || $request->type == 'desc') {
+            $sorts = $request->type;
+            $board = Task::where('board_parent_id', 0)
+                ->with(['moveToCol','taskFilter' => function($q) use($sorts){
+                    $q->where('is_deleted', '!=', 1);
+                    $q->where('hidden', '!=', 1);
+                    $q->orWhereNull('hidden');
+                    $q->orderBy('id', $sorts);
+                    $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
+                },'linkToList'])
+                ->where('project_id', $request->projectId)
+                // ->where('nav_id', $request->nav_id)
+                ->where('multiple_board_id', $request->board_id)
+                ->orderby('board_sort_id', 'ASC')
+                ->orderby('parent_id', 'ASC')
+                // ->orderby('sort_id', 'ASC')
+                ->get();
+        }
+        if ($request->type == 'priority') {
+            $sorts = 'desc';
+            $board = Task::where('board_parent_id', 0)
+                ->with(['moveToCol','taskFilter' => function($q) use($sorts){
+                    $q->where('is_deleted', '!=', 1);
+                    $q->where('hidden', '!=', 1);
+                    $q->orWhereNull('hidden');
+                    $q->orderBy('priority_label', $sorts);
+                    $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
+                },'linkToList'])
+                ->where('project_id', $request->projectId)
+                // ->where('nav_id', $request->nav_id)
+                ->where('multiple_board_id', $request->board_id)
+                ->orderby('board_sort_id', 'ASC')
+                ->orderby('parent_id', 'ASC')
+                // ->orderby('sort_id', 'ASC')
+                ->get();
+        }
+
+        //   return($board);
+        // return $board[0]->moveToCol->moveTo->multipleBord->board_title;
+        $team = DB::table('team_users')->where('user_id', Auth::id())->first();
+        $team_id = Auth::user()->current_team_id;
+        $allUsers = User::join('team_users', 'team_users.user_id', 'users.id')
+                        ->where('team_users.team_id', $team_id)->get()->toArray();
+        $allTags = Tags::where('team_id', $team_id)->where('title','!=', $this->dont_forget_tag)->get()->toArray();
+        foreach ($board as $key => $value) {
+            $keys = -1;
+            $boards[$key]['id'] = $value['id'];
+            $boards[$key]['parent_id'] = $value['parent_id'];
+            $boards[$key]['column'] = $value['title'];
+            $boards[$key]['hidden'] = $value['hidden'];
+            $boards[$key]['progress'] = $value['progress'];
+            $boards[$key]['linkToList'] = $value['linkToList'];
+            $boards[$key]['color'] = $value['color'];
+            if ($value['moveToCol'] != null) {
+                // echo $value['moveToCol']['assigned_users'];
+                $users = json_decode($value['moveToCol']['assigned_users']);
+                if (count($users) > 0) {
+                    $user_name = '';
+                    foreach ($users as  $user) {
+                        $user = User::where('id', $user)->first();
+                        $user_name .= $user->name.', ';
+                    }
+                }
+                $boards[$key]['users'] = '';
+                $boards[$key]['moveToCol'] = true;
+                $boards[$key]['ruleName'] = $value['moveToCol']['name'];
+                $boards[$key]['status'] = $value['moveToCol']['status'];
+                if ($value['moveToCol']['move_to'] != 0) {
+                    $boards[$key]['type'] = 'mvCard';
+                    $boards[$key]['boardName'] = $value['moveToCol']['moveTo']['multipleBord']['board_title'];
+                    $boards[$key]['colName'] = $value['moveToCol']['moveTo']['title'];
+                } else {
+                    $boards[$key]['moveToCol'] = true;
+                    $boards[$key]['type'] = 'asnUser';
+                    $boards[$key]['boardName'] = '';
+                    $boards[$key]['colName'] = '';
+                    $boards[$key]['users'] = $user_name;
+                }
+            } else {
+                $boards[$key]['moveToCol'] = false;
+                $boards[$key]['ruleName'] = '';
+                $boards[$key]['boardName'] = '';
+                $boards[$key]['colName']  = '';
+            }
+            if (!empty($value['taskFilter']) && count($value['taskFilter']) > 0) {
+                foreach ($value['taskFilter'] as $keys => $values) {
+                    $allTaskIds[] = $values['id'];
+                    $tagTooltip = '';
+                    $tags = [];
+                    if (!empty($values['Assign_tags']) && count($values['Assign_tags']) > 0) {
+                        foreach ($values['Assign_tags'] as $tagkey => $tag) {
+                                if (!empty($tag->tag)){
+                                    $infoTags = array(
+                                        'assign_id' => $tag->id,
+                                        'id' => $tag->tag->id,
+                                        'board_id' => $tag->task_id,
+                                        'text' => $tag->tag->title,
+                                        'classes' => '',
+                                        'style' => 'background-color: ' . $tag->tag->color,
+                                        'color' => $tag->tag->color,
+                                    );
+                                    $tagTooltip .= '#' . $tag->tag->title . ' ';
+                                    $tags[$tagkey] = $infoTags;
+                                }
+                        }
+                    }
+
+                    $boards[$key]['task'][$keys]['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id','users.id')->where('task_id', $values['id'])->get()->toArray();
+
+                    $assigned_user_ids = [];
+                    foreach ($boards[$key]['task'][$keys]['assigned_user'] as $id) {
+                        $assigned_user_ids[] = $id['id'];
+                    }
+
+                    $boards[$key]['task'][$keys]['assigned_user_ids'] = $assigned_user_ids;
+                    $boards[$key]['task'][$keys]['users'] = $allUsers;
+
+
+                    $boards[$key]['task'][$keys]['tags'] = $tags;
+                    $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
+
+                    if( $values['childTask'] !== null ){
+                        $this->totalChild = 0;
+                        $boards[$key]['task'][$keys]['child'] = $this->recurChild($values['childTask']);
+
+                    } else {
+                        $boards[$key]['task'][$keys]['child'] = 0;
+                    }
+
+                    $boards[$key]['task'][$keys]['userName'] = Auth::user()->name;
+                    $boards[$key]['task'][$keys]['comment'] = [];
+                    $boards[$key]['task'][$keys]['children'] = $values['childTask'];
+                    $boards[$key]['task'][$keys]['parents'] = $values['parents'];
+                    $boards[$key]['task'][$keys]['id'] = $values['id'];
+                    $boards[$key]['task'][$keys]['parent_id'] = $values['parent_id'];
+                    $boards[$key]['task'][$keys]['name'] = $values['title'];
+                    $boards[$key]['task'][$keys]['cardOpen'] = $values['card_open'];
+                    $boards[$key]['task'][$keys]['list_id'] = $values['list_id'];
+                    $boards[$key]['task'][$keys]['multiple_board_id'] = $values['multiple_board_id'];
+                    $boards[$key]['task'][$keys]['description'] = $values['description'];
+                    $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
+                    $boards[$key]['task'][$keys]['progress'] = $values['progress'];
+                    
+                    if ($values['priority_label'] == 3 || $values['priority_label'] == 'high') {
+                        $boards[$key]['task'][$keys]['priority_label'] = 'high';
+                    } else if($values['priority_label'] == 2 || $values['priority_label'] == 'medium'){
+                        $boards[$key]['task'][$keys]['priority_label'] = 'medium';
+                    } else if($values['priority_label'] == 1 || $values['priority_label'] == 'low'){
+                        $boards[$key]['task'][$keys]['priority_label'] = 'low';
+                    }
+
                     if ($values['list_id'] != '') {
                         $boards[$key]['task'][$keys]['type'] = 'task';
                     } else {

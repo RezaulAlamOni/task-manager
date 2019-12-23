@@ -64,6 +64,10 @@ class Task extends Model
     {
         return $this->hasMany(AssignTag::class, 'task_id', 'id')->with('tag');
     }
+    public function Assign_user()
+    {
+        return $this->hasMany(AssignedUser::class, 'task_id', 'id');
+    }
     public function Dont_Forget_tag()
     {
         return $this->hasMany(AssignTag::class, 'task_id', 'id')->with('dont_forget');
@@ -86,7 +90,12 @@ class Task extends Model
 
     public function task()
     {
-        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags','parents','childTask')->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC'); //comment,
+        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags','parents','childTask','Assign_user')->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');; //comment,
+    }
+
+    public function taskFilter()
+    {
+        return $this->hasMany(self::class, 'board_parent_id', 'id')->with('Assign_tags','parents','childTask','Assign_user'); //comment,
     }
 
     public function childTask()
