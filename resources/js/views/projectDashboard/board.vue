@@ -200,13 +200,8 @@
                                                         <a @click="showTransferModel(index, key, card.cardId, column.boardId)"
                                                            class="dropdown-item" href="#"
                                                            title="Transfer To Other Board Or Column">
-
-                                                            <i class="fad fa-sort-alt mr-2"></i>
-                                                            <!--                                                        <img :src="baseUrl+'/img/task-icon/transfer.png'" height="18"-->
-                                                            <!--                                                             width="18" title="Transfer To Other Board Or Column"/>-->
-
-
-                                                        Transfer task to another board</a>
+                                                            <i class="fad fa-sort-alt mr-2"></i> Transfer task to another board
+                                                        </a>
 
                                                         <div class="dropdown-divider"
                                                              v-if="card.types === 'task'"></div>
@@ -214,7 +209,7 @@
                                                            class="dropdown-item" title="Remove Task"
                                                            href="#" v-if="card.types === 'task'">
                                                             <i class="fal fa-minus-octagon mr-2"></i>
-                                                            Remove task from <strong>This Board</strong>
+                                                            Remove task from <strong> This Board </strong>
                                                         </a>
                                                         <div class="dropdown-divider"></div>
                                                         <a @click="RemoveNodeAndChildren()" class="dropdown-item"
@@ -241,12 +236,12 @@
                                                 </a>
                                                 <flatPickr
                                                     :class="{
-                                                                dateCal:true,
-                                                                'flatpickr-input': true,
-                                                                'flatpickr-input1': card.date != '0000-00-00' ? false : true,
-                                                                    active: true,
-                                                                    dateCal1: card.date != '0000-00-00' ? true : false
-                                                                }"
+                                                            dateCal:true,
+                                                            'flatpickr-input': true,
+                                                            'flatpickr-input1': card.date != '0000-00-00' ? false : true,
+                                                                active: true,
+                                                                dateCal1: card.date != '0000-00-00' ? true : false
+                                                            }"
                                                     :config="date_config"
                                                     @on-change="updateDate(card)"
                                                     name="date"
@@ -494,7 +489,7 @@
 
                                                                 <div class="users-select row" >
                                                                     <div class="col-md-9 add-tag-to-selected"
-                                                                         @click="Add_Priority('high',card.cardId)">
+                                                                         @click="Add_Priority('3',card.cardId)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e25858;">.</span>
@@ -510,7 +505,7 @@
                                                                 </div>
                                                                 <div class="users-select row">
                                                                     <div class="col-md-9 add-tag-to-selected"
-                                                                         @click="Add_Priority('medium',card.cardId)">
+                                                                         @click="Add_Priority('2',card.cardId)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e58c62;">.</span>
@@ -524,7 +519,7 @@
                                                                 </div>
                                                                 <div class="users-select row">
                                                                     <div class="col-md-9 add-tag-to-selected"
-                                                                         @click="Add_Priority('low',card.cardId)">
+                                                                         @click="Add_Priority('1',card.cardId)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #5987d1;">.</span>
@@ -692,10 +687,10 @@
                                     <i class="fal fa-exclamation-triangle contex-menu-icon"></i>
                                     Add Priority
                                 </a>
-                                <!--                                <span class="contex-menu-sortcut">-->
-                                <!--                                        <span class="badge-pill badge-default">Shift</span>+<span-->
-                                <!--                                    class="badge-pill badge-default">#</span>-->
-                                <!--                                    </span>-->
+                                <!-- <span class="contex-menu-sortcut">-->
+                                <!--    <span class="badge-pill badge-default">Shift</span>+<span-->
+                                <!--           class="badge-pill badge-default">#</span>-->
+                                <!-- </span>-->
 
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <div class="collapse show switchToggle">
@@ -709,7 +704,7 @@
                                             </li>
                                             <li class="assignUser">
                                                 <div class="users-select row"
-                                                     @click="Add_Priority('high',null)">
+                                                     @click="Add_Priority('3',null)">
                                                     <div class="col-md-9 add-tag-to-selected">
                                                             <span
                                                                 class="badge badge-default tag-color-custom-contextmenu"
@@ -718,7 +713,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="users-select row"
-                                                     @click="Add_Priority('medium',null)">
+                                                     @click="Add_Priority('2',null)">
                                                     <div class="col-md-9 add-tag-to-selected">
                                                             <span
                                                                 class="badge badge-default tag-color-custom-contextmenu"
@@ -727,7 +722,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="users-select row"
-                                                     @click="Add_Priority('low',null)">
+                                                     @click="Add_Priority('1',null)">
                                                     <div class="col-md-9 add-tag-to-selected">
                                                             <span
                                                                 class="badge badge-default tag-color-custom-contextmenu"
@@ -3407,6 +3402,12 @@
                 } else if(val === 'all'){
                     this.getBoardTask();
                 } else if(val === 'not_assign'){
+                    this.getBoardTaskFilter(val);
+                } else if (val === 'priority') {
+                    this.getBoardTaskFilter(val);
+                } else if (val === 'asc' || val === 'desc') {
+                    this.getBoardTaskFilter(val);
+                } else if (val === 'date') {
                     this.getBoardTaskFilter(val);
                 }
                 // this.filter_type = null;

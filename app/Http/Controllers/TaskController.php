@@ -53,6 +53,13 @@ class TaskController extends Controller
             $info['board_parent_id'] = $task->board_parent_id;
             $info['multiple_board_id'] = $task->multiple_board_id;
             $info['priority_label'] = $task->priority_label;
+            // if ($task->priority_label == 3 || $task->priority_label == 'high') {
+            //     $info['priority_label'] = 'high';
+            // } else if($task->priority_label == 2 || $task->priority_label == 'medium'){
+            //     $info['priority_label'] = 'medium';
+            // } else if($task->priority_label == 1 || $task->priority_label == 'low'){
+            //     $info['priority_label'] = 'low';
+            // }
             $info['list_id'] = $task->list_id;//list_id
             $info['text'] = $task->title;
             if ($task->title == 'Dont Forget Section' || $drag != null) {
@@ -250,13 +257,13 @@ class TaskController extends Controller
             $data = $this->decorateData($tasks, 'drag', 'filter');
         } elseif($request->filter_type === 'date') {
 
-//            $tasks = Task::where('parent_id', 0)
-//                ->where('project_id', $request->id)
-//                ->where('is_deleted', '!=', 1)
-//                ->where('list_id', $list_id)->with('column')
-//                ->orderBy('date', 'ASC')
-//                ->get();
-//            $data = $this->decorateData($tasks, null,'date');
+        //  $tasks = Task::where('parent_id', 0)
+        //      ->where('project_id', $request->id)
+        //      ->where('is_deleted', '!=', 1)
+        //      ->where('list_id', $list_id)->with('column')
+        //      ->orderBy('date', 'ASC')
+        //      ->get();
+        //  $data = $this->decorateData($tasks, null,'date');
 
             $tasks = $tasks->orderBy('date', 'DESC')
                 ->get();
