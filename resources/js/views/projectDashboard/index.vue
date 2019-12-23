@@ -269,7 +269,7 @@
                                                         <li class="assignUser">
                                                             <div class="users-select row" >
                                                                 <div class="col-md-9 add-tag-to-selected"
-                                                                     @click="Add_Priority('high',data.id)">
+                                                                     @click="Add_Priority('3',data.id)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e25858;">.</span>
@@ -285,7 +285,7 @@
                                                             </div>
                                                             <div class="users-select row">
                                                                 <div class="col-md-9 add-tag-to-selected"
-                                                                     @click="Add_Priority('medium',data.id)">
+                                                                     @click="Add_Priority('2',data.id)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e58c62;">.</span>
@@ -299,7 +299,7 @@
                                                             </div>
                                                             <div class="users-select row">
                                                                 <div class="col-md-9 add-tag-to-selected"
-                                                                     @click="Add_Priority('low',data.id)">
+                                                                     @click="Add_Priority('1',data.id)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #5987d1;">.</span>
@@ -710,7 +710,7 @@
                                                 </li>
                                                 <li class="assignUser">
                                                     <div class="users-select row"
-                                                         @click="Add_Priority('high',null)">
+                                                         @click="Add_Priority('3',null)">
                                                         <div class="col-md-9 add-tag-to-selected">
                                                             <span
                                                                 class="badge badge-default tag-color-custom-contextmenu"
@@ -719,7 +719,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="users-select row"
-                                                         @click="Add_Priority('medium',null)">
+                                                         @click="Add_Priority('2',null)">
                                                         <div class="col-md-9 add-tag-to-selected">
                                                             <span
                                                                 class="badge badge-default tag-color-custom-contextmenu"
@@ -728,7 +728,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="users-select row"
-                                                         @click="Add_Priority('low',null)">
+                                                         @click="Add_Priority('1',null)">
                                                         <div class="col-md-9 add-tag-to-selected">
                                                             <span
                                                                 class="badge badge-default tag-color-custom-contextmenu"
@@ -1155,6 +1155,12 @@
                         <div class="form-group row">
                             <div class="col-sm-9">
                                 <ul class="list-group list-group-flush">
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input @click="addAllUserToFilter(allUsers)" type="checkbox" class="checkedAllUser"> All
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
                                     <li class="list-group-item" v-for="user in allUsers">
                                         <label class="checkbox_cus_mini">
                                             <input v-model="userIdList" :value="user.id" @click="addUserToFilter(user.id)" type="checkbox" class="checkedAll" name="side_dav"> {{ user.name }}
@@ -1168,6 +1174,58 @@
                     <div class="modal-footer">
                         <!-- {{ selectedExistedTask }} -->
                         <button class="btn btn-primary" @click="userFilter()" type="button">Filter User</button>
+                        <!-- <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="priority_list_modal" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h5 class="modal-title">Priority List  </h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body list-model">
+                        <div class="form-group row">
+                            <div class="col-sm-9">
+                                <ul class="list-group list-group-flush">
+                                <!--                                    <li class="list-group-item" >-->
+                                <!--                                        <label class="checkbox_cus_mini">-->
+                                <!--                                            <input type="checkbox" class="checkedUser"> All-->
+                                <!--                                            <span class="checkmark"></span>-->
+                                <!--                                        </label>-->
+                                <!--                                    </li>-->
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input type="checkbox" class="checkedUser"> Heigh
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input type="checkbox" class="checkedUser"> Medium
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input type="checkbox" class="checkedUser"> Low
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- {{ selectedExistedTask }} -->
+                        <button class="btn btn-primary" @click="" type="button">Hide</button>
+                        <button class="btn btn-primary" @click="" type="button">Show</button>
                         <!-- <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button> -->
                     </div>
                 </div>
@@ -1604,7 +1662,9 @@
                         this.getTaskList()
                     } else if(data.type == 'users_task'){
                         $('#user_list_f').modal('show');
-                    }else{
+                    } else if(data.type == 'priority_based'){
+                        $('#priority_list_modal').modal('show');
+                    } else {
                         this.GetFilterData(data.type)
                     }
                 }
@@ -3536,6 +3596,16 @@
             RuleUpdate() {
                 this.AllNavItems = null;
             },
+            addAllUserToFilter(allUsers){
+                if ($('.checkedAllUser').prop('checked') === false) {
+                    this.userIdList = [];
+                } else {
+                    for(let i = 0; allUsers.length > i; i++)
+                    {
+                        this.userIdList.push(allUsers[i].id);
+                    }
+                }
+            }
 
 
         },

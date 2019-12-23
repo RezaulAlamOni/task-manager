@@ -221,6 +221,10 @@
                                         <i class="fal fa-user-alt-slash pr-2"></i>
                                         No Assigned User
                                     </a>
+                                    <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('priority_based')">
+                                        <i class="fal fa-exclamation-triangle " ></i>
+                                        Priority Wise Show/Hide
+                                    </a>
                                     <a class="dropdown-item" href="javascript:void(0)" @click="FilterAction('completed')">
                                         <i class="far fa-ballot-check pr-2"></i>
                                         Show Completed Tasks
