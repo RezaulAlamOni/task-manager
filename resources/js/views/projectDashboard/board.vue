@@ -1153,6 +1153,57 @@
                 </div>
             </div>
         </div>
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="priority_list_modal" role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog " role="document">
+                <div class="modal-content">
+                    <div class="modal-header" style="border-radius: 13px;">
+                        <h5 class="modal-title">Priority List  </h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body list-model">
+                        <div class="form-group row">
+                            <div class="col-sm-9">
+                                <ul class="list-group list-group-flush">
+                                <!--                                    <li class="list-group-item" >-->
+                                <!--                                        <label class="checkbox_cus_mini">-->
+                                <!--                                            <input type="checkbox" class="checkedUser"> All-->
+                                <!--                                            <span class="checkmark"></span>-->
+                                <!--                                        </label>-->
+                                <!--                                    </li>-->
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input type="checkbox" class="checkedUser"> Heigh
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input type="checkbox" class="checkedUser"> Medium
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li class="list-group-item" >
+                                        <label class="checkbox_cus_mini">
+                                            <input type="checkbox" class="checkedUser"> Low
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- {{ selectedExistedTask }} -->
+                        <button class="btn btn-primary" @click="" type="button">Hide</button>
+                        <button class="btn btn-primary" @click="" type="button">Show</button>
+                        <!-- <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
         <div aria-hidden="true" aria-labelledby="exampleModalCenterTitle" class="modal fade" id="addExistingTask"
              role="dialog"
              tabindex="-1">
@@ -3409,7 +3460,10 @@
                     this.getBoardTaskFilter(val);
                 } else if (val === 'date') {
                     this.getBoardTaskFilter(val);
+                } else if (val === 'priority_based') {
+                    $('#priority_list_modal').modal('show');
                 }
+                
                 // this.filter_type = null;
             },
         }
