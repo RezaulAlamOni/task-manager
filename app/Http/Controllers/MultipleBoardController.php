@@ -289,6 +289,44 @@ class MultipleBoardController extends Controller
                 // ->orderby('sort_id', 'ASC')
                 ->get();
         }
+        if ($request->type == 'p_hide') {
+            $filter = $request->filter;
+            $sorts = 'desc';
+            $board = Task::where('board_parent_id', 0)
+                ->with(['moveToCol','taskFilter' => function($q) use($filter){
+                    $q->where('is_deleted', '!=', 1);
+                    $q->where('hidden', '!=', 1);
+                    $q->whereNotIn('priority_label', $filter);
+                    $q->orWhereNull('hidden');
+                    $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
+                },'linkToList'])
+                ->where('project_id', $request->projectId)
+                // ->where('nav_id', $request->nav_id)
+                ->where('multiple_board_id', $request->board_id)
+                ->orderby('board_sort_id', 'ASC')
+                ->orderby('parent_id', 'ASC')
+                // ->orderby('sort_id', 'ASC')
+                ->get();
+        }
+        if ($request->type == 'p_show') {
+            $filter = $request->filter;
+            $sorts = 'desc';
+            $board = Task::where('board_parent_id', 0)
+                ->with(['moveToCol','taskFilter' => function($q) use($filter){
+                    $q->where('is_deleted', '!=', 1);
+                    $q->where('hidden', '!=', 1);
+                    $q->whereIn('priority_label', $filter);
+                    $q->orWhereNull('hidden');
+                    $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
+                },'linkToList'])
+                ->where('project_id', $request->projectId)
+                // ->where('nav_id', $request->nav_id)
+                ->where('multiple_board_id', $request->board_id)
+                ->orderby('board_sort_id', 'ASC')
+                ->orderby('parent_id', 'ASC')
+                // ->orderby('sort_id', 'ASC')
+                ->get();
+        }
 
         //   return($board);
         // return $board[0]->moveToCol->moveTo->multipleBord->board_title;

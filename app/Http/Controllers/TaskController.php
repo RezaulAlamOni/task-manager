@@ -36,11 +36,11 @@ class TaskController extends Controller
 
     public function decorateData ($obj, $drag = null, $filter = null)
     {
-//        $team_id = Auth::user()->current_team_id;
-//        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
-//                            ->where('team_users.team_id', $team_id)->get()->toArray();
-//        $allTeamTags = Tags::where('team_id', $team_id)->where('title', '!=', $this->dont_forget_tag)
-//                            ->get()->toArray();
+    //        $team_id = Auth::user()->current_team_id;
+    //        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
+    //                            ->where('team_users.team_id', $team_id)->get()->toArray();
+    //        $allTeamTags = Tags::where('team_id', $team_id)->where('title', '!=', $this->dont_forget_tag)
+    //                            ->get()->toArray();
         $allTeamUsers = [];
         $allTeamTags = [];
         $data = [];
@@ -252,12 +252,10 @@ class TaskController extends Controller
                 ->where('is_deleted', '!=', 1)
                 ->where('list_id', $list_id)
                 ->with('column')
-                ->where('progress','!=', 100)
-                ->orWhere('progress', null)
-                ->where('project_id', $request->id)
-                ->where('is_deleted', '!=', 1)
-                ->where('list_id', $list_id)
-                ->with('column')
+                ->where( function ($q) {
+                    $q->where('progress','!=', 100)
+                        ->orWhere('progress', null);
+                })
                 ->orderBy('sort_id', 'ASC')
                 ->get();
             $data = $this->decorateData($tasks, 'drag', 'filter');
@@ -289,6 +287,19 @@ class TaskController extends Controller
 
             $tasks = $tasks->orderBy('priority_label', 'desc')
                 ->get();
+            $data = $this->decorateData($tasks, 'drag', 'filter');
+        } elseif($request->filter_type === "p_hide") {
+            $filter = $request->filter;
+            $tasks = $tasks->where( function ($q) use ($filter){
+                $q->whereNotIn('priority_label', $filter)
+                    ->orWhere('priority_label', null);
+            })->get();
+//            return ($tasks);
+            $data = $this->decorateData($tasks, 'drag', 'filter');
+        } elseif($request->filter_type === "p_show") {
+
+            $filter = $request->filter;
+            $tasks = $tasks->whereIn('priority_label', $filter)->get();
             $data = $this->decorateData($tasks, 'drag', 'filter');
         } else {
 
