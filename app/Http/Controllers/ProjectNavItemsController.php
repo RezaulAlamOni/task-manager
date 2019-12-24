@@ -16,11 +16,11 @@ class ProjectNavItemsController extends Controller
 {
     protected $actionLog;
 
-    public function __construct()
-    {
-        $this->actionLog = new ActionLogController;
-        $this->middleware('auth');
-    }
+//    public function __construct()
+//    {
+//        $this->actionLog = new ActionLogController;
+//        $this->middleware('auth');
+//    }
 
     public function index($project_id)
     {

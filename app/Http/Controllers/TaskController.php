@@ -252,12 +252,10 @@ class TaskController extends Controller
                 ->where('is_deleted', '!=', 1)
                 ->where('list_id', $list_id)
                 ->with('column')
-                ->where('progress','!=', 100)
-                ->orWhere('progress', null)
-                ->where('project_id', $request->id)
-                ->where('is_deleted', '!=', 1)
-                ->where('list_id', $list_id)
-                ->with('column')
+                ->where( function ($q) {
+                    $q->where('progress','!=', 100)
+                        ->orWhere('progress', null);
+                })
                 ->orderBy('sort_id', 'ASC')
                 ->get();
             $data = $this->decorateData($tasks, 'drag', 'filter');
@@ -289,6 +287,19 @@ class TaskController extends Controller
 
             $tasks = $tasks->orderBy('priority_label', 'desc')
                 ->get();
+            $data = $this->decorateData($tasks, 'drag', 'filter');
+        } elseif($request->filter_type === "p_hide") {
+            $filter = $request->filter;
+            $tasks = $tasks->where( function ($q) use ($filter){
+                $q->whereNotIn('priority_label', $filter)
+                    ->orWhere('priority_label', null);
+            })->get();
+//            return ($tasks);
+            $data = $this->decorateData($tasks, 'drag', 'filter');
+        } elseif($request->filter_type === "p_show") {
+
+            $filter = $request->filter;
+            $tasks = $tasks->whereIn('priority_label', $filter)->get();
             $data = $this->decorateData($tasks, 'drag', 'filter');
         } else {
 

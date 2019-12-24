@@ -194,7 +194,7 @@
                             </li>
 
                             <li class="nav-item dropdown">
-                                <a aria-expanded="false" aria-haspopup="true"
+                                <a aria-expanded="false" aria-haspopup="true" v-if="list_selected.type == 'list' || list_selected.type == 'board'"
                                    class="d-block d-md-flex text-center nav-link dropdown-toggle" data-toggle="dropdown"
                                    href="#">
                                 <span class="d-none d-md-block">
