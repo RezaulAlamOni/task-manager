@@ -1194,27 +1194,21 @@
                         <div class="form-group row">
                             <div class="col-sm-9">
                                 <ul class="list-group list-group-flush">
-                                <!--                                    <li class="list-group-item" >-->
-                                <!--                                        <label class="checkbox_cus_mini">-->
-                                <!--                                            <input type="checkbox" class="checkedUser"> All-->
-                                <!--                                            <span class="checkmark"></span>-->
-                                <!--                                        </label>-->
-                                <!--                                    </li>-->
                                     <li class="list-group-item" >
                                         <label class="checkbox_cus_mini">
-                                            <input type="checkbox" class="checkedUser"> Heigh
+                                            <input type="checkbox" class="checkedUser" @click="addFilterToFilter(3)" :checked="priorityFilter.includes(3) ? true : false" > High
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
                                     <li class="list-group-item" >
                                         <label class="checkbox_cus_mini">
-                                            <input type="checkbox" class="checkedUser"> Medium
+                                            <input type="checkbox" class="checkedUser"   @click="addFilterToFilter(2)" :checked="priorityFilter.includes(2) ? true : false"> Medium
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
                                     <li class="list-group-item" >
                                         <label class="checkbox_cus_mini">
-                                            <input type="checkbox" class="checkedUser"> Low
+                                            <input type="checkbox"  @click="addFilterToFilter(1)" class="checkedUser" :checked="priorityFilter.includes(1) ? true : false"> Low
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
@@ -1224,8 +1218,8 @@
                     </div>
                     <div class="modal-footer">
                         <!-- {{ selectedExistedTask }} -->
-                        <button class="btn btn-primary" @click="" type="button">Hide</button>
-                        <button class="btn btn-primary" @click="" type="button">Show</button>
+                        <button class="btn btn-primary" @click="GetFilterData('p_hide')" type="button">Hide</button>
+                        <button class="btn btn-primary" @click="GetFilterData('p_show')" type="button">Show</button>
                         <!-- <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button> -->
                     </div>
                 </div>
@@ -1303,6 +1297,7 @@
                     type: null
                 },
                 userIdList: [],
+                priorityFilter: [],
                 nav_id: null,
                 AllNavItems: null,
                 task_logs: null,
@@ -1648,8 +1643,6 @@
                 $('#myUL').addClass('myUL-show');
 
             },
-
-
             filter(data){
                 let _this = this;
                 this.filter_type = data.type
@@ -1680,6 +1673,18 @@
                     this.userIdList.push(userId);
                 }
             },
+            addFilterToFilter(type)
+            {
+                if (this.priorityFilter.includes(type)) {
+                    var indexs = this.priorityFilter.indexOf(type);
+                    if (indexs > -1) {
+                        this.priorityFilter.splice(indexs, 1);
+                    }
+                } else {
+                    this.priorityFilter.push(type);
+                }
+                console.log(this.priorityFilter)
+            },
             userFilter()
             {
                 if ( this.userIdList.length < 1) {
@@ -1698,9 +1703,10 @@
                     list_id: this.list_id,
                     nav_id: this.nav_id,
                     filter_type : type,
-                    ids : ids
+                    ids : ids,
+                    filter : this.priorityFilter
                 };
-                console.log(data)
+                this.priorityFilter = [];
                 axios.post('/api/task-list-filter', data)
                     .then(response => response.data)
                     .then(response => {
@@ -1712,7 +1718,7 @@
                         _this.allTags = response.allTeamTags;
                         _this.allTaskId = response.all_ids;
 
-
+                        $('#priority_list_modal').modal('hide');
                         $('[data-toggle="tooltip"]').tooltip('dispose');
                         setTimeout(function () {
                             $('[data-toggle="tooltip"]').tooltip('enable');
@@ -2808,7 +2814,6 @@
                         console.log('Api for add tag not Working !!!')
                     });
             },
-
             showLog() {
                 var _this = this;
                 axios.get('/api/task-list/get-log/' + _this.selectedData.id)
@@ -2825,7 +2830,6 @@
                         console.log('Api for move down task not Working !!!')
                     });
             },
-
             // get task list
             getTaskListWithDynamicEmptyNode() {
                 var _this = this;
@@ -2924,7 +2928,6 @@
 
                     });
             },
-
             //collect data by child navbar component
             showTask(data) {
                 setTimeout(function () {
@@ -3482,7 +3485,6 @@
                         console.log('Api for task add priority not Working !!!')
                     });
             },
-
             RemovePriority(id){
                 var _this = this;
                 var data = {

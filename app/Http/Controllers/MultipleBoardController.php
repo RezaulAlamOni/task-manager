@@ -159,7 +159,7 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['description'] = $values['description'];
                     $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
                     $boards[$key]['task'][$keys]['progress'] = $values['progress'];
-                    
+                    $boards[$key]['task'][$keys]['priority_label'] = null;
                     if ($values['priority_label'] == 3 || $values['priority_label'] == 'high') {
                         $boards[$key]['task'][$keys]['priority_label'] = 'high';
                     } else if($values['priority_label'] == 2 || $values['priority_label'] == 'medium'){
@@ -167,6 +167,7 @@ class MultipleBoardController extends Controller
                     } else if($values['priority_label'] == 1 || $values['priority_label'] == 'low'){
                         $boards[$key]['task'][$keys]['priority_label'] = 'low';
                     }
+
                     if ($values['list_id'] != '') {
                         $boards[$key]['task'][$keys]['type'] = 'task';
                     } else {
@@ -278,6 +279,44 @@ class MultipleBoardController extends Controller
                     $q->where('hidden', '!=', 1);
                     $q->orWhereNull('hidden');
                     $q->orderBy('priority_label', $sorts);
+                    $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
+                },'linkToList'])
+                ->where('project_id', $request->projectId)
+                // ->where('nav_id', $request->nav_id)
+                ->where('multiple_board_id', $request->board_id)
+                ->orderby('board_sort_id', 'ASC')
+                ->orderby('parent_id', 'ASC')
+                // ->orderby('sort_id', 'ASC')
+                ->get();
+        }
+        if ($request->type == 'p_hide') {
+            $filter = $request->filter;
+            $sorts = 'desc';
+            $board = Task::where('board_parent_id', 0)
+                ->with(['moveToCol','taskFilter' => function($q) use($filter){
+                    $q->where('is_deleted', '!=', 1);
+                    $q->where('hidden', '!=', 1);
+                    $q->whereNotIn('priority_label', $filter);
+                    $q->orWhereNull('hidden');
+                    $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
+                },'linkToList'])
+                ->where('project_id', $request->projectId)
+                // ->where('nav_id', $request->nav_id)
+                ->where('multiple_board_id', $request->board_id)
+                ->orderby('board_sort_id', 'ASC')
+                ->orderby('parent_id', 'ASC')
+                // ->orderby('sort_id', 'ASC')
+                ->get();
+        }
+        if ($request->type == 'p_show') {
+            $filter = $request->filter;
+            $sorts = 'desc';
+            $board = Task::where('board_parent_id', 0)
+                ->with(['moveToCol','taskFilter' => function($q) use($filter){
+                    $q->where('is_deleted', '!=', 1);
+                    $q->where('hidden', '!=', 1);
+                    $q->whereIn('priority_label', $filter);
+                    $q->orWhereNull('hidden');
                     $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
                 },'linkToList'])
                 ->where('project_id', $request->projectId)
@@ -979,13 +1018,15 @@ class MultipleBoardController extends Controller
     }
 
     public function transferToAnotherBoard(Request $request)
-    {
+    {   
         $sortNo = Task::where('board_parent_id', $request->board_parent_id)->max('board_sort_id');
-        $data = Task::where('id', $request->cardId)
-                ->update([
-                    'board_parent_id' => $request->board_parent_id,
-                    'board_sort_id' => $sortNo+1
-                ]);
+        foreach ($request->cardId as $key => $cardId) {
+            $data = Task::where('id', $cardId)
+                    ->update([
+                        'board_parent_id' => $request->board_parent_id,
+                        'board_sort_id' => $sortNo+1
+                    ]);
+        }
         if ($data) {
             // $this->createLog($id, 'Updated', 'Column Updated', 'Board Column sorting');
             return response()->json(['success' => true, 'data' => $data]);
