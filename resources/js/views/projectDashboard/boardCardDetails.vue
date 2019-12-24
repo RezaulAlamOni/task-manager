@@ -481,16 +481,23 @@
                                                             </li>
                                                         </template>
                                                     </div>
+                                                    <div style=" width: 100%;margin-right: 136px;">
+
+                                                        <div>
+
                                                     <input  :id="'replyTextBox'+comments.id" type="text"
                                                             class="custom-input"
                                                             name="subscribe_email"
                                                             @keyup="commentReplyPress($event,selectedData,comments)"
                                                             placeholder="Reply ... "
                                                             autocomplete="off">
-                                                            <br>
-                                                    <div class="input-group-append">
-                                                        <span @click="saveReply(comments.id, selectedData.cardId)" class="input-group-text" id="basic-addon1">Reply</span>
+                                                        </div>
+                                                        <div class="input-group-append">
+                                                            <span @click="saveReply(comments.id, selectedData.cardId)" class="input-group-text" id="basic-addon1">Reply</span>
+                                                        </div>
+
                                                     </div>
+
                                                 </div>
 
                                             </li>
@@ -1114,7 +1121,7 @@
                 console.log(e.which);
                 let _this = this;
                 let title = $('#comment'+data.cardId).val();
-                // this.projectUsers = null; 
+                // this.projectUsers = null;
                 let cmHe = $('#comment'+data.cardId).height();
                 $('#cmntSection').css({maxHeight: ' calc(100vh - 420px - '+cmHe+'px + 30px)'});
                 $('.myUL-user-comment').css({bottom: ' calc(100vh - 864px + '+cmHe+'px - 38px)'});
@@ -1164,6 +1171,12 @@
                     .catch(error => {
                         console.log('All suggest user api not working')
                     })
+                }
+            },
+            commentsReplyKeyPress(e){
+                if (e.which === 32 || e.which === 13 ) {
+                    // e.preventDefault();
+                    // e.stopPropagation();
                 }
             },
             commentReplyPress(e,data,comments)
