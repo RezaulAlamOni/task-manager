@@ -3462,8 +3462,7 @@
                     this.getBoardTaskFilter(val);
                 } else if (val === 'priority_based') {
                     $('#priority_list_modal').modal('show');
-                }
-                
+                }                
                 // this.filter_type = null;
             },
         }

@@ -1648,8 +1648,6 @@
                 $('#myUL').addClass('myUL-show');
 
             },
-
-
             filter(data){
                 let _this = this;
                 this.filter_type = data.type
@@ -2808,7 +2806,6 @@
                         console.log('Api for add tag not Working !!!')
                     });
             },
-
             showLog() {
                 var _this = this;
                 axios.get('/api/task-list/get-log/' + _this.selectedData.id)
@@ -2825,7 +2822,6 @@
                         console.log('Api for move down task not Working !!!')
                     });
             },
-
             // get task list
             getTaskListWithDynamicEmptyNode() {
                 var _this = this;
@@ -2924,7 +2920,6 @@
 
                     });
             },
-
             //collect data by child navbar component
             showTask(data) {
                 setTimeout(function () {
@@ -3482,7 +3477,6 @@
                         console.log('Api for task add priority not Working !!!')
                     });
             },
-
             RemovePriority(id){
                 var _this = this;
                 var data = {

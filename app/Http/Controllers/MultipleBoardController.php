@@ -159,7 +159,7 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['description'] = $values['description'];
                     $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
                     $boards[$key]['task'][$keys]['progress'] = $values['progress'];
-                    
+                    $boards[$key]['task'][$keys]['priority_label'] = null;
                     if ($values['priority_label'] == 3 || $values['priority_label'] == 'high') {
                         $boards[$key]['task'][$keys]['priority_label'] = 'high';
                     } else if($values['priority_label'] == 2 || $values['priority_label'] == 'medium'){
@@ -167,6 +167,7 @@ class MultipleBoardController extends Controller
                     } else if($values['priority_label'] == 1 || $values['priority_label'] == 'low'){
                         $boards[$key]['task'][$keys]['priority_label'] = 'low';
                     }
+
                     if ($values['list_id'] != '') {
                         $boards[$key]['task'][$keys]['type'] = 'task';
                     } else {

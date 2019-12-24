@@ -52,7 +52,7 @@ class TaskController extends Controller
             $info['sort_id'] = $task->sort_id;
             $info['board_parent_id'] = $task->board_parent_id;
             $info['multiple_board_id'] = $task->multiple_board_id;
-//            $info['priority_label'] = $task->priority_label;
+           $info['priority_label'] = null;
              if ($task->priority_label == 3 || $task->priority_label == 'high') {
                  $info['priority_label'] = 'high';
              } else if($task->priority_label == 2 || $task->priority_label == 'medium'){
