@@ -143,7 +143,7 @@
                                     group-name="col"
                                 >
                                     <Draggable :key="card.id" v-for="(card , key) in column.children">
-                                        <div
+                                        <div 
                                             :class="[card.props.className,(card.priority_label !== null) ? 'pc-'+card.priority_label : '']"
                                             :style="card.props.style"
                                             class="card-list"
@@ -674,8 +674,7 @@
                             </li>
                             <li>
                                 <a @click="showTransferModel(this.currentColumn , '' , '', this.currentColumnIndex)">
-                                    <img src="/img/task-icon/copy-to.png" class="contex-menu-icon"> Move to another
-                                    column or Board
+                                    <img src="/img/task-icon/copy-to.png" class="contex-menu-icon"> Move to another column or Board
                                 </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+
@@ -2232,26 +2231,27 @@
             },
             transferCardToOtherBoard() {
                 var _this = this;
+                console.log(this.selectedIds);
+                // return 0;
                 let data = {
-                    'cardId': this.selectedData.cardId,
+                    'cardId': this.selectedIds,
                     'board_parent_id': this.selectedBoardColumn,
                 };
                 axios.post('/api/Transfer-to-board', data)
-                    .then(response => response.data)
-                    .then(response => {
+                .then(response => response.data)
+                .then(response => {
+                    if (response.success) {
+                        _this.getBoardTask();
+                        $('#transferCard').modal('hide');
+                    } else {
+                        $('#transferCard').modal('hide');
+                    }
+                    // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
+                    // _this.boardColumn = response.data;
+                })
+                .catch(error => {
 
-                        if (response.success) {
-                            _this.getBoardTask();
-                            $('#transferCard').modal('hide');
-                        } else {
-                            $('#transferCard').modal('hide');
-                        }
-                        // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
-                        // _this.boardColumn = response.data;
-                    })
-                    .catch(error => {
-
-                    });
+                });
             },
             transferColumnToOtherBoard(index, id) {
 
@@ -3041,24 +3041,11 @@
                     for (let index = 0; index < _this.selectedIds.length; index++) {
                         $('#card_' + _this.selectedIds[index]).addClass('selected-card');
                     }
-                }
-                    // else if (e.shiftKey && e.which === 1) {
-                    // alert('shft+left clk');
-                    // _this.selectedIds.push(card.cardId);
-                    // console.log(_this.selectedIds);
-                    // for (let index = 0; index < _this.selectedIds.length; index++) {
-                    //     $('#card_'+this.selectedCard).addClass('selected-card');
-                    // }
-                    // $('#click' + card.cardId).addClass('clicked');
-
-                // }
-                else if (e.shiftKey && e.which === 1) {
-
+                } else if (e.shiftKey && e.which === 1) {
                     var first = _this.shift_first;
                     var last = card.cardId;
                     var flag = 0;
                     var flag1 = 0;
-
                     var index_last = _this.allCardIds.indexOf(last);
                     var index_first = _this.allCardIds.indexOf(first);
                     if (index_first > index_last) {
