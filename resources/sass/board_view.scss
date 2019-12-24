@@ -806,13 +806,14 @@
 .custom-input {
     border: 2px solid #fff;
     background: #f2f2f2;
-    padding: 10px 0 10px 20px;
-    width: 75.5%;
-    max-width: 500px;
+    padding: 10px 5px 10px 11px;
+    width: 100%;
+    //max-width: 500px;
     margin: 15px 0 0 0;
     /* border-radius: 30px; */
     color: #525252;
     transition: .4s;
+
 }
 
 .input-group-text {
