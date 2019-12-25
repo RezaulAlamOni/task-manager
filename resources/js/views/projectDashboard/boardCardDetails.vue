@@ -628,10 +628,11 @@
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th scope="col" style=" width: 40%;">Title</th>
-                                        <th scope="col" style=" width: 20%;">Log Type</th>
-                                        <th scope="col" style=" width: 20%;">Action Type</th>
-                                        <th scope="col" style=" width: 20%;">Action At</th>
+                                        <th scope="col" style=" width: 30%;">Title</th>
+                                        <th scope="col" style=" width: 19%;">Log Type</th>
+                                        <th scope="col" style=" width: 19%;">Action Type</th>
+                                        <th scope="col" style=" width: 16%;">Action By</th>
+                                        <th scope="col" style=" width: 17%;">Action At</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -639,6 +640,7 @@
                                         <td>{{log.title}}</td>
                                         <td>{{log.log_type}}</td>
                                         <td>{{log.action_type}}</td>
+                                        <td>{{log.user.name}}</td>
                                         <td class="text-center">{{ log.action_at | relative }} </td>
                                     </tr>
                                 </tbody>

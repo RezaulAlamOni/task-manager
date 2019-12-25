@@ -4,7 +4,7 @@
             <section>
                 <div class="container-header">
                     <h2><i class="fa fa-fw fa-magic"></i> Rules For <b>{{Project.name}}</b>
-                        <button v-if="rules_action ===  'rules'" type="submit" class="btn btn-primary pull-right"
+                        <button v-if="rules_action ===  'rules'" type="submit" class="btn btn-primary pull-right" style="float: right;"
                                 @click="ShowAddRulesPanel">
                             Create Rule
                         </button>
