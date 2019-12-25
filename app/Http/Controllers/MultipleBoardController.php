@@ -12,6 +12,7 @@ use App\Task;
 use App\Rules;
 use App\Project;
 use App\User;
+use App\Comment;
 use App\AssignedUser;
 use App\AssignTag;
 use App\LinkListToColumn;
@@ -147,7 +148,7 @@ class MultipleBoardController extends Controller
                     }
 
                     $boards[$key]['task'][$keys]['userName'] = Auth::user()->name;
-                    $boards[$key]['task'][$keys]['comment'] = [];
+                    $boards[$key]['task'][$keys]['comment'] = Comment::where('task_id',$values['id'])->where('user_id',Auth::id())->get(); //->count()
                     $boards[$key]['task'][$keys]['children'] = $values['childTask'];
                     $boards[$key]['task'][$keys]['parents'] = $values['parents'];
                     $boards[$key]['task'][$keys]['id'] = $values['id'];
@@ -421,7 +422,7 @@ class MultipleBoardController extends Controller
                     }
 
                     $boards[$key]['task'][$keys]['userName'] = Auth::user()->name;
-                    $boards[$key]['task'][$keys]['comment'] = [];
+                    $boards[$key]['task'][$keys]['comment'] = Comment::where('task_id',$values['id'])->where('user_id',Auth::id())->get(); //->count()
                     $boards[$key]['task'][$keys]['children'] = $values['childTask'];
                     $boards[$key]['task'][$keys]['parents'] = $values['parents'];
                     $boards[$key]['task'][$keys]['id'] = $values['id'];

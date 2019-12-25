@@ -543,21 +543,27 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-
                                             </a>
-                                            <div class=""
-                                                 :class="[(card.priority_label !== null) ? 'pch-total-child' : 'total-child']"
-                                                 v-if="card.child > 0"
-                                                 @click="hideChilds(card.cardId)">
-                                                <i v-if="card.open === 0" class="fal fa-layer-minus"
-                                                   style="font-size: 14px;"></i>
-                                                <i v-if="card.open === 1" class="fal fa-layer-plus"
-                                                   style="font-size: 14px;"></i>
-                                                <strong>
-                                                    {{ card.child }}
-                                                </strong>
+                                            <div :class="[(card.priority_label !== null) ? 'pch-total-child' : 'total-child']"> 
+                                                <span @click="hideChilds(card.cardId)" v-if="card.child > 0 ">
+                                                    <i v-if="card.open === 0" class="fal fa-layer-minus"
+                                                    style="font-size: 14px;"></i>
+                                                    <i v-if="card.open === 1" class="fal fa-layer-plus"
+                                                    style="font-size: 14px;"></i>
+                                                    <i v-if="card.open === null" class="fal fa-layer-minus"
+                                                    style="font-size: 14px;"></i>
+                                                    <strong>
+                                                        {{ card.child }}
+                                                    </strong>
+                                                </span>
+                                                <span v-if="card.comment.length > 0" title="Comments">
+                                                    <i class="fal fa-comments"></i>
+                                                </span>
+                                                <span v-if="card.description !== ''" title="Description">
+                                                    <!-- <i class="fal fa-clipboard-prescription"></i> -->
+                                                    <i class="fal fa-align-justify"></i>
+                                                </span>
                                             </div>
-
                                         </div>
                                     </Draggable>
                                 </Container>
@@ -690,7 +696,7 @@
                                 </a>
                                 <span class="contex-menu-sortcut">
                                     <span class="badge-pill badge-default">Ctrl</span>+
-                                    <span class="badge-pill badge-default">T</span>
+                                    <span class="badge-pill badge-default">M</span>
                                 </span>
                             </li>
                             <li>
@@ -702,7 +708,6 @@
                                 <!--    <span class="badge-pill badge-default">Shift</span>+<span-->
                                 <!--           class="badge-pill badge-default">#</span>-->
                                 <!-- </span>-->
-
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <div class="collapse show switchToggle">
                                         <ul>
