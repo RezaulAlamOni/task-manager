@@ -144,7 +144,7 @@
                                     group-name="col"
                                 >
                                     <Draggable :key="card.id" v-for="(card , key) in column.children">
-                                        <div
+                                        <div 
                                             :class="[card.props.className,(card.priority_label !== null) ? 'pc-'+card.priority_label : '']"
                                             :style="card.props.style"
                                             class="card-list"
@@ -1190,19 +1190,19 @@
                                     <!--                                    </li>-->
                                     <li class="list-group-item">
                                         <label class="checkbox_cus_mini">
-                                            <input type="checkbox" class="checkedUser"> Heigh
+                                            <input @click="addFilterToFilter('3')" type="checkbox" class="checkedUser"> Heigh
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
                                     <li class="list-group-item">
                                         <label class="checkbox_cus_mini">
-                                            <input type="checkbox" class="checkedUser"> Medium
+                                            <input @click="addFilterToFilter('2')" type="checkbox" class="checkedUser"> Medium
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
                                     <li class="list-group-item">
                                         <label class="checkbox_cus_mini">
-                                            <input type="checkbox" class="checkedUser"> Low
+                                            <input @click="addFilterToFilter('1')" type="checkbox" class="checkedUser"> Low
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
@@ -1212,8 +1212,8 @@
                     </div>
                     <div class="modal-footer">
                         <!-- {{ selectedExistedTask }} -->
-                        <button class="btn btn-primary" @click="" type="button">Hide</button>
-                        <button class="btn btn-primary" @click="" type="button">Show</button>
+                        <button class="btn btn-primary" @click="priorityHide()" type="button">Hide</button>
+                        <button class="btn btn-primary" @click="priorityShow()" type="button">Show</button>
                         <!-- <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button> -->
                     </div>
                 </div>
@@ -1530,6 +1530,7 @@
                 projectUsers: null,
                 commentsData: null,
                 filter_types: null,
+                selectedPriorites: [],
                 userIdList: [],
             }
         },
@@ -2247,26 +2248,27 @@
             },
             transferCardToOtherBoard() {
                 var _this = this;
+                console.log(this.selectedIds);
+                // return 0;
                 let data = {
-                    'cardId': this.selectedData.cardId,
+                    'cardId': this.selectedIds,
                     'board_parent_id': this.selectedBoardColumn,
                 };
                 axios.post('/api/Transfer-to-board', data)
-                    .then(response => response.data)
-                    .then(response => {
+                .then(response => response.data)
+                .then(response => {
+                    if (response.success) {
+                        _this.getBoardTask();
+                        $('#transferCard').modal('hide');
+                    } else {
+                        $('#transferCard').modal('hide');
+                    }
+                    // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
+                    // _this.boardColumn = response.data;
+                })
+                .catch(error => {
 
-                        if (response.success) {
-                            _this.getBoardTask();
-                            $('#transferCard').modal('hide');
-                        } else {
-                            $('#transferCard').modal('hide');
-                        }
-                        // console.log(selectedBoard,selectedSubBoard,selectedBoardColumn);
-                        // _this.boardColumn = response.data;
-                    })
-                    .catch(error => {
-
-                    });
+                });
             },
             transferColumnToOtherBoard(index, id) {
 
@@ -2387,7 +2389,8 @@
                     board_id: this.board_id,
                     nav_id: this.nav_id,
                     type: type,
-                    users: []
+                    users: [],
+                    filter : this.selectedPriorites
                 };
                 if (this.userIdList.length > 0) {
                     data.users = this.userIdList;
@@ -3005,7 +3008,6 @@
                         console.log('Api for task add priority not Working !!!')
                     });
             },
-
             HideDetails() {
                 // this.getBoardTask();
                 $('#task_width').addClass('task_width');
@@ -3056,24 +3058,11 @@
                     for (let index = 0; index < _this.selectedIds.length; index++) {
                         $('#card_' + _this.selectedIds[index]).addClass('selected-card');
                     }
-                }
-                    // else if (e.shiftKey && e.which === 1) {
-                    // alert('shft+left clk');
-                    // _this.selectedIds.push(card.cardId);
-                    // console.log(_this.selectedIds);
-                    // for (let index = 0; index < _this.selectedIds.length; index++) {
-                    //     $('#card_'+this.selectedCard).addClass('selected-card');
-                    // }
-                    // $('#click' + card.cardId).addClass('clicked');
-
-                // }
-                else if (e.shiftKey && e.which === 1) {
-
+                } else if (e.shiftKey && e.which === 1) {
                     var first = _this.shift_first;
                     var last = card.cardId;
                     var flag = 0;
                     var flag1 = 0;
-
                     var index_last = _this.allCardIds.indexOf(last);
                     var index_first = _this.allCardIds.indexOf(first);
                     if (index_first > index_last) {
@@ -3432,7 +3421,37 @@
                         this.userIdList.push(allUsers[i].id);
                     }
                 }
-            }
+            },
+            priorityHide() {
+                // console.log(this.selectedPriorites);
+                if (this.selectedPriorites.length <= 0) {
+                    swal('Warning!!','Nothing selected','warning');
+                    return false;
+                }
+                this.getBoardTaskFilter('p_hide');
+                $('#priority_list_modal').modal('hide');
+            },
+            priorityShow() {
+                // console.log(this.selectedPriorites);
+                if (this.selectedPriorites.length <= 0) {
+                    swal('Warning!!','Nothing selected','warning');
+                    return false;
+                }
+                this.getBoardTaskFilter('p_show');
+                $('#priority_list_modal').modal('hide');
+            },
+            addFilterToFilter(type)
+            {
+                if (this.selectedPriorites.includes(type)) {
+                    var indexs = this.selectedPriorites.indexOf(type);
+                    if (indexs > -1) {
+                        this.selectedPriorites.splice(indexs, 1);
+                    }
+                } else {
+                    this.selectedPriorites.push(type);
+                }
+                // console.log(this.selectedPriorites)
+            },
         },
         directives: {
             ClickOutside

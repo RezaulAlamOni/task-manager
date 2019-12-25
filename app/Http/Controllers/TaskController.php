@@ -36,11 +36,11 @@ class TaskController extends Controller
 
     public function decorateData ($obj, $drag = null, $filter = null)
     {
-//        $team_id = Auth::user()->current_team_id;
-//        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
-//                            ->where('team_users.team_id', $team_id)->get()->toArray();
-//        $allTeamTags = Tags::where('team_id', $team_id)->where('title', '!=', $this->dont_forget_tag)
-//                            ->get()->toArray();
+    //        $team_id = Auth::user()->current_team_id;
+    //        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
+    //                            ->where('team_users.team_id', $team_id)->get()->toArray();
+    //        $allTeamTags = Tags::where('team_id', $team_id)->where('title', '!=', $this->dont_forget_tag)
+    //                            ->get()->toArray();
         $allTeamUsers = [];
         $allTeamTags = [];
         $data = [];
@@ -52,7 +52,7 @@ class TaskController extends Controller
             $info['sort_id'] = $task->sort_id;
             $info['board_parent_id'] = $task->board_parent_id;
             $info['multiple_board_id'] = $task->multiple_board_id;
-           $info['priority_label'] = null;
+            $info['priority_label'] = null;
              if ($task->priority_label == 3 || $task->priority_label == 'high') {
                  $info['priority_label'] = 'high';
              } else if($task->priority_label == 2 || $task->priority_label == 'medium'){
