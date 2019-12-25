@@ -91,6 +91,9 @@ Route::post('/change-board-parent', 'MultipleBoardController@changeParentId');
 Route::post('/column-sort', 'MultipleBoardController@columnSort');
 Route::post('/get-card-comment', 'CommentController@getCardComment');
 Route::post('/add-comment', 'CommentController@addComment');
+
+Route::post('/update-comment', 'CommentController@updateComment');
+
 Route::post('/delete-card-comment', 'CommentController@cardCommentDelete');
 Route::post('/save-comment-reply', 'CommentController@saveCommentReply');
 Route::post('/comment-file-upload', 'CommentController@fileUpload');
