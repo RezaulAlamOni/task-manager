@@ -482,10 +482,8 @@
                                                         </template>
                                                     </div>
                                                     <div style=" width: 100%;margin-right: 136px;">
-
                                                         <div>
-
-                                                    <input  :id="'replyTextBox'+comments.id" type="text"
+                                                            <input  :id="'replyTextBox'+comments.id" type="text"
                                                             class="custom-input"
                                                             name="subscribe_email"
                                                             @keyup="commentReplyPress($event,selectedData,comments)"
