@@ -3,7 +3,7 @@
         <!-- {{selectedData}} -->
         <div class="row">
             <div class="col-2">
-                <!--                <h4 class="compltit-blue" >#ID{{selectedData.id}}</h4>-->
+                <!--  <h4 class="compltit-blue" >#ID{{selectedData.id}}</h4>-->
                 <h4 class="compltit-blue  details-header" @click="showOriginalList(selectedData)"
                     style="cursor:pointer;" data-toggle="tooltip"
                     :title="(selectedData.list_id === null) ? 'This Card Is Only show In Board' : 'Click For Go List'">
@@ -482,22 +482,18 @@
                                                         </template>
                                                     </div>
                                                     <div style=" width: 100%;margin-right: 136px;">
-
                                                         <div>
-
-                                                    <input  :id="'replyTextBox'+comments.id" type="text"
-                                                            class="custom-input"
-                                                            name="subscribe_email"
-                                                            @keyup="commentReplyPress($event,selectedData,comments)"
-                                                            placeholder="Reply ... "
-                                                            autocomplete="off">
+                                                            <input  :id="'replyTextBox'+comments.id" type="text"
+                                                                    class="custom-input"
+                                                                    name="subscribe_email"
+                                                                    @keyup="commentReplyPress($event,selectedData,comments)"
+                                                                    placeholder="Reply ... "
+                                                                    autocomplete="off">
                                                         </div>
                                                         <div class="input-group-append">
                                                             <span @click="saveReply(comments.id, selectedData.cardId)" class="input-group-text" id="basic-addon1">Reply</span>
                                                         </div>
-
                                                     </div>
-
                                                 </div>
 
                                             </li>
@@ -547,7 +543,7 @@
                                                         <ul>
                                                             <li><i class="fa fa-clock-o"></i> {{ reply.created_at.substring(11,16)}}</li>
                                                             <li><i class="fa fa-calendar"></i> {{ reply.created_at.substring(0,10)}}</li>
-                                                            <li><i class="fa fa-pencil"></i> <span class="user"> {{ reply.user.name }}</span></li>
+                                                            <li @click="showReplyBox(comments.id,reply.id,reply.comment)"><i class="fa fa-pencil"></i> <span class="user"> {{ reply.user.name }}</span></li>
                                                             <li @click="deleteDetailComment(reply.id)"><i class="fa fa-trash"></i> <span class="user" style="color: red"> Delete</span></li>
                                                         </ul>
                                                     </div>
@@ -630,10 +626,11 @@
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th scope="col" style=" width: 40%;">Title</th>
-                                        <th scope="col" style=" width: 20%;">Log Type</th>
-                                        <th scope="col" style=" width: 20%;">Action Type</th>
-                                        <th scope="col" style=" width: 20%;">Action At</th>
+                                        <th scope="col" style=" width: 30%;">Title</th>
+                                        <th scope="col" style=" width: 19%;">Log Type</th>
+                                        <th scope="col" style=" width: 19%;">Action Type</th>
+                                        <th scope="col" style=" width: 16%;">Action By</th>
+                                        <th scope="col" style=" width: 17%;">Action At</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -641,6 +638,7 @@
                                         <td>{{log.title}}</td>
                                         <td>{{log.log_type}}</td>
                                         <td>{{log.action_type}}</td>
+                                        <td>{{log.user.name}}</td>
                                         <td class="text-center">{{ log.action_at | relative }} </td>
                                     </tr>
                                 </tbody>
@@ -833,6 +831,7 @@
                 task_logs : [],
                 check_uncheck_child: null,
                 manageTag: null,
+                replyId: null,
                 trigger : false,
                 userNames : '',
                 commentsData : '',
@@ -1604,6 +1603,14 @@
                 $('#replyBox'+id).show();
                 $('#replyTextBox'+id).focus();
             },
+            showReplyBox(commentId,replyId,replyText){
+                this.replyProjectUsers = null;
+                this.replyId = replyId;
+                $('.replyCommentSection').hide();
+                $('#replyBox'+commentId).show();
+                $('#replyTextBox'+commentId).val(replyText);
+                $('#replyTextBox'+commentId).focus();
+            },
             hidereplaybox(id)
             {
                 let _this = this;
@@ -1619,7 +1626,12 @@
                 let data = {
                     'parent_id' : id,
                     'task_id'   : task_id,
-                    'comment'   : reply
+                    'comment'   : reply,
+                    'replyId'   : ''
+                }
+                if (this.replyId !== null) {
+                    data.replyId = this.replyId;
+                     this.replyId = null;
                 }
                 // console.log(data);
                 axios.post('/api/save-comment-reply', data)

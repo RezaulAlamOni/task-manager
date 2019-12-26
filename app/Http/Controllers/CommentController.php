@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Comment;
+use App\ActionLog;
 use Carbon\Carbon;
 use App\Files;
 use App\Task;
@@ -107,5 +108,25 @@ class CommentController extends Controller
         $project = view('vendor.spark.layouts.commentsNotification', ['comment' => $comment])->render();
         // return response()->json(['success' => true, 'Data' => $project]);
         print_r($project);
+    }
+
+    public function updateComment(Request $request){
+        $oldComment = Comment::where('id', $request->id)->first();
+        $data = Comment::where('id', $request->id)->update(['comment'=>$request->comment]);
+       
+        if($data){
+            $log = [
+                'task_id' => $oldComment->task_id,
+                // 'task_id' => Comment::id(),
+                'title' => $oldComment->comment,
+                'log_type' => 'Comment update',
+                'action_type' => 'Updated',
+                'action_by' => Auth::id(),
+            ]; 
+            $insert = ActionLog::create($log);
+        }
+
+
+        return response()->json(['success' => true, 'update' => $oldComment]);
     }
 }
