@@ -445,6 +445,7 @@
                                                     <ul>
                                                         <!-- BRYAN I removed this section Not sure what it's for -->
                                                         <!-- <li><i class="fa fa-pencil"></i> <span class="user">{{comments.user.name}}</span></li> -->
+                                                        <li @click="showCommentBox(comments.id,comments.comment)"><i class="fa fa-pencil"></i>
                                                         <li @click="deleteDetailComment(comments.id)"><i class="fal fa-trash-alt"></i></li>
                                                         <li @click="replyToComment(comments.id)"><i class="fas fa-reply"></i></li>
                                                     </ul>
@@ -481,9 +482,9 @@
                                                             </li>
                                                         </template>
                                                     </div>
-                                                    <div style=" width: 100%;margin-right: 136px;">
+                                                    <div class="replyWrapper" style=" width: 100%; margin-right: 136px;">
                                                         <div>
-                                                            <input  :id="'replyTextBox'+comments.id" type="text"
+                                                            <input :id="'replyTextBox'+comments.id" type="text"
                                                                     class="custom-input"
                                                                     name="subscribe_email"
                                                                     @keyup="commentReplyPress($event,selectedData,comments)"
@@ -491,7 +492,9 @@
                                                                     autocomplete="off">
                                                         </div>
                                                         <div class="input-group-append">
-                                                            <span @click="saveReply(comments.id, selectedData.cardId)" class="input-group-text" id="basic-addon1">Reply</span>
+                                                            <span :id="'replyBtn'+comments.id" @click="saveReply(comments.id, selectedData.cardId)" class="input-group-text" >Reply</span>
+                                                            <span :id="'editReplyBtn'+comments.id" @click="editReply(comments.id, selectedData.cardId)" class="input-group-text" style="display: none" >Edit Reply</span>
+                                                            <span :id="'editCommentBtn'+comments.id" @click="editReply(comments.id, selectedData.cardId)" class="input-group-text" style="display: none" >Update</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1596,17 +1599,42 @@
                     });
                 });
             },
+            showCommentBox(id,comment){
+                // this.ShowTextArea(this.selectedData);
+                // $('#comment'+this.selectedData.cardId).click();
+                // $('#comment'+this.selectedData.cardId).focus();
+
+                this.replyProjectUsers = null;
+                this.replyId = id;
+                $('.replyCommentSection').hide();
+                $('#editReplyBtn'+id).hide();
+                $('.replyWrapper').css('margin-right','146px');
+                $('#editCommentBtn'+id).show();
+                $('#replyBox'+id).show();
+                $('#replyTextBox'+id).val(comment)
+                $('#replyTextBox'+id).focus();
+            },
             replyToComment(id)
             {
                 this.replyProjectUsers = null;
+                this.replyId = null;
                 $('.replyCommentSection').hide();
+                $('#editReplyBtn'+id).hide();
+                $('#editCommentBtn'+id).hide();
+                $('.replyWrapper').css('margin-right','136px');
+                $('#replyBtn'+id).show();
                 $('#replyBox'+id).show();
+                $('#replyTextBox'+id).val(' ')
                 $('#replyTextBox'+id).focus();
             },
             showReplyBox(commentId,replyId,replyText){
                 this.replyProjectUsers = null;
                 this.replyId = replyId;
                 $('.replyCommentSection').hide();
+                $('.replyWrapper').css('margin-right','163px');
+                $('#replyBtn'+commentId).hide();
+                $('#editCommentBtn'+commentId).hide();
+                $('#editReplyBtn'+commentId).show();
                 $('#replyBox'+commentId).show();
                 $('#replyTextBox'+commentId).val(replyText);
                 $('#replyTextBox'+commentId).focus();
@@ -1627,14 +1655,32 @@
                     'parent_id' : id,
                     'task_id'   : task_id,
                     'comment'   : reply,
-                    'replyId'   : ''
-                }
-                if (this.replyId !== null) {
-                    data.replyId = this.replyId;
-                     this.replyId = null;
                 }
                 // console.log(data);
                 axios.post('/api/save-comment-reply', data)
+                .then(response => data)
+                .then(response => {
+                    _this.getComments(task_id);
+                    $('#replyBox'+id).hide();
+                })
+                .catch(error => {
+
+                })
+            },
+            editReply(id, task_id)
+            {
+                let _this = this;
+                let reply = $('#replyTextBox'+id).val();
+                let data = {
+                    'comment'   : reply,
+                    'id'        : ''
+                }
+                if (this.replyId !== null) {
+                    data.id = this.replyId;
+                     this.replyId = null;
+                }
+                // console.log(data);
+                axios.post('/api/update-comment', data)
                 .then(response => data)
                 .then(response => {
                     _this.getComments(task_id);
