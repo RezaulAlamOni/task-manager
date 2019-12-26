@@ -227,21 +227,21 @@
                                                   v-if="data.priority_label !== null"
                                                   style="top: 12px;"
                                                   data-toggle="dropdown">
-                                                 <span title="" data-placement="bottom" data-toggle="tooltip"
+                                                    <span title="" data-placement="bottom" data-toggle="tooltip"
                                                        v-if="data.priority_label === 'high'"
                                                        class="badge badge-warning text-capitalize "
                                                        style="background: #e25858;margin-left: 1px; float: left;margin-right: 5px;color:#ffffff"
                                                        data-original-title="">
                                                     {{data.priority_label}}
                                                  </span>
-                                                <span title="" data-placement="bottom" data-toggle="tooltip"
-                                                      v-if="data.priority_label === 'low'"
-                                                      class="badge badge-warning text-capitalize "
-                                                      style="background: #5987d1; margin-left: 1px; float: left;margin-right: 5px;"
-                                                      data-original-title="">
-                                                    {{data.priority_label}}
-                                                 </span>
-                                                <span title="" data-placement="bottom" data-toggle="tooltip"
+                                                    <span title="" data-placement="bottom" data-toggle="tooltip"
+                                                          v-if="data.priority_label === 'low'"
+                                                          class="badge badge-warning text-capitalize "
+                                                          style="background: #5987d1; margin-left: 1px; float: left;margin-right: 5px;"
+                                                          data-original-title="">
+                                                        {{data.priority_label}}
+                                                     </span>
+                                                    <span title="" data-placement="bottom" data-toggle="tooltip"
                                                       v-if="data.priority_label === 'medium'"
                                                       class="badge badge-warning text-capitalize "
                                                       style="background: #e58c62; margin-left: 1px; float: left;margin-right: 5px;"
@@ -318,6 +318,12 @@
                                         </a>
 
                                     </div>
+                                    <a class="description-icon hide-item-res" v-if="data.description !== ''">
+                                        <i class="fal fa-align-justify li-opacity" aria-hidden="true"></i>
+                                    </a>
+                                        <a class="comment-icon hide-item-res" v-if="data.comment.length > 0"><!--v-if="data.comment.length > 0"-->
+                                        <i class="fal fa-comments li-opacity" aria-hidden="true"></i>
+                                    </a>
 
                                     <a class="attach-icon hide-item-res" style="width: auto !important;">
                                         <span v-if="data.files && data.files.length !== 0">
@@ -1898,6 +1904,7 @@
                         }
                     }
                 } else if (e.which === 1) {
+
                     if (data.text !== '') {
                         _this.DeleteEmptyTask();
                     }
@@ -1906,7 +1913,6 @@
                     _this.selectedData.childrens = _this.selectedData.children;
                     // _this.selectedData.files = [];
                     _this.selectedData.child = [];
-                    _this.selectedData.comment = [];
                     _this.selectedData.parents = [];
                     _this.selectedData.userName = _this.authUser.name;
                     _this.selectedData.cardId = _this.selectedData.id;
@@ -2005,7 +2011,8 @@
                 $(e.target).closest('.eachItemRow').find('.user').hide();
                 $(e.target).closest('.eachItemRow').find('.dateCal').hide();
                 $(e.target).closest('.eachItemRow').find('.priority-icon').hide();
-                // $(e.target).closest('.eachItemRow').find('.delete-icon').show();
+                $(e.target).closest('.eachItemRow').find('.description-icon').hide();
+                $(e.target).closest('.eachItemRow').find('.comment-icon').hide();
             },
             showItem(e, data) {
 
@@ -2022,6 +2029,8 @@
                     $(e.target).closest('.eachItemRow').find('.user').show();
                     $(e.target).closest('.eachItemRow').find('.dateCal').show();
                     $(e.target).closest('.eachItemRow').find('.priority-icon').show();
+                    $(e.target).closest('.eachItemRow').find('.description-icon').show();
+                    $(e.target).closest('.eachItemRow').find('.comment-icon').show();
                     data.draggable = true;
                     data.droppable = true;
                 }, 500);

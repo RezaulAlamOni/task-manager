@@ -253,6 +253,24 @@
             cursor: pointer;
         }
 
+        .description-icon {
+            position: absolute;
+            right: 275px;
+            top: 9px;
+            font-size: 15px;
+            cursor: pointer;
+            width: auto;
+        }
+
+        .comment-icon {
+            position: absolute;
+            right: 295px;
+            top: 9px;
+            font-size: 15px;
+            cursor: pointer;
+            width: auto;
+        }
+
         .subTask_plus {
             position: absolute;
             right: -25px;
