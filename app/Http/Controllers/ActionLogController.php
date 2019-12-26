@@ -15,7 +15,7 @@ class ActionLogController extends Controller
 
     public function getSingleTaskLog ($task_id)
     {
-        $log = ActionLog::where('task_id', $task_id)->orderBy('id', 'desc')->get();
+        $log = ActionLog::where('task_id', $task_id)->with('user')->orderBy('id', 'desc')->get();
         return response()->json($log);
     }
 
