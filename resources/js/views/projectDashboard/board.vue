@@ -764,7 +764,6 @@
                                 </a> <span class="contex-menu-sortcut"><span class="badge-pill badge-default">Ctrl</span>+<span class="badge-pill badge-default">M</span></span>
                             </li> -->
 
-
                             <li style="position: relative" @click="openPicker()">
                                 <datepicker
                                     :disabled-dates="disabledDates"
@@ -943,7 +942,6 @@
                                         </td>
                                     </tr>
                                 </template>
-
                                 </tbody>
                             </table>
                         </div>
@@ -956,8 +954,7 @@
             </div>
         </div>
 
-        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transferCard" role="dialog"
-             tabindex="-1">
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="transferCard" role="dialog" tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header" style="border-radius: 13px;">
@@ -974,7 +971,7 @@
                                 <select @change="showSubBoard()" class="form-control" v-model="selectedBoard">
                                     <option disabled>Select Board</option>
                                     <option :key="index" v-bind:value="navs.id" v-for="(navs, index) in board"
-                                            v-if="navs.type === 'board'">{{navs.title}}
+                                            v-if="navs.type === 'board'"> {{navs.title}}
                                     </option>
                                 </select>
                             </div>

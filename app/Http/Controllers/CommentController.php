@@ -113,7 +113,6 @@ class CommentController extends Controller
     public function updateComment(Request $request){
         $oldComment = Comment::where('id', $request->id)->first();
         $data = Comment::where('id', $request->id)->update(['comment'=>$request->comment]);
-       
         if($data){
             $log = [
                 'task_id' => $oldComment->task_id,
@@ -125,8 +124,6 @@ class CommentController extends Controller
             ]; 
             $insert = ActionLog::create($log);
         }
-
-
         return response()->json(['success' => true, 'update' => $oldComment]);
     }
 }

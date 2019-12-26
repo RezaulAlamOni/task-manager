@@ -113,7 +113,6 @@ class Task extends Model
         return $this->hasMany(self::class, 'parent_id', 'id')->with('child');
     }
 
-
     public function parents()
     {
         return $this->hasMany(self::class, 'id', 'parent_id')->with('parents');
