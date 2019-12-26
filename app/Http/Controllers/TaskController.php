@@ -109,6 +109,7 @@ class TaskController extends Controller
 
             $info['users'] = $allTeamUsers;
             $info['existing_tags'] = $allTeamTags;
+            $info['comment'] = $task->comment;
 
 
             if ($filter === null) {
@@ -157,6 +158,7 @@ class TaskController extends Controller
             ->where('is_deleted', '!=', 1)
             ->where('list_id', $list_id)->with('column')
             ->orderBy('sort_id', 'ASC')
+            ->with('comment')
             ->get();
         $task = [];
         if ($tasks->count() <= 0) {
