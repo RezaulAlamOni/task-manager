@@ -84,7 +84,7 @@ class CommentController extends Controller
     }
 
     public function saveCommentReply(Request $request)
-    {   
+    {
         // return $request->all();
         $data = [
             'task_id' => $request->task_id,
