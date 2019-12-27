@@ -2898,11 +2898,12 @@
             getTaskList() {
                 var _this = this;
                 // $('#loder-hide').removeClass('loder-hide')
-
+                var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 let data = {
                     id: this.projectId,
                     list_id: this.list_id,
-                    nav_id: this.nav_id
+                    nav_id: this.nav_id,
+                    tz : tz
                 };
                 axios.post('/api/task-list', data)
                     .then(response => response.data)
@@ -3426,11 +3427,13 @@
                 date = new Date(date);
                 var _this = this;
                 var month = (parseFloat(date.getMonth() + 1) > 9) ? parseFloat(date.getMonth() + 1) : '0' + parseFloat(date.getMonth() + 1);
-                var formatedDate = date.getFullYear() + '-' + month + '-' + date.getDate();
+                var formatedDate = date.getFullYear() + '-' + month + '-' + date.getDate()+ ' 23:59:00';
 
+                var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 var postData = {
                     id: _this.selectedData.id,
-                    date: formatedDate
+                    date: formatedDate,
+                    tz : tz
                 };
                 axios.post('/api/task-list/update', postData)
                     .then(response => response.data)
