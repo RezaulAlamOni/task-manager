@@ -2389,13 +2389,15 @@
             getBoardTaskFilter(type) {
                 // console.log(type);
                 var _this = this;
+                var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 let data = {
                     projectId: this.projectId,
                     board_id: this.board_id,
                     nav_id: this.nav_id,
                     type: type,
                     users: [],
-                    filter : this.selectedPriorites
+                    filter : this.selectedPriorites,
+                    tz :tz
                 };
                 if (this.userIdList.length > 0) {
                     data.users = this.userIdList;

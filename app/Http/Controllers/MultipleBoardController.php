@@ -50,6 +50,7 @@ class MultipleBoardController extends Controller
                     // $q->orderBy('parent_id','ASC');
                 },'linkToList'])
                 ->where('project_id', $request->projectId)
+                ->where('is_deleted', '!=', 1)
                 // ->where('nav_id', $request->nav_id)
                 ->where('multiple_board_id', $request->board_id)
                 ->orderby('board_sort_id', 'ASC')
@@ -194,6 +195,7 @@ class MultipleBoardController extends Controller
         $boards = [];
         $allTaskIds = [];
         $user_id = [Auth::user()->id];
+        $tz = $request->tz;
         if ($request->type === "my") {
             $user_id =[Auth::user()->id];
         }
@@ -215,7 +217,7 @@ class MultipleBoardController extends Controller
                     $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
                 }])
                 ->where('project_id', $request->projectId)
-                // ->where('nav_id', $request->nav_id)
+                ->where('is_deleted', '!=', 1)
                 ->where('multiple_board_id', $request->board_id)
                 ->orderby('board_sort_id', 'ASC')
                 ->orderby('parent_id', 'ASC')
@@ -235,6 +237,7 @@ class MultipleBoardController extends Controller
             }])
             ->where('project_id', $request->projectId)
             ->where('multiple_board_id', $request->board_id)
+            ->where('is_deleted', '!=', 1)
             ->orderby('board_sort_id', 'ASC')
             ->orderby('parent_id', 'ASC')
             ->get();
@@ -249,6 +252,7 @@ class MultipleBoardController extends Controller
                     $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
                 },'linkToList'])
                 ->where('project_id', $request->projectId)
+                ->where('is_deleted', '!=', 1)
                 // ->where('nav_id', $request->nav_id)
                 ->where('multiple_board_id', $request->board_id)
                 ->orderby('board_sort_id', 'ASC')
@@ -267,6 +271,7 @@ class MultipleBoardController extends Controller
                     $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
                 },'linkToList'])
                 ->where('project_id', $request->projectId)
+                ->where('is_deleted', '!=', 1)
                 // ->where('nav_id', $request->nav_id)
                 ->where('multiple_board_id', $request->board_id)
                 ->orderby('board_sort_id', 'ASC')
@@ -285,6 +290,7 @@ class MultipleBoardController extends Controller
                     $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
                 },'linkToList'])
                 ->where('project_id', $request->projectId)
+                ->where('is_deleted', '!=', 1)
                 // ->where('nav_id', $request->nav_id)
                 ->where('multiple_board_id', $request->board_id)
                 ->orderby('board_sort_id', 'ASC')
@@ -304,6 +310,7 @@ class MultipleBoardController extends Controller
                     $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
                 },'linkToList'])
                 ->where('project_id', $request->projectId)
+                ->where('is_deleted', '!=', 1)
                 // ->where('nav_id', $request->nav_id)
                 ->where('multiple_board_id', $request->board_id)
                 ->orderby('board_sort_id', 'ASC')
@@ -323,6 +330,7 @@ class MultipleBoardController extends Controller
                     $q->orderBy('board_sort_id','ASC')->orderBy('parent_id','ASC');
                 },'linkToList'])
                 ->where('project_id', $request->projectId)
+                ->where('is_deleted', '!=', 1)
                 // ->where('nav_id', $request->nav_id)
                 ->where('multiple_board_id', $request->board_id)
                 ->orderby('board_sort_id', 'ASC')
@@ -450,7 +458,8 @@ class MultipleBoardController extends Controller
                     } else {
                         $boards[$key]['task'][$keys]['type'] = 'card';
                     }
-                    $boards[$key]['task'][$keys]['date'] = ($values['date'] == '0000-00-00')? $values['date'] : date('d M', strtotime($values['date']));
+                    $date = Carbon::parse($values['date'], 'UTC')->setTimezone($tz);
+                    $boards[$key]['task'][$keys]['date'] = ($values['date'] == '0000-00-00')? $date : date('d M Y', strtotime($date));
                     $boards[$key]['task'][$keys]['existing_tags'] = $allTags;
 
                 }
