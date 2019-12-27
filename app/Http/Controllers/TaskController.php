@@ -34,7 +34,7 @@ class TaskController extends Controller
         $this->middleware('auth');
     }
 
-    public function decorateData ($obj, $drag = null, $filter = null)
+    public function decorateData ($obj, $drag = null, $filter = null,$tz = null)
     {
     //        $team_id = Auth::user()->current_team_id;
     //        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
@@ -45,6 +45,7 @@ class TaskController extends Controller
         $allTeamTags = [];
         $data = [];
         foreach ($obj as $key => $task) {
+
             $info = array();
             array_push($this->all_ids, $task->id);
             $info['id'] = $task->id;
@@ -72,7 +73,8 @@ class TaskController extends Controller
             $info['droppable'] = true;
             $info['clicked'] = 0;
             $info['count_child'] = 0;
-            $info['date'] = $task->date;
+            $date = Carbon::parse($task->date, 'UTC')->setTimezone($tz);
+            $info['date'] = $date;
             $info['progress'] = $task->progress;
             $info['open'] = $task->open;
             $allTags = $task->Assign_tags;
@@ -147,6 +149,7 @@ class TaskController extends Controller
 
     public function getAll (Request $request)
     {
+        $tz = $request->tz;
         if ($request->list_id == null) {
             $list = Multiple_list::where('project_id', $request->id)->orderBy('id', 'ASC')->first();
             $list_id = $list->id;
@@ -183,7 +186,7 @@ class TaskController extends Controller
 
         }
         $this->all_ids = [];
-        $data = $this->decorateData($tasks, null);
+        $data = $this->decorateData($tasks, null,null,$tz);
         $userName = Auth::user();
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
@@ -207,7 +210,7 @@ class TaskController extends Controller
 
     public function getAllFilter (Request $request)
     {
-
+        $tz = $request->tz;
         if ($request->list_id == null) {
             $list = Multiple_list::where('project_id', $request->id)
                 ->orderBy('id', 'ASC')->first();
@@ -260,7 +263,7 @@ class TaskController extends Controller
                 })
                 ->orderBy('sort_id', 'ASC')
                 ->get();
-            $data = $this->decorateData($tasks, 'drag', 'filter');
+            $data = $this->decorateData($tasks, 'drag', 'filter',$tz);
         } elseif($request->filter_type === 'date') {
 
         //  $tasks = Task::where('parent_id', 0)
@@ -873,7 +876,11 @@ class TaskController extends Controller
                 return response()->json(['status' => 0]);
             }
         } elseif (isset($request->date)) {
-            if (Task::where('id', $request->id)->update(['date' => $request->date])) {
+            $d = $request->date;
+            $tz = $request->tz;
+            $date  = Carbon::parse($d,$tz)->setTimezone('UTC');
+//            $date = Carbon::parse($date, 'UTC')->setTimezone('Asia/Dhaka');
+            if (Task::where('id', $request->id)->update(['date' => $date])) {
                 return response()->json('success', 200);
             }
         } elseif (isset($request->text)) {

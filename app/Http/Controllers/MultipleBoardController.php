@@ -38,6 +38,7 @@ class MultipleBoardController extends Controller
 
     public function index(Request $request)
     {
+        $tz = $request->tz;
         $boards = [];
         $allTaskIds = [];
         $board = Task::where('board_parent_id', 0)
@@ -174,7 +175,8 @@ class MultipleBoardController extends Controller
                     } else {
                         $boards[$key]['task'][$keys]['type'] = 'card';
                     }
-                    $boards[$key]['task'][$keys]['date'] = ($values['date'] == '0000-00-00')? $values['date'] : date('d M', strtotime($values['date']));
+                    $date = Carbon::parse($values['date'], 'UTC')->setTimezone($tz);
+                    $boards[$key]['task'][$keys]['date'] = ($values['date'] == '0000-00-00')? $date : date('d M Y', strtotime($date));
                     $boards[$key]['task'][$keys]['existing_tags'] = $allTags;
 
                 }
@@ -187,7 +189,7 @@ class MultipleBoardController extends Controller
     }
 
     public function filter(Request $request)
-    {   
+    {
         // return $request->users;
         $boards = [];
         $allTaskIds = [];
@@ -434,7 +436,7 @@ class MultipleBoardController extends Controller
                     $boards[$key]['task'][$keys]['description'] = $values['description'];
                     $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
                     $boards[$key]['task'][$keys]['progress'] = $values['progress'];
-                    
+
                     if ($values['priority_label'] == 3 || $values['priority_label'] == 'high') {
                         $boards[$key]['task'][$keys]['priority_label'] = 'high';
                     } else if($values['priority_label'] == 2 || $values['priority_label'] == 'medium'){
@@ -642,9 +644,13 @@ class MultipleBoardController extends Controller
         $data = [];
         foreach ($request->all() as $key => $value) {
             if ($key == 'date') {
-                $value = date('Y-m-d', strtotime($value));
+                $tz = $request->tz;
+                $value = date('Y-m-d H:i:s', strtotime($value));
+                $value  = Carbon::parse($value,$tz)->setTimezone('UTC');
             }
-            $data[$key] = $value;
+            if ($key !== 'tz'){
+                $data[$key] = $value;
+            }
         }
         $datas = Task::find($id);
         if ( isset($request->title) && $datas->title === $request->title) {
@@ -1019,7 +1025,7 @@ class MultipleBoardController extends Controller
     }
 
     public function transferToAnotherBoard(Request $request)
-    {   
+    {
         $sortNo = Task::where('board_parent_id', $request->board_parent_id)->max('board_sort_id');
         foreach ($request->cardId as $key => $cardId) {
             $data = Task::where('id', $cardId)

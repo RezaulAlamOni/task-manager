@@ -144,7 +144,7 @@
                                     group-name="col"
                                 >
                                     <Draggable :key="card.id" v-for="(card , key) in column.children">
-                                        <div 
+                                        <div
                                             :class="[card.props.className,(card.priority_label !== null) ? 'pc-'+card.priority_label : '']"
                                             :style="card.props.style"
                                             class="card-list"
@@ -249,6 +249,7 @@
                                                                 active: true,
                                                                 dateCal1: card.date != '0000-00-00' ? true : false
                                                             }"
+                                                    style="width: 40px;"
                                                     :config="date_config"
                                                     @on-change="updateDate(card)"
                                                     name="date"
@@ -544,7 +545,7 @@
                                                     </div>
                                                 </div>
                                             </a>
-                                            <div :class="[(card.priority_label !== null) ? 'pch-total-child' : 'total-child']"> 
+                                            <div :class="[(card.priority_label !== null) ? 'pch-total-child' : 'total-child']">
                                                 <span @click="hideChilds(card.cardId)" v-if="card.child > 0 ">
                                                     <i v-if="card.open === 0" class="fal fa-layer-minus"
                                                     style="font-size: 14px;"></i>
@@ -1464,8 +1465,8 @@
                     enableTime: false,
                     wrap: true,
                     disableMobile: true,
-                    altFormat: 'Y-m-d',
-                    dateFormat: 'd M',
+                    altFormat: 'd M Y',
+                    dateFormat: 'd M Y',
                 },
                 date_for_selected: null,
                 nav: [],
@@ -2366,10 +2367,12 @@
                 _this.disabledDates = {
                     to: datePicker, // Disable all dates up to specific date
                 };
+                var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 let data = {
                     projectId: this.projectId,
                     board_id: this.board_id,
-                    nav_id: this.nav_id
+                    nav_id: this.nav_id,
+                    tz :tz
                 };
                 axios.post('/api/board-task', data)
                     .then(response => response.data)
@@ -2858,13 +2861,18 @@
                 }
             },
             updateDate(card) {
+                var _this = this;
+                var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 setTimeout(function () {
                     let data = {
-                        'date': card.date
+                        'date': card.date+' 23:59:59',
+                        'tz': tz,
                     };
+                    console.log(data)
                     axios.post('/api/card-update/' + card.cardId, data)
                         .then(response => response.data)
                         .then(response => {
+                            // _this.getBoardTask();
                         })
                         .catch(error => {
                         });
