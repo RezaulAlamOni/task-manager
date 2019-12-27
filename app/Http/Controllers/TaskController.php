@@ -210,7 +210,7 @@ class TaskController extends Controller
 
     public function getAllFilter (Request $request)
     {
-
+        $tz = $request->tz;
         if ($request->list_id == null) {
             $list = Multiple_list::where('project_id', $request->id)
                 ->orderBy('id', 'ASC')->first();
@@ -263,7 +263,7 @@ class TaskController extends Controller
                 })
                 ->orderBy('sort_id', 'ASC')
                 ->get();
-            $data = $this->decorateData($tasks, 'drag', 'filter');
+            $data = $this->decorateData($tasks, 'drag', 'filter',$tz);
         } elseif($request->filter_type === 'date') {
 
         //  $tasks = Task::where('parent_id', 0)

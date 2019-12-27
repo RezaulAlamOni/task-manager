@@ -1703,6 +1703,7 @@
 
             },
             GetFilterData(type,ids = []){
+                var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 var _this = this;
                 let data = {
                     id: this.projectId,
@@ -1710,7 +1711,8 @@
                     nav_id: this.nav_id,
                     filter_type : type,
                     ids : ids,
-                    filter : this.priorityFilter
+                    filter : this.priorityFilter,
+                    tz : tz
                 };
                 this.priorityFilter = [];
                 axios.post('/api/task-list-filter', data)
