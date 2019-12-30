@@ -1135,33 +1135,34 @@
                     _this.projectUsers = null;
                 }
                 if (_this.trigger == true && e.which !== 16 && e.which !== 50) {
-                    var lastIndex = title.lastIndexOf(" ");
-
-                    let str = title.substring(lastIndex);
-                    if (str.includes('@')) {
-                        let notKeys = ["Backspace","ScrollLock","null","NumLock","Tab","ArrowLeft","ArrowDown","ArrowRight","ArrowUp"];
-                        if (notKeys.includes(e.key) === false) {
-                            _this.userNames += e.key;
-                        }
-                        if (e.key === "Backspace") {
-                            _this.userNames = _this.userNames.slice(0, -1);
-                        }
-                       axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
-                        .then(response => response.data)
-                        .then(response => {
-                            _this.projectUsers = response.search_user;
-                            $('.myUL-user-comment').css({display : 'none'});
-                            if (_this.projectUsers.length > 0) {
-                                $('.myUL-user-comment').css({display : 'block'});
+                    setTimeout(() => {
+                        var lastIndex = title.lastIndexOf(" ");
+                        let str = title.substring(lastIndex);
+                        if (str.includes('@')) {
+                            let notKeys = ["Backspace","ScrollLock","null","NumLock","Tab","ArrowLeft","ArrowDown","ArrowRight","ArrowUp"];
+                            if (notKeys.includes(e.key) === false) {
+                                _this.userNames += e.key;
                             }
-                        })
-                        .catch(error => {
-                            console.log('search user is not Working !!!')
-                        });
-                    }
+                            if (e.key === "Backspace") {
+                                _this.userNames = _this.userNames.slice(0, -1);
+                            }
+                           axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
+                            .then(response => response.data)
+                            .then(response => {
+                                _this.projectUsers = response.search_user;
+                                $('.myUL-user-comment').css({display : 'none'});
+                                if (_this.projectUsers.length > 0) {
+                                    $('.myUL-user-comment').css({display : 'block'});
+                                }
+                            })
+                            .catch(error => {
+                                console.log('search user is not Working !!!')
+                            });
+                        }
+                    }, 100);
                 }
 
-                if (e.shiftKey && e.which == 50) {
+                if ((e.shiftKey && e.which == 50 ) || e.key === '@') {
                     _this.trigger = true;
                     _this.commentsData = $('.commentInput').val();
                     axios.get('/api/task-list/all-suggest-user')

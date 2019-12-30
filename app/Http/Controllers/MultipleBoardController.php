@@ -388,11 +388,13 @@ class MultipleBoardController extends Controller
             }
             if (!empty($value['taskFilter']) && count($value['taskFilter']) > 0) {
                 foreach ($value['taskFilter'] as $keys => $values) {
-                    $allTaskIds[] = $values['id'];
-                    $tagTooltip = '';
-                    $tags = [];
-                    if (!empty($values['Assign_tags']) && count($values['Assign_tags']) > 0) {
-                        foreach ($values['Assign_tags'] as $tagkey => $tag) {
+                    if ($values['title'] !== 'Dont Forget Section') {
+
+                        $allTaskIds[] = $values['id'];
+                        $tagTooltip = '';
+                        $tags = [];
+                        if (!empty($values['Assign_tags']) && count($values['Assign_tags']) > 0) {
+                            foreach ($values['Assign_tags'] as $tagkey => $tag) {
                                 if (!empty($tag->tag)){
                                     $infoTags = array(
                                         'assign_id' => $tag->id,
@@ -406,62 +408,62 @@ class MultipleBoardController extends Controller
                                     $tagTooltip .= '#' . $tag->tag->title . ' ';
                                     $tags[$tagkey] = $infoTags;
                                 }
+                            }
                         }
+
+                        $boards[$key]['task'][$keys]['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id','users.id')->where('task_id', $values['id'])->get()->toArray();
+
+                        $assigned_user_ids = [];
+                        foreach ($boards[$key]['task'][$keys]['assigned_user'] as $id) {
+                            $assigned_user_ids[] = $id['id'];
+                        }
+
+                        $boards[$key]['task'][$keys]['assigned_user_ids'] = $assigned_user_ids;
+                        $boards[$key]['task'][$keys]['users'] = $allUsers;
+
+
+                        $boards[$key]['task'][$keys]['tags'] = $tags;
+                        $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
+
+                        if( $values['childTask'] !== null ){
+                            $this->totalChild = 0;
+                            $boards[$key]['task'][$keys]['child'] = $this->recurChild($values['childTask']);
+
+                        } else {
+                            $boards[$key]['task'][$keys]['child'] = 0;
+                        }
+
+                        $boards[$key]['task'][$keys]['userName'] = Auth::user()->name;
+                        $boards[$key]['task'][$keys]['comment'] = Comment::where('task_id',$values['id'])->where('user_id',Auth::id())->get(); //->count()
+                        $boards[$key]['task'][$keys]['children'] = $values['childTask'];
+                        $boards[$key]['task'][$keys]['parents'] = $values['parents'];
+                        $boards[$key]['task'][$keys]['id'] = $values['id'];
+                        $boards[$key]['task'][$keys]['parent_id'] = $values['parent_id'];
+                        $boards[$key]['task'][$keys]['name'] = $values['title'];
+                        $boards[$key]['task'][$keys]['cardOpen'] = $values['card_open'];
+                        $boards[$key]['task'][$keys]['list_id'] = $values['list_id'];
+                        $boards[$key]['task'][$keys]['multiple_board_id'] = $values['multiple_board_id'];
+                        $boards[$key]['task'][$keys]['description'] = $values['description'];
+                        $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
+                        $boards[$key]['task'][$keys]['progress'] = $values['progress'];
+
+                        if ($values['priority_label'] == 3 || $values['priority_label'] == 'high') {
+                            $boards[$key]['task'][$keys]['priority_label'] = 'high';
+                        } else if($values['priority_label'] == 2 || $values['priority_label'] == 'medium'){
+                            $boards[$key]['task'][$keys]['priority_label'] = 'medium';
+                        } else if($values['priority_label'] == 1 || $values['priority_label'] == 'low'){
+                            $boards[$key]['task'][$keys]['priority_label'] = 'low';
+                        }
+
+                        if ($values['list_id'] != '') {
+                            $boards[$key]['task'][$keys]['type'] = 'task';
+                        } else {
+                            $boards[$key]['task'][$keys]['type'] = 'card';
+                        }
+                        $date = Carbon::parse($values['date'], 'UTC')->setTimezone($tz);
+                        $boards[$key]['task'][$keys]['date'] = ($values['date'] == '0000-00-00')? $date : date('d M Y', strtotime($date));
+                        $boards[$key]['task'][$keys]['existing_tags'] = $allTags;
                     }
-
-                    $boards[$key]['task'][$keys]['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id','users.id')->where('task_id', $values['id'])->get()->toArray();
-
-                    $assigned_user_ids = [];
-                    foreach ($boards[$key]['task'][$keys]['assigned_user'] as $id) {
-                        $assigned_user_ids[] = $id['id'];
-                    }
-
-                    $boards[$key]['task'][$keys]['assigned_user_ids'] = $assigned_user_ids;
-                    $boards[$key]['task'][$keys]['users'] = $allUsers;
-
-
-                    $boards[$key]['task'][$keys]['tags'] = $tags;
-                    $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
-
-                    if( $values['childTask'] !== null ){
-                        $this->totalChild = 0;
-                        $boards[$key]['task'][$keys]['child'] = $this->recurChild($values['childTask']);
-
-                    } else {
-                        $boards[$key]['task'][$keys]['child'] = 0;
-                    }
-
-                    $boards[$key]['task'][$keys]['userName'] = Auth::user()->name;
-                    $boards[$key]['task'][$keys]['comment'] = Comment::where('task_id',$values['id'])->where('user_id',Auth::id())->get(); //->count()
-                    $boards[$key]['task'][$keys]['children'] = $values['childTask'];
-                    $boards[$key]['task'][$keys]['parents'] = $values['parents'];
-                    $boards[$key]['task'][$keys]['id'] = $values['id'];
-                    $boards[$key]['task'][$keys]['parent_id'] = $values['parent_id'];
-                    $boards[$key]['task'][$keys]['name'] = $values['title'];
-                    $boards[$key]['task'][$keys]['cardOpen'] = $values['card_open'];
-                    $boards[$key]['task'][$keys]['list_id'] = $values['list_id'];
-                    $boards[$key]['task'][$keys]['multiple_board_id'] = $values['multiple_board_id'];
-                    $boards[$key]['task'][$keys]['description'] = $values['description'];
-                    $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
-                    $boards[$key]['task'][$keys]['progress'] = $values['progress'];
-
-                    if ($values['priority_label'] == 3 || $values['priority_label'] == 'high') {
-                        $boards[$key]['task'][$keys]['priority_label'] = 'high';
-                    } else if($values['priority_label'] == 2 || $values['priority_label'] == 'medium'){
-                        $boards[$key]['task'][$keys]['priority_label'] = 'medium';
-                    } else if($values['priority_label'] == 1 || $values['priority_label'] == 'low'){
-                        $boards[$key]['task'][$keys]['priority_label'] = 'low';
-                    }
-
-                    if ($values['list_id'] != '') {
-                        $boards[$key]['task'][$keys]['type'] = 'task';
-                    } else {
-                        $boards[$key]['task'][$keys]['type'] = 'card';
-                    }
-                    $date = Carbon::parse($values['date'], 'UTC')->setTimezone($tz);
-                    $boards[$key]['task'][$keys]['date'] = ($values['date'] == '0000-00-00')? $date : date('d M Y', strtotime($date));
-                    $boards[$key]['task'][$keys]['existing_tags'] = $allTags;
-
                 }
             } else {
                 $boards[$key]['task'] = [];

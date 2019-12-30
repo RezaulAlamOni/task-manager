@@ -151,7 +151,8 @@
                                             @contextmenu="makeItClick($event, card,column.children, index, key, column.boardId)"
                                             @click="makeItClick($event, card, column.children, index, key, column.boardId)"
                                             :id="'card_'+card.cardId"
-                                            v-on:dblclick="showLog(card)">
+                                            v-on:dblclick="showLog(card)"
+                                            v-if="card.data !== 'Dont Forget Section'">
                                             <div :id="'titleUserMention'+card.cardId" class="dropdowns-card-user"
                                                  style="z-index: 1;">
                                                 <diV class="collapse show switchToggle">
@@ -1269,7 +1270,7 @@
                                     :class="(tree.board_parent_id !== null && tree.children.length <= 0) ? 'list-group-item-hide' : ''">
                                     <label
                                         :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': tree.board_parent_id !== null}"
-                                        v-if="tree.text !== '' && tree.board_parent_id !== null && tree.children.length > 0"
+                                        v-if="tree.text !== '' && tree.text !== 'Dont Forget Section' && tree.board_parent_id !== null && tree.children.length > 0"
                                         v-html="tree.text">
                                         <!-- <input :id="tree.id" :value="tree.id" type="checkbox"
                                                 v-if="tree.text !== '' && tree.board_parent_id !== null"
@@ -1278,7 +1279,7 @@
                                         <!-- <span class="checkmark"></span>-->
                                     </label>
                                     <label class="checkbox_cus_mini"
-                                           v-if="tree.text !== '' && tree.board_parent_id == null">
+                                           v-if="tree.text !== '' && tree.text !== 'Dont Forget Section' && tree.board_parent_id == null">
                                         <input :id="tree.id" :value="tree.id" type="checkbox"
                                                v-model="selectedExistedTask"
                                                :class="{'selectAll': true}" @change="selectChild(tree.id)"
@@ -1292,14 +1293,14 @@
                                             <li class="list-group-item">
                                                 <label
                                                     :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child.board_parent_id !== null}"
-                                                    v-if="child.text !== '' && child.board_parent_id !== null && child.children.length > 0">
+                                                    v-if="child.text !== '' && child.text !== 'Dont Forget Section' && child.board_parent_id !== null && child.children.length > 0">
                                                     <input :id="child.id" class="tree-child" :value="child.id"
                                                            type="checkbox"
                                                            checked disable> <span v-html="child.text"></span>
                                                     <!--<span class="checkmark"></span>-->
                                                 </label>
                                                 <label class="checkbox_cus_mini"
-                                                       v-if="child.text !== '' && child.board_parent_id == null">
+                                                       v-if="child.text !== '' && child.text !== 'Dont Forget Section' && child.board_parent_id == null">
                                                     <input :id="child.id" class="tree-child selectAll" :value="child.id"
                                                            type="checkbox" v-model="selectedExistedTask"
                                                            @change="selectChild(child.id)"> <span
@@ -1313,7 +1314,7 @@
                                                         <li class="list-group-item">
                                                             <label
                                                                 :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child1.board_parent_id !== null}"
-                                                                v-if="child1.text !== '' && child1.board_parent_id !== null  && child1.children.length > 0">
+                                                                v-if="child1.text !== '' && child1.text !== 'Dont Forget Section' && child1.board_parent_id !== null  && child1.children.length > 0">
                                                                 <input :id="child1.id" :value="child1.id"
                                                                        class="tree-child"
                                                                        type="checkbox"
@@ -1323,7 +1324,7 @@
                                                             </label>
 
                                                             <label class="checkbox_cus_mini"
-                                                                   v-if="child1.text !== '' && child1.board_parent_id == null">
+                                                                   v-if="child1.text !== '' && child1.text !== 'Dont Forget Section' && child1.board_parent_id == null">
                                                                 <input :id="child1.id" :value="child1.id"
                                                                        class="tree-child selectAll"
                                                                        type="checkbox" v-model="selectedExistedTask"
@@ -1338,7 +1339,7 @@
                                                                     <li class="list-group-item">
                                                                         <label
                                                                             :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
-                                                                            v-if="child2.text !== '' && child2.board_parent_id !== null  && child2.children.length > 0">
+                                                                            v-if="child2.text !== '' && child2.text !== 'Dont Forget Section' && child2.board_parent_id !== null  && child2.children.length > 0">
                                                                             <input :id="child2.id" :value="child2.id"
                                                                                    class="tree-child"
                                                                                    type="checkbox"
@@ -1349,7 +1350,7 @@
                                                                         </label>
 
                                                                         <label class="checkbox_cus_mini"
-                                                                               v-if="child2.text !== '' && child2.board_parent_id == null">
+                                                                               v-if="child2.text !== '' && child2.text !== 'Dont Forget Section' && child2.board_parent_id == null">
                                                                             <input :id="child2.id" :value="child2.id"
                                                                                    class="tree-child selectAll"
                                                                                    type="checkbox"
@@ -1367,7 +1368,7 @@
                                                                                 <li class="list-group-item">
                                                                                     <label
                                                                                         :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
-                                                                                        v-if="child3.text !== '' && child3.board_parent_id !== null && child3.children.length > 0">
+                                                                                        v-if="child3.text !== '' && child3.text !== 'Dont Forget Section' && child3.board_parent_id !== null && child3.children.length > 0">
                                                                                         <input :id="child3.id"
                                                                                                :value="child3.id"
                                                                                                class="tree-child"
@@ -1380,7 +1381,7 @@
                                                                                     </label>
 
                                                                                     <label class="checkbox_cus_mini"
-                                                                                           v-if="child2.text !== '' && child2.board_parent_id == null">
+                                                                                           v-if="child3.text !== '' && child3.text !== 'Dont Forget Section' && child3.board_parent_id == null">
                                                                                         <input :id="child3.id"
                                                                                                :value="child3.id"
                                                                                                class="tree-child selectAll"
@@ -2740,17 +2741,17 @@
                             _this.userNames = _this.userNames.slice(0, -1);
                         }
                         axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
-                            .then(response => response.data)
-                            .then(response => {
-                                _this.projectUsers = response.search_user;
-                                $('.dropdowns-card-user').hide();
-                                if (_this.projectUsers.length > 0) {
-                                    $('#titleUserMention' + card.cardId).show();
-                                }
-                            })
-                            .catch(error => {
-                                console.log('search user is not Working !!!')
-                            });
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.projectUsers = response.search_user;
+                            $('.dropdowns-card-user').hide();
+                            if (_this.projectUsers.length > 0) {
+                                $('#titleUserMention' + card.cardId).show();
+                            }
+                        })
+                        .catch(error => {
+                            console.log('search user is not Working !!!')
+                        });
                     }
                 }
 
@@ -3084,7 +3085,6 @@
                     }
                     _this.selectedIds = [];
                     $('.card-list').removeClass('selected-card');
-
                     for (var i = index_first; i <= _this.allCardIds.length; i++) {
                         if (_this.allCardIds[i] === first) {
                             flag = 1;
@@ -3102,38 +3102,19 @@
                         }
                     }
                 } else if (e.which === 1) {
-                    // alert('left clk');
-                    // if (card.text !== '') {
-                    //     _this.DeleteEmptyTask();
-                    // }
                     _this.selectedIds = [];
                     _this.selectedIds.push(card.cardId);
                     _this.shift_first = card.cardId;
-                    // this.selectedData = card;
-                    // this.tags = card.tags;
-                    // $('.eachItemRow').removeClass('clicked');
-                    // $(e.target).addClass('clicked');
-                    // $(e.target).closest('.eachItemRow').addClass('clicked');
-                    // if (card.text !== 'Dont Forget Section') {
-                    //     // data.draggable = true;
-                    // }
-                    // $('.jquery-accordion-menu').hide();
 
                     this.selectedData = card;
                     this.selectedCard = card.cardId;
                     this.task_logs = null;
                     this.HideDetails();
-                    // $('.card-list').css("background-color", "#ffffff");
-                    // $('#card_'+this.selectedCard).css("background-color","#ddf3fd");
-                    // console.log(this.selectedData);
                     $('.card-list').removeClass('selected-card');
                     $('#card_' + this.selectedCard).addClass('selected-card');
 
 
                 } else if (e.which === 3) {
-                    // alert('right clk');
-                    //  && card.draggable == true
-                    // alert('single');
                     e.preventDefault();
                     e.stopPropagation();
                     if (_this.context_menu_flag !== 1) {
