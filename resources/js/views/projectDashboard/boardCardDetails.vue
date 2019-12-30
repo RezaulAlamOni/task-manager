@@ -1260,7 +1260,7 @@
             },
             SearchTaskByAssignedUser(id, name) {
                 let _this = this;
-                $('.commentInput').val(_this.commentsData+''+name+' ');
+                $('.commentInput').val(_this.commentsData+''+name+'');
                 setTimeout(() => {
                     _this.projectUsers = null;
                 }, 10);
