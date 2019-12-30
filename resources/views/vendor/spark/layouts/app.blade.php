@@ -31,6 +31,11 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
 
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-messaging.js"></script>
+
+
 
 
     {{--yield styles--}}
@@ -122,6 +127,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
+    <script src="{{asset('js/init-firebase.js')}}"></script>
     <!-- Scripts -->
     @yield('custom_scripts', '')
     <script>
@@ -187,8 +193,27 @@
             alert('dsfsdafjdsklf');
         }
 
+    </script>
 
+    <script>
 
+        $(function () {
+            navigator.serviceWorker.register("{{url('/firebase-messaging-sw.js')}}").then(function(){
+                const messaging = firebase.messaging();
+                messaging.requestPermission().then(function () {
+                    return messaging.getToken();
+                }).then(function (token) {
+
+                    console.log(token)
+                }).catch(function (err) {
+                    console.log(err);
+                });
+                messaging.onMessage(function(payload) {
+
+                    console.log(payload);
+                });
+            });
+        })
 
     </script>
 </body>

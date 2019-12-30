@@ -50,6 +50,7 @@ mix.copy(resourcesAssets + 'js/icheck.js', destJs);
 mix.copy(resourcesAssets + 'js/form_elements.js', destJs);
 mix.copy(resourcesAssets + 'js/script.js', destJs);
 mix.copy(resourcesAssets + 'js/jquery.tagsinput.js', destJs);
+mix.copy(resourcesAssets + 'js/init-firebase.js', destJs);
 
 
 //select2
