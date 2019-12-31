@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\AssignedUser;
+use App\AssignTag;
 use App\Multiple_board;
 use App\Multiple_list;
 use App\ProjectNavItems;
 use App\Rules;
+use App\Tags;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User;
@@ -15,12 +18,15 @@ use Illuminate\Support\Facades\Auth;
 class ProjectNavItemsController extends Controller
 {
     protected $actionLog;
+    protected $dont_forget_tag;
 
-//    public function __construct()
-//    {
-//        $this->actionLog = new ActionLogController;
-//        $this->middleware('auth');
-//    }
+    public function __construct()
+    {
+        $this->dont_forget_tag = 'Dont Forget';
+        $this->actionLog = new ActionLogController;
+        $this->middleware('auth');
+    }
+
 
     public function index($project_id)
     {
@@ -76,9 +82,6 @@ class ProjectNavItemsController extends Controller
 
         return response()->json(['status' => 'success', 'data' => $boards,'users'=>$user,'rules'=>$rules]);
     }
-
-
-
     public function getList($project_id, $nav_id, $type)
     {
         $nav = ProjectNavItems::where('id', $nav_id)->first();
@@ -208,6 +211,26 @@ class ProjectNavItemsController extends Controller
     public function moveSelectedTask(Request $request)
     {
         $ids = $request->ids;
+
+        $task_find = Task::where('id', $ids[0])->first();
+        $taskDontForgetSection = Task::where([
+            'title' => 'Dont Forget Section',
+            'project_id' => $task_find->project_id,
+            'list_id' => $task_find->list_id,
+        ])->first();
+        $tag_ids = $tags = Tags::where(['title' => $this->dont_forget_tag, 'team_id' => Auth::user()->current_team_id])->first();
+
+        if ($taskDontForgetSection) {
+            $childrenOfDontForgetSection = Task::where('parent_id', $taskDontForgetSection->id)
+                ->where('is_deleted', 0)->get()->toArray();
+            dd($childrenOfDontForgetSection);
+            if (count($childrenOfDontForgetSection) <= 0) {
+                AssignedUser::where('task_id', $taskDontForgetSection->id)->delete();
+                AssignTag::where(['task_id' => $taskDontForgetSection->id, 'tag_id' => $tag_ids->id])->delete();
+                Task::where('id', $taskDontForgetSection->id)->delete();
+            }
+        }
+
         $target_nav_id = $request->nav;
         $target_listOrBoard = $request->target;
         $nav = ProjectNavItems::where('id', $target_nav_id)->first();
