@@ -699,6 +699,24 @@ class TaskController extends Controller
             $this->createLog($request->id, 'softdelete', 'Task Softdeleted', $task->title);
             // $this->deleteTaskWithChild($request->id);
         }
+
+        $taskDontForgetSection = Task::where([
+            'title' => 'Dont Forget Section',
+            'project_id' => $task->project_id,
+            'list_id' => $task->list_id,
+        ])->first();
+        $tag_ids = $tags = Tags::where(['title' => $this->dont_forget_tag, 'team_id' => Auth::user()->current_team_id])->first();
+        if ($taskDontForgetSection) {
+            $childrenOfDontForgetSection = Task::where('parent_id', $taskDontForgetSection->id)
+                ->where('is_deleted', 0)->get()->toArray();
+
+            if (count($childrenOfDontForgetSection) <= 0) {
+                AssignedUser::where('task_id', $taskDontForgetSection->id)->delete();
+                AssignTag::where(['task_id' => $taskDontForgetSection->id, 'tag_id' => $tag_ids->id])->delete();
+                Task::where('id', $taskDontForgetSection->id)->delete();
+            }
+        }
+
         return response()->json(['success' => 1]);
 
     }

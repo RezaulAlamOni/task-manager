@@ -220,17 +220,6 @@ class ProjectNavItemsController extends Controller
         ])->first();
         $tag_ids = $tags = Tags::where(['title' => $this->dont_forget_tag, 'team_id' => Auth::user()->current_team_id])->first();
 
-        if ($taskDontForgetSection) {
-            $childrenOfDontForgetSection = Task::where('parent_id', $taskDontForgetSection->id)
-                ->where('is_deleted', 0)->get()->toArray();
-            dd($childrenOfDontForgetSection);
-            if (count($childrenOfDontForgetSection) <= 0) {
-                AssignedUser::where('task_id', $taskDontForgetSection->id)->delete();
-                AssignTag::where(['task_id' => $taskDontForgetSection->id, 'tag_id' => $tag_ids->id])->delete();
-                Task::where('id', $taskDontForgetSection->id)->delete();
-            }
-        }
-
         $target_nav_id = $request->nav;
         $target_listOrBoard = $request->target;
         $nav = ProjectNavItems::where('id', $target_nav_id)->first();
@@ -248,7 +237,7 @@ class ProjectNavItemsController extends Controller
                 Task::where('id', $id)
                     ->update(['multiple_board_id' => $target_listOrBoard, 'board_parent_id' => $request->column_id, 'board_sort_id' => $board_sort_id + 1,'progress'=>$column->progress]);
             }
-            return response()->json(['status' => 'success', 'board']);
+//            return response()->json(['status' => 'success', 'board']);
         } elseif ($nav->type == 'list') {
             $task = Task::where(['list_id' => $target_listOrBoard, 'parent_id' => 0])->orderBy('sort_id', 'desc')->first();
             $sort_id = $task->sort_id + 1;
@@ -258,9 +247,21 @@ class ProjectNavItemsController extends Controller
                 $this->moveWithChild($childs, $target_listOrBoard);
                 $sort_id++;
             }
-            return response()->json(['status' => 'success', 'list']);
+//            return response()->json(['status' => 'success', 'list']);
         }
 
+        if ($taskDontForgetSection) {
+            $childrenOfDontForgetSection = Task::where('parent_id', $taskDontForgetSection->id)
+                ->where('is_deleted', 0)->get()->toArray();
+
+            if (count($childrenOfDontForgetSection) <= 0) {
+                AssignedUser::where('task_id', $taskDontForgetSection->id)->delete();
+                AssignTag::where(['task_id' => $taskDontForgetSection->id, 'tag_id' => $tag_ids->id])->delete();
+                Task::where('id', $taskDontForgetSection->id)->delete();
+            }
+        }
+
+        return response()->json(['status' => 'success', $nav->type]);
 
     }
 
