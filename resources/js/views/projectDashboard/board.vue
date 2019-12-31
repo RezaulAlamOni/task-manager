@@ -754,7 +754,7 @@
                                 </div>
                             </li>
                             <li v-if="selectedCards.types == 'task'">
-                                <a @click="deleteTask(currentColumnIndex, currentColumnKey, selectedCards.cardId)"
+                                <a @click="deleteAllTasks(currentColumnIndex, currentColumnKey, selectedCards.cardId)"
                                    href="javascript:void(0)">
                                     <i class="fad fa-eraser"></i>
                                     Remove Tasks From This Column
@@ -1889,14 +1889,14 @@
                     // console.log('col',column);
                     newColumn.children = applyDrag(newColumn.children, dropResult);
                     scene.children.splice(columnIndex, 1, newColumn);
-                    // console.log(this.scene.children[index]);
+                    console.log(this.scene.children[index]);
                     this.scene = scene
                     let data = this.scene.children[index];
                     // console.log("sort",data);
                     axios.post('/api/card-sort', data)
                         .then(response => response.data)
                         .then(response => {
-                            // _this.getBoardTask();
+                            _this.getBoardTask();
                             setTimeout(() => {
                             }, 500);
                             // console.log('sorted');
@@ -1916,7 +1916,7 @@
                             .then(response => response.data)
                             .then(response => {
                                 setTimeout(() => {
-                                    _this.getBoardTask();
+                                    // _this.getBoardTask();
                                     $('#loader').modal('hide');
 
                                 }, 500);
@@ -2577,6 +2577,40 @@
                     } else {
                         // alert("couden't delete");
                     }
+                });
+            },
+            deleteAllTasks(index, cardIndex, id) {
+                let _this = this;
+                id = {
+                    'id' : this.selectedIds
+                };
+                swal({
+                    title: 'Are you sure',
+                    text: "You want to remove this task?",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'Red',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, remove it'
+                }, function () {
+                    axios.post('/api/board-task-delete/', id)
+                        .then(response => response.data)
+                        .then(response => {
+                            // if(response.success){
+                            _this.cards[index].task.splice(cardIndex, 1);
+                            // delete _this.cards[index].task[cardIndex];
+                            // _this.cards[index].task.length = _this.cards[index].task.length-1;
+                            _this.getBoardTask();
+                            _this.selectedIds = [];
+                            swal("Removed!", "The task has been removed.", "success");
+                            setTimeout(() => {
+                                swal.close();
+                            }, 1000);
+                            // }
+                        })
+                        .catch(error => {
+
+                        });
                 });
             },
             addTag(e, index, key) {

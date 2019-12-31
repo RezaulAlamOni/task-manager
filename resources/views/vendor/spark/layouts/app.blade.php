@@ -246,7 +246,6 @@
                         "_token": "{{ csrf_token() }}",
                         user_id : {{auth()->id()}},
                         fcm_token : token,
-
                     },
                 success: function(data) {
 

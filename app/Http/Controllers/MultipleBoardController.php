@@ -821,6 +821,28 @@ class MultipleBoardController extends Controller
         }
     }
 
+    public function selectedExistingTaskDelete(Request $request)
+    {   
+        // return $request->all();
+        $delete = Task::whereIn('id', $request->id)->update([
+            'board_parent_id' => null,
+            'board_flag' => null,
+            'task_flag' => 1,
+            'multiple_board_id' => null
+        ]);
+        if($delete){
+            if (is_array($request->id)) {
+                foreach ($request->id as $key => $id) {
+                    $task = Task::where('id',$id)->first();
+                    $this->createLog($id, 'remove', 'Task Remove From Board', $task->title);
+                }
+            }
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
     public function hideColumn($id, Request $request)
     {
         $hide = Task::where('id', $id)
@@ -990,11 +1012,16 @@ class MultipleBoardController extends Controller
                     $id = $item['cardId'];
                     $caseString .= " when id = '".$id."' then '".$item['sort_id']."'";
                     $ids .= " $id,";
+
+                    $update = Task::where('id', $id)->update([
+                        'board_sort_id' => $item['sort_id']
+                    ]);
+
                 }
             }
 
-            $ids = trim($ids, ',');
-            $update = DB::update("update task_lists set board_sort_id = CASE $caseString END where id in ($ids) and board_parent_id = $request->boardId");
+            // $ids = trim($ids, ',');
+            // $update = DB::update("update task_lists set board_sort_id = CASE $caseString END where id in ($ids) and board_parent_id = $request->boardId");
             if ($update) {
                 $this->createLog($request->boardId, 'Updated', 'Card Updated', 'Board Card sorting');
                 return response()->json(['success' => true, 'data' => $update]);
