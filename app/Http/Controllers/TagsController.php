@@ -97,6 +97,7 @@ class TagsController extends Controller
             'project_id' => $task->project_id,
             'list_id' => $task->list_id,
         ])->get();
+
         if ($taskDontForget->count() <= 0) {
             $data = [
                 'sort_id' => -2,
@@ -117,6 +118,13 @@ class TagsController extends Controller
             $this->TaskController->updateTagWithDataMove($id, $NewTask->id);
             return response()->json(['success' => $taskUpdate]);
         } elseif ($id != $taskDontForget[0]->id) {
+            if($taskDontForget[0]->is_deleted == 1 ){
+                Task::where([
+                    'title' => $this->dont_Forget_Section,
+                    'project_id' => $task->project_id,
+                    'list_id' => $task->list_id,
+                ])->update(['is_deleted'=>0]);
+            }
             $parent_assign_dont_Forget_tag = AssignTag::where(['task_id' => $task->parent_id , 'tag_id' => $tag_id])->count();
 
             if ($parent_assign_dont_Forget_tag <= 0) {
