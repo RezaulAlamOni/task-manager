@@ -537,7 +537,6 @@ class MultipleBoardController extends Controller
         return response()->json(['multiple_board' => $multiple_board, 'id' => $id]);
     }
 
-
     public function cardAdd(Request $request)
     {
         $id = $request->id;
@@ -962,7 +961,8 @@ class MultipleBoardController extends Controller
     // }
 
 
-    function findTopParent($data, $d, $parents){
+    function findTopParent($data, $d, $parents)
+    {
         $key = array_search($d['cardId'], array_column($data, 'cardId'));
         $keyP = array_search($d['parent_id'], array_column($data, 'cardId'));
         $keySP = array_search($d['parent_id'], $parents);
@@ -1005,6 +1005,14 @@ class MultipleBoardController extends Controller
 
             foreach ($allData as $d) {
                 $allData = $this->findTopParent($allData, $d, $parents);
+            }
+            foreach ($allData as $keys => $values) {
+                foreach ($allData as $key2 => $value2) {
+                    if($value2['parent_id'] == $values['cardId'])
+                    {
+                        $allData[$key2]['sort_id'] = $values['sort_id'];
+                    }
+                }
             }
             // return $allData;
             foreach ($allData as $key => $item) {
@@ -1052,7 +1060,8 @@ class MultipleBoardController extends Controller
         }
     }
 
-    public function getAllColumnBylist(Request $request){
+    public function getAllColumnBylist(Request $request)
+    {
 
         $column = Task::where('board_parent_id',0)->where('multiple_board_id',$request->list_id)->get();
         if ($column) {
@@ -1080,7 +1089,8 @@ class MultipleBoardController extends Controller
         }
     }
 
-    public function transferColumnToAnotherBoard(Request $request){
+    public function transferColumnToAnotherBoard(Request $request)
+    {
         // return $request->all();
         $sortNo = Task::where('board_parent_id', 0)->max('board_sort_id');
         $data = Task::where('id', $request->columnId)
@@ -1148,9 +1158,8 @@ class MultipleBoardController extends Controller
         return response()->json(['success' => false]);
     }
 
-
-
-    public function test(){
+    public function test()
+    {
 
         $data = array(
             [
@@ -1208,7 +1217,8 @@ class MultipleBoardController extends Controller
           }
     }
 
-    function findTopParents($allData, $item, $parents){
+    function findTopParents($allData, $item, $parents)
+    {
         if($item['parent_id'] == 0){
             return $item['id'];
         }
@@ -1238,7 +1248,8 @@ class MultipleBoardController extends Controller
         return $item['parent_id'].' 55555';
     }
 
-    public function childHide(Request $request){
+    public function childHide(Request $request)
+    {
         $data = Task::where('id',$request->parent_id)
                     ->with('childTask')
                     ->get();

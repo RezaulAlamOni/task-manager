@@ -1411,7 +1411,7 @@
                     </div>
                     <div class="modal-footer">
                         <!-- {{ selectedExistedTask }} -->
-                        <button @click="AddExistingTasks" class="btn btn-primary" type="button">Add Tasks</button>
+                        <button @click="AddExistingTasks" class="btn btn-primary" type="button">Add Tasks</button>&nbsp;
                         <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button>
                     </div>
                 </div>
@@ -2602,6 +2602,7 @@
                             // _this.cards[index].task.length = _this.cards[index].task.length-1;
                             _this.getBoardTask();
                             _this.selectedIds = [];
+                            $('.card-list').removeClass('selected-card');
                             swal("Removed!", "The task has been removed.", "success");
                             setTimeout(() => {
                                 swal.close();
@@ -2682,7 +2683,6 @@
             // peekabo option commented. don't remove the code yet
             // deleteColumnCards(index, id) {
             //     let _this = this;
-
             //     swal({
             //         title: "Are you sure?",
             //         text: "Your will not be able to recover this",
@@ -2703,10 +2703,8 @@
             //             }
             //         })
             //         .catch(error => {
-
             //         })
             //     });
-
             // },
             hideItem(index) {
 
@@ -3032,6 +3030,7 @@
                     .then(response => {
                         _this.getBoardTask();
                         _this.selectedIds = [];
+                        $('.card-list').removeClass('selected-card');
                         $('.jquery-accordion-menu').hide();
                     })
                     .catch(error => {
@@ -3049,6 +3048,7 @@
                     .then(response => {
                         _this.getBoardTask();
                         _this.selectedIds = [];
+                        $('.card-list').removeClass('selected-card');
                         $('.jquery-accordion-menu').hide();
                     })
                     .catch(error => {
@@ -3187,6 +3187,7 @@
 
                                 $('.jquery-accordion-menu').hide();
                                 _this.selectedIds = [];
+                                $('.card-list').removeClass('selected-card');
                             }
                         }
                     }
@@ -3368,6 +3369,7 @@
                             _this.getBoardTask();
                             $('.jquery-accordion-menu').hide();
                             _this.selectedIds = [];
+                            $('.card-list').removeClass('selected-card');
                         })
                         .catch(error => {
                             console.log('Api for delete task not Working !!!')
