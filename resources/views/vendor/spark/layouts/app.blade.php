@@ -31,6 +31,8 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-messaging.js"></script>
@@ -216,7 +218,7 @@
                     return messaging.getToken();
                 }).then(function (token) {
                     InsertOrUpdateFcmToken(token);
-                    console.log(token)
+                    // console.log(token)
                 }).catch(function (err) {
                     console.log(err);
                 });

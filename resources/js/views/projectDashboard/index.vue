@@ -1348,6 +1348,7 @@
                 userNames: null,
                 projectUsers: null,
                 commentsData: null,
+                Socket : null
             }
         },
         mounted() {
@@ -1357,6 +1358,7 @@
             $('.SubmitButton').hide();
             $('.submitdetails').hide();
             $('#loder-hide').removeClass('loder-hide')
+            this.connectSocket();
         },
         created() {
             let _this = this;
@@ -1456,6 +1458,52 @@
         },
 
         methods: {
+            connectSocket: function () {
+                let app = this;
+                if (app.Socket == null) {
+                    app.Socket = io.connect('http://localhost:3000/');
+                    app.Socket.emit('loginId', 2)
+                    app.Socket.on('newMessage', function (res) {
+                        console.log(res);
+                    })
+                    app.Socket.on('assign_user', function (res) {
+                        if (res == app.authUser.id){
+                            swal('Assigned','You assign on a task!', 'success');
+                        }
+                    })
+                    // app.Socket.on('newMessage' + app.auth.id, function (res) {
+                    //     console.log(res);
+                    //     app.chatMessage.push(res)
+                    //     var userLenth = app.users.length;
+                    //     var i;
+                    //     for (i = 0; i < userLenth; i++) {
+                    //         if (app.users[i].id === res.sender) {
+                    //             app.users[i].message = res.message;
+                    //             app.users[i].sender = res.sender;
+                    //             app.users[i].type = res.type;
+                    //         }
+                    //     }
+                    //     if (res.sender !== app.selectedUser) {
+                    //         $('#' + res.sender).css('background-color', '#d6cab9')
+                    //         if (app.selectedUser === 0) {
+                    //             $('#' + res.sender).click();
+                    //         }
+                    //     }
+                    //     setTimeout(function () {
+                    //         $("#chatDiv")[0].scrollTop = $("#chatDiv")[0].scrollHeight;
+                    //     }, 100);
+                    // });
+                    // app.Socket.on('logoutId', function (logoutId) {
+                    //     var userLenth = app.users.length
+                    //     var i;
+                    //     for (i = 0; i < userLenth; i++) {
+                    //         if (app.users[i].id === logoutId) {
+                    //             app.users[i].status = 0;
+                    //         }
+                    //     }
+                    // })
+                }
+            },
             grow: function (text, options) {
                 var height = options.height || '100px';
                 var maxHeight = options.maxHeight || '500px';
@@ -1824,6 +1872,7 @@
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
+                        _this.Socket.emit('assignUser',user.id)
                         _this.getTaskList();
                     })
                     .catch(error => {
