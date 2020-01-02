@@ -275,7 +275,7 @@
                                 swal('sorry', 'Already Exist', 'warning');
                             } else {
                                 // swal('Rules Created', 'Rules Create Success', 'success');
-                                _this.Socket.emit('rulesCreate',_this.rule.assign_to )
+                                _this.Socket.emit('rulesCreate',{assign_users : _this.rule.assign_to, project_id : _this.project_id} )
                                 _this.rule.id = null;
                                 _this.rule.name = '';
                                 _this.rule.status = 1;

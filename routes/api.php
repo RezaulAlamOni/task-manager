@@ -122,6 +122,9 @@ Route::post('/project-overview/list-open-close', 'OverviewController@ListToggle'
 Route::get('/overview-all-logs/{project_id}', 'ActionLogController@AllLogs');
 Route::post('/overview-log/undo-action', 'ActionLogController@UndoAction');
 
+//auth-user
+Route::get('/auth-user', 'HomeController@AuthUser');
+
 //fcm
 Route::post('/firebase-insert-update', 'FirbaseController@AddFcmToken')->name('FcmTokenInsertOrUpdate');
 

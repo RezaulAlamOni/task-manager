@@ -30,11 +30,11 @@ class HomeController extends Controller
      * @return Response
      */
     public function show()
-    {  
+    {
         $team_id = Auth::user()->current_team_id;
         $Projects = Project::where('team_id', $team_id)->get();
 
-       
+
         return view('home',['projects' => $Projects]);
     }
 
@@ -46,13 +46,18 @@ class HomeController extends Controller
         foreach($task_comment as $key => $assignuser)
         {   $j = 0;
             if(count($assignuser['taskComment']) > 0)
-            {       
+            {
                 foreach($assignuser['taskComment'] as $keys => $comments)
-                {   
+                {
                     $commentsArr[] =  $comments;
                 }
             }
         }
         return response()->json(['success' => true, 'data' => $commentsArr]);
+    }
+
+    public function AuthUser(){
+        $user = Auth::user();
+        return response()->json(['user'=>$user]);
     }
 }

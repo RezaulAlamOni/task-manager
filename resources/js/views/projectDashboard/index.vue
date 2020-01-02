@@ -796,6 +796,7 @@
                     :nav_id="nav_id"
                     :projectId="projectId"
                     :filter_type="filter_type"
+                    :auth_user="authUser"
                 >
                 </BoardView>
 
@@ -1358,6 +1359,7 @@
             $('.SubmitButton').hide();
             $('.submitdetails').hide();
             $('#loder-hide').removeClass('loder-hide')
+            this.getAuthUser();
             this.connectSocket();
         },
         created() {
@@ -1472,42 +1474,13 @@
                         }
                     })
                     app.Socket.on('rulesCreateAndAssign', function (res) {
-                        if (res.indexOf(app.authUser.id) > -1){
+                        console.log(res)
+                        console.log(app.authUser)
+                        if (res.assign_users.indexOf(app.authUser.id) > -1 && res.project_id === app.projectId){
                             swal('Assigned','You assigned by rules!', 'success');
                         }
                     })
 
-                    // app.Socket.on('newMessage' + app.auth.id, function (res) {
-                    //     console.log(res);
-                    //     app.chatMessage.push(res)
-                    //     var userLenth = app.users.length;
-                    //     var i;
-                    //     for (i = 0; i < userLenth; i++) {
-                    //         if (app.users[i].id === res.sender) {
-                    //             app.users[i].message = res.message;
-                    //             app.users[i].sender = res.sender;
-                    //             app.users[i].type = res.type;
-                    //         }
-                    //     }
-                    //     if (res.sender !== app.selectedUser) {
-                    //         $('#' + res.sender).css('background-color', '#d6cab9')
-                    //         if (app.selectedUser === 0) {
-                    //             $('#' + res.sender).click();
-                    //         }
-                    //     }
-                    //     setTimeout(function () {
-                    //         $("#chatDiv")[0].scrollTop = $("#chatDiv")[0].scrollHeight;
-                    //     }, 100);
-                    // });
-                    // app.Socket.on('logoutId', function (logoutId) {
-                    //     var userLenth = app.users.length
-                    //     var i;
-                    //     for (i = 0; i < userLenth; i++) {
-                    //         if (app.users[i].id === logoutId) {
-                    //             app.users[i].status = 0;
-                    //         }
-                    //     }
-                    // })
                 }
             },
             grow: function (text, options) {
@@ -1523,6 +1496,18 @@
                     curHeight = height;
                 }
                 text.style.height = curHeight + 'px';
+            },
+            getAuthUser(){
+                // auth-user
+                var _this = this;
+                axios.get('/api/auth-user')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.authUser = response.user;
+                    })
+                    .catch(error => {
+
+                    });
             },
             growInit: function (options) {
                 let _this = this;

@@ -1442,7 +1442,7 @@
     // import Folder from './recurLi.vue';
 
     export default {
-        props: ['nav_id', 'board_id', 'projectId', 'filter_type'],
+        props: ['nav_id', 'board_id', 'projectId', 'filter_type', 'auth_user'],
         components: {Container, Draggable, flatPickr, switches, VueTagsInput, Datepicker, TaskDetails},
         data() {
             return {
@@ -1536,13 +1536,14 @@
                 filter_types: null,
                 selectedPriorites: [],
                 userIdList: [],
+                Socket : null,
+                authUser : null
             }
         },
         mounted() {
             var _this = this;
-            // this.filter_types = this.filter_type;
+            _this.authUser = _this.auth_user;
             $('#header-item').text('Project  / Task Board');
-            // console.log(_this.filter_type)
             $(document)
                 .one('focus.autoExpand', 'textarea.autoExpand', function () {
                     var savedValue = this.value;
@@ -1569,6 +1570,8 @@
             $(document).ready(function () {
                 $('.searchList').hide();
             });
+            this.getAuthUser();
+            this.connectSocket();
 
         },
         created() {
@@ -1644,6 +1647,32 @@
             });
         },
         methods: {
+            connectSocket: function () {
+                let app = this;
+                if (app.Socket == null) {
+                    app.Socket = io.connect('http://localhost:3000/');
+
+                    app.Socket.on('CardMoved', function (res) {
+                        // if (res.project_id == app.projectId && res.user_id != app.authUser.id){
+                        if (res.project_id == app.projectId){
+                            app.getBoardTask();
+                            swal('Card moved','You assign on a task!', 'success');
+                        }
+                    })
+                }
+            },
+            getAuthUser(){
+                // auth-user
+                var _this = this;
+                axios.get('/api/auth-user')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.authUser = response.user;
+                    })
+                    .catch(error => {
+
+                    });
+            },
             grow: function (text, options) {
                 var height = options.height || '100px';
                 var maxHeight = options.maxHeight || '500px';
@@ -1929,6 +1958,7 @@
                                 // console.log('shifting failed');
                             });
                     }
+                    _this.Socket.emit('CardMoved',{user_id : _this.auth_user.id,project_id : _this.projectId})
 
                 }
             },
