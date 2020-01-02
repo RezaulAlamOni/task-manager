@@ -38,5 +38,9 @@ io.on('connection', function(socket) {
         console.log('Assign user '+data);
         io.emit('assign_user',data);
     });
+    socket.on('rulesCreate', function(data) {
+        console.log('Assign user By Rules '+data);
+        io.emit('rulesCreateAndAssign',data);
+    });
 
 });

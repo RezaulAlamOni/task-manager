@@ -1471,6 +1471,12 @@
                             swal('Assigned','You assign on a task!', 'success');
                         }
                     })
+                    app.Socket.on('rulesCreateAndAssign', function (res) {
+                        if (res.indexOf(app.authUser.id) > -1){
+                            swal('Assigned','You assigned by rules!', 'success');
+                        }
+                    })
+
                     // app.Socket.on('newMessage' + app.auth.id, function (res) {
                     //     console.log(res);
                     //     app.chatMessage.push(res)
