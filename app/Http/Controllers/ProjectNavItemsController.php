@@ -7,6 +7,7 @@ use App\AssignTag;
 use App\Multiple_board;
 use App\Multiple_list;
 use App\ProjectNavItems;
+use App\Project;
 use App\Rules;
 use App\Tags;
 use App\Task;
@@ -31,14 +32,24 @@ class ProjectNavItemsController extends Controller
     public function index($project_id)
     {
         $navItem = [];
-        $nav = ProjectNavItems::where('project_id', $project_id)->orderBy('sort_id', 'asc')->get();
+        $team_id = Auth::user()->current_team_id;
+        $nav = ProjectNavItems::with(['project'])->where('project_id', $project_id)->orderBy('sort_id', 'asc')->get();
+        // => function($q) use ($team_id){
+        //     $q->where('team_id', '=', $team_id);
+        // }
+        $nav = $nav->where('project.team_id',$team_id);
         foreach ($nav as $item) {
             $nav_ = $this->getList($project_id, $item->id, $item->type);
             $item->lists = $nav_[0];
             $navItem[] = $item;
         }
-//        $rules = Rules::where('project_id',$project_id)->get();
-        return response()->json(['success' => $navItem,'rules'=>[]]);
+        // $rules = Rules::where('project_id',$project_id)->get();
+        // return $navItem;
+        $projects = Project::where(['id' => $project_id, 'team_id' => $team_id])->first();
+        if (!$projects) {
+            return response()->json(['success' => $navItem,'rules' => [], 'redierct' => true]);
+        }
+        return response()->json(['success' => $navItem,'rules' => [], 'redierct' => false]);
 
 
     }

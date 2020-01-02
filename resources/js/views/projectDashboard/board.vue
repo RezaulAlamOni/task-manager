@@ -754,7 +754,7 @@
                                 </div>
                             </li>
                             <li v-if="selectedCards.types == 'task'">
-                                <a @click="deleteTask(currentColumnIndex, currentColumnKey, selectedCards.cardId)"
+                                <a @click="deleteAllTasks(currentColumnIndex, currentColumnKey, selectedCards.cardId)"
                                    href="javascript:void(0)">
                                     <i class="fad fa-eraser"></i>
                                     Remove Tasks From This Column
@@ -1411,7 +1411,7 @@
                     </div>
                     <div class="modal-footer">
                         <!-- {{ selectedExistedTask }} -->
-                        <button @click="AddExistingTasks" class="btn btn-primary" type="button">Add Tasks</button>
+                        <button @click="AddExistingTasks" class="btn btn-primary" type="button">Add Tasks</button>&nbsp;
                         <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button>
                     </div>
                 </div>
@@ -1918,14 +1918,14 @@
                     // console.log('col',column);
                     newColumn.children = applyDrag(newColumn.children, dropResult);
                     scene.children.splice(columnIndex, 1, newColumn);
-                    // console.log(this.scene.children[index]);
+                    console.log(this.scene.children[index]);
                     this.scene = scene
                     let data = this.scene.children[index];
                     // console.log("sort",data);
                     axios.post('/api/card-sort', data)
                         .then(response => response.data)
                         .then(response => {
-                            // _this.getBoardTask();
+                            _this.getBoardTask();
                             setTimeout(() => {
                             }, 500);
                             // console.log('sorted');
@@ -1945,7 +1945,7 @@
                             .then(response => response.data)
                             .then(response => {
                                 setTimeout(() => {
-                                    _this.getBoardTask();
+                                    // _this.getBoardTask();
                                     $('#loader').modal('hide');
 
                                 }, 500);
@@ -2609,6 +2609,41 @@
                     }
                 });
             },
+            deleteAllTasks(index, cardIndex, id) {
+                let _this = this;
+                id = {
+                    'id' : this.selectedIds
+                };
+                swal({
+                    title: 'Are you sure',
+                    text: "You want to remove this task?",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'Red',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, remove it'
+                }, function () {
+                    axios.post('/api/board-task-delete/', id)
+                        .then(response => response.data)
+                        .then(response => {
+                            // if(response.success){
+                            _this.cards[index].task.splice(cardIndex, 1);
+                            // delete _this.cards[index].task[cardIndex];
+                            // _this.cards[index].task.length = _this.cards[index].task.length-1;
+                            _this.getBoardTask();
+                            _this.selectedIds = [];
+                            $('.card-list').removeClass('selected-card');
+                            swal("Removed!", "The task has been removed.", "success");
+                            setTimeout(() => {
+                                swal.close();
+                            }, 1000);
+                            // }
+                        })
+                        .catch(error => {
+
+                        });
+                });
+            },
             addTag(e, index, key) {
                 if (e.which === 13) {
                     this.cards[index].task[key].tags.splice(0, 1, this.tag);
@@ -2678,7 +2713,6 @@
             // peekabo option commented. don't remove the code yet
             // deleteColumnCards(index, id) {
             //     let _this = this;
-
             //     swal({
             //         title: "Are you sure?",
             //         text: "Your will not be able to recover this",
@@ -2699,10 +2733,8 @@
             //             }
             //         })
             //         .catch(error => {
-
             //         })
             //     });
-
             // },
             hideItem(index) {
 
@@ -3028,6 +3060,7 @@
                     .then(response => {
                         _this.getBoardTask();
                         _this.selectedIds = [];
+                        $('.card-list').removeClass('selected-card');
                         $('.jquery-accordion-menu').hide();
                     })
                     .catch(error => {
@@ -3045,6 +3078,7 @@
                     .then(response => {
                         _this.getBoardTask();
                         _this.selectedIds = [];
+                        $('.card-list').removeClass('selected-card');
                         $('.jquery-accordion-menu').hide();
                     })
                     .catch(error => {
@@ -3183,6 +3217,7 @@
 
                                 $('.jquery-accordion-menu').hide();
                                 _this.selectedIds = [];
+                                $('.card-list').removeClass('selected-card');
                             }
                         }
                     }
@@ -3364,6 +3399,7 @@
                             _this.getBoardTask();
                             $('.jquery-accordion-menu').hide();
                             _this.selectedIds = [];
+                            $('.card-list').removeClass('selected-card');
                         })
                         .catch(error => {
                             console.log('Api for delete task not Working !!!')
