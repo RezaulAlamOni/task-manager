@@ -30,4 +30,9 @@ class Project extends Model
     {
         return $this->hasMany('App\ActionLog', 'project_id', 'id');
     }
+
+    public function project_nav()
+    {
+        return $this->hasMany(ProjectNavItems::class, 'project_id', 'id');
+    }
 }

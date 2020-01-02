@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="fullIndexPage">
         <div class="page-titles">
             <!-- Navbar Component-->
             <Navbar :AllNavGet="AllNavItems"
@@ -1354,6 +1354,7 @@
         mounted() {
             let _this = this;
             this.projectId = this.$route.params.projectId;
+            this.teamCheck();
             $('.searchList').hide();
             $('.SubmitButton').hide();
             $('.submitdetails').hide();
@@ -1362,6 +1363,8 @@
         },
         created() {
             let _this = this;
+            this.projectId = this.$route.params.projectId;
+            // this.teamCheck();
             hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+a,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3,ctrl+m', function (event, handler) {
                 event.preventDefault();
                 switch (handler.key) {
@@ -1458,7 +1461,24 @@
         },
 
         methods: {
-            connectSocket: function () {
+            teamCheck(){
+                $('#fullIndexPage').hide();
+                axios.get('/api/nav-item/'+this.projectId)
+                .then(response => response.data)
+                .then(response => {
+                    if (response.redierct) {
+                        swal('Sorry',"You are not permitted","warning");
+                        window.location.href = window.location.origin+'/projects';
+                    }else{
+                        $('#fullIndexPage').show();
+                    }
+                })
+                .catch(error => {
+
+                })
+            },
+            connectSocket: function () 
+            {
                 let app = this;
                 if (app.Socket == null) {
                     app.Socket = io.connect('http://localhost:3000/');
@@ -1504,7 +1524,8 @@
                     // })
                 }
             },
-            grow: function (text, options) {
+            grow: function (text, options) 
+            {
                 var height = options.height || '100px';
                 var maxHeight = options.maxHeight || '500px';
                 text.style.height = 'auto';
@@ -1518,7 +1539,8 @@
                 }
                 text.style.height = curHeight + 'px';
             },
-            growInit: function (options) {
+            growInit: function (options) 
+            {
                 let _this = this;
                 var locInputs = document.querySelectorAll('[data-grow="auto"]');
                 for (var i = 0; i < locInputs.length; i++) {
@@ -1537,11 +1559,13 @@
                     };
                 }
             },
-            dropNode(node, targetTree, oldTree) {
+            dropNode(node, targetTree, oldTree) 
+            {
                 let THIS = this;
                 clearInterval(THIS.dNodeInterval);
             },
-            dragNode(node) {
+            dragNode(node) 
+            {
                 let THIS = this;
                 this.dNode = node;
                 this.dNodeHeght = $('#' + node._id)[0].getBoundingClientRect().top + window.scrollY;
@@ -1553,7 +1577,8 @@
                     target.scrollTo(0, top);
                 }, 100);
             },
-            ChangeNode(data, taskAfterDrop) {
+            ChangeNode(data, taskAfterDrop) 
+            {
                 if (data.sort_id === -2) {
                     return false
                 }
@@ -1571,7 +1596,8 @@
                         console.log('Api is drag and drop not Working !!!')
                     });
             },
-            FindDopedTask(parent, data, tasks) {
+            FindDopedTask(parent, data, tasks) 
+            {
                 for (var i = 0; i < tasks.length; i++) {
                     if (data.id === tasks[i].id) {
                         if (i >= 1) {
@@ -1588,14 +1614,16 @@
                     }
                 }
             },
-            showSearchInputField() {
+            showSearchInputField() 
+            {
                 // if (this.list.type === 'list') {
                 this.search_type = (this.list.type === 'overview') ? 'all' : 'this';
                 $('.searchList').toggle();
                 $('.searchTaskList').focus();
                 // }
             },
-            SearchTaskByAssignedUser(id, name) {
+            SearchTaskByAssignedUser(id, name) 
+            {
                 $('.searchTaskList').val('@' + name);
                 var _this = this;
                 var nav_type = JSON.parse(localStorage.selected_nav);
@@ -1618,7 +1646,8 @@
                         console.log('Api is drag and drop not Working !!!')
                     });
             },
-            searchDataFormTask(e) {
+            searchDataFormTask(e) 
+            {
                 var value = e.target.value;
                 var _this = this;
                 if (value.charAt(0) === '@') {
@@ -1674,7 +1703,8 @@
                     // }
                 }
             },
-            searchBYType() {
+            searchBYType() 
+            {
                 var _this = this;
                 var value = $('.searchTaskList').val();
                 var nav_type = JSON.parse(localStorage.selected_nav);
@@ -1697,7 +1727,8 @@
                 $('#myUL').addClass('myUL-show');
 
             },
-            filter(data){
+            filter(data)
+            {
                 let _this = this;
                 this.filter_type = data.type
                 setTimeout(() => {
