@@ -124,8 +124,14 @@ module.exports = {
          */
         refreshApiToken() {
             this.lastRefreshedApiTokenAt = moment();
-
-            axios.put('/spark/token');
+            axios.post('/spark/token')
+                .then(response => {
+                    //
+                })
+                .catch(response  => {
+                    window.location.href = window.location.origin;
+                })
+            ;
         },
 
 
