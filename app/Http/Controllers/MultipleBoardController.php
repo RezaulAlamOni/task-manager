@@ -20,6 +20,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
+use Mail;
+use App\Mail\UserMail;
 
 class MultipleBoardController extends Controller
 {
@@ -538,7 +540,7 @@ class MultipleBoardController extends Controller
     }
 
     public function cardAdd(Request $request)
-    {
+    {   
         $id = $request->id;
         $parent = Task::find($id);
         $sortNo = Task::where('board_parent_id', $parent->id)->max('board_sort_id');
