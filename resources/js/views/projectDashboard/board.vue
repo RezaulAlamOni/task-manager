@@ -1918,7 +1918,7 @@
                     // console.log('col',column);
                     newColumn.children = applyDrag(newColumn.children, dropResult);
                     scene.children.splice(columnIndex, 1, newColumn);
-                    console.log(this.scene.children[index]);
+                    // console.log(this.scene.children[index]);
                     this.scene = scene
                     let data = this.scene.children[index];
                     // console.log("sort",data);

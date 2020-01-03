@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\AssignedUser;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\UserMail;
+use Mail;
 
 class AssignedUserController extends Controller
 {
@@ -34,6 +37,10 @@ class AssignedUserController extends Controller
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),
             ]);
+            $user = User::where('id',$request->user_id)->first();
+            $comment = 'Hi, 
+                        A new task is assigned to you.';
+            Mail::to($user->email)->send(new UserMail($comment));
 
             $data =  AssignedUser::join('users', 'task_assigned_users.user_id','users.id')->where('task_id',  $request->task_id)->get()->toArray();
             return response()->json(['success' => 'success', 'data' => $data[0]]);
