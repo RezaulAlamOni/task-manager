@@ -1918,7 +1918,7 @@
                     // console.log('col',column);
                     newColumn.children = applyDrag(newColumn.children, dropResult);
                     scene.children.splice(columnIndex, 1, newColumn);
-                    console.log(this.scene.children[index]);
+                    // console.log(this.scene.children[index]);
                     this.scene = scene
                     let data = this.scene.children[index];
                     // console.log("sort",data);
@@ -2933,7 +2933,6 @@
                         'date': card.date+' 23:59:59',
                         'tz': tz,
                     };
-                    console.log(data)
                     axios.post('/api/card-update/' + card.cardId, data)
                         .then(response => response.data)
                         .then(response => {

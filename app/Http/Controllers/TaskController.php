@@ -551,10 +551,12 @@ class TaskController extends Controller
 
             $target_id = $request->target_id;
             $copy_ids = $request->copy_ids;
+
+            $target_list_id = Task::select('list_id')->where(['id'=>$target_id])->first();
             foreach ($copy_ids as $copy_id) {
                 $target_id = $this->CopayPast($target_id, $copy_id);
             }
-            return response()->json(['success' => $target_id]);
+            return response()->json(['success' => $target_id,'list_id'=>$target_list_id->list_id]);
 
         } else {
             if ($request->type == 'cut') {
@@ -570,7 +572,7 @@ class TaskController extends Controller
                 $this->updateTagWithDataMove($past->id, $target->parent_id);
                 //check the target task id in the dont forget section and update tag for necessary
                 $this->createLog($past->id, 'cut', 'Cut and past tsk', $past->title);
-                return response()->json(['success' => $past->id]);
+                return response()->json(['success' => $past->id,'list_id'=>$target->list_id]);
             }
         }
     }
@@ -902,6 +904,7 @@ class TaskController extends Controller
         } elseif (isset($request->date)) {
             $d = $request->date;
             $tz = $request->tz;
+
             $date  = Carbon::parse($d,$tz)->setTimezone('UTC');
 //            $date = Carbon::parse($date, 'UTC')->setTimezone('Asia/Dhaka');
             if (Task::where('id', $request->id)->update(['date' => $date])) {

@@ -45,4 +45,9 @@ io.on('connection', function(socket) {
         io.emit('CardMoved',data);
     });
 
+    socket.on('taskUpdate', function(data) {
+        console.log(data)
+        io.emit('takUpdateSocket',data);
+    });
+
 });
