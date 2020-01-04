@@ -21,4 +21,9 @@ class AssignedUser extends Model
     {
         return $this->hasMany(Comment::class,'task_id','task_id');
     }
+
+    public function users()
+    {
+        return $this->hasOne(User::class,'id','user_id');
+    }
 }

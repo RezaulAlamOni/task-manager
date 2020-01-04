@@ -652,7 +652,7 @@ class MultipleBoardController extends Controller
     }
 
     public function cardEdit($id, Request $request)
-    {
+    {   
         $data = [];
         foreach ($request->all() as $key => $value) {
             if ($key == 'date') {
@@ -672,6 +672,16 @@ class MultipleBoardController extends Controller
         if ($child) {
             $datas = Task::find($id);
             $this->createLog($id, 'updated', 'Card Update', $datas->title);
+
+            $emails = [];
+            $users = AssignedUser::where('task_id',$id)->with(['users'])->get();
+            foreach ($users as $key => $value) {
+                $emails[] = $value->users->email;
+            }
+            if (count($emails) > 0) {
+                $comment = 'Hi, Card title is updated.';
+                Mail::to($emails)->send(new UserMail($comment));
+            }
             return response()->json(['success' => true, 'data' => $datas]);
         }
         return response()->json(['success' => false]);
