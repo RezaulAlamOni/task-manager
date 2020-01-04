@@ -155,6 +155,7 @@ class TaskController extends Controller
             $list_id = $list->id;
         } else {
             $list_id = $request->list_id;
+            $list = Multiple_list::where('id', $list_id)->first();
         }
         $tasks = Task::where('parent_id', 0)
             ->where('project_id', $request->id)
@@ -205,6 +206,7 @@ class TaskController extends Controller
             'allTeamUsers' => $allTeamUsers,
             'allTeamTags' => $allTeamTags,
             'all_ids' => $this->all_ids,
+            'list'=>$list
         ]);
     }
 

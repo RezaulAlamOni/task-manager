@@ -910,7 +910,6 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>Add your new list here !</p>
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">Title</label>
                             <div class="col-sm-8">
@@ -3142,6 +3141,14 @@
                     .then(response => response.data)
                     .then(response => {
                         l.stop();
+                        localStorage.selected_nav = JSON.stringify({
+                            title: _this.list.name,
+                            description: _this.list.description,
+                            list_id: _this.list.id,
+                            nav_id:_this.list.nav_id,
+                            project_id: _this.projectId,
+                            type: _this.list.type
+                        });
                         _this.AllNavItems = response.navItems.original.success;
                         $("#updateListBoardModel").modal('hide');
                     })
