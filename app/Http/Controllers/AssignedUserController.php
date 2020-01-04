@@ -53,6 +53,12 @@ class AssignedUserController extends Controller
     public function delete(Request $request)
     {
         AssignedUser::where($request->all())->delete();
+        $user = User::where('id',$request->user_id)->first();
+        $comment = 'Hi, 
+                    You are unassigned from a task.';
+        Mail::to($user->email)->send(new UserMail($comment));
+        
+        // Mail::to($request->user())->queue(new OrderShipped($order));
         return response()->json('success');
     }
 
