@@ -99,10 +99,19 @@
                 </li>
         @endif
             <li class="menu-dropdown">
-                <a href="/profile">
-                    <i class="menu-icon ti-user"></i>
-                    <span>Profile</span>
+                <a data-toggle="collapse" href="#collapseAccount">
+                    <i class="menu-icon fa fa-cog"></i>
+                    <span>Account</span>
+                    <span class="fa arrow"></span>
                 </a>
+                <ul id="collapseAccount" class="collapse" data-parent="#navigation">
+                    <!-- Profile Link -->
+                    <li>
+                        <a href="/profile">
+                            <i class="menu-icon ti-user"></i> Profile
+                        </a>
+                    </li>
+                </ul>
             </li>
         <!--
             <li>
