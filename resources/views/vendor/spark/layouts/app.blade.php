@@ -24,6 +24,7 @@
     <link href="{{asset('css/board_view.css')}}" rel="stylesheet">
     <link href="{{asset('css/icon.css')}}" rel="stylesheet">
     <link href="{{asset('css/loder.css')}}" rel="stylesheet">
+    <link href="{{asset('css/profile.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/all.css')}}">
     <link rel="stylesheet" href="{{asset('css/formelements.css')}}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">

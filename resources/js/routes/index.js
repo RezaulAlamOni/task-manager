@@ -7,6 +7,7 @@ import projectDashboard from '../views/projectDashboard/index'
 import projectBoard from '../views/projectDashboard/board'
 import addProject from '../views/project/edit'
 import Rules from '../views/Rules/index/index'
+import Profile from '../views/profile/index'
 
 
 let routes = [
@@ -41,7 +42,12 @@ let routes = [
         path: '/project-board/:projectId/rules',
         component: Rules,
         name : 'Rules'
-    }
+    },
+    {
+        path: '/profile',
+        component: Profile,
+        name: 'Profile'
+    },
 
 
 ];

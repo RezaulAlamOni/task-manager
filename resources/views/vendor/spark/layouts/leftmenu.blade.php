@@ -79,7 +79,7 @@
             @if (Spark::usesTeams())
                 <li {!! (Request::is('settings/'.str_plural(Spark::teamsPrefix()).'/*') ? 'class="menu-dropdown active"' : 'class="menu-dropdown"') !!}>
                     <a data-toggle="collapse" href="#collapseTeam">
-                        <i class="ti-user"></i>
+                        <i class="menu-icon fa fa-users"></i>
                         <span> {{ ucfirst(str_plural(Spark::teamsPrefix())) }} Settings</span>
                         <span class="fa arrow"></span>
                     </a>
@@ -98,6 +98,12 @@
                     </ul>
                 </li>
         @endif
+            <li class="menu-dropdown">
+                <a href="/profile">
+                    <i class="menu-icon ti-user"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
         <!--
             <li>
                 <a href="/clear">
