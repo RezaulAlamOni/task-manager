@@ -65,7 +65,7 @@
                                                                             <div class="col-md-6">
                                                                                 <p>{{ profile.email }}</p>
                                                                             </div>
-                                                                            <div class="col-md-6 text-right pr-0">
+                                                                            <div class="col-md-6 text-right pr-0" v-if="profile.email_verified_at === null">
                                                                                 <a class="profile-edit-btn">
                                                                                     Verify  Email
                                                                                 </a>
