@@ -1661,11 +1661,20 @@
                     })
                     app.Socket.on('takUpdateSocket', function (res) {
                         console.log( res.user_id + " " +app.authUser.id)
-                        if (res.list_id == app.list.id && res.project_id == app.projectId && res.user_id != app.authUser.id) {
+                        if (res.list_id == app.nav_id && res.project_id == app.projectId && res.user_id != app.authUser.id) {
                             // if (res.list_id == app.list.id && res.project_id == app.projectId) {
                             // swal('Updated', 'Task Update!', 'success');
-                            app.getTaskList();
+                            app.getBoardTask();
                         }
+                    })
+                    app.Socket.on('cardUpdatedSocket', function(res) {
+                        // console.log('app.list ', res.list_id, app.board_id);
+                        // console.log('resp',res.project_id, app.projectId);
+                        if (res.list_id == app.board_id && res.project_id == app.projectId ) {
+                            // if (res.list_id == app.list.id && res.project_id == app.projectId) {
+                            // swal('Updated', 'Task Update!', 'success');
+                        }                  
+                            app.getBoardTask();
                     })
                 }
             },
@@ -1850,6 +1859,15 @@
                     .then(response => {
                         console.log(response);
                         _this.getBoardTask();
+                        _this.Socket.emit('cardUpdated',{
+                            // user_id : _this.auth_user.id,
+                            // project_id : _this.projectId
+                            project_id: _this.projectId,
+                            list_id : _this.board_id,
+                            nav_id  : _this.nav_id,
+                            user_id : _this.authUser.id,
+                            type : 'list'
+                        });
                     })
                     .catch(error => {
 
@@ -1966,8 +1984,15 @@
                                 // console.log('shifting failed');
                             });
                     }
-                    _this.Socket.emit('CardMoved',{user_id : _this.auth_user.id,project_id : _this.projectId})
-
+                    _this.Socket.emit('cardUpdated',{
+                        // user_id : _this.auth_user.id,
+                        // project_id : _this.projectId
+                        project_id: _this.projectId,
+                        list_id : _this.board_id,
+                        nav_id  : _this.nav_id,
+                        user_id : _this.authUser.id,
+                        type : 'list'
+                    });
                 }
             },
             onDragStart(columnId, boardId, index, dropResult) {
@@ -2036,6 +2061,15 @@
                                 swal.close();
                             }, 1000);
                         }
+                        _this.Socket.emit('cardUpdated',{
+                            // user_id : _this.auth_user.id,
+                            // project_id : _this.projectId
+                            project_id: _this.projectId,
+                            list_id : _this.board_id,
+                            nav_id  : _this.nav_id,
+                            user_id : _this.authUser.id,
+                            type : 'list'
+                        });
                     })
                     .catch(error => {
                     });
@@ -2541,6 +2575,15 @@
                                 $('#title' + data.id).focus();
                             }, 1000)
                         }
+                        _this.Socket.emit('cardUpdated',{
+                            // user_id : _this.auth_user.id,
+                            // project_id : _this.projectId
+                            project_id: _this.projectId,
+                            list_id : _this.board_id,
+                            nav_id  : _this.nav_id,
+                            user_id : _this.authUser.id,
+                            type : 'list'
+                        });
                     })
                     .catch(error => {
                     });
@@ -2683,7 +2726,15 @@
                         // $('#dropdown' + cardId).toggle();
                         setTimeout(function () {
                             _this.getBoardTask();
-                            _this.Socket.emit('CardMoved',{user_id : _this.auth_user.id,project_id : _this.projectId})
+                            _this.Socket.emit('cardUpdated',{
+                                // user_id : _this.auth_user.id,
+                                // project_id : _this.projectId
+                                project_id: _this.projectId,
+                                list_id : _this.board_id,
+                                nav_id  : _this.nav_id,
+                                user_id : _this.authUser.id,
+                                type : 'list'
+                            });
                         }, 100);
                     })
                     .catch(error => {
@@ -2924,13 +2975,15 @@
                             _this.cards[index].task[child_key].name = data.data;
                             _this.getData();
 
-                            _this.Socket.emit('taskUpdate',{
+                            _this.Socket.emit('cardUpdated',{
+                                // user_id : _this.auth_user.id,
+                                // project_id : _this.projectId
                                 project_id: _this.projectId,
                                 list_id : _this.board_id,
                                 nav_id  : _this.nav_id,
                                 user_id : _this.authUser.id,
                                 type : 'list'
-                            })
+                            });
                         })
                         .catch(error => {
                         });
