@@ -50,7 +50,10 @@ io.on('connection', function(socket) {
         io.emit('takUpdateSocket',data);
     });
 
-
+    socket.on('cardUpdated', function(data){
+        io.emit('cardUpdatedSocket', data)
+        console.log(data);
+    });
 
     socket.on('task-list-Update', function(data) {
 
