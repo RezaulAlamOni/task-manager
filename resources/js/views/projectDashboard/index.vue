@@ -1507,7 +1507,7 @@
                         }
                     })
                     app.Socket.on('takUpdateSocket', function (res) {
-                        console.log( res.user_id + " " +app.authUser.id)
+                        // console.log( res.user_id + " " +app.authUser.id)
                         if (res.list_id == app.list.id && res.project_id == app.projectId && res.user_id != app.authUser.id) {
                         // if (res.list_id == app.list.id && res.project_id == app.projectId) {
                             // swal('Updated', 'Task Update!', 'success');
@@ -2292,7 +2292,8 @@
                             project_id: _this.projectId,
                             list_id : response.list_id,
                             nav_id  : postData.nav_id,
-                            user_id : _this.authUser.id
+                            user_id : _this.authUser.id,
+                            type : 'list'
                         })
 
                     })

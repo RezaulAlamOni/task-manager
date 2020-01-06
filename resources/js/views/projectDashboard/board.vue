@@ -1659,6 +1659,14 @@
                             // swal('Card moved','You assign on a task!', 'success');
                         }
                     })
+                    app.Socket.on('takUpdateSocket', function (res) {
+                        console.log( res.user_id + " " +app.authUser.id)
+                        if (res.list_id == app.list.id && res.project_id == app.projectId && res.user_id != app.authUser.id) {
+                            // if (res.list_id == app.list.id && res.project_id == app.projectId) {
+                            // swal('Updated', 'Task Update!', 'success');
+                            app.getTaskList();
+                        }
+                    })
                 }
             },
             getAuthUser(){
@@ -2915,6 +2923,14 @@
                         .then(response => {
                             _this.cards[index].task[child_key].name = data.data;
                             _this.getData();
+
+                            _this.Socket.emit('taskUpdate',{
+                                project_id: _this.projectId,
+                                list_id : _this.board_id,
+                                nav_id  : _this.nav_id,
+                                user_id : _this.authUser.id,
+                                type : 'list'
+                            })
                         })
                         .catch(error => {
                         });

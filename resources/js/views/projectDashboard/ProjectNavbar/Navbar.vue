@@ -729,16 +729,19 @@
         },
         mounted() {
             this.AllNavItem();
-
             if (localStorage.selected_nav !== undefined) {
                 var session_data = JSON.parse(localStorage.selected_nav);
-                this.$emit('getList', {
-                    list_id: session_data.list_id,
-                    nav_id: session_data.nav_id,
-                    title: session_data.title,
-                    description: session_data.description,
-                    type: session_data.type
-                })
+               if (session_data.project_id == this.projectId){
+                   this.$emit('getList', {
+                       list_id: session_data.list_id,
+                       nav_id: session_data.nav_id,
+                       title: session_data.title,
+                       description: session_data.description,
+                       type: session_data.type
+                   })
+               } else {
+                   this.ShowOverView();
+               }
             }else {
                 this.ShowOverView();
             }
@@ -762,8 +765,6 @@
                 $("#shortcutModel").modal('show');
             },
             addListFromOverview() {
-
-
                 $("#addListFromOverviewModel").modal('show');
             },
             AddNavItem() {
@@ -790,8 +791,6 @@
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
                     });
-
-
                 // console.log(_this.navItem)
             },
             AllNavItem() {
