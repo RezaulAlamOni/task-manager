@@ -228,10 +228,10 @@
                                                   style="top: 12px;"
                                                   data-toggle="dropdown">
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
-                                                       v-if="data.priority_label === 'high'"
-                                                       class="badge badge-warning text-capitalize "
-                                                       style="background: #e25858;margin-left: 1px; float: left;margin-right: 5px;color:#ffffff"
-                                                       data-original-title="">
+                                                          v-if="data.priority_label === 'high'"
+                                                          class="badge badge-warning text-capitalize "
+                                                          style="background: #e25858;margin-left: 1px; float: left;margin-right: 5px;color:#ffffff"
+                                                          data-original-title="">
                                                     {{data.priority_label}}
                                                  </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
@@ -242,10 +242,10 @@
                                                         {{data.priority_label}}
                                                      </span>
                                                     <span title="" data-placement="bottom" data-toggle="tooltip"
-                                                      v-if="data.priority_label === 'medium'"
-                                                      class="badge badge-warning text-capitalize "
-                                                      style="background: #e58c62; margin-left: 1px; float: left;margin-right: 5px;"
-                                                      data-original-title="">
+                                                          v-if="data.priority_label === 'medium'"
+                                                          class="badge badge-warning text-capitalize "
+                                                          style="background: #e58c62; margin-left: 1px; float: left;margin-right: 5px;"
+                                                          data-original-title="">
                                                     {{data.priority_label}}
                                                  </span>
                                             </span>
@@ -267,7 +267,7 @@
                                                             </label>
                                                         </li>
                                                         <li class="assignUser">
-                                                            <div class="users-select row" >
+                                                            <div class="users-select row">
                                                                 <div class="col-md-9 add-tag-to-selected"
                                                                      @click="Add_Priority('3',data.id)">
                                                                     <span
@@ -276,8 +276,8 @@
                                                                     <h5 class="text-capitalize"> high</h5>
                                                                 </div>
                                                                 <div @click="RemovePriority(data.id)"
-                                                                    style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
-                                                                    v-if="data.priority_label === 'high'">
+                                                                     style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
+                                                                     v-if="data.priority_label === 'high'">
                                                                     <span>
                                                                         <i class="far fa-minus-octagon"></i>
                                                                     </span>
@@ -292,8 +292,8 @@
                                                                     <h5 class="text-capitalize">medium</h5>
                                                                 </div>
                                                                 <div @click="RemovePriority(data.id)"
-                                                                    style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
-                                                                    v-if="data.priority_label === 'medium'">
+                                                                     style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
+                                                                     v-if="data.priority_label === 'medium'">
                                                                     <i class="far fa-minus-octagon"></i>
                                                                 </div>
                                                             </div>
@@ -306,8 +306,8 @@
                                                                     <h5>Low</h5>
                                                                 </div>
                                                                 <div @click="RemovePriority(data.id)"
-                                                                    style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
-                                                                    v-if="data.priority_label === 'low'">
+                                                                     style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
+                                                                     v-if="data.priority_label === 'low'">
                                                                     <i class="far fa-minus-octagon"></i>
                                                                 </div>
                                                             </div>
@@ -321,7 +321,8 @@
                                     <a class="description-icon hide-item-res" v-if="data.description !== ''">
                                         <i class="fal fa-align-justify li-opacity" aria-hidden="true"></i>
                                     </a>
-                                        <a class="comment-icon hide-item-res" v-if="data.comment.length > 0"><!--v-if="data.comment.length > 0"-->
+                                    <a class="comment-icon hide-item-res" v-if="data.comment.length > 0">
+                                        <!--v-if="data.comment.length > 0"-->
                                         <i class="fal fa-comments li-opacity" aria-hidden="true"></i>
                                     </a>
 
@@ -909,7 +910,6 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>Add your new list here !</p>
                         <div class="form-group row">
                             <label class="col-sm-4 col-form-label">Title</label>
                             <div class="col-sm-8">
@@ -1162,15 +1162,18 @@
                         <div class="form-group row">
                             <div class="col-sm-9">
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item" >
+                                    <li class="list-group-item">
                                         <label class="checkbox_cus_mini">
-                                            <input @click="addAllUserToFilter(allUsers)" type="checkbox" class="checkedAllUser"> All
+                                            <input @click="addAllUserToFilter(allUsers)" type="checkbox"
+                                                   class="checkedAllUser"> All
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
                                     <li class="list-group-item" v-for="user in allUsers">
                                         <label class="checkbox_cus_mini">
-                                            <input v-model="userIdList" :value="user.id" @click="addUserToFilter(user.id)" type="checkbox" class="checkedAll" name="side_dav"> {{ user.name }}
+                                            <input v-model="userIdList" :value="user.id"
+                                                   @click="addUserToFilter(user.id)" type="checkbox" class="checkedAll"
+                                                   name="side_dav"> {{ user.name }}
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
@@ -1187,12 +1190,13 @@
             </div>
         </div>
 
-        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="priority_list_modal" role="dialog"
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="priority_list_modal"
+             role="dialog"
              tabindex="-1">
             <div class="modal-dialog " role="document">
                 <div class="modal-content">
                     <div class="modal-header" style="border-radius: 13px;">
-                        <h5 class="modal-title">Priority List  </h5>
+                        <h5 class="modal-title">Priority List </h5>
                         <button aria-label="Close" class="close" data-dismiss="modal" type="button">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -1201,21 +1205,24 @@
                         <div class="form-group row">
                             <div class="col-sm-9">
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item" >
+                                    <li class="list-group-item">
                                         <label class="checkbox_cus_mini">
-                                            <input type="checkbox" class="checkedUser" @click="addFilterToFilter(3)" :checked="priorityFilter.includes(3) ? true : false" > High
+                                            <input type="checkbox" class="checkedUser" @click="addFilterToFilter(3)"
+                                                   :checked="priorityFilter.includes(3) ? true : false"> High
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
-                                    <li class="list-group-item" >
+                                    <li class="list-group-item">
                                         <label class="checkbox_cus_mini">
-                                            <input type="checkbox" class="checkedUser"   @click="addFilterToFilter(2)" :checked="priorityFilter.includes(2) ? true : false"> Medium
+                                            <input type="checkbox" class="checkedUser" @click="addFilterToFilter(2)"
+                                                   :checked="priorityFilter.includes(2) ? true : false"> Medium
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
-                                    <li class="list-group-item" >
+                                    <li class="list-group-item">
                                         <label class="checkbox_cus_mini">
-                                            <input type="checkbox"  @click="addFilterToFilter(1)" class="checkedUser" :checked="priorityFilter.includes(1) ? true : false"> Low
+                                            <input type="checkbox" @click="addFilterToFilter(1)" class="checkedUser"
+                                                   :checked="priorityFilter.includes(1) ? true : false"> Low
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
@@ -1274,7 +1281,7 @@
                 disabledDates: {
                     id: null,
                 },
-                filter_type : null,
+                filter_type: null,
                 id: 0,
                 treeList: [],
                 date_config: {
@@ -1349,7 +1356,7 @@
                 userNames: null,
                 projectUsers: null,
                 commentsData: null,
-                Socket : null
+                Socket: null
             }
         },
         mounted() {
@@ -1433,7 +1440,7 @@
                         _this.delete_popup = 1;
                         var nav_type = JSON.parse(localStorage.selected_nav);
                         console.log(nav_type)
-                        if (nav_type.type === 'list' && _this.selectedIds.length > 0){
+                        if (nav_type.type === 'list' && _this.selectedIds.length > 0) {
                             _this.RemoveNodeAndChildren(_this.selectedData);
                         }
                         break;
@@ -1463,24 +1470,23 @@
         },
 
         methods: {
-            teamCheck(){
+            teamCheck() {
                 $('#fullIndexPage').hide();
-                axios.get('/api/nav-item/'+this.projectId)
-                .then(response => response.data)
-                .then(response => {
-                    if (response.redierct) {
-                        swal('Sorry',"You are not permitted","warning");
-                        window.location.href = window.location.origin+'/projects';
-                    }else{
-                        $('#fullIndexPage').show();
-                    }
-                })
-                .catch(error => {
+                axios.get('/api/nav-item/' + this.projectId)
+                    .then(response => response.data)
+                    .then(response => {
+                        if (response.redierct) {
+                            swal('Sorry', "You are not permitted", "warning");
+                            window.location.href = window.location.origin + '/projects';
+                        } else {
+                            $('#fullIndexPage').show();
+                        }
+                    })
+                    .catch(error => {
 
-                })
+                    })
             },
-            connectSocket: function ()
-            {
+            connectSocket: function () {
                 let app = this;
                 if (app.Socket == null) {
                     app.Socket = io.connect('http://localhost:3000/');
@@ -1489,15 +1495,23 @@
                         console.log(res);
                     })
                     app.Socket.on('assign_user', function (res) {
-                        if (res == app.authUser.id){
-                            swal('Assigned','You assign on a task!', 'success');
+                        // console.log(res)
+                        if (res == app.authUser.id) {
+                            // swal('Assigned', 'You assign on a task!', 'success');
                         }
+                        app.getTaskList();
                     })
                     app.Socket.on('rulesCreateAndAssign', function (res) {
-                        console.log(res)
-                        console.log(app.authUser)
-                        if (res.assign_users.indexOf(app.authUser.id) > -1 && res.project_id === app.projectId){
-                            swal('Assigned','You assigned by rules!', 'success');
+                        if (res.assign_users.indexOf(app.authUser.id) > -1 && res.project_id === app.projectId) {
+                            swal('Assigned', 'You assigned by rules!', 'success');
+                        }
+                    })
+                    app.Socket.on('takUpdateSocket', function (res) {
+                        // console.log( res.user_id + " " +app.authUser.id)
+                        if (res.list_id == app.list.id && res.project_id == app.projectId && res.user_id != app.authUser.id) {
+                        // if (res.list_id == app.list.id && res.project_id == app.projectId) {
+                            // swal('Updated', 'Task Update!', 'success');
+                            app.getTaskList();
                         }
                     })
 
@@ -1517,7 +1531,7 @@
                 }
                 text.style.height = curHeight + 'px';
             },
-            getAuthUser(){
+            getAuthUser() {
                 // auth-user
                 var _this = this;
                 axios.get('/api/auth-user')
@@ -1548,13 +1562,11 @@
                     };
                 }
             },
-            dropNode(node, targetTree, oldTree)
-            {
+            dropNode(node, targetTree, oldTree) {
                 let THIS = this;
                 clearInterval(THIS.dNodeInterval);
             },
-            dragNode(node)
-            {
+            dragNode(node) {
                 let THIS = this;
                 this.dNode = node;
                 this.dNodeHeght = $('#' + node._id)[0].getBoundingClientRect().top + window.scrollY;
@@ -1584,8 +1596,7 @@
                         console.log('Api is drag and drop not Working !!!')
                     });
             },
-            FindDopedTask(parent, data, tasks)
-            {
+            FindDopedTask(parent, data, tasks) {
                 for (var i = 0; i < tasks.length; i++) {
                     if (data.id === tasks[i].id) {
                         if (i >= 1) {
@@ -1602,16 +1613,14 @@
                     }
                 }
             },
-            showSearchInputField()
-            {
+            showSearchInputField() {
                 // if (this.list.type === 'list') {
                 this.search_type = (this.list.type === 'overview') ? 'all' : 'this';
                 $('.searchList').toggle();
                 $('.searchTaskList').focus();
                 // }
             },
-            SearchTaskByAssignedUser(id, name)
-            {
+            SearchTaskByAssignedUser(id, name) {
                 $('.searchTaskList').val('@' + name);
                 var _this = this;
                 var nav_type = JSON.parse(localStorage.selected_nav);
@@ -1634,8 +1643,7 @@
                         console.log('Api is drag and drop not Working !!!')
                     });
             },
-            searchDataFormTask(e)
-            {
+            searchDataFormTask(e) {
                 var value = e.target.value;
                 var _this = this;
                 if (value.charAt(0) === '@') {
@@ -1691,8 +1699,7 @@
                     // }
                 }
             },
-            searchBYType()
-            {
+            searchBYType() {
                 var _this = this;
                 var value = $('.searchTaskList').val();
                 var nav_type = JSON.parse(localStorage.selected_nav);
@@ -1715,28 +1722,26 @@
                 $('#myUL').addClass('myUL-show');
 
             },
-            filter(data)
-            {
+            filter(data) {
                 let _this = this;
                 this.filter_type = data.type
                 setTimeout(() => {
                     _this.filter_type = null;
                 }, 100);
 
-                if(this.list.type == 'list'){
-                    if (data.type === 'all'){
+                if (this.list.type == 'list') {
+                    if (data.type === 'all') {
                         this.getTaskList()
-                    } else if(data.type == 'users_task'){
+                    } else if (data.type == 'users_task') {
                         $('#user_list_f').modal('show');
-                    } else if(data.type == 'priority_based'){
+                    } else if (data.type == 'priority_based') {
                         $('#priority_list_modal').modal('show');
                     } else {
                         this.GetFilterData(data.type)
                     }
                 }
             },
-            addUserToFilter(userId)
-            {
+            addUserToFilter(userId) {
                 if (this.userIdList.includes(userId)) {
                     var indexs = this.userIdList.indexOf(userId);
                     if (indexs > -1) {
@@ -1746,8 +1751,7 @@
                     this.userIdList.push(userId);
                 }
             },
-            addFilterToFilter(type)
-            {
+            addFilterToFilter(type) {
                 if (this.priorityFilter.includes(type)) {
                     var indexs = this.priorityFilter.indexOf(type);
                     if (indexs > -1) {
@@ -1758,28 +1762,27 @@
                 }
                 console.log(this.priorityFilter)
             },
-            userFilter()
-            {
-                if ( this.userIdList.length < 1) {
-                    swal('Warning!!',"No user is selected ","warning");
-                }  else {
-                    this.GetFilterData('users_task',this.userIdList);
+            userFilter() {
+                if (this.userIdList.length < 1) {
+                    swal('Warning!!', "No user is selected ", "warning");
+                } else {
+                    this.GetFilterData('users_task', this.userIdList);
                     $('#user_list_f').modal('hide');
                     this.userIdList = [];
                 }
 
             },
-            GetFilterData(type,ids = []){
+            GetFilterData(type, ids = []) {
                 var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 var _this = this;
                 let data = {
                     id: this.projectId,
                     list_id: this.list_id,
                     nav_id: this.nav_id,
-                    filter_type : type,
-                    ids : ids,
-                    filter : this.priorityFilter,
-                    tz : tz
+                    filter_type: type,
+                    ids: ids,
+                    filter: this.priorityFilter,
+                    tz: tz
                 };
                 this.priorityFilter = [];
                 axios.post('/api/task-list-filter', data)
@@ -1891,7 +1894,7 @@
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
-                        _this.Socket.emit('assignUser',user.id)
+                        _this.Socket.emit('assignUser', user.id)
                         _this.getTaskList();
                     })
                     .catch(error => {
@@ -1913,6 +1916,7 @@
                         // console.log(response);
                         if (response === 'success') {
                             _this.getTaskList()
+                            _this.Socket.emit('assignUser', postData.user_id)
                         }
                     })
                     .catch(error => {
@@ -2270,10 +2274,10 @@
                 //     return false;
                 // }
                 var postData = {
-                    target_id: data.id,
-                    copy_ids: (this.selectedCopy === null) ? this.selectedCut : this.selectedCopy,
-                    type: (this.selectedCopy === null) ? 'cut' : 'copy',
-                    nav_id: _this.nav_id
+                    target_id   : data.id,
+                    copy_ids    : (this.selectedCopy === null) ? this.selectedCut : this.selectedCopy,
+                    type        : (this.selectedCopy === null) ? 'cut' : 'copy',
+                    nav_id      : _this.nav_id
                 };
 
                 axios.post('/api/task-list/copy-cut-past', postData)
@@ -2284,6 +2288,13 @@
                         _this.selectedIds = [];
                         _this.selectedCopy = null;
                         _this.selectedCut = null;
+                        _this.Socket.emit('taskUpdate',{
+                            project_id: _this.projectId,
+                            list_id : response.list_id,
+                            nav_id  : postData.nav_id,
+                            user_id : _this.authUser.id,
+                            type : 'list'
+                        })
 
                     })
                     .catch(error => {
@@ -2440,6 +2451,12 @@
                             $("#" + _this.newEmptyTaskID).focus();
                         }, 1000)
                         _this.empty_task_delete_flag = _this.newEmptyTaskID
+                        _this.Socket.emit('taskUpdate',{
+                            project_id: _this.projectId,
+                            list_id : postData.list_id,
+                            nav_id  : postData.nav_id,
+                            user_id : _this.authUser.id
+                        })
                     })
                     .catch(error => {
                         console.log('Api is task-make-child not Working !!!')
@@ -2466,6 +2483,11 @@
                             $("#" + _this.newEmptyTaskID).focus();
                         }, 500)
                         _this.empty_task_delete_flag = _this.newEmptyTaskID
+                        _this.Socket.emit('taskUpdate',{
+                            project_id: _this.projectId,
+                            list_id : postData.list_id,
+                            user_id : _this.authUser.id
+                        })
 
                     })
                     .catch(error => {
@@ -2478,7 +2500,7 @@
                 return myColor;
             },
             addTag(e, data) {
-
+                alert()
                 var _this = this;
                 if (e.which === 13) {
                     var color = (_this.tag === 'Dont Forget') ? '#ff0000' : _this.generateColor();
@@ -2493,7 +2515,12 @@
                             _this.getTaskList();
                             $('#dropdown' + data._id).toggle();
                             _this.selectedData = data;
-                            _this.tag = null
+                            _this.tag = null;
+                            _this.Socket.emit('taskUpdate',{
+                                project_id: _this.projectId,
+                                list_id : _this.list.id,
+                                user_id : _this.authUser.id
+                            })
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
@@ -2515,6 +2542,11 @@
                         _this.getTaskList();
                         $('#dropdown' + data._id).toggle();
                         _this.selectedData.tags[0] = tag
+                        _this.Socket.emit('taskUpdate',{
+                            project_id: _this.projectId,
+                            list_id : _this.list.id,
+                            user_id : _this.authUser.id
+                        })
                     })
                     .catch(error => {
                         console.log('Api for add tag not Working !!!')
@@ -2540,6 +2572,12 @@
 
                             _this.getTaskList();
                             _this.tag = null
+
+                            _this.Socket.emit('taskUpdate',{
+                                project_id: _this.projectId,
+                                list_id : _this.list.id,
+                                user_id : _this.authUser.id
+                            })
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
@@ -2557,6 +2595,11 @@
                         .then(response => {
                             _this.getTaskList();
                             _this.tag = null
+                            _this.Socket.emit('taskUpdate',{
+                                project_id: _this.projectId,
+                                list_id : _this.list.id,
+                                user_id : _this.authUser.id
+                            })
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
@@ -2650,6 +2693,12 @@
                         // _this.getTaskList()
                         // $('#dropdown' + data._id).toggle();
                         // _this.selectedData.tags = tag
+
+                        _this.Socket.emit('taskUpdate',{
+                            project_id: _this.projectId,
+                            list_id : _this.list.id,
+                            user_id : _this.authUser.id
+                        })
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
@@ -2677,6 +2726,11 @@
                                 if (response.status === 1) {
                                     _this.getTaskList();
                                     swal.close();
+                                    _this.Socket.emit('taskUpdate',{
+                                        project_id: _this.projectId,
+                                        list_id : _this.list.id,
+                                        user_id : _this.authUser.id
+                                    })
                                     // swal("Complete!", "This task is added to complete", "success");
                                 } else if (response.status === 2) {
                                     swal("Sorry!", "The board dont have any 100% progress column !!", "warning");
@@ -2716,6 +2770,12 @@
                         setTimeout(function () {
                             $("#click" + data.id).click();
                         }, 300)
+
+                        _this.Socket.emit('taskUpdate',{
+                            project_id: _this.projectId,
+                            list_id : _this.list.id,
+                            user_id : _this.authUser.id
+                        })
                     })
                     .catch(error => {
                         console.log('Api for move up task not Working !!!')
@@ -2743,6 +2803,12 @@
                         setTimeout(function () {
                             $("#click" + data.id).click();
                         }, 300)
+
+                        _this.Socket.emit('taskUpdate',{
+                            project_id: _this.projectId,
+                            list_id : _this.list.id,
+                            user_id : _this.authUser.id
+                        })
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
@@ -2973,7 +3039,7 @@
                     id: this.projectId,
                     list_id: this.list_id,
                     nav_id: this.nav_id,
-                    tz : tz
+                    tz: tz
                 };
                 axios.post('/api/task-list', data)
                     .then(response => response.data)
@@ -3026,8 +3092,8 @@
                     localStorage.selected_nav = JSON.stringify({
                         list_id: data.list_id,
                         nav_id: data.nav_id,
-                        title : data.title,
-                        description : this.list.description,
+                        title: data.title,
+                        description: this.list.description,
                         project_id: this.projectId,
                         type: 'list'
                     });
@@ -3037,8 +3103,8 @@
                     localStorage.selected_nav = JSON.stringify({
                         list_id: data.list_id,
                         nav_id: data.nav_id,
-                        title : data.title,
-                        description : this.list.description,
+                        title: data.title,
+                        description: this.list.description,
                         project_id: this.projectId,
                         type: 'board'
                     });
@@ -3076,6 +3142,14 @@
                     .then(response => response.data)
                     .then(response => {
                         l.stop();
+                        localStorage.selected_nav = JSON.stringify({
+                            title: _this.list.name,
+                            description: _this.list.description,
+                            list_id: _this.list.id,
+                            nav_id:_this.list.nav_id,
+                            project_id: _this.projectId,
+                            type: _this.list.type
+                        });
                         _this.AllNavItems = response.navItems.original.success;
                         $("#updateListBoardModel").modal('hide');
                     })
@@ -3420,6 +3494,11 @@
                         .then(response => response.data)
                         .then(response => {
                             if (response.empty !== 'not change') {
+                                _this.Socket.emit('taskUpdate',{
+                                    project_id: _this.projectId,
+                                    list_id : _this.list.id,
+                                    user_id : _this.authUser.id
+                                })
                                 if (data.text.indexOf("@") != -1 || data.text.indexOf("#") != -1) {
                                     _this.getTaskList();
                                 }
@@ -3497,18 +3576,23 @@
                 date = new Date(date);
                 var _this = this;
                 var month = (parseFloat(date.getMonth() + 1) > 9) ? parseFloat(date.getMonth() + 1) : '0' + parseFloat(date.getMonth() + 1);
-                var formatedDate = date.getFullYear() + '-' + month + '-' + date.getDate()+ ' 23:59:00';
+                var formatedDate = date.getFullYear() + '-' + month + '-' + date.getDate() + ' 23:59:00';
 
                 var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 var postData = {
                     id: _this.selectedData.id,
                     date: formatedDate,
-                    tz : tz
+                    tz: tz
                 };
                 axios.post('/api/task-list/update', postData)
                     .then(response => response.data)
                     .then(response => {
                         _this.getTaskList()
+                        _this.Socket.emit('taskUpdate',{
+                            project_id: _this.projectId,
+                            list_id : _this.list.id,
+                            user_id : _this.authUser.id
+                        })
                     })
                     .catch(error => {
                         console.log('Api for task date update not Working !!!')
@@ -3567,7 +3651,7 @@
                         console.log('Api for task add priority not Working !!!')
                     });
             },
-            RemovePriority(id){
+            RemovePriority(id) {
                 var _this = this;
                 var data = {
                     ids: (id == null) ? this.selectedIds : [id],
@@ -3680,12 +3764,11 @@
             RuleUpdate() {
                 this.AllNavItems = null;
             },
-            addAllUserToFilter(allUsers){
+            addAllUserToFilter(allUsers) {
                 if ($('.checkedAllUser').prop('checked') === false) {
                     this.userIdList = [];
                 } else {
-                    for(let i = 0; allUsers.length > i; i++)
-                    {
+                    for (let i = 0; allUsers.length > i; i++) {
                         this.userIdList.push(allUsers[i].id);
                     }
                 }
