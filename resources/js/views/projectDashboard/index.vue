@@ -1514,6 +1514,14 @@
                             app.getTaskList();
                         }
                     })
+                    app.Socket.on('listUpdateSocket', function (res) {
+                        // console.log( res.user_id + " " +app.authUser.id)
+                        if (res.list_id == app.list.id && res.project_id == app.projectId && res.user_id != app.authUser.id) {
+                        // if (res.list_id == app.list.id && res.project_id == app.projectId) {
+                            // swal('Updated', 'Task Update!', 'success');
+                            app.getTaskList();
+                        }
+                    })
 
                 }
             },
@@ -2288,7 +2296,7 @@
                         _this.selectedIds = [];
                         _this.selectedCopy = null;
                         _this.selectedCut = null;
-                        _this.Socket.emit('taskUpdate',{
+                        _this.Socket.emit('task-list-Update',{
                             project_id: _this.projectId,
                             list_id : response.list_id,
                             nav_id  : postData.nav_id,
@@ -2451,7 +2459,7 @@
                             $("#" + _this.newEmptyTaskID).focus();
                         }, 1000)
                         _this.empty_task_delete_flag = _this.newEmptyTaskID
-                        _this.Socket.emit('taskUpdate',{
+                        _this.Socket.emit('task-list-Update',{
                             project_id: _this.projectId,
                             list_id : postData.list_id,
                             nav_id  : postData.nav_id,
@@ -2483,12 +2491,11 @@
                             $("#" + _this.newEmptyTaskID).focus();
                         }, 500)
                         _this.empty_task_delete_flag = _this.newEmptyTaskID
-                        _this.Socket.emit('taskUpdate',{
+                        _this.Socket.emit('task-list-Update',{
                             project_id: _this.projectId,
                             list_id : postData.list_id,
                             user_id : _this.authUser.id
                         })
-
                     })
                     .catch(error => {
                         console.log('Api is task-unmake-child not Working !!!')

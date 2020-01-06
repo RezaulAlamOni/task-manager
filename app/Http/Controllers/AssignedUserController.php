@@ -60,7 +60,7 @@ class AssignedUserController extends Controller
         $comment['subject'] = "You have been removed from a task";
         $comment['body'] = "You have been removed from a task";
         Mail::to($user->email)->send(new UserMail($comment));
-        
+
         // Mail::to($request->user())->queue(new OrderShipped($order));
         return response()->json('success');
     }
