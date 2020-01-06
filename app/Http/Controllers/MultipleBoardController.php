@@ -20,6 +20,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
+use Mail;
+use App\Mail\UserMail;
 
 class MultipleBoardController extends Controller
 {
@@ -388,11 +390,13 @@ class MultipleBoardController extends Controller
             }
             if (!empty($value['taskFilter']) && count($value['taskFilter']) > 0) {
                 foreach ($value['taskFilter'] as $keys => $values) {
-                    $allTaskIds[] = $values['id'];
-                    $tagTooltip = '';
-                    $tags = [];
-                    if (!empty($values['Assign_tags']) && count($values['Assign_tags']) > 0) {
-                        foreach ($values['Assign_tags'] as $tagkey => $tag) {
+                    if ($values['title'] !== 'Dont Forget Section') {
+
+                        $allTaskIds[] = $values['id'];
+                        $tagTooltip = '';
+                        $tags = [];
+                        if (!empty($values['Assign_tags']) && count($values['Assign_tags']) > 0) {
+                            foreach ($values['Assign_tags'] as $tagkey => $tag) {
                                 if (!empty($tag->tag)){
                                     $infoTags = array(
                                         'assign_id' => $tag->id,
@@ -406,62 +410,62 @@ class MultipleBoardController extends Controller
                                     $tagTooltip .= '#' . $tag->tag->title . ' ';
                                     $tags[$tagkey] = $infoTags;
                                 }
+                            }
                         }
+
+                        $boards[$key]['task'][$keys]['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id','users.id')->where('task_id', $values['id'])->get()->toArray();
+
+                        $assigned_user_ids = [];
+                        foreach ($boards[$key]['task'][$keys]['assigned_user'] as $id) {
+                            $assigned_user_ids[] = $id['id'];
+                        }
+
+                        $boards[$key]['task'][$keys]['assigned_user_ids'] = $assigned_user_ids;
+                        $boards[$key]['task'][$keys]['users'] = $allUsers;
+
+
+                        $boards[$key]['task'][$keys]['tags'] = $tags;
+                        $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
+
+                        if( $values['childTask'] !== null ){
+                            $this->totalChild = 0;
+                            $boards[$key]['task'][$keys]['child'] = $this->recurChild($values['childTask']);
+
+                        } else {
+                            $boards[$key]['task'][$keys]['child'] = 0;
+                        }
+
+                        $boards[$key]['task'][$keys]['userName'] = Auth::user()->name;
+                        $boards[$key]['task'][$keys]['comment'] = Comment::where('task_id',$values['id'])->where('user_id',Auth::id())->get(); //->count()
+                        $boards[$key]['task'][$keys]['children'] = $values['childTask'];
+                        $boards[$key]['task'][$keys]['parents'] = $values['parents'];
+                        $boards[$key]['task'][$keys]['id'] = $values['id'];
+                        $boards[$key]['task'][$keys]['parent_id'] = $values['parent_id'];
+                        $boards[$key]['task'][$keys]['name'] = $values['title'];
+                        $boards[$key]['task'][$keys]['cardOpen'] = $values['card_open'];
+                        $boards[$key]['task'][$keys]['list_id'] = $values['list_id'];
+                        $boards[$key]['task'][$keys]['multiple_board_id'] = $values['multiple_board_id'];
+                        $boards[$key]['task'][$keys]['description'] = $values['description'];
+                        $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
+                        $boards[$key]['task'][$keys]['progress'] = $values['progress'];
+
+                        if ($values['priority_label'] == 3 || $values['priority_label'] == 'high') {
+                            $boards[$key]['task'][$keys]['priority_label'] = 'high';
+                        } else if($values['priority_label'] == 2 || $values['priority_label'] == 'medium'){
+                            $boards[$key]['task'][$keys]['priority_label'] = 'medium';
+                        } else if($values['priority_label'] == 1 || $values['priority_label'] == 'low'){
+                            $boards[$key]['task'][$keys]['priority_label'] = 'low';
+                        }
+
+                        if ($values['list_id'] != '') {
+                            $boards[$key]['task'][$keys]['type'] = 'task';
+                        } else {
+                            $boards[$key]['task'][$keys]['type'] = 'card';
+                        }
+                        $date = Carbon::parse($values['date'], 'UTC')->setTimezone($tz);
+                        $boards[$key]['task'][$keys]['date'] = ($values['date'] == '0000-00-00')? $date : date('d M Y', strtotime($date));
+                        $boards[$key]['task'][$keys]['existing_tags'] = $allTags;
                     }
-
-                    $boards[$key]['task'][$keys]['assigned_user'] = AssignedUser::join('users', 'task_assigned_users.user_id','users.id')->where('task_id', $values['id'])->get()->toArray();
-
-                    $assigned_user_ids = [];
-                    foreach ($boards[$key]['task'][$keys]['assigned_user'] as $id) {
-                        $assigned_user_ids[] = $id['id'];
-                    }
-
-                    $boards[$key]['task'][$keys]['assigned_user_ids'] = $assigned_user_ids;
-                    $boards[$key]['task'][$keys]['users'] = $allUsers;
-
-
-                    $boards[$key]['task'][$keys]['tags'] = $tags;
-                    $boards[$key]['task'][$keys]['tagTooltip'] = $tagTooltip;
-
-                    if( $values['childTask'] !== null ){
-                        $this->totalChild = 0;
-                        $boards[$key]['task'][$keys]['child'] = $this->recurChild($values['childTask']);
-
-                    } else {
-                        $boards[$key]['task'][$keys]['child'] = 0;
-                    }
-
-                    $boards[$key]['task'][$keys]['userName'] = Auth::user()->name;
-                    $boards[$key]['task'][$keys]['comment'] = Comment::where('task_id',$values['id'])->where('user_id',Auth::id())->get(); //->count()
-                    $boards[$key]['task'][$keys]['children'] = $values['childTask'];
-                    $boards[$key]['task'][$keys]['parents'] = $values['parents'];
-                    $boards[$key]['task'][$keys]['id'] = $values['id'];
-                    $boards[$key]['task'][$keys]['parent_id'] = $values['parent_id'];
-                    $boards[$key]['task'][$keys]['name'] = $values['title'];
-                    $boards[$key]['task'][$keys]['cardOpen'] = $values['card_open'];
-                    $boards[$key]['task'][$keys]['list_id'] = $values['list_id'];
-                    $boards[$key]['task'][$keys]['multiple_board_id'] = $values['multiple_board_id'];
-                    $boards[$key]['task'][$keys]['description'] = $values['description'];
-                    $boards[$key]['task'][$keys]['textareaShow'] = ($values['title'] !== '')? false : true;
-                    $boards[$key]['task'][$keys]['progress'] = $values['progress'];
-
-                    if ($values['priority_label'] == 3 || $values['priority_label'] == 'high') {
-                        $boards[$key]['task'][$keys]['priority_label'] = 'high';
-                    } else if($values['priority_label'] == 2 || $values['priority_label'] == 'medium'){
-                        $boards[$key]['task'][$keys]['priority_label'] = 'medium';
-                    } else if($values['priority_label'] == 1 || $values['priority_label'] == 'low'){
-                        $boards[$key]['task'][$keys]['priority_label'] = 'low';
-                    }
-
-                    if ($values['list_id'] != '') {
-                        $boards[$key]['task'][$keys]['type'] = 'task';
-                    } else {
-                        $boards[$key]['task'][$keys]['type'] = 'card';
-                    }
-                    $date = Carbon::parse($values['date'], 'UTC')->setTimezone($tz);
-                    $boards[$key]['task'][$keys]['date'] = ($values['date'] == '0000-00-00')? $date : date('d M Y', strtotime($date));
-                    $boards[$key]['task'][$keys]['existing_tags'] = $allTags;
-
                 }
             } else {
                 $boards[$key]['task'] = [];
@@ -535,9 +539,8 @@ class MultipleBoardController extends Controller
         return response()->json(['multiple_board' => $multiple_board, 'id' => $id]);
     }
 
-
     public function cardAdd(Request $request)
-    {
+    {   
         $id = $request->id;
         $parent = Task::find($id);
         $sortNo = Task::where('board_parent_id', $parent->id)->max('board_sort_id');
@@ -819,6 +822,28 @@ class MultipleBoardController extends Controller
         }
     }
 
+    public function selectedExistingTaskDelete(Request $request)
+    {   
+        // return $request->all();
+        $delete = Task::whereIn('id', $request->id)->update([
+            'board_parent_id' => null,
+            'board_flag' => null,
+            'task_flag' => 1,
+            'multiple_board_id' => null
+        ]);
+        if($delete){
+            if (is_array($request->id)) {
+                foreach ($request->id as $key => $id) {
+                    $task = Task::where('id',$id)->first();
+                    $this->createLog($id, 'remove', 'Task Remove From Board', $task->title);
+                }
+            }
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
     public function hideColumn($id, Request $request)
     {
         $hide = Task::where('id', $id)
@@ -938,7 +963,8 @@ class MultipleBoardController extends Controller
     // }
 
 
-    function findTopParent($data, $d, $parents){
+    function findTopParent($data, $d, $parents)
+    {
         $key = array_search($d['cardId'], array_column($data, 'cardId'));
         $keyP = array_search($d['parent_id'], array_column($data, 'cardId'));
         $keySP = array_search($d['parent_id'], $parents);
@@ -982,17 +1008,30 @@ class MultipleBoardController extends Controller
             foreach ($allData as $d) {
                 $allData = $this->findTopParent($allData, $d, $parents);
             }
+            foreach ($allData as $keys => $values) {
+                foreach ($allData as $key2 => $value2) {
+                    if($value2['parent_id'] == $values['cardId'])
+                    {
+                        $allData[$key2]['sort_id'] = $values['sort_id'];
+                    }
+                }
+            }
             // return $allData;
             foreach ($allData as $key => $item) {
                 if ($item['types'] == 'card' || $item['types'] == 'task') {
                     $id = $item['cardId'];
                     $caseString .= " when id = '".$id."' then '".$item['sort_id']."'";
                     $ids .= " $id,";
+
+                    $update = Task::where('id', $id)->update([
+                        'board_sort_id' => $item['sort_id']
+                    ]);
+
                 }
             }
 
-            $ids = trim($ids, ',');
-            $update = DB::update("update task_lists set board_sort_id = CASE $caseString END where id in ($ids) and board_parent_id = $request->boardId");
+            // $ids = trim($ids, ',');
+            // $update = DB::update("update task_lists set board_sort_id = CASE $caseString END where id in ($ids) and board_parent_id = $request->boardId");
             if ($update) {
                 $this->createLog($request->boardId, 'Updated', 'Card Updated', 'Board Card sorting');
                 return response()->json(['success' => true, 'data' => $update]);
@@ -1023,7 +1062,8 @@ class MultipleBoardController extends Controller
         }
     }
 
-    public function getAllColumnBylist(Request $request){
+    public function getAllColumnBylist(Request $request)
+    {
 
         $column = Task::where('board_parent_id',0)->where('multiple_board_id',$request->list_id)->get();
         if ($column) {
@@ -1051,7 +1091,8 @@ class MultipleBoardController extends Controller
         }
     }
 
-    public function transferColumnToAnotherBoard(Request $request){
+    public function transferColumnToAnotherBoard(Request $request)
+    {
         // return $request->all();
         $sortNo = Task::where('board_parent_id', 0)->max('board_sort_id');
         $data = Task::where('id', $request->columnId)
@@ -1119,9 +1160,8 @@ class MultipleBoardController extends Controller
         return response()->json(['success' => false]);
     }
 
-
-
-    public function test(){
+    public function test()
+    {
 
         $data = array(
             [
@@ -1179,7 +1219,8 @@ class MultipleBoardController extends Controller
           }
     }
 
-    function findTopParents($allData, $item, $parents){
+    function findTopParents($allData, $item, $parents)
+    {
         if($item['parent_id'] == 0){
             return $item['id'];
         }
@@ -1209,7 +1250,8 @@ class MultipleBoardController extends Controller
         return $item['parent_id'].' 55555';
     }
 
-    public function childHide(Request $request){
+    public function childHide(Request $request)
+    {
         $data = Task::where('id',$request->parent_id)
                     ->with('childTask')
                     ->get();

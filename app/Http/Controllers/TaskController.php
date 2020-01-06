@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Intervention\Image\File;
 use function GuzzleHttp\Promise\all;
 use function response;
@@ -36,11 +37,11 @@ class TaskController extends Controller
 
     public function decorateData ($obj, $drag = null, $filter = null,$tz = null)
     {
-    //        $team_id = Auth::user()->current_team_id;
-    //        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
-    //                            ->where('team_users.team_id', $team_id)->get()->toArray();
-    //        $allTeamTags = Tags::where('team_id', $team_id)->where('title', '!=', $this->dont_forget_tag)
-    //                            ->get()->toArray();
+        //        $team_id = Auth::user()->current_team_id;
+        //        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
+        //                            ->where('team_users.team_id', $team_id)->get()->toArray();
+        //        $allTeamTags = Tags::where('team_id', $team_id)->where('title', '!=', $this->dont_forget_tag)
+        //                            ->get()->toArray();
         $allTeamUsers = [];
         $allTeamTags = [];
         $data = [];
@@ -235,7 +236,7 @@ class TaskController extends Controller
             } else {
                 $ids = [Auth::id()];
             }
-//            return $ids;
+        //            return $ids;
             $tasks = $tasks->whereHas('Assign_user', function ($q) use ($ids) {
                 $q->whereIn('user_id', $ids);
             })
@@ -299,7 +300,7 @@ class TaskController extends Controller
                 $q->whereNotIn('priority_label', $filter)
                     ->orWhere('priority_label', null);
             })->get();
-//            return ($tasks);
+        //            return ($tasks);
             $data = $this->decorateData($tasks, 'drag', 'filter');
         } elseif($request->filter_type === "p_show") {
 
@@ -318,7 +319,7 @@ class TaskController extends Controller
         }
 
 
-//        return $tasks;
+        //        return $tasks;
         $task = [];
         $this->all_ids = [];
         $userName = Auth::user();
@@ -471,9 +472,9 @@ class TaskController extends Controller
                 $taskSortId = Task::where('parent_id', $task->id)->max('sort_id');
                 $sort_id = ($taskSortId > 0) ? $taskSortId + 1 : 1;
                 $child = Task::where('id', $request->id)->update(['parent_id' => $task->id, 'sort_id' => $sort_id, 'title' => $request->text]);
+                $this->updateTagWithDataMove($request->id, $task->id);
 
                 $this->createLog($request->id, 'updated', 'Update parent', $request->text);
-                $this->updateTagWithDataMove($request->id, $task->id);
             }
             return response()->json(['success' => $request->id]);
         }
@@ -482,9 +483,12 @@ class TaskController extends Controller
     public
     function updateTagWithDataMove ($task_id, $target_parent_id)
     {
+
         $tag_ids = $tags = Tags::where(['title' => $this->dont_forget_tag, 'team_id' => Auth::user()->current_team_id])->first();
         if ($tag_ids) {
+
             $check_tag_assign = AssignTag::where(['task_id' => $target_parent_id, 'tag_id' => $tag_ids->id])->count();
+
             if ($check_tag_assign <= 0) {
                 AssignTag::where(['task_id' => $task_id, 'tag_id' => $tag_ids->id])->delete();
                 $task_find = Task::where('id', $task_id)->first();
@@ -493,8 +497,10 @@ class TaskController extends Controller
                     'project_id' => $task_find->project_id,
                     'list_id' => $task_find->list_id,
                 ])->first();
-                if ($taskDontForgetSection != null) {
-                    $childrenOfDontForgetSection = Task::where('parent_id', $taskDontForgetSection->id)->get()->toArray();
+
+                if ($taskDontForgetSection) {
+                    $childrenOfDontForgetSection = Task::where('parent_id', $taskDontForgetSection->id)
+                        ->where('is_deleted', 0)->get()->toArray();
                     if (count($childrenOfDontForgetSection) <= 0) {
                         AssignedUser::where('task_id', $taskDontForgetSection->id)->delete();
                         AssignTag::where(['task_id' => $taskDontForgetSection->id, 'tag_id' => $tag_ids->id])->delete();
@@ -504,8 +510,9 @@ class TaskController extends Controller
 
             } else {
                 $self = AssignTag::where(['task_id' => $task_id, 'tag_id' => $tag_ids->id])->with('task')->first();
-                if ($self) {
+                if (!$self) {
                     AssignTag::create(['task_id' => $task_id, 'tag_id' => $tag_ids->id]);
+                    $self = AssignTag::where(['task_id' => $task_id, 'tag_id' => $tag_ids->id])->with('task')->first();
                     $this->createLog($task_id, 'updated', 'Add dont\'t forget tag', $self->task->title);
                 }
             }
@@ -605,20 +612,20 @@ class TaskController extends Controller
         }
         return response()->json([$task]);
 
-//        $data = [
-//            'sort_id' => $target->sort_id + 1,
-//            'parent_id' => $target->parent_id,
-//            'project_id' => $past->project_id,
-//            'list_id' => $past->list_id,
-//            'created_by' => Auth::id(),
-//            'updated_by' => Auth::id(),
-//            'title' => $past->title . ' -copy',
-//            'date' => $past->date,
-//            'created_at' => Carbon::now(),
-//        ];
-//        $task = Task::create($data);
-//        $this->updateTagWithDataMove($task->id, $target->parent_id);
-//        $this->createLog($task->id, 'copy', 'Copy', $task->title);
+        //        $data = [
+        //            'sort_id' => $target->sort_id + 1,
+        //            'parent_id' => $target->parent_id,
+        //            'project_id' => $past->project_id,
+        //            'list_id' => $past->list_id,
+        //            'created_by' => Auth::id(),
+        //            'updated_by' => Auth::id(),
+        //            'title' => $past->title . ' -copy',
+        //            'date' => $past->date,
+        //            'created_at' => Carbon::now(),
+        //        ];
+        //        $task = Task::create($data);
+        //        $this->updateTagWithDataMove($task->id, $target->parent_id);
+        //        $this->createLog($task->id, 'copy', 'Copy', $task->title);
     }
 
     function CopayPast ($target_id, $copy_id)
@@ -676,7 +683,7 @@ class TaskController extends Controller
         if (isset($request->ids)) {
             $ids = $request->ids;
             foreach ($ids as $id) {
-//                $this->deleteTaskWithChild($id);
+        //                $this->deleteTaskWithChild($id);
                 $delete = Task::where('id', $id)->update([
                     'is_deleted' => 1,
                     'deleted_at' => carbon::now()
@@ -693,6 +700,24 @@ class TaskController extends Controller
             $this->createLog($request->id, 'softdelete', 'Task Softdeleted', $task->title);
             // $this->deleteTaskWithChild($request->id);
         }
+
+        $taskDontForgetSection = Task::where([
+            'title' => 'Dont Forget Section',
+            'project_id' => $task->project_id,
+            'list_id' => $task->list_id,
+        ])->first();
+        $tag_ids = $tags = Tags::where(['title' => $this->dont_forget_tag, 'team_id' => Auth::user()->current_team_id])->first();
+        if ($taskDontForgetSection) {
+            $childrenOfDontForgetSection = Task::where('parent_id', $taskDontForgetSection->id)
+                ->where('is_deleted', 0)->get()->toArray();
+
+            if (count($childrenOfDontForgetSection) <= 0) {
+                AssignedUser::where('task_id', $taskDontForgetSection->id)->delete();
+                AssignTag::where(['task_id' => $taskDontForgetSection->id, 'tag_id' => $tag_ids->id])->delete();
+                Task::where('id', $taskDontForgetSection->id)->delete();
+            }
+        }
+
         return response()->json(['success' => 1]);
 
     }
@@ -785,7 +810,7 @@ class TaskController extends Controller
                     $del = unlink($image_path);
                     return response()->json(['success' => $del]);
                 }
-//                return response()->json(['success' => 1]);
+        //                return response()->json(['success' => 1]);
             }
         } else {
             return response()->json(['success' => 0]);
@@ -879,7 +904,7 @@ class TaskController extends Controller
             $d = $request->date;
             $tz = $request->tz;
             $date  = Carbon::parse($d,$tz)->setTimezone('UTC');
-//            $date = Carbon::parse($date, 'UTC')->setTimezone('Asia/Dhaka');
+            //            $date = Carbon::parse($date, 'UTC')->setTimezone('Asia/Dhaka');
             if (Task::where('id', $request->id)->update(['date' => $date])) {
                 return response()->json('success', 200);
             }

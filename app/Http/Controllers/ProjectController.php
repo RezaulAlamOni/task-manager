@@ -102,7 +102,8 @@ class ProjectController extends Controller
 
     public function show(Request $request)
     {
-        $project = Project::findOrFail($request->id);
+        $team_id = Auth::user()->current_team_id;
+        $project = Project::where('team_id',$team_id)->findOrFail($request->id);
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
 

@@ -151,7 +151,8 @@
                                             @contextmenu="makeItClick($event, card,column.children, index, key, column.boardId)"
                                             @click="makeItClick($event, card, column.children, index, key, column.boardId)"
                                             :id="'card_'+card.cardId"
-                                            v-on:dblclick="showLog(card)">
+                                            v-on:dblclick="showLog(card)"
+                                            v-if="card.data !== 'Dont Forget Section'">
                                             <div :id="'titleUserMention'+card.cardId" class="dropdowns-card-user"
                                                  style="z-index: 1;">
                                                 <diV class="collapse show switchToggle">
@@ -753,7 +754,7 @@
                                 </div>
                             </li>
                             <li v-if="selectedCards.types == 'task'">
-                                <a @click="deleteTask(currentColumnIndex, currentColumnKey, selectedCards.cardId)"
+                                <a @click="deleteAllTasks(currentColumnIndex, currentColumnKey, selectedCards.cardId)"
                                    href="javascript:void(0)">
                                     <i class="fad fa-eraser"></i>
                                     Remove Tasks From This Column
@@ -1269,7 +1270,7 @@
                                     :class="(tree.board_parent_id !== null && tree.children.length <= 0) ? 'list-group-item-hide' : ''">
                                     <label
                                         :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': tree.board_parent_id !== null}"
-                                        v-if="tree.text !== '' && tree.board_parent_id !== null && tree.children.length > 0"
+                                        v-if="tree.text !== '' && tree.text !== 'Dont Forget Section' && tree.board_parent_id !== null && tree.children.length > 0"
                                         v-html="tree.text">
                                         <!-- <input :id="tree.id" :value="tree.id" type="checkbox"
                                                 v-if="tree.text !== '' && tree.board_parent_id !== null"
@@ -1278,7 +1279,7 @@
                                         <!-- <span class="checkmark"></span>-->
                                     </label>
                                     <label class="checkbox_cus_mini"
-                                           v-if="tree.text !== '' && tree.board_parent_id == null">
+                                           v-if="tree.text !== '' && tree.text !== 'Dont Forget Section' && tree.board_parent_id == null">
                                         <input :id="tree.id" :value="tree.id" type="checkbox"
                                                v-model="selectedExistedTask"
                                                :class="{'selectAll': true}" @change="selectChild(tree.id)"
@@ -1292,14 +1293,14 @@
                                             <li class="list-group-item">
                                                 <label
                                                     :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child.board_parent_id !== null}"
-                                                    v-if="child.text !== '' && child.board_parent_id !== null && child.children.length > 0">
+                                                    v-if="child.text !== '' && child.text !== 'Dont Forget Section' && child.board_parent_id !== null && child.children.length > 0">
                                                     <input :id="child.id" class="tree-child" :value="child.id"
                                                            type="checkbox"
                                                            checked disable> <span v-html="child.text"></span>
                                                     <!--<span class="checkmark"></span>-->
                                                 </label>
                                                 <label class="checkbox_cus_mini"
-                                                       v-if="child.text !== '' && child.board_parent_id == null">
+                                                       v-if="child.text !== '' && child.text !== 'Dont Forget Section' && child.board_parent_id == null">
                                                     <input :id="child.id" class="tree-child selectAll" :value="child.id"
                                                            type="checkbox" v-model="selectedExistedTask"
                                                            @change="selectChild(child.id)"> <span
@@ -1313,7 +1314,7 @@
                                                         <li class="list-group-item">
                                                             <label
                                                                 :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child1.board_parent_id !== null}"
-                                                                v-if="child1.text !== '' && child1.board_parent_id !== null  && child1.children.length > 0">
+                                                                v-if="child1.text !== '' && child1.text !== 'Dont Forget Section' && child1.board_parent_id !== null  && child1.children.length > 0">
                                                                 <input :id="child1.id" :value="child1.id"
                                                                        class="tree-child"
                                                                        type="checkbox"
@@ -1323,7 +1324,7 @@
                                                             </label>
 
                                                             <label class="checkbox_cus_mini"
-                                                                   v-if="child1.text !== '' && child1.board_parent_id == null">
+                                                                   v-if="child1.text !== '' && child1.text !== 'Dont Forget Section' && child1.board_parent_id == null">
                                                                 <input :id="child1.id" :value="child1.id"
                                                                        class="tree-child selectAll"
                                                                        type="checkbox" v-model="selectedExistedTask"
@@ -1338,7 +1339,7 @@
                                                                     <li class="list-group-item">
                                                                         <label
                                                                             :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
-                                                                            v-if="child2.text !== '' && child2.board_parent_id !== null  && child2.children.length > 0">
+                                                                            v-if="child2.text !== '' && child2.text !== 'Dont Forget Section' && child2.board_parent_id !== null  && child2.children.length > 0">
                                                                             <input :id="child2.id" :value="child2.id"
                                                                                    class="tree-child"
                                                                                    type="checkbox"
@@ -1349,7 +1350,7 @@
                                                                         </label>
 
                                                                         <label class="checkbox_cus_mini"
-                                                                               v-if="child2.text !== '' && child2.board_parent_id == null">
+                                                                               v-if="child2.text !== '' && child2.text !== 'Dont Forget Section' && child2.board_parent_id == null">
                                                                             <input :id="child2.id" :value="child2.id"
                                                                                    class="tree-child selectAll"
                                                                                    type="checkbox"
@@ -1367,7 +1368,7 @@
                                                                                 <li class="list-group-item">
                                                                                     <label
                                                                                         :class="{'checkbox_cus_mini' : true, '_pen_disable' : true,'disabledTask': child2.board_parent_id !== null}"
-                                                                                        v-if="child3.text !== '' && child3.board_parent_id !== null && child3.children.length > 0">
+                                                                                        v-if="child3.text !== '' && child3.text !== 'Dont Forget Section' && child3.board_parent_id !== null && child3.children.length > 0">
                                                                                         <input :id="child3.id"
                                                                                                :value="child3.id"
                                                                                                class="tree-child"
@@ -1380,7 +1381,7 @@
                                                                                     </label>
 
                                                                                     <label class="checkbox_cus_mini"
-                                                                                           v-if="child2.text !== '' && child2.board_parent_id == null">
+                                                                                           v-if="child3.text !== '' && child3.text !== 'Dont Forget Section' && child3.board_parent_id == null">
                                                                                         <input :id="child3.id"
                                                                                                :value="child3.id"
                                                                                                class="tree-child selectAll"
@@ -1410,7 +1411,7 @@
                     </div>
                     <div class="modal-footer">
                         <!-- {{ selectedExistedTask }} -->
-                        <button @click="AddExistingTasks" class="btn btn-primary" type="button">Add Tasks</button>
+                        <button @click="AddExistingTasks" class="btn btn-primary" type="button">Add Tasks</button>&nbsp;
                         <button @click="clearInputFeild" class="btn btn-secondary" type="button">Cancel</button>
                     </div>
                 </div>
@@ -1441,7 +1442,7 @@
     // import Folder from './recurLi.vue';
 
     export default {
-        props: ['nav_id', 'board_id', 'projectId', 'filter_type'],
+        props: ['nav_id', 'board_id', 'projectId', 'filter_type', 'auth_user'],
         components: {Container, Draggable, flatPickr, switches, VueTagsInput, Datepicker, TaskDetails},
         data() {
             return {
@@ -1535,13 +1536,14 @@
                 filter_types: null,
                 selectedPriorites: [],
                 userIdList: [],
+                Socket : null,
+                authUser : null
             }
         },
         mounted() {
             var _this = this;
-            // this.filter_types = this.filter_type;
+            _this.authUser = _this.auth_user;
             $('#header-item').text('Project  / Task Board');
-            // console.log(_this.filter_type)
             $(document)
                 .one('focus.autoExpand', 'textarea.autoExpand', function () {
                     var savedValue = this.value;
@@ -1568,6 +1570,8 @@
             $(document).ready(function () {
                 $('.searchList').hide();
             });
+            this.getAuthUser();
+            this.connectSocket();
 
         },
         created() {
@@ -1643,6 +1647,32 @@
             });
         },
         methods: {
+            connectSocket: function () {
+                let app = this;
+                if (app.Socket == null) {
+                    app.Socket = io.connect('http://localhost:3000/');
+
+                    app.Socket.on('CardMoved', function (res) {
+                        // if (res.project_id == app.projectId && res.user_id != app.authUser.id){
+                        if (res.project_id == app.projectId){
+                            app.getBoardTask();
+                            swal('Card moved','You assign on a task!', 'success');
+                        }
+                    })
+                }
+            },
+            getAuthUser(){
+                // auth-user
+                var _this = this;
+                axios.get('/api/auth-user')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.authUser = response.user;
+                    })
+                    .catch(error => {
+
+                    });
+            },
             grow: function (text, options) {
                 var height = options.height || '100px';
                 var maxHeight = options.maxHeight || '500px';
@@ -1895,7 +1925,7 @@
                     axios.post('/api/card-sort', data)
                         .then(response => response.data)
                         .then(response => {
-                            // _this.getBoardTask();
+                            _this.getBoardTask();
                             setTimeout(() => {
                             }, 500);
                             // console.log('sorted');
@@ -1915,7 +1945,7 @@
                             .then(response => response.data)
                             .then(response => {
                                 setTimeout(() => {
-                                    _this.getBoardTask();
+                                    // _this.getBoardTask();
                                     $('#loader').modal('hide');
 
                                 }, 500);
@@ -1928,6 +1958,7 @@
                                 // console.log('shifting failed');
                             });
                     }
+                    _this.Socket.emit('CardMoved',{user_id : _this.auth_user.id,project_id : _this.projectId})
 
                 }
             },
@@ -2578,6 +2609,41 @@
                     }
                 });
             },
+            deleteAllTasks(index, cardIndex, id) {
+                let _this = this;
+                id = {
+                    'id' : this.selectedIds
+                };
+                swal({
+                    title: 'Are you sure',
+                    text: "You want to remove this task?",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'Red',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, remove it'
+                }, function () {
+                    axios.post('/api/board-task-delete/', id)
+                        .then(response => response.data)
+                        .then(response => {
+                            // if(response.success){
+                            _this.cards[index].task.splice(cardIndex, 1);
+                            // delete _this.cards[index].task[cardIndex];
+                            // _this.cards[index].task.length = _this.cards[index].task.length-1;
+                            _this.getBoardTask();
+                            _this.selectedIds = [];
+                            $('.card-list').removeClass('selected-card');
+                            swal("Removed!", "The task has been removed.", "success");
+                            setTimeout(() => {
+                                swal.close();
+                            }, 1000);
+                            // }
+                        })
+                        .catch(error => {
+
+                        });
+                });
+            },
             addTag(e, index, key) {
                 if (e.which === 13) {
                     this.cards[index].task[key].tags.splice(0, 1, this.tag);
@@ -2647,7 +2713,6 @@
             // peekabo option commented. don't remove the code yet
             // deleteColumnCards(index, id) {
             //     let _this = this;
-
             //     swal({
             //         title: "Are you sure?",
             //         text: "Your will not be able to recover this",
@@ -2668,10 +2733,8 @@
             //             }
             //         })
             //         .catch(error => {
-
             //         })
             //     });
-
             // },
             hideItem(index) {
 
@@ -2740,17 +2803,17 @@
                             _this.userNames = _this.userNames.slice(0, -1);
                         }
                         axios.post('/api/task-list/search-result', {'user_name': _this.userNames})
-                            .then(response => response.data)
-                            .then(response => {
-                                _this.projectUsers = response.search_user;
-                                $('.dropdowns-card-user').hide();
-                                if (_this.projectUsers.length > 0) {
-                                    $('#titleUserMention' + card.cardId).show();
-                                }
-                            })
-                            .catch(error => {
-                                console.log('search user is not Working !!!')
-                            });
+                        .then(response => response.data)
+                        .then(response => {
+                            _this.projectUsers = response.search_user;
+                            $('.dropdowns-card-user').hide();
+                            if (_this.projectUsers.length > 0) {
+                                $('#titleUserMention' + card.cardId).show();
+                            }
+                        })
+                        .catch(error => {
+                            console.log('search user is not Working !!!')
+                        });
                     }
                 }
 
@@ -2997,6 +3060,7 @@
                     .then(response => {
                         _this.getBoardTask();
                         _this.selectedIds = [];
+                        $('.card-list').removeClass('selected-card');
                         $('.jquery-accordion-menu').hide();
                     })
                     .catch(error => {
@@ -3014,6 +3078,7 @@
                     .then(response => {
                         _this.getBoardTask();
                         _this.selectedIds = [];
+                        $('.card-list').removeClass('selected-card');
                         $('.jquery-accordion-menu').hide();
                     })
                     .catch(error => {
@@ -3084,7 +3149,6 @@
                     }
                     _this.selectedIds = [];
                     $('.card-list').removeClass('selected-card');
-
                     for (var i = index_first; i <= _this.allCardIds.length; i++) {
                         if (_this.allCardIds[i] === first) {
                             flag = 1;
@@ -3102,38 +3166,19 @@
                         }
                     }
                 } else if (e.which === 1) {
-                    // alert('left clk');
-                    // if (card.text !== '') {
-                    //     _this.DeleteEmptyTask();
-                    // }
                     _this.selectedIds = [];
                     _this.selectedIds.push(card.cardId);
                     _this.shift_first = card.cardId;
-                    // this.selectedData = card;
-                    // this.tags = card.tags;
-                    // $('.eachItemRow').removeClass('clicked');
-                    // $(e.target).addClass('clicked');
-                    // $(e.target).closest('.eachItemRow').addClass('clicked');
-                    // if (card.text !== 'Dont Forget Section') {
-                    //     // data.draggable = true;
-                    // }
-                    // $('.jquery-accordion-menu').hide();
 
                     this.selectedData = card;
                     this.selectedCard = card.cardId;
                     this.task_logs = null;
                     this.HideDetails();
-                    // $('.card-list').css("background-color", "#ffffff");
-                    // $('#card_'+this.selectedCard).css("background-color","#ddf3fd");
-                    // console.log(this.selectedData);
                     $('.card-list').removeClass('selected-card');
                     $('#card_' + this.selectedCard).addClass('selected-card');
 
 
                 } else if (e.which === 3) {
-                    // alert('right clk');
-                    //  && card.draggable == true
-                    // alert('single');
                     e.preventDefault();
                     e.stopPropagation();
                     if (_this.context_menu_flag !== 1) {
@@ -3172,6 +3217,7 @@
 
                                 $('.jquery-accordion-menu').hide();
                                 _this.selectedIds = [];
+                                $('.card-list').removeClass('selected-card');
                             }
                         }
                     }
@@ -3353,6 +3399,7 @@
                             _this.getBoardTask();
                             $('.jquery-accordion-menu').hide();
                             _this.selectedIds = [];
+                            $('.card-list').removeClass('selected-card');
                         })
                         .catch(error => {
                             console.log('Api for delete task not Working !!!')

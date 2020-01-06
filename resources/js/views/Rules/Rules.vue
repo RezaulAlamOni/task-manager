@@ -202,11 +202,14 @@
                     assign_to: null,
                     btn_actve: 1
                 },
-                all_rules: null
+                all_rules: null,
+                socket : null
             }
         },
         mounted() {
             var _this = this;
+            _this.Socket = io.connect('http://localhost:3000/');
+
             this.getProject();
             this.getBoardColumn();
             if (this.rules_action === 'update') {
@@ -272,7 +275,7 @@
                                 swal('sorry', 'Already Exist', 'warning');
                             } else {
                                 // swal('Rules Created', 'Rules Create Success', 'success');
-
+                                _this.Socket.emit('rulesCreate',{assign_users : _this.rule.assign_to, project_id : _this.project_id} )
                                 _this.rule.id = null;
                                 _this.rule.name = '';
                                 _this.rule.status = 1;

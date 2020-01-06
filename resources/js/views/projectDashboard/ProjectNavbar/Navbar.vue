@@ -750,7 +750,6 @@
                     type: type
                 })
             },
-
             showModelForNavItem() {
                 $("#addNavItem").modal('show');
                 $('input[name="optionsRadios"]').iCheck({
@@ -800,6 +799,9 @@
                 axios.get('/api/nav-item/' + _this.projectId)
                     .then(response => response.data)
                     .then(response => {
+                        if (response.redierct) {
+                            // window.location.href = window.location.origin+'/projects';
+                        }
                         _this.AllNavItems = response.success;
                         _this.rules = response.rules;
                         _this.$emit('getNavBars', {AllNavItem: _this.AllNavItems});
@@ -850,7 +852,6 @@
                         console.log('Api for move down task not Working !!!')
                     });
             },
-
             addListModel(id) {
                 this.nav_id = id;
                 $("#addListModel").modal('show');
@@ -864,7 +865,6 @@
             showSearchInputField() {
                 this.$emit('showSearchInputField')
             },
-
             HideShowBoardTitle: () => {
                 $('#col10').css('height', 'calc(100vh - 177px)');
                 $('.smooth-dnd-container').css('height', 'calc(100vh - 262px)');
@@ -876,7 +876,6 @@
                     $('.smooth-dnd-container').css('height', 'calc(100vh - 188px)');
                 }, 2000)
             },
-
             setListId(navList, nav_id, description, type) {
 
                 this.list_id = navList.id;
@@ -890,7 +889,6 @@
                     type: type
                 })
             },
-
             ShowOverView() {
                 this.overview = 'overview';
                 this.$emit('getList', {
@@ -935,8 +933,6 @@
                     action_type: 'update',
                 })
             },
-
-
             AddNewList() {
                 this.list.project_id = this.projectId;
                 this.list.nav_id = this.nav_id;
@@ -989,7 +985,6 @@
                 }
 
             },
-
             AddNewBoard() {
                 this.list.project_id = this.projectId;
                 this.list.nav_id = this.nav_id;

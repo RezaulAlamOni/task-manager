@@ -121,7 +121,8 @@ $router->group(['middleware' => 'web'], function ($router) {
     $router->post('/support/email', 'SupportController@sendEmail');
 
     // API Token Refresh...
-    $router->put('/spark/token', 'TokenController@refresh');
+//    $router->put('/spark/token', 'TokenController@refresh');
+    $router->post('/spark/token', 'TokenController@refresh');
 
     // Terms Of Service...
     $router->get('/terms', 'TermsController@show')->name('terms');

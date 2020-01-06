@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="fullIndexPage">
         <div class="page-titles">
             <!-- Navbar Component-->
             <Navbar :AllNavGet="AllNavItems"
@@ -796,6 +796,7 @@
                     :nav_id="nav_id"
                     :projectId="projectId"
                     :filter_type="filter_type"
+                    :auth_user="authUser"
                 >
                 </BoardView>
 
@@ -1348,18 +1349,24 @@
                 userNames: null,
                 projectUsers: null,
                 commentsData: null,
+                Socket : null
             }
         },
         mounted() {
             let _this = this;
             this.projectId = this.$route.params.projectId;
+            this.teamCheck();
             $('.searchList').hide();
             $('.SubmitButton').hide();
             $('.submitdetails').hide();
             $('#loder-hide').removeClass('loder-hide')
+            this.getAuthUser();
+            this.connectSocket();
         },
         created() {
             let _this = this;
+            this.projectId = this.$route.params.projectId;
+            // this.teamCheck();
             hotkeys('enter,tab,shift+tab,up,down,left,right,ctrl+c,ctrl+x,ctrl+a,ctrl+v,ctrl+u,delete,ctrl+b,ctrl+s,ctrl+i,shift+3,ctrl+m', function (event, handler) {
                 event.preventDefault();
                 switch (handler.key) {
@@ -1456,6 +1463,46 @@
         },
 
         methods: {
+            teamCheck(){
+                $('#fullIndexPage').hide();
+                axios.get('/api/nav-item/'+this.projectId)
+                .then(response => response.data)
+                .then(response => {
+                    if (response.redierct) {
+                        swal('Sorry',"You are not permitted","warning");
+                        window.location.href = window.location.origin+'/projects';
+                    }else{
+                        $('#fullIndexPage').show();
+                    }
+                })
+                .catch(error => {
+
+                })
+            },
+            connectSocket: function ()
+            {
+                let app = this;
+                if (app.Socket == null) {
+                    app.Socket = io.connect('http://localhost:3000/');
+                    app.Socket.emit('loginId', 2)
+                    app.Socket.on('newMessage', function (res) {
+                        console.log(res);
+                    })
+                    app.Socket.on('assign_user', function (res) {
+                        if (res == app.authUser.id){
+                            swal('Assigned','You assign on a task!', 'success');
+                        }
+                    })
+                    app.Socket.on('rulesCreateAndAssign', function (res) {
+                        console.log(res)
+                        console.log(app.authUser)
+                        if (res.assign_users.indexOf(app.authUser.id) > -1 && res.project_id === app.projectId){
+                            swal('Assigned','You assigned by rules!', 'success');
+                        }
+                    })
+
+                }
+            },
             grow: function (text, options) {
                 var height = options.height || '100px';
                 var maxHeight = options.maxHeight || '500px';
@@ -1469,6 +1516,18 @@
                     curHeight = height;
                 }
                 text.style.height = curHeight + 'px';
+            },
+            getAuthUser(){
+                // auth-user
+                var _this = this;
+                axios.get('/api/auth-user')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.authUser = response.user;
+                    })
+                    .catch(error => {
+
+                    });
             },
             growInit: function (options) {
                 let _this = this;
@@ -1489,11 +1548,13 @@
                     };
                 }
             },
-            dropNode(node, targetTree, oldTree) {
+            dropNode(node, targetTree, oldTree)
+            {
                 let THIS = this;
                 clearInterval(THIS.dNodeInterval);
             },
-            dragNode(node) {
+            dragNode(node)
+            {
                 let THIS = this;
                 this.dNode = node;
                 this.dNodeHeght = $('#' + node._id)[0].getBoundingClientRect().top + window.scrollY;
@@ -1523,7 +1584,8 @@
                         console.log('Api is drag and drop not Working !!!')
                     });
             },
-            FindDopedTask(parent, data, tasks) {
+            FindDopedTask(parent, data, tasks)
+            {
                 for (var i = 0; i < tasks.length; i++) {
                     if (data.id === tasks[i].id) {
                         if (i >= 1) {
@@ -1540,14 +1602,16 @@
                     }
                 }
             },
-            showSearchInputField() {
+            showSearchInputField()
+            {
                 // if (this.list.type === 'list') {
                 this.search_type = (this.list.type === 'overview') ? 'all' : 'this';
                 $('.searchList').toggle();
                 $('.searchTaskList').focus();
                 // }
             },
-            SearchTaskByAssignedUser(id, name) {
+            SearchTaskByAssignedUser(id, name)
+            {
                 $('.searchTaskList').val('@' + name);
                 var _this = this;
                 var nav_type = JSON.parse(localStorage.selected_nav);
@@ -1570,7 +1634,8 @@
                         console.log('Api is drag and drop not Working !!!')
                     });
             },
-            searchDataFormTask(e) {
+            searchDataFormTask(e)
+            {
                 var value = e.target.value;
                 var _this = this;
                 if (value.charAt(0) === '@') {
@@ -1626,7 +1691,8 @@
                     // }
                 }
             },
-            searchBYType() {
+            searchBYType()
+            {
                 var _this = this;
                 var value = $('.searchTaskList').val();
                 var nav_type = JSON.parse(localStorage.selected_nav);
@@ -1649,7 +1715,8 @@
                 $('#myUL').addClass('myUL-show');
 
             },
-            filter(data){
+            filter(data)
+            {
                 let _this = this;
                 this.filter_type = data.type
                 setTimeout(() => {
@@ -1824,6 +1891,7 @@
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
+                        _this.Socket.emit('assignUser',user.id)
                         _this.getTaskList();
                     })
                     .catch(error => {

@@ -102,6 +102,7 @@ Route::get('/get-all-comment', 'CommentController@allComment');
 Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');
 Route::get('/card-delete/{id}','MultipleBoardController@cardDelete'); //delete card
 Route::get('/board-task-delete/{id}','MultipleBoardController@existingTaskDelete'); //delete card
+Route::post('/board-task-delete','MultipleBoardController@selectedExistingTaskDelete'); //delete card
 Route::get('/testGet','MultipleBoardController@test'); //delete card
 
 //rules
@@ -121,4 +122,11 @@ Route::post('/project-overview/list-open-close', 'OverviewController@ListToggle'
 //logs
 Route::get('/overview-all-logs/{project_id}', 'ActionLogController@AllLogs');
 Route::post('/overview-log/undo-action', 'ActionLogController@UndoAction');
+
+//auth-user
+Route::get('/auth-user', 'HomeController@AuthUser');
+
+//fcm
+Route::post('/firebase-insert-update', 'FirbaseController@AddFcmToken')->name('FcmTokenInsertOrUpdate');
+
 

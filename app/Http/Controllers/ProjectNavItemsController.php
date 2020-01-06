@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\AssignedUser;
+use App\AssignTag;
 use App\Multiple_board;
 use App\Multiple_list;
 use App\ProjectNavItems;
+use App\Project;
 use App\Rules;
+use App\Tags;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User;
@@ -15,24 +19,37 @@ use Illuminate\Support\Facades\Auth;
 class ProjectNavItemsController extends Controller
 {
     protected $actionLog;
+    protected $dont_forget_tag;
 
-//    public function __construct()
-//    {
-//        $this->actionLog = new ActionLogController;
-//        $this->middleware('auth');
-//    }
+    public function __construct()
+    {
+        $this->dont_forget_tag = 'Dont Forget';
+        $this->actionLog = new ActionLogController;
+        $this->middleware('auth');
+    }
+
 
     public function index($project_id)
     {
         $navItem = [];
-        $nav = ProjectNavItems::where('project_id', $project_id)->orderBy('sort_id', 'asc')->get();
+        $team_id = Auth::user()->current_team_id;
+        $nav = ProjectNavItems::with(['project'])->where('project_id', $project_id)->orderBy('sort_id', 'asc')->get();
+        // => function($q) use ($team_id){
+        //     $q->where('team_id', '=', $team_id);
+        // }
+        $nav = $nav->where('project.team_id',$team_id);
         foreach ($nav as $item) {
             $nav_ = $this->getList($project_id, $item->id, $item->type);
             $item->lists = $nav_[0];
             $navItem[] = $item;
         }
-//        $rules = Rules::where('project_id',$project_id)->get();
-        return response()->json(['success' => $navItem,'rules'=>[]]);
+        // $rules = Rules::where('project_id',$project_id)->get();
+        // return $navItem;
+        $projects = Project::where(['id' => $project_id, 'team_id' => $team_id])->first();
+        if (!$projects) {
+            return response()->json(['success' => $navItem,'rules' => [], 'redierct' => true]);
+        }
+        return response()->json(['success' => $navItem,'rules' => [], 'redierct' => false]);
 
 
     }
@@ -76,9 +93,6 @@ class ProjectNavItemsController extends Controller
 
         return response()->json(['status' => 'success', 'data' => $boards,'users'=>$user,'rules'=>$rules]);
     }
-
-
-
     public function getList($project_id, $nav_id, $type)
     {
         $nav = ProjectNavItems::where('id', $nav_id)->first();
@@ -208,6 +222,15 @@ class ProjectNavItemsController extends Controller
     public function moveSelectedTask(Request $request)
     {
         $ids = $request->ids;
+
+        $task_find = Task::where('id', $ids[0])->first();
+        $taskDontForgetSection = Task::where([
+            'title' => 'Dont Forget Section',
+            'project_id' => $task_find->project_id,
+            'list_id' => $task_find->list_id,
+        ])->first();
+        $tag_ids = $tags = Tags::where(['title' => $this->dont_forget_tag, 'team_id' => Auth::user()->current_team_id])->first();
+
         $target_nav_id = $request->nav;
         $target_listOrBoard = $request->target;
         $nav = ProjectNavItems::where('id', $target_nav_id)->first();
@@ -225,7 +248,7 @@ class ProjectNavItemsController extends Controller
                 Task::where('id', $id)
                     ->update(['multiple_board_id' => $target_listOrBoard, 'board_parent_id' => $request->column_id, 'board_sort_id' => $board_sort_id + 1,'progress'=>$column->progress]);
             }
-            return response()->json(['status' => 'success', 'board']);
+//            return response()->json(['status' => 'success', 'board']);
         } elseif ($nav->type == 'list') {
             $task = Task::where(['list_id' => $target_listOrBoard, 'parent_id' => 0])->orderBy('sort_id', 'desc')->first();
             $sort_id = $task->sort_id + 1;
@@ -235,9 +258,21 @@ class ProjectNavItemsController extends Controller
                 $this->moveWithChild($childs, $target_listOrBoard);
                 $sort_id++;
             }
-            return response()->json(['status' => 'success', 'list']);
+//            return response()->json(['status' => 'success', 'list']);
         }
 
+        if ($taskDontForgetSection) {
+            $childrenOfDontForgetSection = Task::where('parent_id', $taskDontForgetSection->id)
+                ->where('is_deleted', 0)->get()->toArray();
+
+            if (count($childrenOfDontForgetSection) <= 0) {
+                AssignedUser::where('task_id', $taskDontForgetSection->id)->delete();
+                AssignTag::where(['task_id' => $taskDontForgetSection->id, 'tag_id' => $tag_ids->id])->delete();
+                Task::where('id', $taskDontForgetSection->id)->delete();
+            }
+        }
+
+        return response()->json(['status' => 'success', $nav->type]);
 
     }
 
