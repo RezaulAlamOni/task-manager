@@ -28,6 +28,6 @@ class UserMail extends Mailable //implements ShouldQueue
      */
     public function build()
     {
-        return $this->view('mailTemplate');
+        return $this->subject($this->mailTemplate['subject'])->view('mailTemplate');
     }
 }

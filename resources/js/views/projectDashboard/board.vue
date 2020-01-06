@@ -1656,7 +1656,7 @@
                         // if (res.project_id == app.projectId && res.user_id != app.authUser.id){
                         if (res.project_id == app.projectId){
                             app.getBoardTask();
-                            swal('Card moved','You assign on a task!', 'success');
+                            // swal('Card moved','You assign on a task!', 'success');
                         }
                     })
                 }
@@ -2675,6 +2675,7 @@
                         // $('#dropdown' + cardId).toggle();
                         setTimeout(function () {
                             _this.getBoardTask();
+                            _this.Socket.emit('CardMoved',{user_id : _this.auth_user.id,project_id : _this.projectId})
                         }, 100);
                     })
                     .catch(error => {

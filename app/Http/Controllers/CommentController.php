@@ -44,7 +44,9 @@ class CommentController extends Controller
             $emails[] = $value->users->email;
         }
         if (count($emails) > 0) {
-            $comment = 'Hi, Comment Add to card.';
+            // $comment = 'Hi, Comment Add to card.';
+            $comment['subject'] = "Comment added on a task that you are assigned";
+            $comment['body'] = "Comment added on a task that you are assigned";
             Mail::to($emails)->send(new UserMail($comment));
         }
 

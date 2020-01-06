@@ -679,7 +679,9 @@ class MultipleBoardController extends Controller
                 $emails[] = $value->users->email;
             }
             if (count($emails) > 0) {
-                $comment = 'Hi, Card title is updated.';
+                // $comment = 'Hi, Card title is updated.'; 01825082461
+                $comment['subject'] = "Card is updated";
+                $comment['body'] = "A card is updated that you are assigned";
                 Mail::to($emails)->send(new UserMail($comment));
             }
             return response()->json(['success' => true, 'data' => $datas]);
