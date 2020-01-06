@@ -50,7 +50,7 @@
                                                                  aria-labelledby="home-tab">
                                                                 <div class="row">
                                                                     <div class="col-md-4">
-                                                                        <label>Name</label>
+                                                                        Name
                                                                     </div>
                                                                     <div class="col-md-8">
                                                                         <p>{{ profile.name }}</p>
@@ -58,11 +58,11 @@
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-md-4">
-                                                                        <label>Email</label>
+                                                                        Email
                                                                     </div>
                                                                     <div class="col-md-8">
-                                                                        <div class="col-md-12 row pr-0">
-                                                                            <div class="col-md-6 p-0">
+                                                                        <div class="row pr-0">
+                                                                            <div class="col-md-6">
                                                                                 <p>{{ profile.email }}</p>
                                                                             </div>
                                                                             <div class="col-md-6 text-right pr-0">
