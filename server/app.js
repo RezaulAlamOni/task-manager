@@ -50,4 +50,12 @@ io.on('connection', function(socket) {
         io.emit('takUpdateSocket',data);
     });
 
+
+
+    socket.on('task-list-Update', function(data) {
+
+        console.log(data)
+        io.emit('listUpdateSocket',data);
+    });
+
 });
