@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEmailAndNotificationsTable extends Migration
+class CreateNotificationUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateEmailAndNotificationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('email_and_notifications', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('parent_id')->nullable();
-            $table->string('title');
-            $table->string('unique_id');
+        Schema::table('notification_user', function (Blueprint $table) {
+            $table->bigInteger('user_id');
+            $table->bigInteger('notification_id');
             $table->timestamps();
         });
     }
@@ -29,6 +27,8 @@ class CreateEmailAndNotificationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('email_and_notifications');
+        Schema::table('notification_user', function (Blueprint $table) {
+            //
+        });
     }
 }
