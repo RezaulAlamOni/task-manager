@@ -1506,7 +1506,7 @@
                             swal('Assigned', 'You assigned by rules!', 'success');
                         }
                     })
-                    app.Socket.on('takUpdateSocket', function (res) {
+                    app.Socket.on('taskUpdateSocket', function (res) {
                         // console.log( res.user_id + " " +app.authUser.id)
                         if (res.list_id == app.list.id && res.project_id == app.projectId && res.user_id != app.authUser.id) {
                             // if (res.list_id == app.list.id && res.project_id == app.projectId) {

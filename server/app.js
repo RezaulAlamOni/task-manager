@@ -49,7 +49,7 @@ io.on('connection', function(socket) {
     });
 
     socket.on('taskUpdate', function(data) {
-        io.emit('takUpdateSocket',data);
+        io.emit('taskUpdateSocket',data);
         console.log(data);
     });
 

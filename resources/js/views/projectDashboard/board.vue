@@ -1659,7 +1659,7 @@
                             // swal('Card moved','You assign on a task!', 'success');
                         }
                     })
-                    app.Socket.on('takUpdateSocket', function (res) {
+                    app.Socket.on('taskUpdateSocket', function (res) {
                         console.log( res.user_id + " " +app.authUser.id)
                         if (res.list_id == app.nav_id && res.project_id == app.projectId && res.user_id != app.authUser.id) {
                             // if (res.list_id == app.list.id && res.project_id == app.projectId) {
@@ -3568,8 +3568,7 @@
                 this.getBoardTaskFilter('p_show');
                 $('#priority_list_modal').modal('hide');
             },
-            addFilterToFilter(type)
-            {
+            addFilterToFilter(type) {
                 if (this.selectedPriorites.includes(type)) {
                     var indexs = this.selectedPriorites.indexOf(type);
                     if (indexs > -1) {
