@@ -27,6 +27,6 @@ class EmailAndNotification extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'notification_user', 'user_id', 'notification_id');
+        return $this->belongsToMany(User::class, 'notification_user', 'notification_id', 'user_id');
     }
 }
