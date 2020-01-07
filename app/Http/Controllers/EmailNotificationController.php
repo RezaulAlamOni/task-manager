@@ -17,7 +17,7 @@ class EmailNotificationController extends Controller
     public function usersNotifications()
     {
 //        $notifications = EmailAndNotification::with('users')->get();
-        $notifications = User::select()->with('notifications:id')->find(1)->notifications;
+        $notifications = User::select()->with('notifications:id')->find(1)->notifications->pluck('id');
         return $notifications;
     }
 }

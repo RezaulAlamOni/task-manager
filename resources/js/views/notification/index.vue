@@ -20,7 +20,7 @@
                                             <input :id="child.unique_id" class="form-check-input" type="checkbox"
                                                    data-toggle="toggle" data-style="ml-1" data-height="25"
                                                    data-onstyle="success" data-offstyle="secondary"
-                                                   v-model="child.unique_id">
+                                                   v-model="userNotification.unique_id">
                                             <label :for="child.unique_id" class="form-check-label">
                                                 <h5 v-text="child.title"></h5>
                                             </label>
