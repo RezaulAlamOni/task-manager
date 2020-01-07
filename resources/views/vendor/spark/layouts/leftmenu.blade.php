@@ -113,6 +113,12 @@
                     </li>
                 </ul>
             </li>
+            <li class="menu-dropdown">
+                <a href="/notification">
+                    <i class="menu-icon fa fa-bell-o"></i>
+                    <span>Email & Notification</span>
+                </a>
+            </li>
         <!--
             <li>
                 <a href="/clear">

@@ -9,6 +9,7 @@ import addProject from '../views/project/edit'
 import Rules from '../views/Rules/index/index'
 import Profile from '../views/profile/index'
 import ProfileEdit from '../views/profile/edit'
+import Notification from '../views/notification/index'
 
 
 let routes = [
@@ -53,6 +54,11 @@ let routes = [
         path: '/profile/edit',
         component: ProfileEdit,
         name: 'ProfileEdit'
+    },
+    {
+        path: '/notification',
+        component: Notification,
+        name: 'Notification'
     },
 
 
