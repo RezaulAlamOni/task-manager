@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Multiple_list extends Model
 {
+    protected $table = 'multiple_lists';
     protected $fillable = [
         'project_id',
         'list_title',

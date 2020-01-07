@@ -15,14 +15,16 @@ var express = require('express'),
     // https =  require('https'),//for https server
     server = https.createServer(app),
     io = require('socket.io')(server),
-    port = 3000,
+    port = 4100,
     ipAddress = '0.0.0.0';
-server.listen(port,ipAddress,function () {
+    server.listen(port,ipAddress,function () {
     console.log('Chat Server started on port : ' + port);
 });
+
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/package.json');
 });
+
 // =============================
 // Connections
 // =============================
@@ -37,6 +39,7 @@ io.on('connection', function(socket) {
     socket.on('assignUser', function(data) {
         io.emit('assign_user',data);
     });
+    
     socket.on('rulesCreate', function(data) {
         io.emit('rulesCreateAndAssign',data);
     });
@@ -45,4 +48,18 @@ io.on('connection', function(socket) {
         io.emit('CardMoved',data);
     });
 
+    socket.on('taskUpdate', function(data) {
+        io.emit('takUpdateSocket',data);
+        console.log(data);
+    });
+
+    socket.on('cardUpdated', function(data){
+        io.emit('cardUpdatedSocket', data);
+        console.log(data);
+    });
+
+    socket.on('task-list-Update', function(data) {
+        io.emit('listUpdateSocket',data);
+        console.log(data);
+    });
 });

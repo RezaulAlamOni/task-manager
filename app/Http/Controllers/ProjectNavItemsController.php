@@ -27,8 +27,7 @@ class ProjectNavItemsController extends Controller
         $this->actionLog = new ActionLogController;
         $this->middleware('auth');
     }
-
-
+    
     public function index($project_id)
     {
         $navItem = [];
@@ -248,7 +247,7 @@ class ProjectNavItemsController extends Controller
                 Task::where('id', $id)
                     ->update(['multiple_board_id' => $target_listOrBoard, 'board_parent_id' => $request->column_id, 'board_sort_id' => $board_sort_id + 1,'progress'=>$column->progress]);
             }
-//            return response()->json(['status' => 'success', 'board']);
+        // return response()->json(['status' => 'success', 'board']);
         } elseif ($nav->type == 'list') {
             $task = Task::where(['list_id' => $target_listOrBoard, 'parent_id' => 0])->orderBy('sort_id', 'desc')->first();
             $sort_id = $task->sort_id + 1;
@@ -258,7 +257,7 @@ class ProjectNavItemsController extends Controller
                 $this->moveWithChild($childs, $target_listOrBoard);
                 $sort_id++;
             }
-//            return response()->json(['status' => 'success', 'list']);
+        //  return response()->json(['status' => 'success', 'list']);
         }
 
         if ($taskDontForgetSection) {

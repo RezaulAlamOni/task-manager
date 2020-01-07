@@ -81,13 +81,13 @@ class FirbaseController extends Controller
         } else {
             FcmToken::create(['user_id' => $user_id, 'fcm_token' => $fcm_token]);
         }
-//        $okens =  FcmToken::all()->pluck('fcm_token')->toArray();
-//        $data = [
-//            "title" => "FCM Registration Successful",
-//            "body" => 'Test Notification',
-//
-//        ];
-//        $this->send($okens, $data);
+        // $okens =  FcmToken::all()->pluck('fcm_token')->toArray();
+        // $data = [
+        //     "title" => "FCM Registration Successful",
+        //     "body" => 'Test Notification',
+        //
+        // ];
+        // $this->send($okens, $data);
 
         return response()->json(['status' => 'success']);
     }

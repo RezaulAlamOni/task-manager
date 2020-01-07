@@ -89,11 +89,13 @@ class MultipleListController extends Controller
         $id = $request->id;
         $title = $request->name;
         $description = $request->description;
+
         if ($request->type == 'list') {
-            Multiple_list::where('id', $id)->update([
+
+            $dd = Multiple_list::where('id', $id)
+                ->update([
                 'list_title' => $title,
-                'description' => $description,
-                'updated_at' => Carbon::now()
+                'description' => $description
             ]);
         } else {
             Multiple_board::where('id', $id)->update([

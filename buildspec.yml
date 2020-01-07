@@ -21,6 +21,9 @@ phases:
       - composer install --no-dev
       - npm install
       - npm run production
+      - cd server
+      - npm install
+      #- npm install --save express
 #  build:
 #    commands:
 #      - php vendor/phpunit/phpunit/phpunit tests

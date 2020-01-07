@@ -6,7 +6,7 @@
                     <h2>
                         <i class="fa fa-fw fa-tasks"></i> Projects
                         <router-link :to="{ name: 'project-create'}">
-                            <button class="btn btn-primary pull-right" type="submit"> Create Project</button>
+                            <button class="btn btn-primary" style="float: right;margin-right: 20px;" type="submit"> Create Project</button>
                         </router-link>
                     </h2>
                 </div>
