@@ -1489,7 +1489,7 @@
             connectSocket: function () {
                 let app = this;
                 if (app.Socket == null) {
-                    app.Socket = io.connect('http://localhost:3000/');
+                    app.Socket = io.connect('http://localhost:4100/');
                     app.Socket.emit('loginId', 2)
                     app.Socket.on('newMessage', function (res) {
                         console.log(res);
@@ -1506,10 +1506,10 @@
                             swal('Assigned', 'You assigned by rules!', 'success');
                         }
                     })
-                    app.Socket.on('takUpdateSocket', function (res) {
+                    app.Socket.on('taskUpdateSocket', function (res) {
                         // console.log( res.user_id + " " +app.authUser.id)
                         if (res.list_id == app.list.id && res.project_id == app.projectId && res.user_id != app.authUser.id) {
-                        // if (res.list_id == app.list.id && res.project_id == app.projectId) {
+                            // if (res.list_id == app.list.id && res.project_id == app.projectId) {
                             // swal('Updated', 'Task Update!', 'success');
                             app.getTaskList();
                         }
@@ -1517,7 +1517,7 @@
                     app.Socket.on('listUpdateSocket', function (res) {
                         // console.log( res.user_id + " " +app.authUser.id)
                         if (res.list_id == app.list.id && res.project_id == app.projectId && res.user_id != app.authUser.id) {
-                        // if (res.list_id == app.list.id && res.project_id == app.projectId) {
+                            // if (res.list_id == app.list.id && res.project_id == app.projectId) {
                             // swal('Updated', 'Task Update!', 'success');
                             app.getTaskList();
                         }
@@ -1902,7 +1902,12 @@
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
-                        _this.Socket.emit('assignUser', user.id)
+                        _this.Socket.emit('taskUpdate', {
+                            project_id: _this.projectId,
+                            list_id: _this.list.id,
+                            board_id: _this.selectedData.multiple_board_id,
+                            user_id: _this.authUser.id
+                        })
                         _this.getTaskList();
                     })
                     .catch(error => {
@@ -1924,7 +1929,12 @@
                         // console.log(response);
                         if (response === 'success') {
                             _this.getTaskList()
-                            _this.Socket.emit('assignUser', postData.user_id)
+                            _this.Socket.emit('taskUpdate', {
+                                project_id: _this.projectId,
+                                list_id: _this.list.id,
+                                board_id: _this.selectedData.multiple_board_id,
+                                user_id: _this.authUser.id
+                            })
                         }
                     })
                     .catch(error => {
@@ -2282,10 +2292,10 @@
                 //     return false;
                 // }
                 var postData = {
-                    target_id   : data.id,
-                    copy_ids    : (this.selectedCopy === null) ? this.selectedCut : this.selectedCopy,
-                    type        : (this.selectedCopy === null) ? 'cut' : 'copy',
-                    nav_id      : _this.nav_id
+                    target_id: data.id,
+                    copy_ids: (this.selectedCopy === null) ? this.selectedCut : this.selectedCopy,
+                    type: (this.selectedCopy === null) ? 'cut' : 'copy',
+                    nav_id: _this.nav_id
                 };
 
                 axios.post('/api/task-list/copy-cut-past', postData)
@@ -2296,12 +2306,12 @@
                         _this.selectedIds = [];
                         _this.selectedCopy = null;
                         _this.selectedCut = null;
-                        _this.Socket.emit('task-list-Update',{
+                        _this.Socket.emit('task-list-Update', {
                             project_id: _this.projectId,
-                            list_id : response.list_id,
-                            nav_id  : postData.nav_id,
-                            user_id : _this.authUser.id,
-                            type : 'list'
+                            list_id: response.list_id,
+                            nav_id: postData.nav_id,
+                            user_id: _this.authUser.id,
+                            type: 'past copy - cut'
                         })
 
                     })
@@ -2396,6 +2406,13 @@
                     .then(response => {
                         _this.newEmptyTaskID = response.success.id;
                         _this.getTaskList();
+                        _this.Socket.emit('task-list-Update', {
+                            project_id: _this.projectId,
+                            list_id: _this.list.id,
+                            board_id: _this.selectedData.multiple_board_id,
+                            user_id: _this.authUser.id,
+                            type    : 'New task Added!'
+                        })
                         setTimeout(function () {
                             $("#" + _this.newEmptyTaskID).click();
                             $("#" + _this.newEmptyTaskID).focus();
@@ -2422,6 +2439,11 @@
                     .then(response => response.data)
                     .then(response => {
                         // console.log(response);
+                        _this.Socket.emit('task-list-Update', {
+                            project_id: postData.project_id,
+                            list_id: postData.list_id,
+                            user_id: _this.authUser.id
+                        })
                         _this.newEmptyTaskID = response.success.id;
                         _this.getTaskList();
                         setTimeout(function () {
@@ -2459,11 +2481,10 @@
                             $("#" + _this.newEmptyTaskID).focus();
                         }, 1000)
                         _this.empty_task_delete_flag = _this.newEmptyTaskID
-                        _this.Socket.emit('task-list-Update',{
+                        _this.Socket.emit('task-list-Update', {
                             project_id: _this.projectId,
-                            list_id : postData.list_id,
-                            nav_id  : postData.nav_id,
-                            user_id : _this.authUser.id
+                            list_id: postData.list_id,
+                            user_id: _this.authUser.id
                         })
                     })
                     .catch(error => {
@@ -2491,10 +2512,10 @@
                             $("#" + _this.newEmptyTaskID).focus();
                         }, 500)
                         _this.empty_task_delete_flag = _this.newEmptyTaskID
-                        _this.Socket.emit('task-list-Update',{
+                        _this.Socket.emit('task-list-Update', {
                             project_id: _this.projectId,
-                            list_id : postData.list_id,
-                            user_id : _this.authUser.id
+                            list_id: postData.list_id,
+                            user_id: _this.authUser.id
                         })
                     })
                     .catch(error => {
@@ -2523,10 +2544,11 @@
                             $('#dropdown' + data._id).toggle();
                             _this.selectedData = data;
                             _this.tag = null;
-                            _this.Socket.emit('taskUpdate',{
+                            _this.Socket.emit('taskUpdate', {
                                 project_id: _this.projectId,
-                                list_id : _this.list.id,
-                                user_id : _this.authUser.id
+                                list_id: _this.list.id,
+                                board_id: _this.selectedData.multiple_board_id,
+                                user_id: _this.authUser.id
                             })
                         })
                         .catch(error => {
@@ -2535,7 +2557,6 @@
                 }
             },
             addExistingTag(data, tag, color) {
-
                 var _this = this;
                 var color = (tag === 'Dont Forget') ? '#ff0000' : color;
                 var postData = {
@@ -2549,10 +2570,11 @@
                         _this.getTaskList();
                         $('#dropdown' + data._id).toggle();
                         _this.selectedData.tags[0] = tag
-                        _this.Socket.emit('taskUpdate',{
+                        _this.Socket.emit('taskUpdate', {
                             project_id: _this.projectId,
-                            list_id : _this.list.id,
-                            user_id : _this.authUser.id
+                            list_id: _this.list.id,
+                            board_id: _this.selectedData.multiple_board_id,
+                            user_id: _this.authUser.id
                         })
                     })
                     .catch(error => {
@@ -2579,11 +2601,11 @@
 
                             _this.getTaskList();
                             _this.tag = null
-
-                            _this.Socket.emit('taskUpdate',{
+                            _this.Socket.emit('taskUpdate', {
                                 project_id: _this.projectId,
-                                list_id : _this.list.id,
-                                user_id : _this.authUser.id
+                                list_id: _this.list.id,
+                                board_id: _this.selectedData.multiple_board_id,
+                                user_id: _this.authUser.id
                             })
                         })
                         .catch(error => {
@@ -2602,10 +2624,11 @@
                         .then(response => {
                             _this.getTaskList();
                             _this.tag = null
-                            _this.Socket.emit('taskUpdate',{
+                            _this.Socket.emit('taskUpdate', {
                                 project_id: _this.projectId,
-                                list_id : _this.list.id,
-                                user_id : _this.authUser.id
+                                list_id: _this.list.id,
+                                board_id: _this.selectedData.multiple_board_id,
+                                user_id: _this.authUser.id
                             })
                         })
                         .catch(error => {
@@ -2700,11 +2723,11 @@
                         // _this.getTaskList()
                         // $('#dropdown' + data._id).toggle();
                         // _this.selectedData.tags = tag
-
-                        _this.Socket.emit('taskUpdate',{
+                        _this.Socket.emit('taskUpdate', {
                             project_id: _this.projectId,
-                            list_id : _this.list.id,
-                            user_id : _this.authUser.id
+                            list_id: _this.list.id,
+                            board_id: _this.selectedData.multiple_board_id,
+                            user_id: _this.authUser.id
                         })
                     })
                     .catch(error => {
@@ -2733,10 +2756,11 @@
                                 if (response.status === 1) {
                                     _this.getTaskList();
                                     swal.close();
-                                    _this.Socket.emit('taskUpdate',{
+                                    _this.Socket.emit('taskUpdate', {
                                         project_id: _this.projectId,
-                                        list_id : _this.list.id,
-                                        user_id : _this.authUser.id
+                                        list_id: _this.list.id,
+                                        board_id: _this.selectedData.multiple_board_id,
+                                        user_id: _this.authUser.id
                                     })
                                     // swal("Complete!", "This task is added to complete", "success");
                                 } else if (response.status === 2) {
@@ -2778,10 +2802,11 @@
                             $("#click" + data.id).click();
                         }, 300)
 
-                        _this.Socket.emit('taskUpdate',{
+                        _this.Socket.emit('task-list-Update', {
                             project_id: _this.projectId,
-                            list_id : _this.list.id,
-                            user_id : _this.authUser.id
+                            list_id: _this.list.id,
+                            board_id: _this.selectedData.multiple_board_id,
+                            user_id: _this.authUser.id
                         })
                     })
                     .catch(error => {
@@ -2811,10 +2836,11 @@
                             $("#click" + data.id).click();
                         }, 300)
 
-                        _this.Socket.emit('taskUpdate',{
+                        _this.Socket.emit('task-list-Update', {
                             project_id: _this.projectId,
-                            list_id : _this.list.id,
-                            user_id : _this.authUser.id
+                            list_id: _this.list.id,
+                            board_id: _this.selectedData.multiple_board_id,
+                            user_id: _this.authUser.id
                         })
                     })
                     .catch(error => {
@@ -2848,15 +2874,18 @@
                                 _this.getTaskList()
                                 _this.delete_popup = 0;
                                 swal.close()
+                                _this.Socket.emit('taskUpdate',{
+                                    project_id  : _this.projectId,
+                                    list_id     : _this.list.id,
+                                    board_id    : _this.selectedData.multiple_board_id,
+                                    user_id     : _this.authUser.id
+                                })
                                 // swal("Deleted!", "Successfully delete task !", "success");
                             })
                             .catch(error => {
                                 console.log('Api for delete task not Working !!!')
                             });
-
                     });
-
-
             },
             ActionToSelectedTask(value, type) {
                 var _this = this;
@@ -2879,6 +2908,12 @@
                             _this.getTaskList();
                             $('.jquery-accordion-menu').hide();
                             _this.selectedIds = [];
+                            _this.Socket.emit('taskUpdate',{
+                                project_id  : _this.projectId,
+                                list_id     : _this.list.id,
+                                board_id    : _this.selectedData.multiple_board_id,
+                                user_id     : _this.authUser.id
+                            })
                         })
                         .catch(error => {
                             console.log('Api for delete task not Working !!!')
@@ -2903,6 +2938,12 @@
                     .then(response => {
                         _this.nav_T = response.success;
                         // console.log(response)
+                        _this.Socket.emit('taskUpdate',{
+                            project_id  : _this.projectId,
+                            list_id     : _this.list.id,
+                            board_id    : _this.selectedData.multiple_board_id,
+                            user_id     : _this.authUser.id
+                        })
                         setTimeout(() => {
                             $('#MoveTAsk').modal('show');
                         }, 200);
@@ -2938,8 +2979,15 @@
                                 _this.getTaskList();
                                 $('.jquery-accordion-menu').hide();
                                 _this.delete_popup = 0;
+
                                 // swal("Deleted!", "Successfully delete selected task !", "success");
                                 swal.close();
+                                _this.Socket.emit('taskUpdate',{
+                                    project_id  : _this.projectId,
+                                    list_id     : _this.list.id,
+                                    board_id    : _this.selectedData.multiple_board_id,
+                                    user_id     : _this.authUser.id
+                                })
                             })
                             .catch(error => {
                                 console.log('Api for delete task not Working !!!')
@@ -2961,6 +3009,12 @@
                     .then(response => {
                         _this.getTaskList();
                         $('.jquery-accordion-menu').hide();
+                        _this.Socket.emit('taskUpdate',{
+                            project_id  : _this.projectId,
+                            list_id     : _this.list.id,
+                            board_id    : _this.selectedData.multiple_board_id,
+                            user_id     : _this.authUser.id
+                        })
                     })
                     .catch(error => {
                         console.log('Api for add tag not Working !!!')
@@ -3153,12 +3207,18 @@
                             title: _this.list.name,
                             description: _this.list.description,
                             list_id: _this.list.id,
-                            nav_id:_this.list.nav_id,
+                            nav_id: _this.list.nav_id,
                             project_id: _this.projectId,
                             type: _this.list.type
                         });
                         _this.AllNavItems = response.navItems.original.success;
                         $("#updateListBoardModel").modal('hide');
+                        _this.Socket.emit('taskUpdate',{
+                            project_id  : _this.projectId,
+                            list_id     : _this.list.id,
+                            board_id    : _this.selectedData.multiple_board_id,
+                            user_id     : _this.authUser.id
+                        })
                     })
                     .catch(error => {
                         console.log('Add list api not working!!')
@@ -3183,6 +3243,12 @@
                             setTimeout(() => {
                                 $('#transAndMoveTAsk').modal('show');
                             }, 200);
+                            _this.Socket.emit('taskUpdate',{
+                                project_id  : _this.projectId,
+                                list_id     : _this.list.id,
+                                board_id    : _this.selectedData.multiple_board_id,
+                                user_id     : _this.authUser.id
+                            })
                         })
                         .catch(error => {
 
@@ -3252,6 +3318,12 @@
                                             .then(response => {
                                                 swal("Complete!", "This List is deleted successfully !", "success");
                                                 window.location.href = '/project-dashboard/' + _this.projectId;
+                                                _this.Socket.emit('taskUpdate',{
+                                                    project_id  : _this.projectId,
+                                                    list_id     : _this.list.id,
+                                                    board_id    : _this.selectedData.multiple_board_id,
+                                                    user_id     : _this.authUser.id
+                                                })
                                             })
                                             .catch(error => {
                                                 console.log('Add list api not working!!')
@@ -3351,6 +3423,12 @@
                         })
                             .then(response => response.data)
                             .then(response => {
+                                _this.Socket.emit('taskUpdate', {
+                                    project_id: _this.projectId,
+                                    list_id: _this.list.id,
+                                    board_id: _this.selectedSubList,
+                                    user_id: _this.authUser.id
+                                })
                                 // swal("Complete!", "This " + _this.type_T + " is deleted and all task are moved !", "success");
                                 window.location.href = '/project-dashboard/' + _this.projectId;
                             })
@@ -3383,6 +3461,12 @@
                                 // swal("Complete!", "All Selected task are moved !", "success");
                                 swal.close();
                                 _this.getTaskList()
+                                _this.Socket.emit('taskUpdate', {
+                                    project_id: _this.projectId,
+                                    list_id: _this.list.id,
+                                    board_id: _this.selectedSubList,
+                                    user_id: _this.authUser.id
+                                })
                             })
                             .catch(error => {
                                 console.log('Add list api not working!!')
@@ -3413,6 +3497,12 @@
                                 // swal("Complete!", "All Selected task are moved !", "success");
                                 swal.close();
                                 _this.getTaskList()
+                                _this.Socket.emit('task-list-Update', {
+                                    project_id: _this.projectId,
+                                    list_id: _this.list.id,
+                                    board_id: _this.selectedSubList,
+                                    user_id: _this.authUser.id
+                                })
                             })
                             .catch(error => {
                                 console.log('Add list api not working!!')
@@ -3439,6 +3529,11 @@
                         })
                             .then(response => response.data)
                             .then(response => {
+                                _this.Socket.emit('task-list-Update', {
+                                    project_id: _this.projectId,
+                                    list_id: _this.list.id,
+                                    user_id: _this.authUser.id
+                                })
                                 swal("Complete!", "This " + _this.type_T + " is Moved Successfully !", "success");
                                 window.location.href = '/project-dashboard/' + _this.projectId;
                             })
@@ -3501,10 +3596,11 @@
                         .then(response => response.data)
                         .then(response => {
                             if (response.empty !== 'not change') {
-                                _this.Socket.emit('taskUpdate',{
+                                _this.Socket.emit('taskUpdate', {
                                     project_id: _this.projectId,
-                                    list_id : _this.list.id,
-                                    user_id : _this.authUser.id
+                                    list_id: _this.list.id,
+                                    board_id: _this.selectedData.multiple_board_id,
+                                    user_id: _this.authUser.id
                                 })
                                 if (data.text.indexOf("@") != -1 || data.text.indexOf("#") != -1) {
                                     _this.getTaskList();
@@ -3595,10 +3691,11 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.getTaskList()
-                        _this.Socket.emit('taskUpdate',{
+                        _this.Socket.emit('taskUpdate', {
                             project_id: _this.projectId,
-                            list_id : _this.list.id,
-                            user_id : _this.authUser.id
+                            list_id: _this.list.id,
+                            board_id: _this.selectedData.multiple_board_id,
+                            user_id: _this.authUser.id
                         })
                     })
                     .catch(error => {
@@ -3623,6 +3720,13 @@
                 axios.post('/api/task-list/update', formData, {headers: {'Content-Type': 'multipart/form-data'}})
                     .then(response => response.data)
                     .then(response => {
+                        _this.Socket.emit('taskUpdate', {
+                            project_id: _this.projectId,
+                            list_id: _this.list.id,
+                            board_id: _this.selectedData.multiple_board_id,
+                            user_id: _this.authUser.id,
+                            type : 'Upload Photo'
+                        })
                         _this.getTaskList()
                     })
                     .catch(error => {
@@ -3634,6 +3738,13 @@
                 axios.post('/api/task-list/delete-img', {'img': img, id: id})
                     .then(response => response.data)
                     .then(response => {
+                        _this.Socket.emit('taskUpdate', {
+                            project_id: _this.projectId,
+                            list_id: _this.list.id,
+                            board_id: _this.selectedData.multiple_board_id,
+                            user_id: _this.authUser.id,
+                            type : 'Delete Photo'
+                        })
                         _this.getTaskList();
                         $("#imageModal").modal('hide');
                     })
@@ -3650,6 +3761,13 @@
                 axios.post('/api/task-list/add-priority', data)
                     .then(response => response.data)
                     .then(response => {
+                        _this.Socket.emit('taskUpdate', {
+                            project_id: _this.projectId,
+                            list_id: _this.list.id,
+                            board_id: _this.selectedData.multiple_board_id,
+                            user_id: _this.authUser.id,
+                            type : 'priority add'
+                        })
                         _this.getTaskList();
                         _this.selectedIds = [];
                         $('.jquery-accordion-menu').hide();
@@ -3667,6 +3785,13 @@
                 axios.post('/api/task-list/add-priority', data)
                     .then(response => response.data)
                     .then(response => {
+                        _this.Socket.emit('taskUpdate', {
+                            project_id: _this.projectId,
+                            list_id: _this.list.id,
+                            board_id: _this.selectedData.multiple_board_id,
+                            user_id: _this.authUser.id,
+                            type : 'priority remove'
+                        })
                         _this.getTaskList();
                         _this.selectedIds = [];
                         $('.jquery-accordion-menu').hide();

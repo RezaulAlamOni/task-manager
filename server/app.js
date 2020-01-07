@@ -22,7 +22,7 @@ var express = require('express'),
 });
 
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/package.json');
+    res.sendFile(__dirname + '/index.html');
 });
 
 // =============================
@@ -39,7 +39,7 @@ io.on('connection', function(socket) {
     socket.on('assignUser', function(data) {
         io.emit('assign_user',data);
     });
-    
+
     socket.on('rulesCreate', function(data) {
         io.emit('rulesCreateAndAssign',data);
     });
@@ -49,7 +49,7 @@ io.on('connection', function(socket) {
     });
 
     socket.on('taskUpdate', function(data) {
-        io.emit('takUpdateSocket',data);
+        io.emit('taskUpdateSocket',data);
         console.log(data);
     });
 

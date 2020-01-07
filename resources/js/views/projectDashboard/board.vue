@@ -320,7 +320,7 @@
                                                                     </div>
                                                                     <a :id="'remove-assign-user'+user.id"
                                                                        v-if="card.assigned_user_ids.includes(user.id)"
-                                                                       @click="removeAssignedUser(user.id, card.cardId)"
+                                                                       @click="removeAssignedUser(user.id, card)"
                                                                        data-toggle="tooltip"
                                                                        title="Remove user from assigned !"
                                                                        class="remove-assign-user badge badge-danger"
@@ -380,14 +380,14 @@
                                                                             <template
                                                                                 v-for="(tag, tagIndx) in card.existing_tags">
                                                                                 <li class="badge-pill tags"
-                                                                                    @click="addExistingTag(index , tagIndx, key, card.cardId, '')"
+                                                                                    @click="addExistingTag(index , tagIndx, key, card, '')"
                                                                                     v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
                                                                                     v-if="tag.text !== 'Dont Forget'">
                                                                                     {{(tag.title !== undefined) ?
                                                                                     tag.title.substring(0,12) : ''}}
                                                                                 </li>
                                                                             </template>
-                                                                            <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')"
+                                                                            <li @click="addExistingTag(index , 0, key, card, 'Dont Forget')"
                                                                                 class="badge-pill tags"
                                                                                 style="background: #FB8678;height: 17px;line-height: 14px;">
                                                                                 Dont Forget
@@ -427,14 +427,14 @@
                                                                     <template
                                                                         v-for="(tag, tagIndx) in card.existing_tags">
                                                                         <li class="badge-pill tags"
-                                                                            @click="addExistingTag(index , tagIndx, key, card.cardId ,'')"
+                                                                            @click="addExistingTag(index , tagIndx, key, card ,'')"
                                                                             v-bind:style="[{'background': tag.color },{'margin-left' : 1 +'px'}]"
                                                                             v-if="tag.text !== 'Dont Forget'">
                                                                             {{(tag.title !== undefined)
                                                                             ?tag.title.substring(0,12) : ''}}
                                                                         </li>
                                                                     </template>
-                                                                    <li @click="addExistingTag(index , 0, key, card.cardId, 'Dont Forget')"
+                                                                    <li @click="addExistingTag(index , 0, key, card, 'Dont Forget')"
                                                                         class="badge-pill tags"
                                                                         style="background: #FB8678"> Dont Forget
                                                                     </li>
@@ -499,13 +499,13 @@
 
                                                                 <div class="users-select row">
                                                                     <div class="col-md-9 add-tag-to-selected"
-                                                                         @click="Add_Priority('3',card.cardId)">
+                                                                         @click="Add_Priority('3',card)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e25858;">.</span>
                                                                         <h5 class="text-capitalize"> high</h5>
                                                                     </div>
-                                                                    <div @click="RemovePriority(card.cardId)"
+                                                                    <div @click="RemovePriority(card)"
                                                                          style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
                                                                          v-if="card.priority_label === 'high'">
                                                                     <span>
@@ -515,13 +515,13 @@
                                                                 </div>
                                                                 <div class="users-select row">
                                                                     <div class="col-md-9 add-tag-to-selected"
-                                                                         @click="Add_Priority('2',card.cardId)">
+                                                                         @click="Add_Priority('2',card)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #e58c62;">.</span>
                                                                         <h5 class="text-capitalize">medium</h5>
                                                                     </div>
-                                                                    <div @click="RemovePriority(card.cardId)"
+                                                                    <div @click="RemovePriority(card)"
                                                                          style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
                                                                          v-if="card.priority_label === 'medium'">
                                                                         <i class="far fa-minus-octagon"></i>
@@ -529,13 +529,13 @@
                                                                 </div>
                                                                 <div class="users-select row">
                                                                     <div class="col-md-9 add-tag-to-selected"
-                                                                         @click="Add_Priority('1',card.cardId)">
+                                                                         @click="Add_Priority('1',card)">
                                                                     <span
                                                                         class="badge badge-default tag-color-custom-contextmenu"
                                                                         style="background: #5987d1;">.</span>
                                                                         <h5>Low</h5>
                                                                     </div>
-                                                                    <div @click="RemovePriority(card.cardId)"
+                                                                    <div @click="RemovePriority(card)"
                                                                          style=" width: 20%; text-align: right;padding-top: 4px;font-size: 16px"
                                                                          v-if="card.priority_label === 'low'">
                                                                         <i class="far fa-minus-octagon"></i>
@@ -1650,7 +1650,7 @@
             connectSocket: function () {
                 let app = this;
                 if (app.Socket == null) {
-                    app.Socket = io.connect('http://localhost:3000/');
+                    app.Socket = io.connect('http://localhost:4100/');
 
                     app.Socket.on('CardMoved', function (res) {
                         // if (res.project_id == app.projectId && res.user_id != app.authUser.id){
@@ -1659,22 +1659,22 @@
                             // swal('Card moved','You assign on a task!', 'success');
                         }
                     })
-                    app.Socket.on('takUpdateSocket', function (res) {
+                    app.Socket.on('taskUpdateSocket', function (res) {
                         console.log( res.user_id + " " +app.authUser.id)
-                        if (res.list_id == app.nav_id && res.project_id == app.projectId && res.user_id != app.authUser.id) {
+                        if (res.board_id == app.board_id && res.project_id == app.projectId && res.user_id != app.authUser.id ) { // && res.user_id != app.authUser.id
                             // if (res.list_id == app.list.id && res.project_id == app.projectId) {
                             // swal('Updated', 'Task Update!', 'success');
                             app.getBoardTask();
                         }
                     })
                     app.Socket.on('cardUpdatedSocket', function(res) {
-                        // console.log('app.list ', res.list_id, app.board_id);
-                        // console.log('resp',res.project_id, app.projectId);
-                        if (res.list_id == app.board_id && res.project_id == app.projectId ) {
+                        console.log('app.list ', res.list_id, app.board_id);
+                        console.log('resp', res);
+                        if (res.board_id == app.board_id && res.project_id == app.projectId && res.user_id != app.authUser.id ) {
                             // if (res.list_id == app.list.id && res.project_id == app.projectId) {
                             // swal('Updated', 'Task Update!', 'success');
-                        }                  
-                            app.getBoardTask();
+                        }
+                        app.getBoardTask();
                     })
                 }
             },
@@ -1859,15 +1859,7 @@
                     .then(response => {
                         console.log(response);
                         _this.getBoardTask();
-                        _this.Socket.emit('cardUpdated',{
-                            // user_id : _this.auth_user.id,
-                            // project_id : _this.projectId
-                            project_id: _this.projectId,
-                            list_id : _this.board_id,
-                            nav_id  : _this.nav_id,
-                            user_id : _this.authUser.id,
-                            type : 'list'
-                        });
+                        _this.boardSocketCall();
                     })
                     .catch(error => {
 
@@ -1927,15 +1919,14 @@
                         }, 500);
                         console.log('sorting failed');
                     });
+                    this.boardSocketCall();
             },
             onCardDrop(columnId, boardId, index, dropResult) {
                 // index = index+1;
                 // console.log('drops => ',dropResult);
                 let _this = this;
                 if (dropResult.removedIndex !== null || dropResult.addedIndex !== null) {
-
                     // console.log(this.scene.children[index]);
-
                     // console.log(this.scene, dropResult);
                     const scene = Object.assign({}, this.scene);
                     const column = scene.children.filter(p => p.id === columnId)[0];
@@ -1984,15 +1975,7 @@
                                 // console.log('shifting failed');
                             });
                     }
-                    _this.Socket.emit('cardUpdated',{
-                        // user_id : _this.auth_user.id,
-                        // project_id : _this.projectId
-                        project_id: _this.projectId,
-                        list_id : _this.board_id,
-                        nav_id  : _this.nav_id,
-                        user_id : _this.authUser.id,
-                        type : 'list'
-                    });
+                    _this.boardSocketCall();
                 }
             },
             onDragStart(columnId, boardId, index, dropResult) {
@@ -2061,15 +2044,7 @@
                                 swal.close();
                             }, 1000);
                         }
-                        _this.Socket.emit('cardUpdated',{
-                            // user_id : _this.auth_user.id,
-                            // project_id : _this.projectId
-                            project_id: _this.projectId,
-                            list_id : _this.board_id,
-                            nav_id  : _this.nav_id,
-                            user_id : _this.authUser.id,
-                            type : 'list'
-                        });
+                        _this.boardSocketCall();
                     })
                     .catch(error => {
                     });
@@ -2105,6 +2080,7 @@
                         });
                     setTimeout(function () {
                         _this.getBoardTask();
+                        _this.boardSocketCall();
                         // _this.getData();
                         // _this.editField = {};
                         // $("#EditModal").modal('show');
@@ -2239,6 +2215,7 @@
                     .then(response => {
 
                         _this.getBoardTask();
+                        _this.boardSocketCall();
                         console.log('added');
                     })
                     .catch(error => {
@@ -2270,6 +2247,7 @@
                             .then(response => response.data)
                             .then(response => {
                                 _this.getBoardTask();
+                                _this.boardSocketCall();
                                 swal("Unlinked!", "Successfully Unlinked", "success");
                                 setTimeout(() => {
                                     swal.close();
@@ -2335,6 +2313,7 @@
                 .then(response => {
                     if (response.success) {
                         _this.getBoardTask();
+                        _this.boardSocketCall();
                         $('#transferCard').modal('hide');
                     } else {
                         $('#transferCard').modal('hide');
@@ -2386,6 +2365,7 @@
 
                         if (response.success) {
                             _this.getBoardTask();
+                            _this.boardSocketCall();
                             $('#transferColumn').modal('hide');
                         } else {
                             $('#transferColumn').modal('hide');
@@ -2417,7 +2397,8 @@
                         axios.post('/api/task-list/delete-task', postData)
                             .then(response => response.data)
                             .then(response => {
-                                _this.getBoardTask()
+                                _this.getBoardTask();
+                                _this.boardSocketCall();
                                 swal("Deleted!", "Successfully deleted task", "success");
                                 setTimeout(() => {
                                     swal.close();
@@ -2526,6 +2507,7 @@
                         }
                         // _this.getData()
                         _this.getBoardTask();
+                        _this.boardSocketCall();
                     })
                     .catch(error => {
                     });
@@ -2575,15 +2557,7 @@
                                 $('#title' + data.id).focus();
                             }, 1000)
                         }
-                        _this.Socket.emit('cardUpdated',{
-                            // user_id : _this.auth_user.id,
-                            // project_id : _this.projectId
-                            project_id: _this.projectId,
-                            list_id : _this.board_id,
-                            nav_id  : _this.nav_id,
-                            user_id : _this.authUser.id,
-                            type : 'list'
-                        });
+                        _this.boardSocketCall();
                     })
                     .catch(error => {
                     });
@@ -2608,6 +2582,7 @@
                                     let keys = _this.cards[index].task.length - 1;
                                     _this.getBoardTask();
                                     _this.getData();
+                                    _this.boardSocketCall();
                                     setTimeout(function () {
                                         $('#id' + index + keys).click();
                                         $('#id' + index + keys).focus();
@@ -2646,6 +2621,7 @@
                                 // delete _this.cards[index].task[cardIndex];
                                 // _this.cards[index].task.length = _this.cards[index].task.length-1;
                                 _this.getData();
+                                _this.boardSocketCall();
                                 swal("Removed!", "The task has been removed.", "success");
                                 setTimeout(() => {
                                     swal.close();
@@ -2682,6 +2658,7 @@
                             // delete _this.cards[index].task[cardIndex];
                             // _this.cards[index].task.length = _this.cards[index].task.length-1;
                             _this.getBoardTask();
+                            _this.boardSocketCall();
                             _this.selectedIds = [];
                             $('.card-list').removeClass('selected-card');
                             swal("Removed!", "The task has been removed.", "success");
@@ -2701,18 +2678,18 @@
                     this.tag = null;
                 }
             },
-            addExistingTag(index, tagIndx, key, cardId, dntfrgt = '') {
+            addExistingTag(index, tagIndx, key, card, dntfrgt = '') {
                 let _this = this;
                 if (dntfrgt !== '') {
                     var postData = {
-                        id: cardId,
+                        id: card.cardId,
                         tags: "Dont Forget",
                         color: "#FF0000",
                         type: 'task',
                     };
                 } else {
                     var postData = {
-                        id: cardId,
+                        id: card.cardId,
                         tags: this.cards[index].task[key].existing_tags[tagIndx].title,
                         color: this.cards[index].task[key].existing_tags[tagIndx].color,
                         type: 'task',
@@ -2726,15 +2703,7 @@
                         // $('#dropdown' + cardId).toggle();
                         setTimeout(function () {
                             _this.getBoardTask();
-                            _this.Socket.emit('cardUpdated',{
-                                // user_id : _this.auth_user.id,
-                                // project_id : _this.projectId
-                                project_id: _this.projectId,
-                                list_id : _this.board_id,
-                                nav_id  : _this.nav_id,
-                                user_id : _this.authUser.id,
-                                type : 'list'
-                            });
+                            _this.listSocketCall(card.list_id);
                         }, 100);
                     })
                     .catch(error => {
@@ -2760,6 +2729,7 @@
                                 if (response.success) {
                                     _this.cards.splice(index, 1);
                                     _this.getData();
+                                    _this.boardSocketCall();
                                     swal("Deleted!", "Your imaginary file has been deleted.", "success");
                                     setTimeout(() => {
                                         swal.close();
@@ -2809,6 +2779,7 @@
                     .then(response => {
                         _this.cards[index].hidden = 1;
                         _this.getData();
+                        _this.boardSocketCall();
                     })
                     .catch(error => {
                     });
@@ -2823,6 +2794,7 @@
                     .then(response => {
                         _this.cards[index].hidden = 0;
                         _this.getData();
+                        _this.boardSocketCall();
                     })
                     .catch(error => {
                     });
@@ -2921,7 +2893,7 @@
                 let _this = this;
                 $('#title' + card.cardId).focus();
                 $('#title' + card.cardId).html(_this.commentsData + '' + tag.title + ' ');
-                _this.addExistingTag(index, tagIndx, key, card.cardId, '');
+                _this.addExistingTag(index, tagIndx, key, card, '');
                 _this.allTags = null;
                 $('.dropdowns-card-user').hide();
             },
@@ -2958,7 +2930,7 @@
             },
             saveData(data, index, child_key) {
                 let _this = this;
-                // console.log("data = "+data.data);
+                // console.log("data = ",data);
                 if (data.data === "") {
                     _this.getBoardTask();
                     swal('Blank!', 'Title is required!', 'warning');
@@ -2966,6 +2938,11 @@
                         swal.close();
                     }, 1000);
                 } else {
+                    let mailData = {
+                        subject : "A card is update ",
+                        body    :  "A card ( "+data.data+" ) is updated that is assign to you",
+                        task_id : data.cardId
+                    }
                     let title = {
                         'title': data.data
                     };
@@ -2974,16 +2951,8 @@
                         .then(response => {
                             _this.cards[index].task[child_key].name = data.data;
                             _this.getData();
-
-                            _this.Socket.emit('cardUpdated',{
-                                // user_id : _this.auth_user.id,
-                                // project_id : _this.projectId
-                                project_id: _this.projectId,
-                                list_id : _this.board_id,
-                                nav_id  : _this.nav_id,
-                                user_id : _this.authUser.id,
-                                type : 'list'
-                            });
+                            _this.listSocketCall(data.list_id);
+                            _this.sendMail(mailData);
                         })
                         .catch(error => {
                         });
@@ -3003,10 +2972,17 @@
                         'date': card.date+' 23:59:59',
                         'tz': tz,
                     };
+                    let mailData = {
+                        subject : "A card due date is update ",
+                        body    :  "A card ( "+card.data+" ) due date is updated that is assigned to you",
+                        task_id : card.cardId
+                    }
                     axios.post('/api/card-update/' + card.cardId, data)
                         .then(response => response.data)
                         .then(response => {
                             // _this.getBoardTask();
+                            _this.sendMail(mailData);
+                            _this.listSocketCall(card.list_id);
                         })
                         .catch(error => {
                         });
@@ -3039,6 +3015,7 @@
 
                             setTimeout(function () {
                                 _this.getBoardTask();
+                                _this.listSocketCall(card.list_id)
                                 $('.dropdown-menu').removeClass('show');
                                 // _this.getData();
                             }, 100);
@@ -3062,6 +3039,7 @@
                             _this.cards[columnIndex].task[cardIndex].tags.splice(obj.index, 1);
                             setTimeout(function () {
                                 _this.getBoardTask();
+                                _this.listSocketCall(card.list_id);
                             }, 100);
                             _this.tags = [];
                         })
@@ -3118,16 +3096,17 @@
                     $('#details').addClass('details-show');
                 }
             },
-            Add_Priority(priority, id) {
+            Add_Priority(priority, card) {
                 var _this = this;
                 var data = {
-                    ids: (id == null) ? _this.selectedIds : [id],
+                    ids: (card == null) ? _this.selectedIds : [card.cardId],
                     priority: priority
                 }
                 axios.post('/api/task-list/add-priority', data)
                     .then(response => response.data)
                     .then(response => {
                         _this.getBoardTask();
+                        (card == null) ? _this.boardSocketCall() : _this.listSocketCall(card.list_id);
                         _this.selectedIds = [];
                         $('.card-list').removeClass('selected-card');
                         $('.jquery-accordion-menu').hide();
@@ -3136,16 +3115,17 @@
                         console.log('Api for task add priority not Working !!!')
                     });
             },
-            RemovePriority(id) {
+            RemovePriority(card) {
                 var _this = this;
                 var data = {
-                    ids: (id == null) ? _this.selectedIds : [id],
+                    ids: (card == null) ? _this.selectedIds : [card.cardId],
                     priority: null
                 }
                 axios.post('/api/task-list/add-priority', data)
                     .then(response => response.data)
                     .then(response => {
                         _this.getBoardTask();
+                        (card == null) ? _this.boardSocketCall() : _this.listSocketCall(card.list_id);
                         _this.selectedIds = [];
                         $('.card-list').removeClass('selected-card');
                         $('.jquery-accordion-menu').hide();
@@ -3294,13 +3274,17 @@
                     // e.target.setSelectionRange(0, card.text.length);
                 }
             },
-            removeAssignedUser(user_id, task_id) {
-
+            removeAssignedUser(user_id, card) {
                 // console.log(user.id, user.task_id);
                 var _this = this;
                 var postData = {
                     user_id: user_id,
-                    task_id: task_id
+                    task_id: card.cardId
+                };
+                let mailData = {
+                    subject : "You are unassigned from a card",
+                    body    : "You are unassigned from ( "+card.data+" ) card",
+                    user_id :  user_id
                 };
                 // console.log(postData)
                 axios.post('/api/task-list/assign-user-remove', postData)
@@ -3311,6 +3295,8 @@
                             // _this.cards[index].task[key].assigned_user_ids.splice(0,1);
                             console.log(response);
                             _this.getBoardTask();
+                            _this.listSocketCall(card.list_id);
+                            _this.sendMail(mailData);
                         }
                     })
                     .catch(error => {
@@ -3323,6 +3309,11 @@
                     task_id: data.cardId,
                     user_id: user.id
                 };
+                let mailData = {
+                    subject : "A card is assign to you ",
+                    body    :  "A card ( "+data.data+" ) is assigned to you",
+                    user_id: user.id
+                }
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -3331,6 +3322,8 @@
                             //  console.log(_this.cards);
                             setTimeout(function () {
                                 _this.getBoardTask();
+                                _this.listSocketCall(data.list_id);
+                                _this.sendMail(mailData);
                             }, 100);
                         }
                     })
@@ -3510,6 +3503,7 @@
                             .then(response => response.data)
                             .then(response => {
                                 _this.getBoardTask();
+                                _this.boardSocketCall();
                                 $('.jquery-accordion-menu').hide();
                                 _this.delete_popup = 0;
                                 swal("Deleted!", "Successfully deleted selected tasks", "success");
@@ -3568,8 +3562,7 @@
                 this.getBoardTaskFilter('p_show');
                 $('#priority_list_modal').modal('hide');
             },
-            addFilterToFilter(type)
-            {
+            addFilterToFilter(type) {
                 if (this.selectedPriorites.includes(type)) {
                     var indexs = this.selectedPriorites.indexOf(type);
                     if (indexs > -1) {
@@ -3580,6 +3573,38 @@
                 }
                 // console.log(this.selectedPriorites)
             },
+            boardSocketCall(list_id = null){
+                let _this = this;
+                _this.Socket.emit('cardUpdated',{
+                    // user_id : _this.auth_user.id,
+                    // project_id : _this.projectId
+                    project_id: _this.projectId,
+                    board_id : _this.board_id,
+                    list_id : list_id,
+                    user_id : _this.authUser.id,
+                });
+            },
+            listSocketCall(list_id = null){
+                let _this = this;
+                _this.Socket.emit('taskUpdate',{
+                    // user_id : _this.auth_user.id,
+                    // project_id : _this.projectId
+                    project_id: _this.projectId,
+                    board_id : _this.board_id,
+                    list_id : list_id,
+                    user_id : _this.authUser.id,
+                });
+            },
+            sendMail(data){
+                axios.post('/api/send-mail/',data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+
+                });
+            }
         },
         directives: {
             ClickOutside
