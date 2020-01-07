@@ -2938,6 +2938,11 @@
                         swal.close();
                     }, 1000);
                 } else {
+                    let mailData = {
+                        subject : "A card is update ",
+                        body    :  "A card ( "+data.data+" ) is updated that is assign to you",
+                        task_id : data.cardId
+                    }
                     let title = {
                         'title': data.data
                     };
@@ -2947,6 +2952,7 @@
                             _this.cards[index].task[child_key].name = data.data;
                             _this.getData();
                             _this.listSocketCall(data.list_id);
+                            _this.sendMail(mailData);
                         })
                         .catch(error => {
                         });
@@ -2966,11 +2972,17 @@
                         'date': card.date+' 23:59:59',
                         'tz': tz,
                     };
+                    let mailData = {
+                        subject : "A card due date is update ",
+                        body    :  "A card ( "+card.data+" ) due date is updated that is assigned to you",
+                        task_id : card.cardId
+                    }
                     axios.post('/api/card-update/' + card.cardId, data)
                         .then(response => response.data)
                         .then(response => {
                             // _this.getBoardTask();
-                            _this.listSocketCall(card.list_id)
+                            _this.sendMail(mailData);
+                            _this.listSocketCall(card.list_id);
                         })
                         .catch(error => {
                         });
@@ -3263,12 +3275,16 @@
                 }
             },
             removeAssignedUser(user_id, card) {
-
                 // console.log(user.id, user.task_id);
                 var _this = this;
                 var postData = {
                     user_id: user_id,
                     task_id: card.cardId
+                };
+                let mailData = {
+                    subject : "You are unassigned from a card",
+                    body    : "You are unassigned from ( "+card.data+" ) card",
+                    user_id :  user_id
                 };
                 // console.log(postData)
                 axios.post('/api/task-list/assign-user-remove', postData)
@@ -3280,6 +3296,7 @@
                             console.log(response);
                             _this.getBoardTask();
                             _this.listSocketCall(card.list_id);
+                            _this.sendMail(mailData);
                         }
                     })
                     .catch(error => {
@@ -3292,6 +3309,11 @@
                     task_id: data.cardId,
                     user_id: user.id
                 };
+                let mailData = {
+                    subject : "A card is assign to you ",
+                    body    :  "A card ( "+data.data+" ) is assigned to you",
+                    user_id: user.id
+                }
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -3300,8 +3322,8 @@
                             //  console.log(_this.cards);
                             setTimeout(function () {
                                 _this.getBoardTask();
-                                _this.listLinkToCol(data.list_id);
-                                _this.sendMail(user.id);
+                                _this.listSocketCall(data.list_id);
+                                _this.sendMail(mailData);
                             }, 100);
                         }
                     })
@@ -3573,8 +3595,8 @@
                     user_id : _this.authUser.id,
                 });
             },
-            sendMail(id){
-                axios.get('/api/send-mail/'+id)
+            sendMail(data){
+                axios.post('/api/send-mail/',data)
                 .then(response => response.data)
                 .then(response => {
                     console.log(response);
