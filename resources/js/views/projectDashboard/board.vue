@@ -1659,9 +1659,9 @@
                             // swal('Card moved','You assign on a task!', 'success');
                         }
                     })
-                    app.Socket.on('takUpdateSocket', function (res) {
+                    app.Socket.on('taskUpdateSocket', function (res) {
                         // console.log( res.user_id + " " +app.authUser.id)
-                        if (res.board_id == app.board_id && res.project_id == app.projectId ) { // && res.user_id != app.authUser.id
+                        if (res.board_id == app.board_id && res.project_id == app.projectId && res.user_id != app.authUser.id ) { // && res.user_id != app.authUser.id
                             // if (res.list_id == app.list.id && res.project_id == app.projectId) {
                             // swal('Updated', 'Task Update!', 'success');
                             app.getBoardTask();
@@ -1670,7 +1670,7 @@
                     app.Socket.on('cardUpdatedSocket', function(res) {
                         // console.log('app.list ', res.list_id, app.board_id);
                         console.log('resp', res);
-                        if (res.board_id == app.board_id && res.project_id == app.projectId ) {
+                        if (res.board_id == app.board_id && res.project_id == app.projectId && res.user_id != app.authUser.id ) {
                             // if (res.list_id == app.list.id && res.project_id == app.projectId) {
                             // swal('Updated', 'Task Update!', 'success');
                         }
