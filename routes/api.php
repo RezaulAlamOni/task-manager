@@ -125,6 +125,7 @@ Route::post('/overview-log/undo-action', 'ActionLogController@UndoAction');
 
 //auth-user
 Route::get('/auth-user', 'HomeController@AuthUser');
+Route::get('/send-mail/{taskId}', 'HomeController@userMail');
 
 //fcm
 Route::post('/firebase-insert-update', 'FirbaseController@AddFcmToken')->name('FcmTokenInsertOrUpdate');

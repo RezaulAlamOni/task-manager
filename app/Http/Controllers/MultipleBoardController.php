@@ -20,8 +20,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
-use Mail;
-use App\Mail\UserMail;
 
 class MultipleBoardController extends Controller
 {
@@ -673,17 +671,17 @@ class MultipleBoardController extends Controller
             $datas = Task::find($id);
             $this->createLog($id, 'updated', 'Card Update', $datas->title);
 
-            $emails = [];
-            $users = AssignedUser::where('task_id',$id)->with(['users'])->get();
-            foreach ($users as $key => $value) {
-                $emails[] = $value->users->email;
-            }
-            if (count($emails) > 0) {
-                // $comment = 'Hi, Card title is updated.'; 01825082461
-                $comment['subject'] = "Card is updated";
-                $comment['body'] = "A card is updated that you are assigned";
-                Mail::to($emails)->send(new UserMail($comment));
-            }
+            // $emails = [];
+            // $users = AssignedUser::where('task_id',$id)->with(['users'])->get();
+            // foreach ($users as $key => $value) {
+            //     $emails[] = $value->users->email;
+            // }
+            // if (count($emails) > 0) {
+            //     // $comment = 'Hi, Card title is updated.'; 01825082461
+            //     $comment['subject'] = "Card is updated";
+            //     $comment['body'] = "A card is updated that you are assigned";
+            //     Mail::to($emails)->send(new UserMail($comment));
+            // }
             return response()->json(['success' => true, 'data' => $datas]);
         }
         return response()->json(['success' => false]);
