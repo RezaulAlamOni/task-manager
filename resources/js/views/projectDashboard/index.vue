@@ -1902,7 +1902,12 @@
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
-                        _this.Socket.emit('assignUser', user.id)
+                        _this.Socket.emit('taskUpdate', {
+                            project_id: _this.projectId,
+                            list_id: _this.list.id,
+                            board_id: _this.selectedData.multiple_board_id,
+                            user_id: _this.authUser.id
+                        })
                         _this.getTaskList();
                     })
                     .catch(error => {
@@ -1924,7 +1929,12 @@
                         // console.log(response);
                         if (response === 'success') {
                             _this.getTaskList()
-                            _this.Socket.emit('assignUser', postData.user_id)
+                            _this.Socket.emit('taskUpdate', {
+                                project_id: _this.projectId,
+                                list_id: _this.list.id,
+                                board_id: _this.selectedData.multiple_board_id,
+                                user_id: _this.authUser.id
+                            })
                         }
                     })
                     .catch(error => {
