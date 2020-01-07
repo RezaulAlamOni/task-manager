@@ -1673,7 +1673,7 @@
                         if (res.list_id == app.board_id && res.project_id == app.projectId ) {
                             // if (res.list_id == app.list.id && res.project_id == app.projectId) {
                             // swal('Updated', 'Task Update!', 'success');
-                        }                  
+                        }
                             app.getBoardTask();
                     })
                 }
