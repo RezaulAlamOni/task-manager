@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\EmailAndNotification;
+use App\User;
 use Illuminate\Http\Request;
 
 class EmailNotificationController extends Controller
@@ -15,7 +16,8 @@ class EmailNotificationController extends Controller
 
     public function usersNotifications()
     {
-        $notifications = EmailAndNotification::with('users')->get();
+//        $notifications = EmailAndNotification::with('users')->get();
+        $notifications = User::select()->with('notifications:id')->find(1)->notifications;
         return $notifications;
     }
 }

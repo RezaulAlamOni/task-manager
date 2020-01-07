@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class EmailAndNotification extends Model
 {
     public $timestamps = false;
+    protected $hidden = ['pivot'];
 
     /**
      * Get the Categories associated with the parent's `id`
@@ -26,6 +27,6 @@ class EmailAndNotification extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'notification_user', 'user_id', 'notification_id');
     }
 }

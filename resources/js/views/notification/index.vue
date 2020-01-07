@@ -185,6 +185,7 @@
                     weeklyReport: false,
                     monthlyReport: false,
                 },
+                userNotification: {},
                 notifications: {}
             };
         },
@@ -207,6 +208,7 @@
                 });
             });
             this.getAllNotifications();
+            this.getUserNotification();
         },
         methods: {
             getAllNotifications() {
@@ -218,6 +220,17 @@
                         setTimeout(function () {
                             $('.form-check-input').bootstrapToggle();
                         }, 400)
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            },
+            getUserNotification() {
+                let _this = this;
+                axios.get('/api/users-notifications')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.userNotification = response;
                     })
                     .catch(error => {
                         console.log(error);
