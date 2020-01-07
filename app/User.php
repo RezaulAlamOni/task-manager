@@ -54,4 +54,9 @@ class User extends SparkUser implements MustVerifyEmail
         'trial_ends_at' => 'datetime',
         'uses_two_factor_auth' => 'boolean',
     ];
+
+    public function notifications()
+    {
+        return $this->belongsToMany( EmailAndNotification::class);
+    }
 }

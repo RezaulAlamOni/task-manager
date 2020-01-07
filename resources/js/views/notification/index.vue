@@ -14,6 +14,18 @@
                         <div class="card bg-primary-card">
                             <div class="card-body">
                                 <div class="row">
+                                    <div class="col-md-12" v-for="notification in notifications">
+                                        <h2 class="mb-4">{{ notification.title }}</h2>
+                                        <div class="form-check mb-4" v-for="child in notification.children">
+                                            <input :id="child.unique_id" class="form-check-input" type="checkbox"
+                                                   data-toggle="toggle" data-style="ml-1" data-height="25"
+                                                   data-onstyle="success" data-offstyle="secondary"
+                                                   v-model="child.unique_id">
+                                            <label :for="child.unique_id" class="form-check-label">
+                                                <h5 v-text="child.title"></h5>
+                                            </label>
+                                        </div>
+                                    </div>
                                     <div class="col-md-12">
                                         <h2 class="mb-4">Email frequency</h2>
                                         <div class="form-check mb-4">
@@ -71,7 +83,7 @@
                                                    data-onstyle="success" data-offstyle="secondary"
                                                    v-model="emailFreq.everydayUpdate">
                                             <label for="everyUpdate" class="form-check-label">
-                                                <h5>Have a checkbox for - Email me everything</h5>
+                                                <h5>Email me everything</h5>
                                             </label>
                                         </div>
                                         <div class="form-check mb-4">
@@ -162,7 +174,9 @@
 </template>
 <script>
     export default {
-        components: {},
+        components: {
+
+        },
         data() {
             return {
                 emailFreq: {
@@ -170,8 +184,11 @@
                     dailyReport: false,
                     weeklyReport: false,
                     monthlyReport: false,
-                }
+                },
+                notifications: {}
             };
+        },
+        created(){
         },
         mounted() {
             let _this = this;
@@ -189,9 +206,22 @@
                     _this.emailFreq.monthlyReport = !_this.emailFreq.monthlyReport;
                 });
             });
+            this.getAllNotifications();
         },
         methods: {
-            everydayUpdate() {
+            getAllNotifications() {
+                let _this = this;
+                axios.get('/api/get-notifications')
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.notifications = response;
+                        setTimeout(function () {
+                            $('.form-check-input').bootstrapToggle();
+                        }, 400)
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
             }
         },
         watch: {}

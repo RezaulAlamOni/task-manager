@@ -129,4 +129,6 @@ Route::get('/auth-user', 'HomeController@AuthUser');
 //fcm
 Route::post('/firebase-insert-update', 'FirbaseController@AddFcmToken')->name('FcmTokenInsertOrUpdate');
 
-
+//Get All Notifications
+Route::get('/get-notifications', 'EmailNotificationController@getAllNotifications');
+Route::get('/users-notifications', 'EmailNotificationController@usersNotifications');
