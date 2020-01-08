@@ -56,7 +56,6 @@
         mounted() {
             let _this = this;
             this.getAllNotifications();
-            this.getUserNotification();
 
 
             // $('body').on('change', '#emailFreq_everydayUpdate', function () {
@@ -89,12 +88,14 @@
                         console.log(error);
                     });
             },
-            getUserNotification() {
+            setNotification(id, value) {
                 let _this = this;
-                axios.get('/api/users-notifications')
+                axios.post('/api/set-notification/' + id, {
+                    value: value
+                })
                     .then(response => response.data)
                     .then(response => {
-                        _this.userNotification = response;
+                        console.log(response);
                     })
                     .catch(error => {
                         console.log(error);
@@ -107,6 +108,7 @@
                         // console.log(child_v.unique_id);
                         $('#' + child_v.unique_id).change(function () {
                             _this.notifications[index].children[child_i].user = !_this.notifications[index].children[child_i].user;
+                            _this.setNotification(child_v.id, _this.notifications[index].children[child_i].user);
                             console.log(_this.notifications[index].children[child_i].user);
                         });
                     })

@@ -35,10 +35,10 @@ class EmailNotificationController extends Controller
         $notification = EmailAndNotification::with('users')->findOrFail($id);
         $user = User::findOrFail(auth()->id());
         if ($request->value) {
-            $user->notifications()->attach($id);
+            $result = $user->notifications()->attach($id);
         } else {
-            $user->notifications()->detach($id);
+            $result = $user->notifications()->detach($id);
         }
-        return response()->json(['success' => true], 200);
+        return response()->json(['success' => true, 'message' => $result], 200);
     }
 }
