@@ -10,6 +10,7 @@ import Rules from '../views/Rules/index/index'
 import Profile from '../views/profile/index'
 import ProfileEdit from '../views/profile/edit'
 import Notification from '../views/notification/index'
+import NotificationSettings from '../views/notification/settings'
 
 
 let routes = [
@@ -60,8 +61,11 @@ let routes = [
         component: Notification,
         name: 'Notification'
     },
-
-
+    {
+        path: '/notification-settings',
+        component: NotificationSettings,
+        name: 'NotificationSettings'
+    },
 ];
 
 const router = new VueRouter({
