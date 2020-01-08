@@ -15,7 +15,7 @@ var express = require('express'),
     // https =  require('https'),//for https server
     server = https.createServer(app),
     io = require('socket.io')(server),
-    port = 4100,
+    port = 3000,
     ipAddress = '0.0.0.0';
     server.listen(port,ipAddress,function () {
     console.log('Chat Server started on port : ' + port);
