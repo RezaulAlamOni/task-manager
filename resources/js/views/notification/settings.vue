@@ -14,7 +14,21 @@
                         <div class="card bg-primary-card">
                             <div class="card-body">
                                 <div class="row">
-
+                                    <table class="table table-hover" v-for="notification in notifications">
+                                        <thead>
+                                        <tr>
+                                            <th>{{ notification.title }}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="d-flex" v-for="child in notification.children">
+                                            <td class="col-10">{{ child.title }}</td>
+                                            <td class="col-2">
+                                                <button class="btn btn-danger btn-sm"><i class="fa fa-close"></i></button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -28,9 +42,12 @@
     export default {
         components: {},
         data() {
-            return {};
+            return {
+                notifications: {}
+            };
         },
         created() {
+            this.getAllNotifications();
         },
         mounted() {
         },
@@ -42,11 +59,6 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.notifications = response;
-                        setTimeout(function () {
-                            $('.form-check-input').bootstrapToggle();
-
-                            _this.changeFunc();
-                        }, 400);
                     })
                     .catch(error => {
                         console.log(error);
@@ -57,5 +69,10 @@
     }
 </script>
 <style>
-
+    .btn-sm, .btn-group-sm > .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+    }
 </style>
