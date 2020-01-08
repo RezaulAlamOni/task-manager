@@ -4,32 +4,44 @@ namespace App\Http\Controllers;
 
 use App\EmailAndNotification;
 use App\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class EmailNotificationController extends Controller
 {
+    /**
+     * Get All the Notifications with Parent Child Relationship.
+     *
+     * @return JsonResponse
+     */
     public function getAllNotifications()
     {
         $notifications = EmailAndNotification::with('children')->whereNull('parent_id')->get();
         return response()->json($notifications, 200);
     }
 
+    /**
+     * Get the Logged In User's Notifications status.
+     *
+     * @return JsonResponse
+     */
     public function usersNotifications()
     {
-//        $notifications = EmailAndNotification::with(['children' => function($q){
-//            $q->with('users:id,name')->count();
-//        }])->whereNull('parent_id')->get();
-//        ->where('user_id', 1)
-//        $notifications = User::select()->with('notifications:id')->find(1)->notifications->pluck('id');
         $notifications = EmailAndNotification::with(['children' => function ($q) {
             $q->withCount(['users as user' => function ($q) {
                 $q->where('id', auth()->id());
-//            $q->where('id', 3);
             }]);
         }])->whereNull('parent_id')->get();
-        return $notifications;
+        return response()->json($notifications, 200);
     }
 
+    /**
+     * Change the Notification status.
+     *
+     * @param integer $id
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function changeNotification($id, Request $request)
     {
         $notification = EmailAndNotification::with('users')->find($id);
@@ -51,15 +63,24 @@ class EmailNotificationController extends Controller
         }
     }
 
+    /**
+     * Get The Notifications status by User.
+     *
+     * @param integer $user_id
+     * @return JsonResponse
+     */
     public function getNotificationsByUser($user_id)
     {
         $notifications = EmailAndNotification::select('id', 'title')->withCount(['users as hasNotification' => function ($q) use ($user_id) {
             $q->where('id', $user_id);
         }])->whereNotNull('parent_id')->get();
-        $data = [];
-        foreach ($notifications as $notification) {
-            $data[$notification->title] = $notification->hasNotification;
+        if ($notifications) {
+            $data = [];
+            foreach ($notifications as $notification) {
+                $data[$notification->title] = $notification->hasNotification;
+            }
+            return response()->json($data, 200);
         }
-        return $data;
+        return response()->json(['success' => false, 'message' => 'No Notifications Found!'], 200);
     }
 }
