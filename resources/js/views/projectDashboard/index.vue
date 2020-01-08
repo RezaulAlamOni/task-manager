@@ -1489,7 +1489,8 @@
             connectSocket: function () {
                 let app = this;
                 if (app.Socket == null) {
-                    app.Socket = io.connect('http://localhost:4100/');
+                    // app.Socket = io.connect('http://localhost:4100/');
+                    app.Socket = io.connect('https://spark.compltit.net:4100/');
                     app.Socket.emit('loginId', 2)
                     app.Socket.on('newMessage', function (res) {
                         console.log(res);
