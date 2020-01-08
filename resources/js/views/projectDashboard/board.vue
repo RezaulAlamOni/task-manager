@@ -1650,8 +1650,8 @@
             connectSocket: function () {
                 let app = this;
                 if (app.Socket == null) {
-                    app.Socket = io.connect('http://localhost:4100/');
-                    // app.Socket = io.connect('https://spark.compltit.net:4100/');
+                    // app.Socket = io.connect('http://localhost:4100/');
+                    app.Socket = io.connect('https://spark.compltit.net:4100/');
 
                     app.Socket.on('CardMoved', function (res) {
                         // if (res.project_id == app.projectId && res.user_id != app.authUser.id){
