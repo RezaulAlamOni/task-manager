@@ -13,7 +13,7 @@ class CreateNotificationUserTable extends Migration
      */
     public function up()
     {
-        Schema::table('notification_user', function (Blueprint $table) {
+        Schema::create('notification_user', function (Blueprint $table) {
             $table->bigInteger('user_id');
             $table->bigInteger('notification_id');
             $table->timestamps();
@@ -27,8 +27,6 @@ class CreateNotificationUserTable extends Migration
      */
     public function down()
     {
-        Schema::table('notification_user', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('notification_user');
     }
 }
