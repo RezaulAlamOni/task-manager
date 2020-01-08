@@ -83,4 +83,14 @@ class EmailNotificationController extends Controller
         }
         return response()->json(['success' => false, 'message' => 'No Notifications Found!'], 200);
     }
+
+    public function deleteNotification($id)
+    {
+        $notifications = EmailAndNotification::find($id)->delete();
+        if ($notifications) {
+            return response()->json(['success' => true, 'Notification Deleted Successfully'], 200);
+        } else {
+            return response()->json(['success' => false, 'Whoops! Notification Not Deleted'], 200);
+        }
+    }
 }

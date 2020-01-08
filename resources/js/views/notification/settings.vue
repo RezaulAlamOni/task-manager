@@ -24,7 +24,9 @@
                                         <tr class="d-flex" v-for="child in notification.children">
                                             <td class="col-10">{{ child.title }}</td>
                                             <td class="col-2">
-                                                <button class="btn btn-danger btn-sm" @click="deleteNotification(child.id)"><i class="fa fa-close"/></button>
+                                                <button class="btn btn-danger btn-sm" type="button"
+                                                        @click="deleteNotification(child.id)"><i class="fa fa-close"/>
+                                                </button>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -57,6 +59,7 @@
                 axios.get('/api/users-notifications')
                     .then(response => response.data)
                     .then(response => {
+                        console.log(response)
                         _this.notifications = response;
                     })
                     .catch(error => {
@@ -65,10 +68,18 @@
             },
             deleteNotification(id) {
                 let _this = this;
-                axios.post('/api/delete-notification', {id: id})
+                axios.post('/api/delete-notification/' + id)
                     .then(response => response.data)
                     .then(response => {
-                        _this.notifications = response;
+                        if (response.success === true) {
+                            _this.notifications.forEach((value, index) => {
+                                value.children.forEach((child_v, key) => {
+                                    if (child_v.id === id) {
+                                        _this.notifications[index].children.splice(key, 1);
+                                    }
+                                })
+                            })
+                        }
                     })
                     .catch(error => {
                         console.log(error);
