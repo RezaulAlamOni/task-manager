@@ -12,7 +12,7 @@ php artisan up
 cd /var/www/html/spark/public/
 ln -s /var/www/html/storage/uploads/ storage
 cd ..
-chmod -R ug+rwx ./storage ./bootstrap/cache
+chmod -R a+rwx ./storage ./bootstrap/cache
 
 cd vendor/laravel
 ln -s ../../spark/ spark-aurelius
