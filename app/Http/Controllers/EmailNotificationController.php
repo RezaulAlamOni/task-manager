@@ -32,13 +32,34 @@ class EmailNotificationController extends Controller
 
     public function changeNotification($id, Request $request)
     {
-        $notification = EmailAndNotification::with('users')->findOrFail($id);
-        $user = User::findOrFail(auth()->id());
-        if ($request->value) {
-            $result = $user->notifications()->attach($id);
+        $notification = EmailAndNotification::with('users')->find($id);
+        if (!$notification) {
+            return response()->json(['success' => false, 'message' => 'Notification Not Found!'], 200);
         } else {
-            $result = $user->notifications()->detach($id);
+            if (isset($request->value)) {
+                $result = false;
+                $user = User::findOrFail(auth()->id());
+                if ($request->value) {
+                    $result = $user->notifications()->attach($id);
+                } else if (!$request->value) {
+                    $result = $user->notifications()->detach($id);
+                }
+                return response()->json(['success' => true, 'message' => $result], 200);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Incorrect Value'], 200);
+            }
         }
-        return response()->json(['success' => true, 'message' => $result], 200);
+    }
+
+    public function getNotificationsByUser($user_id)
+    {
+        $notifications = EmailAndNotification::select('id', 'title')->withCount(['users as hasNotification' => function ($q) use ($user_id) {
+            $q->where('id', $user_id);
+        }])->whereNotNull('parent_id')->get();
+        $data = [];
+        foreach ($notifications as $notification) {
+            $data[$notification->title] = $notification->hasNotification;
+        }
+        return $data;
     }
 }

@@ -133,3 +133,4 @@ Route::post('/firebase-insert-update', 'FirbaseController@AddFcmToken')->name('F
 Route::get('/get-notifications', 'EmailNotificationController@getAllNotifications');
 Route::get('/users-notifications', 'EmailNotificationController@usersNotifications');
 Route::post('/set-notification/{id}', 'EmailNotificationController@changeNotification');
+Route::get('/user-notifications/{user_id}', 'EmailNotificationController@getNotificationsByUser'); // User Notification Validity

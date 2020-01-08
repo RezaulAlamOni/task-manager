@@ -56,19 +56,6 @@
         mounted() {
             let _this = this;
             this.getAllNotifications();
-
-
-            // $('body').on('change', '#emailFreq_everydayUpdate', function () {
-            //     alert('sfdsdf');
-            //     _this.emailFreq.everydayUpdate = !_this.emailFreq.everydayUpdate;
-            // });
-            //
-            // $('#weeklyReport').change(function () {
-            //     _this.emailFreq.weeklyReport = !_this.emailFreq.weeklyReport;
-            // });
-            // $('#monthlyReport').change(function () {
-            //     _this.emailFreq.monthlyReport = !_this.emailFreq.monthlyReport;
-            // });
         },
         methods: {
             getAllNotifications() {
