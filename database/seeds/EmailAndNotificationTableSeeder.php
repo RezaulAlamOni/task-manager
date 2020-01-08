@@ -2,6 +2,7 @@
 
 use App\EmailAndNotification;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class EmailAndNotificationTableSeeder extends Seeder
 {
@@ -12,6 +13,8 @@ class EmailAndNotificationTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('email_and_notifications')->truncate();
+        DB::table('notification_user')->truncate();
         $parent = EmailAndNotification::create(['parent_id' => null, 'title' => 'Email frequency', 'unique_id' => 'emailFreq']);
         EmailAndNotification::create(['parent_id' => $parent->id, 'title' => 'Every Update', 'unique_id' => 'emailFreq_everydayUpdate']);
         EmailAndNotification::create(['parent_id' => $parent->id, 'title' => 'Daily Report', 'unique_id' => 'emailFreq_dailyReport']);
