@@ -13,8 +13,8 @@
                     <div class="col-lg-12">
                         <div class="card bg-primary-card">
                             <div class="card-body">
-                                <div class="row">
-                                    <table class="table table-hover" v-for="notification in notifications">
+                                <div class="row p-5">
+                                    <table class="table table-hover mt-5" v-for="notification in notifications">
                                         <thead>
                                         <tr>
                                             <th>{{ notification.title }}</th>
@@ -24,7 +24,7 @@
                                         <tr class="d-flex" v-for="child in notification.children">
                                             <td class="col-10">{{ child.title }}</td>
                                             <td class="col-2">
-                                                <button class="btn btn-danger btn-sm"><i class="fa fa-close"></i></button>
+                                                <button class="btn btn-danger btn-sm" @click="deleteNotification(child.id)"><i class="fa fa-close"/></button>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -54,7 +54,6 @@
         methods: {
             getAllNotifications() {
                 let _this = this;
-                // axios.get('/api/get-notifications')
                 axios.get('/api/users-notifications')
                     .then(response => response.data)
                     .then(response => {
@@ -64,6 +63,17 @@
                         console.log(error);
                     });
             },
+            deleteNotification(id) {
+                let _this = this;
+                axios.post('/api/delete-notification', {id: id})
+                    .then(response => response.data)
+                    .then(response => {
+                        _this.notifications = response;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
         },
         watch: {}
     }
