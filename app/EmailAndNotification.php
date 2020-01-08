@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmailAndNotification extends Model
 {
-    public $timestamps = false;
+    public $timestamps = true;
     protected $hidden = ['pivot'];
 
     /**
@@ -30,6 +30,6 @@ class EmailAndNotification extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class, 'notification_user', 'notification_id', 'user_id');
+        return $this->belongsToMany(User::class, 'notification_user', 'notification_id', 'user_id')->withTimestamps();
     }
 }
