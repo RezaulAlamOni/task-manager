@@ -14,9 +14,9 @@
                         <div class="card bg-primary-card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <h2 class="mb-4"></h2>
-                                        <div class="form-check mb-4" v-for="child in notifications">
+                                    <div class="col-md-12" v-for="notification in notifications">
+                                        <h2 class="mb-4">{{ notification.title }}</h2>
+                                        <div class="form-check mb-4" v-for="child in notification.children">
                                             <input :id="child.unique_id" class="form-check-input" type="checkbox"
                                                    data-toggle="toggle" data-style="ml-1" data-height="25"
                                                    data-onstyle="success" data-offstyle="secondary"
@@ -55,23 +55,21 @@
         },
         mounted() {
             let _this = this;
-            $(function () {
-                $('#email_IAmOn').change(function () {
-                    alert('sfdsdf');
-                    _this.emailFreq.everydayUpdate = !_this.emailFreq.everydayUpdate;
-                });
-                $('#dailyReport').change(function () {
-                    _this.emailFreq.dailyReport = !_this.emailFreq.dailyReport;
-                });
-                $('#weeklyReport').change(function () {
-                    _this.emailFreq.weeklyReport = !_this.emailFreq.weeklyReport;
-                });
-                $('#monthlyReport').change(function () {
-                    _this.emailFreq.monthlyReport = !_this.emailFreq.monthlyReport;
-                });
-            });
             this.getAllNotifications();
             this.getUserNotification();
+
+
+            // $('body').on('change', '#emailFreq_everydayUpdate', function () {
+            //     alert('sfdsdf');
+            //     _this.emailFreq.everydayUpdate = !_this.emailFreq.everydayUpdate;
+            // });
+            //
+            // $('#weeklyReport').change(function () {
+            //     _this.emailFreq.weeklyReport = !_this.emailFreq.weeklyReport;
+            // });
+            // $('#monthlyReport').change(function () {
+            //     _this.emailFreq.monthlyReport = !_this.emailFreq.monthlyReport;
+            // });
         },
         methods: {
             getAllNotifications() {
@@ -83,8 +81,9 @@
                         _this.notifications = response;
                         setTimeout(function () {
                             $('.form-check-input').bootstrapToggle();
+
+                            _this.changeFunc();
                         }, 400);
-                        _this.chng();
                     })
                     .catch(error => {
                         console.log(error);
@@ -101,14 +100,16 @@
                         console.log(error);
                     });
             },
-            chng() {
+            changeFunc() {
                 let _this = this;
-                this.notifications.forEach(function (value, index) {
-                    console.log(value.unique_id);
-                    $('#' + value.unique_id).change(function () {
-                        console.log('sfsdfsdfs');
-                        _this.notifications[index].user = !_this.notifications[index].user;
-                    });
+                _this.notifications.forEach(function (value, index) {
+                    value.children.forEach((child_v, child_i) => {
+                        // console.log(child_v.unique_id);
+                        $('#' + child_v.unique_id).change(function () {
+                            _this.notifications[index].children[child_i].user = !_this.notifications[index].children[child_i].user;
+                            console.log(_this.notifications[index].children[child_i].user);
+                        });
+                    })
                 });
             }
         },

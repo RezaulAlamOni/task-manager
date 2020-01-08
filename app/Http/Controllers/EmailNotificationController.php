@@ -21,16 +21,12 @@ class EmailNotificationController extends Controller
 //        }])->whereNull('parent_id')->get();
 //        ->where('user_id', 1)
 //        $notifications = User::select()->with('notifications:id')->find(1)->notifications->pluck('id');
-        $notifications = EmailAndNotification::with('users')->whereNotNull('parent_id')->get();
-        $data = [];
-        foreach ($notifications as $info) {
-            $da['title'] = $info['title'];
-//            $da[$info['unique_id']] = (count($info['users']) > 0 ? 1 : 0);
-            $da['user'] = (count($info['users']) > 0 ? true : false);
-            $da['unique_id'] = $info['unique_id'];
-            $data[] = $da;
-            $da = [];
-        }
-        return $data;
+        $notifications = EmailAndNotification::with(['children' => function ($q) {
+            $q->withCount(['users as user' => function ($q) {
+                $q->where('id', auth()->id());
+//            $q->where('id', 3);
+            }]);
+        }])->whereNull('parent_id')->get();
+        return $notifications;
     }
 }
