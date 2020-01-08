@@ -102,7 +102,7 @@ class HomeController extends Controller
         // Comment left                     : 1
         // When any task is added           : 0
         // When any task is updated         : 0
-        // When any task is commented on    : 1
+        // When any task is commented on    : 1 
         
     }
 }
