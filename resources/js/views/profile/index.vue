@@ -88,7 +88,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2 mt-3">
+                                            <div class="col-md-2 mt-3" style="display: none">
                                                 <router-link :to="{ name: 'ProfileEdit' }" class="profile-edit-btn">Edit Profile</router-link>
                                             </div>
                                         </div>
