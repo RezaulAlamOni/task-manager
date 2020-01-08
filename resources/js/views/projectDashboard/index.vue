@@ -1489,8 +1489,8 @@
             connectSocket: function () {
                 let app = this;
                 if (app.Socket == null) {
-                    // app.Socket = io.connect('http://localhost:4100/');
-                    app.Socket = io.connect('https://spark.compltit.net:4100/');
+                    app.Socket = io.connect('http://localhost:4100/');
+                    // app.Socket = io.connect('https://spark.compltit.net:4100/');
                     app.Socket.emit('loginId', 2)
                     app.Socket.on('newMessage', function (res) {
                         console.log(res);
@@ -1599,6 +1599,13 @@
                 axios.post('/api/task-list/task-drag-drop', position)
                     .then(response => response.data)
                     .then(response => {
+                        _this.Socket.emit('task-list-Update', {
+                            project_id: _this.projectId,
+                            list_id: _this.list.id,
+                            nav_id: _this.nav_id,
+                            user_id: _this.authUser.id,
+                            type: 'drag and drop'
+                        })
                         _this.getTaskList()
                     })
                     .catch(error => {
