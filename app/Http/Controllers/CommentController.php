@@ -11,8 +11,6 @@ use App\Files;
 use App\AssignedUser;
 use App\Task;
 use Intervention\Image\File;
-use Mail;
-use App\Mail\UserMail;
 
 
 class CommentController extends Controller
@@ -38,17 +36,17 @@ class CommentController extends Controller
         if ($insert) {
             $insert = Comment::where('id',$insert->id)->with('user')->first();
         }
-        $emails = [];
-        $users = AssignedUser::where('task_id',$request->task_id)->with(['users'])->get();
-        foreach ($users as $key => $value) {
-            $emails[] = $value->users->email;
-        }
-        if (count($emails) > 0) {
-            // $comment = 'Hi, Comment Add to card.';
-            $comment['subject'] = "Comment added on a task that you are assigned";
-            $comment['body'] = "Comment added on a task that you are assigned";
-            Mail::to($emails)->send(new UserMail($comment));
-        }
+        // $emails = [];
+        // $users = AssignedUser::where('task_id',$request->task_id)->with(['users'])->get();
+        // foreach ($users as $key => $value) {
+        //     $emails[] = $value->users->email;
+        // }
+        // if (count($emails) > 0) {
+        //     // $comment = 'Hi, Comment Add to card.';
+        //     $comment['subject'] = "Comment added on a task that you are assigned";
+        //     $comment['body'] = "Comment added on a task that you are assigned";
+        //     Mail::to($emails)->send(new UserMail($comment));
+        // }
 
         return response()->json(['success' => true, 'Data' => $insert]);
     }

@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Project;
 use App\Team;
+use App\User;
 use App\AssignedUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Mail;
+use App\Mail\UserMail;
 
 class HomeController extends Controller
 {
@@ -59,5 +62,26 @@ class HomeController extends Controller
     public function AuthUser(){
         $user = Auth::user();
         return response()->json(['user'=>$user]);
+    }
+
+    public function userMail(Request $request)
+    {   
+        $emails = [];
+        if (isset($request->task_id) && $request->task_id !== '') {
+            $users = AssignedUser::where('task_id',$request->task_id)->with(['users'])->get();
+            foreach ($users as $key => $value) {
+                $emails[] = $value->users->email;
+            }
+        }
+        if (isset($request->user_id) && $request->user_id !== '') {
+            $user = User::where('id',$request->user_id)->first();
+            $emails[] = $user->email;
+        }
+        if (count($emails) > 0) {
+            // $comment = 'Hi, Comment Add to card.';
+            $comment['subject'] = $request->subject;
+            $comment['body'] = $request->body;
+            Mail::to($emails)->send(new UserMail($comment));
+        }
     }
 }
