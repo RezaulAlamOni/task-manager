@@ -29,4 +29,16 @@ class EmailNotificationController extends Controller
         }])->whereNull('parent_id')->get();
         return $notifications;
     }
+
+    public function changeNotification($id, Request $request)
+    {
+        $notification = EmailAndNotification::with('users')->findOrFail($id);
+        $user = User::findOrFail(auth()->id());
+        if ($request->value) {
+            $user->notifications()->attach($id);
+        } else {
+            $user->notifications()->detach($id);
+        }
+        return response()->json(['success' => true], 200);
+    }
 }
