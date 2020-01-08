@@ -87,7 +87,7 @@ class HomeController extends Controller
             $comment['body'] = $request->body;
             Mail::to($emails)->send(new UserMail($comment));
         }
-
+        
         // Every Update                     : 1
         // Daily Report                     : 1
         // Weekly Report                    : 1
