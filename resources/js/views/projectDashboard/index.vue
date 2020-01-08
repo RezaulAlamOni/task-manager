@@ -1025,7 +1025,7 @@
                                     </option>
                                     <option :key="index" v-bind:value="navList.id" v-for="(navList, index) in list_T"
                                             v-if="navList.is_delete !== 1"
-                                            :disabled="((navList.id !== list_id) ? false : true)">
+                                            :disabled="((navList.id == list_id && type_T == 'list') ? true : false)">
                                         <span v-if="type_T === 'board'">{{navList.board_title}}</span> <span v-else>{{navList.list_title}}</span>
                                     </option>
                                 </select>
@@ -1489,8 +1489,8 @@
             connectSocket: function () {
                 let app = this;
                 if (app.Socket == null) {
-                    // app.Socket = io.connect('http://localhost:4100/');
-                    app.Socket = io.connect('https://spark.compltit.net:4100/');
+                    app.Socket = io.connect('http://localhost:4100/');
+                    // app.Socket = io.connect('https://spark.compltit.net:4100/');
                     app.Socket.emit('loginId', 2)
                     app.Socket.on('newMessage', function (res) {
                         console.log(res);
