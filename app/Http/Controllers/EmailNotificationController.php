@@ -21,7 +21,7 @@ class EmailNotificationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:255',
-            'unique_id' => 'required|string|max:255|unique:email_and_notifications,unique_id',
+            'unique_id' => 'required|alpha_dash|max:255|unique:email_and_notifications,unique_id',
         ]);
         if ($validator->fails()) {
             return response()->json(['success' => false, 'error' => $validator->errors(), 'status' => 400], Response::HTTP_OK);

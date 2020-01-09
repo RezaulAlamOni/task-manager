@@ -30,6 +30,7 @@
                                             <td class="col-10">{{ child.title }}</td>
                                             <td class="col-2" style="text-align: right;">
                                                 <button class="btn btn-danger btn-sm" type="button"
+                                                        data-toggle="tooltip" title="Delete!" data-placement="right"
                                                         @click="deleteNotification(child.id)"><i
                                                     class="fal fa-trash-alt" aria-hidden="true"/>
                                                 </button>
@@ -67,6 +68,9 @@
                     .then(response => {
                         console.log(response)
                         _this.notifications = response;
+                        setTimeout(() => {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        }, 400);
                     })
                     .catch(error => {
                         console.log(error);
@@ -74,22 +78,44 @@
             },
             deleteNotification(id) {
                 let _this = this;
-                axios.post('/api/delete-notification/' + id)
-                    .then(response => response.data)
-                    .then(response => {
-                        if (response.success === true) {
-                            _this.notifications.forEach((value, index) => {
-                                value.children.forEach((child_v, key) => {
-                                    if (child_v.id === id) {
-                                        _this.notifications[index].children.splice(key, 1);
+                swal({
+                        title: "Are you sure you want to delete?",
+                        text: "",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Delete!",
+                        confirmButtonColor: '#f56065',
+                        cancelButtonText: "Cancel",
+                        cancelButtonColor: "#c3dda3",
+                        closeOnConfirm: false,
+                        closeOnCancel: true,
+                        dangerMode: true,
+                        buttons: true,
+                    },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            axios.post('/api/delete-notification/' + id)
+                                .then(response => response.data)
+                                .then(response => {
+                                    if (response.success === true) {
+                                        _this.getAllNotifications();
+                                        // _this.notifications.forEach((value, index) => {
+                                        //     value.children.forEach((child_v, key) => {
+                                        //         if (child_v.id === id) {
+                                        //             _this.notifications[index].children.splice(key, 1);
+                                        //         }
+                                        //     })
+                                        // });
+                                        swal.close();
                                     }
                                 })
-                            })
+                                .catch(error => {
+                                    console.log(error);
+                                });
                         }
-                    })
-                    .catch(error => {
-                        console.log(error);
                     });
+
             }
         },
         watch: {}
