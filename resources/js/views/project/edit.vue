@@ -115,18 +115,28 @@
             },
             UpdateProject() {
                 var _this = this;
-                if (_this.project.title.length > 3) {
+                _this.title_error = null;
+                if (this.project.title.length > 3) {
                     axios.post('/api/project-update', _this.project)
                         .then(response => response.data)
                         .then(response => {
                             if (response.status === 'success') {
                                 window.location.href = "/projects";
                                 // console.log(response)
+                            } else {
+                                _this.title_error = "Project title already taken!"
                             }
                         })
                         .catch(error => {
 
                         });
+                } else {
+                    if(_this.project.title.length != 0){
+                        _this.title_error = "Project title must have minimum 4 character!"
+                    }
+                    if(_this.project.title.length == 0){
+                        _this.title_error = "Project title can't Empty"
+                    }
                 }
 
             },

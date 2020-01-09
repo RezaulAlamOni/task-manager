@@ -135,15 +135,37 @@
                 return dialog => this.deleteProject(project);
             },
             deleteProject(project) {
-                axios.post('/api/project/delete', project.id)
-                    .then(response => response.data)
-                    .then(response => {
-                        if (response.success == 1) {
-                            this.getProjects();
-                        }
-                    }).catch(error => {
 
-                });
+                swal({
+                        title: "Are you sure ?",
+                        text: "If you delete this project, all data will deleted !",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes Delete!",
+                        confirmButtonColor: '#f56065',
+                        cancelButtonText: "Cancel",
+                        cancelButtonColor: "#c3dda3",
+                        closeOnConfirm: false,
+                        closeOnCancel: true,
+                        dangerMode: true,
+                    },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            axios.post('/api/project/delete', project.id)
+                                .then(response => response.data)
+                                .then(response => {
+                                    if (response.success == 1) {
+                                        this.getProjects();
+                                    }
+                                }).catch(error => {
+
+                            });
+                            swal.close();
+                        }
+                    });
+
+
             }
         },
         watch: {
