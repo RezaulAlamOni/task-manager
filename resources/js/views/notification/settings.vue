@@ -12,8 +12,13 @@
                 <div class="row user-list">
                     <div class="col-lg-12">
                         <div class="card bg-primary-card">
-                            <div class="card-body">
-                                <div class="row p-5">
+                            <div class="card-body m-5">
+                                <div class="row">
+                                    <div class="col text-right">
+                                        <router-link :to="{ name: 'NotificationCreate' }" class="profile-edit-btn">Add New Notification</router-link>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <table class="table table-hover mt-5" v-for="notification in notifications">
                                         <thead>
                                         <tr>
