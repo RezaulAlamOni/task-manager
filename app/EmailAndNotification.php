@@ -8,6 +8,7 @@ class EmailAndNotification extends Model
 {
     public $timestamps = true;
     protected $hidden = ['pivot'];
+    protected $guarded = ['id'];
 
     /**
      * Get the EmailAndNotifications associated with the parent's `id`
