@@ -6,9 +6,39 @@ use App\EmailAndNotification;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class EmailNotificationController extends Controller
 {
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:255',
+            'unique_id' => 'required|alpha_dash|max:255|unique:email_and_notifications,unique_id',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'error' => $validator->errors(), 'status' => 400], Response::HTTP_OK);
+        }
+
+        $notification = EmailAndNotification::create([
+            'title' => $request->title,
+            'parent_id' => 7,
+            'unique_id' => $request->unique_id,
+        ]);
+        if ($notification) {
+            return response()->json(['success' => true, 'data' => $notification, 'status' => 200], Response::HTTP_OK);
+        } else {
+            return response()->json(['success' => false, 'data' => 'Notification Not Created', 'status' => 401], Response::HTTP_OK);
+        }
+    }
+
     /**
      * Get All the Notifications with Parent Child Relationship.
      *
@@ -84,10 +114,21 @@ class EmailNotificationController extends Controller
         return response()->json(['success' => false, 'message' => 'No Notifications Found!'], 200);
     }
 
+    /**
+     * Get The Notification by Id.
+     *
+     * @param integer $id
+     * @return JsonResponse
+     */
     public function deleteNotification($id)
     {
-        $notifications = EmailAndNotification::find($id)->delete();
-        if ($notifications) {
+        $notifications = EmailAndNotification::find($id);
+        if (!$notifications) {
+            return response()->json(['success' => false, 'Whoops! Notification not found'], 200);
+        }
+        $notifications->users()->detach();
+        $deleted_notifications = $notifications->delete();
+        if ($deleted_notifications) {
             return response()->json(['success' => true, 'Notification Deleted Successfully'], 200);
         } else {
             return response()->json(['success' => false, 'Whoops! Notification Not Deleted'], 200);

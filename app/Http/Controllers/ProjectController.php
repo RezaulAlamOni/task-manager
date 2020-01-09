@@ -19,14 +19,14 @@ class ProjectController extends Controller
      */
     protected $actionLog;
 
-    public function __construct()
+    public function __construct ()
     {
         date_default_timezone_set('UTC');
         $this->actionLog = new ActionLogController;
         $this->middleware('auth');
     }
 
-    public function getAll(Request $request)
+    public function getAll (Request $request)
     {
         $team_id = Auth::user()->current_team_id;
         $Projects = Project::where('team_id', $team_id)->get();
@@ -39,7 +39,7 @@ class ProjectController extends Controller
 
     }
 
-    public function success($items = null, $status = 200)
+    public function success ($items = null, $status = 200)
     {
         $data = ['status' => 'success'];
 
@@ -56,17 +56,17 @@ class ProjectController extends Controller
         return response()->json($data, $status)->setEncodingOptions(JSON_NUMERIC_CHECK);
     }
 
-    public function index()
+    public function index ()
     {
         return view('projects');
     }
 
-    public function create()
+    public function create ()
     {
         //
     }
 
-    public function store(Request $request)
+    public function store (Request $request)
     {
         $team_id = Auth::user()->current_team_id;
         $data = [
@@ -94,23 +94,24 @@ class ProjectController extends Controller
                 ];
                 $this->actionLog->store($log_data);
                 return response()->json(['success' => 1]);
+            } else {
+                return response()->json(['success' => 0]);
             }
         }
 
     }
 
-
-    public function show(Request $request)
+    public function show (Request $request)
     {
         $team_id = Auth::user()->current_team_id;
-        $project = Project::where('team_id',$team_id)->findOrFail($request->id);
+        $project = Project::where('team_id', $team_id)->findOrFail($request->id);
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
 
         return response()->json(['success' => 1, 'project' => $project, 'multiple_list' => $multiple_list]);
     }
 
-    public function UpdateUserCurrentTeam(Request $request)
+    public function UpdateUserCurrentTeam (Request $request)
     {
         if (isset($request->team_id)) {
             User::where('id', Auth::id())->update(['current_team_id' => $request->team_id]);
@@ -119,16 +120,22 @@ class ProjectController extends Controller
     }
 
 
-    public function update(Request $request)
+    public function update (Request $request)
     {
-        if (Project::where('id',$request->id)->update(['name'=>$request->title,'description'=>$request->description])){
+        $team_id = Auth::user()->current_team_id;
+        $check_project = Project::Where(['team_id' => $team_id, 'name' => $request->title])->count();
+
+        if ($check_project <= 1) {
+            Project::where('id', $request->id)->update(['name' => $request->title, 'description' => $request->description]);
             return \response()->json(['status' => 'success', 'data' => $request->all()]);
+        } else {
+            return \response()->json(['status' => 0, 'data' => $request->all()]);
         }
 
     }
 
 
-    public function destroy(Request $request)
+    public function destroy (Request $request)
     {
         Project::findOrFail($request->id)->delete();
         return response()->json(['success' => 1]);
