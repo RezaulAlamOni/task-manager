@@ -38,11 +38,15 @@
                                                 <td>Active</td>
                                                 <td class="table-option" style="text-align: right;">
                                                     <a @click.prevent="editProject(project)" class="compltit-blue-a badge badge-info"
-                                                       href="javascript:void(0)"
-                                                       title="edit_project"><i data-v-0ca4b43b="" class="fal fa-edit" aria-hidden="true"></i></a>
+                                                       href="javascript:void(0)" data-toggle="tooltip"
+                                                       title="Edit Project">
+                                                        <i data-v-0ca4b43b="" class="fal fa-edit" aria-hidden="true"></i>
+                                                    </a>
                                                     <a :key="project.id" @click.prevent="deleteProject(project)"
-                                                       class="compltit-blue-a badge badge-danger" href="javascript:void(0)"
-                                                       title="Delete"><i class="fal fa-trash-alt" aria-hidden="true"></i></a>
+                                                       class="compltit-blue-a badge badge-danger" href="javascript:void(0)" data-toggle="tooltip"
+                                                       title="Delete Project">
+                                                        <i class="fal fa-trash-alt" aria-hidden="true"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -116,6 +120,9 @@
                     .then(response => response.data)
                     .then(response => {
                         this.projects = response.Projects;
+                        setTimeout(function () {
+                            $('[data-toggle="tooltip"]').tooltip();
+                        },200)
                     })
                     .catch(error => {
 
@@ -128,7 +135,7 @@
                 return dialog => this.deleteProject(project);
             },
             deleteProject(project) {
-                axios.post('/api/project/' + project.id)
+                axios.post('/api/project/delete', project.id)
                     .then(response => response.data)
                     .then(response => {
                         if (response.success == 1) {

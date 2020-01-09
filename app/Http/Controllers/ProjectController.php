@@ -100,7 +100,7 @@ class ProjectController extends Controller
         }
 
     }
-    
+
     public function show(Request $request)
     {
         $team_id = Auth::user()->current_team_id;
