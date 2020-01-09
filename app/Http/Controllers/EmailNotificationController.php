@@ -71,13 +71,13 @@ class EmailNotificationController extends Controller
      */
     public function getNotificationsByUser($user_id)
     {
-        $notifications = EmailAndNotification::select('id', 'title')->withCount(['users as hasNotification' => function ($q) use ($user_id) {
+        $notifications = EmailAndNotification::select('id', 'unique_id')->withCount(['users as hasNotification' => function ($q) use ($user_id) {
             $q->where('id', $user_id);
         }])->whereNotNull('parent_id')->get();
         if ($notifications) {
             $data = [];
             foreach ($notifications as $notification) {
-                $data[$notification->title] = $notification->hasNotification;
+                $data[$notification->unique_id] = $notification->hasNotification;
             }
             return response()->json($data, 200);
         }

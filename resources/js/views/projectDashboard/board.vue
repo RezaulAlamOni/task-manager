@@ -1650,8 +1650,8 @@
             connectSocket: function () {
                 let app = this;
                 if (app.Socket == null) {
-                    app.Socket = io.connect('http://localhost:4100/');
-                    // app.Socket = io.connect('https://spark.compltit.net:4100/');
+                    // app.Socket = io.connect('http://localhost:4100/');
+                    app.Socket = io.connect('https://spark.compltit.net:4100/');
 
                     app.Socket.on('CardMoved', function (res) {
                         // if (res.project_id == app.projectId && res.user_id != app.authUser.id){
@@ -2939,11 +2939,6 @@
                         swal.close();
                     }, 1000);
                 } else {
-                    let mailData = {
-                        subject : "A card is update ",
-                        body    :  "A card ( "+data.data+" ) is updated that is assign to you",
-                        task_id : data.cardId
-                    }
                     let title = {
                         'title': data.data
                     };
@@ -2953,6 +2948,12 @@
                             _this.cards[index].task[child_key].name = data.data;
                             _this.getData();
                             _this.listSocketCall(data.list_id);
+                            let mailData = {
+                                subject : "Card updated",
+                                body    : "Card is updated that you are assigned on",
+                                email   : "email_taskUpdated",
+                                task_id :  data.cardId
+                            };
                             _this.sendMail(mailData);
                         })
                         .catch(error => {
@@ -2973,15 +2974,16 @@
                         'date': card.date+' 23:59:59',
                         'tz': tz,
                     };
-                    let mailData = {
-                        subject : "A card due date is update ",
-                        body    :  "A card ( "+card.data+" ) due date is updated that is assigned to you",
-                        task_id : card.cardId
-                    }
                     axios.post('/api/card-update/' + card.cardId, data)
                         .then(response => response.data)
                         .then(response => {
                             // _this.getBoardTask();
+                            let mailData = {
+                                subject : "Card date updated",
+                                body    : "A card date is updated that you are assigned on",
+                                email   : "email_taskUpdated",
+                                task_id :  card.cardId
+                            };
                             _this.sendMail(mailData);
                             _this.listSocketCall(card.list_id);
                         })
@@ -3282,21 +3284,22 @@
                     user_id: user_id,
                     task_id: card.cardId
                 };
-                let mailData = {
-                    subject : "You are unassigned from a card",
-                    body    : "You are unassigned from ( "+card.data+" ) card",
-                    user_id :  user_id
-                };
                 // console.log(postData)
                 axios.post('/api/task-list/assign-user-remove', postData)
                     .then(response => response.data)
                     .then(response => {
                         if (response === 'success') {
                             // _this.cards[index].task[key].assigned_user.splice(0,1);
-                            // _this.cards[index].task[key].assigned_user_ids.splice(0,1);
+                            // _this.cards[index].task[key].assigned_user_ids.splice(0,1);  dasfsdaf
                             console.log(response);
                             _this.getBoardTask();
                             _this.listSocketCall(card.list_id);
+                            let mailData = {
+                                subject : "Removed from a card",
+                                body    : "You are removed from a card that you are assigned on.",
+                                email   : "email_whenRemovedFromTask",
+                                user_id :  user_id
+                            };
                             _this.sendMail(mailData);
                         }
                     })
@@ -3310,11 +3313,6 @@
                     task_id: data.cardId,
                     user_id: user.id
                 };
-                let mailData = {
-                    subject : "A card is assign to you ",
-                    body    :  "A card ( "+data.data+" ) is assigned to you",
-                    user_id: user.id
-                }
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -3324,7 +3322,13 @@
                             setTimeout(function () {
                                 _this.getBoardTask();
                                 _this.listSocketCall(data.list_id);
-                                _this.sendMail(mailData);
+                                let mailData = {
+                                subject : "Added to a card",
+                                body    : "You are assigned on a card",
+                                email   : "email_whenAddedToTask",
+                                user_id :  user.id
+                            };
+                            _this.sendMail(mailData);
                             }, 100);
                         }
                     })
