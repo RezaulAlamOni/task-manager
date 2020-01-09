@@ -1,35 +1,27 @@
 <template>
-    <aside class="right-aside" style="height: calc(100vh - 77px); overflow: auto;">
-        <div class="container">
-            <section>
-                <div class="container-header">
-                    <h2>
-                        <i class="fa fa-bell-o"/> Add or Remove Email & Notifications
-                    </h2>
-                </div>
-            </section>
-            <section class="content">
-                <div class="row user-list">
-                    <div class="col-lg-12">
-                        <div class="card bg-primary-card">
-                            <div class="card-body">
-                                <div class="row p-5">
-                                    <form @submit.prevent="saveNotification">
-                                        <div class="form-group">
-                                            <label for="title">Notification Title</label>
-                                            <input id="title" :placeholder="'Notification Title'" class="form-control" type="text" v-model="notification.title">
-                                            <show-error :form-name="notification" prop-name="title"></show-error>
-                                        </div>
-                                        <button class="btn btn-info waves-effect waves-light" type="submit">Add Notification</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+    <div class="col-md-6 offset-md-3">
+        <div class="card card-default border-primary">
+            <div id="header-item" class="card-header bg-primary text-white">Project Create</div>
+            <div class="card-body">
+                <form role="form">
+                    <div class="form-group row"><label class="col-md-4 col-form-label text-md-right">Project
+                        Title</label>
+                        <div class="col-md-6"><input name="name" type="text" class="form-control"></div>
                     </div>
-                </div>
-            </section>
+                    <div class="form-group row"><label class="col-md-4 col-form-label text-md-right">Project
+                        Description</label>
+                        <div class="col-md-6"><input name="description" type="text" class="form-control"></div>
+                    </div>
+                    <div class="form-group row mb-0">
+                        <div class="offset-md-4 col-md-6">
+                            <button type="submit" class="btn btn-primary">Create
+                            </button>
+                            <a href="/projects" class="btn btn-default">Cancel</a></div>
+                    </div>
+                </form>
+            </div>
         </div>
-    </aside>
+    </div>
 </template>
 <script>
     export default {
