@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div class="card card-default">
                 <div id="header-item" class="card-header">
-                    <b><i class="fa fa-bell-o"/> Add or Remove Email & Notifications</b>
+                    <b><i class="fa fa-bell-o"/> Add Email & Notifications</b>
                 </div>
                 <div class="card-body">
                     <form role="form" @submit.prevent="saveNotification">

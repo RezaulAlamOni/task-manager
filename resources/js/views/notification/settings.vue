@@ -8,7 +8,7 @@
                             <div id="header-item" class="card-header text-black">
                                 <div class="row">
                                     <div class="col text-left">
-                                        <b><i class="fa fa-bell-o"/> Add or Remove Email & Notifications</b>
+                                        <b><i class="fa fa-bell-o"/> Email & Notifications</b>
                                     </div>
                                     <div class="col text-right">
                                         <router-link :to="{ name: 'NotificationCreate' }" class="profile-edit-btn">Add

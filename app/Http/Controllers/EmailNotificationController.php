@@ -126,16 +126,12 @@ class EmailNotificationController extends Controller
         if (!$notifications) {
             return response()->json(['success' => false, 'Whoops! Notification not found'], 200);
         }
-        $deleted = $notifications->users()->detach();
-        if ($deleted) {
-            $deleted_notifications = $notifications->delete();
-            if ($deleted_notifications) {
-                return response()->json(['success' => true, 'Notification Deleted Successfully'], 200);
-            } else {
-                return response()->json(['success' => false, 'Whoops! Notification Not Deleted'], 200);
-            }
+        $notifications->users()->detach();
+        $deleted_notifications = $notifications->delete();
+        if ($deleted_notifications) {
+            return response()->json(['success' => true, 'Notification Deleted Successfully'], 200);
         } else {
-            return response()->json(['success' => false, 'Whoops! Something went wrong with detaching Users'], 200);
+            return response()->json(['success' => false, 'Whoops! Notification Not Deleted'], 200);
         }
     }
 }
