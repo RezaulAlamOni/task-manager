@@ -1,20 +1,23 @@
 <template>
     <aside class="right-aside" style="height: calc(100vh - 77px); overflow: auto;">
         <div class="container">
-            <section>
-                <div class="container-header">
-                    <h2>
-                        <i class="fa fa-bell-o"/> Add or Remove Email & Notifications
-                    </h2>
-                </div>
-            </section>
             <section class="content">
-                <div class="row user-list">
+                <div class="row">
                     <div class="col-lg-12">
                         <div class="card bg-primary-card">
-                            <div class="card-body">
-                                <div class="row p-5">
-                                    <table class="table table-hover mt-5" v-for="notification in notifications">
+                            <div id="header-item" class="card-header text-black">
+                                <div class="row">
+                                    <div class="col text-left">
+                                        <i class="fa fa-bell-o"/> Add or Remove Email & Notifications
+                                    </div>
+                                    <div class="col text-right">
+                                        <router-link :to="{ name: 'NotificationCreate' }" class="profile-edit-btn">Add New Notification</router-link>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body" style="margin: 5px 50px;">
+                                <div class="row">
+                                    <table class="table table-hover" v-for="notification in notifications">
                                         <thead>
                                         <tr>
                                             <th>{{ notification.title }}</th>
@@ -23,7 +26,7 @@
                                         <tbody>
                                         <tr class="d-flex" v-for="child in notification.children">
                                             <td class="col-10">{{ child.title }}</td>
-                                            <td class="col-2">
+                                            <td class="col-2" style="text-align: right;">
                                                 <button class="btn btn-danger btn-sm" type="button"
                                                         @click="deleteNotification(child.id)"><i class="fa fa-close"/>
                                                 </button>

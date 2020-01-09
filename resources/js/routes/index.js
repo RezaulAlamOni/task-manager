@@ -11,6 +11,7 @@ import Profile from '../views/profile/index'
 import ProfileEdit from '../views/profile/edit'
 import Notification from '../views/notification/index'
 import NotificationSettings from '../views/notification/settings'
+import NotificationCreate from '../views/notification/add'
 
 
 let routes = [
@@ -65,6 +66,11 @@ let routes = [
         path: '/notification-settings',
         component: NotificationSettings,
         name: 'NotificationSettings'
+    },
+    {
+        path: '/notifications/create',
+        component: NotificationCreate,
+        name: 'NotificationCreate'
     },
 ];
 
