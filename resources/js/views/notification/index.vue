@@ -1,22 +1,24 @@
 <template>
-    <div class="container" style="height: calc(100vh - 77px); overflow: auto;">
-        <div class="col-md-12">
-            <div class="card card-default">
-                <div id="header-item" class="card-header">
-                    <b><i class="fa fa-bell-o"/> Email & Notifications</b>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12" v-for="notification in notifications">
-                            <h2 class="mb-4">{{ notification.title }}</h2>
-                            <div class="form-check mb-4" v-for="child in notification.children">
-                                <input :id="child.unique_id" class="form-check-input" type="checkbox"
-                                       data-toggle="toggle" data-style="ml-1" data-height="25"
-                                       data-onstyle="success" data-offstyle="secondary"
-                                       v-model="child.user">
-                                <label :for="child.unique_id" class="form-check-label">
-                                    <h5 v-text="child.title"></h5>
-                                </label>
+    <div style="height: calc(100vh - 77px);overflow: auto;}">
+        <div class="container" style="">
+            <div class="col-md-12">
+                <div class="card card-default">
+                    <div id="header-item" class="card-header">
+                        <b><i class="fa fa-bell-o"/> Email & Notifications</b>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12" v-for="notification in notifications">
+                                <h2 class="mb-4">{{ notification.title }}</h2>
+                                <div class="form-check mb-4" v-for="child in notification.children">
+                                    <input :id="child.unique_id" class="form-check-input" type="checkbox"
+                                           data-toggle="toggle" data-style="ml-1" data-height="25"
+                                           data-onstyle="success" data-offstyle="secondary"
+                                           v-model="child.user">
+                                    <label :for="child.unique_id" class="form-check-label">
+                                        <h5 v-text="child.title"></h5>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -24,6 +26,7 @@
             </div>
         </div>
     </div>
+
 </template>
 <script>
     export default {
@@ -99,10 +102,12 @@
     .card-header > b {
         font-size: 25px;
     }
+
     h2 {
         font-size: 20px;
         font-weight: bold;
     }
+
     .toggle-handle {
         display: none !important;
     }
