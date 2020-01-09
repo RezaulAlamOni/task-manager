@@ -8,10 +8,12 @@
                             <div id="header-item" class="card-header text-black">
                                 <div class="row">
                                     <div class="col text-left">
-                                        <i class="fa fa-bell-o"/> Add or Remove Email & Notifications
+                                        <b><i class="fa fa-bell-o"/> Add or Remove Email & Notifications</b>
                                     </div>
                                     <div class="col text-right">
-                                        <router-link :to="{ name: 'NotificationCreate' }" class="profile-edit-btn">Add New Notification</router-link>
+                                        <router-link :to="{ name: 'NotificationCreate' }" class="profile-edit-btn">Add
+                                            New Notification
+                                        </router-link>
                                     </div>
                                 </div>
                             </div>
@@ -28,7 +30,8 @@
                                             <td class="col-10">{{ child.title }}</td>
                                             <td class="col-2" style="text-align: right;">
                                                 <button class="btn btn-danger btn-sm" type="button"
-                                                        @click="deleteNotification(child.id)"><i class="fa fa-close"/>
+                                                        @click="deleteNotification(child.id)"><i
+                                                    class="fal fa-trash-alt" aria-hidden="true"/>
                                                 </button>
                                             </td>
                                         </tr>
@@ -93,6 +96,19 @@
     }
 </script>
 <style>
+    .card-header b {
+        font-size: 25px;
+    }
+
+    h2 {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .table > thead > tr > th {
+        font-size: 20px;
+    }
+
     .btn-sm, .btn-group-sm > .btn {
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;

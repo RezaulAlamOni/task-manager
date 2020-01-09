@@ -101,4 +101,11 @@
     }
 </script>
 <style>
+    .card-header > b {
+        font-size: 25px;
+    }
+    h2 {
+        font-size: 20px;
+        font-weight: bold;
+    }
 </style>
