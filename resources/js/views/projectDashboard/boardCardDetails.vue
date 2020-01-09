@@ -804,6 +804,7 @@
                 currentColumnIndex: null,
                 cards: [],
                 scene: {},
+                mentionUsers : [],
                 upperDropPlaceholderOptions: {
                     className: 'cards-drop-preview',
                     animationDuration: '150',
@@ -1087,8 +1088,25 @@
                 axios.post('/api/add-comment', commentData)
                 .then(response => response.data)
                 .then(response => {
-                    console.log(_this.comment);
+                    let mailUsers = [];
+                    for (let index = 0; index < _this.mentionUsers.length; index++) {
+                        // console.log(_this.mentionUsers[index]);
+                        if (comment.includes('@'+_this.mentionUsers[index].name)) {
+                            console.log(_this.mentionUsers[index].name);
+                            mailUsers.push(_this.mentionUsers[index].id);
+                        }
+                    }
+                    _this.mentionUsers = [];
+                    console.log(mailUsers);
+                    
+                    let mailData = {
+                        subject : "You are mentioned in a comment",
+                        body    : "You are mentioned in a comment",
+                        email    : "email_commentLeft",
+                        user_id :  mailUsers
+                    };
                     $('#comment'+id).val('');
+                    _this.sendMail(mailData);
                     setTimeout(() => {
                         _this.comment.push(response.Data);
                         _this.HideTextArea();
@@ -1260,10 +1278,12 @@
             },
             SearchTaskByAssignedUser(id, name) {
                 let _this = this;
+                _this.mentionUsers.push({id: id, name : name});
                 $('.commentInput').val(_this.commentsData+''+name+'');
                 setTimeout(() => {
                     _this.projectUsers = null;
                 }, 10);
+                console.log(_this.mentionUsers);
             },
             // removeAssignedUser(user, index, key) {
 
@@ -1703,6 +1723,16 @@
                         console.log('Api for move down task not Working !!!')
                     });
             },
+            sendMail(data){
+                axios.post('/api/send-mail/',data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+
+                });
+            }
         },
 
         directives: {
