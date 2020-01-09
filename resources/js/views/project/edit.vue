@@ -13,6 +13,7 @@
 
                             <div class="col-md-6">
                                 <input class="form-control" name="name" type="text" v-model="project.title">
+                                <span class="text-danger">{{title_error}}</span>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -49,15 +50,17 @@
         data() {
             return {
                 project: {
-                    id: null,
-                    title: null,
-                    description: null
+                    id: '',
+                    title: '',
+                    description: ''
                 },
-
+                title_error : null,
                 id: this.$route.params.uuid
             }
         },
         mounted() {
+            var _this = this
+            _this.title_error = null;
 
             if (this.id !== undefined) {
                 $('#header-item').text('Project Edit')
@@ -68,17 +71,28 @@
         },
         methods: {
             addProject() {
+                var _this = this;
+                _this.title_error = null;
                 if (this.project.title.length > 3) {
                     axios.post('/api/project', this.project)
                         .then(response => response.data)
                         .then(response => {
                             if (response.success == 1) {
                                 window.location.href = "/projects";
+                            } else {
+                                _this.title_error = "Project title already taken!"
                             }
                         })
                         .catch(error => {
 
                         });
+                } else {
+                    if(this.project.title.length != 0){
+                        _this.title_error = "Project title must have minimum 4 character!"
+                    }
+                    if(this.project.title.length == 0){
+                        _this.title_error = "Project title can't Empty"
+                    }
                 }
 
             },

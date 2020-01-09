@@ -94,12 +94,13 @@ class ProjectController extends Controller
                 ];
                 $this->actionLog->store($log_data);
                 return response()->json(['success' => 1]);
+            } else {
+                return response()->json(['success' => 0]);
             }
         }
 
     }
-
-
+    
     public function show(Request $request)
     {
         $team_id = Auth::user()->current_team_id;

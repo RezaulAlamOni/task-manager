@@ -39,10 +39,10 @@
                                                 <td class="table-option" style="text-align: right;">
                                                     <a @click.prevent="editProject(project)" class="compltit-blue-a badge badge-info"
                                                        href="javascript:void(0)"
-                                                       title="edit_project">Edit</a>
+                                                       title="edit_project"><i data-v-0ca4b43b="" class="fal fa-edit" aria-hidden="true"></i></a>
                                                     <a :key="project.id" @click.prevent="deleteProject(project)"
                                                        class="compltit-blue-a badge badge-danger" href="javascript:void(0)"
-                                                       title="Delete">Delete</a>
+                                                       title="Delete"><i class="fal fa-trash-alt" aria-hidden="true"></i></a>
                                                 </td>
                                             </tr>
                                             </tbody>
