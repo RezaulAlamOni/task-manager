@@ -1,39 +1,32 @@
 <template>
-    <aside class="right-aside" style="height: calc(100vh - 77px); overflow: auto;">
-        <div class="container">
-            <section>
-                <div class="container-header">
-                    <h2>
-                        <i class="fa fa-bell-o"/> Email & Notifications
-                    </h2>
-                </div>
-            </section>
-            <section class="content">
-                <div class="row user-list">
-                    <div class="col-lg-12">
-                        <div class="card bg-primary-card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h2 class="mb-4"></h2>
-                                        <div class="form-check mb-4" v-for="child in notifications">
-                                            <input :id="child.unique_id" class="form-check-input" type="checkbox"
-                                                   data-toggle="toggle" data-style="ml-1" data-height="25"
-                                                   data-onstyle="success" data-offstyle="secondary"
-                                                   v-model="child.user">
-                                            <label :for="child.unique_id" class="form-check-label">
-                                                <h5 v-text="child.title"></h5>
-                                            </label>
-                                        </div>
-                                    </div>
+    <div style="height: calc(100vh - 77px);overflow: auto;}">
+        <div class="container" style="">
+            <div class="col-md-12">
+                <div class="card card-default">
+                    <div id="header-item" class="card-header">
+                        <b><i class="fa fa-bell-o"/> Email & Notifications</b>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12" v-for="notification in notifications">
+                                <h2 class="mb-4">{{ notification.title }}</h2>
+                                <div class="form-check mb-4" v-for="child in notification.children">
+                                    <input :id="child.unique_id" class="form-check-input" type="checkbox"
+                                           data-toggle="toggle" data-style="ml-1" data-height="25"
+                                           data-onstyle="success" data-offstyle="secondary"
+                                           v-model="child.user">
+                                    <label :for="child.unique_id" class="form-check-label">
+                                        <h5 v-text="child.title"></h5>
+                                    </label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
-    </aside>
+    </div>
+
 </template>
 <script>
     export default {
@@ -55,23 +48,7 @@
         },
         mounted() {
             let _this = this;
-            $(function () {
-                $('#email_IAmOn').change(function () {
-                    alert('sfdsdf');
-                    _this.emailFreq.everydayUpdate = !_this.emailFreq.everydayUpdate;
-                });
-                $('#dailyReport').change(function () {
-                    _this.emailFreq.dailyReport = !_this.emailFreq.dailyReport;
-                });
-                $('#weeklyReport').change(function () {
-                    _this.emailFreq.weeklyReport = !_this.emailFreq.weeklyReport;
-                });
-                $('#monthlyReport').change(function () {
-                    _this.emailFreq.monthlyReport = !_this.emailFreq.monthlyReport;
-                });
-            });
             this.getAllNotifications();
-            this.getUserNotification();
         },
         methods: {
             getAllNotifications() {
@@ -83,32 +60,38 @@
                         _this.notifications = response;
                         setTimeout(function () {
                             $('.form-check-input').bootstrapToggle();
+
+                            _this.changeFunc();
                         }, 400);
-                        _this.chng();
                     })
                     .catch(error => {
                         console.log(error);
                     });
             },
-            getUserNotification() {
+            setNotification(id, value) {
                 let _this = this;
-                axios.get('/api/users-notifications')
+                axios.post('/api/set-notification/' + id, {
+                    value: value
+                })
                     .then(response => response.data)
                     .then(response => {
-                        _this.userNotification = response;
+                        console.log(response);
                     })
                     .catch(error => {
                         console.log(error);
                     });
             },
-            chng() {
+            changeFunc() {
                 let _this = this;
-                this.notifications.forEach(function (value, index) {
-                    console.log(value.unique_id);
-                    $('#' + value.unique_id).change(function () {
-                        console.log('sfsdfsdfs');
-                        _this.notifications[index].user = !_this.notifications[index].user;
-                    });
+                _this.notifications.forEach(function (value, index) {
+                    value.children.forEach((child_v, child_i) => {
+                        // console.log(child_v.unique_id);
+                        $('#' + child_v.unique_id).change(function () {
+                            _this.notifications[index].children[child_i].user = !_this.notifications[index].children[child_i].user;
+                            _this.setNotification(child_v.id, _this.notifications[index].children[child_i].user);
+                            console.log(_this.notifications[index].children[child_i].user);
+                        });
+                    })
                 });
             }
         },
@@ -116,6 +99,15 @@
     }
 </script>
 <style>
+    .card-header > b {
+        font-size: 25px;
+    }
+
+    h2 {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
     .toggle-handle {
         display: none !important;
     }

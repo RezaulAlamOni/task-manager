@@ -821,6 +821,7 @@ class MultipleBoardController extends Controller
             'board_parent_id' => null,
             'board_flag' => null,
             'task_flag' => 1,
+            'progress' => null,
             'multiple_board_id' => null
         ]);
         if($delete){
