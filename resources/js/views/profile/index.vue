@@ -20,7 +20,7 @@
               <div class="card-body">
                 <div class="container emp-profile">
                   <div class="row">
-                    <div class="col-4 pl-0">
+                    <div class="col-4">
                       <div class="profile-img">
                         <img :src="profile.photo_url" alt="Avatar" />
                         <div class="file btn btn-lg btn-primary">
@@ -28,34 +28,32 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-8 border pl-0 pr-0">
-                      <div class="profile-head">
-                        <h1 class="card-header bg-secondary text-white">{{ profile.name }}</h1>
-                        <h6></h6>
-                        <p class="proile-rating">
-                          <span></span>
-                        </p>
-                      </div>
-                      <div class="row ml-2">
-                        <div class="col-md-12">
-                          <div class="row">
-                            <div class="col-md-2 font-weight-bold">Name</div>
-                            <div class="col-md-10">
-                              <p>{{ profile.name }}</p>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-2 font-weight-bold">Email</div>
-                            <div class="col-md-10">
-                              <div class="row pr-0">
-                                <div class="col-md-6">
-                                  <p>{{ profile.email }}</p>
+                    <div class="col-8">
+                      <div class="card">
+                        <div class="card-header bg-secondary text-white">{{ profile.name }}</div>
+                        <div class="card-body">
+                          <div class="row ml-2">
+                            <div class="col-md-12">
+                              <div class="row">
+                                <div class="col-md-2 font-weight-bold">Name</div>
+                                <div class="col-md-10">
+                                  <p>{{ profile.name }}</p>
                                 </div>
-                                <div
-                                  class="col-md-6 pr-0"
-                                  v-if="profile.email_verified_at === null"
-                                >
-                                  <a class="profile-edit-btn">Verify Email</a>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-2 font-weight-bold">Email</div>
+                                <div class="col-md-10">
+                                  <div class="row pr-0">
+                                    <div class="col-md-6">
+                                      <p>{{ profile.email }}</p>
+                                    </div>
+                                    <div
+                                      class="col-md-6 pr-0"
+                                      v-if="profile.email_verified_at === null"
+                                    >
+                                      <a class="profile-edit-btn">Verify Email</a>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
