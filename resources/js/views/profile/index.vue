@@ -28,10 +28,20 @@
                           </div>
                         </div>
                       </div>
+                      <div class="card">
+                        <div class="card-header bg-secondary text-white">About</div>
+                        <div class="card-body">
+                          <div class="profile-work">
+                            <p>WORK LINK</p>
+                            <a href="#">Website Link</a>
+                            <br />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div class="col-8">
                       <div class="card">
-                        <div class="card-header bg-secondary text-white">{{ profile.name }}</div>
+                        <div class="card-header bg-secondary text-white">Personal Information</div>
                         <div class="card-body">
                           <div class="row ml-2">
                             <div class="col-md-12">
@@ -57,21 +67,95 @@
                                   </div>
                                 </div>
                               </div>
+                              <div class="row">
+                                <div class="col-md-2 font-weight-bold">Phone</div>
+                                <div class="col-md-10">
+                                  <p>{{ profile.phone ? profile.phone : '[Phone number not set]' }}</p>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-4">
                       <div class="card">
-                        <div class="card-header bg-secondary text-white">About</div>
+                        <div class="card-header bg-secondary text-white">Card Information</div>
                         <div class="card-body">
-                          <div class="profile-work">
-                            <p>WORK LINK</p>
-                            <a href="#">Website Link</a>
-                            <br />
+                          <div class="row ml-2">
+                            <div class="col-md-12">
+                              <div class="row">
+                                <div class="col-md-3 font-weight-bold">Card Brand</div>
+                                <div class="col-md-9">
+                                  <p>{{ profile.card_brand ? profile.card_brand : '-' }}</p>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-3 font-weight-bold">Card Last 4 Digit</div>
+                                <div class="col-md-9">
+                                  <p>{{ profile.card_last_four ? profile.card_last_four : '0000' }}</p>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-3 font-weight-bold">Card Country</div>
+                                <div class="col-md-9">
+                                  <p>{{ profile.card_country ? profile.card_country : '-' }}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card">
+                        <div class="card-header bg-secondary text-white">Billing Information</div>
+                        <div class="card-body">
+                          <div class="row ml-2">
+                            <div class="col-md-12">
+                              <div class="row">
+                                <div class="col-md-3 font-weight-bold">Billing Address</div>
+                                <div class="col-md-9">
+                                  <p>
+                                    {{ profile.billing_address }}
+                                    <br />
+                                    {{ profile.billing_address_line_2 }}
+                                  </p>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-3 font-weight-bold">City</div>
+                                <div class="col-md-9">
+                                  <p>{{ profile.billing_city ? profile.billing_city : '-'}}</p>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-3 font-weight-bold">State</div>
+                                <div class="col-md-9">
+                                  <p>{{ profile.billing_state ? profile.billing_state : '-'}}</p>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-3 font-weight-bold">Zip Code</div>
+                                <div class="col-md-9">
+                                  <p>{{ profile.billing_zip ? profile.billing_zip : '-' }}</p>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-3 font-weight-bold">Country</div>
+                                <div class="col-md-9">
+                                  <p>{{ profile.billing_country ? profile.billing_country : '-' }}</p>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-3 font-weight-bold">Vat ID</div>
+                                <div class="col-md-9">
+                                  <p>{{ profile.vat_id ? profile.vat_id : '-' }}</p>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-3 font-weight-bold">Extra Billing Information</div>
+                                <div class="col-md-9">
+                                  <p>{{ profile.extra_billing_information ? profile.extra_billing_information : '-' }}</p>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -102,7 +186,7 @@ export default {
     getUser() {
       let _this = this;
       axios
-        .get("/api/auth-user")
+        .get("/api/profile")
         .then(response => response.data)
         .then(response => {
           _this.profile = response.user;
