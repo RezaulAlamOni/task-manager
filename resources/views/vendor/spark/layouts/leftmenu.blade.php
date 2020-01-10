@@ -119,6 +119,12 @@
                     <span>Email & Notification</span>
                 </a>
             </li>
+            <li class="menu-dropdown">
+                <a href="/notification-settings">
+                    <i class="menu-icon fa fa-cogs"></i>
+                    <span>Email & Notification Settings</span>
+                </a>
+            </li>
         <!--
             <li>
                 <a href="/clear">
