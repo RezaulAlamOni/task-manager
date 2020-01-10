@@ -1,5 +1,6 @@
 /node_modules
 /public/*
+/server/node_modules/
 !public/.htaccess
 !public/index.php
 !public/robots.txt

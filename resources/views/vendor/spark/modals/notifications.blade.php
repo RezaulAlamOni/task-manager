@@ -26,6 +26,11 @@
                                         <i class="fa fa-fw ti-settings"></i>
                                     </a>
                                 </li>
+                                <li class="text-center nav-item" id="getAllComment-2">
+                                    <a href="#r_tab4" role="tab" data-toggle="tab" class="nav-link">
+                                        <i class="fa fa-comments"></i>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         <!-- <div class="btn-group">
@@ -49,8 +54,8 @@
                                     </h5>
 
                                     <!-- List Of Announcements -->
-                                    <div class="notification-container" style="width:100%;float: left;">
-                                        <div class="notification" v-for="announcement in notifications.announcements">
+                                    <div class="notification-container" style="width:100%;float: left;" v-if="notifications != null">
+                                        <div class="notification" v-for="announcement in notifications.announcements" >
 
                                             <!-- Notification Icon -->
                                             <figure>
@@ -69,7 +74,7 @@
 
                                                 <div class="notification-body" v-html="announcement.parsed_body"></div>
 
-                                                <!-- Announcement Action -->
+                                                   <!-- Announcement Action -->
                                                 <a :href="announcement.action_url" class="btn btn-primary" v-if="announcement.action_text">
                                                     @{{ announcement.action_text }}
                                                 </a>
@@ -176,6 +181,71 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="tab-pane fade" id="r_tab4">
+                                <div id="slim_t2">
+                                    <!-- Informational Messages -->
+                                    <div>
+                                        <h5 class="rightsidebar-right-heading text-uppercase text-xs" style="width: 100%;margin-top: 70px;clear: both;">
+                                            <i class="menu-icon fa fa-comments"></i>
+                                            Comments
+                                        </h5>
+                                        <div class="notification-container" v-if="loadingNotifications"  style="width:100%;float: left;">
+                                            <i class="fa fa-btn fa-spinner fa-spin"></i> {{__('Loading Notifications')}}
+                                        </div>
+                                    </div>
+
+                                    <!-- List Of Notifications -->
+                                    <div class="notification-container" v-if="notifications != null ">
+                                        <div class="notification" v-for="comment in notifications.comments"
+                                             style="border-bottom: 1px dashed #c7cdd1;border-top: none;margin-bottom: 0;">
+{{--                                            @{{ comment }}--}}
+                                            <!-- Notification Icon -->
+                                            <figure>
+                                                <img v-if="comment.user.photo_url" :src="comment.user.photo_url" class="spark-profile-photo">
+                                                <span v-else class="fa-stack fa-2x">
+                                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                                    <i :class="['fa', 'fa-stack-1x', 'fa-inverse']"></i>
+                                                </span>
+                                            </figure>
+
+                                            <!-- Notification -->
+                                            <div class="notification-content">
+                                                <div class="meta" >
+                                                    <p class="title" >
+                                                        <span>
+                                                            @{{ comment.user.name }}
+                                                        </span>
+                                                    </p>
+
+                                                    <div class="date">
+                                                        @{{ comment.created_at | relative }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="notification-body">
+                                                    <span  v-if="comment.comment != ''" >
+                                                           Comment on a task you are taged in!
+                                                        <br>
+                                                        <b>@{{ comment.comment }}</b>
+
+                                                        </span>
+                                                    <span v-else>
+                                                           Attached a file on a task you are tagged in! <br>
+                                                        <b>@{{ comment.attatchment }}</b>
+                                                        </span>
+                                                </div>
+
+                                                <!-- Notification Action -->
+{{--                                                <a  class="btn btn-primary" v-if="comment">--}}
+{{--                                                    --}}
+{{--                                                </a>--}}
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
 
 
@@ -183,10 +253,12 @@
 
                     <!-- Modal Actions -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-success" data-dismiss="modal">{{__('Close')}}</button>
+                        <button type="button" class="btn btn-default " data-dismiss="modal">{{__('Close')}}</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </spark-notifications>
+
+

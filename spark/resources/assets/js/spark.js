@@ -124,8 +124,14 @@ module.exports = {
          */
         refreshApiToken() {
             this.lastRefreshedApiTokenAt = moment();
-
-            axios.put('/spark/token');
+            axios.post('/spark/token')
+                .then(response => {
+                    //
+                })
+                .catch(response  => {
+                    window.location.href = window.location.origin;
+                })
+            ;
         },
 
 
@@ -169,13 +175,13 @@ module.exports = {
          * Get the application notifications.
          */
         getNotifications() {
+            var _this = this;
             this.loadingNotifications = true;
 
             axios.get('/notifications/recent')
                 .then(response => {
-                    this.notifications = response.data;
-
-                    this.loadingNotifications = false;
+                    _this.notifications = response.data;
+                    _this.loadingNotifications = false;
                 });
         },
 

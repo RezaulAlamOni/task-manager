@@ -50,6 +50,8 @@ mix.copy(resourcesAssets + 'js/icheck.js', destJs);
 mix.copy(resourcesAssets + 'js/form_elements.js', destJs);
 mix.copy(resourcesAssets + 'js/script.js', destJs);
 mix.copy(resourcesAssets + 'js/jquery.tagsinput.js', destJs);
+mix.copy(resourcesAssets + 'js/init-firebase.js', destJs);
+mix.copy(resourcesAssets + 'js/firebase-messaging-sw.js', dest);
 
 
 //select2
@@ -63,6 +65,8 @@ mix.sass(resourcesAssets + 'sass/custom.scss', 'public/css');
 mix.sass(resourcesAssets + 'sass/light_custom.scss', 'public/css');
 mix.sass(resourcesAssets + 'sass/board_view.scss', 'public/css');
 mix.sass(resourcesAssets + 'sass/tree_view.scss', 'public/css');
+mix.sass(resourcesAssets + 'sass/rules.scss', 'public/css');
+mix.sass(resourcesAssets + 'js/views/OverView/_OverView.scss', 'public/css');
 
 mix.sass('resources/sass/app.scss', 'public/css')
     .js('resources/js/app.js', 'public/js')

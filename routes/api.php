@@ -12,6 +12,8 @@ Route::post('/list-add', 'MultipleListController@store');//add list under projec
 Route::post('/board-list-update', 'MultipleListController@update');//Update list board
 Route::post('/board-list-delete', 'MultipleListController@delete');//delete list or board
 Route::post('/board-list-move', 'ProjectNavItemsController@boardListMove');//move list or board
+Route::post('/selected-task-move', 'ProjectNavItemsController@moveSelectedTask');//move list or board
+Route::post('/selected-multiple-task-past-to-another-list', 'TaskController@CopyPastMultipleTaskToAnotherList');//copy and past multiple task to another list
 
 //task listmanagement
 Route::post('/add-task-task', 'TaskController@addNewTask');//add new node
@@ -25,7 +27,7 @@ Route::post('/task-list/update', 'TaskController@update');//reverse child node
 Route::post('/task-list/delete-empty-task', 'TaskController@deleteEmptyTask');//delete empty node
 Route::post('/task-list/delete-img', 'TaskController@deleteImg');//reverse child node
 Route::post('/task-list/task-drag-drop', 'TaskController@taskDragDrop');//task-drag-drop
-
+Route::post('/task-list-filter', 'TaskController@getAllFilter');//get task list data
 
 //task list tags related
 Route::get('/task-list/all-tag-for-manage', 'TagsController@index');//get all tag
@@ -41,16 +43,16 @@ Route::post('/task-list/assign-user-add-tag', 'TaskController@ActionSelectedTask
 Route::post('/task-list/move-task', 'TaskController@moveTask');//move-task
 Route::get('/task-list/get-log/{task_id}', 'ActionLogController@getSingleTaskLog'); //lod
 
-
-
 //search task
-Route::post('/task-list/suggest-user','SearchController@suggestUser'); //user suggest for search
+Route::get('/task-list/all-suggest-user','SearchController@getAllUser'); //user for search
+Route::post('/task-list/search-result','SearchController@suggestUser'); //user suggest for search
+Route::post('/task-list/add-priority','PriorityController@AddPriority'); //add priority
 
 //navigation management
 Route::post('/allNavs','ProjectNavItemsController@store'); //add new nav item
 Route::post('/nav-item/add-new','ProjectNavItemsController@store'); //add new nav item
 Route::get('/nav-item/{project_id}','ProjectNavItemsController@index'); //all nav item
-// Route::get('/board-item/{project_id}','ProjectNavItemsController@allBoard'); //all nav item
+Route::get('/board-item-and-column/{project_id}','ProjectNavItemsController@GetBoardsAndColumn'); //all nav item
 Route::post('/nav-item/update','ProjectNavItemsController@edit'); //all nav item
 Route::post('/nav-list','ProjectNavItemsController@navList'); //all nav list item
 Route::post('/board-list','ProjectNavItemsController@boardList'); //all nav list item
@@ -58,6 +60,9 @@ Route::post('/board-column','MultipleBoardController@getAllColumnBylist'); //all
 Route::post('/Transfer-to-board','MultipleBoardController@transferToAnotherBoard'); //all nav list item
 Route::post('/multiple-list','ProjectNavItemsController@multipleList'); //all nav list item
 Route::post('/Transfer-column-to-board','MultipleBoardController@transferColumnToAnotherBoard'); //all nav list item
+Route::post('/link-list-to-column','MultipleBoardController@linkListToColumn'); //all nav list item
+Route::post('/unlink-list-to-column','MultipleBoardController@unlinkListToColumn'); //all nav list item
+Route::post('/is-linked','MultipleBoardController@isLinked'); //all nav list item
 
 //assign  user to task
 Route::post('/task-list/assign-user','AssignedUserController@store'); //Assign user
@@ -65,6 +70,7 @@ Route::post('/task-list/assign-user-remove','AssignedUserController@delete'); //
 
 //board Section
 Route::post('/board-task','MultipleBoardController@index'); //get board item
+Route::post('/board-task-filter','MultipleBoardController@filter'); //get board item filtered
 Route::post('/board-save','MultipleBoardController@create'); //get board item
 Route::post('/board-modify','MultipleBoardController@update'); //column info update
 Route::post('/board-add', 'MultipleBoardController@store'); //add list under project
@@ -75,9 +81,55 @@ Route::post('/all-board', 'MultipleBoardController@getAllColumnBylist');
 Route::post('/add-existing-tasks', 'MultipleBoardController@addExistingTasks');
 
 Route::post('/card-add', 'MultipleBoardController@cardAdd');
+Route::post('/card-file-upload', 'MultipleBoardController@fileUpload');
+Route::post('/delete-card-file', 'MultipleBoardController@cardFileDelete');
+Route::post('/get-card-file', 'MultipleBoardController@getCardFiles');
+Route::post('/hideChildes', 'MultipleBoardController@childHide');
+Route::post('/show-child-parent', 'MultipleBoardController@childrenAndParent');
 Route::post('/card-sort', 'MultipleBoardController@cardSort');
 Route::post('/change-board-parent', 'MultipleBoardController@changeParentId');
 Route::post('/column-sort', 'MultipleBoardController@columnSort');
+Route::post('/get-card-comment', 'CommentController@getCardComment');
+Route::post('/add-comment', 'CommentController@addComment');
+
+Route::post('/update-comment', 'CommentController@updateComment');
+
+Route::post('/delete-card-comment', 'CommentController@cardCommentDelete');
+Route::post('/save-comment-reply', 'CommentController@saveCommentReply');
+Route::post('/comment-file-upload', 'CommentController@fileUpload');
+Route::get('/get-all-comment', 'CommentController@allComment');
+
 Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');
 Route::get('/card-delete/{id}','MultipleBoardController@cardDelete'); //delete card
 Route::get('/board-task-delete/{id}','MultipleBoardController@existingTaskDelete'); //delete card
+Route::post('/board-task-delete','MultipleBoardController@selectedExistingTaskDelete'); //delete card
+Route::get('/testGet','MultipleBoardController@test'); //delete card
+
+//rules
+Route::post('/add-rules', 'RulesController@store');
+Route::get('/all-rules/{project_id}', 'RulesController@index');
+Route::get('/rules/{id}', 'RulesController@show');
+Route::post('/rules-update', 'RulesController@update');
+Route::post('/rules-delete', 'RulesController@delete');
+
+//overview
+Route::get('/project-overview/{project_id}', 'OverviewController@index');
+Route::get('/overview-all-files/{project_id}', 'OverviewController@All_files');
+Route::get('/overview-all-comments/{project_id}', 'OverviewController@AllComments');
+Route::post('/project-overview/list-sort', 'OverviewController@ListSort');
+Route::post('/project-overview/list-open-close', 'OverviewController@ListToggle');
+
+//logs
+Route::get('/overview-all-logs/{project_id}', 'ActionLogController@AllLogs');
+Route::post('/overview-log/undo-action', 'ActionLogController@UndoAction');
+
+//auth-user
+Route::get('/auth-user', 'HomeController@AuthUser');
+Route::post('/send-mail', 'HomeController@userMail');
+
+//fcm
+Route::post('/firebase-insert-update', 'FirbaseController@AddFcmToken')->name('FcmTokenInsertOrUpdate');
+
+//Get All Notifications
+Route::get('/get-notifications', 'EmailNotificationController@getAllNotifications');
+Route::get('/users-notifications', 'EmailNotificationController@usersNotifications');

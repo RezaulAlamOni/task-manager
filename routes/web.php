@@ -15,6 +15,8 @@ Route::get('/', 'WelcomeController@show');
 
 Route::get('/home', 'HomeController@show');
 
+Route::get('/allcomments', 'HomeController@allComment');
+
 Route::get('/clear', 'ClearController@show');
 
 Route::get('/select', 'ClearController@show_select');
@@ -22,6 +24,9 @@ Route::get('/select', 'ClearController@show_select');
 Route::get('/blank','ClearController@show_blank');
 
 Route::get('/blank','BlankController@show');
+
+
+Route::get('/list-pdf-create/{type}/{list_id}','MultipleListController@ListPdfCreate');
 
 //Route::get('/projects','ProjectController@index');
 

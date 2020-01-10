@@ -7,22 +7,21 @@
     <meta name="keywords" content="">
 
     <title>CompltIt - Project Management From Idea to Complete</title>
-    <script src="https://kit.fontawesome.com/770fef9945.js" crossorigin="anonymous"></script>
-
 
     <!-- Styles -->
     <link href="../css/page.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
 
-
     <!-- Favicons -->
     <link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
     <link rel="icon" href="../img/favicon.ico">
+    <script src="https://kit.fontawesome.com/1a9af935ca.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/latest/css/pro.min.css" media="all">
+    <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/latest/css/pro-v4-font-face.min.css" media="all">
+    <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/latest/css/pro-v4-shims.min.css" media="all">
 </head>
 
 <body>
-
-
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark" data-navbar="fixed">
     <div class="container">
@@ -57,10 +56,18 @@
         <div class="row align-items-center h-100">
 
             <div class="col-lg-5">
-                <h1 class="display-4"><strong>TheSaaS</strong>;<br>Where Work happens</h1>
-                <p class="lead mt-5">Whatever work means for you, TheSaaS brings all the pieces and people you need together so you can actually get things done.</p>
+                <h1 style="font-size: 35px"><strong>Project Management</strong> <small>for Developers</small></h1>
+                <h3 class="mt-5">From Idea to Complete</h3>
 
-                <hr class="w-10 ml-0 my-7">
+                <ul>
+                    <li>Custom work flows</li>
+                    <li>Create task lists and scopes</li>
+                    <li>Convert task lists to cards</li>
+                    <li>Automate task flow with custom rules</li>
+                    <li>Create unlimited lists and boards</li>
+                    <li>Keep a complete overview of your app</li>
+                    <li>Change history on cards for updates or bugs</li>
+                </ul>
 
                 <p class="gap-xy">
                     <a class="btn btn-lg btn-round btn-success mw-200" href="#section-pricing">Get Started</a>
@@ -69,11 +76,7 @@
             </div>
 
             <div class="col-lg-6 ml-auto">
-                <div class="video-wrapper ratio-16x9 rounded shadow-6 mt-8 mt-lg-0">
-                    <div class="poster" style="background-image: url(../img/preview/shot-1.png)"></div>
-                    <button class="btn btn-circle btn-lg btn-info"><i class="fas fa-play"></i></button>
-                    <iframe width="560" height="315" src="https://www.youtube.com/embed/M5S_JBRjd1s?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
-                </div>
+                    <script src="https://fast.wistia.com/embed/medias/4edt1rne9z.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><span class="wistia_embed wistia_async_4edt1rne9z popover=true popoverAnimateThumbnail=true" style="display:inline-block;height:252px;position:relative;width:560px">&nbsp;</span>
             </div>
 
         </div>
@@ -93,14 +96,90 @@
         <div class="container">
             <header class="section-header">
                 <small>Feature</small>
-                <h2>Team communication for the 21st century.</h2>
+                <h2>Management Your Way</h2>
                 <hr>
             </header>
+
+            <div class="row gap-y align-items-center">
+                <div class="col-md-6">
+                    <h4>Create Unlimited Projects</h4>
+                    <p>Everything in TheSaaS—messages, notifications, files, and all—is automatically indexed and archived so that you can have it at your fingertips whenever you want. TheSaaS also indexes the content of every file so you can search within PDFs, Word documents, Google docs, and more. With one search box and a set of powerful search operators, you can slice and dice your way to that one message in your communication haystack.</p>
+                </div>
+
+                <div class="col-md-5">
+                    <script src="https://fast.wistia.com/embed/medias/xb1nqy3h8t.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><div class="wistia_embed wistia_async_xb1nqy3h8t" style="height:252px;position:relative;width:560px">&nbsp;</div>
+                </div>
+            </div>
+
+
+            <hr class="my-8">
+
+
+            <div class="row gap-y align-items-center">
+                <div class="col-md-5">
+                    <h4>Custom List and Board Navigation For Each Project</h4>
+                    <p>Not just your messages, but all your files, images, PDFs, documents, and spreadsheets can be dropped right into TheSaaS and shared with anyone you want. Add comments, star for later reference, and it’s all completely searchable.</p>
+                    <p>If you use any services like Google Drive, Dropbox, or Box, just paste the link and that document is immediately in sync and searchable too.</p>
+                </div>
+
+                <div class="col-md-7 order-md-first">
+                    <script src="https://fast.wistia.com/embed/medias/4whfifr25m.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><div class="wistia_embed wistia_async_4whfifr25m" style="height:252px;position:relative;width:560px"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="https://fast.wistia.com/embed/medias/4whfifr25m/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;" /></div></div>
+                </div>
+            </div>
+
+
+            <hr class="my-8">
+
+
+            <div class="row gap-y align-items-center">
+                <div class="col-md-6">
+                    <h4>Create Lists For Quick Project Layouts</h4>
+                    <p>Everything in TheSaaS—messages, notifications, files, and all—is automatically indexed and archived so that you can have it at your fingertips whenever you want. TheSaaS also indexes the content of every file so you can search within PDFs, Word documents, Google docs, and more. With one search box and a set of powerful search operators, you can slice and dice your way to that one message in your communication haystack.</p>
+                </div>
+
+                <div class="col-md-5">
+                    <script src="https://fast.wistia.com/embed/medias/7o02h9pv77.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><div class="wistia_embed wistia_async_7o02h9pv77" style="height:252px;position:relative;width:560px">&nbsp;</div>
+                </div>
+            </div>
+
+
+            <hr class="my-8">
+
+
+            <div class="row gap-y align-items-center">
+                <div class="col-md-5 ml-auto">
+                    <h4>Create Boards With Custom Workflows</h4>
+                    <p>Connect all the tools you use to TheSaaS and avoid all that constant switching between apps. Set up your integration so that you get all your notifications directly within TheSaaS—from support requests, code check-ins, and error logs to sales leads—all of them searchable in one central archive.</p>
+                    <p>If you use any services like Google Drive, Dropbox, or Box, just paste the link and that document is immediately in sync and searchable too.</p>
+                </div>
+
+                <div class="col-md-7 order-md-first">
+                    <script src="https://fast.wistia.com/embed/medias/6ud2ujs1ds.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><div class="wistia_embed wistia_async_6ud2ujs1ds" style="height:252px;position:relative;width:560px">&nbsp;</div>
+                </div>
+            </div>
+
+
+            <hr class="my-8">
+
+
+            <div class="row gap-y align-items-center">
+                <div class="col-md-6 mr-auto">
+                    <h4>Custom Workflow Rules to Move and Assign Tasks</h4>
+                    <p>Everything in TheSaaS—messages, notifications, files, and all—is automatically indexed and archived so that you can have it at your fingertips whenever you want. TheSaaS also indexes the content of every file so you can search within PDFs, Word documents, Google docs, and more. With one search box and a set of powerful search operators, you can slice and dice your way to that one message in your communication haystack.</p>
+                </div>
+
+                <div class="col-md-5">
+                    <img src="../img/vector/11.png" alt="...">
+                </div>
+            </div>
+
+
+            <hr class="my-8">
 
 
             <div class="row gap-y align-items-center">
                 <div class="col-md-6 ml-auto">
-                    <h4>Drag, drop, and share your files.</h4>
+                    <h4>Communicate With Team Members</h4>
                     <p>Not just your messages, but all your files, images, PDFs, documents, and spreadsheets can be dropped right into TheSaaS and shared with anyone you want. Add comments, star for later reference, and it’s all completely searchable.</p>
                     <p>If you use any services like Google Drive, Dropbox, or Box, just paste the link and that document is immediately in sync and searchable too.</p>
                 </div>
@@ -116,7 +195,7 @@
 
             <div class="row gap-y align-items-center">
                 <div class="col-md-6 mr-auto">
-                    <h4>Works everywhere you go</h4>
+                    <h4>Get The Full Picture With Project Overview</h4>
                     <p>Everything in TheSaaS—messages, notifications, files, and all—is automatically indexed and archived so that you can have it at your fingertips whenever you want. TheSaaS also indexes the content of every file so you can search within PDFs, Word documents, Google docs, and more. With one search box and a set of powerful search operators, you can slice and dice your way to that one message in your communication haystack.</p>
                 </div>
 
@@ -131,7 +210,7 @@
 
             <div class="row gap-y align-items-center">
                 <div class="col-md-6 ml-auto">
-                    <h4>All your tools in one place.</h4>
+                    <h4>Log Everything</h4>
                     <p>Connect all the tools you use to TheSaaS and avoid all that constant switching between apps. Set up your integration so that you get all your notifications directly within TheSaaS—from support requests, code check-ins, and error logs to sales leads—all of them searchable in one central archive.</p>
                     <p>If you use any services like Google Drive, Dropbox, or Box, just paste the link and that document is immediately in sync and searchable too.</p>
                 </div>

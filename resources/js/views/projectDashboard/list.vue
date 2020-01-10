@@ -171,15 +171,6 @@
                                                             </span>
                                                 </li>
                                             </diV>
-                                            <li @click="switchEvent($event)" class="border-top pl-2">
-
-                                                <span style="font-size: 13px;">Assign an external team</span>
-                                                <switches color="success"
-                                                          style="position:absolute;right: 10px;bottom: -4px"
-                                                          theme="bootstrap"
-                                                          v-model="id">
-                                                </switches>
-                                            </li>
                                         </div>
                                     </a>
 

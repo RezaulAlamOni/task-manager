@@ -20,4 +20,9 @@ class ActionLog extends Model
         'action_by',
         'action_at'
     ];
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'action_by');
+    }
 }

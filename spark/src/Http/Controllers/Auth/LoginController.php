@@ -31,7 +31,7 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
 
-        $this->redirectTo = Spark::afterLoginRedirect();
+        $this->redirectTo = '/home';//Spark::afterLoginRedirect();
     }
 
     /**
@@ -59,7 +59,7 @@ class LoginController extends Controller
             $request->merge(['remember' => '']);
         }
 
-        return $this->traitLogin($request);
+        return ($this->traitLogin($request))? $this->traitLogin($request): redirect('/home');
     }
 
     /**

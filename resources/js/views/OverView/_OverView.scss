@@ -1,0 +1,327 @@
+.overview-list {
+    border-left: none !important;
+    border-top: none !important;
+    border-right: none !important;
+    box-shadow: 0 0 0.6px !important;
+    margin: 5px 0px;
+    overflow: initial !important;
+}
+
+.overview-dropdown {
+    position: absolute;
+    will-change: transform;
+    top: 0px;
+    left: 5px !important;
+    transform: translate3d(1038px, 67px, 0px);
+}
+
+.overview-dropdown:before {
+    content: "";
+    border-bottom: 10px solid #fff;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    z-index: 10;
+}
+
+.overview-dropdown:after {
+    content: "";
+    border-bottom: 12px solid #ccc;
+    border-right: 12px solid transparent;
+    border-left: 12px solid transparent;
+    position: absolute;
+    top: -12px;
+    right: 8px;
+    z-index: 9;
+}
+
+.overview-list-header {
+    padding: 2px 10px !important;
+}
+
+.option-btn {
+    position: absolute;
+    right: -5px;
+    font-size: 17px;
+    cursor: pointer;
+    top: -8px;
+}
+
+.sort-trigger {
+    position: absolute;
+    left: 0px;
+    top: 4px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.hide-overview-list-task {
+    display: none;
+}
+
+.show-overview-list-task {
+    display: block;
+}
+
+
+// @import url(https://fonts.googleapis.com/css?family=Lato:300,400);
+// @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css);
+
+$LATO: 'Lato', sans-serif;
+
+$GREY: #CCC;
+$BACKGROUND_GREY: #f9f9f9;
+$SUBTLE_GREY: #F2F2F2;
+$MURKY_GREY: #384148;
+$DARK_GREY: #333;
+
+$WHITE: #FFF;
+$SUBTLE_WHITE: #F9F9F9;
+
+$BLUE: #6495ED;
+$RED: #FF6347;
+
+*,
+*:before,
+*:after {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+body, html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    font-family: $LATO;
+    font-size: 1rem;
+
+    color: $DARK-GREY;
+    background-color: $BACKGROUND_GREY;
+
+}
+
+.user_avatar {
+    width: 35px;
+    height: 35px;
+    float: left;
+    display: inline-block;
+    vertical-align: middle;
+
+    img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+}
+
+.comment_block {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 10px;
+    overflow-x: hidden;
+    .create_new_comment {
+        width: 100%;
+        padding: 20px 0;
+
+        .input_comment {
+            display: inline-block;
+            vertical-align: middle;
+
+            margin-left: 10px;
+            width: calc(100% - 80px);
+
+            input[type="text"] {
+                width: 100%;
+
+                font-family: $LATO;
+                font-weight: 300;
+                font-size: 1.3rem;
+
+                padding: 10px;
+
+                border: none;
+                border-bottom: 2px solid lighten($GREY, 15%);
+
+                &:focus {
+                    outline: none;
+                    border-bottom: 2px solid lighten($GREY, 10%);
+                }
+            }
+        }
+    }
+
+    .new_comment {
+        width: 100%;
+        height: auto;
+        padding: 20px 0;
+        //border-top: 1px solid lighten($GREY, 10%);
+
+        .user_comment {
+            list-style-type: none;
+        }
+
+        .comment_body {
+            display: inline-block;
+            vertical-align: middle;
+            word-break: break-all;
+            width: calc(100% - 80px);
+            min-height: 15px;
+            margin-left: 10px;
+            padding: 5px 10px;
+            font-size: .9rem;
+            color: #555;
+            background: #efefef;
+            border-radius: 5px;
+
+            .replied_to {
+                margin: 5px 0px;
+                background-color: lighten($GREY, 18%);
+                border-bottom: 2px solid lighten($GREY, 15%);
+                border-radius: 5px;
+
+                p {
+                    padding: 5px;
+                }
+
+                span {
+                    color: $BLUE;
+                    margin-right: 2px;
+                }
+            }
+        }
+
+        .comment_toolbar {
+            width: 100%;
+            float: right;
+
+            ul {
+                list-style-type: none;
+                padding-left: 40px;
+                font-size: 0;
+
+                li {
+                    display: inline-block;
+                    padding: 5px;
+                    font-size: 12px;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .comment_details {
+                display: inline-block;
+                vertical-align: middle;
+                width: 100%;
+                text-align: right;
+                padding-right: 35px;
+            }
+            .comment_details-reply {
+                display: inline-block;
+                vertical-align: middle;
+                width: 100%;
+                text-align: left;
+            }
+
+            .comment_tools {
+                display: inline-block;
+                vertical-align: middle;
+                width: 29%;
+                text-align: right;
+
+                li {
+                    &:hover {
+                        color: $GREY;
+                    }
+                }
+            }
+
+            // replies
+
+        }
+
+        .user {
+            &:hover {
+                color: $BLUE;
+                text-decoration: underline;
+            }
+        }
+
+        .love {
+            &:hover {
+                color: $RED;
+            }
+        }
+    }
+
+    .user {
+        color: $DARK_GREY;
+        font-weight: bold;
+
+        &:hover {
+            color: $DARK_GREY;
+            text-decoration: underline;
+        }
+    }
+
+}
+
+.comment-avature {
+    height: 50px;
+    width: 50px;
+    background: #c7d4d0;
+    border-radius: 50%;
+    line-height: 50px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    /* margin: -1px 0 0 10px; */
+    margin-left: 10px;
+}
+
+
+
+//=======================
+// nav-train-station
+//=======================
+.nav-train-station{
+    width: calc(100% - 500px);
+    display: inline-block;
+    float: left;
+    overflow-y: hidden;
+    overflow-x: auto;
+    &.stop-train{
+        overflow-y: initial;
+        overflow-x: initial;
+    }
+    @media only screen and (max-width: 991px) {
+        width: calc(100% - 0px);
+    }
+    .nav-train{
+        display: flex;
+        .navbar-nav-cabin{
+            position: relative;
+            float: left;
+        }
+    }
+}
+
+
+.ck .ck-content {
+    ul {
+        padding-left: 30px !important;
+        list-style: disc !important;
+    }
+
+    ol{
+        padding-left: 30px !important;
+    }
+}

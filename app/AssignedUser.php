@@ -16,4 +16,14 @@ class AssignedUser extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function taskComment()
+    {
+        return $this->hasMany(Comment::class,'task_id','task_id');
+    }
+
+    public function users()
+    {
+        return $this->hasOne(User::class,'id','user_id');
+    }
 }
