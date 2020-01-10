@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Mail;
 use App\Mail\UserMail;
+// use EmailNotificationController;
 
 class HomeController extends Controller
 {
@@ -18,10 +19,11 @@ class HomeController extends Controller
      *
      * @return void
      */
+    protected $emailNotification;
     public function __construct()
     {
         $this->middleware('auth');
-
+        $this->emailNotification = new EmailNotificationController();
         // $this->middleware('subscribed');
 
         // $this->middleware('verified');
@@ -67,21 +69,70 @@ class HomeController extends Controller
     public function userMail(Request $request)
     {   
         $emails = [];
+        $userIds = [];
+        $emailCond = $request->email;
         if (isset($request->task_id) && $request->task_id !== '') {
             $users = AssignedUser::where('task_id',$request->task_id)->with(['users'])->get();
             foreach ($users as $key => $value) {
-                $emails[] = $value->users->email;
+                // $data[$value->users->id] = $this->emailNotification->getNotificationsByUser($value->users->id);
+                if (!in_array($value->users->email, $emails)) {
+                    $emails[$value->users->id] = $value->users->email;
+                }
+                if (!in_array($value->users->id, $userIds)) {
+                    $userIds[] = $value->users->id;
+                }
             }
         }
         if (isset($request->user_id) && $request->user_id !== '') {
-            $user = User::where('id',$request->user_id)->first();
-            $emails[] = $user->email;
+            if (is_array($request->user_id)) {
+                foreach ($request->user_id as $keys => $mailuser) {
+                    $user = User::where('id', $mailuser)->first();
+                    if (!in_array($user->email, $emails)) {
+                        $emails[$user->id] = $user->email;
+                    }
+                    if (!in_array($user->id, $userIds)) {
+                        $userIds[] = $user->id;
+                    }     
+                }
+            } else {
+                $user = User::where('id',$request->user_id)->first();
+                if (!in_array($user->email, $emails)) {
+                    $emails[$user->id] = $user->email;
+                }
+                if (!in_array($request->user_id, $userIds)) {
+                    $userIds[] = $request->user_id;
+                }
+            }
         }
-        if (count($emails) > 0) {
-            // $comment = 'Hi, Comment Add to card.';
-            $comment['subject'] = $request->subject;
-            $comment['body'] = $request->body;
-            Mail::to($emails)->send(new UserMail($comment));
+        foreach ($userIds as $keys => $ids) {
+            $data = $this->emailNotification->getNotificationsByUser($ids);
+            if ($data->original[$emailCond] == 1) {
+                if ($emails[$ids] !== '') {
+                    // $comment = 'Hi, Comment Add to card.';
+                    $comment['subject'] = $request->subject;
+                    $comment['body'] = $request->body;
+                    Mail::to($emails[$ids])->send(new UserMail($comment));
+                }
+            }
         }
+        
+        
+        // emailFreq_everydayUpdate     : 0
+        // emailFreq_dailyReport        : 0
+        // emailFreq_weeklyReport       : 0
+        // emailFreq_monthlyReport      : 0
+        // emailFreq_never              : 0
+        // email_IAmOn                  : 0
+        // email_everything             : 0
+        // email_whenAddedToTask        : 0
+        // email_whenRemovedFromTask    : 0
+        // email_titleChanged           : 0
+        // email_descriptionUpdated     : 0
+        // email_commentLeft            : 0
+        // email_commentMention         : 0
+        // email_taskAdded              : 0
+        // email_taskUpdated            : 0
+        // email_taskCommented          : 0 
+        
     }
 }

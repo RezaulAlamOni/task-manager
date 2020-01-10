@@ -27,8 +27,6 @@ class CreateNotificationUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notification_user', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('notification_user');
     }
 }
