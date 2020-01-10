@@ -21,10 +21,11 @@
                 <div class="container emp-profile">
                   <div class="row">
                     <div class="col-4">
-                      <div class="profile-img">
-                        <img :src="profile.photo_url" alt="Avatar" />
-                        <div class="file btn btn-lg btn-primary">
-                          <input type="file" name="file" />
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="profile-img">
+                            <img :src="profile.photo_url" alt="Avatar" class="border mb-4 mt-4" />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -63,7 +64,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-4">
                       <div class="card">
                         <div class="card-header bg-secondary text-white">About</div>
                         <div class="card-body">
