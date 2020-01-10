@@ -26,6 +26,11 @@ class RulesController extends Controller
 
     public function store(Request $request)
     {
+        $rule_check_by_name = Rules::where(['name' => $request->name])->count();
+        if ($rule_check_by_name > 0){
+            return response()->json(['status' => 'exist']);
+        }
+
         $check_move_from = Rules::where('move_from',$request->move_from)->OrWhere('move_to',$request->move_from)->count();
         $check_move_to = Rules::where('move_from',$request->move_to)->count();
         if ($check_move_from > 0 || $check_move_to > 0){
