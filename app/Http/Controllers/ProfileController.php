@@ -129,6 +129,46 @@ class ProfileController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateBillingInfo(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'billing_address' => 'required|max:255',
+            'billing_city' => 'required|max:255',
+            'billing_state' => 'required|max:255',
+            'billing_zip' => 'required|numeric',
+            'billing_country' => 'required|max:255',
+            'vat_id' => 'required|max:255',
+            'extra_billing_information' => 'required|max:255',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'error' => $validator->errors(), 'status' => 400], Response::HTTP_OK);
+        }
+
+        $user = User::find(Auth::id());
+
+        $updated = $user->update([
+            'billing_address' => $request->billing_address,
+            'billing_address_line_2' => $request->billing_address_line_2,
+            'billing_city' => $request->billing_city,
+            'billing_state' => $request->billing_state,
+            'billing_zip'=> $request->billing_zip,
+            'billing_country' => $request->billing_country,
+            'vat_id' => $request->vat_id,
+            'extra_billing_information' => $request->extra_billing_information,
+        ]);
+        if ($updated) {
+            return response()->json(['success' => true, 'data' => $updated, 'status' => 200], Response::HTTP_OK);
+        } else {
+            return response()->json(['success' => false, 'data' => 'Card Info Not Updated', 'status' => 401], Response::HTTP_OK);
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
