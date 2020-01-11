@@ -40,7 +40,7 @@ class HomeController extends Controller
         $Projects = Project::where('team_id', $team_id)->get();
 
 
-        return view('home',['projects' => $Projects]);
+        return view('home', ['projects' => $Projects]);
     }
 
     public function allComment()
@@ -48,12 +48,10 @@ class HomeController extends Controller
         $task_comment = AssignedUser::where('user_id', Auth::user()->id)->with('taskComment')->get();
         // dd($task_comment);
         $commentsArr = [];
-        foreach($task_comment as $key => $assignuser)
-        {   $j = 0;
-            if(count($assignuser['taskComment']) > 0)
-            {
-                foreach($assignuser['taskComment'] as $keys => $comments)
-                {
+        foreach ($task_comment as $key => $assignuser) {
+            $j = 0;
+            if (count($assignuser['taskComment']) > 0) {
+                foreach ($assignuser['taskComment'] as $keys => $comments) {
                     $commentsArr[] =  $comments;
                 }
             }
@@ -61,19 +59,20 @@ class HomeController extends Controller
         return response()->json(['success' => true, 'data' => $commentsArr]);
     }
 
-    public function AuthUser(){
+    public function AuthUser()
+    {
         $user = Auth::user();
-        return response()->json(['user'=>$user]);
+        return response()->json(['user' => $user]);
     }
 
     public function userMail(Request $request)
-    {   
+    {
         $emails = [];
         $userIds = [];
         $mails = [];
         $emailCond = $request->email;
         if (isset($request->task_id) && $request->task_id !== '') {
-            $users = AssignedUser::where('task_id',$request->task_id)->with(['users'])->get();
+            $users = AssignedUser::where('task_id', $request->task_id)->with(['users'])->get();
             foreach ($users as $key => $value) {
                 // $data[$value->users->id] = $this->emailNotification->getNotificationsByUser($value->users->id);
                 if (!in_array($value->users->email, $emails)) {
@@ -93,10 +92,10 @@ class HomeController extends Controller
                     }
                     if (!in_array($user->id, $userIds)) {
                         $userIds[] = $user->id;
-                    }     
+                    }
                 }
             } else {
-                $user = User::where('id',$request->user_id)->first();
+                $user = User::where('id', $request->user_id)->first();
                 if (!in_array($user->email, $emails)) {
                     $emails[$user->id] = $user->email;
                 }
@@ -145,8 +144,32 @@ class HomeController extends Controller
         // email_commentMention         : 0
         // email_taskAdded              : 0
         // email_taskUpdated            : 0
-        // email_taskCommented          : 0 
-        
+        // email_taskCommented          : 0
+
+    }
+
+    /**
+     * Get Logged in User Profile.
+     *
+     * @return JsonResponse
+     */
+    public function profile()
+    {
+        $makeVisible = array(
+            'country_code',
+            'phone',
+            'card_brand',
+            'card_last_four',
+            'card_country',
+            'billing_address',
+            'billing_address_line_2',
+            'billing_city',
+            'billing_zip',
+            'billing_country',
+            'extra_billing_information',
+        );
+        $user = Auth::user()->makeVisible($makeVisible);
+        return response()->json(['user' => $user]);
     }
 
     public function sendAllToAllUser($userIds, $request)
