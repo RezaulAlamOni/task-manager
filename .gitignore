@@ -4,7 +4,6 @@
 !public/.htaccess
 !public/index.php
 !public/robots.txt
-!public/
 /storage/*.key
 /vendor
 /.idea
