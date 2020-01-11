@@ -131,7 +131,13 @@ Route::post('/send-mail', 'HomeController@userMail');
 Route::post('/firebase-insert-update', 'FirbaseController@AddFcmToken')->name('FcmTokenInsertOrUpdate');
 
 // User Information Routes
+Route::get('/get-info', 'ProfileController@show');
+Route::get('/get-card-info', 'ProfileController@showCardInfo');
+Route::get('/get-billing-info', 'ProfileController@showBillingInfo');
 Route::get('/profile', 'HomeController@profile'); // User Profile
+Route::post('/update-profile', 'ProfileController@update');
+Route::post('/update-card-info', 'ProfileController@updateCardInfo');
+Route::post('/update-billing-info', 'ProfileController@updateBillingInfo');
 
 //Get All Notifications
 Route::get('/get-notifications', 'EmailNotificationController@getAllNotifications');

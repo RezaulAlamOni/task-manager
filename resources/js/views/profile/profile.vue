@@ -42,15 +42,8 @@
                     <div class="col-8">
                       <div class="card">
                         <div class="card-header bg-secondary text-white">
-                          Personal Information
-                          <a
-                            class="float-right profile-edit"
-                            data-toggle="modal"
-                            data-target="#personal_info"
-                            @click="getProfile"
-                          >
-                            <i class="fal fa-edit" aria-hidden="true"></i>
-                          </a>
+                          <span>Personal Information</span>
+                          <i class="fal fa-edit float-right personal-info" aria-hidden="true"></i>
                         </div>
                         <div class="card-body">
                           <div class="row ml-2">
@@ -88,17 +81,7 @@
                         </div>
                       </div>
                       <div class="card">
-                        <div class="card-header bg-secondary text-white">
-                          Card Information
-                          <a
-                            class="float-right profile-edit"
-                            data-toggle="modal"
-                            data-target="#card_info"
-                            @click="getCardInfo"
-                          >
-                            <i class="fal fa-edit" aria-hidden="true"></i>
-                          </a>
-                        </div>
+                        <div class="card-header bg-secondary text-white">Card Information</div>
                         <div class="card-body">
                           <div class="row ml-2">
                             <div class="col-md-12">
@@ -125,17 +108,7 @@
                         </div>
                       </div>
                       <div class="card">
-                        <div class="card-header bg-secondary text-white">
-                          Billing Information
-                          <a
-                            class="float-right profile-edit"
-                            data-toggle="modal"
-                            data-target="#billing_info"
-                            @click="getBillingInfo"
-                          >
-                            <i class="fal fa-edit" aria-hidden="true"></i>
-                          </a>
-                        </div>
+                        <div class="card-header bg-secondary text-white">Billing Information</div>
                         <div class="card-body">
                           <div class="row ml-2">
                             <div class="col-md-12">
@@ -198,26 +171,14 @@
         </div>
       </section>
     </div>
-    <editModal
-      :personalInfo="userInfo"
-      :cardInfo="cardInfo"
-      :billingInfo="billingInfo"
-      @profileInfoUpdate="getUser"
-    ></editModal>
   </div>
 </template>
 <script>
-import edit from "./edit";
 export default {
-  components: {
-    editModal: edit
-  },
+  components: {},
   data() {
     return {
-      profile: {},
-      userInfo: {},
-      cardInfo: {},
-      billingInfo: {}
+      profile: {}
     };
   },
   created() {
@@ -236,45 +197,10 @@ export default {
         .catch(error => {
           console.log(error);
         });
-    },
-    getProfile() {
-      let _this = this;
-      axios
-        .get("/api/get-info")
-        .then(response => response.data)
-        .then(response => {
-          _this.userInfo = response;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-    getCardInfo() {
-      let _this = this;
-      axios
-        .get("/api/get-card-info")
-        .then(response => response.data)
-        .then(response => {
-          _this.cardInfo = response.data;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-    getBillingInfo() {
-      let _this = this;
-      axios
-        .get("/api/get-billing-info")
-        .then(response => response.data)
-        .then(response => {
-          _this.billingInfo = response.data;
-        })
-        .catch(error => {
-          console.log(error);
-        });
     }
-    // return response()->json(Schema::getColumnListing('task_lists'));
   },
   watch: {}
 };
 </script>
+<style>
+</style>

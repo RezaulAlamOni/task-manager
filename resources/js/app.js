@@ -1,4 +1,3 @@
-
 /*
  |--------------------------------------------------------------------------
  | Laravel Spark Bootstrap
@@ -14,23 +13,31 @@
  |
  */
 
-require('spark-bootstrap');
-require('./components/bootstrap');
-window.Vue = require('vue');
+require("spark-bootstrap");
+require("./components/bootstrap");
+window.Vue = require("vue");
 
-let invoice = require('./components/invoice.vue');
+// import plugin
+import VueToastr from "vue-toastr";
+// use plugin
+Vue.use(VueToastr, {
+    /* OverWrite Plugin Options if you need */
+});
 
-let projects = require('./views/project/index.vue');
+let invoice = require("./components/invoice.vue");
 
-require('./bootstrap');
+let projects = require("./views/project/index.vue");
 
-import router from './routes'
+require("./bootstrap");
+
+import router from "./routes";
 
 var app = new Vue({
     router,
-    mixins: [require('spark')],
+    mixins: [require("spark")],
     components: {
-        invoice,projects
+        invoice,
+        projects
     }
 });
-    // .$mount('#project');
+// .$mount('#project');

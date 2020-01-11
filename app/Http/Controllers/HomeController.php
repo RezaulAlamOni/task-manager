@@ -126,9 +126,8 @@ class HomeController extends Controller
                 }
             }
         }
-
         return $this->sendAllToAllUser($userIds, $request);        
-        
+
         // emailFreq_everydayUpdate     : 0
         // emailFreq_dailyReport        : 0
         // emailFreq_weeklyReport       : 0
