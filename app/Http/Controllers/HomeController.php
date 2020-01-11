@@ -39,7 +39,6 @@ class HomeController extends Controller
         $team_id = Auth::user()->current_team_id;
         $Projects = Project::where('team_id', $team_id)->get();
 
-
         return view('home', ['projects' => $Projects]);
     }
 
@@ -108,6 +107,7 @@ class HomeController extends Controller
         foreach ($userIds as $keys => $ids) {
             $data = $this->emailNotification->getNotificationsByUser($ids);
             // echo $data->original['email_IAmOn'];
+
             if ($data->original['email_IAmOn'] == 1) {
                 if ($emails[$ids] !== '') {
                     // $comment = 'Hi, Comment Add to card.';
@@ -126,6 +126,7 @@ class HomeController extends Controller
                 }
             }
         }
+
         return $this->sendAllToAllUser($userIds, $request);        
         
         // emailFreq_everydayUpdate     : 0
