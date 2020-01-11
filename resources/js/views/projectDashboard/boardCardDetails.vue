@@ -915,6 +915,7 @@
                             subject : "Date updated",
                             body    : "Date is updated of a task that you are assigned on",
                             email    : "email_taskUpdated",
+                            generalBody : "A Card ( "+_this.selectedData.data+" ) date is updated",
                             task_id :  _this.selectedData.cardId
                         };
                         _this.sendMail(mailData);
@@ -951,6 +952,7 @@
                         subject : "Description updated",
                         body    : "Description updated of a task that you are assigned on",
                         email    : "email_descriptionUpdated",
+                        generalBody : "A Card description is updates",
                         task_id :  _this.selectedData.cardId
                     };
                     _this.sendMail(mailData);
@@ -1117,6 +1119,7 @@
                         subject : "You are mentioned in a comment",
                         body    : "You are mentioned in a comment",
                         email    : "email_commentLeft",
+                        generalBody : "A comment is added to a card ( "+_this.selectedData.data+" ) ",
                         user_id :  mailUsers,
                         task_id :  id
                     };
@@ -1712,6 +1715,7 @@
                         subject : "You are mentioned in a comment reply",
                         body    : "You are mentioned in a comment reply",
                         email    : "email_commentLeft",
+                        generalBody : "A comment reply added",
                         user_id :  mailUsers,
                         task_id :  task_id
                     };

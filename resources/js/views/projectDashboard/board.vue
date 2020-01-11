@@ -320,7 +320,7 @@
                                                                     </div>
                                                                     <a :id="'remove-assign-user'+user.id"
                                                                        v-if="card.assigned_user_ids.includes(user.id)"
-                                                                       @click="removeAssignedUser(user.id, card)"
+                                                                       @click="removeAssignedUser(user, card)"
                                                                        data-toggle="tooltip"
                                                                        title="Remove user from assigned !"
                                                                        class="remove-assign-user badge badge-danger"
@@ -1970,8 +1970,8 @@
                                 let mailData = {
                                     subject : "A Card is moved to another column",
                                     body    : "A Card that you are assigned on is moved to another column",
-                                    generalBody : "A Card is moved to another column",
                                     email   : "email_taskUpdated",
+                                    generalBody : "A Card is moved to another column",
                                     task_id : dropResult.payload.cardId
                                 };
                                 _this.sendMail(mailData);
@@ -2960,6 +2960,7 @@
                                 subject : "Card updated",
                                 body    : "Card is updated that you are assigned on",
                                 email   : "email_taskUpdated",
+                                generalBody : "A Card title is updates",
                                 task_id :  data.cardId
                             };
                             _this.sendMail(mailData);
@@ -2990,6 +2991,7 @@
                                 subject : "Card date updated",
                                 body    : "A card date is updated that you are assigned on",
                                 email   : "email_taskUpdated",
+                                generalBody : "A Card date is updated",
                                 task_id :  card.cardId
                             };
                             _this.sendMail(mailData);
@@ -3285,11 +3287,11 @@
                     // e.target.setSelectionRange(0, card.text.length);
                 }
             },
-            removeAssignedUser(user_id, card) {
+            removeAssignedUser(user, card) {
                 // console.log(user.id, user.task_id);
                 var _this = this;
                 var postData = {
-                    user_id: user_id,
+                    user_id: user.id,
                     task_id: card.cardId
                 };
                 // console.log(postData)
@@ -3306,7 +3308,8 @@
                                 subject : "Removed from a card",
                                 body    : "You are removed from a card that you are assigned on.",
                                 email   : "email_whenRemovedFromTask",
-                                user_id :  user_id
+                                generalBody : user.name+" is removed from a card ("+card.data+") ",
+                                user_id :  user.id
                             };
                             _this.sendMail(mailData);
                         }
@@ -3334,6 +3337,7 @@
                                 subject : "Added to a card",
                                 body    : "You are assigned on a card",
                                 email   : "email_whenAddedToTask",
+                                generalBody : "A Card ( "+data.data+" ) is assigned to "+user.name,
                                 user_id :  user.id
                             };
                             _this.sendMail(mailData);

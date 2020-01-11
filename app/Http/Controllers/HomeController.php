@@ -103,10 +103,10 @@ class HomeController extends Controller
                 }
             }
         }
+        
         foreach ($userIds as $keys => $ids) {
             $data = $this->emailNotification->getNotificationsByUser($ids);
-
-            //echo $data->original['email_IAmOn'];
+            // echo $data->original['email_IAmOn'];
 
             if ($data->original['email_IAmOn'] == 1) {
                 if ($emails[$ids] !== '') {
@@ -126,9 +126,9 @@ class HomeController extends Controller
                 }
             }
         }
-        // return $this->sendAllToAllUser($userIds, $request);
-        return $mails;
 
+        return $this->sendAllToAllUser($userIds, $request);        
+        
         // emailFreq_everydayUpdate     : 0
         // emailFreq_dailyReport        : 0
         // emailFreq_weeklyReport       : 0
@@ -173,8 +173,25 @@ class HomeController extends Controller
     }
 
     public function sendAllToAllUser($userIds, $request)
-    {   
-        // $team_id = Auth::user()->current_team_id;
-        // return $data = Team::where('team_id', $team_id)->with(['user'])->get();
+    {       
+        $comment = [];
+        $mails = [];
+        $team_id = Auth::user()->current_team_id;
+        $data = Team::with(['team_users.notifications', 'team_users' => function ($q) {
+            $q->whereHas('notifications', function($q) {
+                $q->where('unique_id','email_everything');
+            });
+        }
+        ])->find($team_id);
+        foreach ($data->team_users as $key => $value) {
+            // return $value->notifications->toArray(); //array_search('email_everything', array_column($value->notifications->toArray(), 'unique_id'));
+            $emails = $value->email; // array_search('email_everything', array_column($value->notifications->toArray(), 'unique_id'));
+            $comment['subject'] = $request->subject;
+            $comment['body'] = $request->generalBody;
+            $mails[] = Mail::to($emails)->send(new UserMail($comment));
+            if (array_search('email_everything', array_column($value->notifications->toArray(), 'unique_id')) ) {
+                // return $request->generalBody;
+            }
+        }
     }
 }
