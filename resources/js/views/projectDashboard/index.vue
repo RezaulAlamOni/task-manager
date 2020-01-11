@@ -319,11 +319,11 @@
 
                                     </div>
                                     <a class="description-icon hide-item-res" v-if="data.description !== ''">
-                                        <i class="fal fa-align-justify opecity_additional" aria-hidden="true"></i>
+                                        <i class="fal fa-align-justify opacity_additional" aria-hidden="true"></i>
                                     </a>
                                     <a class="comment-icon hide-item-res" v-if="data.comment.length > 0">
                                         <!--v-if="data.comment.length > 0"-->
-                                        <i class="fal fa-comments opecity_additional" aria-hidden="true"></i>
+                                        <i class="fal fa-comments opacity_additional" aria-hidden="true"></i>
                                     </a>
 
                                     <a class="attach-icon hide-item-res" style="width: auto !important;">
