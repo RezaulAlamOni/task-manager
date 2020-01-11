@@ -39,7 +39,6 @@ class HomeController extends Controller
         $team_id = Auth::user()->current_team_id;
         $Projects = Project::where('team_id', $team_id)->get();
 
-
         return view('home', ['projects' => $Projects]);
     }
 
@@ -69,6 +68,7 @@ class HomeController extends Controller
     {
         $emails = [];
         $userIds = [];
+        $mails = [];
         $emailCond = $request->email;
         if (isset($request->task_id) && $request->task_id !== '') {
             $users = AssignedUser::where('task_id', $request->task_id)->with(['users'])->get();
@@ -103,18 +103,30 @@ class HomeController extends Controller
                 }
             }
         }
+        
         foreach ($userIds as $keys => $ids) {
             $data = $this->emailNotification->getNotificationsByUser($ids);
-            if ($data->original[$emailCond] == 1) {
+            // echo $data->original['email_IAmOn'];
+
+            if ($data->original['email_IAmOn'] == 1) {
                 if ($emails[$ids] !== '') {
                     // $comment = 'Hi, Comment Add to card.';
                     $comment['subject'] = $request->subject;
                     $comment['body'] = $request->body;
-                    Mail::to($emails[$ids])->send(new UserMail($comment));
+                    $mails[] = Mail::to($emails[$ids])->send(new UserMail($comment));
+                }
+            } else {
+                if ($data->original[$emailCond] == 1) {
+                    if ($emails[$ids] !== '') {
+                        // $comment = 'Hi, Comment Add to card.';
+                        $comment['subject'] = $request->subject;
+                        $comment['body'] = $request->body;
+                        $mails[] = Mail::to($emails[$ids])->send(new UserMail($comment));
+                    }
                 }
             }
         }
-
+        return $this->sendAllToAllUser($userIds, $request);        
 
         // emailFreq_everydayUpdate     : 0
         // emailFreq_dailyReport        : 0
@@ -157,5 +169,28 @@ class HomeController extends Controller
         );
         $user = Auth::user()->makeVisible($makeVisible);
         return response()->json(['user' => $user]);
+    }
+
+    public function sendAllToAllUser($userIds, $request)
+    {       
+        $comment = [];
+        $mails = [];
+        $team_id = Auth::user()->current_team_id;
+        $data = Team::with(['team_users.notifications', 'team_users' => function ($q) {
+            $q->whereHas('notifications', function($q) {
+                $q->where('unique_id','email_everything');
+            });
+        }
+        ])->find($team_id);
+        foreach ($data->team_users as $key => $value) {
+            // return $value->notifications->toArray(); //array_search('email_everything', array_column($value->notifications->toArray(), 'unique_id'));
+            $emails = $value->email; // array_search('email_everything', array_column($value->notifications->toArray(), 'unique_id'));
+            $comment['subject'] = $request->subject;
+            $comment['body'] = $request->generalBody;
+            $mails[] = Mail::to($emails)->send(new UserMail($comment));
+            if (array_search('email_everything', array_column($value->notifications->toArray(), 'unique_id')) ) {
+                // return $request->generalBody;
+            }
+        }
     }
 }
