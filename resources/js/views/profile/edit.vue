@@ -250,6 +250,11 @@ export default {
   },
   mounted() {
     this.profile = this.personalInfo;
+    // Inject your class names for animation
+    /*
+    this.$toastr.defaultTimeout = 1000;
+    this.$toastr.s("Hello Toastr");
+    */
   },
   methods: {
     updateProfile() {
