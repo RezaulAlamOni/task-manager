@@ -41,7 +41,17 @@
                     </div>
                     <div class="col-8">
                       <div class="card">
-                        <div class="card-header bg-secondary text-white">Personal Information</div>
+                        <div class="card-header bg-secondary text-white">
+                          <span>Personal Information</span>
+                          <a
+                            class="float-right profile-edit"
+                            data-toggle="modal"
+                            data-target="#personal_info"
+                            @click="getProfile"
+                          >
+                            <i class="fal fa-edit" aria-hidden="true"></i>
+                          </a>
+                        </div>
                         <div class="card-body">
                           <div class="row ml-2">
                             <div class="col-md-12">
@@ -78,7 +88,17 @@
                         </div>
                       </div>
                       <div class="card">
-                        <div class="card-header bg-secondary text-white">Card Information</div>
+                        <div class="card-header bg-secondary text-white">
+                          Card Information
+                          <a
+                            class="float-right profile-edit"
+                            data-toggle="modal"
+                            data-target="#card_info"
+                            @click="getProfile"
+                          >
+                            <i class="fal fa-edit" aria-hidden="true"></i>
+                          </a>
+                        </div>
                         <div class="card-body">
                           <div class="row ml-2">
                             <div class="col-md-12">
@@ -168,14 +188,19 @@
         </div>
       </section>
     </div>
+    <editModal :personalInfo="userInfo" @profileInfoUpdate="getUser"></editModal>
   </div>
 </template>
 <script>
+import edit from "./edit";
 export default {
-  components: {},
+  components: {
+    editModal: edit
+  },
   data() {
     return {
-      profile: {}
+      profile: {},
+      userInfo: {}
     };
   },
   created() {
@@ -194,6 +219,18 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    getProfile() {
+      let _this = this;
+      axios
+        .get("/api/get-info")
+        .then(response => response.data)
+        .then(response => {
+          _this.userInfo = response;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
     // return response()->json(Schema::getColumnListing('task_lists'));
   },
@@ -201,7 +238,4 @@ export default {
 };
 </script>
 <style>
-.card-header b {
-  font-size: 25px;
-}
 </style>

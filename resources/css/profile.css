@@ -90,3 +90,7 @@
     font-weight: 600;
     color: #0062cc;
 }
+.profile-edit:hover {
+    cursor: pointer;
+    color: rgb(133, 189, 133) !important;
+}

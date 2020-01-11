@@ -21,6 +21,7 @@ class User extends SparkUser implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
+        'phone',
     ];
 
     /**

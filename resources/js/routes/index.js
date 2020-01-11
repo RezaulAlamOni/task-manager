@@ -1,83 +1,78 @@
-
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
-import Index from '../views/project/index'
-import projectDashboard from '../views/projectDashboard/index'
-import projectBoard from '../views/projectDashboard/board'
-import addProject from '../views/project/edit'
-import Rules from '../views/Rules/index/index'
-import Profile from '../views/profile/index'
-import ProfileEdit from '../views/profile/edit'
-import Notification from '../views/notification/index'
-import NotificationSettings from '../views/notification/settings'
-import NotificationCreate from '../views/notification/add'
-
+import Vue from "vue";
+import VueRouter from "vue-router";
+Vue.use(VueRouter);
+import Index from "../views/project/index";
+import projectDashboard from "../views/projectDashboard/index";
+import projectBoard from "../views/projectDashboard/board";
+import addProject from "../views/project/edit";
+import Rules from "../views/Rules/index/index";
+import Profile from "../views/profile/index";
+import ProfileEdit from "../views/profile/edit";
+import Notification from "../views/notification/index";
+import NotificationSettings from "../views/notification/settings";
+import NotificationCreate from "../views/notification/add";
 
 let routes = [
-
     // { path: '*', redirect: '/projects' },
     {
-        path: '/projects',
+        path: "/projects",
         component: Index
     },
     {
-        path: '/project/create',
+        path: "/project/create",
         component: addProject,
-        name : 'project-create'
+        name: "project-create"
     },
     {
-        path: '/project/:uuid/edit',
+        path: "/project/:uuid/edit",
         component: addProject,
-        name : 'project-edit'
+        name: "project-edit"
     },
     {
-        path: '/project-dashboard/:projectId',
+        path: "/project-dashboard/:projectId",
         component: projectDashboard,
-        name : 'project-dashboard'
-
+        name: "project-dashboard"
     },
     {
-        path: '/project-board/:projectId',
+        path: "/project-board/:projectId",
         component: projectBoard,
-        name : 'project-board'
+        name: "project-board"
     },
     {
-        path: '/project-board/:projectId/rules',
+        path: "/project-board/:projectId/rules",
         component: Rules,
-        name : 'Rules'
+        name: "Rules"
     },
     {
-        path: '/profile',
+        path: "/profile",
         component: Profile,
-        name: 'Profile'
+        name: "Profile"
     },
     {
-        path: '/profile/edit',
+        path: "/profile/edit",
         component: ProfileEdit,
-        name: 'ProfileEdit'
+        name: "ProfileEdit"
     },
     {
-        path: '/notification',
+        path: "/notification",
         component: Notification,
-        name: 'Notification'
+        name: "Notification"
     },
     {
-        path: '/notification-settings',
+        path: "/notification-settings",
         component: NotificationSettings,
-        name: 'NotificationSettings'
+        name: "NotificationSettings"
     },
     {
-        path: '/notifications/create',
+        path: "/notifications/create",
         component: NotificationCreate,
-        name: 'NotificationCreate'
-    },
+        name: "NotificationCreate"
+    }
 ];
 
 const router = new VueRouter({
-    mode:'history',
+    mode: "history",
     routes
 });
-
 
 export default router;
