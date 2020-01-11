@@ -22,6 +22,9 @@ class User extends SparkUser implements MustVerifyEmail
         'name',
         'email',
         'phone',
+        'card_brand',
+        'card_last_four',
+        'card_country',
     ];
 
     /**

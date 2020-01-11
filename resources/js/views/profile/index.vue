@@ -42,7 +42,7 @@
                     <div class="col-8">
                       <div class="card">
                         <div class="card-header bg-secondary text-white">
-                          <span>Personal Information</span>
+                          Personal Information
                           <a
                             class="float-right profile-edit"
                             data-toggle="modal"
@@ -94,7 +94,7 @@
                             class="float-right profile-edit"
                             data-toggle="modal"
                             data-target="#card_info"
-                            @click="getProfile"
+                            @click="getCardInfo"
                           >
                             <i class="fal fa-edit" aria-hidden="true"></i>
                           </a>
@@ -125,7 +125,17 @@
                         </div>
                       </div>
                       <div class="card">
-                        <div class="card-header bg-secondary text-white">Billing Information</div>
+                        <div class="card-header bg-secondary text-white">
+                          Billing Information
+                          <a
+                            class="float-right profile-edit"
+                            data-toggle="modal"
+                            data-target="#billing_info"
+                            @click="getBillingInfo"
+                          >
+                            <i class="fal fa-edit" aria-hidden="true"></i>
+                          </a>
+                        </div>
                         <div class="card-body">
                           <div class="row ml-2">
                             <div class="col-md-12">
@@ -188,7 +198,12 @@
         </div>
       </section>
     </div>
-    <editModal :personalInfo="userInfo" @profileInfoUpdate="getUser"></editModal>
+    <editModal
+      :personalInfo="userInfo"
+      :cardInfo="cardInfo"
+      :billingInfo="billingInfo"
+      @profileInfoUpdate="getUser"
+    ></editModal>
   </div>
 </template>
 <script>
@@ -200,7 +215,9 @@ export default {
   data() {
     return {
       profile: {},
-      userInfo: {}
+      userInfo: {},
+      cardInfo: {},
+      billingInfo: {}
     };
   },
   created() {
@@ -227,6 +244,30 @@ export default {
         .then(response => response.data)
         .then(response => {
           _this.userInfo = response;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getCardInfo() {
+      let _this = this;
+      axios
+        .get("/api/get-card-info")
+        .then(response => response.data)
+        .then(response => {
+          _this.cardInfo = response.data;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getBillingInfo() {
+      let _this = this;
+      axios
+        .get("/api/get-billing-info")
+        .then(response => response.data)
+        .then(response => {
+          _this.billingInfo = response.data;
         })
         .catch(error => {
           console.log(error);
