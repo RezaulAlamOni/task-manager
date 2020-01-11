@@ -18,7 +18,6 @@ class CreateEmailAndNotificationsTable extends Migration
             $table->bigInteger('parent_id')->nullable();
             $table->string('title');
             $table->string('unique_id');
-            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }
