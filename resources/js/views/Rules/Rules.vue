@@ -8,7 +8,7 @@
                                 @click="ShowAddRulesPanel">
                             Create Rule
                         </button>
-                        <button v-else-if="rules_action === 'update' || rules_action === 'create'" type="submit"
+                        <button v-else-if="rules_action === 'update' || rules_action === 'create'" type="submit" style="float: right;"
                                 @click="AllRules" class="btn btn-primary pull-right">
                             All Rules
                         </button>
