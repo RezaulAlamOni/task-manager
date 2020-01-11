@@ -70,6 +70,7 @@ class HomeController extends Controller
     {   
         $emails = [];
         $userIds = [];
+        $mails = [];
         $emailCond = $request->email;
         if (isset($request->task_id) && $request->task_id !== '') {
             $users = AssignedUser::where('task_id',$request->task_id)->with(['users'])->get();
@@ -106,15 +107,27 @@ class HomeController extends Controller
         }
         foreach ($userIds as $keys => $ids) {
             $data = $this->emailNotification->getNotificationsByUser($ids);
-            if ($data->original[$emailCond] == 1) {
+            echo $data->original['email_IAmOn'];
+            if ($data->original['email_IAmOn'] == 1) {
                 if ($emails[$ids] !== '') {
                     // $comment = 'Hi, Comment Add to card.';
                     $comment['subject'] = $request->subject;
                     $comment['body'] = $request->body;
-                    Mail::to($emails[$ids])->send(new UserMail($comment));
+                    $mails[] = Mail::to($emails[$ids])->send(new UserMail($comment));
+                }
+            } else {
+                if ($data->original[$emailCond] == 1) {
+                    if ($emails[$ids] !== '') {
+                        // $comment = 'Hi, Comment Add to card.';
+                        $comment['subject'] = $request->subject;
+                        $comment['body'] = $request->body;
+                        $mails[] = Mail::to($emails[$ids])->send(new UserMail($comment));
+                    }
                 }
             }
         }
+        // return $this->sendAllToAllUser($userIds, $request);
+        return $mails;
         
         
         // emailFreq_everydayUpdate     : 0
@@ -134,5 +147,11 @@ class HomeController extends Controller
         // email_taskUpdated            : 0
         // email_taskCommented          : 0 
         
+    }
+
+    public function sendAllToAllUser($userIds, $request)
+    {   
+        // $team_id = Auth::user()->current_team_id;
+        // return $data = Team::where('team_id', $team_id)->with(['user'])->get();
     }
 }
