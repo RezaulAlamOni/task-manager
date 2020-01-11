@@ -62,4 +62,9 @@ class User extends SparkUser implements MustVerifyEmail
     {
         return $this->belongsToMany( EmailAndNotification::class, 'notification_user', 'user_id', 'notification_id')->withTimestamps();
     }
+
+    public function user_teams()
+    {
+        return $this->belongsToMany(Team::class, 'team_users','user_id','team_id');
+    }
 }

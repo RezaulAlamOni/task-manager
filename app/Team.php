@@ -6,11 +6,11 @@ use Laravel\Spark\Team as SparkTeam;
 
 class Team extends SparkTeam
 {
-    // protected $table = 'team_users';
+    protected $table = 'teams';
 
-    // public function users()
-    // {
-    //     return $this->hasMany(User::class, 'id','user_id')->with('notifications');
-    // }
+    public function team_users()
+    {
+        return $this->belongsToMany(User::class, 'team_users','team_id','user_id');
+    }
 
 }
