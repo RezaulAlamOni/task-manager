@@ -1967,6 +1967,14 @@
                                     $('#loader').modal('hide');
 
                                 }, 500);
+                                let mailData = {
+                                    subject : "A Card is moved to another column",
+                                    body    : "A Card that you are assigned on is moved to another column",
+                                    generalBody : "A Card is moved to another column",
+                                    email   : "email_taskUpdated",
+                                    task_id : dropResult.payload.cardId
+                                };
+                                _this.sendMail(mailData);
                                 // console.log('shifted');
                             })
                             .catch(error => {
