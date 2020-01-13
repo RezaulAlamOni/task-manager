@@ -495,7 +495,7 @@
                                                                 </div>
                                                                 <a :id="'remove-assign-user'+user.id"
                                                                    v-if="data.assigned_user_ids.includes(user.id)"
-                                                                   @click="removeAssignedUser(user.id, data.id)"
+                                                                   @click="removeAssignedUser(user, data)"
                                                                    data-toggle="tooltip"
                                                                    title="Remove user from assigned !"
                                                                    class="remove-assign-user badge badge-danger"
@@ -1912,6 +1912,13 @@
                     task_id: data.id,
                     user_id: user.id
                 };
+                let mailData = {
+                        subject : "A task is assigned ",
+                        body    : "A task ( "+data.text+" ) is assigned to you.",
+                        email   : "email_whenAddedToTask",
+                        generalBody : "A task ( "+data.text+" ) is assigned to  "+user.name,
+                        user_id     : user.id
+                };
                 axios.post('/api/task-list/assign-user', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -1923,20 +1930,27 @@
                         })
                         _this.getTaskList();
                         _this.$toastr.s("User Assign success !");
+                        _this.sendMail(mailData);
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
                     });
             },
-            removeAssignedUser(user_id, task_id) {
+            removeAssignedUser(user, data) {
 
                 // console.log(user.id, user.task_id);
                 var _this = this;
                 var postData = {
-                    user_id: user_id,
-                    task_id: task_id
+                    user_id: user.id,
+                    task_id: data.id
                 };
-
+                let mailData = {
+                        subject : "A task is unassigned ",
+                        body    : "A task ( "+data.text+" ) is unassigned from you.",
+                        email   : "email_whenAddedToTask",
+                        generalBody : "A task ( "+data.text+" ) is unassigned from  "+user.name,
+                        user_id     : user.id
+                };
                 axios.post('/api/task-list/assign-user-remove', postData)
                     .then(response => response.data)
                     .then(response => {
@@ -1950,6 +1964,7 @@
                                 user_id: _this.authUser.id
                             })
                             _this.$toastr.w("User Assign Removed !");
+                            _this.sendMail(mailData);
                         }
                     })
                     .catch(error => {
@@ -3633,7 +3648,14 @@
                     id: data.id,
                     text: (data.text === null) ? '' : data.text,
                 };
-                // console.log(postData)
+                let mailData = {
+                        subject : "Task title is updated",
+                        body    : "A task title is updated to ( "+data.text+" ) that you are assigned on.",
+                        email   : "email_titleChanged",
+                        generalBody : "A task title is updated to ( "+data.text+" )",
+                        task_id : data.id
+                };
+                // console.log('update',postData)
                 if (data.text !== '') {
                     axios.post('/api/task-list/update', postData)
                         .then(response => response.data)
@@ -3648,6 +3670,7 @@
                                 if (data.text.indexOf("@") != -1 || data.text.indexOf("#") != -1) {
                                     _this.getTaskList();
                                 }
+                                _this.sendMail(mailData);
                             }
                         })
                         .catch(error => {
@@ -3730,16 +3753,26 @@
                     date: formatedDate,
                     tz: tz
                 };
+                // console.log(_this.selectedData.text);
+
+                let mailData = {
+                        subject : "Task date is updated",
+                        body    : "A task ( "+_this.selectedData.text+" ) date is updated that you are assigned on.",
+                        email   : "email_titleChanged",
+                        generalBody : "A task ( "+_this.selectedData.text+" ) date is updated ",
+                        task_id : _this.selectedData.id
+                };
                 axios.post('/api/task-list/update', postData)
                     .then(response => response.data)
                     .then(response => {
-                        _this.getTaskList()
+                        _this.getTaskList();
                         _this.Socket.emit('taskUpdate', {
                             project_id: _this.projectId,
                             list_id: _this.list.id,
                             board_id: _this.selectedData.multiple_board_id,
                             user_id: _this.authUser.id
-                        })
+                        });
+                        _this.sendMail(mailData);
                     })
                     .catch(error => {
                         console.log('Api for task date update not Working !!!')
@@ -3951,9 +3984,17 @@
                         this.userIdList.push(allUsers[i].id);
                     }
                 }
+            },
+            sendMail(data){
+                axios.post('/api/send-mail/',data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+
+                });
             }
-
-
         },
         directives: {
             ClickOutside
