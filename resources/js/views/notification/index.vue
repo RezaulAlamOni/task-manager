@@ -81,7 +81,7 @@ export default {
           }, 400);
         })
         .catch(error => {
-          console.log(error);
+          // console.log(error);
         });
     },
     setNotification(id, value) {
@@ -92,25 +92,31 @@ export default {
         })
         .then(response => response.data)
         .then(response => {
-          console.log(response);
+          // console.log(response);
+          _this.getAllNotifications();
         })
         .catch(error => {
-          console.log(error);
+          // console.log(error);
         });
     },
     changeFunc() {
       let _this = this;
+      let count = 1;
       _this.notifications.forEach(function(value, index) {
         value.children.forEach((child_v, child_i) => {
-          // console.log(child_v.unique_id);
+          // console.log('Model '+_this.notifications[index].children[child_i].user);
           $("#" + child_v.unique_id).change(function() {
-            _this.notifications[index].children[child_i].user = !_this
-              .notifications[index].children[child_i].user;
-            _this.setNotification(
-              child_v.id,
-              _this.notifications[index].children[child_i].user
-            );
-            console.log(_this.notifications[index].children[child_i].user);
+            console.log(child_v.unique_id);
+          // console.log($(this).val());
+            if (count === 1) {
+              _this.notifications[index].children[child_i].user = !_this.notifications[index].children[child_i].user;
+              _this.setNotification(
+                child_v.id,
+                _this.notifications[index].children[child_i].user
+              );
+              count++;
+            }
+            // console.log(_this.notifications[index].children[child_i].user);
           });
         });
       });
