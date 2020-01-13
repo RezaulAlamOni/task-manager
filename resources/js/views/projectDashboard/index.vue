@@ -1949,7 +1949,7 @@
                                 board_id: _this.selectedData.multiple_board_id,
                                 user_id: _this.authUser.id
                             })
-                            _this.$toastr.s("User Assign Removed !");
+                            _this.$toastr.w("User Assign Removed !");
                         }
                     })
                     .catch(error => {
@@ -2537,6 +2537,7 @@
                             list_id: postData.list_id,
                             user_id: _this.authUser.id
                         })
+                        _this.$toastr.s("Unmake child !");
                     })
                     .catch(error => {
                         console.log('Api is task-unmake-child not Working !!!')
@@ -2629,6 +2630,7 @@
                                 board_id: _this.selectedData.multiple_board_id,
                                 user_id: _this.authUser.id
                             })
+                            _this.$toastr.s("Tag added to task Success !");
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
@@ -2652,6 +2654,7 @@
                                 board_id: _this.selectedData.multiple_board_id,
                                 user_id: _this.authUser.id
                             })
+                            _this.$toastr.w("Tag remove from task Success !");
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
@@ -2685,6 +2688,7 @@
                         // $('#dropdown' + data._id).toggle();
                         // _this.selectedData = data
                         _this.tag = null
+                        _this.$toastr.s("Tag remove from task Success !");
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
@@ -2704,6 +2708,7 @@
                             _this.manageTag = response.tags;
                             _this.getTaskList();
                             _this.tag = null
+                            _this.$toastr.i("Tag name updated!");
                         })
                         .catch(error => {
                             console.log('Api for update tag not Working !!!')
@@ -2727,6 +2732,7 @@
                         _this.manageTag = response.tags;
                         _this.getTaskList();
                         _this.tag = null
+                        _this.$toastr.w("Tag Deleted!");
                     })
                     .catch(error => {
                         console.log('Api for delete tag not Working !!!')
@@ -2751,6 +2757,7 @@
                             board_id: _this.selectedData.multiple_board_id,
                             user_id: _this.authUser.id
                         })
+                        _this.$toastr.i("Task Description updatd");
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
@@ -2784,6 +2791,7 @@
                                         board_id: _this.selectedData.multiple_board_id,
                                         user_id: _this.authUser.id
                                     })
+                                    _this.$toastr.i("task Added to complete list!");
                                     // swal("Complete!", "This task is added to complete", "success");
                                 } else if (response.status === 2) {
                                     swal("Sorry!", "The board dont have any 100% progress column !!", "warning");
@@ -2902,6 +2910,7 @@
                                     board_id    : _this.selectedData.multiple_board_id,
                                     user_id     : _this.authUser.id
                                 })
+                                _this.$toastr.s("Successfully delete task !");
                                 // swal("Deleted!", "Successfully delete task !", "success");
                             })
                             .catch(error => {
@@ -2936,6 +2945,7 @@
                                 board_id    : _this.selectedData.multiple_board_id,
                                 user_id     : _this.authUser.id
                             })
+                            _this.$toastr.s("Successfully update task !");
                         })
                         .catch(error => {
                             console.log('Api for delete task not Working !!!')
@@ -3004,6 +3014,7 @@
 
                                 // swal("Deleted!", "Successfully delete selected task !", "success");
                                 swal.close();
+                                _this.$toastr.i("Successfully delete selected task ");
                                 _this.Socket.emit('taskUpdate',{
                                     project_id  : _this.projectId,
                                     list_id     : _this.list.id,
@@ -3241,6 +3252,7 @@
                             board_id    : _this.selectedData.multiple_board_id,
                             user_id     : _this.authUser.id
                         })
+                        _this.$toastr.i("Successfully Update List");
                     })
                     .catch(error => {
                         console.log('Add list api not working!!')
@@ -3271,6 +3283,7 @@
                                 board_id    : _this.selectedData.multiple_board_id,
                                 user_id     : _this.authUser.id
                             })
+                            _this.$toastr.w("Successfully Deleted List");
                         })
                         .catch(error => {
 
@@ -3313,7 +3326,8 @@
                                         axios.post('/api/board-list-delete', data)
                                             .then(response => response.data)
                                             .then(response => {
-                                                swal("Complete!", "This List is deleted successfully !", "success");
+                                                _this.$toastr.i("This List is deleted successfully !");
+                                                // swal("Complete!", "This List is deleted successfully !", "success");
                                                 window.location.href = '/project-dashboard/' + _this.projectId;
                                             })
                                             .catch(error => {
@@ -3338,7 +3352,8 @@
                                         axios.post('/api/board-list-delete', data)
                                             .then(response => response.data)
                                             .then(response => {
-                                                swal("Complete!", "This List is deleted successfully !", "success");
+                                                // swal("Complete!", "This List is deleted successfully !", "success");
+                                                _this.$toastr.s("This List is deleted successfully !");
                                                 window.location.href = '/project-dashboard/' + _this.projectId;
                                                 _this.Socket.emit('taskUpdate',{
                                                     project_id  : _this.projectId,
@@ -3368,7 +3383,8 @@
                                 axios.post('/api/board-list-delete', {type: type, id: _this.list_id, action: action})
                                     .then(response => response.data)
                                     .then(response => {
-                                        swal("Complete!", "This List is deleted successfully !", "success");
+                                        _this.$toastr.s("This List is deleted successfully !");
+                                        // swal("Complete!", "This List is deleted successfully !", "success");
                                         window.location.href = '/project-dashboard/' + _this.projectId;
                                     })
                                     .catch(error => {
@@ -3445,6 +3461,7 @@
                         })
                             .then(response => response.data)
                             .then(response => {
+                                _this.$toastr.w("This List is deleted & move successfully !");
                                 _this.Socket.emit('taskUpdate', {
                                     project_id: _this.projectId,
                                     list_id: _this.list.id,
@@ -3481,6 +3498,7 @@
                             .then(response => response.data)
                             .then(response => {
                                 // swal("Complete!", "All Selected task are moved !", "success");
+                                _this.$toastr.i("Task are moved successfully !");
                                 swal.close();
                                 _this.getTaskList()
                                 _this.Socket.emit('taskUpdate', {
@@ -3525,6 +3543,7 @@
                                     board_id: _this.selectedSubList,
                                     user_id: _this.authUser.id
                                 })
+                                _this.$toastr.s("Successfully past task !");
                             })
                             .catch(error => {
                                 console.log('Add list api not working!!')
@@ -3556,7 +3575,8 @@
                                     list_id: _this.list.id,
                                     user_id: _this.authUser.id
                                 })
-                                swal("Complete!", "This " + _this.type_T + " is Moved Successfully !", "success");
+                                // swal("Complete!", "This " + _this.type_T + " is Moved Successfully !", "success");
+                                _this.$toastr.s("Successfully moved task !");
                                 window.location.href = '/project-dashboard/' + _this.projectId;
                             })
                             .catch(error => {
@@ -3584,6 +3604,7 @@
                         setTimeout(() => {
                             $('#transToNav').modal('show');
                         }, 300);
+                        _this.$toastr.s("Successfully moved List !");
                     })
                     .catch(error => {
 
@@ -3749,6 +3770,7 @@
                             user_id: _this.authUser.id,
                             type : 'Upload Photo'
                         })
+                        _this.$toastr.s("Successfully added file !");
                         _this.getTaskList()
                     })
                     .catch(error => {
@@ -3769,6 +3791,7 @@
                         })
                         _this.getTaskList();
                         $("#imageModal").modal('hide');
+                        _this.$toastr.w("Successfully remove file !");
                     })
                     .catch(error => {
                         console.log('Api for task date update not Working !!!')
@@ -3792,7 +3815,8 @@
                         })
                         _this.getTaskList();
                         _this.selectedIds = [];
-                        $('.jquery-accordion-menu').hide();
+                        $('.jquery-accordion-menu').hide()
+                        _this.$toastr.s("Successfully added priority !");
                     })
                     .catch(error => {
                         console.log('Api for task add priority not Working !!!')
@@ -3817,6 +3841,7 @@
                         _this.getTaskList();
                         _this.selectedIds = [];
                         $('.jquery-accordion-menu').hide();
+                        _this.$toastr.s("Successfully remove priority !");
                     })
                     .catch(error => {
                         console.log('Api for task add priority not Working !!!')
