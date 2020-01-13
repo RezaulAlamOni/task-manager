@@ -427,7 +427,7 @@ class TaskController extends Controller
                     $data['multiple_board_id'] = $progress->multiple_board_id;
                 }
                 $task = Task::create($data);
-                $this->createLog($task->id, 'created', 'Create task', $task->title == '' ? 'Epmty Task' : $task->title);
+                $this->createLog($task->id, 'created', 'Create task', $task->title == '' ? 'Empty Task' : $task->title);
                 $this->updateTagWithDataMove($task->id, $request->parent_id);
                 return response()->json(['success' => $task]);
             }
@@ -945,6 +945,9 @@ class TaskController extends Controller
             $photo = $_FILES['file']['name'];
             $path = public_path() . "/storage/" . $task_id;
             if (!is_dir($path)) {
+                if (!is_dir(public_path() . "/storage")) {
+                    mkdir(public_path() . "/storage/");
+                }
                 mkdir($path);
             }
             if (move_uploaded_file($_FILES["file"]["tmp_name"], $path . "/" . $_FILES['file']['name'])) {

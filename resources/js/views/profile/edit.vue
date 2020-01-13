@@ -143,7 +143,7 @@
                   <input
                     type="text"
                     class="form-control"
-                    id="billing_address_line_2"
+                    id="billing_address_line_2_"
                     placeholder="Billing Address Line 2"
                     v-model="billingInfo.billing_address_line_2"
                   />
