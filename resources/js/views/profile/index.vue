@@ -305,3 +305,11 @@ export default {
   watch: {}
 };
 </script>
+<style scoped>
+.fa-edit {
+  padding: 4px;
+  border: 1px solid #333;
+  border-radius: 3px;
+  font-weight: bold;
+}
+</style>
