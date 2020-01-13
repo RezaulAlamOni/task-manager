@@ -49,7 +49,12 @@
                             data-target="#personal_info"
                             @click="getProfile"
                           >
-                            <i class="fal fa-edit" aria-hidden="true"></i>
+                            <i
+                              class="fal fa-edit"
+                              aria-hidden="true"
+                              data-toggle="tooltip"
+                              :data-original-title="profileUpdatedAt(profile.updated_at)"
+                            ></i>
                           </a>
                         </div>
                         <div class="card-body">
@@ -96,7 +101,12 @@
                             data-target="#card_info"
                             @click="getCardInfo"
                           >
-                            <i class="fal fa-edit" aria-hidden="true"></i>
+                            <i
+                              class="fal fa-edit"
+                              aria-hidden="true"
+                              data-toggle="tooltip"
+                              :data-original-title="profileUpdatedAt(profile.updated_at)"
+                            ></i>
                           </a>
                         </div>
                         <div class="card-body">
@@ -133,7 +143,12 @@
                             data-target="#billing_info"
                             @click="getBillingInfo"
                           >
-                            <i class="fal fa-edit" aria-hidden="true"></i>
+                            <i
+                              class="fal fa-edit"
+                              aria-hidden="true"
+                              data-toggle="tooltip"
+                              :data-original-title="profileUpdatedAt(profile.updated_at)"
+                            ></i>
                           </a>
                         </div>
                         <div class="card-body">
@@ -221,10 +236,22 @@ export default {
     };
   },
   created() {
+    // moment.tz.setDefault("America/New_York");
     this.getUser();
   },
   mounted() {},
   methods: {
+    profileUpdatedAt(value) {
+      console.log(moment.utc());
+      return (
+        "Profile Updated " +
+        moment
+          .utc(value)
+          .local()
+          .locale("en-short")
+          .fromNow()
+      );
+    },
     getUser() {
       let _this = this;
       axios
@@ -278,3 +305,11 @@ export default {
   watch: {}
 };
 </script>
+<style scoped>
+.fa-edit {
+  padding: 4px;
+  border: 1px solid #333;
+  border-radius: 3px;
+  font-weight: bold;
+}
+</style>

@@ -22,6 +22,10 @@ import VueToastr from "vue-toastr";
 // use plugin
 Vue.use(VueToastr, {
     /* OverWrite Plugin Options if you need */
+    defaultTimeout: 3000,
+    defaultProgressBar: false,
+    defaultProgressBarValue: 0,
+    defaultClassNames: ["animated", "zoomInUp"]
 });
 
 let invoice = require("./components/invoice.vue");
