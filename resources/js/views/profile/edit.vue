@@ -83,7 +83,7 @@
                     type="text"
                     class="form-control"
                     id="card_last_four"
-                    placeholder="card_last_four"
+                    placeholder="Card Last Four"
                     v-model="cardInfo.card_last_four"
                   />
                 </div>
@@ -98,7 +98,7 @@
                     type="text"
                     class="form-control"
                     id="card_country"
-                    placeholder="card_country"
+                    placeholder="Card Country"
                     v-model="cardInfo.card_country"
                   />
                 </div>
@@ -156,7 +156,7 @@
                     type="text"
                     class="form-control"
                     id="billing_city"
-                    placeholder="billing_city"
+                    placeholder="Billing City"
                     v-model="billingInfo.billing_city"
                   />
                 </div>
@@ -168,7 +168,7 @@
                     type="text"
                     class="form-control"
                     id="billing_state"
-                    placeholder="billing_state"
+                    placeholder="Billing State"
                     v-model="billingInfo.billing_state"
                   />
                 </div>
@@ -180,7 +180,7 @@
                     type="text"
                     class="form-control"
                     id="billing_zip"
-                    placeholder="billing_zip"
+                    placeholder="Billing Zip"
                     v-model="billingInfo.billing_zip"
                   />
                 </div>
@@ -195,19 +195,19 @@
                     type="text"
                     class="form-control"
                     id="billing_country"
-                    placeholder="billing_country"
+                    placeholder="Billing Country"
                     v-model="billingInfo.billing_country"
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label for="vat_id" class="col-sm-2 col-form-label font-weight-bold">Vat ID</label>
+                <label for="vat_id" class="col-sm-2 col-form-label font-weight-bold">VAT ID</label>
                 <div class="col-sm-10">
                   <input
                     type="text"
                     class="form-control"
                     id="vat_id"
-                    placeholder="vat_id"
+                    placeholder="VAT ID"
                     v-model="billingInfo.vat_id"
                   />
                 </div>
@@ -222,7 +222,7 @@
                     type="text"
                     class="form-control"
                     id="extra_billing_information"
-                    placeholder="extra_billing_information"
+                    placeholder="Extra Billing Information"
                     v-model="billingInfo.extra_billing_information"
                   />
                 </div>
@@ -250,11 +250,6 @@ export default {
   },
   mounted() {
     this.profile = this.personalInfo;
-    // Inject your class names for animation
-    /*
-    this.$toastr.defaultTimeout = 1000;
-    this.$toastr.s("Hello Toastr");
-    */
   },
   methods: {
     updateProfile() {
@@ -263,8 +258,15 @@ export default {
         .post("/api/update-profile", _this.personalInfo)
         .then(response => response.data)
         .then(response => {
-          $("#personal_info").modal("hide");
-          _this.$emit("profileInfoUpdate");
+          if (response.status === 400) {
+            Object.values(response.error).forEach(error => {
+              this.$toastr.e(error[0]);
+            });
+          } else {
+            $("#personal_info").modal("hide");
+            this.$toastr.s("Profile info Updated Successfully");
+            _this.$emit("profileInfoUpdate");
+          }
         })
         .catch(error => {
           console.log(error);
@@ -276,9 +278,15 @@ export default {
         .post("/api/update-card-info", _this.cardInfo)
         .then(response => response.data)
         .then(response => {
-          console.log(response);
-          $("#card_info").modal("hide");
-          _this.$emit("profileInfoUpdate");
+          if (response.status === 400) {
+            Object.values(response.error).forEach(error => {
+              this.$toastr.e(error[0]);
+            });
+          } else {
+            $("#card_info").modal("hide");
+            this.$toastr.s("Card info Updated Successfully");
+            _this.$emit("profileInfoUpdate");
+          }
         })
         .catch(error => {
           console.log(error);
@@ -290,9 +298,15 @@ export default {
         .post("/api/update-billing-info", _this.billingInfo)
         .then(response => response.data)
         .then(response => {
-          console.log(response);
-          $("#billing_info").modal("hide");
-          _this.$emit("profileInfoUpdate");
+          if (response.status === 400) {
+            Object.values(response.error).forEach(error => {
+              this.$toastr.e(error[0]);
+            });
+          } else {
+            $("#billing_info").modal("hide");
+            this.$toastr.s("Billing info Updated Successfully");
+            _this.$emit("profileInfoUpdate");
+          }
         })
         .catch(error => {
           console.log(error);
