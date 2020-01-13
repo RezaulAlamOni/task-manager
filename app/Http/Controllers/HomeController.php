@@ -188,9 +188,20 @@ class HomeController extends Controller
             $comment['subject'] = $request->subject;
             $comment['body'] = $request->generalBody;
             $mails[] = Mail::to($emails)->send(new UserMail($comment));
-            if (array_search('email_everything', array_column($value->notifications->toArray(), 'unique_id')) ) {
-                // return $request->generalBody;
-            }
         }
     }
+    // email_IAmOn
+    // email_everything
+    // email_whenAddedToTask
+    // email_whenRemovedFromTask
+    // email_titleChanged
+    // if (array_search('email_everything', array_column($value->notifications->toArray(), 'unique_id')) ) {
+    //     // return $request->generalBody;
+    // }
+    // email_descriptionUpdated
+    // email_commentLeft
+    // email_commentMention
+    // email_taskAdded
+    // email_taskUpdated
+    // email_taskCommented
 }
