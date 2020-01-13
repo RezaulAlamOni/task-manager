@@ -1360,6 +1360,10 @@
             }
         },
         mounted() {
+            // window.addEventListener('beforeunload',(event)=>{
+            //    event.preventDefault();
+            //    event.returnValue = "";
+            // });
             let _this = this;
             this.projectId = this.$route.params.projectId;
             this.teamCheck();
