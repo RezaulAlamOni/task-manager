@@ -1364,6 +1364,7 @@
             //    event.preventDefault();
             //    event.returnValue = "";
             // });
+            this.$toastr.defaultTimeout = 1000;
             let _this = this;
             this.projectId = this.$route.params.projectId;
             this.teamCheck();
@@ -1921,6 +1922,7 @@
                             user_id: _this.authUser.id
                         })
                         _this.getTaskList();
+                        _this.$toastr.s("User Assign success !");
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -1947,6 +1949,7 @@
                                 board_id: _this.selectedData.multiple_board_id,
                                 user_id: _this.authUser.id
                             })
+                            _this.$toastr.s("User Assign Removed !");
                         }
                     })
                     .catch(error => {
@@ -2251,6 +2254,7 @@
                     _this.selectedCopy = _this.selectedIds;
                     _this.selectedCut = null;
                     $('.jquery-accordion-menu').hide();
+                    _this.$toastr.s("Copy Task success !");
                     // console.log(_this.selectedData)
                     // console.log(_this.selectedIds)
                 } else {
@@ -2265,6 +2269,7 @@
                     if (_this.selectedData.text !== 'Dont Forget Section') {
                         _this.selectedCut = _this.selectedIds;
                         _this.selectedCopy = null;
+                        _this.$toastr.s("Cut Task success !");
                         $('.jquery-accordion-menu').hide();
                     } else {
                         swal('Sorry!!', 'You can\'t do Cut Dont Forget Section! task', 'warning')
@@ -2425,6 +2430,7 @@
                             user_id: _this.authUser.id,
                             type    : 'New task Added!'
                         })
+                        _this.$toastr.s("New task Added !");
                         setTimeout(function () {
                             $("#" + _this.newEmptyTaskID).click();
                             $("#" + _this.newEmptyTaskID).focus();
@@ -2465,6 +2471,7 @@
                             $("#" + _this.newEmptyTaskID).removeClass('input-hide');
                         }, 1000)
                         _this.empty_task_delete_flag = _this.newEmptyTaskID
+                        _this.$toastr.s("Add child to list !");
                     })
                     .catch(error => {
                         console.log('Api is not Working !!!')
@@ -2498,6 +2505,7 @@
                             list_id: postData.list_id,
                             user_id: _this.authUser.id
                         })
+                        _this.$toastr.s("Make child !");
                     })
                     .catch(error => {
                         console.log('Api is task-make-child not Working !!!')
@@ -2562,6 +2570,7 @@
                                 board_id: _this.selectedData.multiple_board_id,
                                 user_id: _this.authUser.id
                             })
+                            _this.$toastr.s("Tag added to task Success !");
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
@@ -2588,6 +2597,7 @@
                             board_id: _this.selectedData.multiple_board_id,
                             user_id: _this.authUser.id
                         })
+                        _this.$toastr.s("Tag added to task Success !");
                     })
                     .catch(error => {
                         console.log('Api for add tag not Working !!!')

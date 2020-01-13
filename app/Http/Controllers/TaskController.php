@@ -945,6 +945,9 @@ class TaskController extends Controller
             $photo = $_FILES['file']['name'];
             $path = public_path() . "/storage/" . $task_id;
             if (!is_dir($path)) {
+                if (!is_dir(public_path() . "/storage")) {
+                    mkdir(public_path() . "/storage/");
+                }
                 mkdir($path);
             }
             if (move_uploaded_file($_FILES["file"]["tmp_name"], $path . "/" . $_FILES['file']['name'])) {
