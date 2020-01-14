@@ -45,6 +45,7 @@
                     </div>
 
                     <div class="modal-body">
+
                         <div class="tab-content">
                             <div class="tab-pane active" id="r_tab1">
                                 <div id="slim_t1">
@@ -185,9 +186,9 @@
                                 <div id="slim_t2">
                                     <!-- Informational Messages -->
                                     <div>
-                                        <h5 class="rightsidebar-right-heading text-uppercase text-xs" style="width: 100%;margin-top: 70px;clear: both;">
+                                        <h5 @click="showComments" class="rightsidebar-right-heading text-uppercase text-xs" style="width: 100%;margin-top: 70px;clear: both;">
                                             <i class="menu-icon fa fa-comments"></i>
-                                            Comments
+                                            Comments @{{ comment }}
                                         </h5>
                                         <div class="notification-container" v-if="loadingNotifications"  style="width:100%;float: left;">
                                             <i class="fa fa-btn fa-spinner fa-spin"></i> {{__('Loading Notifications')}}
@@ -198,7 +199,6 @@
                                     <div class="notification-container" v-if="notifications != null ">
                                         <div class="notification" v-for="comment in notifications.comments"
                                              style="border-bottom: 1px dashed #c7cdd1;border-top: none;margin-bottom: 0;">
-{{--                                            @{{ comment }}--}}
                                             <!-- Notification Icon -->
                                             <figure>
                                                 <img v-if="comment.user.photo_url" :src="comment.user.photo_url" class="spark-profile-photo">
@@ -236,9 +236,9 @@
                                                 </div>
 
                                                 <!-- Notification Action -->
-{{--                                                <a  class="btn btn-primary" v-if="comment">--}}
-{{--                                                    --}}
-{{--                                                </a>--}}
+                                                <a  class="btn btn-primary" v-if="comment">
+
+                                                </a>
 
                                             </div>
                                         </div>
@@ -260,5 +260,3 @@
         </div>
     </div>
 </spark-notifications>
-
-

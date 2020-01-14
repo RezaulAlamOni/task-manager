@@ -1949,6 +1949,7 @@
                             setTimeout(() => {
                             }, 500);
                             // console.log('sorted');
+                            _this.$toastr.s("Card successfully Moved ");
                         })
                         .catch(error => {
                             // console.log('sorting failed');
@@ -1976,6 +1977,7 @@
                                     generalBody : "A Card is moved to another column",
                                     task_id : dropResult.payload.cardId
                                 };
+                                _this.$toastr.s("Card successfully Moved ");
                                 _this.sendMail(mailData);
                                 // console.log('shifted');
                             })
