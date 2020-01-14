@@ -644,8 +644,7 @@
                                                              class="users-select row">
                                                             <div class="col-md-3 pt-1 pl-4">
                                                                 <p class="assignUser-photo">
-                                                                    {{(user.name !== null) ? user.name.substring(0,2) :
-                                                                    ''}}</p>
+                                                                    {{(user.name !== null) ? user.name.substring(0,2) : ''}}</p>
                                                             </div>
                                                             <div class="col-md-9 assign-user-name-email">
                                                                 <h5>{{user.name}}<br>
@@ -2564,7 +2563,6 @@
                 return myColor;
             },
             addTag(e, data) {
-                alert()
                 var _this = this;
                 if (e.which === 13) {
                     var color = (_this.tag === 'Dont Forget') ? '#ff0000' : _this.generateColor();
@@ -2576,6 +2574,13 @@
                     axios.post('/api/task-list/add-tag', postData)
                         .then(response => response.data)
                         .then(response => {
+                            let mailData = {
+                                    subject : "Tag added to a task",
+                                    body    : "A tag ("+_this.tag+") is assigned to ( "+data.text+" ) task.",
+                                    email   : "email_taskUpdated",
+                                    generalBody : "A tag ("+_this.tag+") is assigned to ( "+data.text+" ) task.",
+                                    task_id : data.id
+                            };
                             _this.getTaskList();
                             $('#dropdown' + data._id).toggle();
                             _this.selectedData = data;
@@ -2587,6 +2592,7 @@
                                 user_id: _this.authUser.id
                             })
                             _this.$toastr.s("Tag added to task Success !");
+                            _this.sendMail(mailData);
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
@@ -2604,6 +2610,13 @@
                 axios.post('/api/task-list/add-tag', postData)
                     .then(response => response.data)
                     .then(response => {
+                        let mailData = {
+                                subject : "Tag added to a task",
+                                body    : "A tag ( "+tag+" ) is assigned to ( "+data.text+" ) task.",
+                                email   : "email_taskUpdated",
+                                generalBody : "A tag ( "+tag+" ) is assigned to ( "+data.text+" ) task.",
+                                task_id : data.id
+                        };
                         _this.getTaskList();
                         $('#dropdown' + data._id).toggle();
                         _this.selectedData.tags[0] = tag
@@ -2614,6 +2627,7 @@
                             user_id: _this.authUser.id
                         })
                         _this.$toastr.s("Tag added to task Success !");
+                        _this.sendMail(mailData);
                     })
                     .catch(error => {
                         console.log('Api for add tag not Working !!!')
@@ -2636,7 +2650,13 @@
                     axios.post('/api/task-list/add-tag', postData)
                         .then(response => response.data)
                         .then(response => {
-
+                            let mailData = {
+                                    subject : "Tag added to a task",
+                                    body    : "A tag ( "+_this.tags[newl - 1].text+" ) is assigned to ( "+_this.selectedData.text+" ) task.",
+                                    email   : "email_taskUpdated",
+                                    generalBody : "A tag ( "+_this.tags[newl - 1].text+" ) is assigned to ( "+_this.selectedData.text+" ) task.",
+                                    task_id : _this.selectedData.id
+                            };
                             _this.getTaskList();
                             _this.tag = null
                             _this.Socket.emit('taskUpdate', {
@@ -2646,6 +2666,7 @@
                                 user_id: _this.authUser.id
                             })
                             _this.$toastr.s("Tag added to task Success !");
+                            _this.sendMail(mailData);
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
@@ -2657,10 +2678,19 @@
                 var postData = {
                     assign_id: obj.tag.assign_id
                 };
+                console.log(obj.tag);
+                
                 if (obj.tag.text !== 'Dont Forget') {
                     axios.post('/api/task-list/delete-tag', postData)
                         .then(response => response.data)
                         .then(response => {
+                            let mailData = {
+                                    subject : "Tag removed from a task",
+                                    body    : "A tag ( "+obj.tag.text+" ) is removed from ( "+_this.selectedData.text+" ) task.",
+                                    email   : "email_taskUpdated",
+                                    generalBody : "A tag ( "+obj.tag.text+" ) is removed from ( "+_this.selectedData.text+" ) task.",
+                                    task_id : _this.selectedData.id
+                            };
                             _this.getTaskList();
                             _this.tag = null
                             _this.Socket.emit('taskUpdate', {
@@ -2670,6 +2700,7 @@
                                 user_id: _this.authUser.id
                             })
                             _this.$toastr.w("Tag remove from task Success !");
+                            _this.sendMail(mailData);
                         })
                         .catch(error => {
                             console.log('Api for move down task not Working !!!')
@@ -3645,8 +3676,8 @@
             SaveDataWithoutCreateNewNode(data) {
                 var _this = this;
                 var postData = {
-                    id: data.id,
-                    text: (data.text === null) ? '' : data.text,
+                    id : data.id,
+                    text : (data.text === null) ? '' : data.text,
                 };
                 let mailData = {
                         subject : "Task title is updated",
@@ -3836,9 +3867,26 @@
                     ids: (id == null) ? this.selectedIds : [id],
                     priority: priority
                 }
+                let ids = (id == null) ? this.selectedIds : [id];
                 axios.post('/api/task-list/add-priority', data)
                     .then(response => response.data)
                     .then(response => {
+                        if (priority === "1") {
+                            priority = 'Low';
+                        }
+                        if (priority === "2") {
+                            priority = 'Medium';
+                        }
+                        if (priority === "3") {
+                            priority = 'High';
+                        }
+                        let mailData = {
+                                subject : "Priority added to a task",
+                                body    : "Priority ( "+priority+" ) is added to ( "+_this.selectedData.text+" ) task",
+                                email   : "email_taskUpdated",
+                                generalBody : "Priority ( "+priority+" ) is added to ( "+_this.selectedData.text+" ) task ",
+                                task_id : ids
+                        };
                         _this.Socket.emit('taskUpdate', {
                             project_id: _this.projectId,
                             list_id: _this.list.id,
@@ -3850,6 +3898,7 @@
                         _this.selectedIds = [];
                         $('.jquery-accordion-menu').hide()
                         _this.$toastr.s("Successfully added priority !");
+                        _this.sendMail(mailData);
                     })
                     .catch(error => {
                         console.log('Api for task add priority not Working !!!')
@@ -3861,9 +3910,17 @@
                     ids: (id == null) ? this.selectedIds : [id],
                     priority: null
                 }
+                let ids = (id == null) ? this.selectedIds : [id];
                 axios.post('/api/task-list/add-priority', data)
                     .then(response => response.data)
                     .then(response => {
+                        let mailData = {
+                                subject : "Priority remove from a task",
+                                body    : "Priority is remove from ( "+_this.selectedData.text+" ) task",
+                                email   : "email_taskUpdated",
+                                generalBody : "Priority is remove from ( "+_this.selectedData.text+" ) task ",
+                                task_id : ids
+                        };
                         _this.Socket.emit('taskUpdate', {
                             project_id: _this.projectId,
                             list_id: _this.list.id,
@@ -3875,6 +3932,7 @@
                         _this.selectedIds = [];
                         $('.jquery-accordion-menu').hide();
                         _this.$toastr.s("Successfully remove priority !");
+                        _this.sendMail(mailData);
                     })
                     .catch(error => {
                         console.log('Api for task add priority not Working !!!')

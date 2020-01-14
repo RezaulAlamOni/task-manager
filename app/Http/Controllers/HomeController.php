@@ -103,7 +103,7 @@ class HomeController extends Controller
                 }
             }
         }
-        
+        // return $this->sendAllToAllUser($userIds, $request);
         foreach ($userIds as $keys => $ids) {
             $data = $this->emailNotification->getNotificationsByUser($ids);
             // echo $data->original['email_IAmOn'];
@@ -126,7 +126,7 @@ class HomeController extends Controller
                 }
             }
         }
-        return $this->sendAllToAllUser($userIds, $request);        
+        return $this->sendAllToAllUser($userIds, $request);
 
         // emailFreq_everydayUpdate     : 0
         // emailFreq_dailyReport        : 0
@@ -183,11 +183,13 @@ class HomeController extends Controller
         }
         ])->find($team_id);
         foreach ($data->team_users as $key => $value) {
-            // return $value->notifications->toArray(); //array_search('email_everything', array_column($value->notifications->toArray(), 'unique_id'));
-            $emails = $value->email; // array_search('email_everything', array_column($value->notifications->toArray(), 'unique_id'));
-            $comment['subject'] = $request->subject;
-            $comment['body'] = $request->generalBody;
-            $mails[] = Mail::to($emails)->send(new UserMail($comment));
+            // if (in_array('email_everything ', array_column($value->notifications->toArray(), 'unique_id')) ) {
+                $emails = $value->email; 
+                $comment['subject'] = $request->subject;
+                $comment['body'] = $request->generalBody;
+                $mails[] = Mail::to($emails)->send(new UserMail($comment));
+            // }
+            // print_r(array_column($value->notifications->toArray(), 'unique_id'));
         }
     }
     // email_IAmOn
