@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ReminderMail;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ReminderSettingsController extends Controller
 {
@@ -22,6 +24,14 @@ class ReminderSettingsController extends Controller
         }, 'notifications' => function ($qr) {
             $qr->where('unique_id', 'reminder_whenTaskIsDue');
         }])->get();
+        $data = [
+            'subject' => "Reminder Mail",
+            'name' => "Ferdous Anam",
+            'title' => "Thanks sir :)",
+        ];
+        $mailTemplate = $data;
+//        return view('reminderMailTemplate', compact('mailTemplate'));
+        Mail::to('anam.mediusware@gmail.com')->send(new ReminderMail($data));
         return $user;
     }
 
