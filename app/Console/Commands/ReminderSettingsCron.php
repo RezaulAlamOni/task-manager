@@ -11,7 +11,7 @@ class ReminderSettingsCron extends Command
      *
      * @var string
      */
-    protected $signature = 'reminder:cron';
+    protected $signature = 'reminder';
 
     /**
      * The console command description.
@@ -37,6 +37,8 @@ class ReminderSettingsCron extends Command
      */
     public function handle()
     {
-        //
+        \Log::info("Reminder Cron is working fine!");
+        $result = app('App\Http\Controllers\ReminderSettingsController')->sendDueDateEmail();
+        $this->info('Reminder:Cron Command Run successfully!');
     }
 }
