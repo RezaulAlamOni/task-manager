@@ -15,6 +15,8 @@ class EmailAndNotificationTableSeeder extends Seeder
     {
         DB::table('email_and_notifications')->truncate();
         DB::table('notification_user')->truncate();
+        $parent = EmailAndNotification::create(['parent_id' => null, 'title' => 'Reminder Settings', 'unique_id' => 'reminder']);
+        EmailAndNotification::create(['parent_id' => $parent->id, 'title' => 'Send me reminder emails when a task is due', 'unique_id' => 'reminder_whenTaskIsDue']);
         $parent = EmailAndNotification::create(['parent_id' => null, 'title' => 'Email frequency', 'unique_id' => 'emailFreq']);
         EmailAndNotification::create(['parent_id' => $parent->id, 'title' => 'Every Update', 'unique_id' => 'emailFreq_everydayUpdate']);
         EmailAndNotification::create(['parent_id' => $parent->id, 'title' => 'Daily Report', 'unique_id' => 'emailFreq_dailyReport']);
