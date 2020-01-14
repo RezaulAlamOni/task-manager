@@ -374,7 +374,7 @@
                                     <td>
                                         <p>Hi <b>{{ $mailTemplate['name'] }}</b>,</p>
                                         <p>This is a reminder for the task from <a href="{{ config('app.url') }}">Complitit</a>.</p>
-                                        <p>Task Title <b>{{ $mailTemplate['title'] }}</b></p>
+                                        <p>Task Title <b>{{ $mailTemplate['title'] }}</b> which due date is {{ $mailTemplate['date'] }}</p>
                                     </td>
                                 </tr>
                                 <tr>

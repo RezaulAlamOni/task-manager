@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ReminderMail extends Mailable
+class ReminderMail extends Mailable // implements ShouldQueue
 {
     use Queueable, SerializesModels;
     public $mailTemplate;

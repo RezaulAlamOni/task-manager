@@ -34,6 +34,7 @@ class ReminderSettingsController extends Controller
             foreach ($user->tasks as $task) {
                 $data['subject'] = "Reminder for: " . $task->title;
                 $data['title'] = $task->title;
+                $data['date'] = $task->date;
                 Mail::to($data['email'])->send(new ReminderMail($data));
             }
         }
