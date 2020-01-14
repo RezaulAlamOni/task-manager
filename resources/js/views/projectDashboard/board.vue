@@ -1543,6 +1543,7 @@
         mounted() {
             var _this = this;
             _this.authUser = _this.auth_user;
+            _this.$toastr.defaultTimeout = 1000;
             $('#header-item').text('Project  / Task Board');
             $(document)
                 .one('focus.autoExpand', 'textarea.autoExpand', function () {
@@ -1858,7 +1859,8 @@
                 axios.post('/api/hideChildes', data)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
+                        // console.log(response);
+                        _this.$toastr.s("Successfully hide child ! ");
                         _this.getBoardTask();
                         _this.boardSocketCall();
                     })
@@ -2048,7 +2050,7 @@
                                 task: []
                             });
                             _this.getBoardTask();
-                            swal("Successful", "Board successfuly created", "success");
+                            _this.$toastr.s("Board successfully created ");
                             setTimeout(() => {
                                 swal.close();
                             }, 1000);
@@ -2083,6 +2085,7 @@
                             if (response.success === true) {
                                 _this.cards[_this.updateIndex].column = _this.editField.name;
                                 _this.cards[_this.updateIndex].progress = _this.editField.progress;
+                                _this.$toastr.s("Column successfully updated ");
                             }
                         })
                         .catch(error => {
@@ -2109,6 +2112,7 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.nav = response.success;
+                        _this.$toastr.s("Existing task successfully added ");
                     })
                     .catch(error => {
                     });
@@ -2198,7 +2202,8 @@
                         if (response.success === false) {
                             this.linkBtn = true;
                         } else {
-                            swal('Warning!!', 'That list is already linked. Need to unlink first', 'warning');
+                            //swal('Warning!!', 'That list is already linked. Need to unlink first', 'warning');
+                            _this.$toastr.w("This list is already linked. Need to unlink first");
                             setTimeout(() => {
                                 swal.close();
                             }, 1000);
@@ -2225,7 +2230,8 @@
 
                         _this.getBoardTask();
                         _this.boardSocketCall();
-                        console.log('added');
+                        // console.log('added');
+                        _this.$toastr.s("List successfully linked!");
                     })
                     .catch(error => {
                         console.log('not added');
@@ -2257,7 +2263,9 @@
                             .then(response => {
                                 _this.getBoardTask();
                                 _this.boardSocketCall();
-                                swal("Unlinked!", "Successfully Unlinked", "success");
+                                // swal("Unlinked!", "Successfully Unlinked", "success");
+
+                                _this.$toastr.s("Successfully Unlinked");
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1000);
@@ -2281,6 +2289,7 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.subBoard = response.success;
+
                     })
                     .catch(error => {
                     });
@@ -2324,6 +2333,7 @@
                         _this.getBoardTask();
                         _this.boardSocketCall();
                         $('#transferCard').modal('hide');
+                        _this.$toastr.s("Card Successfully Transferred");
                     } else {
                         $('#transferCard').modal('hide');
                     }
@@ -2351,7 +2361,8 @@
                     .then(response => {
                         // console.log(response.success);
                         _this.board = response.success;
-                        console.log(_this.board);
+                        // console.log(_this.board);
+                        _this.$toastr.s("Column Successfully Transferred");
                         setTimeout(() => {
                             $('#transferColumn').modal('show');
                         }, 500);
@@ -2376,6 +2387,7 @@
                             _this.getBoardTask();
                             _this.boardSocketCall();
                             $('#transferColumn').modal('hide');
+                            _this.$toastr.s("Column Successfully Transferred");
                         } else {
                             $('#transferColumn').modal('hide');
                         }
@@ -2408,7 +2420,8 @@
                             .then(response => {
                                 _this.getBoardTask();
                                 _this.boardSocketCall();
-                                swal("Deleted!", "Successfully deleted task", "success");
+                                // swal("Deleted!", "Successfully deleted task", "success");
+                                _this.$toastr.w("Task Successfully Deleted !");
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1000);
@@ -2420,6 +2433,7 @@
                     });
 
             },
+
             getBoardTask() {
                 var _this = this;
                 // $('#loder-hide').fadeIn();
