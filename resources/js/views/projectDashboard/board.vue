@@ -1543,6 +1543,7 @@
         mounted() {
             var _this = this;
             _this.authUser = _this.auth_user;
+            _this.$toastr.defaultTimeout = 1000;
             $('#header-item').text('Project  / Task Board');
             $(document)
                 .one('focus.autoExpand', 'textarea.autoExpand', function () {
@@ -1858,7 +1859,8 @@
                 axios.post('/api/hideChildes', data)
                     .then(response => response.data)
                     .then(response => {
-                        console.log(response);
+                        // console.log(response);
+                        _this.$toastr.s("Successfully hide child ! ");
                         _this.getBoardTask();
                         _this.boardSocketCall();
                     })
@@ -1947,6 +1949,7 @@
                             setTimeout(() => {
                             }, 500);
                             // console.log('sorted');
+                            _this.$toastr.s("Card successfully Moved ");
                         })
                         .catch(error => {
                             // console.log('sorting failed');
@@ -1974,6 +1977,7 @@
                                     generalBody : "A Card is moved to another column",
                                     task_id : dropResult.payload.cardId
                                 };
+                                _this.$toastr.s("Card successfully Moved ");
                                 _this.sendMail(mailData);
                                 // console.log('shifted');
                             })
@@ -2048,7 +2052,7 @@
                                 task: []
                             });
                             _this.getBoardTask();
-                            swal("Successful", "Board successfuly created", "success");
+                            _this.$toastr.s("Board successfully created ");
                             setTimeout(() => {
                                 swal.close();
                             }, 1000);
@@ -2083,6 +2087,7 @@
                             if (response.success === true) {
                                 _this.cards[_this.updateIndex].column = _this.editField.name;
                                 _this.cards[_this.updateIndex].progress = _this.editField.progress;
+                                _this.$toastr.s("Column successfully updated ");
                             }
                         })
                         .catch(error => {
@@ -2109,6 +2114,7 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.nav = response.success;
+                        _this.$toastr.s("Existing task successfully added ");
                     })
                     .catch(error => {
                     });
@@ -2198,7 +2204,8 @@
                         if (response.success === false) {
                             this.linkBtn = true;
                         } else {
-                            swal('Warning!!', 'That list is already linked. Need to unlink first', 'warning');
+                            //swal('Warning!!', 'That list is already linked. Need to unlink first', 'warning');
+                            _this.$toastr.w("This list is already linked. Need to unlink first");
                             setTimeout(() => {
                                 swal.close();
                             }, 1000);
@@ -2225,7 +2232,8 @@
 
                         _this.getBoardTask();
                         _this.boardSocketCall();
-                        console.log('added');
+                        // console.log('added');
+                        _this.$toastr.s("List successfully linked!");
                     })
                     .catch(error => {
                         console.log('not added');
@@ -2257,7 +2265,9 @@
                             .then(response => {
                                 _this.getBoardTask();
                                 _this.boardSocketCall();
-                                swal("Unlinked!", "Successfully Unlinked", "success");
+                                // swal("Unlinked!", "Successfully Unlinked", "success");
+
+                                _this.$toastr.s("Successfully Unlinked");
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1000);
@@ -2281,6 +2291,7 @@
                     .then(response => response.data)
                     .then(response => {
                         _this.subBoard = response.success;
+
                     })
                     .catch(error => {
                     });
@@ -2324,6 +2335,7 @@
                         _this.getBoardTask();
                         _this.boardSocketCall();
                         $('#transferCard').modal('hide');
+                        _this.$toastr.s("Card Successfully Transferred");
                     } else {
                         $('#transferCard').modal('hide');
                     }
@@ -2351,7 +2363,8 @@
                     .then(response => {
                         // console.log(response.success);
                         _this.board = response.success;
-                        console.log(_this.board);
+                        // console.log(_this.board);
+                        _this.$toastr.s("Column Successfully Transferred");
                         setTimeout(() => {
                             $('#transferColumn').modal('show');
                         }, 500);
@@ -2376,6 +2389,7 @@
                             _this.getBoardTask();
                             _this.boardSocketCall();
                             $('#transferColumn').modal('hide');
+                            _this.$toastr.s("Column Successfully Transferred");
                         } else {
                             $('#transferColumn').modal('hide');
                         }
@@ -2408,7 +2422,8 @@
                             .then(response => {
                                 _this.getBoardTask();
                                 _this.boardSocketCall();
-                                swal("Deleted!", "Successfully deleted task", "success");
+                                // swal("Deleted!", "Successfully deleted task", "success");
+                                _this.$toastr.w("Card Successfully Deleted !");
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1000);
@@ -2561,6 +2576,7 @@
                             });
                             let keys = _this.cards[index].task.length - 1;
                             _this.getBoardTask();
+                            _this.$toastr.s("Card Successfully added !");
                             setTimeout(function () {
                                 $('#title' + data.id).click();
                                 $('#title' + data.id).focus();
@@ -2596,7 +2612,8 @@
                                         $('#id' + index + keys).click();
                                         $('#id' + index + keys).focus();
                                     }, 100)
-                                    swal("Deleted!", "The card has been deleted.", "success");
+                                    // swal("Deleted!", "The card has been deleted.", "success");
+                                    _this.$toastr.s("Card Successfully deleted !");
                                     setTimeout(() => {
                                         swal.close();
                                     }, 1000);
@@ -2631,7 +2648,8 @@
                                 // _this.cards[index].task.length = _this.cards[index].task.length-1;
                                 _this.getData();
                                 _this.boardSocketCall();
-                                swal("Removed!", "The task has been removed.", "success");
+                                // swal("Removed!", "The task has been removed.", "success");
+                                _this.$toastr.s("Card Successfully removed !");
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1000);
@@ -2670,7 +2688,9 @@
                             _this.boardSocketCall();
                             _this.selectedIds = [];
                             $('.card-list').removeClass('selected-card');
-                            swal("Removed!", "The task has been removed.", "success");
+                            // swal("Removed!", "The task has been removed.", "success");
+                            _this.$toastr.s("Card Successfully removed !");
+
                             setTimeout(() => {
                                 swal.close();
                             }, 1000);
@@ -2710,6 +2730,7 @@
                         // _this.cards[index].task[key].tags.push(data);
                         // _this.cards[index].task[key].existing_tags.splice(tagIndx, 1);
                         // $('#dropdown' + cardId).toggle();
+                        _this.$toastr.s("Tag Successfully Added !");
                         setTimeout(function () {
                             _this.getBoardTask();
                             _this.listSocketCall(card.list_id);
@@ -2739,7 +2760,9 @@
                                     _this.cards.splice(index, 1);
                                     _this.getData();
                                     _this.boardSocketCall();
-                                    swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                    // swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                    _this.$toastr.s("Column Successfully Deleted !");
+
                                     setTimeout(() => {
                                         swal.close();
                                     }, 1000);
@@ -2942,7 +2965,9 @@
                 // console.log("data = ",data);
                 if (data.data === "") {
                     _this.getBoardTask();
-                    swal('Blank!', 'Title is required!', 'warning');
+                    // swal('Blank!', 'Title is required!', 'warning');
+                    _this.$toastr.e("Title is required! !");
+
                     setTimeout(() => {
                         swal.close();
                     }, 1000);
@@ -2996,6 +3021,7 @@
                             };
                             _this.sendMail(mailData);
                             _this.listSocketCall(card.list_id);
+                            _this.$toastr.e("Date Successfully updated!");
                         })
                         .catch(error => {
                         });
@@ -3025,7 +3051,7 @@
                     axios.post('/api/task-list/add-tag', postData)
                         .then(response => response.data)
                         .then(response => {
-
+                            _this.$toastr.s("Tag Successfully Changed!");
                             setTimeout(function () {
                                 _this.getBoardTask();
                                 _this.listSocketCall(card.list_id)
@@ -3053,6 +3079,7 @@
                             setTimeout(function () {
                                 _this.getBoardTask();
                                 _this.listSocketCall(card.list_id);
+                                _this.$toastr.s("Tag Successfully deleted!");
                             }, 100);
                             _this.tags = [];
                         })
@@ -3123,6 +3150,7 @@
                         _this.selectedIds = [];
                         $('.card-list').removeClass('selected-card');
                         $('.jquery-accordion-menu').hide();
+                        _this.$toastr.s("Priority Successfully Added!");
                     })
                     .catch(error => {
                         console.log('Api for task add priority not Working !!!')
@@ -3142,6 +3170,7 @@
                         _this.selectedIds = [];
                         $('.card-list').removeClass('selected-card');
                         $('.jquery-accordion-menu').hide();
+                        _this.$toastr.w("Priority Successfully Removed!");
                     })
                     .catch(error => {
                         console.log('Api for task add priority not Working !!!')
@@ -3312,6 +3341,8 @@
                                 user_id :  user.id
                             };
                             _this.sendMail(mailData);
+                            _this.$toastr.s("Assign-User Successfully Removed!");
+
                         }
                     })
                     .catch(error => {
@@ -3330,6 +3361,7 @@
                         if (response.success === 'success') {
                             // _this.cards[index].task[key].assigned_user.push(response.data);
                             //  console.log(_this.cards);
+                            _this.$toastr.s("Successfully Assign user to task !");
                             setTimeout(function () {
                                 _this.getBoardTask();
                                 _this.listSocketCall(data.list_id);
@@ -3345,7 +3377,8 @@
                         }
                     })
                     .catch(error => {
-                        console.log('Api is not Working !!!')
+                        _this.$toastr.e("Api is not Working !!!");
+                        console.log('')
                     });
             },
             showTagManageModel() {
@@ -3378,6 +3411,7 @@
                         // $('#dropdown' + data._id).toggle();
                         // _this.selectedData = data
                         // _this.tag = null
+                        _this.$toastr.s("Tag Successfully Updated!");
                     })
                     .catch(error => {
                         console.log('Api for update color of tag not Working !!!')
@@ -3406,7 +3440,8 @@
                                 // _this.manageTag = response.tags;
                                 // _this.showTagManageModel();
                                 _this.getBoardTask();
-                                swal("Deleted!", "The tag has been deleted.", "success");
+                                // swal("Deleted!", "The tag has been deleted.", "success");
+                                _this.$toastr.w("Tag Successfully Deleted!");
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1000);
@@ -3443,6 +3478,7 @@
                             _this.manageTag = response.tags;
                             _this.getBoardTask();
                             // _this.tag = null
+                            _this.$toastr.w("Tag Successfully Update!");
                         })
                         .catch(error => {
                             console.log('Api for update tag not Working !!!')
@@ -3479,8 +3515,10 @@
                             $('.jquery-accordion-menu').hide();
                             _this.selectedIds = [];
                             $('.card-list').removeClass('selected-card');
+                            _this.$toastr.w("Action Successfully to card!");
                         })
                         .catch(error => {
+                            _this.$toastr.w("Api for delete task not Working !!!");
                             console.log('Api for delete task not Working !!!')
                         });
                 }, 500)
@@ -3523,7 +3561,8 @@
                                 _this.boardSocketCall();
                                 $('.jquery-accordion-menu').hide();
                                 _this.delete_popup = 0;
-                                swal("Deleted!", "Successfully deleted selected tasks", "success");
+                                // swal("Deleted!", "Successfully deleted selected tasks", "success");
+                                _this.$toastr.w("Selected Task Successfully Deleted");
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1000);

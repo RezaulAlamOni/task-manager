@@ -7,8 +7,13 @@ module.exports = {
     data() {
         return {
             showingNotifications: true,
-            showingAnnouncements: false
+            showingAnnouncements: false,
+            comment : 'trueFalse',
         }
+    },
+
+    mounted(){
+
     },
 
 
@@ -21,7 +26,10 @@ module.exports = {
             this.showingAnnouncements = false;
         },
 
-
+        showComments(){
+            this.comment = "Update Comment with using vue"
+          swal('Success',"Comments Section Found","success");
+        },
         /**
          * Show the product announcements.
          */
