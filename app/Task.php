@@ -147,4 +147,14 @@ class Task extends Model
     {
         return $this->hasMany(Comment::class, 'task_id', 'id')->where('parent_id', null)->with('user','commentReply');
     }
+
+    /**
+     * Get User Assigned to the task
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class, 'task_assigned_users', 'task_id', 'user_id')->withTimestamps();
+    }
 }
