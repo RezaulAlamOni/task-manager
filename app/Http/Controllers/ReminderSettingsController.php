@@ -12,10 +12,12 @@ class ReminderSettingsController extends Controller
 {
     /**
      * Send Due Date Reminder Email
+     *
+     * @return string
      */
     public function sendDueDateEmail()
     {
-        $user = User::whereHas('tasks', function ($q) {
+        $users = User::whereHas('tasks', function ($q) {
             $q->whereDate('date', Carbon::today()->addDays(2)->format("Y-m-d"));
         })->whereHas('notifications', function ($q) {
             $q->where('unique_id', 'reminder_whenTaskIsDue');
@@ -24,15 +26,18 @@ class ReminderSettingsController extends Controller
         }, 'notifications' => function ($qr) {
             $qr->where('unique_id', 'reminder_whenTaskIsDue');
         }])->get();
-        $data = [
-            'subject' => "Reminder Mail",
-            'name' => "Ferdous Anam",
-            'title' => "Thanks sir :)",
-        ];
-        $mailTemplate = $data;
-//        return view('reminderMailTemplate', compact('mailTemplate'));
-        Mail::to('anam.mediusware@gmail.com')->send(new ReminderMail($data));
-        return $user;
+
+        foreach ($users as $user) {
+            $data = [];
+            $data['name'] = $user->name;
+            $data['email'] = $user->email;
+            foreach ($user->tasks as $task) {
+                $data['subject'] = "Reminder for: " . $task->title;
+                $data['title'] = $task->title;
+                Mail::to($data['email'])->send(new ReminderMail($data));
+            }
+        }
+        return "Email Send Successfully";
     }
 
     /**
