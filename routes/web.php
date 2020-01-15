@@ -34,6 +34,7 @@ Route::get('/list-pdf-create/{type}/{list_id}','MultipleListController@ListPdfCr
  * Test Cron Jobs Routes
  */
 Route::get('reminder', 'ReminderSettingsController@sendDueDateEmail');
+Route::get('report/daily/{project_id}', 'ReportEmailController@daily');
 
 
 Route::get( '/{vue_route?}', 'ProjectController@index' )->where( 'vue_route', '(.*)' );
