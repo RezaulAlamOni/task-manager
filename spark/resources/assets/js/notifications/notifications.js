@@ -8,7 +8,7 @@ module.exports = {
         return {
             showingNotifications: true,
             showingAnnouncements: false,
-            comment : 'trueFalse',
+            comments : [],
         }
     },
 
@@ -27,8 +27,17 @@ module.exports = {
         },
 
         showComments(){
-            this.comment = "Update Comment with using vue"
-          swal('Success',"Comments Section Found","success");
+            var _this = this;
+            var projectId = _this.$route.params.projectId;
+            axios.get('/api/overview-all-comments/'+projectId)
+                .then(response => response.data)
+                .then(response => {
+                    _this.comments = response.comments;
+                })
+                .catch(error => {
+                    _this.$toastr.w('Field To connect!');
+                });
+
         },
         /**
          * Show the product announcements.

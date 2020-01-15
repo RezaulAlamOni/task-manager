@@ -97,7 +97,7 @@ Route::post('/update-comment', 'CommentController@updateComment');
 Route::post('/delete-card-comment', 'CommentController@cardCommentDelete');
 Route::post('/save-comment-reply', 'CommentController@saveCommentReply');
 Route::post('/comment-file-upload', 'CommentController@fileUpload');
-Route::get('/get-all-comment', 'CommentController@allComment');
+Route::get('/get-all-comment/{project_id}', 'CommentController@allComment');
 
 Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');
 Route::get('/card-delete/{id}', 'MultipleBoardController@cardDelete'); //delete card

@@ -14,9 +14,9 @@ use Intervention\Image\File;
 
 
 class CommentController extends Controller
-{   
+{
     public function getCardComment(Request $request)
-    {   
+    {
         $comment = Task::where('id',$request->task_id)
                     ->with('comment')
                     ->first();
@@ -30,7 +30,7 @@ class CommentController extends Controller
             'user_id' => Auth::id(),
             'comment' => $request->comment,
             'created_at' => Carbon::now()
-        ]; 
+        ];
 
         $insert = Comment::create($data);
         if ($insert) {
@@ -74,8 +74,8 @@ class CommentController extends Controller
                     'comment' => '',
                     'attatchment' => $photo,
                     'created_at' => Carbon::now()
-                ]; 
-        
+                ];
+
                 $insert = Comment::create($data);
                 if ($insert) {
                     $insert = Comment::where('id',$insert->id)->with('user')->first();
@@ -106,7 +106,7 @@ class CommentController extends Controller
             'user_id' => Auth::id(),
             'comment' => $request->comment,
             'created_at' => Carbon::now()
-        ]; 
+        ];
 
         $insert = Comment::create($data);
         if ($insert) {
@@ -115,13 +115,16 @@ class CommentController extends Controller
         return response()->json(['success' => true, 'Data' => $insert]);
     }
 
-    public function allComment()
-    {   
-        $user = Auth::user()->id;
-        $comment = Comment::where('user_id', $user)->orderBy('id','DESC')->get();
-        $project = view('vendor.spark.layouts.commentsNotification', ['comment' => $comment])->render();
-        // return response()->json(['success' => true, 'Data' => $project]);
-        print_r($project);
+    public function allComment($project_id)
+    {
+//        $current_team_id = Auth::user()->current_team_id;
+
+
+//        $comment = Comment::whereIn('task_id', $user)->orderBy('id','DESC')->with('user')->get();
+////        $project = view('vendor.spark.layouts.commentsNotification', ['comment' => $comment])->render();
+//         return response()->json(['success' => true, 'comments' => $comment]);
+         return response()->json(['success' => true, 'comments' => $project_id]);
+
     }
 
     public function updateComment(Request $request){
@@ -135,7 +138,7 @@ class CommentController extends Controller
                 'log_type' => 'Comment update',
                 'action_type' => 'Updated',
                 'action_by' => Auth::id(),
-            ]; 
+            ];
             $insert = ActionLog::create($log);
         }
         return response()->json(['success' => true, 'update' => $oldComment]);

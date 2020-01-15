@@ -26,7 +26,7 @@
                                         <i class="fa fa-fw ti-settings"></i>
                                     </a>
                                 </li>
-                                <li class="text-center nav-item" id="getAllComment-2">
+                                <li class="text-center nav-item" id="getAllComment-2" @click="showComments">
                                     <a href="#r_tab4" role="tab" data-toggle="tab" class="nav-link">
                                         <i class="fa fa-comments"></i>
                                     </a>
@@ -186,9 +186,9 @@
                                 <div id="slim_t2">
                                     <!-- Informational Messages -->
                                     <div>
-                                        <h5 @click="showComments" class="rightsidebar-right-heading text-uppercase text-xs" style="width: 100%;margin-top: 70px;clear: both;">
+                                        <h5  class="rightsidebar-right-heading text-uppercase text-xs" style="width: 100%;margin-top: 70px;clear: both;">
                                             <i class="menu-icon fa fa-comments"></i>
-                                            Comments @{{ comment }}
+                                            Comments
                                         </h5>
                                         <div class="notification-container" v-if="loadingNotifications"  style="width:100%;float: left;">
                                             <i class="fa fa-btn fa-spinner fa-spin"></i> {{__('Loading Notifications')}}
@@ -197,7 +197,7 @@
 
                                     <!-- List Of Notifications -->
                                     <div class="notification-container" v-if="notifications != null ">
-                                        <div class="notification" v-for="comment in notifications.comments"
+                                        <div class="notification" v-for="comment in comments"
                                              style="border-bottom: 1px dashed #c7cdd1;border-top: none;margin-bottom: 0;">
                                             <!-- Notification Icon -->
                                             <figure>
