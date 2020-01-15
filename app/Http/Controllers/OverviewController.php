@@ -72,8 +72,8 @@ class OverviewController extends Controller
     public function AllComments ($project_id)
     {
         $all_comments = Comment::select('comments.*', 'task_lists.title', 'task_lists.list_id')
-            ->join('task_lists', 'comments.task_id', 'task_lists.id')->orderBy('comments.created_at', 'desc')
-            ->where('task_lists.project_id', $project_id)->with('user')->get();
+        ->join('task_lists', 'comments.task_id', 'task_lists.id')->orderBy('comments.created_at', 'desc')
+        ->where('task_lists.project_id', $project_id)->with('user')->get();
         return \response()->json(['comments' => $all_comments, 'status' => 'success']);
     }
 

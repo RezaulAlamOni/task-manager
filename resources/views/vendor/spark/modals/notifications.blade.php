@@ -196,7 +196,7 @@
                                     </div>
 
                                     <!-- List Of Notifications -->
-                                    <div class="notification-container" v-if="notifications != null ">
+                                    <div class="notification-container" v-if="comments.length > 0 ">
                                         <div class="notification" v-for="comment in comments"
                                              style="border-bottom: 1px dashed #c7cdd1;border-top: none;margin-bottom: 0;">
                                             <!-- Notification Icon -->
@@ -242,6 +242,9 @@
 
                                             </div>
                                         </div>
+                                    </div>
+                                    <div v-else>
+                                        <h2>Comments Not Found !!</h2>
                                     </div>
 
                                 </div>

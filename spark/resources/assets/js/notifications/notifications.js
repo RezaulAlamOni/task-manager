@@ -29,7 +29,7 @@ module.exports = {
         showComments(){
             var _this = this;
             var projectId = _this.$route.params.projectId;
-            axios.get('/api/overview-all-comments/'+projectId)
+            axios.get('/api/get-all-comment/'+projectId)
                 .then(response => response.data)
                 .then(response => {
                     _this.comments = response.comments;

@@ -15,15 +15,15 @@ use Intervention\Image\File;
 
 class CommentController extends Controller
 {
-    public function getCardComment(Request $request)
+    public function getCardComment (Request $request)
     {
-        $comment = Task::where('id',$request->task_id)
-                    ->with('comment')
-                    ->first();
+        $comment = Task::where('id', $request->task_id)
+            ->with('comment')
+            ->first();
         return response()->json(['success' => true, 'comment' => $comment]);
     }
 
-    public function addComment(Request $request)
+    public function addComment (Request $request)
     {
         $data = [
             'task_id' => $request->task_id,
@@ -34,7 +34,7 @@ class CommentController extends Controller
 
         $insert = Comment::create($data);
         if ($insert) {
-            $insert = Comment::where('id',$insert->id)->with('user')->first();
+            $insert = Comment::where('id', $insert->id)->with('user')->first();
         }
         // $emails = [];
         // $users = AssignedUser::where('task_id',$request->task_id)->with(['users'])->get();
@@ -51,13 +51,13 @@ class CommentController extends Controller
         return response()->json(['success' => true, 'Data' => $insert]);
     }
 
-    public function fileUpload(Request $request)
+    public function fileUpload (Request $request)
     {
         // return $_FILES["file"];
         if (isset($request->file)) {
             $task_id = $request->id;
             $photo = $_FILES['file']['name'];
-            $path = public_path() . "/storage/" . $task_id. "/comment" ;
+            $path = public_path() . "/storage/" . $task_id . "/comment";
             if (!is_dir($path)) {
                 if (!is_dir(public_path() . "/storage/")) {
                     mkdir(public_path() . "/storage/");
@@ -67,7 +67,7 @@ class CommentController extends Controller
                 }
                 mkdir($path);
             }
-            if (move_uploaded_file($_FILES["file"]["tmp_name"], $path."/" . $_FILES['file']['name'])) {
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], $path . "/" . $_FILES['file']['name'])) {
                 $data = [
                     'task_id' => $task_id,
                     'user_id' => Auth::id(),
@@ -78,7 +78,7 @@ class CommentController extends Controller
 
                 $insert = Comment::create($data);
                 if ($insert) {
-                    $insert = Comment::where('id',$insert->id)->with('user')->first();
+                    $insert = Comment::where('id', $insert->id)->with('user')->first();
                 }
                 return response()->json(['success' => true, 'Data' => $insert]);
             } else {
@@ -87,17 +87,17 @@ class CommentController extends Controller
         }
     }
 
-    public function cardCommentDelete(Request $request)
+    public function cardCommentDelete (Request $request)
     {
-       $delete = Comment::where('id', $request->id)->orwhere('parent_id', $request->id)->delete();
-       if ($delete) {
-           return response()->json(['success' => true]);
-        }else{
+        $delete = Comment::where('id', $request->id)->orwhere('parent_id', $request->id)->delete();
+        if ($delete) {
+            return response()->json(['success' => true]);
+        } else {
             return response()->json(['success' => false]);
-       }
+        }
     }
 
-    public function saveCommentReply(Request $request)
+    public function saveCommentReply (Request $request)
     {
         // return $request->all();
         $data = [
@@ -110,27 +110,30 @@ class CommentController extends Controller
 
         $insert = Comment::create($data);
         if ($insert) {
-            $insert = Comment::where('id',$insert->id)->with('user')->first();
+            $insert = Comment::where('id', $insert->id)->with('user')->first();
         }
         return response()->json(['success' => true, 'Data' => $insert]);
     }
 
-    public function allComment($project_id)
+    public function allComment ($project_id)
     {
-//        $current_team_id = Auth::user()->current_team_id;
 
-
-//        $comment = Comment::whereIn('task_id', $user)->orderBy('id','DESC')->with('user')->get();
-////        $project = view('vendor.spark.layouts.commentsNotification', ['comment' => $comment])->render();
-//         return response()->json(['success' => true, 'comments' => $comment]);
-         return response()->json(['success' => true, 'comments' => $project_id]);
+        $comment = Comment::orderBy('id', 'DESC')
+            ->with(['user', 'task' => function ($q) use ($project_id) {
+                $q->where('project_id', $project_id);
+            }])->whereHas('task', function ($q) use ($project_id) {
+                $q->where('project_id', $project_id);
+            })->get();
+        return response()->json(['success' => true, 'comments' => $comment]);
+        return response()->json(['success' => true, 'comments' => $project_id]);
 
     }
 
-    public function updateComment(Request $request){
+    public function updateComment (Request $request)
+    {
         $oldComment = Comment::where('id', $request->id)->first();
-        $data = Comment::where('id', $request->id)->update(['comment'=>$request->comment]);
-        if($data){
+        $data = Comment::where('id', $request->id)->update(['comment' => $request->comment]);
+        if ($data) {
             $log = [
                 'task_id' => $oldComment->task_id,
                 // 'task_id' => Comment::id(),
