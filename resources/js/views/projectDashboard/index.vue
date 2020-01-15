@@ -2679,7 +2679,7 @@
                     assign_id: obj.tag.assign_id
                 };
                 console.log(obj.tag);
-                
+
                 if (obj.tag.text !== 'Dont Forget') {
                     axios.post('/api/task-list/delete-tag', postData)
                         .then(response => response.data)

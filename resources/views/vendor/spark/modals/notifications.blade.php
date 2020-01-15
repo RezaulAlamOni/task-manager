@@ -104,7 +104,7 @@
 
                                     <!-- List Of Notifications -->
                                     <div class="notification-container" v-if="showingNotifications && hasNotifications">
-                                        <div class="notification" v-for="notification in notifications.notifications">  style="width:100%;float: left;"
+                                        <div class="notification" v-for="notification in notifications.notifications"  style="width:100%;float: left;">
 
                                             <!-- Notification Icon -->
                                             <figure>
@@ -244,7 +244,9 @@
                                         </div>
                                     </div>
                                     <div v-else>
-                                        <h2>Comments Not Found !!</h2>
+                                        <div class="alert alert-warning m-b-none">
+                                            {{__('We don\'t have anything to show you right now! But when we do, we\'ll be sure to let you know. Talk to you soon!')}}
+                                        </div>
                                     </div>
 
                                 </div>

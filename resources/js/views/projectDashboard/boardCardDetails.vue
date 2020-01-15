@@ -839,6 +839,7 @@
                 trigger : false,
                 userNames : '',
                 commentsData : '',
+                Socket : null
             }
         },
         mounted() {
@@ -858,6 +859,19 @@
 
         },
         methods: {
+            connectSocket: function () {
+                let app = this;
+                if (app.Socket == null) {
+                    // app.Socket = io.connect('http://localhost:4100/');
+                    app.Socket = io.connect('https://spark.compltit.net:4100/');
+                    // app.Socket.emit('loginId', 2)
+                    // app.Socket.on('newMessage', function (res) {
+                    //     console.log(res);
+                    // })
+
+
+                }
+            },
             handlePaste(){
                 console.log('paste');
             },
@@ -1113,7 +1127,7 @@
                         }
                     }
                     _this.mentionUsers = [];
-                    
+
                     $('#comment'+id).val('');
                     let mailData = {
                         subject : "You are mentioned in a comment",

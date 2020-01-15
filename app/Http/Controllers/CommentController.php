@@ -11,6 +11,7 @@ use App\Files;
 use App\AssignedUser;
 use App\Task;
 use Intervention\Image\File;
+use Laravel\Spark\Notification;
 
 
 class CommentController extends Controller
@@ -31,11 +32,23 @@ class CommentController extends Controller
             'comment' => $request->comment,
             'created_at' => Carbon::now()
         ];
-
+        $all_Assign_users = Task::where('id', $request->task_id)->with('Assign_user')->first();
         $insert = Comment::create($data);
         if ($insert) {
             $insert = Comment::where('id', $insert->id)->with('user')->first();
+            foreach ($all_Assign_users->Assign_user as $item) {
+                Notification::create([
+                    'id'=>uniqid(Carbon::now()->year),
+                    'user_id' =>$item->user_id,
+                    'created_by' =>Auth::id(),
+                    'body' => 'Someone Comments on a task you are assigned!',
+                    'action_text'=>'taskspark',
+                    'action_url'=>'taskspark',
+                ]);
+            }
         }
+
+
         // $emails = [];
         // $users = AssignedUser::where('task_id',$request->task_id)->with(['users'])->get();
         // foreach ($users as $key => $value) {
