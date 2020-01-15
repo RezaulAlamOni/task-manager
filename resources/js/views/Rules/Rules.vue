@@ -208,7 +208,9 @@
         },
         mounted() {
             var _this = this;
-            _this.Socket = io.connect('http://localhost:3000/');
+            this.$toastr.defaultTimeout = 1200;
+            // _this.Socket = io.connect('http://localhost:3000/');
+            _this.Socket = io.connect('https://spark.compltit.net:4100/');
 
             this.getProject();
             this.getBoardColumn();
@@ -272,8 +274,17 @@
                         .then(response => response.data)
                         .then(response => {
                             if (response.status === 'exist') {
-                                swal('sorry', 'Already Exist', 'warning');
+                                // swal('sorry', 'Already Exist', 'warning');
+                                _this.$toastr.w("Sorry, Already Exist !");
                             } else {
+                                let mailData = {
+                                        subject : "Rule Added",
+                                        body    : "Rule ( "+_this.rule.name+" ) is created",
+                                        email   : "email_taskUpdated",
+                                        generalBody : "Rule ( "+_this.rule.name+" ) is created",
+                                        user_id : JSON.parse(_this.rule.assign_to),
+                                        project_id : _this.project_id
+                                };
                                 // swal('Rules Created', 'Rules Create Success', 'success');
                                 _this.Socket.emit('rulesCreate',{assign_users : _this.rule.assign_to, project_id : _this.project_id} )
                                 _this.rule.id = null;
@@ -290,6 +301,8 @@
                                         placeholder: "Select User For Assign"
                                     });
                                 }, 200)
+                                _this.$toastr.s("Rule creation success");
+                                _this.sendMail(mailData);
                             }
                         })
                         .catch(error => {
@@ -313,19 +326,30 @@
                             closeOnConfirm: false
                         },
                         function () {
-                            console.log(_this.rule);
-                            _this.rule.assign_to = JSON.stringify($("#select22").val())
+                            // console.log(_this.rule);
+                             _this.rule.assign_to = JSON.stringify($("#select22").val())
+                            let mailData = {
+                                    subject : "Rule updated",
+                                    body    : "Rule is updated to ( "+_this.rule.name+" )",
+                                    email   : "email_taskUpdated",
+                                    generalBody : "Rule is updated to ( "+_this.rule.name+" )",
+                                    user_id : JSON.parse(_this.rule.assign_to),
+                                    project_id : _this.project_id
+                            };
+                           
                             axios.post('/api/rules-update', _this.rule)
-
                                 .then(response => response.data)
                                 .then(response => {
                                     if (response.status === 'exist') {
-                                        swal('sorry', 'Already Exist', 'warning');
+                                        _this.$toastr.w("Sorry, Already Exist !");
+                                        // swal('sorry', 'Already Exist', 'warning');
                                     } else {
                                         // swal('Rules Created', 'Rules Create Success', 'success');
                                         swal.close();
                                         _this.rules_action = 'rules';
                                         _this.getBoardColumn();
+                                        _this.$toastr.s("Rule update success");
+                                        _this.sendMail(mailData);
                                     }
                                 })
                                 .catch(error => {
@@ -350,10 +374,17 @@
                     },
                     function () {
                         axios.post('/api/rules-delete', {'id': id})
-
                             .then(response => response.data)
                             .then(response => {
                                 swal.close();
+                                let mailData = {
+                                        subject : "Rule deleted",
+                                        body    : "Rule is deleted",
+                                        email   : "email_taskUpdated",
+                                        generalBody : "Rule is deleted",
+                                        user_id : JSON.parse(_this.rule.assign_to),
+                                        project_id : _this.project_id
+                                };
                                 if (response.status === 'success') {
                                     _this.$emit('ruleUpdate');
                                     _this.rules_action = 'create';
@@ -373,6 +404,8 @@
                                         _this.getBoardColumn();
 
                                     }, 200)
+                                    _this.$toastr.s("Rule delation success");
+                                    _this.sendMail(mailData);
                                 }
                             })
                             .catch(error => {
@@ -417,6 +450,16 @@
             },
             PauseRule() {
                 this.rule.status = 0;
+            },
+            sendMail(data){
+                axios.post('/api/send-mail/',data)
+                .then(response => response.data)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+
+                });
             }
         },
         watch: {

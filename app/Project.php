@@ -35,4 +35,14 @@ class Project extends Model
     {
         return $this->hasMany(ProjectNavItems::class, 'project_id', 'id');
     }
+
+    /**
+     * Get the team
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function team()
+    {
+        return $this->belongsTo(Team::class, 'team_id', 'id')->with('team_users');
+    }
 }
