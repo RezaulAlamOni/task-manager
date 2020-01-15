@@ -109,7 +109,7 @@
                 <div class="card">
                     <div class="card-header">
                         <span class="float-left"><b>Project Title:</b> {{ $project->name }}</span>
-                        <span class="float-right"><b>Date:</b> {{ \Carbon\Carbon::parse($date)->format('d F, Y') }}</span>
+                        <span class="float-right"><b>Date:</b> {{ $date }}</span>
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered table-hover">

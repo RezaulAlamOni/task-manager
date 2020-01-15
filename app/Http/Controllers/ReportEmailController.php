@@ -21,18 +21,24 @@ class ReportEmailController extends Controller
         );
         $today = Carbon::today()->format('Y-m-d');
         $today = '2020-01-14';
+        $from = $today;
+        $to = $today;
         $dateRange = array(
-            "$today 00:00:00",
-            "$today 23:59:59"
+            "$from 00:00:00",
+            "$to 23:59:59"
         );
-        $date = $today;
-        $project = Project::with(['action_log' => function ($q) use ($dateRange) {
+        $date = Carbon::parse($today)->format('d F, Y');
+        $projects = Project::with(['action_log' => function ($q) use ($dateRange) {
             $q->whereBetween('action_at', $dateRange)
                 ->with('user');
         }, 'team'])->whereHas('action_log', function ($q) {
             $q->whereBetween('action_at', ['2020-01-14 00:00:00', '2020-01-14 23:59:59']);
-        })->first();
-        $emailData['name'] = $project->team->team_users()->first()->name;
+        })->get();
+        foreach ($projects as $project){
+            // Email Sending Logic will be implemented here
+        }
+        exit();
+        $emailData['name'] = $projects->team->team_users()->first()->name;
         return view('vendor.emailTemplates.reportTemplate', compact('emailData', 'project', 'date'));
     }
 }
