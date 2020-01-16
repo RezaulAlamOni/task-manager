@@ -4,21 +4,21 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class ReportWeeklyCron extends Command
+class ReportMonthlyCron extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'report-weekly';
+    protected $signature = 'report-monthly';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Weekly Report Email Cron Job';
+    protected $description = 'Monthly Report Email Cron Job';
 
     /**
      * Create a new command instance.
@@ -37,8 +37,8 @@ class ReportWeeklyCron extends Command
      */
     public function handle()
     {
-        \Log::info("Weekly Report Email Cron is working fine!");
-        $result = app('App\Http\Controllers\ReportEmailController')->weekly();
-        $this->info('Weekly-Report:Cron Command Run successfully!');
+        \Log::info("Monthly Report Email Cron is working fine!");
+        $result = app('App\Http\Controllers\ReportEmailController')->monthly();
+        $this->info('Monthly-Report:Cron Command Run successfully!');
     }
 }
