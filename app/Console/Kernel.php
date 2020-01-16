@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\ReminderSettingsCron::class,
         Commands\ReportDailyCron::class,
+        Commands\ReportWeeklyCron::class,
     ];
 
     /**
@@ -29,6 +30,8 @@ class Kernel extends ConsoleKernel
                   ->daily();
          $schedule->command('report-daily')
                   ->daily();
+         $schedule->command('report-weekly')
+                  ->weekly();
     }
 
     /**
