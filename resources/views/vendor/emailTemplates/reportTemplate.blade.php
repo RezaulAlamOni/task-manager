@@ -104,7 +104,7 @@
             <div class="content main">
                 <h5>Hi {{ $emailData['name'] }},</h5>
                 <p>
-                    &nbsp; &nbsp; &nbsp; &nbsp; Daily report for project titled <b>{{ $project->name }}</b>.
+                    &nbsp; &nbsp; &nbsp; &nbsp; {{ $emailData['subject'] }} for project titled <b>{{ $project->name }}</b>.
                 </p>
                 <div class="card">
                     <div class="card-header">

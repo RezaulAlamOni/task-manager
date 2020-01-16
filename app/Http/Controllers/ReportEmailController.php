@@ -17,7 +17,7 @@ class ReportEmailController extends Controller
 
     public function __construct()
     {
-        $this->test_env = true;
+        $this->test_env = false;
         $this->show_view = false;
         $this->sendMail = true;
         $this->limitProject = 1;
@@ -48,6 +48,8 @@ class ReportEmailController extends Controller
     }
 
     /**
+     * Common Send Email Functionality
+     *
      * @param array $emailInfo
      * @param array $dateRange
      * @param string $date
