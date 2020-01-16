@@ -39,14 +39,15 @@ class CommentController extends Controller
             $insert = Comment::where('id', $insert->id)->with('user')->first();
             foreach ($all_Assign_users->Assign_user as $item) {
                 $user_ids[] = $item->user_id;
-                Notification::create([
-                    'id' => uniqid(Carbon::now()->year),
-                    'user_id' => $item->user_id,
-                    'created_by' => Auth::id(),
-                    'body' => 'Someone Comments on a task you are assigned!',
-                    'action_text' => 'taskspark',
-                    'action_url' => 'taskspark',
-                ]);
+                if ($item->user_id != Auth::id()){
+                    Notification::create([
+                        'user_id' => $item->user_id,
+                        'created_by' => Auth::id(),
+                        'body' => 'Someone Comments on a task you are assigned!',
+                        'action_text' => 'View',
+                        'action_url' => '/project-dashboard/'.$all_Assign_users->project_id,
+                    ]);
+                }
             }
         }
 

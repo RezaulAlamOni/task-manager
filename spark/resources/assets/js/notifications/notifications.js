@@ -25,11 +25,9 @@ module.exports = {
             if (app.Socket == null) {
                 app.Socket = io.connect(window.socket_url);
                 // app.Socket.emit('notification-update', 2)
-                app.Socket.on('notification-update', function (res) {
-                    swal('Success','notification-update','success')
-                })
-
-
+                // app.Socket.on('notification-update', function (res) {
+                //     swal('Success','notification-update'+ res,'success')
+                // })
             }
         },
         /**
