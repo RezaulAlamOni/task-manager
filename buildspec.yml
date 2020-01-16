@@ -21,11 +21,11 @@ phases:
       #- pecl install zip-1.13.5
   pre_build:
     commands:
-      - composer install --no-dev
-      - npm install
+      - composer install --no-dev --no-progress
+      - npm install --quiet --no-progress
       - npm run production
       - cd server
-      - npm install
+      - npm install --quiet --no-progress
       #- npm install --save express
 #  build:
 #    commands:
