@@ -31,8 +31,8 @@ class ReportEmailController extends Controller
      * Show the email template view
      *
      * @param $projects
-     * @param $project_id
-     * @param $date
+     * @param null $project_id
+     * @param string $date
      * @param string $type
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -59,14 +59,18 @@ class ReportEmailController extends Controller
         $success = true;
         $projects = Project::with(['action_log' => function ($q) use ($dateRange) {
             $q->whereBetween('action_at', $dateRange)->with(['user']);
-        }, 'team.team_users' => function ($q) {
-            $q->with(['notifications' => function ($q) {
-                $q->where('unique_id', 'emailFreq_dailyReport');
-            }])->whereHas('notifications', function ($q) {
-                $q->where('unique_id', 'emailFreq_dailyReport');
+        }, 'team.team_users' => function ($q) use ($emailInfo) {
+            $q->with(['notifications' => function ($q) use ($emailInfo) {
+                $q->where('unique_id', $emailInfo['unique_id']);
+            }])->whereHas('notifications', function ($q) use ($emailInfo) {
+                $q->where('unique_id', $emailInfo['unique_id']);
             });
         }])->whereHas('action_log', function ($q) use ($dateRange) {
             $q->whereBetween('action_at', $dateRange);
+        })->whereHas('team.team_users', function ($q) use ($emailInfo) {
+            $q->whereHas('notifications', function ($q) use ($emailInfo) {
+                $q->where('unique_id', $emailInfo['unique_id']);
+            });
         });
 
         if ($this->show_view) { // Show view if want to debug email template
@@ -78,6 +82,7 @@ class ReportEmailController extends Controller
             }
         } else {
             $projects = $projects->get();
+//            dd($projects->toArray());
         }
 
         $counter = 0;
@@ -112,92 +117,61 @@ class ReportEmailController extends Controller
     /**
      * Daily Report Email Send
      *
-     * @param $project_id
+     * @param null $project_id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function daily($project_id = null)
     {
-        if ($this->test_env) {
-            $today = '2020-01-14';
-        } else {
-            $today = Carbon::today()->format('Y-m-d');
-        }
-        $from = $today;
-        $to = $today;
+        $now = $this->test_env ? Carbon::parse('2020-01-14') : Carbon::now();
         $dateRange = array(
-            "$from 00:00:00",
-            "$to 23:59:59"
+            $now->startOfDay()->format('Y-m-d H:i:s'),
+            $now->endOfDay()->format('Y-m-d H:i:s')
         );
-        $date = Carbon::parse($today)->format('d F, Y');
-        $projects = Project::with(['action_log' => function ($q) use ($dateRange) {
-            $q->whereBetween('action_at', $dateRange)->with(['user']);
-        }, 'team.team_users' => function ($q) {
-            $q->with(['notifications' => function ($q) {
-                $q->where('unique_id', 'emailFreq_dailyReport');
-            }])->whereHas('notifications', function ($q) {
-                $q->where('unique_id', 'emailFreq_dailyReport');
-            });
-        }])->whereHas('action_log', function ($q) use ($dateRange) {
-            $q->whereBetween('action_at', $dateRange);
-        });
-        if ($this->show_view) { // Show view if want to debug email template
-            return $this->showEmailView($projects, $project_id, $date, 'daily');
-        } else {
-            $projects = $projects->get();
-        }
-        $counter = 0;
-        foreach ($projects as $project) {
-            foreach ($project->team->team_users as $team_user) {
-                $emailData = array(
-                    'type' => 'daily',
-                    'subject' => 'Daily Report',
-                    'name' => $team_user->name
-                );
-                if ($this->sendMail) {
-                    Mail::to($team_user->email)->send(new ReportMail($emailData, $project, $date));
-                    sleep(1);
-                }
-                if ($this->test_env) {
-                    echo "Test Environment Run Successfully<br/>";
-                    echo "Counter Value: $counter<br/>";
-                    dump($emailData, $team_user->email, $project->toArray());
-                    if ($this->limitProject < $counter) {
-                        break 2;
-                    }
-                }
+        $date = Carbon::parse($now)->format('d F, Y');
+
+        $emailInfo = array(
+            'type' => 'daily',
+            'subject' => 'Daily Report',
+            'unique_id' => 'emailFreq_dailyReport'
+        );
+        $info = $this->SendEmail($emailInfo, $dateRange, $date, $project_id);
+
+        if ($this->show_view) { // Show view if show_view is enabled
+            if ($info) {
+                return $info;
             }
-            $counter++;
+        } else {
+            echo $date . '<br/>';
         }
-        echo "Daily Report Email Send Successfully";
+
+        if ($info) {
+            echo $emailInfo['subject'] . " Email Send Successfully";
+        } else {
+            echo $emailInfo['subject'] . " Email Sending Failed";
+        }
     }
 
     /**
-     * Daily Report Email Send
+     * Weekly Report Email Send
      *
-     * @param $project_id
+     * @param null $project_id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function weekly($project_id = null)
     {
-        if ($this->test_env) {
-            $today = '2020-01-20';
-            $now = Carbon::parse($today)->subWeeks(1);
-        } else {
-            $now = Carbon::now();
-        }
-        $weekStartDate = $now->startOfWeek($this->weekRange['start'])->format('Y-m-d H:i:s');
-        $weekEndDate = $now->endOfWeek($this->weekRange['end'])->format('Y-m-d H:i:s');
+        $now = $this->test_env ? Carbon::parse('2020-01-20')->subWeeks(1) : Carbon::now();
         $dateRange = array(
-            $weekStartDate,
-            $weekEndDate
+            $now->startOfWeek($this->weekRange['start'])->format('Y-m-d H:i:s'),
+            $now->endOfWeek($this->weekRange['end'])->format('Y-m-d H:i:s')
         );
-        $date = Carbon::parse($weekStartDate)->format('d F, Y');
+        $date = Carbon::parse($dateRange[0])->format('d F, Y');
         $date .= " To ";
-        $date .= Carbon::parse($weekEndDate)->format('d F, Y');
+        $date .= Carbon::parse($dateRange[1])->format('d F, Y');
 
         $emailInfo = array(
             'type' => 'weekly',
-            'subject' => 'Weekly Report'
+            'subject' => 'Weekly Report',
+            'unique_id' => 'emailFreq_weeklyReport'
         );
         $info = $this->SendEmail($emailInfo, $dateRange, $date, $project_id);
 
