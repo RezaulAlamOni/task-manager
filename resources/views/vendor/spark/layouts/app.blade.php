@@ -52,6 +52,7 @@
             Spark::scriptVariables(), []
         )); ?>;
         window.socket_url = <?php echo json_encode(config('app.socket_url')); ?>;
+        // alert(window.socket_url)
 
     </script>
 </head>

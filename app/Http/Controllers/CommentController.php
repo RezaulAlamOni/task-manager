@@ -35,15 +35,17 @@ class CommentController extends Controller
         $all_Assign_users = Task::where('id', $request->task_id)->with('Assign_user')->first();
         $insert = Comment::create($data);
         if ($insert) {
+            $user_ids = [];
             $insert = Comment::where('id', $insert->id)->with('user')->first();
             foreach ($all_Assign_users->Assign_user as $item) {
+                $user_ids[] = $item->user_id;
                 Notification::create([
-                    'id'=>uniqid(Carbon::now()->year),
-                    'user_id' =>$item->user_id,
-                    'created_by' =>Auth::id(),
+                    'id' => uniqid(Carbon::now()->year),
+                    'user_id' => $item->user_id,
+                    'created_by' => Auth::id(),
                     'body' => 'Someone Comments on a task you are assigned!',
-                    'action_text'=>'taskspark',
-                    'action_url'=>'taskspark',
+                    'action_text' => 'taskspark',
+                    'action_url' => 'taskspark',
                 ]);
             }
         }
@@ -61,7 +63,7 @@ class CommentController extends Controller
         //     Mail::to($emails)->send(new UserMail($comment));
         // }
 
-        return response()->json(['success' => true, 'Data' => $insert]);
+        return response()->json(['success' => true, 'Data' => $insert, 'users' => $user_ids]);
     }
 
     public function fileUpload (Request $request)

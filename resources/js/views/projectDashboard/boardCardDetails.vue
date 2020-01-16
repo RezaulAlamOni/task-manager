@@ -844,9 +844,8 @@
         },
         mounted() {
             let _this = this;
-            console.log(this.selectedData);
-            // CKEDITOR.replace( "description" );
-            // console.log(selectedData);
+            _this.$toastr.defaultTimeout = 1500;
+            // console.log(this.selectedData);
             setTimeout(function () {
                 $('[data-toggle="tooltip"]').tooltip();
                 var hei = $("#cmntSection").height();
@@ -854,6 +853,7 @@
                 // $('#comment'+selectedData.cardId);
                 //  .getElementById('comment'+_this.selectedData.cardId).addEventListener("paste", _this.handlePaste);
             }, 1000);
+            _this.connectSocket();
         },
         created() {
 
@@ -863,7 +863,7 @@
                 let app = this;
                 if (app.Socket == null) {
                     // app.Socket = io.connect('http://localhost:4100/');
-                    app.Socket = io.connect('https://spark.compltit.net:4100/');
+                    app.Socket = io.connect(window.socket_url);
                     // app.Socket.emit('loginId', 2)
                     // app.Socket.on('newMessage', function (res) {
                     //     console.log(res);
@@ -1122,28 +1122,32 @@
                     for (let index = 0; index < _this.mentionUsers.length; index++) {
                         // console.log(_this.mentionUsers[index]);
                         if (comment.includes('@'+_this.mentionUsers[index].name)) {
-                            console.log(_this.mentionUsers[index].name);
+                            // console.log(_this.mentionUsers[index].name);
                             mailUsers.push(_this.mentionUsers[index].id);
                         }
                     }
                     _this.mentionUsers = [];
 
                     $('#comment'+id).val('');
-                    let mailData = {
-                        subject : "You are mentioned in a comment",
-                        body    : "You are mentioned in a comment",
-                        email    : "email_commentLeft",
-                        generalBody : "A comment is added to a card ( "+_this.selectedData.data+" ) ",
-                        user_id :  mailUsers,
-                        task_id :  id
-                    };
-                    _this.sendMail(mailData);
+                    // let mailData = {
+                    //     subject : "You are mentioned in a comment",
+                    //     body    : "You are mentioned in a comment",
+                    //     email    : "email_commentLeft",
+                    //     generalBody : "A comment is added to a card ( "+_this.selectedData.data+" ) ",
+                    //     user_id :  mailUsers,
+                    //     task_id :  id
+                    // };
+                    // _this.sendMail(mailData);
                     setTimeout(() => {
                         _this.comment.push(response.Data);
                         _this.HideTextArea();
                         var hei = $("#cmntSection").height();
                         $("#cmntSection").animate({ scrollTop: hei }, 1000);
                         // console.log(_this.selectedData.comment);
+                        _this.$toastr.s('Comment Create Success !');
+                        if(response.users.length > 0){
+                            _this.Socket.emit('notification-update',response.users)
+                        }
                     }, 500);
                 })
                 .catch(error =>{

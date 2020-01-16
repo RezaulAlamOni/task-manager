@@ -14,7 +14,8 @@ module.exports = {
     },
 
     mounted(){
-
+        var _this = this;
+        _this.connectSocket();
     },
 
 
@@ -22,12 +23,11 @@ module.exports = {
         connectSocket: function () {
             let app = this;
             if (app.Socket == null) {
-                // app.Socket = io.connect('http://localhost:4100/');
                 app.Socket = io.connect(window.socket_url);
-                // app.Socket.emit('loginId', 2)
-                // app.Socket.on('newMessage', function (res) {
-                //     console.log(res);
-                // })
+                // app.Socket.emit('notification-update', 2)
+                app.Socket.on('notification-update', function (res) {
+                    swal('Success','notification-update','success')
+                })
 
 
             }

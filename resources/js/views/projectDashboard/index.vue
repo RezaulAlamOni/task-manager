@@ -1363,7 +1363,7 @@
             //    event.preventDefault();
             //    event.returnValue = "";
             // });
-            this.$toastr.defaultTimeout = 1000;
+            this.$toastr.defaultTimeout = 1500;
             let _this = this;
             this.projectId = this.$route.params.projectId;
             this.teamCheck();
@@ -1493,7 +1493,6 @@
             connectSocket: function () {
                 let app = this;
                 if (app.Socket == null) {
-                    // app.Socket = io.connect('http://localhost:4100/');
                     app.Socket = io.connect(window.socket_url);
                     app.Socket.emit('loginId', 2)
                     app.Socket.on('newMessage', function (res) {
