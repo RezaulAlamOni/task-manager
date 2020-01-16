@@ -6,21 +6,19 @@ phases:
       php: 7.3
       nodejs: 10
     commands:
-      #- whereis php
-      #- php -v
-      #- rm -f /usr/local/bin/php*
-      #- rm -f /usr/local/bin/phar*
-      #- rm -f /usr/local/bin/pear*
-      #- rm -f /usr/local/bin/pecl*
+      - rm -f /usr/local/bin/php*
+      - rm -f /usr/local/bin/phar*
+      - rm -f /usr/local/bin/pear*
+      - rm -f /usr/local/bin/pecl*
       # update yum
-      #- apt-get update
-      #- apt-get install -y software-properties-common
-      #- LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
-      #- apt-get update
-      #- apt-get install -y php7.3 php7.3-gd php7.3-mbstring php7.3-xml php7.3-dom php7.3-curl php7.3-mysql mcrypt php7.3-zip php7.3-json
-      - yum update -y
-      - yum install php-pear php-devel gcc libzip-devel zlib-devel php-gd php-mbstring php-xml php-dom php-curl php-mysqlnd php-zip php-json -y
-      - pecl install zip-1.13.5
+      - apt-get update
+      - apt-get install -y software-properties-common
+      - LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
+      - apt-get update
+      - apt-get install -y php7.3 php7.3-gd php7.3-mbstring php7.3-xml php7.3-dom php7.3-curl php7.3-mysql mcrypt php7.3-zip php7.3-json
+      #- yum update -y
+      #- yum install php-pear php-devel gcc libzip-devel zlib-devel php-gd php-mbstring php-xml php-dom php-curl php-mysqlnd php-zip php-json -y
+      #- pecl install zip-1.13.5
   pre_build:
     commands:
       - composer install --no-dev
