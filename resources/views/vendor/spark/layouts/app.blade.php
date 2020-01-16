@@ -51,6 +51,7 @@
         window.Spark = <?php echo json_encode(array_merge(
             Spark::scriptVariables(), []
         )); ?>;
+        window.socket_url = <?php echo json_encode(config('app.socket_url')); ?>;
 
     </script>
 </head>
