@@ -23,7 +23,7 @@ phases:
     commands:
       - composer install --no-dev --no-progress
       - npm install --quiet --no-progress
-      - npm run production
+      - npm run -s production
       - cd server
       - npm install --quiet --no-progress
       #- npm install --save express
