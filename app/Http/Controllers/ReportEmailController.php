@@ -5,18 +5,21 @@ namespace App\Http\Controllers;
 use App\Mail\ReportMail;
 use App\Project;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class ReportEmailController extends Controller
 {
     private $test_env;
     private $show_view;
+    private $sendMail;
+    private $limitProject;
 
     public function __construct()
     {
         $this->test_env = false;
         $this->show_view = false;
+        $this->sendMail = true;
+        $this->limitProject = 4;
     }
 
     /**
@@ -61,9 +64,14 @@ class ReportEmailController extends Controller
         $date = Carbon::parse($today)->format('d F, Y');
 
         $projects = Project::with(['action_log' => function ($q) use ($dateRange) {
-            $q->whereBetween('action_at', $dateRange)
-                ->with('user');
-        }, 'team'])->whereHas('action_log', function ($q) use ($dateRange) {
+            $q->whereBetween('action_at', $dateRange)->with(['user']);
+        }, 'team.team_users' => function ($q) {
+            $q->with(['notifications' => function ($q) {
+                $q->where('unique_id', 'emailFreq_dailyReport');
+            }])->whereHas('notifications', function ($q) {
+                $q->where('unique_id', 'emailFreq_dailyReport');
+            });
+        }])->whereHas('action_log', function ($q) use ($dateRange) {
             $q->whereBetween('action_at', $dateRange);
         });
 
@@ -73,6 +81,7 @@ class ReportEmailController extends Controller
             $projects = $projects->get();
         }
 
+        $counter = 0;
         foreach ($projects as $project) {
             foreach ($project->team->team_users as $team_user) {
                 $emailData = array(
@@ -80,12 +89,20 @@ class ReportEmailController extends Controller
                     'subject' => 'Daily Report',
                     'name' => $team_user->name
                 );
-                Mail::to($team_user['email'])->send(new ReportMail($emailData, $project, $date));
+                if ($this->sendMail) {
+                    Mail::to($team_user->email)->send(new ReportMail($emailData, $project, $date));
+                    sleep(1);
+                }
                 if ($this->test_env) {
                     echo "Test Environment Run Successfully<br/>";
-                    break 2;
+                    echo "Counter Value: $counter<br/>";
+                    dump($emailData, $team_user->email, $project->toArray());
+                    if ($this->limitProject < $counter) {
+                        break 2;
+                    }
                 }
             }
+            $counter++;
         }
         echo "Daily Report Email Send Successfully";
     }
