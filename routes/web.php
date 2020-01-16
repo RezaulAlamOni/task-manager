@@ -36,6 +36,7 @@ Route::get('/list-pdf-create/{type}/{list_id}','MultipleListController@ListPdfCr
 Route::get('reminder', 'ReminderSettingsController@sendDueDateEmail');
 Route::get('report/daily/{project_id}', 'ReportEmailController@daily');
 Route::get('report/weekly/{project_id}', 'ReportEmailController@weekly');
+Route::get('report/monthly/{project_id}', 'ReportEmailController@monthly');
 
 
 Route::get( '/{vue_route?}', 'ProjectController@index' )->where( 'vue_route', '(.*)' );

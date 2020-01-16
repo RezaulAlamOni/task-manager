@@ -17,7 +17,7 @@ class ReportEmailController extends Controller
 
     public function __construct()
     {
-        $this->test_env = false;
+        $this->test_env = true;
         $this->show_view = false;
         $this->sendMail = true;
         $this->limitProject = 1;
@@ -82,7 +82,7 @@ class ReportEmailController extends Controller
             }
         } else {
             $projects = $projects->get();
-//            dd($projects->toArray());
+//            dd($dateRange, $projects->toArray());
         }
 
         $counter = 0;
@@ -172,6 +172,43 @@ class ReportEmailController extends Controller
             'type' => 'weekly',
             'subject' => 'Weekly Report',
             'unique_id' => 'emailFreq_weeklyReport'
+        );
+        $info = $this->SendEmail($emailInfo, $dateRange, $date, $project_id);
+
+        if ($this->show_view) { // Show view if show_view is enabled
+            if ($info) {
+                return $info;
+            }
+        } else {
+            echo $date . '<br/>';
+        }
+
+        if ($info) {
+            echo $emailInfo['subject'] . " Email Send Successfully";
+        } else {
+            echo $emailInfo['subject'] . " Email Sending Failed";
+        }
+    }
+
+    /**
+     * Monthly Report Email Send
+     *
+     * @param null $project_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function monthly($project_id = null)
+    {
+        $now = $this->test_env ? Carbon::parse('2020-02-01') : Carbon::now();
+        $dateRange = array(
+            $now->startOfMonth()->subMonth()->format('Y-m-d H:i:s'),
+            $now->endOfMonth()->format('Y-m-d H:i:s')
+        );
+        $date = Carbon::parse($dateRange[0])->format('F, Y');
+
+        $emailInfo = array(
+            'type' => 'monthly',
+            'subject' => 'Monthly Report',
+            'unique_id' => 'emailFreq_monthlyReport'
         );
         $info = $this->SendEmail($emailInfo, $dateRange, $date, $project_id);
 
