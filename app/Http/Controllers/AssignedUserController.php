@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\Auth;
 
 class AssignedUserController extends Controller
 {
+    protected $HomeController;
+
+    public function __construct()
+    {
+        $this->HomeController = new HomeController;
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         //
@@ -22,7 +30,11 @@ class AssignedUserController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {   
+        
+        $task = Task::find($request->task_id);
+        $user = User::find($request->user_id);
+
         $checkIsUserAssigned = AssignedUser::where([
             'task_id' => $request->task_id,
             'user_id' => $request->user_id
@@ -37,6 +49,14 @@ class AssignedUserController extends Controller
                 'updated_by' => Auth::id(),
             ]);
 
+            $mailData = [
+                'subject'       => "Added to a task",
+                'body'          => "You are assigned on a task (".$task->title.").",
+                'email'         => "email_whenAddedToTask",
+                'generalBody'   => " (".$user->name.") is assigned on a task (".$task->title.") ",
+                'task_id'       => $request->task_id
+            ];
+            $this->HomeController->userMail( (object) $mailData);
             // $user = User::where('id',$request->user_id)->first();
             // $task = Task::where('id',$request->task_id)->with(['project'])->first();
             // // $comment = 'Hi, A new task is assigned to you.';
@@ -53,8 +73,19 @@ class AssignedUserController extends Controller
     }
 
     public function delete(Request $request)
-    {
+    {              
+        $task = Task::find($request->task_id);
+        $user = User::find($request->user_id);
+        $mailData = [
+            'subject'       => "Removed from a card",
+            'body'          => "You are removed from a card (".$task->title.") that you were assigned on.",
+            'email'         => "email_whenRemovedFromTask",
+            'generalBody'   => " (".$user->name.") is removed from a card (".$task->title.") ",
+            'task_id'       => $request->task_id
+        ];
+
         AssignedUser::where($request->all())->delete();
+        $this->HomeController->userMail( (object) $mailData);
         // $user = User::where('id',$request->user_id)->first();
         // $comment['subject'] = "You have been removed from a task";
         // $comment['body'] = "You have been removed from a task";

@@ -64,8 +64,8 @@ class HomeController extends Controller
         return response()->json(['user' => $user]);
     }
 
-    public function userMail(Request $request)
-    {
+    public function userMail($request)
+    {   
         $emails = [];
         $userIds = [];
         $mails = [];
@@ -130,7 +130,7 @@ class HomeController extends Controller
                     // $comment = 'Hi, Comment Add to card.';
                     $comment['subject'] = $request->subject;
                     $comment['body'] = $request->body;
-                    $mails[] = Mail::to($emails[$ids])->send(new UserMail($comment));
+                    $mails[] = Mail::to($emails[$ids])->queue(new UserMail($comment));
                 }
             } else {
                 if ($data->original[$emailCond] == 1) {
@@ -138,7 +138,7 @@ class HomeController extends Controller
                         // $comment = 'Hi, Comment Add to card.';
                         $comment['subject'] = $request->subject;
                         $comment['body'] = $request->body;
-                        $mails[] = Mail::to($emails[$ids])->send(new UserMail($comment));
+                        $mails[] = Mail::to($emails[$ids])->queue(new UserMail($comment));
                     }
                 }
             }
@@ -204,10 +204,15 @@ class HomeController extends Controller
                 $emails = $value->email; 
                 $comment['subject'] = $request->subject;
                 $comment['body'] = $request->generalBody;
-                $mails[] = Mail::to($emails)->send(new UserMail($comment));
+                $mails[] = Mail::to($emails)->queue(new UserMail($comment));
             // }
             // print_r(array_column($value->notifications->toArray(), 'unique_id'));
         }
+    }
+
+    public function test($data)
+    {
+        return $data;
     }
     // email_IAmOn
     // email_everything
