@@ -6,6 +6,8 @@ phases:
       php: 7.3
       nodejs: 10
     commands:
+      - whereis php
+      - php -v
       - rm -f /usr/local/bin/php*
       - rm -f /usr/local/bin/phar*
       - rm -f /usr/local/bin/pear*
