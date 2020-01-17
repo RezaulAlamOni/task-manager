@@ -210,7 +210,7 @@
             var _this = this;
             this.$toastr.defaultTimeout = 1200;
             // _this.Socket = io.connect('http://localhost:3000/');
-            _this.Socket = io.connect('https://spark.compltit.net:4100/');
+            _this.Socket = io.connect(window.socket_url);
 
             this.getProject();
             this.getBoardColumn();
@@ -302,7 +302,7 @@
                                     });
                                 }, 200)
                                 _this.$toastr.s("Rule creation success");
-                                _this.sendMail(mailData);
+                                // _this.sendMail(mailData);
                             }
                         })
                         .catch(error => {
@@ -452,14 +452,14 @@
                 this.rule.status = 0;
             },
             sendMail(data){
-                axios.post('/api/send-mail/',data)
-                .then(response => response.data)
-                .then(response => {
-                    console.log(response);
-                })
-                .catch(error => {
+                // axios.post('/api/send-mail/',data)
+                // .then(response => response.data)
+                // .then(response => {
+                //     console.log(response);
+                // })
+                // .catch(error => {
 
-                });
+                // });
             }
         },
         watch: {

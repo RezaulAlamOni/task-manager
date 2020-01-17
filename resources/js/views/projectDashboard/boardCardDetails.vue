@@ -925,14 +925,14 @@
                     .then(response => response.data)
                     .then(response => {
                         // _this.getTaskList();
-                        let mailData = {
-                            subject : "Date updated",
-                            body    : "Date is updated of a task that you are assigned on",
-                            email    : "email_taskUpdated",
-                            generalBody : "A Card ( "+_this.selectedData.data+" ) date is updated",
-                            task_id :  _this.selectedData.cardId
-                        };
-                        _this.sendMail(mailData);
+                        // let mailData = {
+                        //     subject : "Date updated",
+                        //     body    : "Date is updated of a task that you are assigned on",
+                        //     email    : "email_taskUpdated",
+                        //     generalBody : "A Card ( "+_this.selectedData.data+" ) date is updated",
+                        //     task_id :  _this.selectedData.cardId
+                        // };
+                        // _this.sendMail(mailData);
                     })
                     .catch(error => {
                         console.log('Api for task date update not Working !!!')
@@ -962,14 +962,14 @@
                 .then(response => {
                     // console.log(response)
                     _this.HideDetails();
-                    let mailData = {
-                        subject : "Description updated",
-                        body    : "Description updated of a task that you are assigned on",
-                        email    : "email_descriptionUpdated",
-                        generalBody : "A Card description is updates",
-                        task_id :  _this.selectedData.cardId
-                    };
-                    _this.sendMail(mailData);
+                    // let mailData = {
+                    //     subject : "Description updated",
+                    //     body    : "Description updated of a task that you are assigned on",
+                    //     email    : "email_descriptionUpdated",
+                    //     generalBody : "A Card description is updates",
+                    //     task_id :  _this.selectedData.cardId
+                    // };
+                    // _this.sendMail(mailData);
                     // $('.submitdetails').hide();
                     // _this.getTaskList()
                     // $('#dropdown' + data._id).toggle();
@@ -1111,22 +1111,23 @@
                     }, 1000);
                     return false;
                 }
+                let mailUsers = [];
+                for (let index = 0; index < _this.mentionUsers.length; index++) {
+                    // console.log(_this.mentionUsers[index]);
+                    if (comment.includes('@'+_this.mentionUsers[index].name)) {
+                        // console.log(_this.mentionUsers[index].name);
+                        mailUsers.push(_this.mentionUsers[index].id);
+                    }
+                }
+                _this.mentionUsers = [];
                 var commentData = {
                     'comment' : comment,
-                    'task_id' : id
+                    'task_id' : id,
+                    'mailUsers' : mailUsers,
                 };
                 axios.post('/api/add-comment', commentData)
                 .then(response => response.data)
                 .then(response => {
-                    let mailUsers = [];
-                    for (let index = 0; index < _this.mentionUsers.length; index++) {
-                        // console.log(_this.mentionUsers[index]);
-                        if (comment.includes('@'+_this.mentionUsers[index].name)) {
-                            // console.log(_this.mentionUsers[index].name);
-                            mailUsers.push(_this.mentionUsers[index].id);
-                        }
-                    }
-                    _this.mentionUsers = [];
 
                     $('#comment'+id).val('');
                     // let mailData = {
@@ -1709,35 +1710,39 @@
             {
                 let _this = this;
                 let reply = $('#replyTextBox'+id).val();
+                // console.log(data);
+                let mailUsers = [];
+                for (let index = 0; index < _this.mentionUsers.length; index++) {
+                    // console.log(_this.mentionUsers[index]);
+                    if (reply.includes('@'+_this.mentionUsers[index].name)) {
+                        console.log(_this.mentionUsers[index].name);
+                        mailUsers.push(_this.mentionUsers[index].id);
+                    }
+                }
+                _this.mentionUsers = [];
+                
                 let data = {
                     'parent_id' : id,
                     'task_id'   : task_id,
                     'comment'   : reply,
+                    'mailUsers' : mailUsers,
                 }
-                // console.log(data);
+                
                 axios.post('/api/save-comment-reply', data)
                 .then(response => data)
                 .then(response => {
                     _this.getComments(task_id);
                     $('#replyBox'+id).hide();
-                    let mailUsers = [];
-                    for (let index = 0; index < _this.mentionUsers.length; index++) {
-                        // console.log(_this.mentionUsers[index]);
-                        if (reply.includes('@'+_this.mentionUsers[index].name)) {
-                            console.log(_this.mentionUsers[index].name);
-                            mailUsers.push(_this.mentionUsers[index].id);
-                        }
-                    }
-                    _this.mentionUsers = [];
-                    let mailData = {
-                        subject : "You are mentioned in a comment reply",
-                        body    : "You are mentioned in a comment reply",
-                        email    : "email_commentLeft",
-                        generalBody : "A comment reply added",
-                        user_id :  mailUsers,
-                        task_id :  task_id
-                    };
-                    _this.sendMail(mailData);
+                    
+                    // let mailData = {
+                    //     subject : "You are mentioned in a comment reply",
+                    //     body    : "You are mentioned in a comment reply",
+                    //     email    : "email_commentLeft",
+                    //     generalBody : "A comment reply added",
+                    //     user_id :  mailUsers,
+                    //     task_id :  task_id
+                    // };
+                    // _this.sendMail(mailData);
                 })
                 .catch(error => {
 

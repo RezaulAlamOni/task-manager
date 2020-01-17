@@ -10,12 +10,21 @@ use Carbon\Carbon;
 use App\Files;
 use App\AssignedUser;
 use App\Task;
+use App\User;
 use Intervention\Image\File;
 use Laravel\Spark\Notification;
 
 
 class CommentController extends Controller
 {
+    protected $HomeController;
+
+    public function __construct()
+    {
+        $this->HomeController = new HomeController;
+        $this->middleware('auth');
+    }
+
     public function getCardComment (Request $request)
     {
         $comment = Task::where('id', $request->task_id)
@@ -25,7 +34,8 @@ class CommentController extends Controller
     }
 
     public function addComment (Request $request)
-    {
+    {   
+        // return $request->mailUsers;
         $data = [
             'task_id' => $request->task_id,
             'user_id' => Auth::id(),
@@ -33,10 +43,34 @@ class CommentController extends Controller
             'created_at' => Carbon::now()
         ];
         $all_Assign_users = Task::where('id', $request->task_id)->with('Assign_user')->first();
+        $mailData = [
+            'subject'       => "A comment added to a task",
+            'body'          => "A comment ( ".$request->comment." ) is added to a task ( ".$all_Assign_users->title." ).",
+            'email'         => "email_commentLeft",
+            'generalBody'   => "A comment ( ".$request->comment." ) is added to a task ( ".$all_Assign_users->title." ).",
+            'task_id'       => $request->task_id
+        ];
+        if (count($request->mailUsers) > 0) {
+            if (in_array(Auth::id(), $request->mailUsers)) {
+                $mailData['body'] .= ' And you are mentioned on that reply.';
+            }
+            $usernames = "";
+            foreach ($request->mailUsers as $key => $value) {
+                $user = User::find($value);
+                if ($key < count($request->mailUsers)-1) {
+                    $usernames .= $user->name.", ";                    
+                } else {
+                    $usernames .= $user->name;
+                }
+            }
+            $mailData['generalBody'] .= 'And ( '.$usernames.' ) are mentioned on that comment';
+        }
+
         $insert = Comment::create($data);
         if ($insert) {
             $user_ids = [];
             $insert = Comment::where('id', $insert->id)->with('user')->first();
+            $this->HomeController->userMail( (object) $mailData);
             foreach ($all_Assign_users->Assign_user as $item) {
                 $user_ids[] = $item->user_id;
                 if ($item->user_id != Auth::id()){
@@ -116,6 +150,8 @@ class CommentController extends Controller
     public function saveCommentReply (Request $request)
     {
         // return $request->all();
+        $comment = Comment::find($request->parent_id);
+        $task = Task::find($request->parent_id);
         $data = [
             'task_id' => $request->task_id,
             'parent_id' => $request->parent_id,
@@ -123,9 +159,31 @@ class CommentController extends Controller
             'comment' => $request->comment,
             'created_at' => Carbon::now()
         ];
-
+        $mailData = [
+            'subject'       => "A reply added to a comment",
+            'body'          => "A reply ( ".$request->comment." ) is added to a comment ( ".$comment->comment." ) on ( ".$task->title." ) task.",
+            'email'         => "email_commentLeft",
+            'generalBody'   => "A reply ( ".$request->comment." ) is added to a comment ( ".$comment->comment." ) on ( ".$task->title." ) task.",
+            'task_id'       => $request->task_id
+        ];
+        if (count($request->mailUsers) > 0) {
+            if (in_array(Auth::id(), $request->mailUsers)) {
+                $mailData['body'] .= ' And you are mentioned on that reply.';
+            }
+            $usernames = "";
+            foreach ($request->mailUsers as $key => $value) {
+                $user = User::find($value);
+                if ($key < count($request->mailUsers)-1) {
+                    $usernames .= $user->name.", ";                    
+                } else {
+                    $usernames .= $user->name;  
+                }
+            }
+            $mailData['generalBody'] .= 'And ( '.$usernames.' ) are mentioned on that reply';
+        }
         $insert = Comment::create($data);
         if ($insert) {
+            $this->HomeController->userMail( (object) $mailData);
             $insert = Comment::where('id', $insert->id)->with('user')->first();
         }
         return response()->json(['success' => true, 'Data' => $insert]);
