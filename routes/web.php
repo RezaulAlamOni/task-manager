@@ -13,7 +13,10 @@
 
 Route::get('/', 'WelcomeController@show');
 
-Route::get('/home', 'HomeController@show');
+Route::get('/home', function (){
+    return redirect('/projects');
+});
+//Route::get('/home', 'HomeController@show');
 
 Route::get('/allcomments', 'HomeController@allComment');
 

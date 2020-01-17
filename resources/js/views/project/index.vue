@@ -107,6 +107,8 @@
         },
         mounted() {
             $('#header-item').text('Projects');
+            // this.projectView();
+
             this.getProjects();
         },
         methods: {
@@ -114,6 +116,7 @@
             projectView(id, name) {
                 localStorage.browser_last_project = JSON.stringify(id);
                 this.$router.push({name: 'project-dashboard', params: {projectId: id, name: name}});
+
             },
             getProjects() {
                 axios.get('/api/project')
