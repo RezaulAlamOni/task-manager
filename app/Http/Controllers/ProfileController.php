@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Project;
+use App\Task;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use function foo\func;
 
 class ProfileController extends Controller
 {
@@ -23,7 +27,7 @@ class ProfileController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -34,7 +38,7 @@ class ProfileController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show()
@@ -51,7 +55,7 @@ class ProfileController extends Controller
     public function showCardInfo()
     {
         $cardInfo = User::select('id', 'card_brand', 'card_last_four', 'card_country')->find(Auth::id())
-        ->makeVisible(['card_brand', 'card_last_four', 'card_country']);
+            ->makeVisible(['card_brand', 'card_last_four', 'card_country']);
         return response()->json(['success' => true, 'data' => $cardInfo, 'status' => 200], Response::HTTP_OK);
     }
 
@@ -62,16 +66,16 @@ class ProfileController extends Controller
      */
     public function showBillingInfo()
     {
-        $billingInfo = User::select('id', 'billing_address', 'billing_address_line_2', 'billing_city', 'billing_state', 'billing_zip', 'billing_country', 'vat_id','extra_billing_information')->find(Auth::id())
-        ->makeVisible(['billing_address', 'billing_address_line_2', 'billing_city', 'billing_zip', 'billing_country', 'extra_billing_information']);
+        $billingInfo = User::select('id', 'billing_address', 'billing_address_line_2', 'billing_city', 'billing_state', 'billing_zip', 'billing_country', 'vat_id', 'extra_billing_information')->find(Auth::id())
+            ->makeVisible(['billing_address', 'billing_address_line_2', 'billing_city', 'billing_zip', 'billing_country', 'extra_billing_information']);
         return response()->json(['success' => true, 'data' => $billingInfo, 'status' => 200], Response::HTTP_OK);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -100,7 +104,7 @@ class ProfileController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function updateCardInfo(Request $request)
@@ -131,7 +135,7 @@ class ProfileController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function updateBillingInfo(Request $request)
@@ -156,7 +160,7 @@ class ProfileController extends Controller
             'billing_address_line_2' => $request->billing_address_line_2,
             'billing_city' => $request->billing_city,
             'billing_state' => $request->billing_state,
-            'billing_zip'=> $request->billing_zip,
+            'billing_zip' => $request->billing_zip,
             'billing_country' => $request->billing_country,
             'vat_id' => $request->vat_id,
             'extra_billing_information' => $request->extra_billing_information,
@@ -171,11 +175,34 @@ class ProfileController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function weeklyDueTask()
+    {
+        $now = Carbon::now();
+        $start = $now->startOfDay()->format('Y-m-d H:i:s');
+        $end = $now->addWeek()->endOfDay()->format('Y-m-d H:i:s');
+        $projects = Project::where('team_id', Auth::user()->current_team_id)
+            ->with(['tasks' => function ($q) use ($start, $end) {
+                $q->whereBetween('date', [$start, $end]);
+            }])->whereHas('tasks', function ($q) use ($start, $end) {
+                $q->whereBetween('date', [$start, $end]);
+            })->whereHas('tasks.Assign_user', function ($q) {
+                $q->where('user_id', Auth::id());
+            })->get();
+        if ($projects) {
+            return response()->json(['success' => true, 'data' => $projects, 'status' => 200], Response::HTTP_OK);
+        } else {
+            return response()->json(['success' => false, 'data' => 'Whoops! Data Not Find!', 'status' => 401], Response::HTTP_OK);
+        }
     }
 }
