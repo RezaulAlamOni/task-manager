@@ -21,8 +21,11 @@
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="r_tab1">
-                                    <div id="slim_t1" class="pt-4">
-                                        Due Date Task Panel
+                                    <div class="pt-4">
+                                        <ul class="list-group" v-for="dueTaskList in dueTaskLists">
+                                            <li class="list-group-item active mt-4">{{ dueTaskList.name }}</li>
+                                            <li v-for="task in dueTaskList.tasks" class="list-group-item">{{ task.title }}</li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="r_tab2">
@@ -31,8 +34,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -48,85 +49,46 @@
         components: {},
         data() {
             return {
-                locationForm: new Form({
-                    name: '',
-                    top_location_id: '',
-                    description: '',
-                    is_default: false
-                }),
-                topLocations: [],
-                selected_top_location: null
+                dueTaskLists: {}
             };
         },
         props: [],
         mounted() {
-            if (this.id)
-                this.getLocation();
-
-            if (!this.id)
-                axios.get('/api/location/pre-requisite')
-                    .then(response => response.data)
-                    .then(response => {
-                        this.topLocations = response.top_locations;
-                    })
-                    .catch(error => {
-                        helper.showDataErrorMsg(error);
-                    });
+            this.getDueTask();
         },
         methods: {
-            proceed() {
-                if (this.id)
-                    this.updateLocation();
-                else
-                    this.storeLocation();
-            },
-            storeLocation() {
-                this.locationForm.post('/api/location')
-                    .then(response => {
-                        toastr.success(response.message);
-                        this.topLocations.push(response.new_location);
-                        this.$emit('completed');
-                        this.selected_top_location = null;
-                    })
-                    .catch(error => {
-                        helper.showErrorMsg(error);
-                    });
-            },
-            getLocation() {
-                axios.get('/api/location/' + this.id)
+            getDueTask() {
+                let _this = this;
+                axios.get('/api/get-weekly-due-tasks/')
                     .then(response => response.data)
                     .then(response => {
-                        this.locationForm.name = response.location.name;
-                        this.locationForm.top_location_id = response.location.top_location_id;
-                        this.locationForm.is_default = response.location.is_default;
-                        this.selected_top_location = response.selected_top_location;
-                        this.topLocations = response.top_locations;
+                        _this.dueTaskLists = response.data;
+                        console.log(_this.dueTaskLists);
                     })
                     .catch(error => {
                         helper.showDataErrorMsg(error);
-                        this.$router.push('/location');
                     });
-            },
-            updateLocation() {
-                this.locationForm.patch('/api/location/' + this.id)
-                    .then(response => {
-                        toastr.success(response.message);
-                        this.$router.push('/location');
-                    })
-                    .catch(error => {
-                        helper.showErrorMsg(error);
-                    });
-            },
-            onTopLocationSelect(selectedOption) {
-                this.locationForm.top_location_id = selectedOption.id;
             }
         }
     }
 </script>
-<style>
+<style scoped>
     .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
         color: #ffffff;
         background-color: #868e96;
         border-color: #dee2e6 #dee2e6 #fff;
+    }
+    .list-group-item {
+        position: relative;
+        display: block;
+        padding: 0.75rem 1.25rem !important;
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+    }
+    .list-group-item.active {
+        z-index: 2;
+        color: #fff;
+        background-color: #6699cc;
+        border-color: #6699cc;
     }
 </style>
