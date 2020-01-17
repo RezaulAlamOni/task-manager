@@ -2119,6 +2119,8 @@
             },
             hideItem(e, data) {
                 data.draggable = false;
+                console.log(data.draggable)
+                console.log(data)
                 this.context_menu_flag = data.id;
                 // data.draggable = false;
                 // $(e.target).closest('.eachItemRow').find('.task-complete').hide();
@@ -2135,7 +2137,7 @@
                 $(e.target).closest('.eachItemRow').find('.comment-icon').hide();
             },
             showItem(e, data) {
-
+                data.draggable = true;
                 this.context_menu_flag = data.id;
                 this.SaveDataWithoutCreateNewNode(data);
                 setTimeout(function () {
@@ -2154,11 +2156,9 @@
                     data.draggable = true;
                     data.droppable = true;
                 }, 500);
-
                 setTimeout(() => {
                     $('.dropdowns-task-user').hide();
                 }, 300);
-
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
 
