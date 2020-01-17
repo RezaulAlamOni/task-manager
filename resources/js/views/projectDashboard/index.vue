@@ -1899,6 +1899,7 @@
                     .then(response => response.data)
                     .then(response => {
                         store.toggleOpen(data)
+                        _this.Socket.emit('notification-update',response.users)
                     })
                     .catch(error => {
                         console.log('Api for complete task not Working !!!')
@@ -3703,6 +3704,7 @@
                                     board_id: _this.selectedData.multiple_board_id,
                                     user_id: _this.authUser.id
                                 })
+                                _this.Socket.emit('notification-update',response.users)
                                 if (data.text.indexOf("@") != -1 || data.text.indexOf("#") != -1) {
                                     _this.getTaskList();
                                 }
@@ -3808,6 +3810,7 @@
                             board_id: _this.selectedData.multiple_board_id,
                             user_id: _this.authUser.id
                         });
+                        _this.Socket.emit('notification-update',response.users)
                         _this.sendMail(mailData);
                     })
                     .catch(error => {
@@ -3839,6 +3842,7 @@
                             user_id: _this.authUser.id,
                             type : 'Upload Photo'
                         })
+                        _this.Socket.emit('notification-update',response.users)
                         _this.$toastr.s("Successfully added file !");
                         _this.getTaskList()
                     })
