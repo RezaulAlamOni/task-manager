@@ -135,8 +135,8 @@
                         </div>
                       </div>
                       <div class="card">
-                        <div class="card-header bg-secondary text-white">
-                          Billing Information
+                        <div class="card-header bg-secondary text-white" data-toggle="collapse" data-target="#billingInfoSection" aria-expanded="true" aria-controls="billingInfoSection">
+                            <i class="fad fa-chevron-double-down"></i> Billing Information
                           <a
                             class="float-right profile-edit"
                             data-toggle="modal"
@@ -151,7 +151,7 @@
                             ></i>
                           </a>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body collapse" id="billingInfoSection">
                           <div class="row ml-2">
                             <div class="col-md-12">
                               <div class="row">
@@ -206,6 +206,7 @@
                       </div>
                     </div>
                   </div>
+                    <due-task-panel></due-task-panel>
                 </div>
               </div>
             </div>
@@ -223,9 +224,10 @@
 </template>
 <script>
 import edit from "./edit";
+import taskPanel from './taskPanel';
 export default {
   components: {
-    editModal: edit
+    editModal: edit, dueTaskPanel: taskPanel
   },
   data() {
     return {
@@ -311,5 +313,8 @@ export default {
   border: 1px solid #333;
   border-radius: 3px;
   font-weight: bold;
+}
+[data-toggle~="collapse"] {
+    cursor: pointer;
 }
 </style>

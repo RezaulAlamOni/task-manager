@@ -1,49 +1,51 @@
 <template>
-    <form @keydown="locationForm.errors.clear($event.target.name)" @submit.prevent="proceed">
-        <div class="form-group">
-            <label for="">{{trans('location.name')}}</label>
-            <input :placeholder="trans('location.name')" class="form-control" name="name" type="text" v-model="locationForm.name"
-                   value="">
-            <show-error :form-name="locationForm" prop-name="name"></show-error>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body" style="padding-top: 1px;padding-left: 5px;">
+                    <div class="row ml-2">
+                        <div class="col-12">
+                            <div class="panel-tabs" style="width: 100%;">
+                                <ul class="nav nav-tabs nav-float" role="tablist">
+                                    <li class="nav-item text-center">
+                                        <a href="#r_tab1" role="tab" data-toggle="tab" class="nav-link active ">
+                                            Due Date Task Panel
+                                        </a>
+                                    </li>
+                                    <li class="text-center nav-item">
+                                        <a href="#r_tab2" role="tab" data-toggle="tab" class="nav-link">
+                                            Priority Task Panel
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="r_tab1">
+                                    <div id="slim_t1" class="pt-4">
+                                        Due Date Task Panel
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="r_tab2">
+                                    <div id="slim_t52" class="pt-4">
+                                        Priority Task Panel
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="">{{trans('location.top_location')}}
-                <show-tip module="location" tip="tip_top_location" type="field"></show-tip>
-            </label>
-            <v-select :options="topLocations" :placeholder="trans('location.select_top_location')" @close="locationForm.errors.clear('top_location_id')" @remove="locationForm.top_location_id = ''"
-                      @select="onTopLocationSelect" id="top_location_id"
-                      label="name" name="top_location_id"
-                      v-model="selected_top_location"></v-select>
-            <show-error :form-name="locationForm" prop-name="top_location_id"></show-error>
-        </div>
-        <div class="form-group">
-            <switches class="m-l-20" color="success" theme="bootstrap" v-model="locationForm.is_default"></switches>
-            {{trans('location.default')}}
-            <show-tip module="location" tip="tip_default_location" type="field"></show-tip>
-        </div>
-        <div class="form-group">
-            <label for="">{{trans('location.description')}}</label>
-            <textarea :placeholder="trans('location.description')" class="form-control" name="description" rows="2" type="text"
-                      v-model="locationForm.description" value=""></textarea>
-            <show-error :form-name="locationForm" prop-name="description"></show-error>
-        </div>
-        <button class="btn btn-info waves-effect waves-light" type="submit">
-            <span v-if="id">{{trans('general.update')}}</span>
-            <span v-else>{{trans('general.save')}}</span>
-        </button>
-        <router-link class="btn btn-danger waves-effect waves-light" to="/location" v-show="id">
-            {{trans('general.cancel')}}
-        </router-link>
-    </form>
+    </div>
 </template>
 
 
 <script>
-    import vSelect from 'vue-multiselect'
-    import switches from 'vue-switches'
 
     export default {
-        components: {vSelect, switches},
+        components: {},
         data() {
             return {
                 locationForm: new Form({
@@ -56,7 +58,7 @@
                 selected_top_location: null
             };
         },
-        props: ['id'],
+        props: [],
         mounted() {
             if (this.id)
                 this.getLocation();
@@ -121,3 +123,10 @@
         }
     }
 </script>
+<style>
+    .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+        color: #ffffff;
+        background-color: #868e96;
+        border-color: #dee2e6 #dee2e6 #fff;
+    }
+</style>
