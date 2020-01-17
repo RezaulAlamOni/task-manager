@@ -16,14 +16,19 @@ class Comment extends Model
         'updated_at'
     ];
 
-    public function user()
+    public function user ()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function commentReply()
+    public function task()
     {
-        return $this->hasMany(self::class, 'parent_id', 'id')->with('user','commentReply');
+        return $this->hasOne(Task::class, 'id', 'task_id');
+    }
+
+    public function commentReply ()
+    {
+        return $this->hasMany(self::class, 'parent_id', 'id')->with('user', 'commentReply');
     }
 
 }

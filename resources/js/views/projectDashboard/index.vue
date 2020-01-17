@@ -1363,7 +1363,7 @@
             //    event.preventDefault();
             //    event.returnValue = "";
             // });
-            this.$toastr.defaultTimeout = 1000;
+            this.$toastr.defaultTimeout = 1500;
             let _this = this;
             this.projectId = this.$route.params.projectId;
             this.teamCheck();
@@ -1493,8 +1493,7 @@
             connectSocket: function () {
                 let app = this;
                 if (app.Socket == null) {
-                    // app.Socket = io.connect('http://localhost:4100/');
-                    app.Socket = io.connect('https://spark.compltit.net:4100/');
+                    app.Socket = io.connect(window.socket_url);
                     app.Socket.emit('loginId', 2)
                     app.Socket.on('newMessage', function (res) {
                         console.log(res);
@@ -2679,7 +2678,7 @@
                     assign_id: obj.tag.assign_id
                 };
                 console.log(obj.tag);
-                
+
                 if (obj.tag.text !== 'Dont Forget') {
                     axios.post('/api/task-list/delete-tag', postData)
                         .then(response => response.data)

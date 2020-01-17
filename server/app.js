@@ -62,4 +62,9 @@ io.on('connection', function(socket) {
         io.emit('listUpdateSocket',data);
         console.log(data);
     });
+
+    socket.on('notification-update',function (data) {
+        io.emit('notification-update',data);
+        console.log('notification-update');
+    })
 });

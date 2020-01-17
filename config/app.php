@@ -54,6 +54,9 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'socket_url' => env('SOCKET_URL', 'https://spark.compltit.net:4100/'),
+
+
     'asset_url' => env('ASSET_URL', null),
 
     /*

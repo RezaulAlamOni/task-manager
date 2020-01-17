@@ -8,16 +8,28 @@ module.exports = {
         return {
             showingNotifications: true,
             showingAnnouncements: false,
-            comment : 'trueFalse',
+            comments : [],
+            Socket : null,
         }
     },
 
     mounted(){
-
+        var _this = this;
+        _this.connectSocket();
     },
 
 
     methods: {
+        connectSocket: function () {
+            let app = this;
+            if (app.Socket == null) {
+                app.Socket = io.connect(window.socket_url);
+                // app.Socket.emit('notification-update', 2)
+                // app.Socket.on('notification-update', function (res) {
+                //     swal('Success','notification-update'+ res,'success')
+                // })
+            }
+        },
         /**
          * Show the user notifications.
          */
@@ -27,8 +39,17 @@ module.exports = {
         },
 
         showComments(){
-            this.comment = "Update Comment with using vue"
-          swal('Success',"Comments Section Found","success");
+            var _this = this;
+            var projectId = _this.$route.params.projectId;
+            axios.get('/api/get-all-comment/'+projectId)
+                .then(response => response.data)
+                .then(response => {
+                    _this.comments = response.comments;
+                })
+                .catch(error => {
+                    _this.$toastr.w('Field To connect!');
+                });
+
         },
         /**
          * Show the product announcements.
