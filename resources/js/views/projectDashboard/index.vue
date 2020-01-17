@@ -2802,7 +2802,10 @@
                             board_id: _this.selectedData.multiple_board_id,
                             user_id: _this.authUser.id
                         })
-                        _this.$toastr.i("Task Description updatd");
+                        _this.$toastr.i("Task Description update");
+                        if(response.users.length > 0){
+                            _this.Socket.emit('notification-update',response.users)
+                        }
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
@@ -2837,6 +2840,9 @@
                                         user_id: _this.authUser.id
                                     })
                                     _this.$toastr.i("task Added to complete list!");
+                                    if(response.users.length > 0){
+                                        _this.Socket.emit('notification-update',response.users)
+                                    }
                                     // swal("Complete!", "This task is added to complete", "success");
                                 } else if (response.status === 2) {
                                     swal("Sorry!", "The board dont have any 100% progress column !!", "warning");

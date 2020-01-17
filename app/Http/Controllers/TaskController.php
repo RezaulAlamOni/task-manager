@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Intervention\Image\File;
+use Laravel\Spark\Notification;
 use function GuzzleHttp\Promise\all;
 use function response;
 
@@ -35,7 +36,7 @@ class TaskController extends Controller
         $this->middleware('auth');
     }
 
-    public function decorateData ($obj, $drag = null, $filter = null,$tz = null)
+    public function decorateData ($obj, $drag = null, $filter = null, $tz = null)
     {
         //        $team_id = Auth::user()->current_team_id;
         //        $allTeamUsers = User::join('team_users', 'team_users.user_id', 'users.id')
@@ -55,13 +56,13 @@ class TaskController extends Controller
             $info['board_parent_id'] = $task->board_parent_id;
             $info['multiple_board_id'] = $task->multiple_board_id;
             $info['priority_label'] = null;
-             if ($task->priority_label == 3 || $task->priority_label == 'high') {
-                 $info['priority_label'] = 'high';
-             } else if($task->priority_label == 2 || $task->priority_label == 'medium'){
-                 $info['priority_label'] = 'medium';
-             } else if($task->priority_label == 1 || $task->priority_label == 'low'){
-                 $info['priority_label'] = 'low';
-             }
+            if ($task->priority_label == 3 || $task->priority_label == 'high') {
+                $info['priority_label'] = 'high';
+            } else if ($task->priority_label == 2 || $task->priority_label == 'medium') {
+                $info['priority_label'] = 'medium';
+            } else if ($task->priority_label == 1 || $task->priority_label == 'low') {
+                $info['priority_label'] = 'low';
+            }
             $info['list_id'] = $task->list_id;//list_id
             $info['text'] = $task->title;
             if ($task->title == 'Dont Forget Section' || $drag != null) {
@@ -126,7 +127,7 @@ class TaskController extends Controller
                 } else {
                     $info['children'] = [];
                 }
-            } elseif($filter === 'date') {
+            } elseif ($filter === 'date') {
                 $childrens = Task::where('parent_id', $task->id)
                     ->where('list_id', $task->list_id)
                     ->where('is_deleted', '!=', 1)
@@ -188,7 +189,7 @@ class TaskController extends Controller
 
         }
         $this->all_ids = [];
-        $data = $this->decorateData($tasks, null,null,$tz);
+        $data = $this->decorateData($tasks, null, null, $tz);
         $userName = Auth::user();
         $multiple_list = Project::with('multiple_list')->findOrFail($request->id);
         $multiple_list = $multiple_list->multiple_list;
@@ -207,7 +208,7 @@ class TaskController extends Controller
             'allTeamUsers' => $allTeamUsers,
             'allTeamTags' => $allTeamTags,
             'all_ids' => $this->all_ids,
-            'list'=>$list
+            'list' => $list
         ]);
     }
 
@@ -238,7 +239,7 @@ class TaskController extends Controller
             } else {
                 $ids = [Auth::id()];
             }
-        //            return $ids;
+            //            return $ids;
             $tasks = $tasks->whereHas('Assign_user', function ($q) use ($ids) {
                 $q->whereIn('user_id', $ids);
             })
@@ -260,51 +261,51 @@ class TaskController extends Controller
                 ->where('is_deleted', '!=', 1)
                 ->where('list_id', $list_id)
                 ->with('column')
-                ->where( function ($q) {
-                    $q->where('progress','!=', 100)
+                ->where(function ($q) {
+                    $q->where('progress', '!=', 100)
                         ->orWhere('progress', null);
                 })
                 ->orderBy('sort_id', 'ASC')
                 ->get();
-            $data = $this->decorateData($tasks, 'drag', 'filter',$tz);
-        } elseif($request->filter_type === 'date') {
+            $data = $this->decorateData($tasks, 'drag', 'filter', $tz);
+        } elseif ($request->filter_type === 'date') {
 
-        //  $tasks = Task::where('parent_id', 0)
-        //      ->where('project_id', $request->id)
-        //      ->where('is_deleted', '!=', 1)
-        //      ->where('list_id', $list_id)->with('column')
-        //      ->orderBy('date', 'ASC')
-        //      ->get();
-        //  $data = $this->decorateData($tasks, null,'date');
+            //  $tasks = Task::where('parent_id', 0)
+            //      ->where('project_id', $request->id)
+            //      ->where('is_deleted', '!=', 1)
+            //      ->where('list_id', $list_id)->with('column')
+            //      ->orderBy('date', 'ASC')
+            //      ->get();
+            //  $data = $this->decorateData($tasks, null,'date');
 
             $tasks = $tasks->orderBy('date', 'DESC')
                 ->get();
             $data = $this->decorateData($tasks, 'drag', 'filter');
 
-        } elseif($request->filter_type === 'asc') {
+        } elseif ($request->filter_type === 'asc') {
 
             $tasks = $tasks->orderBy('id', 'ASC')
                 ->get();
             $data = $this->decorateData($tasks, 'drag', 'filter');
-        } elseif($request->filter_type === 'desc') {
+        } elseif ($request->filter_type === 'desc') {
 
             $tasks = $tasks->orderBy('id', 'desc')
                 ->get();
             $data = $this->decorateData($tasks, 'drag', 'filter');
-        } elseif($request->filter_type === "priority") {
+        } elseif ($request->filter_type === "priority") {
 
             $tasks = $tasks->orderBy('priority_label', 'desc')
                 ->get();
             $data = $this->decorateData($tasks, 'drag', 'filter');
-        } elseif($request->filter_type === "p_hide") {
+        } elseif ($request->filter_type === "p_hide") {
             $filter = $request->filter;
-            $tasks = $tasks->where( function ($q) use ($filter){
+            $tasks = $tasks->where(function ($q) use ($filter) {
                 $q->whereNotIn('priority_label', $filter)
                     ->orWhere('priority_label', null);
             })->get();
-        //            return ($tasks);
+            //            return ($tasks);
             $data = $this->decorateData($tasks, 'drag', 'filter');
-        } elseif($request->filter_type === "p_show") {
+        } elseif ($request->filter_type === "p_show") {
 
             $filter = $request->filter;
             $tasks = $tasks->whereIn('priority_label', $filter)->get();
@@ -555,11 +556,11 @@ class TaskController extends Controller
             $target_id = $request->target_id;
             $copy_ids = $request->copy_ids;
 
-            $target_list_id = Task::select('list_id')->where(['id'=>$target_id])->first();
+            $target_list_id = Task::select('list_id')->where(['id' => $target_id])->first();
             foreach ($copy_ids as $copy_id) {
                 $target_id = $this->CopayPast($target_id, $copy_id);
             }
-            return response()->json(['success' => $target_id,'list_id'=>$target_list_id->list_id]);
+            return response()->json(['success' => $target_id, 'list_id' => $target_list_id->list_id]);
 
         } else {
             if ($request->type == 'cut') {
@@ -575,7 +576,7 @@ class TaskController extends Controller
                 $this->updateTagWithDataMove($past->id, $target->parent_id);
                 //check the target task id in the dont forget section and update tag for necessary
                 $this->createLog($past->id, 'cut', 'Cut and past tsk', $past->title);
-                return response()->json(['success' => $past->id,'list_id'=>$target->list_id]);
+                return response()->json(['success' => $past->id, 'list_id' => $target->list_id]);
             }
         }
     }
@@ -687,7 +688,7 @@ class TaskController extends Controller
         if (isset($request->ids)) {
             $ids = $request->ids;
             foreach ($ids as $id) {
-        //                $this->deleteTaskWithChild($id);
+                //                $this->deleteTaskWithChild($id);
                 $delete = Task::where('id', $id)->update([
                     'is_deleted' => 1,
                     'deleted_at' => carbon::now()
@@ -747,6 +748,14 @@ class TaskController extends Controller
                         'updated_by' => Auth::id(),
                     ]);
                 }
+            }
+            if ($request->value != Auth::id()){
+                Notification::create([
+                    'user_id' =>$request->value,
+                    'created_by' => Auth::id(),
+                    'body' => Auth::user()->name." assign on a task.",
+                    'action_text' => 'View',
+                ]);
             }
             return response()->json(['success' => 1]);
         } else if (isset($request->type) && $request->type == 'tag') {
@@ -814,7 +823,7 @@ class TaskController extends Controller
                     $del = unlink($image_path);
                     return response()->json(['success' => $del]);
                 }
-        //                return response()->json(['success' => 1]);
+                //                return response()->json(['success' => 1]);
             }
         } else {
             return response()->json(['success' => 0]);
@@ -889,7 +898,8 @@ class TaskController extends Controller
     {
         if (isset($request->details)) {
             if (Task::where('id', $request->id)->update(['description' => $request->details])) {
-                return response()->json('success', 200);
+                $users = $this->addNotification($request->id,'Update a task description you are assigned !');
+                return response()->json(['status'=>'success','users'=>$users]);
             }
         } elseif (isset($request->complete)) {
             $find = Task::find($request->id);
@@ -897,7 +907,8 @@ class TaskController extends Controller
                 $board_parent = Task::where(['board_parent_id' => 0, 'progress' => 100, 'multiple_board_id' => $find->multiple_board_id])->first();
                 if ($board_parent) {
                     Task::where('id', $request->id)->update(['progress' => $board_parent->progress, 'board_parent_id' => $board_parent->id]);
-                    return response()->json(['status' => 1]);
+                    $users = $this->addNotification($request->id,'Update a task to complete that you are assigned on!');
+                    return response()->json(['status' => 1,'users'=>$users]);
                 } else {
                     return response()->json(['status' => 2]);
                 }
@@ -908,10 +919,11 @@ class TaskController extends Controller
             $d = $request->date;
             $tz = $request->tz;
 
-            $date  = Carbon::parse($d,$tz)->setTimezone('UTC');
+            $date = Carbon::parse($d, $tz)->setTimezone('UTC');
             //            $date = Carbon::parse($date, 'UTC')->setTimezone('Asia/Dhaka');
             if (Task::where('id', $request->id)->update(['date' => $date])) {
-                return response()->json('success', 200);
+                $users = $this->addNotification($request->id,'Update a dua date on a task that you are assigned on!');
+                return response()->json(['status'=>'success','users'=>$users]);
             }
         } elseif (isset($request->text)) {
             $check_is_empty = Task::where('id', $request->id)->first();
@@ -927,12 +939,14 @@ class TaskController extends Controller
             }
 
             if (Task::where('id', $request->id)->update(['title' => $title])) {
+                $users = [];
                 if ($empty) {
                     $this->createLog($request->id, 'updated', 'Update From empty task', $title);
                 } else {
                     $this->createLog($request->id, 'updated', 'Update task', $title);
+                    $users = $this->addNotification($request->id,'Update a task title on a task that you are assigned on!');
                 }
-                return response()->json(['success' => 1, 'empty' => $empty]);
+                return response()->json(['success' => 1, 'empty' => $empty,'users'=>$users]);
             } else {
                 return response()->json(['success' => 0, 'empty' => $empty]);
             }
@@ -959,10 +973,30 @@ class TaskController extends Controller
                     'created_at' => Carbon::now()
                 ];
                 Files::create($file);
-                return response()->json('success', 200);
+                $users = $this->addNotification($request->id,'Added file on a task that you are assigned on!');
+                return response()->json(['status'=>'success','users'=>$users]);
             } else {
                 return response()->json('failed', 500);
             }
         }
+    }
+
+    public function addNotification ($task_id,$notification_body,$action_url = null)
+    {
+        $all_Assign_users = Task::where('id', $task_id)->with('Assign_user')->first();
+        $user_ids = [];
+        foreach ($all_Assign_users->Assign_user as $item) {
+            if ($item->user_id != Auth::id()){
+                $user_ids[] = $item->user_id;
+                Notification::create([
+                    'user_id' => $item->user_id,
+                    'created_by' => Auth::id(),
+                    'body' => $notification_body,
+                    'action_text' => 'View',
+                    'action_url' => ($action_url == null ) ? '/project-dashboard/'.$all_Assign_users->project_id : $action_url,
+                ]);
+            }
+        }
+        return $user_ids;
     }
 }
