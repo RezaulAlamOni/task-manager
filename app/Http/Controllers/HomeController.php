@@ -64,8 +64,8 @@ class HomeController extends Controller
         return response()->json(['user' => $user]);
     }
 
-    public function userMail(Request $request)
-    {
+    public function userMail($request)
+    {   
         $emails = [];
         $userIds = [];
         $mails = [];
@@ -94,16 +94,33 @@ class HomeController extends Controller
                     }
                 }
             } else {
-                $user = User::where('id', $request->user_id)->first();
-                if (!in_array($user->email, $emails)) {
-                    $emails[$user->id] = $user->email;
-                }
-                if (!in_array($request->user_id, $userIds)) {
-                    $userIds[] = $request->user_id;
+                if ($request->user_id !== 0) {
+                    $user = User::where('id', $request->user_id)->first();
+                    if (!in_array($user->email, $emails)) {
+                        $emails[$user->id] = $user->email;
+                    }
+                    if (!in_array($request->user_id, $userIds)) {
+                        $userIds[] = $request->user_id;
+                    }
                 }
             }
         }
-        // return $this->sendAllToAllUser($userIds, $request);
+        if (isset($request->project_id) && $request->project_id !== '') {
+           $teamUsers = Project::where('id',$request->project_id)
+                        ->with(['team','team.team_users' => function ($q)
+                            {
+                                $q->select(['id','email']);
+                            }
+            ])->first();
+            foreach ($teamUsers->team->team_users as $uKey => $userValue) {
+                if (!in_array($userValue->id, $userIds)) {
+                    $userIds[] = $userValue->id;
+                }
+                if (!in_array($userValue->email, $emails)) {
+                    $emails[$userValue->id] = $userValue->email;
+                }
+            }
+        }
         foreach ($userIds as $keys => $ids) {
             $data = $this->emailNotification->getNotificationsByUser($ids);
             // echo $data->original['email_IAmOn'];
@@ -113,7 +130,7 @@ class HomeController extends Controller
                     // $comment = 'Hi, Comment Add to card.';
                     $comment['subject'] = $request->subject;
                     $comment['body'] = $request->body;
-                    $mails[] = Mail::to($emails[$ids])->send(new UserMail($comment));
+                    $mails[] = Mail::to($emails[$ids])->queue(new UserMail($comment));
                 }
             } else {
                 if ($data->original[$emailCond] == 1) {
@@ -121,7 +138,7 @@ class HomeController extends Controller
                         // $comment = 'Hi, Comment Add to card.';
                         $comment['subject'] = $request->subject;
                         $comment['body'] = $request->body;
-                        $mails[] = Mail::to($emails[$ids])->send(new UserMail($comment));
+                        $mails[] = Mail::to($emails[$ids])->queue(new UserMail($comment));
                     }
                 }
             }
@@ -187,10 +204,15 @@ class HomeController extends Controller
                 $emails = $value->email; 
                 $comment['subject'] = $request->subject;
                 $comment['body'] = $request->generalBody;
-                $mails[] = Mail::to($emails)->send(new UserMail($comment));
+                $mails[] = Mail::to($emails)->queue(new UserMail($comment));
             // }
             // print_r(array_column($value->notifications->toArray(), 'unique_id'));
         }
+    }
+
+    public function test($data)
+    {
+        return $data;
     }
     // email_IAmOn
     // email_everything

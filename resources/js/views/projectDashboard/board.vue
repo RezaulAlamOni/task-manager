@@ -1970,15 +1970,15 @@
                                     $('#loader').modal('hide');
 
                                 }, 500);
-                                let mailData = {
-                                    subject : "A Card is moved to another column",
-                                    body    : "A Card that you are assigned on is moved to another column",
-                                    email   : "email_taskUpdated",
-                                    generalBody : "A Card is moved to another column",
-                                    task_id : dropResult.payload.cardId
-                                };
+                                // let mailData = {
+                                //     subject : "A Card is moved to another column",
+                                //     body    : "A Card that you are assigned on is moved to another column",
+                                //     email   : "email_taskUpdated",
+                                //     generalBody : "A Card is moved to another column",
+                                //     task_id : dropResult.payload.cardId
+                                // };
                                 _this.$toastr.s("Card successfully Moved ");
-                                _this.sendMail(mailData);
+                                // _this.sendMail(mailData);
                                 // console.log('shifted');
                             })
                             .catch(error => {
@@ -2981,14 +2981,14 @@
                             _this.cards[index].task[child_key].name = data.data;
                             _this.getData();
                             _this.listSocketCall(data.list_id);
-                            let mailData = {
-                                subject : "Card updated",
-                                body    : "Card is updated that you are assigned on",
-                                email   : "email_taskUpdated",
-                                generalBody : "A Card title is updates",
-                                task_id :  data.cardId
-                            };
-                            _this.sendMail(mailData);
+                            // let mailData = {
+                            //     subject : "Card updated",
+                            //     body    : "Card is updated that you are assigned on",
+                            //     email   : "email_taskUpdated",
+                            //     generalBody : "A Card title is updates",
+                            //     task_id :  data.cardId
+                            // };
+                            // _this.sendMail(mailData);
                         })
                         .catch(error => {
                         });
@@ -3012,14 +3012,14 @@
                         .then(response => response.data)
                         .then(response => {
                             // _this.getBoardTask();
-                            let mailData = {
-                                subject : "Card date updated",
-                                body    : "A card date is updated that you are assigned on",
-                                email   : "email_taskUpdated",
-                                generalBody : "A Card date is updated",
-                                task_id :  card.cardId
-                            };
-                            _this.sendMail(mailData);
+                            // let mailData = {
+                            //     subject : "Card date updated",
+                            //     body    : "A card date is updated that you are assigned on",
+                            //     email   : "email_taskUpdated",
+                            //     generalBody : "A Card date is updated",
+                            //     task_id :  card.cardId
+                            // };
+                            // _this.sendMail(mailData);
                             _this.listSocketCall(card.list_id);
                             _this.$toastr.e("Date Successfully updated!");
                         })
@@ -3333,14 +3333,14 @@
                             console.log(response);
                             _this.getBoardTask();
                             _this.listSocketCall(card.list_id);
-                            let mailData = {
-                                subject : "Removed from a card",
-                                body    : "You are removed from a card that you are assigned on.",
-                                email   : "email_whenRemovedFromTask",
-                                generalBody : user.name+" is removed from a card ("+card.data+") ",
-                                user_id :  user.id
-                            };
-                            _this.sendMail(mailData);
+                            // let mailData = {
+                            //     subject : "Removed from a card",
+                            //     body    : "You are removed from a card that you are assigned on.",
+                            //     email   : "email_whenRemovedFromTask",
+                            //     generalBody : user.name+" is removed from a card ("+card.data+") ",
+                            //     user_id :  user.id
+                            // };
+                            // _this.sendMail(mailData);
                             _this.$toastr.s("Assign-User Successfully Removed!");
 
                         }
@@ -3365,14 +3365,14 @@
                             setTimeout(function () {
                                 _this.getBoardTask();
                                 _this.listSocketCall(data.list_id);
-                                let mailData = {
-                                subject : "Added to a card",
-                                body    : "You are assigned on a card",
-                                email   : "email_whenAddedToTask",
-                                generalBody : "A Card ( "+data.data+" ) is assigned to "+user.name,
-                                user_id :  user.id
-                            };
-                            _this.sendMail(mailData);
+                                // let mailData = {
+                                //     subject : "Added to a card",
+                                //     body    : "You are assigned on a card",
+                                //     email   : "email_whenAddedToTask",
+                                //     generalBody : "A Card ( "+data.data+" ) is assigned to "+user.name,
+                                //     user_id :  user.id
+                                // };
+                                // _this.sendMail(mailData);
                             }, 100);
                         }
                     })
@@ -3652,14 +3652,14 @@
                 });
             },
             sendMail(data){
-                axios.post('/api/send-mail/',data)
-                .then(response => response.data)
-                .then(response => {
-                    console.log(response);
-                })
-                .catch(error => {
+                // axios.post('/api/send-mail/',data)
+                // .then(response => response.data)
+                // .then(response => {
+                //     console.log(response);
+                // })
+                // .catch(error => {
 
-                });
+                // });
             }
         },
         directives: {

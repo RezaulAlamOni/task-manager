@@ -20,10 +20,12 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use DB;
+// use App\Http\Controllers\HomeController;
 
 class MultipleBoardController extends Controller
 {
     protected $actionLog;
+    protected $HomeController;
     protected $dont_forget_tag;
     protected $totalChild = 0;
     protected $childIds = [];
@@ -33,6 +35,7 @@ class MultipleBoardController extends Controller
     {
         date_default_timezone_set('UTC');
         $this->actionLog = new ActionLogController;
+        $this->HomeController = new HomeController;
         $this->middleware('auth');
     }
 
@@ -588,7 +591,14 @@ class MultipleBoardController extends Controller
                 $ids = $this->recurChildIds($childs);
             }
         }
-        // dd($data);
+        $mailData = [
+            'subject'       => "A Card is moved to another column",
+            'body'          => "A Card ( ".$parent_task->title." ) that you are assigned on is moved to another column ( ".$parent->title." )",
+            'email'         => "email_taskUpdated",
+            'generalBody'   => "A Card  ( ".$parent_task->title." ) is moved to another column ( ".$parent->title." )",
+            'task_id'       => $ids
+        ];
+        // dd($mailData);
         $moveToData = Rules::where('move_from',$request->board_parent_id)->where('status',1)->with('moveTo')->first();
         if ($moveToData) {
             $assiagnUser = json_decode($moveToData->assigned_users);
@@ -631,6 +641,7 @@ class MultipleBoardController extends Controller
 
         if ($update) {
             $this->createLog($request->id, 'Update', 'Parent changed', $parent_task->title);
+            $this->HomeController->userMail( (object) $mailData);
             return response()->json(['success' => true, 'data' => $update]);
         }
         return response()->json(['success' => false]);
@@ -652,24 +663,37 @@ class MultipleBoardController extends Controller
     public function cardEdit($id, Request $request)
     {   
         $data = [];
+        $datas = Task::find($id);
+        $mailData = [
+            'subject'       => "A Card title updated",
+            'body'          => "A Card (".$datas->title.") title is updated to ( ".($request->title??'')." ) that you are assigned on",
+            'email'         => "email_taskUpdated",
+            'generalBody'   => "A Card (".$datas->title.") title is updated to ( ".($request->title??'')." )",
+            'task_id'       => $id
+        ];
         foreach ($request->all() as $key => $value) {
+            // $request->title = ($request->title)??'';
             if ($key == 'date') {
                 $tz = $request->tz;
                 $value = date('Y-m-d H:i:s', strtotime($value));
                 $value  = Carbon::parse($value,$tz)->setTimezone('UTC');
+                $mailData['subject'] = "Card due date updated";
+                $mailData['body'] = "Card due date is updated to ( ".$value." ) that you are assigned on";
+                $mailData['generalBody'] = "A Card due date is updates to ( ".$value." )";
             }
             if ($key !== 'tz'){
                 $data[$key] = $value;
             }
         }
-        $datas = Task::find($id);
         if ( isset($request->title) && $datas->title === $request->title) {
             return response()->json(['success' => false]);
         }
+        
         $child = Task::where('id', $id)->update($data);
         if ($child) {
             $datas = Task::find($id);
             $this->createLog($id, 'updated', 'Card Update', $datas->title);
+            $this->HomeController->userMail( (object) $mailData);
 
             // $emails = [];
             // $users = AssignedUser::where('task_id',$id)->with(['users'])->get();
