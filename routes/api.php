@@ -97,7 +97,7 @@ Route::post('/update-comment', 'CommentController@updateComment');
 Route::post('/delete-card-comment', 'CommentController@cardCommentDelete');
 Route::post('/save-comment-reply', 'CommentController@saveCommentReply');
 Route::post('/comment-file-upload', 'CommentController@fileUpload');
-Route::get('/get-all-comment', 'CommentController@allComment');
+Route::get('/get-all-comment/{project_id}', 'CommentController@allComment');
 
 Route::post('/card-update/{id}', 'MultipleBoardController@cardEdit');
 Route::get('/card-delete/{id}', 'MultipleBoardController@cardDelete'); //delete card
@@ -114,7 +114,7 @@ Route::post('/rules-delete', 'RulesController@delete');
 
 //overview
 Route::get('/project-overview/{project_id}', 'OverviewController@index');
-Route::get('/overview-all-files/{project_id}', 'OverviewController@All_files');
+Route::get('/overview-all-files/{project_id}', 'OverviewController@AllFiles');
 Route::get('/overview-all-comments/{project_id}', 'OverviewController@AllComments');
 Route::post('/project-overview/list-sort', 'OverviewController@ListSort');
 Route::post('/project-overview/list-open-close', 'OverviewController@ListToggle');
