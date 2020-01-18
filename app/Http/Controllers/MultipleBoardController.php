@@ -681,6 +681,12 @@ class MultipleBoardController extends Controller
                 $mailData['body'] = "Card due date is updated to ( ".$value." ) that you are assigned on";
                 $mailData['generalBody'] = "A Card due date is updates to ( ".$value." )";
             }
+            if (isset($request->description) && $request->description) {
+                $mailData['subject'] = "Card description updated";
+                $mailData['body'] = "A Card (".$datas->title.") description is updated";
+                $mailData['generalBody'] = "A Card (".$datas->title.") description is updated";
+                $mailData['email'] = "email_descriptionUpdated";
+            }
             if ($key !== 'tz'){
                 $data[$key] = $value;
             }

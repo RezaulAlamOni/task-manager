@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AssignedUser;
 use App\Rules;
+use App\Project;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -12,6 +13,13 @@ use Sabberworm\CSS\Rule\Rule;
 
 class RulesController extends Controller
 {
+    protected $HomeController;
+
+    public function __construct()
+    {
+        $this->HomeController = new HomeController;
+        $this->middleware('auth');
+    }
 
     public function index()
     {
@@ -46,10 +54,20 @@ class RulesController extends Controller
             'created_by' => Auth::id(),
             'assigned_users' => $request->assign_to
         ];
+        // $project = Project::select('id')->where('team_id',Auth::user()->current_team_id)->first();
+        $mailData = [
+                'subject' => "Rule Added",
+                'body'    => "Rule ( ". $request->name." ) is created",
+                'email'   => "email_taskUpdated",
+                'generalBody' => "Rule ( ". $request->name ." ) is created",
+                'user_id' => json_decode($request->assign_to) ,
+                'project_id' => (int)$request->project_id
+        ];
         if (Rules::create($data)) {
             if ($request->status == 1){
                 $this->MoveAllCardAndAssign($request->move_from,$request->move_to,json_decode($request->assign_to));
             }
+            $this->HomeController->userMail( (object) $mailData);
             return response()->json(['status' => 'success']);
         } else {
             return response()->json(['status' => 'failed']);
