@@ -17,14 +17,14 @@
     <link rel="icon" href="../img/favicon.ico">
 </head>
 
-<body class="layout-centered bg-img" style="background-image: url(../img/bg/4.jpg);">
+<body class="layout-centered bg-img">
 
 
 <!-- Main Content -->
 <main class="main-content">
 
     <div class="bg-white rounded shadow-7 w-400 mw-100 p-6">
-        <h5 class="mb-7">Sign into your account</h5>
+        <h5 class="mb-7">Login to Compltit</h5>
         @include('spark::shared.errors')
         <form role="form" method="POST" action="/login">
             {{ csrf_field() }}
@@ -49,12 +49,12 @@
             </div>
         </form>
 
-        <div class="divider">Or Login With</div>
+        <!--<div class="divider">Or Login With</div>
         <div class="text-center">
             <a class="btn btn-circle btn-sm btn-facebook mr-2" href="#"><i class="fa fa-facebook"></i></a>
             <a class="btn btn-circle btn-sm btn-google mr-2" href="#"><i class="fa fa-google"></i></a>
             <a class="btn btn-circle btn-sm btn-twitter" href="#"><i class="fa fa-twitter"></i></a>
-        </div>
+        </div>-->
 
         <hr class="w-30">
 

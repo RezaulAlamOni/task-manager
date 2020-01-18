@@ -5,7 +5,7 @@
             {{--<label class="col-md-4 col-form-label text-md-right">{{ __('teams.team_name') }}</label>--}}
 
             <div class="col-md-12">
-                <input type="text" class="form-control" placeholder="Teamname" name="team" v-model="registerForm.team" :class="{'is-invalid': registerForm.errors.has('team')}" autofocus>
+                <input type="text" class="form-control" placeholder="Team Name" name="team" v-model="registerForm.team" :class="{'is-invalid': registerForm.errors.has('team')}" autofocus>
 
                 <span class="invalid-feedback" v-show="registerForm.errors.has('team')">
                     @{{ registerForm.errors.get('team') }}
@@ -38,7 +38,7 @@
         {{--<label class="col-md-4 col-form-label text-md-right">{{__('Name')}}</label>--}}
 
         <div class="col-md-12">
-            <input type="text" class="form-control" placeholder="Name" name="name" v-model="registerForm.name" :class="{'is-invalid': registerForm.errors.has('name')}" autofocus>
+            <input type="text" class="form-control" placeholder="Your Name" name="name" v-model="registerForm.name" :class="{'is-invalid': registerForm.errors.has('name')}" autofocus>
 
             <span class="invalid-feedback" v-show="registerForm.errors.has('name')">
                 @{{ registerForm.errors.get('name') }}
@@ -51,7 +51,7 @@
         {{--<label class="col-md-4 col-form-label text-md-right">{{__('E-Mail Address')}}</label>--}}
 
         <div class="col-md-12">
-            <input type="email" class="form-control" placeholder="Email" name="email" v-model="registerForm.email" :class="{'is-invalid': registerForm.errors.has('email')}">
+            <input type="email" class="form-control" placeholder="Email Address" name="email" v-model="registerForm.email" :class="{'is-invalid': registerForm.errors.has('email')}">
 
             <span class="invalid-feedback" v-show="registerForm.errors.has('email')">
                 @{{ registerForm.errors.get('email') }}
@@ -92,7 +92,7 @@
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input " id="terms" :class="{'is-invalid': registerForm.errors.has('terms')}" v-model="registerForm.terms">
                     <label class="form-check-label login-check-label" for="terms">
-                        &nbsp;&nbsp;{!! __('I Accept :linkOpen The Terms Of Service :linkClose', ['linkOpen' => '<a href="/terms" target="_blank">', 'linkClose' => '</a>']) !!}
+                        &nbsp;&nbsp;{!! __('I Accept :linkOpen The Terms Of Service :linkClose', ['linkOpen' => '<a href="https://www.compltit.com/tos.html" target="_blank">', 'linkClose' => '</a>']) !!}
                     </label>
                     <div class="invalid-feedback" v-show="registerForm.errors.has('terms')">
                         <strong>@{{ registerForm.errors.get('terms') }}</strong>
@@ -118,7 +118,7 @@
             </div>
 
         </div>
-        <div class="row text-center social_register">
+        <!--<div class="row text-center social_register">
             <div class="col-md-12 col-xs-12">
                 <p class="alter">Sign up with</p>
 
@@ -142,7 +142,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
 
     </div>
 </form>
