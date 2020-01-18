@@ -1899,6 +1899,7 @@
                     .then(response => response.data)
                     .then(response => {
                         store.toggleOpen(data)
+                        _this.Socket.emit('notification-update',response.users)
                     })
                     .catch(error => {
                         console.log('Api for complete task not Working !!!')
@@ -2119,6 +2120,8 @@
             },
             hideItem(e, data) {
                 data.draggable = false;
+                console.log(data.draggable)
+                console.log(data)
                 this.context_menu_flag = data.id;
                 // data.draggable = false;
                 // $(e.target).closest('.eachItemRow').find('.task-complete').hide();
@@ -2135,7 +2138,7 @@
                 $(e.target).closest('.eachItemRow').find('.comment-icon').hide();
             },
             showItem(e, data) {
-
+                data.draggable = true;
                 this.context_menu_flag = data.id;
                 this.SaveDataWithoutCreateNewNode(data);
                 setTimeout(function () {
@@ -2154,11 +2157,9 @@
                     data.draggable = true;
                     data.droppable = true;
                 }, 500);
-
                 setTimeout(() => {
                     $('.dropdowns-task-user').hide();
                 }, 300);
-
                 $('.inp').addClass('input-hide');
                 $('.inp').removeClass('form-control');
 
@@ -2802,7 +2803,10 @@
                             board_id: _this.selectedData.multiple_board_id,
                             user_id: _this.authUser.id
                         })
-                        _this.$toastr.i("Task Description updatd");
+                        _this.$toastr.i("Task Description update");
+                        if(response.users.length > 0){
+                            _this.Socket.emit('notification-update',response.users)
+                        }
                     })
                     .catch(error => {
                         console.log('Api for move down task not Working !!!')
@@ -2837,6 +2841,9 @@
                                         user_id: _this.authUser.id
                                     })
                                     _this.$toastr.i("task Added to complete list!");
+                                    if(response.users.length > 0){
+                                        _this.Socket.emit('notification-update',response.users)
+                                    }
                                     // swal("Complete!", "This task is added to complete", "success");
                                 } else if (response.status === 2) {
                                     swal("Sorry!", "The board dont have any 100% progress column !!", "warning");
@@ -3697,6 +3704,7 @@
                                     board_id: _this.selectedData.multiple_board_id,
                                     user_id: _this.authUser.id
                                 })
+                                _this.Socket.emit('notification-update',response.users)
                                 if (data.text.indexOf("@") != -1 || data.text.indexOf("#") != -1) {
                                     _this.getTaskList();
                                 }
@@ -3802,6 +3810,7 @@
                             board_id: _this.selectedData.multiple_board_id,
                             user_id: _this.authUser.id
                         });
+                        _this.Socket.emit('notification-update',response.users)
                         _this.sendMail(mailData);
                     })
                     .catch(error => {
@@ -3833,6 +3842,7 @@
                             user_id: _this.authUser.id,
                             type : 'Upload Photo'
                         })
+                        _this.Socket.emit('notification-update',response.users)
                         _this.$toastr.s("Successfully added file !");
                         _this.getTaskList()
                     })
