@@ -152,10 +152,18 @@
                                     <h5 class="rightsidebar-right-heading text-uppercase text-xs">Settings</h5>
                                     <div>
                                         <ul class="list-unstyled">
-                                            <li class="rightsidebar-notification">
-                                                <a href="/settings#/profile" aria-controls="profile">
-                                                    <i class="fa fa-fw fa-btn fa-edit"></i> Profile
-                                                </a>
+                                            <li class="rightsidebar-notification" data-dismiss="modal">
+{{--                                                <a href="/settings#/profile" aria-controls="profile">--}}
+{{--                                                    <i class="fa fa-fw fa-btn fa-edit"></i> Profile--}}
+{{--                                                </a>--}}
+                                                <router-link :to="{ name: 'Profile' }">
+                                                    <i class="menu-icon ti-user"></i> Profile
+                                                </router-link>
+                                            </li>
+                                            <li class="rightsidebar-notification" data-dismiss="modal">
+                                                <router-link :to="{ name: 'Notification' }">
+                                                    <i class="menu-icon fa fa-bell-o"></i> Email & Notification
+                                                </router-link>
                                             </li>
                                             @if (Spark::usesTeams())
                                             <li class="rightsidebar-notification">

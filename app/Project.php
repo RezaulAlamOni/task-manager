@@ -45,4 +45,9 @@ class Project extends Model
     {
         return $this->belongsTo(Team::class, 'team_id', 'id')->with('team_users');
     }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }

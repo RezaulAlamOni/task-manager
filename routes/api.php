@@ -146,3 +146,6 @@ Route::post('/notifications/create', 'EmailNotificationController@store'); // Cr
 Route::post('/set-notification/{id}', 'EmailNotificationController@changeNotification');
 Route::get('/user-notifications/{user_id}', 'EmailNotificationController@getNotificationsByUser'); // User Notification Validity
 Route::post('/delete-notification/{id}', 'EmailNotificationController@deleteNotification');
+
+//Users tasks
+Route::get('/get-weekly-due-tasks', 'ProfileController@weeklyDueTask');
