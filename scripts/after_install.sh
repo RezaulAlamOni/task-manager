@@ -1,7 +1,7 @@
 #!/bin/sh
 cd /var/www/html/spark
 
-cp /root/configs/compltit.net/spark.env /var/www/html/spark/.env
+cp /root/configs/compltit/spark.env /var/www/html/spark/.env
 touch ./storage/logs/laravel.log
 
 php artisan down
