@@ -12,7 +12,7 @@
             <div class="card card-default">
                 <div class="card-header">
                     <h2 class="text-center">
-                        <img src="/img/mono-logo.png" alt="Logo">
+                        <img src="/img/color-logo.png" alt="Compltit Logo">
                     </h2>
                     <h3 class="text-center">Forgot Password
                     </h3>
